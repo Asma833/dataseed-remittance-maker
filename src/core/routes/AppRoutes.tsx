@@ -16,7 +16,7 @@ export const AppRoutes = () => {
   };
 
   return (
-    <Routes>
+    <Routes >
       <Route path="/login" element={<Login />} />
       {routes.map(({ path, element: Element, roles, permission }) => (
         <Route

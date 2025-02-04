@@ -1,4 +1,4 @@
-import { BrowserRouter } from "react-router-dom";
+import { BrowserRouter, useLocation } from "react-router-dom";
 import { Suspense } from "react";
 import { AppRoutes } from "./core/routes/AppRoutes";
 import ErrorBoundary from "./components/ErrorBoundary/ErrorBoundary";
@@ -7,6 +7,7 @@ import { Toaster } from "sonner";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { Provider } from "react-redux";
 import { store } from "./store";
+import MainLayout from "./components/layout/Main-layout/Main-layout";
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -16,6 +17,16 @@ const queryClient = new QueryClient({
     },
   },
 });
+interface LayoutWrapperProps {
+  children: React.ReactNode;
+}
+const LayoutWrapper: React.FC<LayoutWrapperProps> = ({ children }) => {
+  const location = useLocation();
+  // Exclude login page or other pages from the layout
+  const isLayoutRequired = location.pathname !== "/login";
+
+  return isLayoutRequired ? <MainLayout></MainLayout> : <>{children}</>;
+};
 
 const App = () => {
   return (
@@ -25,7 +36,9 @@ const App = () => {
           <Toaster />
           <ErrorBoundary>
             <Suspense fallback={<LoadingFallback />}>
+              <LayoutWrapper>
               <AppRoutes />
+              </LayoutWrapper>
             </Suspense>
           </ErrorBoundary>
         </BrowserRouter>

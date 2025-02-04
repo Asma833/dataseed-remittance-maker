@@ -1,3 +1,5 @@
+
+import MainLayout from "@/components/layout/Main-layout/Main-layout";
 import AgentReport from "@/features/admin-portal/agent-report/pages/AgentReport";
 import Dashboard from "@/features/admin-portal/dashboard/pages/dashboard";
 import AgentProfileCreation from "@/features/admin-portal/user-management/pages/AgentProfileCreation";
@@ -17,32 +19,38 @@ import AgentProfileCreation from "@/features/admin-portal/user-management/pages/
 export const routes = [
   {
     path: "/dashboard",
-    element: Dashboard,
-    roles: ["admin", "co-admin"],
-    permission: "view_dashboard",
-  },
-  {
-    path: "/agent-profile-creation",
-    element: AgentProfileCreation,
-    roles: ["admin", "co-admin"],
-    permission: "",
-  },
-  {
-    path: "/transactions",
-    element: AgentReport,
-    roles: ["maker"],
-    permission: "",
-  },
-  {
-    path: "/pending-approvals",
-    element: AgentReport,
-    roles: ["checker"],
-    permission: "",
-  },
-  {
-    path: "/agents",
-    element: AgentReport,
-    roles: ["admin", "co-admin"],
-    permission: "",
+    element: MainLayout,children:[
+      {
+        path: "/",
+        element: Dashboard,
+        roles: ["admin", "co-admin"],
+        permission: "view_dashboard",
+      },
+      {
+        path: "/agent-profile-creation",
+        element: AgentProfileCreation,
+        roles: ["admin", "co-admin"],
+        permission: "",
+      },
+      {
+        path: "/transactions",
+        element: AgentReport,
+        roles: ["maker"],
+        permission: "",
+      },
+      {
+        path: "/pending-approvals",
+        element: AgentReport,
+        roles: ["checker"],
+        permission: "",
+      },
+      {
+        path: "/agents",
+        element: AgentReport,
+        roles: ["admin", "co-admin"],
+        permission: "",
+      },
+    ]
+  
   },
 ];
