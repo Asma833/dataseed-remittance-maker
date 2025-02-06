@@ -127,7 +127,7 @@ const Login = () => {
                   required
                    className="appearance-none rounded-md text-sm relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 focus:outline-none focus:border-gray-300 focus:border-2 [&:-webkit-autofill]:bg-white [&:-webkit-autofill]:shadow-[0_0_0_30px_white_inset]"
                  
-                  placeholder="jasan.gay@example.com"
+                  placeholder="Enter your email"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
                 />
@@ -145,7 +145,7 @@ const Login = () => {
                   autoComplete="off"
                   required
                   className="appearance-none rounded-md relative text-sm block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 focus:outline-none focus:border-gray-300 focus:border-2 [&:-webkit-autofill]:bg-white [&:-webkit-autofill]:shadow-[0_0_0_30px_white_inset]"
-                 
+                 placeholder="Enter your password"
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
                 />
