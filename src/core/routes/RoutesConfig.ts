@@ -13,6 +13,9 @@ const AgentBranchUserCreationPage = lazy(
 const SendEmailPage = lazy(
   () => import("@/features/auth/pages/send-email/SendEmailPage")
 );
+const ForgetPasswordPage = lazy(
+  () => import("@/features/auth/pages/forget-password/ForgetPasswordPage")
+);
 const Login = lazy(() => import("@/features/auth/pages/login/LoginPage"));
 
 // Public routes
@@ -20,6 +23,11 @@ export const publicRoutes = [
   {
     path: "/login",
     element: Login,
+    roles: ["*"],
+  },
+  {
+    path: "/forget-password",
+    element: ForgetPasswordPage,
     roles: ["*"],
   },
   {
