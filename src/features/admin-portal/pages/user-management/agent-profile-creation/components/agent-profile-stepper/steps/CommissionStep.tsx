@@ -1,12 +1,12 @@
+import { getController } from "@/components/form/utils/getController";
+import FieldWrapper from "@/components/form/wrapper/FieldWrapper";
 import { FormContentWrapper } from "@/components/form/wrapper/FormContentWrapper";
 import FormFieldRow from "@/components/form/wrapper/FormFieldRow";
 import Spacer from "@/components/form/wrapper/Spacer";
-import { agreementDetails } from "./form-metadata";
-import FieldWrapper from "@/components/form/wrapper/FieldWrapper";
-import { getController } from "@/components/form/utils/getController";
+import { agreementDetails } from "../config/agent-profile-form-config";
 import CheckboxWrapper from "@/components/form/wrapper/CheckboxWrapper";
 
-const AggrementDetailsStep = () => {
+const CommissionStep = () => {
   return (
     <FormContentWrapper>
       <Spacer>
@@ -43,9 +43,8 @@ const AggrementDetailsStep = () => {
             })}
         </FormFieldRow>
       </Spacer>
-      <button type="submit">Submit</button>
     </FormContentWrapper>
   );
 };
 
-export default AggrementDetailsStep;
+export default CommissionStep;

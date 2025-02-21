@@ -7,12 +7,14 @@ type PropsType = {
   className?: string;
   rowCols?: number | string;
   flexdirection?: string;
+  error?: string;
 };
 
 const FieldWrapper = ({
   children,
   className = "",
   flexdirection,
+  error,
   ...props
 }: PropsType) => {
   return (
@@ -25,6 +27,11 @@ const FieldWrapper = ({
       )}
     >
       {children}
+      {error && (
+        <span className="text-sm text-[hsl(var(--destructive))]">
+          {error}
+        </span>
+      )}
     </div>
   );
 };

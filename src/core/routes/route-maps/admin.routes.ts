@@ -8,8 +8,8 @@ const adminComponents = {
     AgentBranchUser: lazy(() => import("@/features/admin-portal/pages/user-management/agent-branch-user-creation/page/AgentBranchUserCreationPage")),
     CreateBranchNewUser:lazy(() => import("@/features/admin-portal/pages/user-management/agent-branch-user-creation/page/AgentBranchUserRegistrationPage")),
     AgentProfileSummary: lazy(() => import("@/features/admin-portal/pages/user-management/agent-profile-creation/pages/agent-profile-summary/page")),
-    CreateNewAgent: lazy(() => import("@/features/admin-portal/pages/user-management/agent-profile-creation/pages/create-new-agent/page"))
-  };
+    AgentProfileCreation: lazy(() => import("@/features/admin-portal/pages/user-management/agent-profile-creation/pages/create-new-agent/page"))
+};
 
 export const adminRoutes = [
   {
@@ -44,7 +44,7 @@ export const adminRoutes = [
   },
   {
     path: ROUTES.ADMIN.USER_MANAGEMENT.CREATE_AGENT,
-    element: adminComponents.CreateNewAgent,
+    element: adminComponents.AgentProfileCreation,
     roles: ["admin", "co-admin"],
     permission: "view_dashboard",
   },

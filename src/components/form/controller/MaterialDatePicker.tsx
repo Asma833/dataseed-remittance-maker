@@ -1,45 +1,62 @@
-import { Controller, FieldValues, Path } from "react-hook-form";
-import { TextFieldProps } from "@mui/material";
-import { ErrorMessage } from "../error-message";
-import { DatePicker } from "@mui/x-date-pickers/DatePicker";
-import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
-import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
+import { Controller, useFormContext } from "react-hook-form";
+import { DatePicker } from "@mui/x-date-pickers";
+import dayjs from "dayjs";
 
-type MaterialDatePickerProps<T extends FieldValues> = Omit<
-  TextFieldProps,
-  "name" | "defaultValue"
-> & {
-  name: Path<T>;
+interface MaterialDatePickerProps {
+  name: string;
+  label: string;
   baseStyle?: any;
-};
+  className?: string;
+  error?: string;
+}
 
-export const MaterialDatePicker = <T extends FieldValues>({
+export const MaterialDatePicker = ({
   name,
   label,
   baseStyle,
-  ...props
-}: MaterialDatePickerProps<T>) => {
+  className,
+  error,
+}: MaterialDatePickerProps) => {
+  const { control, formState, clearErrors } = useFormContext();
+
+  const mergedStyles = {
+    ...baseStyle,
+    ...(error && {
+      "& .MuiOutlinedInput-root": {
+        "& fieldset": {
+          borderColor: "hsl(var(--destructive))",
+        },
+      },
+    }),
+  };
+
   return (
-    <>
-      <Controller<T>
+    <div className="flex flex-col w-full">
+      <Controller
         name={name}
+        control={control}
         render={({ field, fieldState }) => (
-          <LocalizationProvider dateAdapter={AdapterDayjs}>
-            <DatePicker
-              {...field}
-              sx={baseStyle}
-              label={label}
-              slotProps={{
-                textField: {
-                  ...props,
-                  error: !!fieldState.error,
-                },
-              }}
-            />
-          </LocalizationProvider>
+          <DatePicker
+            {...field}
+            label={label}
+            value={field.value ? dayjs(field.value) : null}
+            onChange={(date) => {
+              field.onChange(date?.toISOString() || null);
+              if (date) {
+                clearErrors(name);
+              }
+            }}
+            slotProps={{
+              textField: {
+                error: !!fieldState.error,
+                helperText: fieldState.error?.message,
+                sx: mergedStyles,
+                ...(className && { className }),
+              },
+            }}
+          />
         )}
       />
-      <ErrorMessage<T> name={name} />
-    </>
+    </div>
   );
 };

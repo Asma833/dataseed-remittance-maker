@@ -1,39 +1,34 @@
-import { useState, useEffect, useRef } from "react";
-import { Img } from "react-image";
-import { ImageProps } from './common-components.types';
+import { useState } from "react";
+import { ImageProps } from "./common-components.types";
 
-const Image: React.FC<ImageProps> = ({ src, alt, ...props }) => {
+const Image: React.FC<ImageProps> = ({
+  src,
+  alt,
+  width,
+  height,
+  className,
+  ...props
+}) => {
   const [isLoading, setIsLoading] = useState(true);
-  const isMounted = useRef(false);
-
-  useEffect(() => {
-    isMounted.current = true;
-    return () => {
-      isMounted.current = false;
-    };
-  }, []);
-
-  const handleLoad = () => {
-    if (isMounted.current) {
-      setIsLoading(false);
-    }
-  };
 
   return (
-    <Img
-      src={src}
-      alt={alt}
-      loader={
-        isLoading ? (
-          <div
-            className="animate-pulse bg-gray-200 rounded"
-            style={{ width: props.width, height: props.height }}
-          />
-        ) : null
-      }
-      onLoad={handleLoad}
-      {...props}
-    />
+    <div className="relative">
+      {isLoading && (
+        <div
+          className="absolute animate-pulse bg-gray-200 rounded"
+          style={{ width, height }}
+        />
+      )}
+      <img
+        src={src}
+        alt={alt}
+        width={width}
+        height={height}
+        className={className}
+        onLoad={() => setIsLoading(false)}
+        {...props}
+      />
+    </div>
   );
 };
 
