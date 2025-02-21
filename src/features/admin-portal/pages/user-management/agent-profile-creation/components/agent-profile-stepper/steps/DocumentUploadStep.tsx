@@ -3,7 +3,7 @@ import FieldWrapper from "@/components/form/wrapper/FieldWrapper";
 import { FormContentWrapper } from "@/components/form/wrapper/FormContentWrapper";
 import FormFieldRow from "@/components/form/wrapper/FormFieldRow";
 import Spacer from "@/components/form/wrapper/Spacer";
-import { agreementDetails } from "./form-metadata";
+import { agreementDetails } from "../config/agent-profile-form-config";
 import CheckboxWrapper from "@/components/form/wrapper/CheckboxWrapper";
 
 const DocumentUploadStep = () => {

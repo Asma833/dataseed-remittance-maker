@@ -1,102 +1,62 @@
-import { Controller, FieldValues, Path } from "react-hook-form";
-import {
-  Select,
-  SelectProps,
-  MenuItem,
-  FormControl,
-  InputLabel,
-} from "@mui/material";
+import { Controller, useFormContext } from "react-hook-form";
+import { FormControl, InputLabel, MenuItem, Select } from "@mui/material";
 import { ErrorMessage } from "../error-message";
 import { cn } from "@/utils/cn";
 
-type MaterialSelectProps<T extends FieldValues> = Omit<
-  SelectProps,
-  "name" | "defaultValue"
-> & {
-  name: Path<T>;
-  options: { [key: string]: { label: string } };
+interface MaterialSelectProps {
+  name: string;
+  label: string;
+  options:
+    | { [key: string]: { label: string } }
+    | Array<{ value: string; label: string }>;
   baseStyle?: any;
   className?: string;
-};
+}
 
-export const MaterialSelect = <T extends FieldValues>({
+export const MaterialSelect = ({
   name,
-  options,
   label,
+  options,
   baseStyle,
   className,
-  ...props
-}: MaterialSelectProps<T>) => {
+}: MaterialSelectProps) => {
+  const { control } = useFormContext();
+  const isArrayOptions = Array.isArray(options);
+
   return (
     <>
       <Controller
         name={name}
-        render={({ field, fieldState }) => (
-          <FormControl fullWidth error={!!fieldState.error}>
-            <InputLabel
-              id={`${name}-label`}
-              className="bg-background"
-              sx={{
-                padding: "0 5px",
-                transform: baseStyle["& .MuiInputLabel-root"].transform,
-                "&.Mui-focused": {
-                  transform:
-                    baseStyle["& .MuiInputLabel-root.Mui-focused"].transform,
-                },
-                "&.MuiFormLabel-filled": {
-                  transform:
-                    baseStyle["& .MuiInputLabel-root.Mui-focused"].transform,
-                },
-                "&.MuiInputLabel-root": {
-                  color: "hsl(var(--muted))",
-                  "&.Mui-focused": {
-                    color: "hsl(var(--primary))",
-                  },
-                },
-              }}
-            >
-              {label}
-            </InputLabel>
+        control={control}
+        defaultValue=""
+        render={({ field: { value, ...field }, fieldState: { error } }) => (
+          <FormControl fullWidth error={!!error}>
+            <InputLabel>{label}</InputLabel>
             <Select
               {...field}
-              {...props}
-              labelId={`${name}-label`}
+              value={value || ""}
               label={label}
-              className={cn("bg-background", className)}
-              sx={{
-                ...baseStyle,
-                "& .MuiSelect-select": {
-                  color: "inherit",
-                },
-                "& .MuiOutlinedInput-notchedOutline": {
-                  border: "none",
-                },
-              }}
-              MenuProps={{
-                PaperProps: {
-                  className: "bg-background",
-                  sx: {
-                    backgroundColor: "hsl(var(--background))",
-                    "& .MuiMenuItem-root": {
-                      color: "hsl(var(--foreground))",
-                      "&:hover, &.Mui-selected": {
-                        backgroundColor: "hsl(var(--accent))",
-                      },
-                    },
-                  },
-                },
-              }}
+              sx={baseStyle}
+              className={className}
             >
-              {Object.entries(options).map(([value, option]) => (
-                <MenuItem key={value} value={value}>
-                  {option.label}
-                </MenuItem>
-              ))}
+              {isArrayOptions
+                ? (options as Array<{ value: string; label: string }>).map(
+                    (option) => (
+                      <MenuItem key={option.value} value={option.value}>
+                        {option.label}
+                      </MenuItem>
+                    )
+                  )
+                : Object.entries(options).map(([value, { label }]) => (
+                    <MenuItem key={value} value={value}>
+                      {label}
+                    </MenuItem>
+                  ))}
             </Select>
           </FormControl>
         )}
       />
-      <ErrorMessage<T> name={name} />
+      <ErrorMessage name={name} />
     </>
   );
 };

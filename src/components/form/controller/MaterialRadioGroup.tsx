@@ -7,7 +7,7 @@ import {
   RadioGroup,
 } from "@mui/material";
 import { ErrorMessage } from "../error-message";
-import { Circle, CircleAlert, CircleCheck  } from "lucide-react";
+import { Circle, CircleCheck } from "lucide-react";
 
 type MaterialRadioGroupProps<T extends FieldValues> = {
   name: Path<T>;
@@ -25,24 +25,33 @@ export const MaterialRadioGroup = <T extends FieldValues>({
       <FormLabel component="legend">{label}</FormLabel>
       <Controller
         name={name}
-        render={({ field, fieldState }) => (
-          <RadioGroup {...field}>
-            {Object.entries(options).map(([value, option]) => (
-              <FormControlLabel
-                key={value}
-                value={value}
-                control={
-                  <Radio
-                    icon={<Circle size={"20"} />}
-                    checkedIcon={<CircleCheck className="text-primary" size={"20"} />}
-
+        render={({ field, fieldState }) => {
+          console.log("field:", field);
+          return (
+            <RadioGroup {...field}>
+              {Object.entries(options).map(([value, option]) => {
+                console.log('value:>>>>', value)
+                console.log("option:>>>>", option);
+                return (
+                  <FormControlLabel
+                    key={value}
+                    value={value}
+                    control={
+                      <Radio
+                        icon={<Circle size={"20"} />}
+                        checked={field.value === value }
+                        checkedIcon={
+                          <CircleCheck className="text-primary" size={"20"} />
+                        }
+                      />
+                    }
+                    label={option.label}
                   />
-                }
-                label={option.label}
-              />
-            ))}
-          </RadioGroup>
-        )}
+                );
+              })}
+            </RadioGroup>
+          );
+        }}
       />
       <ErrorMessage<T> name={name} />
     </FormControl>

@@ -13,7 +13,8 @@ import {
   StepIconProps,
 } from "@mui/material";
 import { Check } from "lucide-react";
-import { StepperConfig, StepperProps } from "./stepperTypes";
+import { StepperConfig } from "./stepperTypes";
+import { useFormContext } from "react-hook-form";
 
 const defaultConfig: StepperConfig = {
   styles: {
@@ -111,17 +112,35 @@ function QontoStepIcon(props: StepIconProps) {
   );
 }
 
+interface StepperTabsProps {
+  steps: Array<{
+    label: string;
+    content: React.ReactNode;
+    validation?: boolean;
+    optional?: boolean;
+  }>;
+  activeStep: number;
+  onNext: () => Promise<void>;
+  onBack: () => void;
+  isStepValid?: (step: string) => boolean;
+  config?: StepperConfig;
+}
+
 export default function StepperTabs({
   steps,
+  activeStep,
+  onNext,
+  onBack,
+  isStepValid,
   config = defaultConfig,
-  activeStep: controlledActiveStep,
-  onStepChange,
-  onComplete,
-  showNavigation = true,
-}: StepperProps) {
-  const [internalActiveStep, setInternalActiveStep] = React.useState(0);
-  const activeStep = controlledActiveStep ?? internalActiveStep;
+}: StepperTabsProps) {
   const [skipped, setSkipped] = React.useState(new Set<number>());
+  const methods = useFormContext();
+
+  const handleReset = () => {
+    methods.reset();
+    // If you need to handle additional reset logic, you can add it here
+  };
 
   const isStepOptional = (step: number) => {
     return steps[step]?.optional ?? false;
@@ -129,49 +148,6 @@ export default function StepperTabs({
 
   const isStepSkipped = (step: number) => {
     return skipped.has(step);
-  };
-
-  const handleNext = () => {
-    let newSkipped = skipped;
-    if (isStepSkipped(activeStep)) {
-      newSkipped = new Set(newSkipped.values());
-      newSkipped.delete(activeStep);
-    }
-
-    const nextStep = activeStep + 1;
-    if (nextStep === steps.length) {
-      onComplete?.();
-    } else {
-      setInternalActiveStep(nextStep);
-      onStepChange?.(nextStep);
-    }
-    setSkipped(newSkipped);
-  };
-
-  const handleBack = () => {
-    const prevStep = activeStep - 1;
-    setInternalActiveStep(prevStep);
-    onStepChange?.(prevStep);
-  };
-
-  const handleSkip = () => {
-    if (!isStepOptional(activeStep)) {
-      throw new Error("You can't skip a step that isn't optional.");
-    }
-
-    const nextStep = activeStep + 1;
-    setInternalActiveStep(nextStep);
-    onStepChange?.(nextStep);
-    setSkipped((prevSkipped) => {
-      const newSkipped = new Set(prevSkipped.values());
-      newSkipped.add(activeStep);
-      return newSkipped;
-    });
-  };
-
-  const handleReset = () => {
-    setInternalActiveStep(0);
-    onStepChange?.(0);
   };
 
   return (
@@ -243,35 +219,28 @@ export default function StepperTabs({
       ) : (
         <React.Fragment>
           <div className="stepper-content">
-            {steps[activeStep]?.content ?? (
-              <Typography sx={{ mt: 2, mb: 1 }}>
-                Step {activeStep + 1}
-              </Typography>
-            )}
+            {steps[activeStep]?.content}
           </div>
 
-          {showNavigation && (
-            <Box sx={{ display: "flex", flexDirection: "row", pt: 2 }}>
-              <Button
-                color="inherit"
-                disabled={activeStep === 0}
-                onClick={handleBack}
-                sx={{ mr: 1 }}
-                variant="outlined"
-              >
-                Back
-              </Button>
-              <Box sx={{ flex: "1 1 auto" }} />
-              {isStepOptional(activeStep) && (
-                <Button color="inherit" onClick={handleSkip} sx={{ mr: 1 }}>
-                  Skip
-                </Button>
-              )}
-              <Button onClick={handleNext} variant="contained">
-                {activeStep === steps.length - 1 ? "Finish" : "Next"}
-              </Button>
-            </Box>
-          )}
+          <Box sx={{ display: "flex", flexDirection: "row", pt: 2 }}>
+            <Button
+              color="inherit"
+              disabled={activeStep === 0}
+              onClick={onBack}
+              sx={{ mr: 1 }}
+              variant="outlined"
+            >
+              Back
+            </Button>
+            <Box sx={{ flex: "1 1 auto" }} />
+            <Button 
+              onClick={onNext}
+              variant="contained"
+              // disabled={!isStepValid(steps[activeStep].label)}
+            >
+              {activeStep === steps.length - 1 ? "Finish" : "Next"}
+            </Button>
+          </Box>
         </React.Fragment>
       )}
     </Box>

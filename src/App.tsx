@@ -10,6 +10,7 @@ import { cleanupAxiosInterceptors } from './core/services/axios/axiosInstance';
 import { PersistGate } from 'redux-persist/integration/react';
 import { persistor, store } from "./store";
 import ErrorBoundary from "./components/error-boundary/ErrorBoundary";
+import { MUIProviders } from './providers/MUIProviders';
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -29,22 +30,24 @@ const App = () => {
   }, []);
 
   return (
-    <ThemeProvider>
-      <Provider store={store}>
-        <PersistGate loading={<LoadingFallback />} persistor={persistor}>
-          <QueryClientProvider client={queryClient}>
-            <BrowserRouter>
-              <Toaster />
-              <ErrorBoundary>
-                <Suspense fallback={<LoadingFallback />}>
-                  <AppRoutes />
-                </Suspense>
-              </ErrorBoundary>
-            </BrowserRouter>
-          </QueryClientProvider>
-        </PersistGate>
-      </Provider>
-    </ThemeProvider>
+    <MUIProviders>
+      <ThemeProvider>
+        <Provider store={store}>
+          <PersistGate loading={<LoadingFallback />} persistor={persistor}>
+            <QueryClientProvider client={queryClient}>
+              <BrowserRouter>
+                <Toaster />
+                <ErrorBoundary>
+                  <Suspense fallback={<LoadingFallback />}>
+                    <AppRoutes />
+                  </Suspense>
+                </ErrorBoundary>
+              </BrowserRouter>
+            </QueryClientProvider>
+          </PersistGate>
+        </Provider>
+      </ThemeProvider>
+    </MUIProviders>
   );
 };
 

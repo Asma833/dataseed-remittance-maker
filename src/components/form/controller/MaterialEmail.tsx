@@ -15,9 +15,14 @@ export const MaterialEmail = ({ name, label, baseStyle, className }: MaterialEma
     <Controller
       name={name}
       control={control}
-      render={({ field, fieldState: { error } }) => (
+      defaultValue=""  // Add default value
+      render={({ field: { value, onChange, ...field }, fieldState: { error } }) => (
         <TextField
           {...field}
+          value={value ?? ''}  // Ensure value is never undefined
+          onChange={(e) => {
+            onChange(e.target.value || '');  // Handle empty string case
+          }}
           type="email"
           label={label}
           error={!!error}

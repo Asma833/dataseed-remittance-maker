@@ -76,14 +76,28 @@ export const getController = (field: any) => {
         },
       },
     },
+    ...(field.error && {
+      '& .MuiOutlinedInput-root': {
+        '& fieldset': {
+          borderColor: 'hsl(var(--destructive))',
+        },
+      },
+    }),
   };
   const baseGeneralFieldStyle =
     "bg-[hsl(var(--background))] border border-[hsl(var(--border))] rounded-md text-[hsl(var(--foreground))] hover:border-[hsl(var(--primary))] focus:border-[hsl(var(--primary))]";
+
+  const commonProps = {
+    onChange: (e: any) => {
+      console.log(`Field ${field.name} changed:`, e.target.value); // Debug log
+    }
+  };
 
   switch (field.type) {
     case "text":
       return (
         <MaterialText
+          {...commonProps}
           name={field.name}
           label={field.label}
           uppercase={field.uppercase}
@@ -94,6 +108,7 @@ export const getController = (field: any) => {
     case "email":
       return (
         <MaterialEmail
+          {...commonProps}
           name={field.name}
           label={field.label}
           baseStyle={baseStyle}
@@ -103,6 +118,7 @@ export const getController = (field: any) => {
     case "number":
       return (
         <MaterialNumber
+          {...commonProps}
           name={field.name}
           label={field.label}
           baseStyle={baseStyle}
@@ -112,6 +128,7 @@ export const getController = (field: any) => {
     case "file":
       return (
         <MaterialFile
+          {...commonProps}
           name={field.name}
           label={field.label}
           className={baseGeneralFieldStyle}
@@ -120,6 +137,7 @@ export const getController = (field: any) => {
     case "checkbox":
       return (
         <MaterialCheckbox
+          {...commonProps}
           name={field.name}
           label={field.label}
           options={field.options}
@@ -128,6 +146,7 @@ export const getController = (field: any) => {
     case "select":
       return (
         <MaterialSelect
+          {...commonProps}
           name={field.name}
           options={field.options}
           label={field.label}
@@ -138,15 +157,18 @@ export const getController = (field: any) => {
     case "date":
       return (
         <MaterialDatePicker
+          {...commonProps}
           name={field.name}
           label={field.label}
           baseStyle={baseStyle}
           className={baseGeneralFieldStyle}
+          error={field.error}
         />
       );
     case "radio":
       return (
         <MaterialRadioGroup
+          {...commonProps}
           name={field.name}
           label={field.label}
           options={field.options}

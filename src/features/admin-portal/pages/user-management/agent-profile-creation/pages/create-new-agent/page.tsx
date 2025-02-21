@@ -1,8 +1,8 @@
 import React from "react";
-import AgentStepper from "../../components/stepper/AgentStepper";
+import AgentStepperWrapper from "../../components/agent-profile-stepper/AgentStepper";
 
-export const CreateNewAgentPage: React.FC = () => {
-  return <AgentStepper />;
+export const AgentProfileCreation: React.FC = () => {
+  return <AgentStepperWrapper />;
 };
 
-export default CreateNewAgentPage;
+export default AgentProfileCreation;

@@ -1,50 +1,48 @@
-import { Controller, FieldValues, Path } from "react-hook-form";
-import { TextField, TextFieldProps } from "@mui/material";
+import { Controller, useFormContext } from "react-hook-form";
+import { TextField } from "@mui/material";
 import { ErrorMessage } from "../error-message";
 import { cn } from "@/utils/cn";
 
-type MaterialTextProps<T extends FieldValues> = Omit<
-  TextFieldProps,
-  "name" | "defaultValue" | "className"
-> & {
-  name: Path<T>;
-  uppercase?: boolean;
-  height?: string | number;
+interface MaterialTextProps {
+  name: string;
+  label: string;
   baseStyle?: any;
   className?: string;
-};
+  uppercase?: boolean;
+}
 
-export const MaterialText = <T extends FieldValues>({
+export const MaterialText = ({
   name,
   label,
-  uppercase,
-  className,
   baseStyle,
-  ...props
-}: MaterialTextProps<T>) => {
+  className,
+  uppercase,
+}: MaterialTextProps) => {
+  const { control } = useFormContext();
+
   return (
     <>
       <Controller
         name={name}
-        render={({ field, fieldState }) => (
+        control={control}
+        defaultValue=""
+        render={({ field, fieldState: { error } }) => (
           <TextField
             {...field}
-            {...props}
-            sx={baseStyle}
+            value={field.value || ""}
             label={label}
-            className={cn(className)}
-            error={!!fieldState.error}
-            helperText={fieldState.error ? fieldState.error.message : null}
+            error={!!error}
+            helperText={error?.message}
             onChange={(e) => {
-              const value = uppercase
-                ? e.target.value.toUpperCase()
-                : e.target.value;
+              const value = uppercase ? e.target.value.toUpperCase() : e.target.value;
               field.onChange(value);
             }}
+            sx={baseStyle}
+            className={className ?? ''}
           />
         )}
       />
-      <ErrorMessage<T> name={name} />
+      {/* <ErrorMessage name={name} /> */}
     </>
   );
 };

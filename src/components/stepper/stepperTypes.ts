@@ -26,10 +26,18 @@ export interface StepConfig {
 }
 
 export interface StepperProps {
-  steps: StepConfig[];
+  steps: Array<{
+    label: string;
+    content: React.ReactNode;
+    validation?: boolean;
+    optional?: boolean;
+    validationSchema?: any;
+    onNext?: () => Promise<void>;
+  }>;
   config?: StepperConfig;
   activeStep?: number;
   onStepChange?: (step: number) => void;
   onComplete?: () => void;
   showNavigation?: boolean;
+  handleNext?: (activeStep: number, setActiveStep: (step: number) => void) => Promise<void>;
 }

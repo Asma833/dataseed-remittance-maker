@@ -15,7 +15,8 @@ export const MaterialFile = ({ name, label, className }: MaterialFileProps) => {
     <Controller
       name={name}
       control={control}
-      render={({ field: { onChange }, fieldState: { error } }) => (
+      defaultValue={null}  // Add default value
+      render={({ field: { value, onChange }, fieldState: { error } }) => (
         <div>
           <Button
             component="label"
@@ -23,12 +24,13 @@ export const MaterialFile = ({ name, label, className }: MaterialFileProps) => {
             startIcon={<Upload className="w-4 h-4" />}
             className={className || ''}
           >
-            {label}
+            {value ? value.name : label}
             <input
               type="file"
               hidden
               onChange={(e) => {
-                onChange(e.target.files?.[0]);
+                const file = e.target.files?.[0] || null;
+                onChange(file);  // Handle null case
               }}
             />
           </Button>
