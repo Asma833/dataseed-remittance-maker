@@ -34,15 +34,16 @@ export const MaterialText = ({
             error={!!error}
             helperText={error?.message}
             onChange={(e) => {
-              const value = uppercase ? e.target.value.toUpperCase() : e.target.value;
+              const value = uppercase
+                ? e.target.value.toUpperCase()
+                : e.target.value;
               field.onChange(value);
             }}
             sx={baseStyle}
-            className={className ?? ''}
+            className={cn(className)}
           />
         )}
       />
-      {/* <ErrorMessage name={name} /> */}
     </>
   );
 };
