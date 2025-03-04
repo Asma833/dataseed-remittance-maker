@@ -6,7 +6,8 @@
  */
 export const API = {
   AUTH: {
-    LOGIN: `/users/login`,
+    // LOGIN: `/users/login`,
+    LOGIN: `/auth/users/login`,
     LOGOUT: `/auth/logout`,
     REGISTER: `/auth/register`,
     REFRESH_TOKEN: `/auth/refresh-token`,

@@ -1,8 +1,8 @@
 import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { userSchema } from "../user-creation-form/user-form.schema";
-import { userFormConfig } from "../user-creation-form/user-form-config";
+import { userSchema } from "./user-form.schema";
+import { userFormConfig } from "./user-form-config";
 import { FormProvider } from "@/components/form/context/FormProvider";
 import { getController } from "@/components/form/utils/getController";
 
