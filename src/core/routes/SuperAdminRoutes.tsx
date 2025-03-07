@@ -1,22 +1,22 @@
 import { Routes, Route } from "react-router-dom";
-import { checkerRoutes } from "./RoutesConfig";
+import { superAdminRoutes } from "./RoutesConfig";
 import { ProtectedRoute } from "./ProtectedRoute";
-import CheckerLayout from "@/features/checker/components/CheckerLayout";
 import NotFoundPage from "@/components/common/NotFoundPage";
+import Layout from "@/features/super-admin/components/SuperAdminLayout";
 
-export const CheckerRoutes = () => {
+export const SuperAdminRoutes = () => {
   return (
     
     <Routes>
-    {checkerRoutes.map(({ path, element: Element, roles, permission }) => (
+    {superAdminRoutes.map(({ path, element: Element, roles, permission }) => (
       <Route
         key={path}
         path={path}
         element={
           <ProtectedRoute roles={roles} permission={permission}>
-            <CheckerLayout>
+            <Layout>
               <Element />
-            </CheckerLayout>
+            </Layout>
           </ProtectedRoute>
         }
       />
@@ -24,9 +24,9 @@ export const CheckerRoutes = () => {
     <Route
       path="*"
       element={
-        <CheckerLayout>
+        <Layout>
           <NotFoundPage />
-        </CheckerLayout>
+        </Layout>
       }
     />
   </Routes>

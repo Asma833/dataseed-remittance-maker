@@ -1,16 +1,14 @@
 import { useState } from "react";
 import DashboardContentWrapper from "@/components/common/DashboardContentWrapper";
-
 import Header from "@/components/layout/side-navigaion/HeaderNav";
-
 import { ReactNode } from "react";
-import AdminSideNavigation from "./side-navigation/AdminSideNav";
+import SideNavigation from "./side-navigation/SideNav";
 
-interface AdminLayoutProps {
+interface SuperAdminLayoutProps {
   children: ReactNode;
 }
 
-const AdminLayout = ({ children }: AdminLayoutProps) => {
+const SuperAdminLayout = ({ children }: SuperAdminLayoutProps) => {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
  const handleSidebarToggle = () => {
   if(window.innerWidth < 768){
@@ -24,7 +22,7 @@ const AdminLayout = ({ children }: AdminLayoutProps) => {
         className={`w-48 transition-transform transform 
         ${isSidebarOpen ? "translate-x-0" : "-translate-x-64"} md:translate-x-0 fixed md:static h-full`}
       >
-        <AdminSideNavigation />
+        <SideNavigation />
       </div>
 
       {/* Main Content */}
@@ -37,4 +35,4 @@ const AdminLayout = ({ children }: AdminLayoutProps) => {
   );
 };
 
-export default AdminLayout;
+export default SuperAdminLayout;
