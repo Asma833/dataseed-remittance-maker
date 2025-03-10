@@ -1,7 +1,7 @@
 import { Button } from "@/components/ui/button";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { ChevronLeft, ChevronRight } from "lucide-react";
-import { TablePaginationProps } from './common-components.types';
+import { TablePaginationProps } from '../common-components.types';
 
 export function TablePagination({
   currentPage,
@@ -11,6 +11,8 @@ export function TablePagination({
   setPageSize,
   setCurrentPage,
   filteredDataLength,
+  paginationMode,
+  onPageChange
 }: TablePaginationProps) {
   const getPageNumbers = () => {
     const pages: (number | string)[] = [];
@@ -45,6 +47,31 @@ export function TablePagination({
     return pages;
   };
 
+  const handlePageChange = (page: number) => {
+    if (page === currentPage) return;
+    
+    if (paginationMode === 'dynamic' && onPageChange) {
+      // In dynamic mode, call the provided callback to fetch data for the new page
+      onPageChange(page, pageSize);
+    }
+    
+    // Always update the current page state
+    setCurrentPage(page);
+  };
+
+  const handlePageSizeChange = (size: number) => {
+    const newSize = Number(size);
+    
+    if (paginationMode === 'dynamic' && onPageChange) {
+      // When changing page size in dynamic mode, reset to page 1 and fetch new data
+      onPageChange(1, newSize);
+      setCurrentPage(1);
+    }
+    
+    // Always update the page size state
+    setPageSize(newSize);
+  };
+
   return (
     <div className="flex items-center justify-between px-2">
       <p className="text-sm text-gray-700">
@@ -53,7 +80,10 @@ export function TablePagination({
       </p>
       <div className="flex gap-3">
         <div>
-          <Select value={pageSize.toString()} onValueChange={(value) => setPageSize(Number(value))}>
+          <Select 
+            value={pageSize.toString()} 
+            onValueChange={(value) => handlePageSizeChange(Number(value))}
+          >
             <SelectTrigger className="text-black">
               <span className="flex items-center">
                 <span className="mr-2 text-muted-foreground">Rows per page:</span>
@@ -73,7 +103,7 @@ export function TablePagination({
           <Button
             variant="outline"
             size="sm"
-            onClick={() => setCurrentPage(Math.max(currentPage - 1, 1))}
+            onClick={() => handlePageChange(Math.max(currentPage - 1, 1))}
             disabled={currentPage === 1}
             className="bg-white text-black"
           >
@@ -91,7 +121,7 @@ export function TablePagination({
                   key={`page-${pageNum}`}
                   variant={currentPage === pageNum ? "default" : "outline"}
                   size="sm"
-                  onClick={() => setCurrentPage(Number(pageNum))}
+                  onClick={() => handlePageChange(Number(pageNum))}
                   className={currentPage === pageNum ? "paginationActive" : "paginationInactive"}
                 >
                   {pageNum}
@@ -103,7 +133,7 @@ export function TablePagination({
           <Button
             variant="outline"
             size="sm"
-            onClick={() => setCurrentPage(Math.min(currentPage + 1, totalPages))}
+            onClick={() => handlePageChange(Math.min(currentPage + 1, totalPages))}
             disabled={currentPage === totalPages}
             className="bg-white text-black"
           >

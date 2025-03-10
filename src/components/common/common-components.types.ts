@@ -20,6 +20,9 @@ export type TablePaginationProps = {
   setPageSize: (size: number) => void;
   setCurrentPage: (page: number) => void;
   filteredDataLength: number;
+  paginationMode?: "static" | "dynamic";  // Make paginationMode optional
+  onPageChange?: any; 
+  totalRecords?: number;
 };
 
 export type TableDataLoaderProps = {
@@ -55,8 +58,11 @@ export interface DynamicTableProps<T> {
   defaultSortDirection?: "asc" | "desc";
   onRowClick?: (row: T) => void;
   filter?: any;
+  paginationMode?: "static" | "dynamic";
   loading?: boolean;
   renderComponents?: JSX.Element;
+  onPageChange?: (page: number, pageSize: number) => Promise<T[]>;
+  totalRecords?: number;
 }
 
 export type IconType = "default" | "upload" | "download";
@@ -74,6 +80,8 @@ export type DialogWrapperProps = {
   className?: string;
   onSave?: () => void;
   footerBtnText?: string;
+  isOpen?: boolean;  
+  setIsOpen?: (open: boolean) => void;
 };
 
 export type DashboardContentWrapperProps = {

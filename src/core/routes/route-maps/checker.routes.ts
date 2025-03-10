@@ -7,6 +7,8 @@ const checkerComponents = {
     
     UpdateIncident: lazy(() => import("@/features/checker/pages/updateIncident/update-incident-table/UpdateIncidentCreationTable")),
     ViewAll: lazy(() => import("@/features/checker/pages/view-all/view-table/ViewAllTable")),
+    
+    CompletedTransaction: lazy(() => import("@/features/checker/pages/completed-transactions/CompletedTransactionTable")),
   }
 export const checkerRoutes = [
   {
@@ -30,6 +32,12 @@ export const checkerRoutes = [
   {
     path: ROUTES.CHECKER.VIEWALL,
     element: checkerComponents.ViewAll,
+    roles: ["checker", "co-admin"],
+    permission: "view_dashboard",
+  },
+  {
+    path: ROUTES.CHECKER.COMPLETEDTRANSACTIONS,
+    element: checkerComponents.CompletedTransaction,
     roles: ["checker", "co-admin"],
     permission: "view_dashboard",
   },

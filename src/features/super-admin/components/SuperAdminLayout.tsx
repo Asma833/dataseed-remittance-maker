@@ -27,7 +27,7 @@ const SuperAdminLayout = ({ children }: SuperAdminLayoutProps) => {
 
       {/* Main Content */}
       
-        <main className="flex-1 w-[calc(100%-15rem)] h-screen" onClick={handleSidebarToggle}> 
+        <main className="flex-1 w-[calc(100%-15rem)] h-screen bg-background" onClick={handleSidebarToggle}> 
         <Header isSidebarOpen={isSidebarOpen} setIsSidebarOpen={setIsSidebarOpen} />
           <DashboardContentWrapper>{children}</DashboardContentWrapper>
         </main>

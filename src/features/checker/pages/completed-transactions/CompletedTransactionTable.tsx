@@ -1,6 +1,5 @@
 import { DynamicTable } from "@/components/common/dynamic-table/DynamicTable";
-import { getAssignCreationColumns } from "./assign-creation-table-col";
-import { transactionTableData as initialData } from "./assign-table-value";
+import { transactionTableData as initialData } from "../assign/assign-table/assign-table-value";
 import { useState, useEffect } from "react";
 import { useFilterApi } from "@/components/common/dynamic-table/hooks/useFilterApi";
 import { useDynamicPagination } from "@/components/common/dynamic-table/hooks/useDynamicPagination";
@@ -8,8 +7,11 @@ import { Button } from "@/components/ui/button";
 import axios from "axios";
 import { toast } from "sonner";
 import { API } from "@/core/constant/apis";
+import { transactionTableData } from "./completed-transaction-table-value";
+import { getTransactionTableColumns } from "./completed-transaction-table-col";
+import { exportToCSV, exportToExcel } from "@/utils/exportUtils";
 
-const AssignCreationTable = () => {
+const CompletedTransactionTable = () => {
   const [tableData, setTableData] = useState(
     // Add isSelected property to all rows initialized as false
     initialData.map((item) => ({ ...item, isSelected: false }))
@@ -21,16 +23,16 @@ const AssignCreationTable = () => {
 
   // Use the dynamic pagination hook
   const pagination = useDynamicPagination({
-    endpoint: API.CHECKER.ASSIGN.SEARCH_FILTER,
+    endpoint: API.CHECKER.COMPLETED_TRANSACTIONS.SEARCH_FILTER,
     initialPageSize: 10,
     initialData,
-    dataPath: "transactions", 
+    dataPath: "transactions", // Adjust based on your API response structure
     totalRecordsPath: "totalRecords",
   });
 
   // Using the filter API hook
   const filterApi = useFilterApi({
-    endpoint: API.CHECKER.ASSIGN.SEARCH_FILTER,
+    endpoint: API.CHECKER.COMPLETED_TRANSACTIONS.SEARCH_FILTER,
     initialData,
     // base query params if needed
     baseQueryParams: {
@@ -90,9 +92,45 @@ const AssignCreationTable = () => {
     }
   };
 
-  const columns = getAssignCreationColumns(handleSelectionChange);
+  const columns = getTransactionTableColumns();
 
+  const handleExportToCSV = () => {
+    const dataToExport = isPaginationDynamic
+      ? pagination.data
+      : isTableFilterDynamic && filterApi.data.length > 0
+      ? filterApi.data
+      : transactionTableData;
+    
+    exportToCSV(dataToExport, columns, 'completed-transactions');
+  };
 
+  const handleExportToExcel = () => {
+    const dataToExport = isPaginationDynamic
+      ? pagination.data
+      : isTableFilterDynamic && filterApi.data.length > 0
+      ? filterApi.data
+      : transactionTableData;
+    
+    exportToExcel(dataToExport, columns, 'completed-transactions', 'Transactions');
+  };
+
+  // Define transaction type options
+  const transactionTypeOptions = [
+    { label: "All Types", value: "all" },
+    { label: "Transfer", value: "transfer" },
+    { label: "Payment", value: "payment" },
+    { label: "Deposit", value: "deposit" },
+    { label: "Withdrawal", value: "withdrawal" },
+  ];
+
+  // Define status options
+  const transactionStatusOptions = [
+    { label: "All Status", value: "all" },
+    { label: "Pending", value: "pending" },
+    { label: "Completed", value: "completed" },
+    { label: "Failed", value: "failed" },
+    { label: "Processing", value: "processing" },
+  ];
 
   // Load initial data when the component mounts
   useEffect(() => {
@@ -119,7 +157,7 @@ const AssignCreationTable = () => {
             ? pagination.data
             : isTableFilterDynamic && filterApi.data.length > 0
             ? filterApi.data
-            : tableData
+            : transactionTableData
         }
         tableWrapperClass="bg-background p-5 rounded-md"
         defaultSortColumn="niumId"
@@ -140,9 +178,22 @@ const AssignCreationTable = () => {
           roleFilerColumn: "role",
           rederFilerOptions: {
             search: true,
-            dateRange: false,
-            applyAction: false,
-            resetAction: false,
+            dateRange: true,
+            applyAction: true,
+            resetAction: true,
+            status: {
+              label: "Status",
+              placeholder: "Select status",
+              options: transactionStatusOptions,
+            },
+            selects: [
+              {
+                id: "transactionType",
+                label: "Type",
+                placeholder: "Select type",
+                options: transactionTypeOptions,
+              },
+            ],
           },
           // Dynamic callbacks - API functions
           dynamicCallbacks: isTableFilterDynamic
@@ -156,24 +207,13 @@ const AssignCreationTable = () => {
             : undefined,
         }}
       />
-
-      <div className="w-full  flex flex-col items-center justify-start gap-3">
-        <div className="text-sm text-gray-500">
-          {selectedRows.length} transaction
-          {selectedRows.length !== 1 ? "s" : ""} selected
-        </div>
-        <Button
-          onClick={handleTakeRequest}
-          disabled={selectedRows.length === 0 || isSubmitting}
-          className="border"
-        >
-          {isSubmitting
-            ? "Processing..."
-            : `Take Request${selectedRows.length !== 1 ? "s" : ""}`}
-        </Button>
+      <div className="flex mt-4 gap-3">
+        <Button onClick={handleExportToCSV}>Export CSV</Button>
+        {/* Uncomment if you want to use the Excel export option */}
+        {/* <Button onClick={handleExportToExcel}>Export Excel</Button> */}
       </div>
     </div>
   );
 };
 
-export default AssignCreationTable;
+export default CompletedTransactionTable;

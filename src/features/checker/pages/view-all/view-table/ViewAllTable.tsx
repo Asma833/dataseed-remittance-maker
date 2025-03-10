@@ -1,4 +1,4 @@
-import { DynamicTable } from "@/components/common/DynamicTable";
+import { DynamicTable } from "@/components/common/dynamic-table/DynamicTable";
 import { getTransactionTableColumns } from "./view-all-table-col";
 import { transactionTableData as initialData } from "./view-all-table-value";
 import { useState } from "react";

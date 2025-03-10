@@ -26,6 +26,8 @@ export interface RenderFilterOptions {
   dateRange?: boolean;
   status?: StatusConfig;
   selects?: SelectConfig[];
+  applyAction: boolean,
+  resetAction: boolean,
 }
 
 export type FilterMode = "static" | "dynamic";

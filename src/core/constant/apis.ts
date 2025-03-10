@@ -34,9 +34,19 @@ export const API = {
       TAKE_REQUEST: `/checker/assign/take-request`,
       SEARCH_FILTER: `/checker/assign/search-filter`,
     },
+    COMPLETED_TRANSACTIONS: {
+      SEARCH_FILTER: `/checker/completed-transactions/search-filter`,
+    },
+    LIST: `/update-incident`,
+    UPDATE: (id: string) => `/update-incident/${id}`,
   },
   FEATURES: {
     ENABLE_GEMINI_FLASH: `/features/gemini-flash/enable`,
+  },
+  NUSERS: {
+    LIST: `/users`,
+    CREATE: `/users`,
+    GET_BY_ID: (id: string) => `/users/${id}`,
   },
 } as const;
 

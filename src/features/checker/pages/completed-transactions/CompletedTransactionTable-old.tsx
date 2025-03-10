@@ -1,10 +1,10 @@
 import { DynamicTable } from "@/components/common/dynamic-table/DynamicTable";
-import { getTransactionTableColumns } from "./view-all-table-col";
-import { transactionTableData as initialData } from "./view-all-table-value";
+import { getTransactionTableColumns } from "./completed-transaction-table-col";
+import { transactionTableData as initialData } from "./completed-transaction-table-value";
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 
-const ViewAllTable = () => {
+const CompletedTransactionTable = () => {
   const columns = getTransactionTableColumns();
   const [tableData] = useState(initialData);
   const [fromDate, setFromDate] = useState("");
@@ -12,6 +12,8 @@ const ViewAllTable = () => {
   const [transactionType, setTransactionType] = useState("");
   const [purposeType, setPurposeType] = useState("");
 
+
+  
   return (
     <div className="">
       <DynamicTable
@@ -84,8 +86,12 @@ const ViewAllTable = () => {
           },
         }}
       />
+      
+      <Button className="bg-primary text-white mb-3 lg:mb-2 mt-4">
+        Export
+      </Button>
     </div>
   );
 };
 
-export default ViewAllTable;
+export default CompletedTransactionTable;

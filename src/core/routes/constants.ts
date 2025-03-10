@@ -20,7 +20,7 @@ export const ROUTES = {
     ASSIGN: '/assign',
     VIEWALL: '/viewall',
     UPDATE_INCIDENT: '/updateincident',
-    COMPLETEDTRANSACTIONS: '/completed-transactions'
+    COMPLETEDTRANSACTIONS: '/completedtransactions'
   },
   SUPERADMIN:{
     NUSER: '/users',

@@ -11,7 +11,7 @@ import {
 } from "../ui/select";
 import { CalendarDays, RefreshCw } from "lucide-react";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 
 const TableSearchFilter = ({
   filters,
@@ -25,101 +25,99 @@ const TableSearchFilter = ({
   const { search, dateRange, status, selects } = filterConfig.rederFilerOptions;
   const mode = filterConfig.mode || "static";
   const callbacks = filterConfig.dynamicCallbacks;
+  
+  // Store filter values locally to avoid applying them immediately 
+  const [localDateRange, setLocalDateRange] = useState(filters.dateRange);
+  const [localStatus, setLocalStatus] = useState(filters.status);
+  const [localCustomFilters, setLocalCustomFilters] = useState(filters.customFilterValues);
 
   // For dynamic search with debounce
   useEffect(() => {
-    if (mode === "dynamic" && callbacks?.onSearch && filters.search) {
+    if (filters.search) {
       const handler = setTimeout(async () => {
-        if (setLoading) setLoading(true);
-        try {
-          const result = await callbacks?.onSearch?.(filters.search);
-          if (setDynamicData && result) setDynamicData(result);
-        } catch (error) {
-          console.error("Search error:", error);
-        } finally {
-          if (setLoading) setLoading(false);
+        if (mode === "dynamic" && callbacks?.onSearch) {
+          if (setLoading) setLoading(true);
+          try {
+            const result = await callbacks?.onSearch?.(filters.search);
+            if (setDynamicData && result) setDynamicData(result);
+          } catch (error) {
+            console.error("Search error:", error);
+          } finally {
+            if (setLoading) setLoading(false);
+          }
+        } else {
+          // For static mode, apply filter immediately
+          if (onFilter) onFilter();
         }
       }, 500);
 
       return () => clearTimeout(handler);
+    } else {
+      // If search is cleared, immediately reset/refresh the table
+      handleSearchClear();
     }
-    return;
-  }, [mode, callbacks, filters.search, setLoading, setDynamicData]);
+    return undefined;
+  }, [filters.search]);
+  
+  // Handle search clear/reset
+  const handleSearchClear = () => {
+    // Only reset the search filter, keep other filters intact
+    if (mode === "dynamic" && callbacks?.onSearch) {
+      if (setLoading) setLoading(true);
+      try {
+        callbacks?.onSearch?.("").then(result => {
+          if (setDynamicData && result) setDynamicData(result);
+        });
+      } catch (error) {
+        console.error("Search reset error:", error);
+      } finally {
+        if (setLoading) setLoading(false);
+      }
+    } else {
+      // For static mode
+      if (onFilter) onFilter();
+    }
+  };
 
-  const handleDateChange = async (key: "from" | "to", date: Date | null) => {
-    const newDateRange = {
-      ...filters.dateRange,
+  const handleDateChange = (key: "from" | "to", date: Date | null) => {
+    // Update local state but don't apply filter yet
+    setLocalDateRange({
+      ...localDateRange,
       [key]: date || undefined,
-    };
-
-    setFilters({
-      ...filters,
-      dateRange: newDateRange,
     });
-
-    if (mode === "dynamic" && callbacks?.onDateRangeChange && setDynamicData) {
-      if (setLoading) setLoading(true);
-      try {
-        const result = await callbacks.onDateRangeChange(
-          newDateRange.from,
-          newDateRange.to
-        );
-        setDynamicData(result);
-      } catch (error) {
-        console.error("Date range filter error:", error);
-      } finally {
-        if (setLoading) setLoading(false);
-      }
-    }
   };
 
-  const handleStatusChange = async (value: string) => {
-    setFilters({ ...filters, status: value });
-
-    if (mode === "dynamic" && callbacks?.onStatusChange && setDynamicData) {
-      if (setLoading) setLoading(true);
-      try {
-        const result = await callbacks.onStatusChange(value);
-        setDynamicData(result);
-      } catch (error) {
-        console.error("Status filter error:", error);
-      } finally {
-        if (setLoading) setLoading(false);
-      }
-    }
+  const handleStatusChange = (value: string) => {
+    // Update local state but don't apply filter yet
+    setLocalStatus(value);
   };
 
-  const handleSelectChange = async (id: string, value: string) => {
-    const newFilters = {
-      ...filters,
-      customFilterValues: {
-        ...filters.customFilterValues,
-        [id]: value,
-      },
-    };
-
-    setFilters(newFilters);
-
-    if (mode === "dynamic" && callbacks?.onSelectChange && setDynamicData) {
-      if (setLoading) setLoading(true);
-      try {
-        const result = await callbacks.onSelectChange(id, value);
-        setDynamicData(result);
-      } catch (error) {
-        console.error("Select filter error:", error);
-      } finally {
-        if (setLoading) setLoading(false);
-      }
-    }
+  const handleSelectChange = (id: string, value: string) => {
+    // Update local state but don't apply filter yet
+    setLocalCustomFilters({
+      ...localCustomFilters,
+      [id]: value,
+    });
   };
 
   const handleDynamicFilter = async () => {
+    // Apply all filters at once when the Apply button is clicked
+    const updatedFilters = {
+      ...filters,
+      dateRange: localDateRange,
+      status: localStatus,
+      customFilterValues: localCustomFilters
+    };
+    
+    // Update the parent component's filter state
+    setFilters(updatedFilters);
+    
     if (onFilter) onFilter();
 
     if (mode === "dynamic" && callbacks?.onFilterApply && setDynamicData) {
       if (setLoading) setLoading(true);
       try {
-        const result = await callbacks.onFilterApply(filters);
+        const result = await callbacks.onFilterApply(updatedFilters);
         setDynamicData(result);
       } catch (error) {
         console.error("Filter apply error:", error);
@@ -130,14 +128,46 @@ const TableSearchFilter = ({
   };
 
   const handleDynamicReset = async () => {
+    // Reset local states
+    setLocalDateRange({ from: undefined, to: undefined });
+    setLocalStatus("all");
+    setLocalCustomFilters({});
+    
+    // Reset parent component's filter state
+    setFilters({
+      ...filters,
+      search: "", // Also reset search
+      status: "all",
+      role: "",
+      dateRange: { from: undefined, to: undefined },
+      customFilterValues: {},
+    });
+    
     if (onReset) onReset();
 
-    // Additional reset logic for dynamic mode could be added here
+    // Additional reset logic for dynamic mode
+    if (mode === "dynamic" && callbacks?.onFilterApply && setDynamicData) {
+      if (setLoading) setLoading(true);
+      try {
+        const result = await callbacks.onFilterApply({
+          search: "",
+          status: "all",
+          role: "",
+          dateRange: { from: undefined, to: undefined },
+          customFilterValues: {},
+        });
+        setDynamicData(result);
+      } catch (error) {
+        console.error("Filter reset error:", error);
+      } finally {
+        if (setLoading) setLoading(false);
+      }
+    }
   };
 
   return (
     <div className="flex flex-col gap-3 w-full">
-      <div className="flex items-end  justify-between gap-4 flex-wrap text-[--primary-text]">
+      <div className="flex items-end justify-between gap-4 flex-wrap text-[--primary-text]">
         <div className="flex items-end gap-2">
           {dateRange && (
             <>
@@ -147,8 +177,8 @@ const TableSearchFilter = ({
                 </span>
                 <DatePicker
                   value={
-                    filters.dateRange.from
-                      ? dayjs(filters.dateRange.from)
+                    localDateRange.from
+                      ? dayjs(localDateRange.from)
                       : null
                   }
                   onChange={(date) =>
@@ -171,7 +201,7 @@ const TableSearchFilter = ({
                     openPickerIcon: CalendarDays,
                   }}
                   format="DD/MM/YYYY"
-                  className="bg-gray-200"
+                  className="bg-[--filter-bg] text-[--filter-fg]"
                 />
               </div>
               <div className="flex items-start flex-col ">
@@ -180,7 +210,7 @@ const TableSearchFilter = ({
                 </span>
                 <DatePicker
                   value={
-                    filters.dateRange.to ? dayjs(filters.dateRange.to) : null
+                    localDateRange.to ? dayjs(localDateRange.to) : null
                   }
                   onChange={(date) =>
                     handleDateChange("to", date?.toDate() || null)
@@ -202,7 +232,7 @@ const TableSearchFilter = ({
                     openPickerIcon: CalendarDays,
                   }}
                   format="DD/MM/YYYY"
-                  className="bg-gray-200"
+                  className="bg-[--filter-bg] text-[--filter-fg]"
                 />
               </div>
             </>
@@ -213,8 +243,8 @@ const TableSearchFilter = ({
               <span className="text-sm whitespace-nowrap text-gray-500">
                 {status.label || "Status"}:
               </span>
-              <Select value={filters.status} onValueChange={handleStatusChange}>
-                <SelectTrigger className="w-[180px] bg-gray-200 border-none h-10">
+              <Select value={localStatus} onValueChange={handleStatusChange}>
+                <SelectTrigger className="w-[180px] bg-[--filter-bg] text-[--filter-fg] border-none h-10">
                   <SelectValue
                     placeholder={status.placeholder || "Select status"}
                   />
@@ -237,12 +267,12 @@ const TableSearchFilter = ({
                   {select.label}:
                 </span>
                 <Select
-                  value={filters.customFilterValues[select.id] || ""}
+                  value={localCustomFilters[select.id] || ""}
                   onValueChange={(value) =>
                     handleSelectChange(select.id, value)
                   }
                 >
-                  <SelectTrigger className="w-[180px] bg-gray-200 border-none h-10">
+                  <SelectTrigger className="w-[180px] bg-[--filter-bg] text-[--filter-fg] border-none h-10">
                     <SelectValue
                       placeholder={
                         select.placeholder || `Select ${select.label}`
@@ -259,31 +289,33 @@ const TableSearchFilter = ({
                 </Select>
               </div>
             ))}
-          {(onFilter || onReset) && (
-            <div className="flex justify-end gap-2">
-              {onFilter && (
-                <Button
-                  onClick={mode === "dynamic" ? handleDynamicFilter : onFilter}
-                  size="sm"
-                  variant="default"
-                  className="h-10"
-                >
-                  Apply Filters
-                </Button>
-              )}
-              {onReset && (
-                <Button
-                  onClick={mode === "dynamic" ? handleDynamicReset : onReset}
-                  size="sm"
-                  variant="outline"
-                  className="h-10 flex gap-1"
-                >
-                  <RefreshCw size={16} />
-                  Reset
-                </Button>
-              )}
-            </div>
-          )}
+          {filterConfig.rederFilerOptions.applyAction &&
+            filterConfig.rederFilerOptions.resetAction &&
+            (onFilter || onReset) && (
+              <div className="flex justify-end gap-2">
+                {onFilter && (
+                  <Button
+                    onClick={handleDynamicFilter}
+                    size="sm"
+                    variant="default"
+                    className="h-10"
+                  >
+                    Apply Filters
+                  </Button>
+                )}
+                {onReset && (
+                  <Button
+                    onClick={handleDynamicReset}
+                    size="sm"
+                    variant="outline"
+                    className="h-10 flex gap-1"
+                  >
+                    <RefreshCw size={16} />
+                    Reset
+                  </Button>
+                )}
+              </div>
+            )}
         </div>
         {search && (
           <SearchInput

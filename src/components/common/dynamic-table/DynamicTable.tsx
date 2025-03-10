@@ -7,15 +7,15 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import TableSearchFilter from "../filter/TableSearchFilter";
+import TableSearchFilter from "../../filter/TableSearchFilter";
 import TableDataLoader from "./TableDataLoader";
 import { TablePagination } from "./TablePagination";
 import { cn } from "@/utils/cn";
 import { FileX2 } from "lucide-react";
-import { useTableSorting } from "@/hooks/useTableSorting";
-import { useTablePagination } from "@/hooks/useTablePagination";
-import { Column, DynamicTableProps } from "./common-components.types";
-import { SetFilters } from "../filter/filter.types";
+import { useTableSorting } from "@/components/common/dynamic-table/hooks/useTableSorting";
+import { useTablePagination } from "@/components/common/dynamic-table/hooks/useTablePagination";
+import { Column, DynamicTableProps } from "../common-components.types";
+import { SetFilters } from "../../filter/filter.types";
 
 const formatDate = (date: Date | string | undefined) => {
   if (!date) return "";
@@ -70,9 +70,12 @@ export function DynamicTable<T extends Record<string, any>>({
   defaultSortDirection = "asc",
   pageSizeOption = [10, 15, 20, 25],
   onRowClick,
+  paginationMode,
   filter,
   loading: externalLoading,
   renderComponents,
+  onPageChange,
+  totalRecords,
 }: DynamicTableProps<T>) {
   const [filters, setFilters] = useState<SetFilters>({
     search: "",
@@ -81,16 +84,17 @@ export function DynamicTable<T extends Record<string, any>>({
     dateRange: { from: undefined, to: undefined },
     customFilterValues: {},
   });
-  
+
   const [internalLoading, setInternalLoading] = useState(false);
   const [dynamicData, setDynamicData] = useState<T[]>([]);
-  
+
   // Use dynamic data if in dynamic mode, otherwise use filtered data
   const mode = filter?.mode || "static";
   const loading = externalLoading || internalLoading;
-  
+
   // Use either the dynamically fetched data or the original data based on mode
-  const dataSource = mode === "dynamic" && dynamicData.length > 0 ? dynamicData : initialData;
+  const dataSource =
+    mode === "dynamic" && dynamicData.length > 0 ? dynamicData : initialData;
 
   const { sortedData, sortColumn, sortDirection, toggleSort } = useTableSorting(
     dataSource,
@@ -99,50 +103,59 @@ export function DynamicTable<T extends Record<string, any>>({
   );
 
   // Only filter data in static mode
-  const filteredData = mode === "static" 
-    ? sortedData.filter(item => {
-        // Apply search filter
-        if (filters.search && filter?.filterOption) {
-          const searchTerm = filters.search.toLowerCase();
-          const matchesSearch = columns.some(column => {
-            const value = item[column.id];
-            if (value === undefined || value === null) return false;
-            return String(value).toLowerCase().includes(searchTerm);
-          });
-          if (!matchesSearch) return false;
-        }
-        
-        // Apply date range filter
-        if (filter?.dateFilterColumn && filters.dateRange) {
-          const dateColumn = filter.dateFilterColumn as string;
-          const itemDate = item[dateColumn] ? new Date(item[dateColumn]) : null;
-          
-          if (filters.dateRange.from && itemDate) {
-            const fromDate = new Date(filters.dateRange.from);
-            if (itemDate < fromDate) return false;
+  const filteredData =
+    mode === "static"
+      ? sortedData.filter((item) => {
+          // Apply search filter
+          if (filters.search && filter?.filterOption) {
+            const searchTerm = filters.search.toLowerCase();
+            const matchesSearch = columns.some((column) => {
+              const value = item[column.id];
+              if (value === undefined || value === null) return false;
+              return String(value).toLowerCase().includes(searchTerm);
+            });
+            if (!matchesSearch) return false;
           }
-          
-          if (filters.dateRange.to && itemDate) {
-            const toDate = new Date(filters.dateRange.to);
-            toDate.setHours(23, 59, 59, 999); // End of the day
-            if (itemDate > toDate) return false;
+
+          // Apply date range filter
+          if (filter?.dateFilterColumn && filters.dateRange) {
+            const dateColumn = filter.dateFilterColumn as string;
+            const itemDate = item[dateColumn]
+              ? new Date(item[dateColumn])
+              : null;
+
+            if (filters.dateRange.from && itemDate) {
+              const fromDate = new Date(filters.dateRange.from);
+              if (itemDate < fromDate) return false;
+            }
+
+            if (filters.dateRange.to && itemDate) {
+              const toDate = new Date(filters.dateRange.to);
+              toDate.setHours(23, 59, 59, 999); // End of the day
+              if (itemDate > toDate) return false;
+            }
           }
-        }
-        
-        // Apply status filter
-        if (filter?.statusFilerColumn && filters.status && filters.status !== 'all') {
-          const statusColumn = filter.statusFilerColumn as string;
-          if (item[statusColumn] !== filters.status) return false;
-        }
-        
-        // Apply custom select filters
-        for (const [key, value] of Object.entries(filters.customFilterValues)) {
-          if (value && value !== 'all' && item[key] !== value) return false;
-        }
-        
-        return true;
-      })
-    : sortedData; // In dynamic mode, we don't filter locally
+
+          // Apply status filter
+          if (
+            filter?.statusFilerColumn &&
+            filters.status &&
+            filters.status !== "all"
+          ) {
+            const statusColumn = filter.statusFilerColumn as string;
+            if (item[statusColumn] !== filters.status) return false;
+          }
+
+          // Apply custom select filters
+          for (const [key, value] of Object.entries(
+            filters.customFilterValues
+          )) {
+            if (value && value !== "all" && item[key] !== value) return false;
+          }
+
+          return true;
+        })
+      : sortedData; // In dynamic mode, we don't filter locally
 
   const {
     paginatedData,
@@ -166,7 +179,7 @@ export function DynamicTable<T extends Record<string, any>>({
       customFilterValues: {},
     });
     setCurrentPage(1);
-    
+
     // Reset dynamic data to empty if in dynamic mode
     if (mode === "dynamic") {
       setDynamicData([]);
@@ -273,6 +286,9 @@ export function DynamicTable<T extends Record<string, any>>({
           setPageSize={setPageSize}
           setCurrentPage={setCurrentPage}
           filteredDataLength={filteredData.length}
+          paginationMode={paginationMode || "static"}
+          onPageChange={onPageChange}
+          totalRecords={totalRecords ? totalRecords : filteredData.length}
         />
       )}
     </div>

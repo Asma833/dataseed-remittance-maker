@@ -1,5 +1,5 @@
 import React from "react";
-import { Menu,Bell,Power } from "lucide-react";
+import { Menu, Bell, Power } from "lucide-react";
 import LogoutWrapper from "@/features/auth/components/LogoutWrapper";
 import { ThemeToggle } from "@/components/common/ThemeToggle";
 import BreadCrumb from "@/components/common/BreadCrumb";
@@ -11,22 +11,24 @@ interface HeaderProps {
 
 const Header: React.FC<HeaderProps> = ({ isSidebarOpen, setIsSidebarOpen }) => {
   return (
-    <nav className="bg-background shadow-lg h-[70px] top-0 rounded-md m-2">
+    <nav className="bg-background shadow-[1px_6px_0px_14px_rgba(66,66,66,0.6)] border-b border-gray-200 h-[70px] top-0">
       <div className="sm:px-6 lg:px-8 flex items-center h-16">
-        
         <button
           className="md:hidden p-2 rounded-md hover:bg-muted/20"
           onClick={() => setIsSidebarOpen(!isSidebarOpen)}
         >
-          {isSidebarOpen ? '' : <Menu className="w-6 h-6 text-muted-foreground" />}
+          {isSidebarOpen ? (
+            ""
+          ) : (
+            <Menu className="w-6 h-6 text-muted-foreground" />
+          )}
         </button>
 
         {/* Spacer to push icons to the right */}
         <div className="flex-1">
-        <div className="block lg:hidden">
-        <BreadCrumb />
-      </div>
-                  
+          <div className="block lg:hidden">
+            <BreadCrumb />
+          </div>
         </div>
 
         {/* Notification and Logout Buttons (Right) */}
