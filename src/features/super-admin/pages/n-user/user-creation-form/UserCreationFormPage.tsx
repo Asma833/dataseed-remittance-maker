@@ -130,7 +130,7 @@ const UserCreationFormPage = () => {
         className="p-6 bg-white shadow-md rounded-lg max-w-full mx-auto"
       >
         <h2 className="text-xl font-bold mb-4">
-          {isEditMode ? "Update User" : "Create User"}
+          User
         </h2>
 
         <FormContentWrapper className="py-2 lg:pr-32 md:pr-0">
