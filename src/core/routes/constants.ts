@@ -19,8 +19,8 @@ export const ROUTES = {
     DASHBOARD: '/dashboard',
     ASSIGN: '/assign',
     VIEWALL: '/viewall',
-    UPDATE_INCIDENT: '/updateincident',
-    COMPLETEDTRANSACTIONS: '/completedtransactions'
+    UPDATE_INCIDENT: '/update-incident',
+    COMPLETEDTRANSACTIONS: '/completed-transactions'
   },
   SUPERADMIN:{
     NUSER: '/users',
