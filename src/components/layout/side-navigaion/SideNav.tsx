@@ -15,7 +15,7 @@ interface NavItem {
   dropdown?: { title: string; path: string }[];
 }
 
-const Sidebar: React.FC<SidebarProps> = ({ navItems }) => {
+const Sidebar: React.FC<SidebarProps & { setIsSidebarOpen: (open: boolean) => void }> = ({ navItems, setIsSidebarOpen }) => {
   const navigate = useNavigate();
   const location = useLocation();
   const [activeItem, setActiveItem] = useState<string | null>(null);
@@ -31,6 +31,9 @@ const Sidebar: React.FC<SidebarProps> = ({ navItems }) => {
   const handleNavigation = (path: string, itemTitle: string) => {
     setActiveItem(itemTitle);
     navigate(path);
+    if (window.innerWidth < 1024) {
+      setIsSidebarOpen(false);
+    }
   };
 
   return (

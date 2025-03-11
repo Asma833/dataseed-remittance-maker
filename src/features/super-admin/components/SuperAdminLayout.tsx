@@ -10,11 +10,7 @@ interface SuperAdminLayoutProps {
 
 const SuperAdminLayout = ({ children }: SuperAdminLayoutProps) => {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
- const handleSidebarToggle = () => {
-  if(window.innerWidth < 768){
-    setIsSidebarOpen(!isSidebarOpen);
-  }
- }
+ 
   return (
     <div className="flex min-h-screen bg-gray-50">
       {/* Sidebar */}
@@ -22,12 +18,12 @@ const SuperAdminLayout = ({ children }: SuperAdminLayoutProps) => {
         className={`w-48 transition-transform transform 
         ${isSidebarOpen ? "translate-x-0" : "-translate-x-64"} md:translate-x-0 fixed md:static h-full`}
       >
-        <SideNavigation />
+        <SideNavigation setIsSidebarOpen={setIsSidebarOpen} />
       </div>
 
       {/* Main Content */}
       
-        <main className="flex-1 w-[calc(100%-15rem)] h-screen" onClick={handleSidebarToggle}> 
+        <main className="flex-1 w-[calc(100%-15rem)] h-screen" > 
         <Header isSidebarOpen={isSidebarOpen} setIsSidebarOpen={setIsSidebarOpen} />
           <DashboardContentWrapper>{children}</DashboardContentWrapper>
         </main>

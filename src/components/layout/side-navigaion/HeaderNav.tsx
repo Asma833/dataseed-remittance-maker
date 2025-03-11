@@ -23,7 +23,7 @@ const Header: React.FC<HeaderProps> = ({ isSidebarOpen, setIsSidebarOpen }) => {
 
         {/* Spacer to push icons to the right */}
         <div className="flex-1">
-        <div className="block lg:hidden">
+        <div className="block">
         <BreadCrumb />
       </div>
                   
