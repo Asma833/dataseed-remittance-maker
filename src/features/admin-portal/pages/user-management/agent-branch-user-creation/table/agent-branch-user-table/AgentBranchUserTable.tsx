@@ -50,7 +50,7 @@
 // };
 
 // export default AgentBranchUserTable;
-import { DynamicTable } from "@/components/common/DynamicTable";
+import { DynamicTable } from "@/components/common/dynamic-table/DynamicTable";
 import { getAgentBranchUserColumn } from "./agent-branch-user-table-col";
 import { Button } from "@/components/ui/button";
 import { PlusIcon } from "lucide-react";

@@ -29,18 +29,25 @@ export const API = {
     UPDATE: (id: string) => `/orders/${id}`,
     DELETE: (id: string) => `/orders/${id}`,
   },
+  CHECKER: {
+    ASSIGN: {
+      TAKE_REQUEST: `/checker/assign/take-request`,
+      SEARCH_FILTER: `/checker/assign/search-filter`,
+    },
+    COMPLETED_TRANSACTIONS: {
+      SEARCH_FILTER: `/checker/completed-transactions/search-filter`,
+    },
+    LIST: `/update-incident`,
+    UPDATE: (id: string) => `/update-incident/${id}`,
+  },
   FEATURES: {
     ENABLE_GEMINI_FLASH: `/features/gemini-flash/enable`,
   },
-  NUSERS:{
-    LIST:`/users`,
-    CREATE:`/users`,
+  NUSERS: {
+    LIST: `/users`,
+    CREATE: `/users`,
     GET_BY_ID: (id: string) => `/users/${id}`,
   },
-  CHECKER:{
-    LIST:`/update-incident`,
-    UPDATE: (id: string) => `/update-incident/${id}`,
-  }
 } as const;
 
 /**

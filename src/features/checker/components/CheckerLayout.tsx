@@ -12,9 +12,6 @@ interface CheckerLayoutProps {
 const CheckerLayout = ({ children }: CheckerLayoutProps) => {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
  
-  
-
-  
   return (
     <div className="flex min-h-screen bg-gray-50">
       {/* Sidebar */}

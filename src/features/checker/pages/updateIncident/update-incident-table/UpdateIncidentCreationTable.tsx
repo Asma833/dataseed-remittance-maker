@@ -1,5 +1,5 @@
 
-import { DynamicTable } from "@/components/common/DynamicTable";
+import { DynamicTable } from "@/components/common/dynamic-table/DynamicTable";
 import { getTransactionTableColumns } from "./update-incident-creation-table-col";
 import { transactionTableData as initialData } from "./update-incident-table-value";
 import {  useState } from "react";
