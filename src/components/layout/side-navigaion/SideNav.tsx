@@ -71,7 +71,7 @@ const Sidebar: React.FC<SidebarProps & { setIsSidebarOpen: (open: boolean) => vo
                         <li key={subIdx} className="list-none">
                           <a
                             onClick={() => handleNavigation(subItem.path, subItem.title)}
-                            className="block pl-5 py-2 text-sm rounded-md hover:bg-muted/20 cursor-pointer"
+                            className={cn("block pl-5 py-2 text-sm rounded-md hover:bg-muted/20 cursor-pointer",item.title.length > 16 ? "py-1" : "py-3")}
                           >
                             {subItem.title}
                           </a>
@@ -84,9 +84,9 @@ const Sidebar: React.FC<SidebarProps & { setIsSidebarOpen: (open: boolean) => vo
                 <a
                   onClick={() => item.path && handleNavigation(item.path, item.title)}
                   className={cn(
-                   "flex items-center gap-2 pl-2 py-3 my-2 w-full rounded-md cursor-pointer transition-colors text-sm",
+                   "flex items-center gap-2 pl-2 my-2 w-full rounded-md cursor-pointer transition-colors text-sm",
                    activeItem === item.title ? "bg-primary text-white hover:bg-gray-200 hover:text-black" : "hover:bg-muted/20"
-                 )}
+                 ,item.title.length > 16 ? "py-1" : "py-3")}
                 >
                   {item.icon && <item.icon className="h-5 w-5"/>} {item.title}
                 </a>
