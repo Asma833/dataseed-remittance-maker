@@ -3,7 +3,7 @@ import { useState, useEffect } from "react";
 
 // module-level variable to store the current title
 let currentTitle = "";
-const listeners: Function[] = [];
+const listeners: ((newTitle: string) => void)[] = [];
 
 // Function to update title and notify listeners
 const updateTitle = (newTitle: string) => {

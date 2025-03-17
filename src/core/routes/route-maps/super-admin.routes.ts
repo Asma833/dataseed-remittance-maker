@@ -2,9 +2,9 @@ import { lazy } from "react";
 import { ROUTES } from "../constants";
 
 const superAdminComponents = {
-    User: lazy(() => import("@/features/super-admin/pages/n-user/n-user-table/NUserCreationTable")),
-    UserCreation : lazy(()=> import("@/features/super-admin/pages/n-user/user-creation-form/page")),
-    UpdateUser : lazy(()=> import("@/features/super-admin/pages/n-user/user-creation-form/page"))
+    User: lazy(() => import("@/features/co-admin/pages/n-user/n-user-table/NUserCreationTable")),
+    UserCreation : lazy(()=> import("@/features/co-admin/pages/n-user/user-creation-form/page")),
+    UpdateUser : lazy(()=> import("@/features/co-admin/pages/n-user/user-creation-form/page"))
   }
 export const superAdminRoutes = [
   {

@@ -14,7 +14,7 @@ import Spacer from "@/components/form/wrapper/Spacer";
 import { FormContentWrapper } from "@/components/form/wrapper/FormContentWrapper";
 import { useCreateUser } from "../../../hooks/useCreateUser"; // Import the create user hook
 import { toast } from "sonner";
-import { usePageTitle } from "@/components/common/PageTitle";
+import { usePageTitle } from "@/hooks/usePageTitle";
 
 const useScreenSize = () => {
   const [screenWidth, setScreenWidth] = useState(window.innerWidth);

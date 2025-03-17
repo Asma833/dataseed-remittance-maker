@@ -8,7 +8,7 @@ import { useNavigate } from "react-router-dom";
 import { useFilterApi } from "@/components/common/dynamic-table/hooks/useFilterApi";
 import { API } from "@/core/constant/apis";
 import { useDynamicPagination } from "@/components/common/dynamic-table/hooks/useDynamicPagination";
-import { usePageTitle } from "@/components/common/PageTitle";
+import { usePageTitle } from "@/hooks/usePageTitle";
 
 const NuserCreationTable = () => {
   const navigate = useNavigate();

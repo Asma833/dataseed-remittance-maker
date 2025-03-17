@@ -7,7 +7,7 @@ import { Button } from "@/components/ui/button";
 import { API } from "@/core/constant/apis";
 import { getTransactionTableColumns } from "./view-all-table-col";
 import { exportToCSV } from "@/utils/exportUtils";
-import { usePageTitle } from "@/components/common/PageTitle";
+import { usePageTitle } from "@/hooks/usePageTitle";
 
 const ViewAllTable = () => {
    const { setTitle } = usePageTitle();

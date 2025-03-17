@@ -8,7 +8,7 @@ import { API } from "@/core/constant/apis";
 import { transactionTableData } from "./completed-transaction-table-value";
 import { getTransactionTableColumns } from "./completed-transaction-table-col";
 import { exportToCSV } from "@/utils/exportUtils";
-import { usePageTitle } from "@/components/common/PageTitle";
+import { usePageTitle } from "@/hooks/usePageTitle";
 
 const CompletedTransactionTable = () => {
   const { setTitle } = usePageTitle();

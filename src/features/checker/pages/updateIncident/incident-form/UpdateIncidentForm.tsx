@@ -17,7 +17,7 @@ import { Button } from "@/components/ui/button";
 import { cn } from "@/utils/cn";
 import { Loader2 } from "lucide-react";
 import { UpdateIncidentRequest } from "@/features/checker/types/updateIncident.type";
-import { usePageTitle } from "@/components/common/PageTitle";
+import { usePageTitle } from "@/hooks/usePageTitle";
 
 
 const useScreenSize = () => {

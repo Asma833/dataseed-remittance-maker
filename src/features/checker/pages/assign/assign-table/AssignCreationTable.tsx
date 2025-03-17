@@ -7,7 +7,7 @@ import { useDynamicPagination } from "@/components/common/dynamic-table/hooks/us
 import { Button } from "@/components/ui/button";
 import { toast } from "sonner";
 import { API } from "@/core/constant/apis";
-import { usePageTitle } from "@/components/common/PageTitle";
+import { usePageTitle } from "@/hooks/usePageTitle";
 
 const AssignCreationTable = () => {
   const { setTitle } = usePageTitle();

@@ -9,7 +9,7 @@ import UpdateIncidentForm from "../incident-form/UpdateIncidentForm";
 import { useDynamicPagination } from "@/components/common/dynamic-table/hooks/useDynamicPagination";
 import { API } from "@/core/constant/apis";
 import { useFilterApi } from "@/components/common/dynamic-table/hooks/useFilterApi";
-import { usePageTitle } from "@/components/common/PageTitle";
+import { usePageTitle } from "@/hooks/usePageTitle";
 
 
 

@@ -2,39 +2,42 @@ import React from "react";
 import { Menu, Bell, Power } from "lucide-react";
 import LogoutWrapper from "@/features/auth/components/LogoutWrapper";
 import { ThemeToggle } from "@/components/common/ThemeToggle";
-import { usePageTitle } from "@/components/common/PageTitle";
 import { cn } from "@/utils/cn";
+import useGetCurrentUser from "@/hooks/useGetCurrentUser";
+import { toTitleCase } from "@/utils/textFormater";
 
 interface HeaderProps {
   isSidebarOpen: boolean;
   setIsSidebarOpen: (isOpen: boolean) => void;
-  className:string;
+  className: string;
 }
 
-const Header: React.FC<HeaderProps> = ({ isSidebarOpen, setIsSidebarOpen,className }) => {
-  const { title } = usePageTitle();
+const Header: React.FC<HeaderProps> = ({
+  isSidebarOpen,
+  setIsSidebarOpen,
+  className,
+}) => {
+  const { role } = useGetCurrentUser();
   return (
-    <nav className={cn(`bg-background fixed top-0 right-0 border-b border-gray-200 h-[70px]  z-40`,className)}>
+    <nav
+      className={cn(
+        `bg-background fixed top-0 right-0 border-b border-gray-200 h-[70px]  z-40`,
+        className
+      )}
+    >
       <div className="sm:px-6 lg:px-8 flex items-center h-16">
         <button
           className="lg:hidden p-2"
           onClick={() => setIsSidebarOpen(!isSidebarOpen)}
         >
-          {isSidebarOpen ? (
-           ""
-          ) : (
-            <Menu className="w-6 h-6" />
-          )}
+          {isSidebarOpen ? "" : <Menu className="w-6 h-6" />}
         </button>
-        
-
 
         {/* Spacer to push icons to the right */}
         <div className="flex-1">
-        <div className="block">
-        <h1 className="text-2xl font-bold">{title}</h1>
-      </div>
-                  
+          <div className="block">
+            <h1 className="text-2xl font-bold">{role && toTitleCase(role)}</h1>
+          </div>
         </div>
 
         {/* Notification and Logout Buttons (Right) */}
