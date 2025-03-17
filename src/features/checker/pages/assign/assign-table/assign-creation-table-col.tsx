@@ -19,11 +19,11 @@ export const getAssignCreationColumns = (
     cell: (value:any,row: any) => (
       <input
         type="checkbox"
-        checked={value} // ✅ Ensure it reads the correct value
+        checked={value} // Ensure it reads the correct value
         onChange={(e) => handleSelectionChange(row.niumId, e.target.checked)}
         className={`h-5 w-5 cursor-pointer rounded-sm border-2 transition-all duration-300`}
         style={{  
-          accentColor: value ? "red" : "#E53888", // ✅ WebKit color control
+          accentColor: value ? "red" : "#E53888", //  WebKit color control
           display: "inline-block",
           verticalAlign: "middle",
           position: "relative",

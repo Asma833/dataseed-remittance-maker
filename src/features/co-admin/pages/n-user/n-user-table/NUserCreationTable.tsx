@@ -9,6 +9,9 @@ import { useFilterApi } from "@/components/common/dynamic-table/hooks/useFilterA
 import { API } from "@/core/constant/apis";
 import { useDynamicPagination } from "@/components/common/dynamic-table/hooks/useDynamicPagination";
 import { usePageTitle } from "@/hooks/usePageTitle";
+import { useGetApi } from "@/features/co-admin/hooks/useGetApi";
+import { User } from "@/features/auth/types/auth.types";
+
 
 const NuserCreationTable = () => {
   const navigate = useNavigate();
@@ -25,13 +28,14 @@ const NuserCreationTable = () => {
   //     )
   //   );
   // };
+  const { data: users, loading, error } = useGetApi<User[]>("NUSERS.PARTNERS_LIST");
   const handleStatusChange = (rowIndex: number, checked: boolean) => {
     setTableData((prevData) => {
       const newData = prevData.map((row, idx) =>
         idx === rowIndex ? { ...row, status: checked } : row
       );
-      console.log("Updated Data:", newData); // ✅ Debug: Ensure the new state is correct
-      return [...newData]; // ✅ Return a new array to trigger re-render
+      console.log("Updated Data:", newData); // Debug: Ensure the new state is correct
+      return [...newData]; // Return a new array to trigger re-render
     });
   };
   
@@ -43,7 +47,7 @@ const NuserCreationTable = () => {
    
      // Use the dynamic pagination hook
      const pagination = useDynamicPagination({
-       endpoint: API.NUSERS.SEARCH_FILTER,
+       endpoint: API.NUSERS.PARTNERS_LIST,
        initialPageSize: 10,
        initialData,
        dataPath: "transactions",
@@ -58,7 +62,7 @@ const NuserCreationTable = () => {
     navigate(path);
   };
 const filterApi = useFilterApi({
-      endpoint: API.NUSERS.SEARCH_FILTER,
+      endpoint: API.NUSERS.PARTNERS_LIST,
       initialData,
       // base query params if needed
       baseQueryParams: {
@@ -71,17 +75,17 @@ const filterApi = useFilterApi({
     <div className="">
        <div className="flex flex-col">
     <div className="mb-4 flex items-center">
-      {(filterApi.loading || pagination.loading) && (
+      {(filterApi.loading || pagination.loading || loading) && (
         <span className="text-blue-500">Loading data...</span>
       )}
-      {(filterApi.error || pagination.error) && (
+      {(filterApi.error || pagination.error || error ) && (
         <span className="text-red-500">Error loading data</span>
       )}
     </div>
     </div>
       <DynamicTable
         columns={columns}
-        data={tableData}
+        data={users && users.length > 0 ? users : tableData}
         tableWrapperClass="bg-background p-5 rounded-md"
         defaultSortColumn="niumId"
         defaultSortDirection="asc"
@@ -91,7 +95,7 @@ const filterApi = useFilterApi({
             <PlusIcon /> Create User
           </Button>
        )}
-       loading={pagination.loading}
+       loading={pagination.loading ?? loading}
        paginationMode={isPaginationDynamic ? "dynamic" : "static"}
        onPageChange={
          isPaginationDynamic

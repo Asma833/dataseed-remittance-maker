@@ -10,4 +10,11 @@ export const userApi = {
     );
     return data;
   },
+  userUpdate: async (userData: UserCreationRequest): Promise<UserCreationResponse> => {
+    const { data } = await axiosInstance.put<UserCreationResponse>(
+      getEndpoint("NUSER.UPDATE"),
+      userData 
+    );
+    return data;
+  },
 };

@@ -23,8 +23,8 @@ export const getUserTableColumns = (
 ): TableColumn[] => {
   return [
     {
-      key: "userName",
-      id: "userName",
+      key: "first_name",
+      id: "first_name",
       name: "User Name",
     },
     {
@@ -38,8 +38,8 @@ export const getUserTableColumns = (
       name: "Product Type",
     },
     {
-      key: "creationDate",
-      id: "creationDate",
+      key: "createdAt",
+      id: "createdAt",
       name: "Creation Date",
     },
         {

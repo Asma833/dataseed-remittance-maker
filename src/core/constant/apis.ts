@@ -49,10 +49,10 @@ export const API = {
     ENABLE_GEMINI_FLASH: `/features/gemini-flash/enable`,
   },
   NUSERS: {
-    LIST: `/users`,
-    CREATE: `/users`,
+    PARTNERS_LIST: `/partners`,
+    CREATE: `/partners`,
     GET_BY_ID: (id: string) => `/users/${id}`,
-    SEARCH_FILTER: `/users/search-filter`,
+    // SEARCH_FILTER: `/users/search-filter`,
   },
 } as const;
 
