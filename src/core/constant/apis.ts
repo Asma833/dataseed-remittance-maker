@@ -51,6 +51,7 @@ export const API = {
   NUSERS: {
     PARTNERS_LIST: `/partners`,
     CREATE: `/partners`,
+    STATUS_UPDATE:`/partners`,
     GET_BY_ID: (id: string) => `/users/${id}`,
     // SEARCH_FILTER: `/users/search-filter`,
   },

@@ -5,11 +5,11 @@ interface TableColumn {
   key: string;
   id: string;
   name: string;
-  cell?: (value: any, index: number) => React.ReactNode;
+  cell?: (value: any, row:any) => React.ReactNode;
 }
 
 interface HandleStatusChange {
-  (index: number, checked: boolean): void;
+  (row: any, checked: boolean): void;
 }
 
 interface HandleNavigate {
@@ -46,12 +46,12 @@ export const getUserTableColumns = (
         key: "status",
         id: "status",
         name: "Status",
-        cell: (value: boolean, index: number) => (
+        cell: (value: boolean, row:any) => (
           <div className="flex flex-col items-start">
-            <span className="text-sm font-medium">{value ? "Active" : "Inactive"}</span>
+            <span className="text-sm font-medium">{row.is_active ? "Active" : "Inactive"}</span>
             <Switch
-              checked={value}
-              onCheckedChange={(checked) => handleStatusChange(index, checked)}
+              checked={row.is_active}
+              onCheckedChange={(checked) => handleStatusChange(row, checked)}
             />
           </div>
         ),

@@ -120,10 +120,10 @@ const UserCreationFormPage = () => {
     try {
       console.log("Form Data:", data);
       if (isEditMode) {
-        console.log("Updating User:", data);
+      //  console.log("Updating User:", data);
         toast.info("User updated successfully!");
       } else {
-        console.log("Creating User:", data);
+       // console.log("Creating User:", data);
         createUser(data); 
       }
     } catch (error) {

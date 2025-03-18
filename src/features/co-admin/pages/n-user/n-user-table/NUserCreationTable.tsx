@@ -11,6 +11,8 @@ import { useDynamicPagination } from "@/components/common/dynamic-table/hooks/us
 import { usePageTitle } from "@/hooks/usePageTitle";
 import { useGetApi } from "@/features/co-admin/hooks/useGetApi";
 import { User } from "@/features/auth/types/auth.types";
+import { updateStatusAPI } from "@/features/co-admin/hooks/useUpdateStatus";
+
 
 
 const NuserCreationTable = () => {
@@ -20,26 +22,57 @@ const NuserCreationTable = () => {
       setTitle("N-Users");
     }, [setTitle]);
   const [tableData, setTableData] = useState(initialData);
-  
-  // const handleStatusChange = (rowIndex: number, checked: boolean) => {
-  //   setTableData((prevData) =>
-  //     prevData.map((row, idx) =>
+  const { data: users, loading, error, fetchData } = useGetApi<User[]>("NUSERS.PARTNERS_LIST");
+  // const handleStatusChange = (rowIndex: number, checked: boolean,row) => {
+  //   setTableData((prevData) => {
+  //     const newData = prevData.map((row, idx) =>
   //       idx === rowIndex ? { ...row, status: checked } : row
-  //     )
-  //   );
+  //     );
+  //     console.log("Updated Data:", newData); // Debug: Ensure the new state is correct
+  //     return [...newData]; // Return a new array to trigger re-render
+  //   });
   // };
-  const { data: users, loading, error } = useGetApi<User[]>("NUSERS.PARTNERS_LIST");
-  const handleStatusChange = (rowIndex: number, checked: boolean) => {
-    setTableData((prevData) => {
-      const newData = prevData.map((row, idx) =>
-        idx === rowIndex ? { ...row, status: checked } : row
+  
+  const { mutate: updateStatus } = updateStatusAPI();
+
+
+
+  const handleStatusChange = async (rowData: any, checked: boolean) => {
+  //  console.log("Row Data:", rowData); //Debugging log to check received data
+  
+    if (!rowData || !rowData.hashed_key) {
+     // console.error("Error: Row data is missing hashed_key", rowData);
+      return;
+    }
+  
+    const updatedRow = { ...rowData, is_active: checked };
+  
+   // console.log("Updated Row Data:", updatedRow); // Debugging log
+  
+    // Optimistically update UI
+    setTableData((prevData) =>
+      prevData.map((row) => (row.hashed_key === rowData.hashed_key ? updatedRow : row))
+    );
+  
+    try {
+      await updateStatus({
+        hashed_key: updatedRow.hashed_key, //  Ensure hashed_key is being sent
+        is_active: updatedRow.is_active,
+      });
+      await fetchData()
+    } catch (error: any) {
+      //console.error("Error updating status:", error);
+  
+      // Revert UI if API fails
+      setTableData((prevData) =>
+        prevData.map((row) =>
+          row.hashed_key === rowData.hashed_key ? { ...row, is_active: !checked } : row
+        )
       );
-      console.log("Updated Data:", newData); // Debug: Ensure the new state is correct
-      return [...newData]; // Return a new array to trigger re-render
-    });
+  
+      
+    }
   };
-  
-  
   
   
      const isTableFilterDynamic = false;
