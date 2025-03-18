@@ -1,20 +1,20 @@
 import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
-import { useParams } from "react-router-dom"; // Get ID from URL
 import { zodResolver } from "@hookform/resolvers/zod";
 import { userSchema } from "./user-form.schema";
 import { userFormConfig } from "./user-form-config";
 import { FormProvider } from "@/components/form/context/FormProvider";
 import { getController } from "@/components/form/utils/getController";
-
 import FormFieldRow from "@/components/form/wrapper/FormFieldRow";
 import FieldWrapper from "@/components/form/wrapper/FieldWrapper";
 import CheckboxWrapper from "@/components/form/wrapper/CheckboxWrapper";
 import Spacer from "@/components/form/wrapper/Spacer";
 import { FormContentWrapper } from "@/components/form/wrapper/FormContentWrapper";
-import { useCreateUser } from "../../../hooks/useCreateUser"; // Import the create user hook
-import { toast } from "sonner";
+import { useCreateUser } from "../../../hooks/useCreateUser"; 
 import { usePageTitle } from "@/hooks/usePageTitle";
+import { useParams, useLocation, useNavigate } from "react-router-dom";
+import { updateAPI } from "@/features/co-admin/hooks/useUserUpdate";
+import { useProductOptions } from "@/features/co-admin/hooks/useProductOptions";
 
 const useScreenSize = () => {
   const [screenWidth, setScreenWidth] = useState(window.innerWidth);
@@ -29,16 +29,21 @@ const useScreenSize = () => {
   return screenWidth;
 };
 
+
 const UserCreationFormPage = () => {
   const screenWidth = useScreenSize();
-  const { id } = useParams(); // Get the user ID from URL (if available)
-  const isEditMode = !!id; // Boolean flag for edit mode
+  const navigate = useNavigate();
+  const { productOptions} = useProductOptions();
+ 
+  const { id } = useParams(); 
+  const isEditMode = !!id; 
   const { setTitle } = usePageTitle();
-
+  const location = useLocation();
+  const selectedRow = (location.state as any)?.selectedRow || null;
   useEffect(() => {
     setTitle(isEditMode ? "Edit User" : "Create User");
   }, [setTitle]);
-  const { mutate: createUser, isLoading } = useCreateUser({ role: "checker" }); // Using the create user hook
+  const { mutate: createUser, isLoading } = useCreateUser({ role: "checker" }); 
 
   const methods = useForm({
     resolver: zodResolver(userSchema),
@@ -56,15 +61,8 @@ const UserCreationFormPage = () => {
     },
   });
 
-  const {
-    handleSubmit,
-    control,
-    reset,
-    watch,
-    setValue,
-    formState: { errors, isSubmitting },
-  } = methods;
-
+  const { handleSubmit,control,reset,watch,setValue,formState: { errors, isSubmitting },} = methods;
+  const { mutate: updateUser } = updateAPI();
   const handleCheckboxChange = (
     key: "card" | "remittance" | "both",
     checked: boolean
@@ -93,7 +91,7 @@ const UserCreationFormPage = () => {
       const isBothChecked = updatedValues.card && updatedValues.remittance;
       setValue("productType.both", isBothChecked, { shouldValidate: true });
 
-      // Force re-render using a temporary state change
+      // re-render using a temporary state change
       setValue(
         "productType",
         { ...updatedValues, both: isBothChecked },
@@ -102,50 +100,36 @@ const UserCreationFormPage = () => {
     }
   };
 
-  // Fetch user data if in edit mode
-  useEffect(() => {
-    if (isEditMode) {
-      const fetchUserData = async () => {
-        const userData = await new Promise<{ [key: string]: any }>((resolve) =>
-          setTimeout(
-            () =>
-              resolve({
-                firstName: "John",
-                lastName: "Doe",
-                email: "john.doe@example.com",
-                productType: {
-                  card: true,
-                  remittance: false,
-                  both: false,
-                },
-                password: "maker@123#",
-                confirmPassword: "maker@123#",
-              }),
-            1000
-          )
-        );
+  
 
-        reset(userData); // Patch form values
-      };
+useEffect(() => {
 
-      fetchUserData();
-    }
-  }, [id, reset, isEditMode]);
+  if (selectedRow && Object.keys(selectedRow).length > 0) {
+    
+    reset({
+      firstName: selectedRow.first_name || "",
+      lastName: selectedRow.last_name || "",
+      email: selectedRow.email || "",
+      productType: {
+        card: selectedRow.products?.some((p: any) => p.name === "Card") || false,
+        remittance: selectedRow.products?.some((p: any) => p.name === "Remittance") || false,
+        both: selectedRow.products?.some((p: any) => p.name === "Both") || false,
+      },
+    });
+  }
+}, [selectedRow, reset]); // Ensure `reset` runs when `selectedRow` changes
+
 
   const onSubmit = async (data: any) => {
-    try {
-      console.log("Form Data:", data);
       if (isEditMode) {
-      //  console.log("Updating User:", data);
-        toast.info("User updated successfully!");
+        await updateUser({ data, productOptions, id });
+        await navigate(`/admin/users`)
       } else {
-       // console.log("Creating User:", data);
-        createUser(data); 
+        createUser(data);
       }
-    } catch (error) {
-      toast.error("Something went wrong.Please try again.");
-    }
+    
   };
+  
 
   return (
     <FormProvider methods={methods}>
@@ -153,7 +137,7 @@ const UserCreationFormPage = () => {
         onSubmit={handleSubmit(onSubmit)}
         className="p-6 bg-white shadow-md rounded-lg max-w-full mx-auto"
       >
-        <h2 className="text-xl font-bold mb-4">User</h2>
+        <h2 className="text-xl font-bold mb-4">{isEditMode ? "Edit User" : "Create User"}</h2>
 
         <FormContentWrapper className="py-2 lg:pr-32 md:pr-0">
           <Spacer>

@@ -10,6 +10,7 @@ export interface UserCreationRequest {
   email: string;
   password: string;
   confirmPassword: string;
+  hashed_key: string;
   productType: {
     card: boolean;
     remittance: boolean;
@@ -26,7 +27,7 @@ interface UserApiPayload {
   last_name: string;
   password: string;
   is_active: boolean;
-  hashed_key?: string | undefined;
+  hashed_key: string;
   api_key?: string;
   business_type?: string;
   created_by?: string;
@@ -35,7 +36,8 @@ interface UserApiPayload {
 }
 
 export const useCreateUser = ({role}: {role: string}) => {
-  const { getRoleId, getHashedRoleId } = useGetRoleId();
+  // const { getRoleId, getHashedRoleId } = useGetRoleId();
+  const { getRoleId } = useGetRoleId();
 
   // Map product types to product IDs (replace with actual IDs from your system)
   const productMapping = {
@@ -55,7 +57,7 @@ export const useCreateUser = ({role}: {role: string}) => {
 
     // Get role ID (default to empty string if not available)
     const role_id = getRoleId(role) || "";
-    const hashed_key = formData.role ? getHashedRoleId(formData.role) : undefined;
+    //const hashed_key = formData.role ? getHashedRoleId(formData.role) : undefined;
     
     return {
       role_id,
@@ -64,7 +66,7 @@ export const useCreateUser = ({role}: {role: string}) => {
       last_name: formData.lastName,
       password: formData.password,
       is_active: true,
-      hashed_key,
+      hashed_key:formData.hashed_key,
       business_type: "large_enterprise",
       product_ids
     };

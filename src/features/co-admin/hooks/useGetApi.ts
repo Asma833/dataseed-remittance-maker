@@ -30,9 +30,7 @@ export const useGetApi = <T>(
       // Debug log for troubleshooting
       console.log(`Fetching from ${url} with params:`, queryParams || params);
       
-      // Check token before making request
-      const token = localStorage.getItem("accessToken");
-      console.log(`Token available before request: ${!!token}`);
+   
       
       const { data } = await axiosInstance.get<T>(url, { 
         params: queryParams || params 

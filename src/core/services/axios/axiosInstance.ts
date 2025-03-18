@@ -150,6 +150,10 @@ export const testTokenRefresh = async () => {
       error: error,
     };
   }
+  return {
+    refreshAttempted: false,
+    error: null,
+  };
 };
 
 export default axiosInstance;

@@ -1,5 +1,5 @@
 import { BrowserRouter } from "react-router-dom";
-import { Suspense, useEffect } from "react";
+import { Suspense } from "react";
 import { AppRoutes } from "./core/routes/AppRoutes";
 import LoadingFallback from "./components/loader/LoadingFallback";
 import { Toaster } from "sonner";
