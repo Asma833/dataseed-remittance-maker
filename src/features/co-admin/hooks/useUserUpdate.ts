@@ -1,12 +1,14 @@
 import { useMutation } from "@tanstack/react-query";
 import { userApi } from "../api/userApi";
 import { toast } from "sonner";
+import { useNavigate } from "react-router-dom";
 
 export const updateAPI = () => {
+  const navigate = useNavigate();
     const { mutate, isPending, error } = useMutation({
       mutationFn: async ({ data, productOptions, id }: any) => {
         const user = JSON.parse(localStorage.getItem("user") || "{}");
-  
+        //console.log(data,"data")
         const payload = {
           email: data.email,
           first_name: data.firstName,
@@ -26,6 +28,7 @@ export const updateAPI = () => {
       },
       onSuccess: () => {
         toast.success("User details updated successfully");
+        navigate(`/admin/users`);
       },
       onError: (error: Error) => {
         toast.error(error.message || "User update failed");

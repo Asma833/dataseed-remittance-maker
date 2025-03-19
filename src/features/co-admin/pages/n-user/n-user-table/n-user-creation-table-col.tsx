@@ -35,6 +35,13 @@ export const getUserTableColumns = (
       key: "productType",
       id: "productType",
       name: "Product Type",
+      cell: (_,row: any) => (
+        <span>
+          {row.products && row.products.length > 0
+            ? row.products.map((product: any) => product.name).join(", ")
+            : "No Products"}
+        </span>
+      ),
     },
     {
       key: "createdAt",
@@ -45,9 +52,9 @@ export const getUserTableColumns = (
         key: "status",
         id: "status",
         name: "Status",
-        cell: (value: boolean, row:any) => (
+        cell: (_, row:any) => (
           <div className="flex flex-col items-start">
-            <span className="text-sm font-medium">{value && row.is_active ? "Active" : "Inactive"}</span>
+            <span className="text-sm font-medium">{row.is_active ? "Active" : "Inactive"}</span>
             <Switch
               checked={row?.is_active}
               onCheckedChange={(checked) => handleStatusChange(row, checked)}

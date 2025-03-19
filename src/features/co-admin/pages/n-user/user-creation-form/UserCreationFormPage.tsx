@@ -12,10 +12,10 @@ import Spacer from "@/components/form/wrapper/Spacer";
 import { FormContentWrapper } from "@/components/form/wrapper/FormContentWrapper";
 import { useCreateUser } from "../../../hooks/useCreateUser";
 import { usePageTitle } from "@/hooks/usePageTitle";
-import { useParams, useLocation, useNavigate } from "react-router-dom";
+import { useParams, useLocation } from "react-router-dom";
 import { updateAPI } from "@/features/co-admin/hooks/useUserUpdate";
 import { useProductOptions } from "@/features/co-admin/hooks/useProductOptions";
-
+import { UserFormData } from "@/features/co-admin/types/user.type"
 const useScreenSize = () => {
   const [screenWidth, setScreenWidth] = useState(window.innerWidth);
 
@@ -31,7 +31,6 @@ const useScreenSize = () => {
 
 const UserCreationFormPage = () => {
   const screenWidth = useScreenSize();
-  const navigate = useNavigate();
   const { productOptions } = useProductOptions();
 
   const { id } = useParams();
@@ -66,8 +65,8 @@ const UserCreationFormPage = () => {
     reset,
     watch,
     setValue,
-    getValues,
     formState: { errors, isSubmitting },
+    handleSubmit,
   } = methods;
   const { mutate: updateUser } = updateAPI();
   const handleCheckboxChange = (
@@ -126,27 +125,28 @@ const UserCreationFormPage = () => {
     }
   }, [selectedRow, reset]); // Ensure `reset` runs when `selectedRow` changes
 
-  const handleFormSubmit = async (data: any) => {
-    const formdata = getValues();
+
+
+  const handleFormSubmit = handleSubmit(async (formdata:UserFormData) => {
     if (isEditMode) {
-      await updateUser({ data, productOptions, id });
-      await navigate(`/admin/users`);
+      await updateUser({ data: formdata, productOptions, id });
     } else {
-      // Add the required hashed_key property
+      console.log(formdata,"formdata")
       createUser({
         ...formdata,
-        hashed_key: "" // You may need to set an appropriate value here
+        hashed_key:"",
       });
     }
-  };
-
+  });
+  
   return (
     <FormProvider methods={methods}>
+     
+
+      <FormContentWrapper className="py-2 lg:pr-32 md:pr-0">
       <h2 className="text-xl font-bold mb-4">
         {isEditMode ? "Edit User" : "Create User"}
       </h2>
-
-      <FormContentWrapper className="py-2 lg:pr-32 md:pr-0">
         <Spacer>
           <FormFieldRow rowCols={screenWidth < 768 ? 1 : 2} className="mb-4">
             {Object.entries(userFormConfig.fields)
@@ -157,31 +157,14 @@ const UserCreationFormPage = () => {
                 </FieldWrapper>
               ))}
           </FormFieldRow>
-          <FormFieldRow rowCols={screenWidth < 768 ? 1 : 2} className="mb-2">
-            <FieldWrapper>
+          <FormFieldRow rowCols={screenWidth < 768 ? 1 : 2} className="mb-4">
+          <FieldWrapper>
               {getController({
                 ...userFormConfig.fields.email,
                 name: "email",
                 control,
                 errors,
               })}
-            </FieldWrapper>
-          </FormFieldRow>
-          <FormFieldRow rowCols={screenWidth < 768 ? 1 : 2} className="mb-2">
-            <FieldWrapper>
-              {/* <small className="block text-xs font-semibold">
-                  {userFormConfig.fields.businessType.label || "Business Type"}
-                </small> */}
-              <div>
-                {getController({
-                  ...userFormConfig.fields.businessType,
-                  label:
-                    userFormConfig.fields.businessType.label || "Business Type",
-                  name: "businessType",
-                  control,
-                  errors,
-                })}
-              </div>
             </FieldWrapper>
             <FieldWrapper>
               <small className="block text-xs font-semibold">
@@ -199,7 +182,7 @@ const UserCreationFormPage = () => {
               </CheckboxWrapper>
             </FieldWrapper>
           </FormFieldRow>
-          <FormFieldRow rowCols={screenWidth < 768 ? 1 : 2} className="mb-2">
+          <FormFieldRow rowCols={screenWidth < 768 ? 1 : 2} className="mb-4">
             {Object.entries(userFormConfig.fields)
               .slice(3, 5)
               .map(([name, field]) => (
@@ -208,6 +191,23 @@ const UserCreationFormPage = () => {
                 </FieldWrapper>
               ))}
           </FormFieldRow>
+          <FormFieldRow rowCols={screenWidth < 768 ? 1 : 2} className="mb-4">
+            <FieldWrapper>
+              {/* <small className="block text-xs font-semibold">
+                  {userFormConfig.fields.businessType.label || "Business Type"}
+                </small> */}
+              <div>
+                {getController({
+                  ...userFormConfig.fields.businessType,
+                  label:
+                    userFormConfig.fields.businessType.label || "Business Type",
+                  name: "businessType",
+                  control,
+                  errors,
+                })}
+              </div>
+            </FieldWrapper>
+            </FormFieldRow>
         </Spacer>
       </FormContentWrapper>
 
