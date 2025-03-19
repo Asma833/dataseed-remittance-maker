@@ -1,12 +1,12 @@
 import { useMutation } from "@tanstack/react-query";
 import { userApi } from "../api/userApi";
 import { toast } from "sonner";
-import { UserUpdateRequest } from "../types/user.type";
+import { UserStatusRequest } from "../types/user.type";
 
 export const updateStatusAPI  = () => {
-  const { mutate, isPending, error } = useMutation<void, Error, UserUpdateRequest>({
+  const { mutate, isPending, error } = useMutation<void, Error, UserStatusRequest>({
     mutationFn: async (userData:any) => {
-      await userApi.userUpdate(userData);
+      await userApi.userStatusUpdate(userData);
     },
     onSuccess: () => {
       toast.success("User status updated successfully");
