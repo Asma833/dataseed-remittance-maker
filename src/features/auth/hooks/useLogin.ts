@@ -8,6 +8,7 @@ import { toast } from "sonner";
 import { LoginResponse } from "../types/auth.types"; // Updated import
 import type { LoginCredentials } from "../api/authApi"; 
 
+
 export const useLogin = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -19,23 +20,29 @@ export const useLogin = () => {
   >({
     mutationFn: authApi.loginUser,
     onSuccess: (data) => {
+      //  Store tokens in localStorage
+      localStorage.setItem("accessToken", data.access_token);
+      localStorage.setItem("refreshToken", data.refresh_token);
+
+      // Store user info in Redux
       dispatch(setCredentials({ 
         user: data.user, 
         accessToken: data.access_token,
         refreshToken: data.refresh_token 
       }));
-      
+
+      // Redirect user to correct route based on role
       const defaultRoute = DEFAULT_ROUTES[data.user.role.name];
       if (defaultRoute) {
-        toast.success('Login successful');
+        toast.success("Login successful");
         navigate(defaultRoute);
       } else {
-        toast.error('Invalid user role');
+        toast.error("Invalid user role");
       }
     },
     onError: (error: Error) => {
-      toast.error(error.message || 'Login failed');
-    }
+      toast.error(error.message || "Login failed");
+    },
   });
 
   return { mutate, isLoading: isPending, error };

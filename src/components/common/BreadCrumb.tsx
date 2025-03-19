@@ -8,20 +8,26 @@ import {
   BreadcrumbPage,
   BreadcrumbSeparator,
 } from "@/components/ui/breadcrumb";
+import { cn } from "@/utils/cn";
 
-export default function BreadCrumb() {
+export default function BreadCrumb({ className }: { className?: string }) {
   const location = useLocation();
-  const pathSegments = location.pathname.split('/').filter(Boolean);
+  const pathSegments = location.pathname.split("/").filter(Boolean);
 
   return (
-    <div className="flex w-full pb-4 sticky top-[70px] bg-secondary z-2">
+    <div
+      className={cn(
+        "flex w-full pb-4 sticky top-[70px] bg-secondary z-2",
+        className
+      )}
+    >
       <Breadcrumb>
         <BreadcrumbList>
           <BreadcrumbItem>
             <BreadcrumbLink href="/">Dashboard</BreadcrumbLink>
           </BreadcrumbItem>
           {pathSegments.map((segment, index) => {
-            const to = `/${pathSegments.slice(0, index + 1).join('/')}`;
+            const to = `/${pathSegments.slice(0, index + 1).join("/")}`;
             const isLast = index === pathSegments.length - 1;
 
             return (
@@ -31,9 +37,7 @@ export default function BreadCrumb() {
                   {isLast ? (
                     <BreadcrumbPage>{segment}</BreadcrumbPage>
                   ) : (
-                    <BreadcrumbLink href={to}>
-                      {segment}
-                    </BreadcrumbLink>
+                    <BreadcrumbLink href={to}>{segment}</BreadcrumbLink>
                   )}
                 </BreadcrumbItem>
               </Fragment>

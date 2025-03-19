@@ -1,5 +1,5 @@
 import { Loader as LucideLoader } from "lucide-react";
-import { TableDataLoaderProps } from "./common-components.types";
+import { TableDataLoaderProps } from "../common-components.types";
 
 const TableDataLoader = ({ text = "Fetching..." }: TableDataLoaderProps) => {
   return (

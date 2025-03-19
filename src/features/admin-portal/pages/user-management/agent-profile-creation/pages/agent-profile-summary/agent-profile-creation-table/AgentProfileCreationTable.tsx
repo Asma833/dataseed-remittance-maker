@@ -1,4 +1,4 @@
-import { DynamicTable } from "@/components/common/DynamicTable";
+import { DynamicTable } from "@/components/common/dynamic-table/DynamicTable";
 import { getAgentProfileCreationColumn } from "./agent-profile-creation-table-col";
 import { Button } from "@/components/ui/button";
 import { PlusIcon } from "lucide-react";
