@@ -15,9 +15,11 @@ export interface UpdateIncidentRequest {
     };
   }
   
-  
-  
   export interface UpdateIncidentResponse {
     success: boolean;
     message: string;
   }
+  export interface UpdateGetRequestData {
+    checkerId: string;
+    transaction_type: string;
+}
