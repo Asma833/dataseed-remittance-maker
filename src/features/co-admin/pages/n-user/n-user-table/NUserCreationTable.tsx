@@ -11,7 +11,7 @@ import { useDynamicPagination } from "@/components/common/dynamic-table/hooks/us
 import { usePageTitle } from "@/hooks/usePageTitle";
 import { useGetApi } from "@/features/co-admin/hooks/useGetApi";
 import { User } from "@/features/auth/types/auth.types";
-import { updateStatusAPI } from "@/features/co-admin/hooks/useUpdateStatus";
+import { useUpdateStatusAPI } from "@/features/co-admin/hooks/useUpdateStatus";
 
 const NuserCreationTable = () => {
   const navigate = useNavigate();
@@ -20,12 +20,16 @@ const NuserCreationTable = () => {
     setTitle("N-Users");
   }, [setTitle]);
   const [tableData, setTableData] = useState(initialData);
-  
-  const { data: users, loading, error, fetchData } = useGetApi<User[]>("NUSERS.PARTNERS_LIST");
-  
-  const { mutate: updateStatus } = updateStatusAPI();
 
-  
+  const {
+    data: users,
+    loading,
+    error,
+    fetchData,
+  } = useGetApi<User[]>("NUSERS.PARTNERS_LIST");
+
+  const { mutate: updateStatus } = useUpdateStatusAPI();
+
   const handleStatusChange = async (rowData: any, checked: boolean) => {
     if (!rowData || !rowData.hashed_key) {
       return;
@@ -41,10 +45,9 @@ const NuserCreationTable = () => {
 
     try {
       await updateStatus({
-        hashed_key: updatedRow.hashed_key, //  Ensure hashed_key is being sent
+        hashed_key: updatedRow.id,
         is_active: updatedRow.is_active,
       });
-      await fetchData();
     } catch (error: any) {
       // Revert UI if API fails
       setTableData((prevData) =>
@@ -55,6 +58,7 @@ const NuserCreationTable = () => {
         )
       );
     }
+    // await fetchData();
   };
 
   const isTableFilterDynamic = false;
@@ -73,8 +77,8 @@ const NuserCreationTable = () => {
     navigate("create-user");
   };
 
-  const handleNavigate = (path: string,rowData:string) => {
-    navigate(path,{ state: { selectedRow: rowData } });
+  const handleNavigate = (path: string, rowData: string) => {
+    navigate(path, { state: { selectedRow: rowData } });
   };
   const filterApi = useFilterApi({
     endpoint: API.NUSERS.PARTNERS_LIST,

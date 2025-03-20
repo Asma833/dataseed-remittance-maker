@@ -5,7 +5,7 @@ interface TableColumn {
   key: string;
   id: string;
   name: string;
-  cell?: (value: any, row:any) => React.ReactNode;
+  cell?: (value: any, row: any) => React.ReactNode;
 }
 
 interface HandleStatusChange {
@@ -13,7 +13,7 @@ interface HandleStatusChange {
 }
 
 interface HandleNavigate {
-  (path: string,rowData:string): void;
+  (path: string, rowData: string): void;
 }
 
 export const getUserTableColumns = (
@@ -35,7 +35,7 @@ export const getUserTableColumns = (
       key: "productType",
       id: "productType",
       name: "Product Type",
-      cell: (_,row: any) => (
+      cell: (_, row: any) => (
         <span>
           {row.products && row.products.length > 0
             ? row.products.map((product: any) => product.name).join(", ")
@@ -48,40 +48,46 @@ export const getUserTableColumns = (
       id: "createdAt",
       name: "Creation Date",
     },
-        {
-        key: "status",
-        id: "status",
-        name: "Status",
-        cell: (_,row:any) => {
-          return (
-            <div className="flex flex-col items-start">
-              <span className="text-sm font-medium">{row.is_active ? "Active" : "Inactive"}</span>
-              <Switch
-                checked={row?.is_active}
-                onCheckedChange={(checked) => {handleStatusChange(row, checked)}}
-              />
-            </div>
-          )
-        }
+    {
+      key: "status",
+      id: "status",
+      name: "Status",
+      cell: (_, row: any) => {
+        return (
+          <div className="flex flex-col items-start">
+            <span className="text-sm font-medium">
+              {row.is_active ? "Active" : "Inactive"}
+            </span>
+            <Switch
+              checked={row?.is_active}
+              onCheckedChange={(checked) => {
+                handleStatusChange(row, checked);
+              }}
+            />
+          </div>
+        );
       },
+    },
 
     {
       key: "actions",
       id: "actions",
       name: "Action",
-      cell: (_,rowData:any) => {
-        return(
+      cell: (_, rowData: any) => {
+        return (
           <div className="flex gap-2">
             <button
               className="p-2 rounded-md hover:bg-muted/20"
-              onClick={() =>{console.log(rowData,"rowData");
-                handleNavigate(`update-user/${rowData.id}`,rowData)}}
+              onClick={() => {
+                console.log(rowData, "rowData");
+                handleNavigate(`update-user/${rowData.id}`, rowData);
+              }}
             >
               <Edit className="w-5 h-5 text-muted-foreground" />
             </button>
           </div>
         );
-      }
+      },
     },
   ];
 };
