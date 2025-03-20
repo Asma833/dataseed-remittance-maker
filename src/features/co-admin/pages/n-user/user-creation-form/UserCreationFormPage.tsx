@@ -41,6 +41,7 @@ const UserCreationFormPage = () => {
   useEffect(() => {
     setTitle(isEditMode ? "Edit User" : "Create User");
   }, [setTitle]);
+  
   const { mutate: createUser, isLoading } = useCreateUser({ role: "checker" });
 
   const methods = useForm({

@@ -27,6 +27,7 @@ export const API = {
     GET_BY_ID: (id: string) => `/orders/${id}`,
     UPDATE: (id: string) => `/orders/${id}`,
     DELETE: (id: string) => `/orders/${id}`,
+    CHECKER_ORDERS: `/orders/get-checker-orders`,
   },
   CHECKER: {
     ASSIGN: {
@@ -55,6 +56,7 @@ export const API = {
     UPDATE:`/partners`,
     PRODUCTS:`/products`
   },
+
 } as const;
 
 /**
