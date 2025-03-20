@@ -1,24 +1,29 @@
-import { useEffect } from "react";
-import { dashboardData } from "./dashboard-card/card";
+import React from "react";
+import { createDashboardData } from "./dashboard-card/card";
 import DashboardCard from "./dashboard-card/DashboardCards";
-import { usePageTitle } from "@/hooks/usePageTitle";
+import { useGetDashCardMetrics } from "@/features/checker/hooks/useGetDashCardMatrics";
 
-const DashboardPage = () => {
-  const { setTitle } = usePageTitle();
+export const Dashboard: React.FC = () => {
+  const { data: metrics, isLoading, error } = useGetDashCardMetrics();
+  console.log("error:==>", error);
 
-  useEffect(() => {
-    setTitle("Dashboard");
-  }, [setTitle]);
+  // Generate dashboard items using the fetched metrics
+  const dashboardItems = createDashboardData(metrics);
+
+  // if (isLoading) {
+  //   return <div>Loading dashboard data...</div>;
+  // }
+
+  // if (error) {
+  //   console.error("Error loading dashboard data:", error);
+  //   return <div>Error loading dashboard data. Please try again later.</div>;
+  // }
 
   return (
-    <div className="container mx-auto py-3">
-      <p className="font-bold">Overview</p>
-      <p className="mb-4 mt-0">
-        Monitor your transaction statuses and verification processes
-      </p>
-
-      <div className="grid grid-cols-1 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-        {dashboardData.map((item) => (
+    <>
+      {error && <span className="text-red-500">{error ? "Something went wrong" : ""}</span>}
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 p-4">
+        {dashboardItems.map((item) => (
           <DashboardCard
             key={item.id}
             id={item.id}
@@ -26,11 +31,12 @@ const DashboardPage = () => {
             path={item.path}
             count={item.count}
             title={item.title}
+            isLoading={isLoading}
           />
         ))}
       </div>
-    </div>
+    </>
   );
 };
 
-export default DashboardPage;
+export default Dashboard;

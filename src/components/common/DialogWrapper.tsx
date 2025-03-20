@@ -76,7 +76,7 @@ export function DialogWrapper({
           <DialogFooter className="sm:justify-center">
             {
               triggerBtnText && (
-                <Button onClick={()=>{onSave}} disabled={isLoading}>
+                <Button onClick={()=>{onSave?.()}} disabled={isLoading}>
                 {isLoading ? (
                   <Loader2 className="animate-spin" />
                 ) : (

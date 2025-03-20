@@ -1,3 +1,5 @@
+import { determinePurposeType, determineTransactionType } from "@/utils/getTransactionConfigTypes";
+
 export const getTransactionTableColumns = () => [
     {
       key: "niumId",
@@ -30,11 +32,15 @@ export const getTransactionTableColumns = () => [
       key: "transactionType",
       id: "transactionType",
       name: "Transaction Type",
+       cell: (_: unknown, rowData: any) =>
+            determineTransactionType(rowData.transactionType),
     },
     {
       key: "purposeType",
       id: "purposeType",
       name: "Purpose Type",
+        cell: (_: unknown, rowData: any) =>
+            determinePurposeType(rowData.purposeType),
     },
     {
       key: "esignStatus",

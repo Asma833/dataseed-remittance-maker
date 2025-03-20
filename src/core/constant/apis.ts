@@ -29,6 +29,8 @@ export const API = {
     DELETE: (id: string) => `/orders/${id}`,
     CHECKER_ORDERS: `/orders/get-checker-orders`,
     UPDATE_ORDER_DETAILS: `/orders/update-order-details`,
+    UNASSIGN_CHECKER: `/orders/unassign-checker`,
+    ORDER_STATUS_COUNTS: `/orders/order-status-counts`,
   },
   CHECKER: {
     ASSIGN: {

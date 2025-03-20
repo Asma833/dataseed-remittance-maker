@@ -1,6 +1,9 @@
 import { DynamicTable } from "@/components/common/dynamic-table/DynamicTable";
 import { getTransactionTableColumns } from "./update-incident-creation-table-col";
-import { transactionTableData as initialData, transactionTableData } from "./update-incident-table-value";
+import {
+  transactionTableData as initialData,
+  transactionTableData,
+} from "./update-incident-table-value";
 import { useEffect, useState } from "react";
 import { DialogWrapper } from "@/components/common/DialogWrapper";
 // import { UpdateIncidentForm } from "../incident-form/UpdateIncidentForm";
@@ -10,12 +13,22 @@ import { usePageTitle } from "@/hooks/usePageTitle";
 import { useGetUpdateIncident } from "../../../hooks/useGetUpdate";
 import { useCurrentUser } from "@/utils/getUserFromRedux";
 import UpdateIncidentForm from "../incident-form/UpdateIncidentForm";
+import useUnassignChecker from "@/features/checker/hooks/useUnassignChecker";
+
+interface RowData {
+  nium_order_id: string;
+  [key: string]: any;
+}
 
 const UpdateIncidentCreationTable = () => {
   // const [tableData,setTableData] = useState(initialData);
   const { setTitle } = usePageTitle();
   const { getUserHashedKey } = useCurrentUser();
   const currentUserHashedKey = getUserHashedKey();
+
+  // Call the hook at the top level of the component
+  const { handleUnassign: unassignChecker, isPending: isUnassignPending } =
+    useUnassignChecker();
 
   useEffect(() => {
     setTitle("Update Incident");
@@ -27,14 +40,13 @@ const UpdateIncidentCreationTable = () => {
   //   transaction_type: "all",
   // };
   const requestData = {
-    checkerId: currentUserHashedKey || "", 
+    checkerId: currentUserHashedKey || "",
     transaction_type: "all",
   };
 
-
   // Fetch data using the updated hook
   const { data, isLoading, error } = useGetUpdateIncident(requestData);
-  console.log('data:', data)
+  console.log("data:", data);
 
   //const [selectedNiumId, setSelectedNiumId] = useState<string | null>(null);
   // const [selectedNiumId, setSelectedNiumId] = useState<string | null>(null);
@@ -54,34 +66,28 @@ const UpdateIncidentCreationTable = () => {
     totalRecordsPath: "totalRecords",
   });
 
-  const openModal = (niumId: string) => {
-    const selectedRow = transactionTableData.find(item => item.nium_order_id === niumId);
-    setSelectedRowData(selectedRow);
+  const openModal = (rowData: any) => {
+    setSelectedRowData(rowData);
     setIsModalOpen(true);
   };
 
   const filterApi = useFilterApi({
     endpoint: "",
-    // endpoint: API.CHECKER.UPDATE_INCIDENT.SEARCH_FILTER,
     initialData,
-    // base query params if needed
-    baseQueryParams: {
-      // For example: clientId: '123'
-    },
+    baseQueryParams: {},
   });
-  // useEffect(() => {
-  //   setIsModalOpen(true)
-  // }, []);
 
-  const handleOnClick = (niumId: string) => {
-    // Define what should happen when a row is clicked
-    console.log(`Row with niumId ${niumId} clicked`);
+  const handleUnassign = (rowData: RowData): void => {
+    if (currentUserHashedKey) {
+      unassignChecker(rowData.partner_order_id, currentUserHashedKey);
+    }
   };
-  const handleUnassign = () =>{
+  const handleCopyLink = (rowData: RowData): void => {
+    const e_sign_link = rowData.e_sign_link;
     
   }
 
-  const columns = getTransactionTableColumns(openModal,handleUnassign);
+  const columns = getTransactionTableColumns(openModal, handleUnassign, handleCopyLink);
 
   return (
     <div className="">
@@ -134,9 +140,10 @@ const UpdateIncidentCreationTable = () => {
             setIsOpen={setIsModalOpen}
             description={selectedRowData?.nium_order_id ?? ""}
             renderContent={
-              <UpdateIncidentForm 
-                formActionRight="view" 
+              <UpdateIncidentForm
+                formActionRight="view"
                 rowData={selectedRowData}
+                setIsModalOpen={setIsModalOpen}
               />
             }
           />

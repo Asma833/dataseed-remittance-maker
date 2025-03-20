@@ -22,10 +22,18 @@ import { Checkbox } from "@/components/ui/checkbox";
 import { Label } from "@/components/ui/label";
 import useSubmitIncidentFormData from "./useSubmitIncidentFormData";
 import { toast } from "sonner";
+import { useCurrentUser } from "@/utils/getUserFromRedux";
+import { transactionTypeMapping } from "@/utils/transactionTypesConfig";
+import {
+  determineBuySell,
+  determinePurposeType,
+  determineTransactionType,
+} from "@/utils/getTransactionConfigTypes";
 
 type PropTypes = {
   formActionRight: string;
   rowData?: any;
+  setIsModalOpen: (isOpen: boolean) => void;
 };
 
 const useScreenSize = () => {
@@ -44,20 +52,22 @@ const useScreenSize = () => {
 };
 
 const UpdateIncidentForm = (props: PropTypes) => {
-  const { formActionRight, rowData } = props;
-  console.log("rowData:", rowData);
+  const { formActionRight, rowData, setIsModalOpen } = props;
+  console.log("rowData:===>", rowData);
   const screenWidth = useScreenSize();
-  
-  // const { mutate: updateIncident, loading: fetchingIncidentData } =
-  //   useUpdateIncident();
-
-
+  const { getUserHashedKey } = useCurrentUser();
   const { submitIncidentFormData, isPending } = useSubmitIncidentFormData();
-
   const [showNiumInvoice, setShowNiumInvoice] = useState(true);
   const [documentUrl, setDocumentUrl] = useState<string | null>(null);
   const [isApproved, setIsApproved] = useState(true);
   const [isRejected, setIsRejected] = useState(false);
+
+  // Transaction type to Buy/Sell mapping
+
+  // Function to determine buy/sell based on transaction type
+
+  // State to track if we should show the buy/sell field
+  const [showBuySell, setShowBuySell] = useState(true);
 
   const methods = useForm<UpdateIncidentRequest>({
     resolver: zodResolver(updateIncidentFormSchema),
@@ -83,11 +93,44 @@ const UpdateIncidentForm = (props: PropTypes) => {
   const {
     handleSubmit,
     control,
-    // reset,
-    // watch,
     setValue,
+    reset,
     formState: { errors },
   } = methods;
+
+  // Function to reset form to initial state
+  const resetFormValues = () => {
+    reset({
+      fields: {
+        niumId: "",
+        cardNo: "",
+        customerPan: "",
+        customerName: "",
+        bmfOrderRef: "",
+        transactionType: "",
+        purpose: "",
+        buySell: "Buy",
+        incidentNumber: "",
+        eonInvoiceNumber: "",
+        comment: "",
+        status: { approve: true, reject: false },
+        niumInvoiceNo: "",
+      },
+    });
+    setIsApproved(true);
+    setIsRejected(false);
+    setDocumentUrl(null);
+    setShowNiumInvoice(true);
+    setShowBuySell(true);
+  };
+
+  // Reset form when modal is closed
+  useEffect(() => {
+    return () => {
+      // This cleanup function runs when the component unmounts
+      resetFormValues();
+    };
+  }, []);
 
   // Update form status when checkbox states change
   useEffect(() => {
@@ -103,6 +146,18 @@ const UpdateIncidentForm = (props: PropTypes) => {
   // Populate form with row data when available
   useEffect(() => {
     if (rowData) {
+      // Determine the buy/sell value based on transaction type ID
+      const buySellValue = determineBuySell(rowData.transaction_type);
+      console.log("rowData.transaction_type:", rowData.transaction_type);
+
+      // Determine the purpose type text based on the purpose_type ID
+      const purposeTypeText = determinePurposeType(rowData.purpose_type);
+      console.log("rowData.purpose_type:", rowData.purpose_type);
+
+      // Update showBuySell state based on transaction type
+      const shouldShowBuySell = buySellValue !== null;
+      setShowBuySell(shouldShowBuySell);
+
       const mappedData = {
         niumId: rowData.nium_order_id || "",
         cardNo: rowData.card_number || "",
@@ -110,14 +165,14 @@ const UpdateIncidentForm = (props: PropTypes) => {
         customerName: rowData.customer_name || "",
         bmfOrderRef: rowData.partner_order_id || "",
         transactionType: rowData.transaction_type || "",
-        purpose: rowData.purpose_type || "",
-        buySell: rowData.buy_sell || "Buy", // Use rowData value if available
+        purpose: purposeTypeText || "", // Use the converted text value if available
+        buySell: buySellValue || "Buy", // Use the determined value
         incidentNumber: rowData.incident_number || "",
         eonInvoiceNumber: rowData.eon_invoice_number || "",
-        comment: rowData.comment || "", // Use rowData value if available
+        comment: rowData.comment || "",
         status: {
-          approve: rowData.status?.approve ?? true, // Use rowData value if available
-          reject: rowData.status?.reject ?? false, // Use rowData value if available
+          approve: rowData.status?.approve ?? true,
+          reject: rowData.status?.reject ?? false,
         },
         niumInvoiceNo: rowData.nium_invoice_number || "",
       };
@@ -141,44 +196,38 @@ const UpdateIncidentForm = (props: PropTypes) => {
     return screenWidth < 768 ? 1 : 3;
   };
 
-  const onSubmit = (data: UpdateIncidentRequest) => {
-    console.log("Update Incident:", data);
+  const handleFormSubmit = async () => {
+    try {
+      await handleSubmit(async (data) => {
+        const { fields } = data;
+        console.log("Update Incident:", fields);
 
-    // Check if bmfOrderRef is available
-    if (!data.fields.bmfOrderRef) {
-      toast.error("BMF Order Reference is required");
-      return;
+        const formattedData = {
+          partner_order_id: fields.bmfOrderRef || "",
+          checker_id: getUserHashedKey() || "",
+          nium_invoice_number: fields?.status?.approve
+            ? fields.niumInvoiceNo || ""
+            : "",
+          incident_checker_comments: fields.comment || "",
+          incident_status: fields?.status?.approve ? true : false,
+        };
+
+        await submitIncidentFormData(formattedData, {
+          onSuccess: () => {
+            toast.success("Incident updated successfully");
+            resetFormValues(); // Reset form after successful submission
+            setIsModalOpen(false); // Ensure this runs after successful submission
+          },
+          onError: (error) => {
+            toast.error(error?.message || "Failed to update incident");
+          },
+        });
+      })();
+    } catch (error) {
+      console.error("Form submission error:", error);
+      toast.error("Form submission failed. Please check your inputs.");
     }
-
-    // Format the data to match the expected structure
-    const formattedData = {
-      partner_order_id: data.fields.bmfOrderRef,
-      incidentform: {
-        niumInvoiceNo: data.fields.niumInvoiceNo || "",
-        comments: data.fields.comment || "",
-        status: {
-          approve: isApproved,
-          reject: isRejected,
-        },
-      },
-    };
-
-    submitIncidentFormData(formattedData, {
-      onSuccess: () => {
-        toast.success("Incident updated successfully");
-      },
-      onError: () => {
-        toast.error("Failed to update incident");
-      },
-    });
   };
-
-  // const handleCheckboxChange = (key: string, checked: boolean) => {
-  //   methods.setValue("fields.status", {
-  //     ...methods.getValues("fields.status"),
-  //     [key]: checked,
-  //   });
-  // };
 
   const handleViewDocument = () => {
     if (documentUrl) {
@@ -204,100 +253,140 @@ const UpdateIncidentForm = (props: PropTypes) => {
 
   return (
     <FormProvider methods={methods}>
-      <form onSubmit={handleSubmit(onSubmit)} className="bg-white mx-auto">
-        <FormContentWrapper className="py-2 mt-0 rounded-none">
-          <Spacer>
-            {/* First Row */}
-
+      <FormContentWrapper className="py-2 mt-0 rounded-none">
+        <Spacer>
+          <FormFieldRow rowCols={handleRowCols()}>
+            {Object.entries(updateFormIncidentConfig.basicDetails)
+              .slice(1, 5)
+              .map(([name, field]) => {
+                const hasError = !!errors[name as keyof typeof errors];
+                return (
+                  <FieldWrapper
+                    key={name}
+                    className={cn("w-full", hasError ? "mb-8" : "mb-2")}
+                  >
+                    {getController({
+                      ...field,
+                      name,
+                      control,
+                      errors,
+                      disabled: formActionRight === "view",
+                      forcedValue: rowData?.[field.name],
+                    })}
+                  </FieldWrapper>
+                );
+              })}
+          </FormFieldRow>
+          <FormFieldRow rowCols={handleRowCols()}>
+            {Object.entries(updateFormIncidentConfig.basicDetails)
+              .slice(5, 6)
+              .map(([name, field]) => {
+                const hasError = !!errors[name as keyof typeof errors];
+                return (
+                  <FieldWrapper
+                    key={name}
+                    className={cn("w-full", hasError ? "mb-8" : "mb-2")}
+                  >
+                    {getController({
+                      ...field,
+                      name,
+                      control,
+                      errors,
+                      disabled: formActionRight === "view",
+                      forcedValue: determineTransactionType(
+                        rowData?.[field.name]
+                      ),
+                    })}
+                  </FieldWrapper>
+                );
+              })}
+            {Object.entries(updateFormIncidentConfig.basicDetails)
+              .slice(6, 7)
+              .map(([name, field]) => {
+                const hasError = !!errors[name as keyof typeof errors];
+                return (
+                  <FieldWrapper
+                    key={name}
+                    className={cn("w-full", hasError ? "mb-8" : "mb-2")}
+                  >
+                    {getController({
+                      ...field,
+                      name,
+                      control,
+                      errors,
+                      disabled: formActionRight === "view",
+                      forcedValue: determinePurposeType(rowData?.[field.name]),
+                    })}
+                  </FieldWrapper>
+                );
+              })}
+          </FormFieldRow>
+          {/* buy/sell */}
+          {showBuySell && (
             <FormFieldRow rowCols={handleRowCols()}>
-              {Object.entries(updateFormIncidentConfig.basicDetails).map(
-                ([name, field]) => {
-                  const hasError = !!errors[name as keyof typeof errors];
-                  return (
-                    <FieldWrapper
-                      key={name}
-                      className={cn("w-full", hasError ? "mb-8" : "mb-2")}
-                    >
-                      {getController({
-                        ...field,
-                        name,
-                        control,
-                        errors,
-                        disabled: formActionRight === "view",
-                        forcedValue: rowData?.[field.name],
-                      })}
-                    </FieldWrapper>
-                  );
-                }
-              )}
-            </FormFieldRow>
-            <FormFieldRow rowCols={handleRowCols()}>
-              {Object.entries(updateFormIncidentConfig.buySellType).map(
-                ([name, field]) => {
-                  const hasError = !!errors[name as keyof typeof errors];
-                  return (
-                    <FieldWrapper
-                      key={name}
-                      className={cn("w-full", hasError ? "mb-8" : "mb-2")}
-                    >
-                      {getController({
-                        ...field,
-                        name,
-                        control,
-                        errors,
-                        disabled: formActionRight === "view",
-                      })}
-                    </FieldWrapper>
-                  );
-                }
-              )}
-            </FormFieldRow>
-
-            {/* Exchange Rate Details */}
-            <ExchangeRateDetails data={updateFormIncidentConfig.tableData} />
-
-            <FormFieldRow rowCols={handleRowCols()}>
-              <Button
-                type="button"
-                onClick={handleViewDocument}
-                disabled={!documentUrl}
+              <FieldWrapper
+                id="buy-sell"
+                className={cn(
+                  "w-full",
+                  errors.fields?.buySell ? "mb-8" : "mb-2"
+                )}
               >
-                View Document
-              </Button>
+                <MaterialText
+                  name="fields.buySell"
+                  label="Transaction Mode"
+                  disabled={true} // Always disabled since it's determined by transaction type
+                />
+              </FieldWrapper>
             </FormFieldRow>
+          )}
 
-            {/* Replace the CheckboxWrapper with shadcn Checkbox components */}
-            <FormFieldRow rowCols={handleRowCols()}>
-              <div className="flex items-center space-x-8">
-                <div className="flex items-center space-x-2">
-                  <Checkbox
-                    id="approve"
-                    checked={isApproved}
-                    onCheckedChange={handleApproveChange}
-                  />
-                  <Label htmlFor="approve" className="cursor-pointer">
-                    Approve
-                  </Label>
-                </div>
-                <div className="flex items-center space-x-2">
-                  <Checkbox
-                    id="reject"
-                    checked={isRejected}
-                    onCheckedChange={handleRejectChange}
-                  />
-                  <Label htmlFor="reject" className="cursor-pointer">
-                    Reject
-                  </Label>
-                </div>
+          {/* <ExchangeRateDetails data={updateFormIncidentConfig.tableData} /> */}
+
+          <FormFieldRow rowCols={handleRowCols()}>
+            <Button
+              type="button"
+              onClick={handleViewDocument}
+              disabled={!documentUrl}
+            >
+              View Document
+            </Button>
+          </FormFieldRow>
+
+          {/* Replace the CheckboxWrapper with shadcn Checkbox components */}
+          <FormFieldRow rowCols={handleRowCols()}>
+            <div className="flex items-center space-x-8">
+              <div className="flex items-center space-x-2">
+                <Checkbox
+                  id="approve"
+                  checked={isApproved}
+                  onCheckedChange={handleApproveChange}
+                />
+                <Label htmlFor="approve" className="cursor-pointer">
+                  Approve
+                </Label>
               </div>
-            </FormFieldRow>
+              <div className="flex items-center space-x-2">
+                <Checkbox
+                  id="reject"
+                  checked={isRejected}
+                  onCheckedChange={handleRejectChange}
+                />
+                <Label htmlFor="reject" className="cursor-pointer">
+                  Reject
+                </Label>
+              </div>
+            </div>
+          </FormFieldRow>
 
-            <FormFieldRow rowCols={1}>
+          <FormFieldRow rowCols={2}>
+            <FormFieldRow>
               <MaterialTextArea
                 name="fields.comment"
                 label="Comment"
                 required={isRejected}
               />
+            </FormFieldRow>
+            <FormFieldRow>
               {showNiumInvoice && (
                 <MaterialText
                   name="fields.niumInvoiceNo"
@@ -306,16 +395,16 @@ const UpdateIncidentForm = (props: PropTypes) => {
                 />
               )}
             </FormFieldRow>
-          </Spacer>
-        </FormContentWrapper>
+          </FormFieldRow>
+        </Spacer>
+      </FormContentWrapper>
 
-        {/* Submit Button */}
-        <div className="flex justify-center bg-background">
-          <Button type="submit" disabled={isPending}>
-            {isPending ? <Loader2 className="animate-spin" /> : "Submit"}
-          </Button>
-        </div>
-      </form>
+      {/* Submit Button */}
+      <div className="flex justify-center bg-background">
+        <Button disabled={isPending} onClick={handleFormSubmit}>
+          {isPending ? <Loader2 className="animate-spin" /> : "Submit"}
+        </Button>
+      </div>
     </FormProvider>
   );
 };

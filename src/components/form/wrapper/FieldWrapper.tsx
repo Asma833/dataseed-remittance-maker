@@ -3,6 +3,7 @@ import "./form-layout.css";
 import { cn } from "@/utils/cn";
 
 type PropsType = {
+  id?: string;
   children:React.ReactNode;
   className?: string;
   rowCols?: number | string;
@@ -11,6 +12,7 @@ type PropsType = {
 };
 
 const FieldWrapper = ({
+  id,
   children,
   className = "",
   flexdirection,

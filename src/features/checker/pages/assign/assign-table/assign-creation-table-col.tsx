@@ -1,5 +1,7 @@
 // import useGetPurposeName from "@/hooks/useGetPurposeName";
 
+import { determinePurposeType, determineTransactionType } from "@/utils/getTransactionConfigTypes";
+
 // const TransactionTypeItem = ({ row }) => {
 //   const { purposeName } = useGetPurposeName("82da017edadc6482e7617116c6ecb563m8eaq5du");
 //   console.log('purposeName:',row.transaction_type, purposeName)
@@ -55,10 +57,14 @@ export const getAssignCreationColumns = (
     key: "transaction_type",
     id: "transaction_type",
     name: "Transaction Type",
+     cell: (_: unknown, rowData: any) =>
+          determineTransactionType(rowData.transaction_type),
   },
   {
     key: "purpose_type",
     id: "purpose_type",
     name: "Purpose Type",
+     cell: (_: unknown, rowData: any) =>
+          determinePurposeType(rowData.purpose_type),
   },
 ];
