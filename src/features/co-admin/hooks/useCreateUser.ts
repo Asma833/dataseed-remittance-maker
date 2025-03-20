@@ -61,6 +61,7 @@ export const useCreateUser = ({role}: {role: string}) => {
 
     // Get role ID (default to empty string if not available)
     const role_id = getRoleId(role) || "";
+    console.log('role_id:', role_id)
     const hashed_key = formData.role ? getHashedRoleId(formData.role) : undefined;
     
     return {

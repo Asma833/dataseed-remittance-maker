@@ -20,7 +20,7 @@ const UpdateIncidentCreationTable = () => {
     setTitle("Update Incident");
   }, [setTitle]);
 
-  const user = JSON.parse(localStorage.getItem("user") || "");
+  // const user = JSON.parse(localStorage.getItem("user") || "");
   // const requestData = {
   //   checkerId: user.hashed_key,
   //   transaction_type: "all",
@@ -35,7 +35,7 @@ const UpdateIncidentCreationTable = () => {
   const { data, isLoading, error } = useGetUpdateIncident(requestData);
   console.log('data:', data)
 
-  const [selectedNiumId, setSelectedNiumId] = useState<string | null>(null);
+  // const [selectedNiumId, setSelectedNiumId] = useState<string | null>(null);
   const [selectedRowData, setSelectedRowData] = useState<any>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
 
