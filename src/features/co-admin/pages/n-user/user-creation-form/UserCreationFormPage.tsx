@@ -115,7 +115,7 @@ const UserCreationFormPage = () => {
         email: selectedRow.email || "",
         productType: {
           card:
-            selectedRow.products?.some((p: any) => p.name === "Card") || false,
+            selectedRow.products?.some((p: any) => p.name === "Card") || true,
           remittance:
             selectedRow.products?.some((p: any) => p.name === "Remittance") ||
             false,
@@ -132,10 +132,12 @@ const UserCreationFormPage = () => {
     if (isEditMode) {
       await updateUser({ data: formdata, productOptions, id });
     } else {
-      //console.log(formdata,"formdata")
+      console.log(formdata,"formdata")
       createUser({
         ...formdata,
-        hashed_key:"",
+        business_type: "",
+        branch_id:"",
+        bank_account_id: "",
       });
     }
   });

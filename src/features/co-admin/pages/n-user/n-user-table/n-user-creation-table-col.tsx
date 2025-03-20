@@ -52,15 +52,17 @@ export const getUserTableColumns = (
         key: "status",
         id: "status",
         name: "Status",
-        cell: (_, row:any) => (
-          <div className="flex flex-col items-start">
-            <span className="text-sm font-medium">{row.is_active ? "Active" : "Inactive"}</span>
-            <Switch
-              checked={row?.is_active}
-              onCheckedChange={(checked) => handleStatusChange(row, checked)}
-            />
-          </div>
-        ),
+        cell: (_,row:any) => {
+          return (
+            <div className="flex flex-col items-start">
+              <span className="text-sm font-medium">{row.is_active ? "Active" : "Inactive"}</span>
+              <Switch
+                checked={row?.is_active}
+                onCheckedChange={(checked) => {handleStatusChange(row, checked)}}
+              />
+            </div>
+          )
+        }
       },
 
     {
@@ -72,7 +74,8 @@ export const getUserTableColumns = (
           <div className="flex gap-2">
             <button
               className="p-2 rounded-md hover:bg-muted/20"
-              onClick={() => handleNavigate(`update-user/${rowData.hashed_key}`,rowData)}
+              onClick={() =>{console.log(rowData,"rowData");
+                handleNavigate(`update-user/${rowData.hashed_key}`,rowData)}}
             >
               <Edit className="w-5 h-5 text-muted-foreground" />
             </button>

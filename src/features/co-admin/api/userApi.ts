@@ -1,9 +1,9 @@
 import axiosInstance from "@/core/services/axios/axiosInstance";
 import { getEndpoint } from "@/core/constant/apis";
-import { UserCreationRequest, UserCreationResponse, UserUpdateRequest } from "../types/user.type";
+import { UserCreationRequest, UserCreationResponse, UserRequest, UserUpdateRequest } from "../types/user.type";
 
 export const userApi = {
-  userCreation: async (userData: UserCreationRequest): Promise<UserCreationResponse> => {
+  userCreation: async (userData: UserRequest): Promise<UserCreationResponse> => {
     const { data } = await axiosInstance.post<UserCreationResponse>(
       getEndpoint("NUSERS.CREATE"),
       userData 
