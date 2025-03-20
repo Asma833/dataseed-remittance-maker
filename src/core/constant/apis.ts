@@ -30,8 +30,9 @@ export const API = {
   },
   CHECKER: {
     ASSIGN: {
-      TAKE_REQUEST: `/checker/assign/take-request`,
-      SEARCH_FILTER: `/checker/assign/search-filter`,
+      LIST:`/orders`,
+      TAKE_REQUEST: `/orders/update-checker`,
+      SEARCH_FILTER: ``,
     },
     VIEW_ALL: {
       SEARCH_FILTER: `/checker/view-all/search-filter`,
@@ -43,6 +44,7 @@ export const API = {
       LIST: `/update-incident`,
       UPDATE: (id: string) => `/update-incident/${id}`,
       SEARCH_FILTER: `/update-incident/search-filter`,
+      CHECKER_ORDER:`/orders/get-checker-orders`
     },
   },
   FEATURES: {
