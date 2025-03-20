@@ -10,6 +10,9 @@ import { usePageTitle } from "@/hooks/usePageTitle";
 import { useGetUpdateIncident } from "../../../hooks/useGetUpdate";
 import { useCurrentUser } from "@/utils/getUserFromRedux";
 import UpdateIncidentForm from "../incident-form/UpdateIncidentForm";
+import axiosInstance from "@/core/services/axios/axiosInstance";
+import { API } from "@/core/constant/apis";
+import { toast } from "sonner";
 
 const UpdateIncidentCreationTable = () => {
   // const [tableData,setTableData] = useState(initialData);
@@ -33,7 +36,7 @@ const UpdateIncidentCreationTable = () => {
 
 
   // Fetch data using the updated hook
-  const { data, isLoading, error } = useGetUpdateIncident(requestData);
+  const { data, isLoading, error ,fetchData } = useGetUpdateIncident(requestData);
   console.log('data:', data)
 
   //const [selectedNiumId, setSelectedNiumId] = useState<string | null>(null);
@@ -69,19 +72,33 @@ const UpdateIncidentCreationTable = () => {
       // For example: clientId: '123'
     },
   });
-  // useEffect(() => {
-  //   setIsModalOpen(true)
-  // }, []);
-
-  const handleOnClick = (niumId: string) => {
-    // Define what should happen when a row is clicked
-    console.log(`Row with niumId ${niumId} clicked`);
-  };
-  const handleUnassign = () =>{
+ 
+  const handleUnassign = async (partner_order_id:any) =>{
+   try {
+      const response = await axiosInstance.post(
+        API.CHECKER.UPDATE_INCIDENT.UNASSIGN,
+        {
+          orderId:partner_order_id,
+          checkerId:currentUserHashedKey,
+        }
+      );
+      
+      if(response){
+        toast.success("Order ID unassigned successfully.");
+      fetchData();
+      }
+          
+      } catch (error) {
+        console.error("Error unassigning orders:", error);
+        toast.error("Failed to unassign orders.");
+      }
+    };
+  
     
-  }
+    
 
-  const columns = getTransactionTableColumns(openModal,handleUnassign);
+
+  const columns = getTransactionTableColumns(openModal, handleUnassign);
 
   return (
     <div className="">
