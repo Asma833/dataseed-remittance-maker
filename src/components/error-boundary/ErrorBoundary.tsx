@@ -9,7 +9,6 @@ const ErrorBoundary: React.FC<ErrorBoundaryProps> = ({ children, fallback }) => 
         <ReactErrorBoundary
             FallbackComponent={() => (fallback ? <>{fallback}</> : <div>Something went wrong.</div>)}
             onError={(error, info) => {
-                console.error('[ErrorBoundary] Uncaught error:', error, info);
             }}
         >
             {children}

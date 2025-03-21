@@ -11,8 +11,6 @@ import { usePageTitle } from "@/hooks/usePageTitle";
 import { useGetApi } from "@/features/checker/hooks/useGetApi";
 import axiosInstance from "@/core/services/axios/axiosInstance";
 import { useCurrentUser } from "@/utils/getUserFromRedux";
-import useGetConfig from "@/features/checker/hooks/useGetConfig";
-// import useGetConfig from "@/features/checker/hooks/useGetConfig";
 
 const AssignCreationTable = () => {
   const { setTitle } = usePageTitle();
@@ -33,9 +31,7 @@ const AssignCreationTable = () => {
   const isTableFilterDynamic = false;
   const isPaginationDynamic = false;
 
-  // const { purpose_type, transaction_type, document_type } = useGetConfig();
-  // console.log('purpose_type, transaction_type, document_type:', purpose_type, transaction_type, document_type)
-
+  
   // Use the dynamic pagination hook
   const pagination = useDynamicPagination({
     endpoint: API.CHECKER.ASSIGN.LIST,
@@ -90,16 +86,9 @@ const AssignCreationTable = () => {
         fetchData();
       }
 
-      // Clear selections after successful submission
-      // setTableData((prevData) =>
-      //   prevData.map((row) => ({ ...row, isSelected: false }))
-      // );
       setSelectedRows([]);
 
-      // Optionally, refetch the data to get the latest state
-      // filterApi.refreshData();
     } catch (error) {
-      console.error("Error taking request:", error);
       toast.error("Failed to take request. Please try again.");
     } finally {
       setIsSubmitting(false);

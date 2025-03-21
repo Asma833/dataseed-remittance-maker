@@ -32,7 +32,6 @@ const AgentRegistrationForm = () => {
   }, [watch]);
 
   const onSubmit = async (data: any) => {
-    console.log("Submitted Data:", data);
     await new Promise((resolve) => setTimeout(resolve, 2000));
   };
 

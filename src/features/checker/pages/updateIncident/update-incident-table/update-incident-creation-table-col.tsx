@@ -19,7 +19,6 @@ export const getTransactionTableColumns = (
         className="text-pink-600 cursor-pointer"
         onClick={() => {
           openModal(rowData);
-          console.log("rowData: getTransactionTableColumns", rowData);
         }}
       >
         {rowData.nium_order_id}

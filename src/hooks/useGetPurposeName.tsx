@@ -25,7 +25,6 @@ const useGetPurposeName = (id?: string) => {
         setPurposeTypes(response.data || []);
         setError(null);
       } catch (err) {
-        console.error('Error fetching purpose types:', err);
         setError(err instanceof Error ? err : new Error('Failed to fetch purpose types'));
       } finally {
         setLoading(false);

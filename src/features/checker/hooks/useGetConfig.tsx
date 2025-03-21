@@ -57,7 +57,6 @@ export const useGetConfig = (
           },
         }));
       } catch (error) {
-        console.error("Fetch error:", error);
         setConfigData((prev) => ({
           ...prev,
           [type]: { data: null, loading: false, error: (error as Error).message },

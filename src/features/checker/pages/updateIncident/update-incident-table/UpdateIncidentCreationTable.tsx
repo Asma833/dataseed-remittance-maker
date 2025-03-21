@@ -46,10 +46,6 @@ const UpdateIncidentCreationTable = () => {
 
   // Fetch data using the updated hook
   const { data, isLoading, error } = useGetUpdateIncident(requestData);
-  console.log("data:", data);
-
-  //const [selectedNiumId, setSelectedNiumId] = useState<string | null>(null);
-  // const [selectedNiumId, setSelectedNiumId] = useState<string | null>(null);
   const [selectedRowData, setSelectedRowData] = useState<any>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
 

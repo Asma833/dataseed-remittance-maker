@@ -43,11 +43,8 @@ export const useGetCheckerOrders = <T = any>(
 
       setData(data);
     } catch (err) {
-      console.error(`Error fetching checker orders:`, err);
-
       // More detailed error logging for authentication issues
       if (axios.isAxiosError(err) && err.response?.status === 401) {
-        console.error("Authentication error - token issue detected");
       }
 
       const errorMessage =

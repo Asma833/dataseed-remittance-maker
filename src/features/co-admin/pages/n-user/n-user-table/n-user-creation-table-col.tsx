@@ -76,7 +76,6 @@ export const getUserTableColumns = (
             <button
               className="p-2 rounded-md hover:bg-muted/20"
               onClick={() => {
-                console.log(rowData, "rowData");
                 handleNavigate(`update-user/${rowData.id}`, rowData);
               }}
             >

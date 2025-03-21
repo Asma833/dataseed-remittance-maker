@@ -21,12 +21,10 @@ const useUnassignChecker = () => {
     },
     onSuccess: (data) => {
       toast.success("Checker unassigned successfully");
-      console.log("Checker unassigned successfully:", data);
       queryClient.invalidateQueries({ queryKey: ["updateIncident"] });
     },
     onError: (error) => {
       toast.error("Failed to unassign checker");
-      console.error("Error unassigning checker:", error);
     },
   });
 

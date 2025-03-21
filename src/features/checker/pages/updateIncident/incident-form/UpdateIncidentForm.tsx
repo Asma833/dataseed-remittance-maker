@@ -53,7 +53,6 @@ const useScreenSize = () => {
 
 const UpdateIncidentForm = (props: PropTypes) => {
   const { formActionRight, rowData, setIsModalOpen } = props;
-  console.log("rowData:===>", rowData);
   const screenWidth = useScreenSize();
   const { getUserHashedKey } = useCurrentUser();
   const { submitIncidentFormData, isPending } = useSubmitIncidentFormData();
@@ -148,12 +147,10 @@ const UpdateIncidentForm = (props: PropTypes) => {
     if (rowData) {
       // Determine the buy/sell value based on transaction type ID
       const buySellValue = determineBuySell(rowData.transaction_type);
-      console.log("rowData.transaction_type:", rowData.transaction_type);
-
+     
       // Determine the purpose type text based on the purpose_type ID
       const purposeTypeText = determinePurposeType(rowData.purpose_type);
-      console.log("rowData.purpose_type:", rowData.purpose_type);
-
+    
       // Update showBuySell state based on transaction type
       const shouldShowBuySell = buySellValue !== null;
       setShowBuySell(shouldShowBuySell);
@@ -200,8 +197,6 @@ const UpdateIncidentForm = (props: PropTypes) => {
     try {
       await handleSubmit(async (data) => {
         const { fields } = data;
-        console.log("Update Incident:", fields);
-
         const formattedData = {
           partner_order_id: fields.bmfOrderRef || "",
           checker_id: getUserHashedKey() || "",
@@ -224,7 +219,6 @@ const UpdateIncidentForm = (props: PropTypes) => {
         });
       })();
     } catch (error) {
-      console.error("Form submission error:", error);
       toast.error("Form submission failed. Please check your inputs.");
     }
   };
