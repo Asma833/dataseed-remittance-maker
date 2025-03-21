@@ -47,26 +47,6 @@ export const getTransactionTableColumns = (
     cell: (_: unknown, rowData: any) =>
       determineTransactionType(rowData.transaction_type),
   },
-  // {
-  //   key: "fxCurrency",
-  //   id: "fxCurrency",
-  //   name: "FX Currency",
-  // },
-  // {
-  //   key: "fxValue",
-  //   id: "fxValue",
-  //   name: "FX Value",
-  // },
-  // {
-  //   key: "fxRate",
-  //   id: "fxRate",
-  //   name: "FX Rate",
-  // },
-  // {
-  //   key: "inrRate",
-  //   id: "inrRate",
-  //   name: "INR Rate",
-  // },
   {
     key: "purpose_type",
     id: "purpose_type",
@@ -95,7 +75,6 @@ export const getTransactionTableColumns = (
     name: "E Sign Link",
     cell:  (_: unknown, rowData: any) => (
       <button onClick={() => {handleCopyLink(rowData)}}  >
-        {/* <LinkIcon className="text-gray-500 cursor-pointer" /> */}
         <SignLinkButton e_sign_link={rowData.e_sign_link} />
       </button>
     ),

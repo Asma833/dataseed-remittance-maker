@@ -7,7 +7,6 @@ import { useCurrentUser } from "@/utils/getUserFromRedux";
 export const useUpdateAPI = () => {
   const navigate = useNavigate();
   const { getBankAccountId, getBranchId } = useCurrentUser();
- // const currentUserHashedKey = getUserHashedKey();
  
   const { mutate, isPending, error } = useMutation({
     mutationFn: async ({ data, id }: any) => {

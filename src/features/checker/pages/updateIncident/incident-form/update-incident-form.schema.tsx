@@ -3,7 +3,7 @@ import { z } from "zod";
 export const updateIncidentFormSchema = z.object({
   passportNumber: z
     .string()
-    .nonempty("Passport Number is required") // Required validation
+    .nonempty("Passport Number is required") 
     .length(8, "Must be 8 alphanumeric characters")
     .regex(/^[A-Za-z0-9]{8}$/, "No spaces/special characters"),
 

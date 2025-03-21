@@ -1,6 +1,5 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import axiosInstance from "@/core/services/axios/axiosInstance";
-import { API } from "@/core/constant/apis";
 import { toast } from "sonner";
 
 interface UnassignCheckerParams {

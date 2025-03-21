@@ -49,6 +49,3 @@ const useGetPurposeName = (id?: string) => {
 
 export default useGetPurposeName;
 
-
-// const { purposeName, loading: purposeLoading } = useGetPurposeName('603e51b68ffd0e2ad8a8dfcdad7f9dd3m8eao94v');
-// const { transactionType, loading: transactionLoading } = useGetTransactionType('603e51b68ffd0e2ad8a8dfcdad7f9dd3m8eao94v');

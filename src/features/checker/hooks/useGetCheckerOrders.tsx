@@ -58,11 +58,10 @@ export const useGetCheckerOrders = <T = any>(
     }
   }, [userHashedKey]);
 
-  // Functions to change transaction type and fetch data again
+  // fetch data again
   const changeTransactionType = useCallback((newType: TransactionType) => {
     return () => {
       setTransactionType(newType);
-      // We'll rely on the effect to trigger the fetch
     };
   }, []);
 

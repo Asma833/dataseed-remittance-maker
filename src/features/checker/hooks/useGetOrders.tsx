@@ -21,7 +21,6 @@ export const useGetOrders = <T = any>(autoFetch: boolean = true) => {
 
         setData(data);
       } catch (err) {
-        // More detailed error logging for authentication issues
         if (axios.isAxiosError(err) && err.response?.status === 401) {
         }
 

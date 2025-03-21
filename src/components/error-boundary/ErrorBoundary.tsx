@@ -10,7 +10,7 @@ const ErrorBoundary: React.FC<ErrorBoundaryProps> = ({ children, fallback }) => 
             FallbackComponent={() => (fallback ? <>{fallback}</> : <div>Something went wrong.</div>)}
             onError={(error, info) => {
             }}
-        >
+            >
             {children}
         </ReactErrorBoundary>
     );

@@ -1,6 +1,5 @@
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-// import { useUpdateIncident } from "../../../hooks/useUpdateIncident";
 import { updateIncidentFormSchema } from "./update-incident-form.schema";
 import { useState, useEffect } from "react";
 import { FormProvider } from "@/components/form/context/FormProvider";
@@ -61,10 +60,7 @@ const UpdateIncidentForm = (props: PropTypes) => {
   const [isApproved, setIsApproved] = useState(true);
   const [isRejected, setIsRejected] = useState(false);
 
-  // Transaction type to Buy/Sell mapping
-
-  // Function to determine buy/sell based on transaction type
-
+  
   // State to track if we should show the buy/sell field
   const [showBuySell, setShowBuySell] = useState(true);
 
@@ -162,8 +158,8 @@ const UpdateIncidentForm = (props: PropTypes) => {
         customerName: rowData.customer_name || "",
         bmfOrderRef: rowData.partner_order_id || "",
         transactionType: rowData.transaction_type || "",
-        purpose: purposeTypeText || "", // Use the converted text value if available
-        buySell: buySellValue || "Buy", // Use the determined value
+        purpose: purposeTypeText || "", 
+        buySell: buySellValue || "Buy", 
         incidentNumber: rowData.incident_number || "",
         eonInvoiceNumber: rowData.eon_invoice_number || "",
         comment: rowData.comment || "",
@@ -210,7 +206,7 @@ const UpdateIncidentForm = (props: PropTypes) => {
         await submitIncidentFormData(formattedData, {
           onSuccess: () => {
             toast.success("Incident updated successfully");
-            resetFormValues(); // Reset form after successful submission
+            resetFormValues(); 
             setIsModalOpen(false); // Ensure this runs after successful submission
           },
           onError: (error) => {
@@ -328,7 +324,7 @@ const UpdateIncidentForm = (props: PropTypes) => {
                 <MaterialText
                   name="fields.buySell"
                   label="Transaction Mode"
-                  disabled={true} // Always disabled since it's determined by transaction type
+                  disabled={true} 
                 />
               </FieldWrapper>
             </FormFieldRow>

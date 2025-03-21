@@ -6,7 +6,6 @@ import {
 } from "./update-incident-table-value";
 import { useEffect, useState } from "react";
 import { DialogWrapper } from "@/components/common/DialogWrapper";
-// import { UpdateIncidentForm } from "../incident-form/UpdateIncidentForm";
 import { useDynamicPagination } from "@/components/common/dynamic-table/hooks/useDynamicPagination";
 import { useFilterApi } from "@/components/common/dynamic-table/hooks/useFilterApi";
 import { usePageTitle } from "@/hooks/usePageTitle";
@@ -21,7 +20,6 @@ interface RowData {
 }
 
 const UpdateIncidentCreationTable = () => {
-  // const [tableData,setTableData] = useState(initialData);
   const { setTitle } = usePageTitle();
   const { getUserHashedKey } = useCurrentUser();
   const currentUserHashedKey = getUserHashedKey();
@@ -34,11 +32,7 @@ const UpdateIncidentCreationTable = () => {
     setTitle("Update Incident");
   }, [setTitle]);
 
-  // const user = JSON.parse(localStorage.getItem("user") || "");
-  // const requestData = {
-  //   checkerId: user.hashed_key,
-  //   transaction_type: "all",
-  // };
+ 
   const requestData = {
     checkerId: currentUserHashedKey || "",
     transaction_type: "all",
@@ -54,7 +48,6 @@ const UpdateIncidentCreationTable = () => {
 
   // Use the dynamic pagination hook
   const pagination = useDynamicPagination({
-    //  endpoint: API.CHECKER.UPDATE_INCIDENT.SEARCH_FILTER,
     endpoint: "",
     initialPageSize: 10,
     initialData,
@@ -101,8 +94,7 @@ const UpdateIncidentCreationTable = () => {
 
         <DynamicTable
           columns={columns}
-          // data={transactionTableData}
-          data={data && data.orders.length > 0 ? data.orders : []}
+          data={data && data.orders.length > 0 ? data.orders : transactionTableData}
           tableWrapperClass="bg-background p-5 rounded-md"
           defaultSortColumn="nium_order_id"
           defaultSortDirection="asc"

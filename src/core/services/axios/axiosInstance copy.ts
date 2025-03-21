@@ -73,7 +73,6 @@ const responseInterceptorId = axiosInstance.interceptors.response.use(
         
         return axiosInstance(originalRequest);
       } catch (refreshError) {
-        // Use window.location.replace instead of href for cleaner navigation
         localStorage.clear();
         window.location.replace('/login');
         return Promise.reject(refreshError);

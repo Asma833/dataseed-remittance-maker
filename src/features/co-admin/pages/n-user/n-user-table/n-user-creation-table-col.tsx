@@ -21,28 +21,11 @@ export const getUserTableColumns = (
   handleNavigate: HandleNavigate
 ): TableColumn[] => {
   return [
-    // {
-    //   key: "first_name",
-    //   id: "first_name",
-    //   name: "User Name",
-    // },
     {
       key: "email",
       id: "email",
       name: "Email",
     },
-    // {
-    //   key: "productType",
-    //   id: "productType",
-    //   name: "Product Type",
-    //   cell: (_, row: any) => (
-    //     <span>
-    //       {row.products && row.products.length > 0
-    //         ? row.products.map((product: any) => product.name).join(", ")
-    //         : "No Products"}
-    //     </span>
-    //   ),
-    // },
     {
       key: "createdAt",
       id: "createdAt",
