@@ -9,9 +9,8 @@ import { useFilterApi } from "@/components/common/dynamic-table/hooks/useFilterA
 import { API } from "@/core/constant/apis";
 import { useDynamicPagination } from "@/components/common/dynamic-table/hooks/useDynamicPagination";
 import { usePageTitle } from "@/hooks/usePageTitle";
-import { useGetApi } from "@/features/co-admin/hooks/useGetApi";
-import { User } from "@/features/auth/types/auth.types";
 import { useUpdateStatusAPI } from "@/features/co-admin/hooks/useUpdateStatus";
+import { useGetUserApi } from "@/features/co-admin/hooks/useGetUser";
 
 const NuserCreationTable = () => {
   const navigate = useNavigate();
@@ -19,54 +18,36 @@ const NuserCreationTable = () => {
   useEffect(() => {
     setTitle("N-Users");
   }, [setTitle]);
-  const [tableData, setTableData] = useState(initialData);
+  const [tableData] = useState(initialData);
 
   const {
-    data: users,
+    data: users = [],
     loading,
-    error,
-    fetchData,
-  } = useGetApi<User[]>("NUSERS.PARTNERS_LIST");
+    error
+  } = useGetUserApi("NUSERS.USER.LIST");
 
   const { mutate: updateStatus } = useUpdateStatusAPI();
 
   const handleStatusChange = async (rowData: any, checked: boolean) => {
-    if (!rowData || !rowData.hashed_key) {
+    // Ensure rowData and id exist before proceeding
+    if (!rowData || !rowData.id) {
+      console.error("Invalid rowData:", rowData);
       return;
     }
-
-    const updatedRow = { ...rowData, is_active: checked };
-    // Optimistically update UI
-    setTableData((prevData) =>
-      prevData.map((row) =>
-        row.hashed_key === rowData.hashed_key ? updatedRow : row
-      )
-    );
-
-    try {
+      // Make the API call to update the status
       await updateStatus({
-        hashed_key: updatedRow.id,
-        is_active: updatedRow.is_active,
+        hashed_key: rowData.id,
+        is_active: checked,
       });
-    } catch (error: any) {
-      // Revert UI if API fails
-      setTableData((prevData) =>
-        prevData.map((row) =>
-          row.hashed_key === rowData.hashed_key
-            ? { ...row, is_active: !checked }
-            : row
-        )
-      );
-    }
-    // await fetchData();
   };
-
+  
+  
   const isTableFilterDynamic = false;
   const isPaginationDynamic = false;
 
   // Use the dynamic pagination hook
   const pagination = useDynamicPagination({
-    endpoint: API.NUSERS.PARTNERS_LIST,
+    endpoint: API.NUSERS.USER.LIST,
     initialPageSize: 10,
     initialData,
     dataPath: "transactions",
@@ -81,7 +62,7 @@ const NuserCreationTable = () => {
     navigate(path, { state: { selectedRow: rowData } });
   };
   const filterApi = useFilterApi({
-    endpoint: API.NUSERS.PARTNERS_LIST,
+    endpoint: API.NUSERS.USER.LIST,
     initialData,
     // base query params if needed
     baseQueryParams: {

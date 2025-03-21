@@ -5,7 +5,7 @@ import { UserCreationRequest, UserCreationResponse, UserRequest, UserUpdateReque
 export const userApi = {
   userCreation: async (userData: UserRequest): Promise<UserCreationResponse> => {
     const { data } = await axiosInstance.post<UserCreationResponse>(
-      getEndpoint("NUSERS.CREATE"),
+      getEndpoint("NUSERS.LIST.CREATE"),
       userData 
     );
     return data;
@@ -19,7 +19,7 @@ export const userApi = {
 
     // Pass hashed_key as a string in the API request
     const { data } = await axiosInstance.put<UserUpdateRequest>(
-      `${getEndpoint("NUSERS.STATUS_UPDATE")}/${hashed_key}`, // Use string directly
+      `${getEndpoint("NUSERS.USER.STATUS_UPDATE")}/${hashed_key}`, // Use string directly
       updateData // Send the remaining data in the request body
     );
 
@@ -34,7 +34,7 @@ userUpdate: async (userData: UserCreationRequest): Promise<UserUpdateRequest> =>
 
   // Pass hashed_key as a string in the API request
   const { data } = await axiosInstance.put<UserUpdateRequest>(
-    `${getEndpoint("NUSERS.UPDATE")}/${hashed_key}`, // Use string directly
+    `${getEndpoint("NUSERS.USER.UPDATE")}/${hashed_key}`, // Use string directly
     updateData // Send the remaining data in the request body
   );
 
@@ -43,7 +43,7 @@ userUpdate: async (userData: UserCreationRequest): Promise<UserUpdateRequest> =>
 
 
 getProducts: async () => {
-  const { data } = await axiosInstance.get<UserCreationResponse>(getEndpoint("NUSERS.PRODUCTS"));
+  const { data } = await axiosInstance.get<UserCreationResponse>(getEndpoint("NUSERS.USER.PRODUCTS"));
   return data; 
 },
 

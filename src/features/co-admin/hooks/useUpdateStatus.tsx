@@ -11,7 +11,7 @@ export const useUpdateStatusAPI  = () => {
     },
     onSuccess: () => {
       toast.success("User status updated successfully");
-      queryClient.invalidateQueries({ queryKey: ["updateIncident"] });
+      queryClient.invalidateQueries({ queryKey: ["userStatusUpdate"] });
     },
     onError: (error: Error) => {
       toast.error(error.message || "Status update failed");

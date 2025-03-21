@@ -21,11 +21,11 @@ export const getUserTableColumns = (
   handleNavigate: HandleNavigate
 ): TableColumn[] => {
   return [
-    {
-      key: "first_name",
-      id: "first_name",
-      name: "User Name",
-    },
+    // {
+    //   key: "first_name",
+    //   id: "first_name",
+    //   name: "User Name",
+    // },
     {
       key: "email",
       id: "email",
@@ -55,9 +55,6 @@ export const getUserTableColumns = (
       cell: (_, row: any) => {
         return (
           <div className="flex flex-col items-start">
-            <span className="text-sm font-medium">
-              {row.is_active ? "Active" : "Inactive"}
-            </span>
             <Switch
               checked={row?.is_active}
               onCheckedChange={(checked) => {
