@@ -45,7 +45,6 @@ export const updateIncidentFormSchema = z.object({
           }
         ),
 
-      // Also include the original field names for backward compatibility
       passportNumber: z.string().optional(),
       cardNumber: z.string().optional(),
       departureDate: z.string().optional(),
