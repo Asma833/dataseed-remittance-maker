@@ -32,7 +32,6 @@ const UpdateIncidentCreationTable = () => {
     setTitle("Update Incident");
   }, [setTitle]);
 
- 
   const requestData = {
     checkerId: currentUserHashedKey || "",
     transaction_type: "all",
@@ -71,14 +70,8 @@ const UpdateIncidentCreationTable = () => {
       unassignChecker(rowData.partner_order_id, currentUserHashedKey);
     }
   };
-  const handleCopyLink = (rowData: RowData): void => {
-    const e_sign_link = rowData.e_sign_link;
-  };
-  const columns = getTransactionTableColumns(
-    openModal,
-    handleUnassign,
-    handleCopyLink
-  );
+
+  const columns = getTransactionTableColumns(openModal, handleUnassign);
 
   return (
     <div className="">
@@ -94,8 +87,7 @@ const UpdateIncidentCreationTable = () => {
 
         <DynamicTable
           columns={columns}
-          data={data && data.orders.length > 0 ? data.orders : transactionTableData}
-          tableWrapperClass="bg-background p-5 rounded-md"
+          data={data && data.orders.length > 0 ? data.orders : []}
           defaultSortColumn="nium_order_id"
           defaultSortDirection="asc"
           loading={pagination.loading}

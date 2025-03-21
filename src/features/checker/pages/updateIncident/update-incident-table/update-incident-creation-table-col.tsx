@@ -1,14 +1,14 @@
+import { Button } from "@/components/ui/button";
 import { SignLinkButton } from "@/features/e-sign/components/SignLinkButton";
 import {
   determinePurposeType,
   determineTransactionType,
 } from "@/utils/getTransactionConfigTypes";
-import { Link as LinkIcon, X } from "lucide-react";
+import { X } from "lucide-react";
 
 export const getTransactionTableColumns = (
   openModal: (value: string) => void,
   handleUnassign: (rowData: any) => void,
-  handleCopyLink: (rowData: any) => void
 ) => [
   {
     key: "nium_order_id",
@@ -73,10 +73,16 @@ export const getTransactionTableColumns = (
     key: "e_sign_link",
     id: "e_sign_link",
     name: "E Sign Link",
-    cell:  (_: unknown, rowData: any) => (
-      <button onClick={() => {handleCopyLink(rowData)}}  >
-        <SignLinkButton e_sign_link={rowData.e_sign_link} />
-      </button>
+    cell: (_: unknown, rowData: any) => (
+      <SignLinkButton copyLinkUrl={rowData.e_sign_link} buttonText={"E Sign"} />
+    ),
+  },
+  {
+    key: "merged_document",
+    id: "merged_document",
+    name: "Merged Document",
+    cell: (_: unknown, rowData: any) => (
+      <SignLinkButton copyLinkUrl={rowData.e_sign_link} buttonText={"E Sign"} />
     ),
   },
   {
@@ -84,9 +90,14 @@ export const getTransactionTableColumns = (
     id: "release",
     name: "Release",
     cell: (_: unknown, rowData: any) => (
-      <button onClick={() => handleUnassign(rowData)}>
-        <X className="text-gray-600 cursor-pointer" />
-      </button>
+      <Button
+        onClick={() => handleUnassign(rowData)}
+        className="flex items-center"
+        size={"sm"}
+      >
+        <X className="text-white cursor-pointer" size={20} />
+        Unassign
+      </Button>
     ),
   },
 ];

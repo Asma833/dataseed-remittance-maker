@@ -1,6 +1,5 @@
 import { DynamicTable } from "@/components/common/dynamic-table/DynamicTable";
 import { getAssignCreationColumns } from "./assign-creation-table-col";
-import { transactionTableData as initialData } from "./assign-table-value";
 import { useState, useEffect } from "react";
 import { useFilterApi } from "@/components/common/dynamic-table/hooks/useFilterApi";
 import { useDynamicPagination } from "@/components/common/dynamic-table/hooks/useDynamicPagination";
@@ -16,7 +15,7 @@ const AssignCreationTable = () => {
   const { setTitle } = usePageTitle();
   const { getUserHashedKey } = useCurrentUser();
   const currentUserHashedKey = getUserHashedKey();
-  
+
   useEffect(() => {
     setTitle("Assign");
   }, [setTitle]);
@@ -31,12 +30,10 @@ const AssignCreationTable = () => {
   const isTableFilterDynamic = false;
   const isPaginationDynamic = false;
 
-  
   // Use the dynamic pagination hook
   const pagination = useDynamicPagination({
     endpoint: API.CHECKER.ASSIGN.LIST,
     initialPageSize: 10,
-    initialData,
     dataPath: "transactions",
     totalRecordsPath: "totalRecords",
   });
@@ -44,11 +41,7 @@ const AssignCreationTable = () => {
   // Using the filter API hook
   const filterApi = useFilterApi({
     endpoint: API.CHECKER.ASSIGN.LIST,
-    initialData,
-    // base query params if needed
-    baseQueryParams: {
-      // For example: clientId: '123'
-    },
+    baseQueryParams: {},
   });
 
   const handleSelectionChange = (rowId: string, checked: boolean) => {
@@ -87,7 +80,6 @@ const AssignCreationTable = () => {
       }
 
       setSelectedRows([]);
-
     } catch (error) {
       toast.error("Failed to take request. Please try again.");
     } finally {
@@ -124,7 +116,6 @@ const AssignCreationTable = () => {
             ? filterApi.data ?? []
             : assignList ?? []
         }
-        tableWrapperClass="bg-background p-5 rounded-md"
         defaultSortColumn="nium_order_id"
         defaultSortDirection="asc"
         loading={filterApi.loading || pagination.loading || isSubmitting}
