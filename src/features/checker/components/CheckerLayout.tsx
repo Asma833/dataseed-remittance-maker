@@ -13,7 +13,7 @@ const CheckerLayout = ({ children }: CheckerLayoutProps) => {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
 
   return (
-    <div className="flex min-h-screen bg-gray-50">
+    <div className="flex min-h-screen bg-background">
       <div
         className={`fixed lg:static top-0 left-0 w-28 h-full bg-white shadow-md transition-transform transform 
         ${

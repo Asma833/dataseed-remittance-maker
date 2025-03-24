@@ -72,29 +72,36 @@ export const getTransactionTableColumns = (
     name: "VKYC Status",
     className: "min-w-0",
   },
-{
-  key: "incident_status",
-  id: "incident_status",
-  name: "Incident Status",
-  className: "min-w-0  max-w-[70px]",
-  cell: (_: unknown, rowData: any) => (
-    <span>
-      {rowData.incident_status === null || rowData.incident_status === undefined ? 
-        <span className="text-orange-600">Pending</span> :
-        rowData.incident_status ? 
-          <span className="text-green-600">Approved</span> :
+  {
+    key: "incident_status",
+    id: "incident_status",
+    name: "Incident Status",
+    className: "min-w-0  max-w-[70px]",
+    cell: (_: unknown, rowData: any) => (
+      <span>
+        {rowData.incident_status === null ||
+        rowData.incident_status === undefined ? (
+          <span className="text-orange-600">Pending</span>
+        ) : rowData.incident_status ? (
+          <span className="text-green-600">Approved</span>
+        ) : (
           <span className="text-red-600">Rejected</span>
-      }
-    </span>
-  ),
-},
+        )}
+      </span>
+    ),
+  },
   {
     key: "e_sign_link",
     id: "e_sign_link",
     name: "E Sign Link",
     className: "min-w-0 max-w-[80px]",
     cell: (_: unknown, rowData: any) => (
-      <SignLinkButton copyLinkUrl={rowData.e_sign_link} buttonText={"E Sign"} />
+      <SignLinkButton
+        copyLinkUrl={rowData.e_sign_link}
+        buttonText={"E Sign"}
+        disabled={rowData.e_sign_status === "not generated"}
+        tooltipText={"Copy E sign Link"}
+      />
     ),
   },
   {
@@ -103,7 +110,11 @@ export const getTransactionTableColumns = (
     name: "Merged Document",
     className: "min-w-0 max-w-[100px]",
     cell: (_: unknown, rowData: any) => (
-      <SignLinkButton copyLinkUrl={rowData.e_sign_link} buttonText={"E Sign"} />
+      <SignLinkButton
+        copyLinkUrl={rowData.e_sign_link}
+        buttonText={"E Sign"}
+        tooltipText={"Copy Merged Doc Link"}
+      />
     ),
   },
   {
@@ -114,7 +125,7 @@ export const getTransactionTableColumns = (
     cell: (_: unknown, rowData: any) => (
       <Button
         onClick={() => handleUnassign(rowData)}
-        className="flex items-center"
+        className="flex items-center justify-center mx-auto"
         size={"sm"}
       >
         <X className="text-white cursor-pointer" size={20} />
