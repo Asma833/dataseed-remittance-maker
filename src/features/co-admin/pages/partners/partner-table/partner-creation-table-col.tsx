@@ -73,8 +73,7 @@ export const getUserTableColumns = (
           <div className="flex flex-col items-center">
             <button
               className="p-2 rounded-md hover:bg-muted/20"
-              onClick={() =>{console.log(rowData,"rowData");
-                handleNavigate(`update-user/${rowData.hashed_key}`,rowData)}}
+              onClick={() =>handleNavigate(`update-partner/${rowData.hashed_key}`,rowData)}
             >
               <Edit className="w-5 h-5 text-muted-foreground" />
             </button>
