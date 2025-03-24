@@ -1,5 +1,6 @@
 import { lazy } from "react";
 import { ROUTES } from "../constants";
+import { checkerComponents } from "./checker.routes";
 
 const coAdminComponents = {
     User: lazy(() => import("@/features/co-admin/pages/n-user/n-user-table/NUserCreationTable")),
@@ -34,6 +35,12 @@ export const coAdminRoutes = [
     roles: ["maker", "co-admin"],
     permission: "view_dashboard",
   },
+   {
+      path: ROUTES.CHECKER.VIEWALL,
+      element: checkerComponents.ViewAll,
+      roles: ["checker", "co-admin"],
+      permission: "view_dashboard",
+    },
   {
     path: ROUTES.COADMIN.CREATEPARTNER,
     element: coAdminComponents.PartnerCreation,
