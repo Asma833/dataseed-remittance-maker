@@ -1,7 +1,7 @@
 
 const userPrefix = "/admin";
 
-import { LayoutDashboard, ClipboardList, User, Folder } from "lucide-react";
+import { LayoutDashboard, ClipboardList, User, Eye } from "lucide-react";
 
 export const SideNavItems = [
   { title: "N-User", path: `${userPrefix}/users`, icon: LayoutDashboard },
