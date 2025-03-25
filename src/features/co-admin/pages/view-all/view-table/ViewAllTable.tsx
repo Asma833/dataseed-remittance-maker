@@ -12,6 +12,8 @@ import {
   purposeTypeOptions,
   transactionTypeOptions,
 } from "@/features/checker/config/tableFiltersConfig";
+import { useGetOrders } from "@/features/checker/hooks/useGetOrders";
+import useGetAllOrders from "@/features/co-admin/hooks/useGetAllOrders";
 
 const ViewAllTable = () => {
   const { setTitle } = usePageTitle();
@@ -25,12 +27,8 @@ const ViewAllTable = () => {
     loading: checkerOrdersLoading,
     error: checkerOrdersError,
     fetchData: refreshData,
-  } = useGetCheckerOrders<{
-    message: string;
-    totalOrders: number;
-    filterApplied: string;
-    orders: any[];
-  }>("all", true);
+  } = useGetAllOrders();
+  console.log("checkerOrdersData", checkerOrdersData);
 
   const isTableFilterDynamic = false;
   const isPaginationDynamic = false;

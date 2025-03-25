@@ -49,16 +49,18 @@ export const getTransactionTableColumns = (
     id: "transaction_type",
     name: "Transaction Type",
     className: "min-w-0",
-    cell: (_: unknown, rowData: any) =>
-      determineTransactionType(rowData.transaction_type),
+    cell: (_: unknown, rowData: any) => (
+      <span>{rowData.transaction_type.text}</span>
+    ),
   },
   {
     key: "purpose_type",
     id: "purpose_type",
     name: "Purpose Type",
     className: "min-w-0 max-w-[70px]",
-    cell: (_: unknown, rowData: any) =>
-      determinePurposeType(rowData.purpose_type),
+    cell: (_: unknown, rowData: any) => (
+      <span>{rowData.purpose_type.text}</span>
+    ),
   },
   {
     key: "e_sign_status",

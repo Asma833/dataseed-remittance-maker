@@ -34,7 +34,8 @@ export const API = {
   },
   CHECKER: {
     ASSIGN: {
-      LIST:`/orders`,
+      // LIST:`/orders`,
+      LIST:`/orders/unassigned-orders`,
       TAKE_REQUEST: `/orders/update-checker`,
       SEARCH_FILTER: ``,
     },

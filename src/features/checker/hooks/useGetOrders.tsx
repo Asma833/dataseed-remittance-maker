@@ -22,6 +22,8 @@ export const useGetOrders = <T = any>(autoFetch: boolean = true) => {
         setData(data);
       } catch (err) {
         if (axios.isAxiosError(err) && err.response?.status === 401) {
+          console.log("Unauthorized");
+          
         }
 
         const errorMessage =

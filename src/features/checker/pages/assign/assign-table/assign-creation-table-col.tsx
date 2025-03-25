@@ -1,5 +1,7 @@
-
-import { determinePurposeType, determineTransactionType } from "@/utils/getTransactionConfigTypes";
+import {
+  determinePurposeType,
+  determineTransactionType,
+} from "@/utils/getTransactionConfigTypes";
 export const getAssignCreationColumns = (
   handleSelectionChange: (rowId: string, checked: boolean) => void
 ) => [
@@ -49,14 +51,16 @@ export const getAssignCreationColumns = (
     key: "transaction_type",
     id: "transaction_type",
     name: "Transaction Type",
-     cell: (_: unknown, rowData: any) =>
-          determineTransactionType(rowData.transaction_type),
+    cell: (_: unknown, rowData: any) => (
+      <span>{rowData.transaction_type.text}</span>
+    ),
   },
   {
     key: "purpose_type",
     id: "purpose_type",
     name: "Purpose Type",
-     cell: (_: unknown, rowData: any) =>
-          determinePurposeType(rowData.purpose_type),
+    cell: (_: unknown, rowData: any) => (
+      <span>{rowData.purpose_type.text}</span>
+    ),
   },
 ];

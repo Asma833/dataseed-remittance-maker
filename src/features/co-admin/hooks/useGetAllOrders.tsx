@@ -7,7 +7,7 @@ import { useCurrentUser } from "@/utils/getUserFromRedux";
 
 type TransactionType = "all" | "completed";
 
-export const useGetCheckerOrders = <T = any,>(
+export const useGetAllOrders = <T = any,>(
   initialTransactionType: TransactionType = "all",
   autoFetch: boolean = true
 ) => {
@@ -26,7 +26,7 @@ export const useGetCheckerOrders = <T = any,>(
   const transactionTypeRef = useRef(transactionType);
   transactionTypeRef.current = transactionType;
 
-  // Function to fetch data with POST request
+  // Function to fetch data with GET request
   const fetchData = useCallback(async () => {
     if (!userHashedKey) {
       setError("User hash key not available");
@@ -38,10 +38,7 @@ export const useGetCheckerOrders = <T = any,>(
     setError(null);
 
     try {
-      const { data } = await axiosInstance.post(API.ORDERS.CHECKER_ORDERS, {
-        checkerId: userHashedKey,
-        transaction_type: transactionTypeRef.current,
-      });
+      const { data } = await axiosInstance.get(API.ORDERS.LIST);
 
       setData(data);
     } catch (err) {
@@ -87,9 +84,7 @@ export const useGetCheckerOrders = <T = any,>(
     error,
     fetchData,
     transactionType,
-    getAllTransactions: changeTransactionType("all"),
-    getCompletedTransactions: changeTransactionType("completed"),
   };
 };
 
-export default useGetCheckerOrders;
+export default useGetAllOrders;
