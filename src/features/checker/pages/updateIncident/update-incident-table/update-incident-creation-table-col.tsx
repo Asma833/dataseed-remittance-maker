@@ -120,6 +120,19 @@ export const getTransactionTableColumns = (
     ),
   },
   {
+    key: "generateEsign",
+    id: "generateEsign",
+    name: "Generate E Sign",
+    className: "min-w-0 max-w-[100px]",
+    cell: (_: unknown, rowData: any) => (
+      <SignLinkButton
+        copyLinkUrl={rowData.e_sign_link}
+        buttonText={"E Sign"}
+        tooltipText={"Copy Merged Doc Link"}
+      />
+    ),
+  },
+  {
     key: "release",
     id: "release",
     name: "Release",
