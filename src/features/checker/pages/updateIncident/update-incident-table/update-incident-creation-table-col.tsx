@@ -15,25 +15,47 @@ const NiumOrderID = ({
   rowData: any;
   openModal: (value: string) => void;
 }) => {
+  const isNuimOrderIdActive__esign =
+    rowData?.is_esign_required === true &&
+    rowData?.is_v_kyc_required === false &&
+    rowData?.e_sign_status === "completed" &&
+    rowData?.v_kyc_status === "not required";
 
+  const isNuimOrderIdActive__vkcy =
+    rowData?.is_esign_required === false &&
+    rowData?.is_v_kyc_required === true &&
+    rowData?.e_sign_status === "not required" &&
+    rowData?.v_kyc_status === "completed";
 
-  const isNuimOrderIdDisabled = rowData?.e_sign_status === "not generated" || rowData?.e_sign_status === "pending"
+  const isNuimOrderIdActive__esignVkcy =
+    rowData?.is_esign_required === true &&
+    rowData?.is_v_kyc_required === true &&
+    rowData?.e_sign_status === "completed" &&
+    rowData?.v_kyc_status === "completed";
+
+  // const isNuimOrderIdDisabled = rowData?.e_sign_status === "not generated" || rowData?.e_sign_status === "pending" || rowData?.e_sign_status === null
   // const isNuimOrderIdActive = rowData?.e_sign_status === "not generated" || rowData?.e_sign_status === "pending"
-  
-  
+
   return (
     <button
       className="text-pink-600 cursor-pointer underline flex items-center justify-center gap-1 disabled:opacity-50"
       onClick={() => {
         openModal(rowData);
       }}
-      disabled={isNuimOrderIdDisabled}
+      disabled={!(isNuimOrderIdActive__esign || isNuimOrderIdActive__vkcy || isNuimOrderIdActive__esignVkcy)}
     >
       {rowData.nium_order_id}
       <ExternalLink
         size={15}
         className="mr-2"
-        style={{ display: isNuimOrderIdDisabled ? "none" : "block" }}
+        style={{
+          display:
+            !isNuimOrderIdActive__esign &&
+            !isNuimOrderIdActive__vkcy &&
+            !isNuimOrderIdActive__esignVkcy
+              ? "none"
+              : "block",
+        }}
       />
     </button>
   );

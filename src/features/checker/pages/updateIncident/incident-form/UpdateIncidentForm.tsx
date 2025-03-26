@@ -57,7 +57,7 @@ const useScreenSize = () => {
 
 const UpdateIncidentForm = (props: PropTypes) => {
   const { formActionRight, rowData, setIsModalOpen } = props;
-  console.log('rowData: UpdateIncidentForm', rowData)
+  console.log("rowData: UpdateIncidentForm", rowData);
   const screenWidth = useScreenSize();
   const { getUserHashedKey } = useCurrentUser();
   const { submitIncidentFormData, isPending } = useSubmitIncidentFormData();
@@ -100,7 +100,7 @@ const UpdateIncidentForm = (props: PropTypes) => {
     setError,
     clearErrors,
   } = methods;
-  
+
   // Function to reset form to initial state
   const resetFormValues = () => {
     reset({
@@ -163,12 +163,12 @@ const UpdateIncidentForm = (props: PropTypes) => {
         buySell: buySellValue || "",
         incidentNumber: rowData.incident_number || "",
         eonInvoiceNumber: rowData.eon_invoice_number || "",
-        // comment: rowData.comment || "",
+        comment: rowData.comment || "",
         status: {
           approve: rowData.status?.approve ?? true,
           reject: rowData.status?.reject ?? false,
         },
-        // niumInvoiceNo: rowData.nium_invoice_number || "",
+        niumInvoiceNo: rowData.nium_invoice_number || "",
       };
 
       Object.entries(mappedData).forEach(([key, value]) => {
@@ -340,7 +340,7 @@ const UpdateIncidentForm = (props: PropTypes) => {
                       control,
                       errors,
                       disabled: formActionRight === "view",
-                      forcedValue:  rowData?.[field.name].text,
+                      forcedValue: rowData?.[field.name].text,
                     })}
                   </FieldWrapper>
                 );
@@ -360,7 +360,7 @@ const UpdateIncidentForm = (props: PropTypes) => {
                       control,
                       errors,
                       disabled: formActionRight === "view",
-                      forcedValue:rowData?.[field.name].text,
+                      forcedValue: rowData?.[field.name].text,
                     })}
                   </FieldWrapper>
                 );
@@ -421,20 +421,24 @@ const UpdateIncidentForm = (props: PropTypes) => {
           <FormFieldRow rowCols={2}>
             <FormFieldRow className="flex-1">
               <MaterialTextArea
-                name="fields.comment"
+                // name="fields.comment"
+                name="comment"
                 label="Comment"
                 required={isRejected}
                 className="w-full rounded-lg"
+                forcedValue={rowData?.incident_checker_comments}
               />
             </FormFieldRow>
             <FormFieldRow className="flex-1">
               {showNiumInvoice && (
                 <MaterialText
-                  name="fields.niumInvoiceNumber"
+                  // name="fields.niumInvoiceNumber"
+                  name="niumInvoiceNo"
                   label="Nium Invoice Number"
                   required={isApproved}
                   className="w-full rounded-lg"
                   baseStyle={baseStyle({})}
+                  forcedValue={rowData?.nium_invoice_number}
                 />
               )}
             </FormFieldRow>
