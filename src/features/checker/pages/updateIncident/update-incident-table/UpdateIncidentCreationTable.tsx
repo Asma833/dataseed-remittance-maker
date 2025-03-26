@@ -103,11 +103,16 @@ const UpdateIncidentCreationTable = () => {
               : async (_page: number, _pageSize: number) => []
           }
           totalRecords={pagination.totalRecords}
+          
           filter={{
             filterOption: true,
+            dateFilterColumn: "createdAt",
             mode: isTableFilterDynamic ? "dynamic" : "static",
             rederFilerOptions: {
               search: true,
+              dateRange: true,
+              applyAction: true,
+              resetAction: true
             },
             // Dynamic callbacks - API functions
             dynamicCallbacks: isTableFilterDynamic

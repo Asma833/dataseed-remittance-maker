@@ -40,7 +40,7 @@ const PartnerCreationFormPage = () => {
   const location = useLocation();
   const selectedRow = (location.state as any)?.selectedRow || null;
   useEffect(() => {
-    setTitle(isEditMode ? "Edit User" : "Create User");
+    setTitle(isEditMode ? "Edit Partner" : "Create Partner");
   }, [setTitle]);
   const { mutate: createPartner, isLoading } = useCreatePartner( { role: "checker" },
     {

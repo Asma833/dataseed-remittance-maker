@@ -1,5 +1,5 @@
 import { determinePurposeType, determineTransactionType } from "@/utils/getTransactionConfigTypes";
-
+import { formatDate } from "@/utils/dateFormat";
 export const getTransactionTableColumns = () => [
     {
       key: "niumId",
@@ -17,6 +17,9 @@ export const getTransactionTableColumns = () => [
       key: "orderDate",
       id: "orderDate",
       name: "Order Date",
+       cell: (_: unknown, rowData: any) => (
+            <span>{rowData?.orderDate ? formatDate(rowData?.orderDate) : null}</span>
+      ),
     },
     {
       key: "agentId",

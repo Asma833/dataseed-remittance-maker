@@ -31,7 +31,7 @@ export const SignLinkButton: React.FC<SignLinkButtonProps> = ({
 
   return (
     <Tooltip>
-      <TooltipTrigger>
+      <TooltipTrigger asChild>
         <Button
           onClick={handleCopyLink}
           variant="outline"
