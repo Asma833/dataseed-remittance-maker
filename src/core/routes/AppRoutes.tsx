@@ -8,6 +8,7 @@ import { RootState } from "@/store";
 import NotFoundPage from "@/components/common/NotFoundPage";
 import { CheckerRoutes } from "./CheckerRoutes";
 import { CoAdminRoutes } from "./CoAdminRoutes";
+import { AdminRoutes } from "./AdminRoutes";
 
 export const AppRoutes = () => {
   const selectUser = useMemo(
@@ -26,6 +27,7 @@ export const AppRoutes = () => {
       ))}
       <Route path="/checker/*" element={<CheckerRoutes/>} />
       <Route path="/admin/*" element={<CoAdminRoutes />} />
+      {/* <Route path="/admin/*" element={<AdminRoutes/>} /> */}
       <Route
         path="/"
         element={<Navigate to={getDefaultRoute(user?.role.name)} replace />}

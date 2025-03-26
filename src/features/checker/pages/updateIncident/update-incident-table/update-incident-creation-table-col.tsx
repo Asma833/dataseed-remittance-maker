@@ -4,11 +4,18 @@ import {
   determinePurposeType,
   determineTransactionType,
 } from "@/utils/getTransactionConfigTypes";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
 import { X } from "lucide-react";
-
+import { Share2 } from "lucide-react";
 export const getTransactionTableColumns = (
   openModal: (value: string) => void,
-  handleUnassign: (rowData: any) => void
+  handleUnassign: (rowData: any) => void,
+  handleRegeneratedEsignLink: (rowData: any) => void
 ) => [
   {
     key: "nium_order_id",
@@ -29,7 +36,7 @@ export const getTransactionTableColumns = (
   {
     key: "partner_order_id",
     id: "partner_order_id",
-    name: "BMF ID",
+    name: "Partner ID",
     className: "min-w-0",
   },
   {
@@ -107,16 +114,57 @@ export const getTransactionTableColumns = (
     ),
   },
   {
-    key: "merged_document",
-    id: "merged_document",
-    name: "Merged Document",
-    className: "min-w-0 max-w-[100px]",
+    key: "v_kyc_link",
+    id: "v_kyc_link",
+    name: "Vkyc Link",
+    className: "min-w-0 max-w-[80px]",
     cell: (_: unknown, rowData: any) => (
       <SignLinkButton
-        copyLinkUrl={rowData.e_sign_link}
-        buttonText={"E Sign"}
-        tooltipText={"Copy Merged Doc Link"}
+        copyLinkUrl={rowData.v_kyc_link}
+        buttonText={"Vkyc Link"}
+        disabled={rowData.v_kyc_link === null}
+        tooltipText={"Copy Vkyc Link"}
       />
+    ),
+  },
+  // {
+  //   key: "merged_document",
+  //   id: "merged_document",
+  //   name: "Merged Document",
+  //   className: "min-w-0 max-w-[100px]",
+  //   cell: (_: unknown, rowData: any) => (
+  //     <SignLinkButton
+  //       copyLinkUrl={rowData.e_sign_link}
+  //       buttonText={"E Sign"}
+  //       tooltipText={"Copy Merged Doc Link"}
+  //     />
+  //   ),
+  // },
+  {
+    key: "generateLink",
+    id: "generateLink",
+    name: "Generate Esign Link",
+    className: "min-w-0 max-w-[100px]",
+    cell: (_: unknown, rowData: any) => (
+      <TooltipProvider>
+        <Tooltip>
+          <TooltipTrigger asChild>
+            <Button
+              onClick={() => handleRegeneratedEsignLink(rowData)}
+              className="flex items-center justify-center mx-auto"
+              size={"sm"}
+              disabled={
+                rowData?.incident_status || rowData?.incident_status === null || rowData?.incident_status === undefined
+              }
+            >
+              <Share2 className="text-white cursor-pointer" size={20} />
+            </Button>
+          </TooltipTrigger>
+          <TooltipContent className="bg-gray-400">
+            Generate Esign Link
+          </TooltipContent>
+        </Tooltip>
+      </TooltipProvider>
     ),
   },
   {
@@ -138,13 +186,20 @@ export const getTransactionTableColumns = (
     name: "Release",
     className: "min-w-0",
     cell: (_: unknown, rowData: any) => (
-      <Button
-        onClick={() => handleUnassign(rowData)}
-        className="flex items-center justify-center mx-auto"
-        size={"sm"}
-      >
-        <X className="text-white cursor-pointer" size={20} />
-      </Button>
+      <TooltipProvider>
+        <Tooltip>
+          <TooltipTrigger asChild>
+            <Button
+              onClick={() => handleUnassign(rowData)}
+              className="flex items-center justify-center mx-auto"
+              size={"sm"}
+            >
+              <X className="text-white cursor-pointer" size={20} />
+            </Button>
+          </TooltipTrigger>
+          <TooltipContent className="bg-gray-400">Release Order</TooltipContent>
+        </Tooltip>
+      </TooltipProvider>
     ),
   },
 ];

@@ -1,3 +1,4 @@
+import { formatDate } from "@/utils/dateFormat";
 import {
   determinePurposeType,
   determineTransactionType,
@@ -16,6 +17,9 @@ export const getTransactionTableColumns = () => [
     id: "orderDate",
     name: "Order Date",
     className: "min-w-0",
+    cell: (_: unknown, rowData: { orderDate?: string }) => (
+      <span>{rowData.orderDate ? formatDate(rowData.orderDate) : null}</span>
+    ),
   },
   {
     key: "agentId",
@@ -52,6 +56,9 @@ export const getTransactionTableColumns = () => [
     id: "esignStatusCompletionDate",
     name: "E-Sign Status Completion Date",
     className: "min-w-0",
+    cell: (_: unknown, rowData: { esignStatusCompletionDate?: string }) => (
+      <span>{rowData.esignStatusCompletionDate ? formatDate(rowData.esignStatusCompletionDate) : null}</span>
+    ),
   },
   {
     key: "vkycStatus",
@@ -64,6 +71,9 @@ export const getTransactionTableColumns = () => [
     id: "vkycCompletionDate",
     name: "VKYC Completion Date",
     className: "min-w-0",
+    cell: (_: unknown, rowData: { vkycCompletionDate?: string }) => (
+      <span>{rowData.vkycCompletionDate ? formatDate(rowData.vkycCompletionDate) : null}</span>
+    ),
   },
   {
     key: "incidentStatus",
@@ -76,5 +86,8 @@ export const getTransactionTableColumns = () => [
     id: "incidentCompletionDate",
     name: "Incident Completion Date",
     className: "min-w-0",
+    cell: (_: unknown, rowData: { incidentCompletionDate?: string }) => (
+      <span>{rowData.incidentCompletionDate ? formatDate(rowData.incidentCompletionDate) : null}</span>
+    ),
   },
 ];
