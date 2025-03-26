@@ -18,3 +18,4 @@ export const determineTransactionType = (transactionTypeId: string): string => {
   );
   return foundType ? foundType.text : ""; // Return empty string if not found
 };
+

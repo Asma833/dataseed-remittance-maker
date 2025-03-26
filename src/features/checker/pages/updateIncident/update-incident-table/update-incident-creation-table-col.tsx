@@ -154,7 +154,7 @@ export const getTransactionTableColumns = (
               className="flex items-center justify-center mx-auto"
               size={"sm"}
               disabled={
-                rowData?.incident_status || rowData?.incident_status === null
+                rowData?.incident_status || rowData?.incident_status === null || rowData?.incident_status === undefined
               }
             >
               <Share2 className="text-white cursor-pointer" size={20} />

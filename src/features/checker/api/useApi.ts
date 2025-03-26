@@ -1,5 +1,5 @@
 import axiosInstance from "@/core/services/axios/axiosInstance";
-import { getEndpoint } from "@/core/constant/apis";
+import { getEndpoint, HEADER_KEYS } from "@/core/constant/apis";
 import { EsignLinkRequest, UpdateGetRequestData, UpdateIncidentRequest, UpdateIncidentResponse } from "../types/updateIncident.type";
 
 export const useApi = {
@@ -21,8 +21,8 @@ export const useApi = {
       incidentData,
       {
         headers: {
-          api_key: "7b4d9b49-1794-4a91-826a-749cf0d8a87a",
-          partner_id: "befb8eadb0fac508d695b7395ec10543m8ctxoh9"
+          api_key: HEADER_KEYS.API_KEY,
+          partner_id: HEADER_KEYS.PARTNER_ID
         },
       }
     );

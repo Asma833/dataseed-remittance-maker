@@ -99,8 +99,7 @@ const UpdateIncidentForm = (props: PropTypes) => {
     setError,
     clearErrors,
   } = methods;
-  console.log("errors===>", errors);
-
+  
   // Function to reset form to initial state
   const resetFormValues = () => {
     reset({
@@ -158,7 +157,7 @@ const UpdateIncidentForm = (props: PropTypes) => {
         customerPan: rowData.customer_pan || "",
         customerName: rowData.customer_name || "",
         bmfOrderRef: rowData.partner_order_id || "",
-        transactionType: rowData.transaction_type || "",
+        transactionType: rowData.transaction_type.id || "",
         purpose: purposeTypeText || "",
         buySell: buySellValue || "",
         incidentNumber: rowData.incident_number || "",

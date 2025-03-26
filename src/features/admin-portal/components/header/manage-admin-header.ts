@@ -29,9 +29,9 @@ export const AdminNavItems = [
   {
     title: "Master",
     dropdown: [
-      { title: "Rate Master", path: `${userPrefix}/rate-master` },
-      { title: "Purpose Master", path: `${userPrefix}/purpose-master` },
-      { title: "TCS Master", path: `${userPrefix}/tcs-master` },
+      { title: "Rate Master", path: `${userPrefix}/master/rate-margin` },
+      { title: "Purpose Master", path: `${userPrefix}/master/purpose-master` },
+      { title: "TCS Master", path: `${userPrefix}/master/tcs-master` },
     ],
   },
   {
