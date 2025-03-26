@@ -1,5 +1,5 @@
 import { Button } from "@/components/ui/button";
-import { SignLinkButton } from "@/features/e-sign/components/SignLinkButton";
+import { SignLinkButton } from "@/components/common/SignLinkButton";
 import {
   Tooltip,
   TooltipContent,
