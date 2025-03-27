@@ -1,3 +1,5 @@
+import _ from "lodash";
+
 /**
  * Capitalizes the first letter of a string
  * @param str - The input string
@@ -7,14 +9,7 @@
  * capitalizeFirstLetter(null) // returns ''
  */
 export function capitalizeFirstLetter(str: string | null | undefined): string {
-  if (!str) {
-    return "";
-  }
-  const stringValue = String(str).trim();
-  if (stringValue.length === 0) {
-    return "";
-  }
-  return stringValue.charAt(0).toUpperCase() + stringValue.slice(1);
+  return str ? _.capitalize(str.trim()) : "";
 }
 
 /**
@@ -24,10 +19,8 @@ export function capitalizeFirstLetter(str: string | null | undefined): string {
  * @example
  * convertToCamelCase('user_first_name') // returns 'userFirstName'
  */
-export function convertToCamelCase(str: string) {
-  return str
-    .toLowerCase()
-    .replace(/_([a-z])/g, (_: string, letter: string) => letter.toUpperCase());
+export function convertToCamelCase(str: string): string {
+  return _.camelCase(str);
 }
 
 /**
@@ -38,13 +31,7 @@ export function convertToCamelCase(str: string) {
  * slugify('Hello World!') // returns 'hello-world'
  */
 export function slugify(text: string): string {
-  return text
-    .toLowerCase()
-    .replace(/\s+/g, "-")
-    .replace(/[^\w-]+/g, "")
-    .replace(/--+/g, "-")
-    .replace(/^-+/, "")
-    .replace(/-+$/, "");
+  return _.kebabCase(text);
 }
 
 /**
@@ -61,10 +48,7 @@ export function truncate(
   length: number,
   ending: string = "..."
 ): string {
-  if (str.length > length) {
-    return str.substring(0, length - ending.length) + ending;
-  }
-  return str;
+  return _.truncate(str, { length, omission: ending });
 }
 
 /**
@@ -75,7 +59,7 @@ export function truncate(
  * removeSpecialCharacters('Hello! @World#') // returns 'Hello World'
  */
 export function removeSpecialCharacters(str: string): string {
-  return str.replace(/[^a-zA-Z0-9 ]/g, "");
+  return _.deburr(str).replace(/[^a-zA-Z0-9 ]/g, "");
 }
 
 /**
@@ -103,13 +87,5 @@ export function formatPhoneNumber(phone: string): string {
  * toTitleCase('welcome to the app') // returns 'Welcome To The App'
  */
 export function toTitleCase(str: string): string {
-  if (!str) {
-    return "";
-  }
-  return str
-    .toLowerCase()
-    .replace(/[_-]/g, " ") // Replace underscores and dashes with spaces
-    .split(" ")
-    .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
-    .join(" ");
+  return _.startCase(_.toLower(str));
 }

@@ -1,6 +1,6 @@
 import React from "react";
 import { motion } from "framer-motion";
-import { MobileNavProps } from "./navigation.types";
+import { cn } from "@/utils/cn";
 import {
   Accordion,
   AccordionContent,
@@ -8,7 +8,7 @@ import {
   AccordionTrigger,
 } from "@/components/ui/accordion";
 import { Button } from "@/components/ui/button";
-import { cn } from "@/utils/cn";
+import { MobileNavProps } from "./navigation.types";
 
 export const MobileNav: React.FC<MobileNavProps> = ({
   navItems,
@@ -35,7 +35,9 @@ export const MobileNav: React.FC<MobileNavProps> = ({
           <span
             className="w-6 h-6 text-muted-foreground"
             onClick={() => setIsMobileMenuOpen(false)}
-          >Close</span>
+          >
+            Close
+          </span>
         </div>
         <Accordion type="single" collapsible className="w-full">
           {navItems.map((item, idx) =>
@@ -45,7 +47,8 @@ export const MobileNav: React.FC<MobileNavProps> = ({
                   className={cn(
                     "px-6 py-2",
                     activeItem === item.title && "text-primary font-medium"
-                  )}>
+                  )}
+                >
                   {item.title}
                 </AccordionTrigger>
                 <AccordionContent>

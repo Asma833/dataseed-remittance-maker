@@ -1,8 +1,8 @@
 import { Controller, useFormContext } from "react-hook-form";
 import { FormControl, InputLabel, MenuItem, Select } from "@mui/material";
-import { ErrorMessage } from "../error-message";
 import { cn } from "@/utils/cn";
 import { toTitleCase } from "@/utils/textFormater";
+import { ErrorMessage } from "../error-message";
 
 interface MaterialSelectProps {
   name: string;

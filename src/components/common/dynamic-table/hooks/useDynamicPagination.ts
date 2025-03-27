@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import axios from 'axios';
+import axiosInstance from '@/core/services/axios/axiosInstance';
 
 interface PaginationParams {
   page: number;
@@ -40,7 +40,7 @@ export function useDynamicPagination<T = any>({
       // Combine pagination params with additional params
       const queryParams = { ...params, ...additionalParams };
       
-      const response = await axios.get(endpoint, { params: queryParams });
+      const response = await axiosInstance.get(endpoint, { params: queryParams });
       
       // Extract data and pagination info
       const responseData = extractValueFromPath(response.data, dataPath) || [];

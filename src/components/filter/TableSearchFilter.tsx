@@ -1,7 +1,12 @@
+
+import dayjs from "dayjs";
+import { CalendarDays, RefreshCw } from "lucide-react";
+import { DatePicker } from "@mui/x-date-pickers/DatePicker";
+import { useEffect, useState } from "react";
+
+import { Button } from "../ui/button";
 import { SearchInput } from "./SearchInput";
 import { TableSearchFilterProps } from "./filter.types";
-import { Button } from "../ui/button";
-import dayjs from "dayjs";
 import {
   Select,
   SelectContent,
@@ -9,9 +14,6 @@ import {
   SelectTrigger,
   SelectValue,
 } from "../ui/select";
-import { CalendarDays, RefreshCw } from "lucide-react";
-import { DatePicker } from "@mui/x-date-pickers/DatePicker";
-import { useEffect, useState } from "react";
 
 const TableSearchFilter = ({
   filters,
@@ -25,11 +27,13 @@ const TableSearchFilter = ({
   const { search, dateRange, status, selects } = filterConfig.rederFilerOptions;
   const mode = filterConfig.mode || "static";
   const callbacks = filterConfig.dynamicCallbacks;
-  
-  // Store filter values locally to avoid applying them immediately 
+
+  // Store filter values locally to avoid applying them immediately
   const [localDateRange, setLocalDateRange] = useState(filters.dateRange);
   const [localStatus, setLocalStatus] = useState(filters.status);
-  const [localCustomFilters, setLocalCustomFilters] = useState(filters.customFilterValues);
+  const [localCustomFilters, setLocalCustomFilters] = useState(
+    filters.customFilterValues
+  );
 
   // For dynamic search with debounce
   useEffect(() => {
@@ -41,6 +45,7 @@ const TableSearchFilter = ({
             const result = await callbacks?.onSearch?.(filters.search);
             if (setDynamicData && result) setDynamicData(result);
           } catch (error) {
+            console.error(error);
           } finally {
             if (setLoading) setLoading(false);
           }
@@ -57,17 +62,18 @@ const TableSearchFilter = ({
     }
     return undefined;
   }, [filters.search]);
-  
+
   // Handle search clear/reset
   const handleSearchClear = () => {
     // Only reset the search filter, keep other filters intact
     if (mode === "dynamic" && callbacks?.onSearch) {
       if (setLoading) setLoading(true);
       try {
-        callbacks?.onSearch?.("").then(result => {
+        callbacks?.onSearch?.("").then((result) => {
           if (setDynamicData && result) setDynamicData(result);
         });
       } catch (error) {
+        console.error(error);
       } finally {
         if (setLoading) setLoading(false);
       }
@@ -104,12 +110,12 @@ const TableSearchFilter = ({
       ...filters,
       dateRange: localDateRange,
       status: localStatus,
-      customFilterValues: localCustomFilters
+      customFilterValues: localCustomFilters,
     };
-    
+
     // Update the parent component's filter state
     setFilters(updatedFilters);
-    
+
     if (onFilter) onFilter();
 
     if (mode === "dynamic" && callbacks?.onFilterApply && setDynamicData) {
@@ -118,6 +124,7 @@ const TableSearchFilter = ({
         const result = await callbacks.onFilterApply(updatedFilters);
         setDynamicData(result);
       } catch (error) {
+        console.error(error);
       } finally {
         if (setLoading) setLoading(false);
       }
@@ -129,7 +136,7 @@ const TableSearchFilter = ({
     setLocalDateRange({ from: undefined, to: undefined });
     setLocalStatus("all");
     setLocalCustomFilters({});
-    
+
     // Reset parent component's filter state
     setFilters({
       ...filters,
@@ -139,7 +146,7 @@ const TableSearchFilter = ({
       dateRange: { from: undefined, to: undefined },
       customFilterValues: {},
     });
-    
+
     if (onReset) onReset();
 
     // Additional reset logic for dynamic mode
@@ -155,6 +162,7 @@ const TableSearchFilter = ({
         });
         setDynamicData(result);
       } catch (error) {
+        console.error(error);
       } finally {
         if (setLoading) setLoading(false);
       }
@@ -173,9 +181,7 @@ const TableSearchFilter = ({
                 </span>
                 <DatePicker
                   value={
-                    localDateRange.from
-                      ? dayjs(localDateRange.from)
-                      : null
+                    localDateRange.from ? dayjs(localDateRange.from) : null
                   }
                   onChange={(date) =>
                     handleDateChange("from", date?.toDate() || null)
@@ -205,9 +211,7 @@ const TableSearchFilter = ({
                   To Date
                 </span>
                 <DatePicker
-                  value={
-                    localDateRange.to ? dayjs(localDateRange.to) : null
-                  }
+                  value={localDateRange.to ? dayjs(localDateRange.to) : null}
                   onChange={(date) =>
                     handleDateChange("to", date?.toDate() || null)
                   }
@@ -242,9 +246,7 @@ const TableSearchFilter = ({
               <Select value={localStatus} onValueChange={handleStatusChange}>
                 <SelectTrigger className="w-[180px] bg-[--filter-bg] text-[--filter-fg] border-none h-10">
                   <SelectValue
-                    placeholder={
-                      status.placeholder || `Select ${status.label}`
-                    }
+                    placeholder={status.placeholder || `Select ${status.label}`}
                   />
                 </SelectTrigger>
                 <SelectContent>

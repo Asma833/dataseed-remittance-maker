@@ -1,12 +1,11 @@
 import React from "react";
+import { LinkIcon } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { copyToClipboard } from "@/utils/clipboard";
-import { LinkIcon } from "lucide-react";
 import { cn } from "@/utils/cn";
 import {
   Tooltip,
   TooltipContent,
-  TooltipProvider,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
 
