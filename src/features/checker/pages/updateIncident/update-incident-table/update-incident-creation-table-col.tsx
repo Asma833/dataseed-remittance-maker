@@ -6,7 +6,8 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
-import { ExternalLink, RefreshCcwDot, X } from "lucide-react";
+import { ExternalLink, RefreshCcwDot, RefreshCw, X } from "lucide-react";
+import { cn } from "@/utils/cn";
 
 const NiumOrderID = ({
   rowData,
@@ -65,7 +66,8 @@ const NiumOrderID = ({
 export const getTransactionTableColumns = (
   openModal: (value: string) => void,
   handleUnassign: (rowData: any) => void,
-  handleRegeneratedEsignLink: (rowData: any) => void
+  handleRegeneratedEsignLink: (rowData: any) => void,
+  isSendEsignLinkLoading: boolean
 ) => [
   {
     key: "nium_order_id",
@@ -202,7 +204,7 @@ export const getTransactionTableColumns = (
                 rowData?.incident_status === undefined
               }
             >
-              <RefreshCcwDot className="cursor-pointer" size={20} />
+              <RefreshCw className={cn("cursor-pointer", isSendEsignLinkLoading ? "animate-spin" : "")} size={20} />
             </Button>
           </TooltipTrigger>
           <TooltipContent className="bg-gray-400">
