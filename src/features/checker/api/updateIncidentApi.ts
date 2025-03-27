@@ -28,12 +28,12 @@ export const updateIncidentApi = {
   },
   sendEsignLink: async (incidentData: EsignLinkRequest): Promise<any> => {
     const { data } = await axiosInstance.post<any>(
-      `${API.CHECKER.UPDATE_INCIDENT.REGENERATE_ESIGN_LINK}`,
+      API.CHECKER.UPDATE_INCIDENT.REGENERATE_ESIGN_LINK,
       incidentData,
       {
         headers: {
-          api_key: HEADER_KEYS.API_KEY,
-          partner_id: HEADER_KEYS.PARTNER_ID,
+          api_key: "7b4d9b49-1794-4a91-826a-749cf0d8a87a",
+          partner_id: "befb8eadb0fac508d695b7395ec10543m8ctxoh9",
         },
       }
     );

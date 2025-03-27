@@ -4,14 +4,11 @@ export const getBaseUrl = () => {
     : import.meta.env.VITE_APP_API_URL_PROD;
 };
 
-// export const HEADER_KEYS =  {
-// PARTNER_ID: String(import.meta.env.PARTNER_ID),
-// API_KEY:String(import.meta.env.API_KEY)
-// };
-export const HEADER_KEYS = {
-  PARTNER_ID: String(import.meta.env.VITE_PARTNER_ID || ''),
-  API_KEY: String(import.meta.env.VITE_API_KEY || ''),
+export const HEADER_KEYS =  {
+  PARTNER_ID: String(import.meta.env.PARTNER_ID),
+  API_KEY:String(import.meta.env.API_KEY)
 };
+
 export const API = {
   AUTH: {
     LOGIN: `/users/login`,
@@ -33,7 +30,7 @@ export const API = {
     LIST: `/orders`,
     CREATE: `/orders`,
     GET_BY_ID: (id: string) => `/orders/${id}`,
-    // UPDATE: (id: string) => `/orders/${id}`,
+    UPDATE: (id: string) => `/orders/${id}`,
     DELETE: (id: string) => `/orders/${id}`,
     CHECKER_ORDERS: `/orders/get-checker-orders`,
     UPDATE_ORDER_DETAILS: `/orders/update-order-details`,
