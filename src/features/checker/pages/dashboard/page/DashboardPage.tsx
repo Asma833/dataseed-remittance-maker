@@ -8,6 +8,7 @@ export const Dashboard: React.FC = () => {
  
   // Generate dashboard items using the fetched metrics
   const dashboardItems = createDashboardData(metrics);
+  console.log('dashboardItems:', dashboardItems)
 
 
   return (

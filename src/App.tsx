@@ -2,6 +2,7 @@ import { BrowserRouter } from "react-router-dom";
 import { Suspense } from "react";
 import { Provider } from "react-redux";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 // compometns import
 import { AppRoutes } from "./core/routes/AppRoutes";
 import LoadingFallback from "./components/loader/LoadingFallback";
@@ -39,6 +40,7 @@ const App = () => {
                 <ErrorBoundary>
                   <Suspense fallback={<LoadingFallback />}>
                     <AppRoutes />
+                    <ReactQueryDevtools initialIsOpen={false} />
                   </Suspense>
                 </ErrorBoundary>
               </BrowserRouter>
