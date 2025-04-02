@@ -88,7 +88,7 @@ axiosInstance.interceptors.response.use(
         }
         const refreshUrl = `${getBaseUrl()}/refresh/accessToken`;
         // Refresh the token using GET request with query parameter
-        const response = await axios.get<RefreshTokenResponse>(refreshUrl, {
+        const response = await axiosInstance.get<RefreshTokenResponse>(refreshUrl, {
           params: { refreshToken: currentRefreshToken },
         });
 

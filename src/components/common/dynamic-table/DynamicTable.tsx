@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { FileX2 } from "lucide-react";
 import {
   Table,
   TableBody,
@@ -11,7 +12,6 @@ import TableSearchFilter from "../../filter/TableSearchFilter";
 import TableDataLoader from "./TableDataLoader";
 import { TablePagination } from "./TablePagination";
 import { cn } from "@/utils/cn";
-import { FileX2 } from "lucide-react";
 import { useTableSorting } from "@/components/common/dynamic-table/hooks/useTableSorting";
 import { useTablePagination } from "@/components/common/dynamic-table/hooks/useTablePagination";
 import { Column, DynamicTableProps } from "../common-components.types";

@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { SetFilters } from '@/components/filter/filter.types';
-import axios from 'axios';
+import axiosInstance from '@/core/services/axios/axiosInstance';
 
 interface UseFilterApiProps {
   endpoint: string;
@@ -44,7 +44,7 @@ export function useFilterApi<T = any>({
       // Combine base query params with the specific filter params
       const queryParams = { ...baseQueryParams, ...params };
       
-      const response = await axios.get(endpoint, { params: queryParams });
+      const response = await axiosInstance.get(endpoint, { params: queryParams });
       const result = response.data;
       
       setData(result);

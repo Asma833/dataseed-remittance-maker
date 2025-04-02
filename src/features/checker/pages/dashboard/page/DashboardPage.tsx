@@ -9,6 +9,7 @@ export const Dashboard: React.FC = () => {
  const { setTitle } = usePageTitle();
   // Generate dashboard items using the fetched metrics
   const dashboardItems = createDashboardData(metrics);
+  console.log('dashboardItems:', dashboardItems)
 
   useEffect(() => {
     setTitle("Dashboard");

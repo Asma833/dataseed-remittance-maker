@@ -64,25 +64,25 @@ const DashboardCard: React.FC<DashboardCardProps> = ({
   status,
   isLoading,
 }) => {
-  const navigate = useNavigate();
+  // const navigate = useNavigate();
   const cardStyle = getCardStyle(title);
   const statusDotColor = getStatusColor(status);
-  const handleNavigation = (status: string) => {
-    if (status.includes("Successful") || status.includes("Approved")) {
-      navigate("/checker/completed-transactions");
-    } else if (status.includes("Rejected")) {
-      navigate("/checker/viewall");
-    } else if (status.includes("Pending")) {
-      navigate("/checker/assign");
-    } else {
-      navigate("/checker/viewall");
-    }
-  };
+
+  // const handleNavigation = (status: string) => {
+  //   if (status.includes("Successful") || status.includes("Approved")) {
+  //     navigate("/checker/completed-transactions");
+  //   } else if (status.includes("Rejected")) {
+  //     navigate("/checker/viewall");
+  //   } else if (status.includes("Pending")) {
+  //     navigate("/checker/assign");
+  //   } else {
+  //     navigate("/checker/viewall");
+  //   }
+  // };
 
   return (
     
-    <div onClick={() => handleNavigation(status)} className="dashboard-card"
-    >
+    <div className="dashboard-card">
       <div
         className={`relative h-full bg-gradient-to-br ${cardStyle.gradientFrom} ${cardStyle.gradientTo} backdrop-blur-lg  shadow-md`}
       >

@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Bell, Power, Menu } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
+import { cn } from "@/utils/cn";
 import {
   NavigationMenu,
   NavigationMenuContent,
@@ -14,7 +15,6 @@ import {
 import { HeaderProps } from "./navigation.types";
 import { MobileNav } from "./MobileNav";
 import LogoutWrapper from "@/features/auth/components/LogoutWrapper";
-import { cn } from "@/utils/cn";
 import { useActiveMenu } from "@/hooks/useActiveMenu";
 
 const Header: React.FC<HeaderProps> = ({ navItems }) => {
