@@ -47,18 +47,15 @@ const getCardStyle = (title: string) => {
   }
 };
 
-// Helper function to get status color and dot based on status
-const getStatusColor = (status: string) => {
-  if (status.includes("Successful")) {
-    return "bg-green-500";
-  } else if (status.includes("Rejected")) {
-    return "bg-red-500";
-  } else if (status.includes("Pending")) {
-    return "bg-yellow-500";
-  } else {
-    return "bg-blue-500";
-  }
+// Define status colors for different statuses
+const statusColors: Record<string, string> = {
+  Successful: "bg-green-500",
+  Approved: "bg-green-500",
+  Rejected: "bg-red-500",
+  Pending: "bg-yellow-500",
 };
+
+const getStatusColor = (status: string) => statusColors[status] || "bg-blue-500";
 
 const DashboardCard: React.FC<DashboardCardProps> = ({
   count,
@@ -83,9 +80,8 @@ const DashboardCard: React.FC<DashboardCardProps> = ({
   };
 
   return (
-    <div
-      onClick={() => handleNavigation(status)}
-      className={`rounded-xl overflow-hidden transition-all duration-300 lg:hover:shadow-xl hover:opacity-85 h-[120px] ease-linear cursor-pointer`}
+    
+    <div onClick={() => handleNavigation(status)} className="dashboard-card"
     >
       <div
         className={`relative h-full bg-gradient-to-br ${cardStyle.gradientFrom} ${cardStyle.gradientTo} backdrop-blur-lg  shadow-md`}

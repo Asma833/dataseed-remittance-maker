@@ -6,17 +6,17 @@ import {
   FileX,
   FileClock,
 } from "lucide-react";
-import img from "../../../../../../assets/images/img.png";
-import image2 from "../../../../../../assets/images/img-2.png";
-import image3 from "../../../../../../assets/images/img-3.png";
-import image4 from "../../../../../../assets/images/img-4.png";
-import image5 from "../../../../../../assets/images/img-5.png";
-import image6 from "../../../../../../assets/images/img-6.png";
-import image7 from "../../../../../../assets/images/img-7.png";
-import image8 from "../../../../../../assets/images/img-8.png";
-import image9 from "../../../../../../assets/images/img-9.png";
-import image10 from "../../../../../../assets/images/img-10.png";
-import { DashboardMetrics } from "@/features/checker/hooks/useGetDashCardMatrics";
+import transactionReceived from "../../../../../../assets/images/transaction-received.png";
+import transactionApproved from "../../../../../../assets/images/transaction-approved.png";
+import transactionRejected from "../../../../../../assets/images/transaction-rejected.png";
+import transactionPending from "../../../../../../assets/images/transaction-pending.png";
+import vkycCompleted from "../../../../../../assets/images/vkyc-completed.png";
+import vkycRejected from "../../../../../../assets/images/vkyc-rejected.png";
+import vkycPending from "../../../../../../assets/images/vkyc-pending.png";
+import esignCompleted from "../../../../../../assets/images/esign-completed.png";
+import esignRejected from "../../../../../../assets/images/esign-rejected.png";
+import esignPending from "../../../../../../assets/images/esign-pending.png";
+import { DashboardMetrics } from "@/features/checker/hooks/useGetDashboardCardMatrics";
 
 export interface DashboardItem {
   id: number;
@@ -49,7 +49,7 @@ export const createDashboardData = (metrics: DashboardMetrics = apiDummyData): D
     count: metrics.transactionReceived,
     status: "Received",
     icon: FileCheck2,
-    path: img,
+    path: transactionReceived,
   },
   {
     id: 2,
@@ -57,7 +57,7 @@ export const createDashboardData = (metrics: DashboardMetrics = apiDummyData): D
     count: metrics.transactionApproved,
     status: "Approved",
     icon: CheckCircle,
-    path: image2,
+    path: transactionApproved,
   },
   {
     id: 3,
@@ -65,7 +65,7 @@ export const createDashboardData = (metrics: DashboardMetrics = apiDummyData): D
     count: metrics.transactionRejected,
     status: "Rejected",
     icon: XCircle,
-    path: image3,
+    path: transactionRejected,
   },
   {
     id: 4,
@@ -73,7 +73,7 @@ export const createDashboardData = (metrics: DashboardMetrics = apiDummyData): D
     count: metrics.transactionPending,
     status: "Pending",
     icon: MoreHorizontal,
-    path: image4,
+    path: transactionPending,
   },
   {
     id: 5,
@@ -81,7 +81,7 @@ export const createDashboardData = (metrics: DashboardMetrics = apiDummyData): D
     count: metrics.vkycCompleted,
     status: "Completed",
     icon: FileCheck2,
-    path: image5,
+    path: vkycCompleted,
   },
   {
     id: 6,
@@ -89,7 +89,7 @@ export const createDashboardData = (metrics: DashboardMetrics = apiDummyData): D
     count: metrics.vkycPending,
     status: "Pending",
     icon: FileClock,
-    path: image6,
+    path: vkycRejected,
   },
   {
     id: 7,
@@ -97,7 +97,7 @@ export const createDashboardData = (metrics: DashboardMetrics = apiDummyData): D
     count: metrics.vkycRejected,
     status: "Rejected",
     icon: FileX,
-    path: image7,
+    path: vkycPending,
   },
   {
     id: 8,
@@ -105,7 +105,7 @@ export const createDashboardData = (metrics: DashboardMetrics = apiDummyData): D
     count: metrics.esignCompleted,
     status: "Completed",
     icon: FileCheck2,
-    path: image8,
+    path: esignCompleted,
   },
   {
     id: 9,
@@ -113,7 +113,7 @@ export const createDashboardData = (metrics: DashboardMetrics = apiDummyData): D
     count: metrics.esignPending,
     status: "Pending",
     icon: FileClock,
-    path: image9,
+    path: esignRejected,
   },
   {
     id: 10,
@@ -121,7 +121,7 @@ export const createDashboardData = (metrics: DashboardMetrics = apiDummyData): D
     count: metrics.esignRejected,
     status: "Rejected",
     icon: FileX,
-    path: image10,
+    path: esignPending,
   },
 ];
 

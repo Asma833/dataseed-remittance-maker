@@ -84,6 +84,13 @@
     @apply bg-background text-foreground;
   }
 }
+@layer components {
+  .dashboard-card {
+    @apply rounded-xl overflow-hidden transition-all duration-300 
+      lg:hover:shadow-xl hover:opacity-85 h-[120px] ease-linear cursor-pointer;
+  }
+}
+
 
 .MuiStepper-root .Mui-completed.stepper-btn {
   @apply bg-primary/50;

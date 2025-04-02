@@ -1,14 +1,18 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { createDashboardData } from "./dashboard-card/card";
 import DashboardCard from "./dashboard-card/DashboardCards";
-import { useGetDashCardMetrics } from "@/features/checker/hooks/useGetDashCardMatrics";
+import { useGetDashboardCardMetrics } from "@/features/checker/hooks/useGetDashboardCardMatrics";
+import { usePageTitle } from "@/hooks/usePageTitle";
 
 export const Dashboard: React.FC = () => {
-  const { data: metrics, isLoading, error } = useGetDashCardMetrics();
- 
+  const { data: metrics, isLoading, error } = useGetDashboardCardMetrics();
+ const { setTitle } = usePageTitle();
   // Generate dashboard items using the fetched metrics
   const dashboardItems = createDashboardData(metrics);
 
+  useEffect(() => {
+    setTitle("Dashboard");
+  }, [setTitle]);
 
   return (
     <>

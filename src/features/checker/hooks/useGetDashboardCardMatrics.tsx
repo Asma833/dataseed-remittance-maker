@@ -20,7 +20,7 @@ const fetchDashboardMetrics = async (): Promise<DashboardMetrics> => {
   return response.data;
 };
 
-export const useGetDashCardMetrics = () => {
+export const useGetDashboardCardMetrics = () => {
   return useQuery({
     queryKey: ['dashboardMetrics'],
     queryFn: fetchDashboardMetrics,
