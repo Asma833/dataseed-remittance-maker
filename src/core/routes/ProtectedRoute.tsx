@@ -4,7 +4,7 @@ import { createSelector } from '@reduxjs/toolkit';
 import LoadingFallback from '@/components/loader/LoadingFallback';
 import { UserRole } from '@/features/auth/types/auth.types';
 import { RootState } from '@/store';
-import { ROUTES } from './routePaths';
+import { ROUTES } from '../constant/routePaths';
 
 interface ProtectedRouteProps {
   children: React.ReactNode;

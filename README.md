@@ -66,6 +66,29 @@ src/
 └── utils/         # Utility functions
 ```
 
+## Naming Conventions
+
+We follow strict naming conventions to maintain consistency throughout the codebase:
+
+### Files
+
+- **Components**: `PascalCase.tsx` (e.g., `Button.tsx`, `UserProfile.tsx`)
+- **Custom Hooks**: `camelCase.ts` (e.g., `useAuth.ts`, `useFetch.ts`)
+- **Type Definitions**: `kebab-case.types.ts` (e.g., `user-profile.types.ts`)
+- **Utilities/Helpers**: `camelCase.ts` (e.g., `formatDate.ts`, `stringUtils.ts`)
+- **Style Files**: `camelCase.ts` (e.g., `buttonStyles.ts`)
+- **Constants**: `camelCase.ts` (e.g., `apiEndpoints.ts`)
+- **Configuration Files**: `kebab-case.config.ts` (e.g., `api-client.config.ts`)
+- **Schemas**: `camelCase.schema.ts` (e.g., `userSchema.schema.ts`)
+- **Shadcn UI Components**: `kebab-case.tsx`
+- **Shadcn Utilities**: `kebab-case.ts`
+
+### Folders
+
+All folders use `kebab-case` (e.g., `user-profiles`, `form-components`)
+
+For more details, refer to `src/config/naming-convention.config.ts`
+
 ## Development
 
 ```bash
@@ -116,8 +139,6 @@ Contact the development team through:
 - Slack: #nium-support
 - Email: dev-support@nium.com
 
-````
-
 ## Expanding the ESLint configuration
 
 If you are developing a production application, we recommend updating the configuration to enable type aware lint rules:
@@ -159,4 +180,3 @@ export default tseslint.config({
   },
 })
 ```
-````

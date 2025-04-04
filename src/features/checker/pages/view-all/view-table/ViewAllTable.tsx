@@ -1,6 +1,5 @@
 import { DynamicTable } from '@/components/common/dynamic-table/DynamicTable';
 import { useEffect } from 'react';
-import { useFilterApi } from '@/components/common/dynamic-table/hooks/useFilterApi';
 import { useDynamicPagination } from '@/components/common/dynamic-table/hooks/useDynamicPagination';
 import { Button } from '@/components/ui/button';
 import { API } from '@/core/constant/apis';

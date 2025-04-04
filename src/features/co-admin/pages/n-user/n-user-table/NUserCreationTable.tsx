@@ -1,10 +1,9 @@
+import { useNavigate } from 'react-router-dom';
 import { DynamicTable } from '@/components/common/dynamic-table/DynamicTable';
 import { getUserTableColumns } from './n-user-creation-table-col';
-import { userTableData as initialData } from './user-table-value';
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import { Button } from '@/components/ui/button';
 import { PlusIcon } from 'lucide-react';
-import { useNavigate } from 'react-router-dom';
 import { useFilterApi } from '@/components/common/dynamic-table/hooks/useFilterApi';
 import { API } from '@/core/constant/apis';
 import { useDynamicPagination } from '@/components/common/dynamic-table/hooks/useDynamicPagination';
@@ -18,7 +17,6 @@ const NuserCreationTable = () => {
   useEffect(() => {
     setTitle('N-Users');
   }, [setTitle]);
-  const [tableData] = useState(initialData);
 
   const {
     data: users = [],
@@ -46,7 +44,6 @@ const NuserCreationTable = () => {
   const pagination = useDynamicPagination({
     endpoint: API.NUSERS.USER.LIST,
     initialPageSize: 10,
-    initialData,
     dataPath: 'transactions',
     totalRecordsPath: 'totalRecords',
   });
@@ -60,7 +57,6 @@ const NuserCreationTable = () => {
   };
   const filterApi = useFilterApi({
     endpoint: API.NUSERS.USER.LIST,
-    initialData,
     // base query params if needed
     baseQueryParams: {
       // For example: clientId: '123'
@@ -82,7 +78,7 @@ const NuserCreationTable = () => {
       </div>
       <DynamicTable
         columns={columns}
-        data={users && users.length > 0 ? users : tableData}
+        data={users || []}
         tableWrapperClass="bg-background p-5 rounded-md"
         defaultSortColumn="niumId"
         defaultSortDirection="asc"

@@ -1,5 +1,5 @@
 import { lazy } from 'react';
-import { ROUTES } from '../routePaths';
+import { ROUTES } from '../../constant/routePaths';
 import { checkerComponents } from './checker.routes';
 
 const coAdminComponents = {

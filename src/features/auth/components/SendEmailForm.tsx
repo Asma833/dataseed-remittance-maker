@@ -16,7 +16,7 @@ import { useForgotPassword } from '../hooks/useForgotPassword';
 import {
   emailLinkSchema,
   EmailLinkSchema,
-} from '../schemas/sendEmailLink.schema';
+} from '../schemas/send-email-link.schema';
 
 const SendEmailForm = () => {
   const { mutate, isLoading } = useForgotPassword();

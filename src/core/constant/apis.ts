@@ -9,8 +9,6 @@ export const HEADER_KEYS = {
   API_KEY: import.meta.env.VITE_API_KEY,
 };
 
-console.log('HEADER_KEYS: getBaseUrl', HEADER_KEYS);
-
 export const API = {
   AUTH: {
     LOGIN: `/users/login`,

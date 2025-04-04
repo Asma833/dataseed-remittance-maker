@@ -1,7 +1,6 @@
 import { DynamicTable } from '@/components/common/dynamic-table/DynamicTable';
 import { getUserTableColumns } from './partner-creation-table-col';
-import { userTableData as initialData } from './partner-table-value';
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import { Button } from '@/components/ui/button';
 import { PlusIcon } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
@@ -9,7 +8,6 @@ import { useFilterApi } from '@/components/common/dynamic-table/hooks/useFilterA
 import { API } from '@/core/constant/apis';
 import { useDynamicPagination } from '@/components/common/dynamic-table/hooks/useDynamicPagination';
 import { usePageTitle } from '@/hooks/usePageTitle';
-import { useUpdateStatusAPI } from '@/features/co-admin/hooks/useUserUpdateStatus';
 import { useGetPartnersApi } from '@/features/co-admin/hooks/useGetPartners';
 import { usePartnerStatusUpdateAPI } from '@/features/co-admin/hooks/usePartnerUpdateStatus';
 
@@ -19,7 +17,6 @@ const PartnerCreationTable = () => {
   useEffect(() => {
     setTitle('PARTNERS');
   }, [setTitle]);
-  const [tableData] = useState(initialData);
 
   const {
     data: users = [],
@@ -47,7 +44,6 @@ const PartnerCreationTable = () => {
   const pagination = useDynamicPagination({
     endpoint: API.NUSERS.PARTNERS.LIST,
     initialPageSize: 10,
-    initialData,
     dataPath: 'transactions',
     totalRecordsPath: 'totalRecords',
   });
@@ -61,7 +57,6 @@ const PartnerCreationTable = () => {
   };
   const filterApi = useFilterApi({
     endpoint: API.NUSERS.PARTNERS.LIST,
-    initialData,
     // base query params if needed
     baseQueryParams: {
       // For example: clientId: '123'
@@ -83,7 +78,7 @@ const PartnerCreationTable = () => {
       </div>
       <DynamicTable
         columns={columns}
-        data={users && users.length > 0 ? users : tableData}
+        data={users || []}
         tableWrapperClass="bg-background p-5 rounded-md"
         defaultSortColumn="niumId"
         defaultSortDirection="asc"

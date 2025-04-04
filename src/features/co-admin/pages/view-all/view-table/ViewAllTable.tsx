@@ -1,16 +1,11 @@
 import { DynamicTable } from '@/components/common/dynamic-table/DynamicTable';
 import { useEffect } from 'react';
-import { useFilterApi } from '@/components/common/dynamic-table/hooks/useFilterApi';
 import { useDynamicPagination } from '@/components/common/dynamic-table/hooks/useDynamicPagination';
 import { Button } from '@/components/ui/button';
 import { API } from '@/core/constant/apis';
 import { getTransactionTableColumns } from './view-all-table-col';
 import { exportToCSV } from '@/utils/exportUtils';
 import { usePageTitle } from '@/hooks/usePageTitle';
-import {
-  purposeTypeOptions,
-  transactionTypeOptions,
-} from '@/features/checker/config/table-filter.config';
 import useGetAllOrders from '@/features/co-admin/hooks/useGetAllOrders';
 
 const ViewAllTable = () => {
@@ -28,9 +23,6 @@ const ViewAllTable = () => {
   } = useGetAllOrders();
 
 
-  const isTableFilterDynamic = false;
-  const isPaginationDynamic = false;
-
   // Use the dynamic pagination hook for fallback
   const pagination = useDynamicPagination({
     endpoint: API.CHECKER.VIEW_ALL.SEARCH_FILTER,
@@ -39,10 +31,6 @@ const ViewAllTable = () => {
     totalRecordsPath: 'totalRecords',
   });
 
-  // const filterApi = useFilterApi({
-  //   endpoint: API.CHECKER.VIEW_ALL.SEARCH_FILTER,
-  //   baseQueryParams: {},
-  // });
 
   const columns = getTransactionTableColumns();
 
@@ -65,7 +53,7 @@ const ViewAllTable = () => {
     <div className="flex flex-col">
       <DynamicTable
         columns={columns}
-        data={viewAllData}
+        data={viewAllData || []}
         defaultSortColumn="niumId"
         defaultSortDirection="asc"
         loading={isLoading}
