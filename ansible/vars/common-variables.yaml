@@ -8,7 +8,7 @@ tg_health_check_interval: 300
 tg_health_check_path: "/health-check.html"
 
 # Application Variables
-app_image: "{{ AWS_ECR_ID }}.dkr.ecr.ap-south-1.amazonaws.com/nium-forex-agent-portal-frontend:{{ RELEASE_TAG }}"
+app_image: "{{ AWS_ECR_ID }}.dkr.ecr.ap-south-1.amazonaws.com/nium-forex-agent-portal-fe:{{ RELEASE_TAG }}"
 container_port: 80
 execution_role_arn_num: "{{ AWS_ECR_ID }}"
 
