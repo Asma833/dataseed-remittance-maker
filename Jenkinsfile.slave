@@ -111,17 +111,10 @@ pipeline {
                         returnStdout: true
                     ).trim()
                     
-                    // Get secrets again for Ansible (same as before)
-                    def secretString = sh(
-                        script: "aws secretsmanager get-secret-value --secret-id ${params.SECRET_NAME} --query SecretString --output text",
-                        returnStdout: true
-                    ).trim()
-
-                    writeFile file: 'env_secrets.json', text: secretString
                 }
 
                 echo "Deployment starting :: Image TAG: ${TAG}"
-                sh "ansible-playbook ./ansible/deploy-script.yaml --extra-vars 'env=${ENV} AWS_ECR_ID=${AWS_ECR_ID} RELEASE_TAG=${TAG} env_secrets_file=env_secrets.json'"
+                sh "ansible-playbook ./ansible/deploy-script.yaml --extra-vars 'env=${ENV} AWS_ECR_ID=${AWS_ECR_ID} RELEASE_TAG=${TAG}'"
 
                 // Clean up
                 sh "rm -f env_secrets.json temp_secrets.json"
