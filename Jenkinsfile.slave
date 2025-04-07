@@ -19,6 +19,8 @@ pipeline {
         string(name: 'REPO', defaultValue: 'nium-forex-agent-portal-frontend.git')
         string(name: 'APP_NAME', defaultValue: 'nium-forex-agent-portal-fe')
         booleanParam(name: 'SONAR', defaultValue: false)
+        // Add a parameter for the secret name, or define it based on environment
+        string(name: 'SECRET_NAME', defaultValue: 'arn:aws:secretsmanager:ap-south-1:187296086360:secret:Nium-forex-agent-portal-frontend-Preprod-rXRymC', description: 'AWS Secrets Manager secret name (leave blank to use default naming convention)')
     }
     stages {
         stage("Running CI") {
@@ -26,6 +28,34 @@ pipeline {
                 expression { params.CI == true }
             }
             stages {
+                stage('Fetch Environment Secrets') {
+                    steps {
+                        script {
+                            // Determine secret name based on environment
+                            def secretName = "${params.APP_NAME}-${params.ENV}"
+                            
+                            // Fetch secrets from AWS Secrets Manager
+                            def secretString = sh(
+                                script: "aws secretsmanager get-secret-value --secret-id ${secretName} --query SecretString --output text",
+                                returnStdout: true
+                            ).trim()
+                            
+                            // Parse JSON secrets
+                            def secretJson = readJSON text: secretString
+                            
+                            // Create .env file for Vite build
+                            def envFile = ".env"
+                            sh "rm -f ${envFile}"
+                            
+                            secretJson.each { key, value ->
+                                if (key.startsWith("VITE_")) {
+                                    sh "echo '${key}=${value}' >> ${envFile}"
+                                }
+                            }
+                        }
+                    }
+                }
+                
                 stage('Test Stage') {
                     steps {
                         sh "echo Test Cases Stage execution"
@@ -49,7 +79,9 @@ pipeline {
                     steps {
                         sh "echo ${BUILD_NUMBER}"
                         sh "docker --version"
-                        sh "docker build --no-cache -t ${APP_NAME}:latest ."
+                        
+                        // Build Docker image with the .env file
+                        sh "docker build --no-cache --build-arg ENV=${params.ENV} -t ${APP_NAME}:latest ."
                         sh "docker tag ${APP_NAME}:latest ${AWS_ECR_ID}.dkr.ecr.ap-south-1.amazonaws.com/${APP_NAME}:${ENV}-${BUILD_NUMBER}"
                         sh "eval \$(aws ecr get-login --no-include-email --region ap-south-1)"
                         sh "docker push ${AWS_ECR_ID}.dkr.ecr.ap-south-1.amazonaws.com/${APP_NAME}:${ENV}-${BUILD_NUMBER}"    
@@ -82,9 +114,22 @@ pipeline {
                         """,
                         returnStdout: true
                     ).trim()
+                    
+                    // Create a temporary JSON file with secrets to pass to Ansible
+                    def secretName = params.SECRET_NAME ?: "${params.APP_NAME}-${params.ENV}"
+                    def secretString = sh(
+                        script: "aws secretsmanager get-secret-value --secret-id ${secretName} --query SecretString --output text",
+                        returnStdout: true
+                    ).trim()
+                    
+                    // Write secrets to a temporary file for Ansible
+                    writeFile file: 'env_secrets.json', text: secretString
                 }
                 echo "Deployment starting :: Image TAG: ${TAG}"
-                sh "ansible-playbook ./ansible/deploy-script.yaml --extra-vars 'env=${ENV} AWS_ECR_ID=${AWS_ECR_ID} RELEASE_TAG=${TAG}'"
+                sh "ansible-playbook ./ansible/deploy-script.yaml --extra-vars 'env=${ENV} AWS_ECR_ID=${AWS_ECR_ID} RELEASE_TAG=${TAG} env_secrets_file=env_secrets.json'"
+                
+                // Clean up secrets file after deployment
+                sh "rm -f env_secrets.json"
             }
         }
     }
