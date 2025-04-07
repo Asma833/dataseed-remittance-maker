@@ -60,7 +60,7 @@
             memory: '{{ memory_limit }}'
             memoryReservation: '{{ reserved_memory }}'
             secrets:
-              # For variables stored in Secrets Manager
+              # For variables stored in Secrets Manager - But this will not replace already created env variable in docker img
               - name: 'AWS_AUTO_SECRET_ENV_VARIABLES'
                 valueFrom: '{{ secret_arn }}'
             portMappings:
