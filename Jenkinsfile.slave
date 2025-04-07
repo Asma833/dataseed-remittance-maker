@@ -32,7 +32,7 @@ pipeline {
                     steps {
                         script {
                             // Determine secret name based on environment
-                            def secretName = "${params.APP_NAME}-${params.ENV}"
+                            def secretName = "${params.SECRET_NAME}"
                             
                             // Fetch secrets from AWS Secrets Manager
                             def secretString = sh(
@@ -116,7 +116,7 @@ pipeline {
                     ).trim()
                     
                     // Create a temporary JSON file with secrets to pass to Ansible
-                    def secretName = params.SECRET_NAME ?: "${params.APP_NAME}-${params.ENV}"
+                    def secretName = params.SECRET_NAME ?: "${params.SECRET_NAME}"
                     def secretString = sh(
                         script: "aws secretsmanager get-secret-value --secret-id ${secretName} --query SecretString --output text",
                         returnStdout: true
