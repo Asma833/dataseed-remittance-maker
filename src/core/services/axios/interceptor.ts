@@ -53,51 +53,62 @@ export const setupInterceptors = (axiosInstance: AxiosInstance) => {
         _retry?: boolean;
       };
 
-      if (error.response?.status === 401 && !originalRequest._retry) {
-        if (isRefreshing) {
-          return new Promise((resolve, reject) => {
-            failedQueue.push({ resolve, reject });
-          })
-            .then((token) => {
-              if (originalRequest.headers) {
-                originalRequest.headers['Authorization'] = `Bearer ${token}`;
-              }
-              return axiosInstance(originalRequest);
-            })
-            .catch((err) => Promise.reject(err));
+      // Handle 401 errors
+      if (error.response?.status === 401) {
+        const errorMessage = (error.response?.data as { message?: string })?.message || 'Unauthorized';
+
+        // If the error is due to invalid credentials, reject immediately
+        if (originalRequest.url === API.AUTH.LOGIN) {
+          return Promise.reject(new Error(errorMessage));
         }
 
-        originalRequest._retry = true;
-        isRefreshing = true;
-
-        try {
-          const currentRefreshToken = store.getState().auth.refreshToken;
-          if (!currentRefreshToken) {
-            throw new Error('No refresh token available');
+        // Token refresh logic
+        if (!originalRequest._retry) {
+          if (isRefreshing) {
+            return new Promise((resolve, reject) => {
+              failedQueue.push({ resolve, reject });
+            })
+              .then((token) => {
+                if (originalRequest.headers) {
+                  originalRequest.headers['Authorization'] = `Bearer ${token}`;
+                }
+                return axiosInstance(originalRequest);
+              })
+              .catch((err) => Promise.reject(err));
           }
 
-          const refreshUrl = API.AUTH.REFRESH_TOKEN;
-          const response = await axiosInstance.get<RefreshTokenResponse>(
-            refreshUrl,
-            {
-              params: { refreshToken: currentRefreshToken },
+          originalRequest._retry = true;
+          isRefreshing = true;
+
+          try {
+            const currentRefreshToken = store.getState().auth.refreshToken;
+            if (!currentRefreshToken) {
+              throw new Error('No refresh token available');
             }
-          );
 
-          const { accessToken } = response.data.data;
-          store.dispatch(updateAccessToken(accessToken));
-          processQueue(null, accessToken);
+            const refreshUrl = API.AUTH.REFRESH_TOKEN;
+            const response = await axiosInstance.get<RefreshTokenResponse>(
+              refreshUrl,
+              {
+                params: { refreshToken: currentRefreshToken },
+              }
+            );
 
-          if (originalRequest.headers) {
-            originalRequest.headers['Authorization'] = `Bearer ${accessToken}`;
+            const { accessToken } = response.data.data;
+            store.dispatch(updateAccessToken(accessToken));
+            processQueue(null, accessToken);
+
+            if (originalRequest.headers) {
+              originalRequest.headers['Authorization'] = `Bearer ${accessToken}`;
+            }
+            return axiosInstance(originalRequest);
+          } catch (refreshError) {
+            processQueue(refreshError, null);
+            store.dispatch(logout());
+            return Promise.reject(refreshError);
+          } finally {
+            isRefreshing = false;
           }
-          return axiosInstance(originalRequest);
-        } catch (refreshError) {
-          processQueue(refreshError, null);
-          store.dispatch(logout());
-          return Promise.reject(refreshError);
-        } finally {
-          isRefreshing = false;
         }
       }
 

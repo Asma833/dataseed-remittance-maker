@@ -29,6 +29,8 @@ const LoginForm = () => {
   });
 
   const handleLogin = (values: LoginSchema) => {
+    console.log('Login values:', values);
+    
     mutate(values);
   };
 
