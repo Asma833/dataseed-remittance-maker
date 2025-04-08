@@ -17,7 +17,7 @@ pipeline {
         string(name: 'BRANCH', defaultValue: '')
         choice(name: 'AWS_ECR_ID', choices: ['187296086360'], description: '')
         string(name: 'REPO', defaultValue: 'nium-forex-agent-portal-frontend.git')
-        string(name: 'APP_NAME', defaultValue: 'nium-forex-agent-portal-frontend')
+        string(name: 'APP_NAME', defaultValue: 'nium-forex-agent-portal-fe')
         booleanParam(name: 'SONAR', defaultValue: false)
     }
     stages {
@@ -26,6 +26,40 @@ pipeline {
                 expression { params.CI == true }
             }
             stages {
+                stage('Fetch Environment Secrets') {
+                    steps {
+                        script {
+                            
+                            // Read the secret name from config file based on selected ENV
+                            def secretName = sh(
+                                script: """
+                                cat jenkins-config.json | jq -r '.["${params.ENV}"].SECRET_NAME'
+                                """,
+                                returnStdout: true
+                            ).trim()
+
+                            echo "Using secret: ${secretName}"
+                            
+                            // Fetch secrets from AWS Secrets Manager
+                            def secretString = sh(
+                                script: "aws secretsmanager get-secret-value --secret-id ${secretName} --query SecretString --output text",
+                                returnStdout: true
+                            ).trim()
+                            
+                            // Write the full secret JSON to a temp file
+                            writeFile file: 'temp_secrets.json', text: secretString
+
+                            // Create .env with only VITE_ keys
+                            sh """
+                              rm -f .env
+                              cat temp_secrets.json | jq -r 'to_entries[] | select(.key | startswith("VITE_")) | "\\(.key)=\\(.value)"' > .env
+                            """
+
+                            sh "cat .env"
+                        }
+                    }
+                }
+
                 stage('Test Stage') {
                     steps {
                         sh "echo Test Cases Stage execution"
@@ -33,7 +67,7 @@ pipeline {
                         // sh "npm run test"
                     }
                 }
-                
+
                 stage('Sonar Run Analysis') {
                     when {
                         expression { params.SONAR == true }
@@ -44,12 +78,13 @@ pipeline {
                         sh 'npm run analyse -- -Dproject.settings=./sonar-project.global.properties'
                     }
                 }
-                
+
                 stage('Docker Image Creation') {
                     steps {
                         sh "echo ${BUILD_NUMBER}"
                         sh "docker --version"
-                        sh "docker build --no-cache -t ${APP_NAME}:latest ."
+                        
+                        sh "docker build --no-cache --build-arg ENV=${params.ENV} -t ${APP_NAME}:latest ."
                         sh "docker tag ${APP_NAME}:latest ${AWS_ECR_ID}.dkr.ecr.ap-south-1.amazonaws.com/${APP_NAME}:${ENV}-${BUILD_NUMBER}"
                         sh "eval \$(aws ecr get-login --no-include-email --region ap-south-1)"
                         sh "docker push ${AWS_ECR_ID}.dkr.ecr.ap-south-1.amazonaws.com/${APP_NAME}:${ENV}-${BUILD_NUMBER}"    
@@ -65,9 +100,9 @@ pipeline {
             steps {
                 script {
                     def data = sh(
-                            script: "aws ecr describe-images --repository-name ${APP_NAME} --query 'sort_by(imageDetails,& imagePushedAt)'",
-                            returnStdout: true
-                        ).trim()
+                        script: "aws ecr describe-images --repository-name ${APP_NAME} --query 'sort_by(imageDetails,& imagePushedAt)'",
+                        returnStdout: true
+                    ).trim()
 
                     def filteredData = sh(
                         script: """
@@ -82,9 +117,14 @@ pipeline {
                         """,
                         returnStdout: true
                     ).trim()
+                    
                 }
+
                 echo "Deployment starting :: Image TAG: ${TAG}"
                 sh "ansible-playbook ./ansible/deploy-script.yaml --extra-vars 'env=${ENV} AWS_ECR_ID=${AWS_ECR_ID} RELEASE_TAG=${TAG}'"
+
+                // Clean up
+                sh "rm -f env_secrets.json temp_secrets.json"
             }
         }
     }
