@@ -4,6 +4,7 @@ import { toast } from 'sonner';
 import { useCurrentUser } from '@/utils/getUserFromRedux';
 import { UserFormData } from '../types/user.type';
 import { useEffect } from 'react';
+import usePasswordHash from '@/hooks/usePasswordHash';
 
 // Form data structure
 export interface UserCreationRequest {
@@ -37,14 +38,18 @@ export const useCreateUser = (
     onUserCreateSuccess,
   }: { onUserCreateSuccess: (data: UserApiPayload) => void }
 ) => {
+  const { hashPassword } = usePasswordHash();
   const { getBankAccountId, getBranchId } = useCurrentUser();
-  const mapFormDataToApiPayload = (
+  const mapFormDataToApiPayload = async (
     formData: UserCreationRequest
-  ): UserApiPayload => {
+  ): Promise<UserApiPayload> => {
+
+    const hashedValue = await hashPassword(formData.password);
+
     return {
       role_id: 'bcbfc72e-54cc-4f67-9110-342c6570b062',
       email: formData.email,
-      password: formData.password,
+      password: hashedValue,
       is_active: true,
       business_type: 'large_enterprise',
       branch_id: getBranchId() || '',
@@ -58,7 +63,7 @@ export const useCreateUser = (
     UserCreationRequest
   >({
     mutationFn: async (userData: UserCreationRequest) => {
-      const apiPayload = mapFormDataToApiPayload(userData);
+      const apiPayload = await mapFormDataToApiPayload(userData);
       await userApi.userCreation(apiPayload);
       return apiPayload;
     },

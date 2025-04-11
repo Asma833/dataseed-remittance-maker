@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useDispatch } from 'react-redux';
-import { authApi } from '../api/authApi';
+// import { authApi } from '../api/authApi';
 import { logout } from '../store/authSlice';
 import { toast } from 'sonner';
 import { ConfirmationAlert } from '@/components/common/ConfirmationAlert';
@@ -17,7 +17,7 @@ const LogoutWrapper: React.FC<LogoutWrapperProps> = ({ children }) => {
     setIsLoading(true);
     dispatch(logout());
     try {
-      await authApi.logoutUser();
+      // await authApi.logoutUser();
       dispatch(logout());
       toast.success('Logged out successfully');
     } catch (error) {

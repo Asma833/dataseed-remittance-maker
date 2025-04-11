@@ -30,9 +30,9 @@ export const authApi = {
       `Bearer ${data.access_token}`;
     return data;
   },
-  logoutUser: async (): Promise<void> => {
-    await axiosInstance.post(getEndpoint('AUTH.LOGOUT'));
-  },
+  // logoutUser: async (): Promise<void> => {
+  //   await axiosInstance.post(getEndpoint('AUTH.LOGOUT'));
+  // },
   forgotPassword: async (email: string): Promise<void> => {
     await axiosInstance.post(getEndpoint('AUTH.FORGOT_PASSWORD'), { email });
   },

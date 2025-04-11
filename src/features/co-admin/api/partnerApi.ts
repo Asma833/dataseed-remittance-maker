@@ -7,6 +7,11 @@ import {
   PartnerUpdateRequest,
 } from '../types/partner.type';
 
+interface ProductResponse {
+  id: string;
+  name: string;
+}
+
 export const partnerApi = {
   PartnerCreation: async (
     PartnerData: PartnerRequest
@@ -43,9 +48,14 @@ export const partnerApi = {
   },
 
   getProducts: async () => {
-    const { data } = await axiosInstance.get<PartnerCreationResponse>(
-      getEndpoint('NUSERS.PARTNERS.PRODUCTS')
-    );
-    return data;
+    try {
+      const { data } = await axiosInstance.get<ProductResponse[]>(
+        getEndpoint('NUSERS.PARTNERS.PRODUCTS')
+      );
+      return data || [];
+    } catch (error) {
+      console.error('Error fetching products:', error);
+      return [];
+    }
   },
 };

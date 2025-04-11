@@ -16,13 +16,13 @@ import { useCreatePartner } from '@/features/co-admin/hooks/useCreatePartners';
 import { usePartnerUpdateAPI } from '@/features/co-admin/hooks/usePartnerUpdate';
 import { useProductOptions } from '@/features/co-admin/hooks/useProductOptions';
 import { PartnerFormData } from '@/features/co-admin/types/partner.type';
+import { toast } from 'sonner';
 
 const useScreenSize = () => {
   const [screenWidth, setScreenWidth] = useState(window.innerWidth);
 
   useEffect(() => {
     const handleResize = () => setScreenWidth(window.innerWidth);
-
     window.addEventListener('resize', handleResize);
     return () => window.removeEventListener('resize', handleResize);
   }, []);
@@ -33,23 +33,28 @@ const useScreenSize = () => {
 const PartnerCreationFormPage = () => {
   const screenWidth = useScreenSize();
   const { productOptions } = useProductOptions();
-
   const { id } = useParams();
   const isEditMode = !!id;
   const { setTitle } = usePageTitle();
   const location = useLocation();
   const selectedRow = (location.state as any)?.selectedRow || null;
+
   useEffect(() => {
     setTitle(isEditMode ? 'Edit Partner' : 'Create Partner');
-  }, [setTitle]);
-  const { mutate: createPartner, isLoading } = useCreatePartner(
+  }, [setTitle, isEditMode]);
+
+  const { mutate: createPartner, isLoading: isCreating, error: createError } = useCreatePartner(
     { role: 'checker' },
     {
-      onUserCreateSuccess: (data) => {
+      onUserCreateSuccess: () => {
         reset({});
+        toast.success('Partner created successfully');
       },
+      productOptions,
     }
   );
+
+  const { mutate: updatePartner, isLoading: isUpdating, error: updateError } = usePartnerUpdateAPI();
 
   const methods = useForm({
     resolver: zodResolver(userSchema),
@@ -73,77 +78,91 @@ const PartnerCreationFormPage = () => {
     reset,
     watch,
     setValue,
-    getValues,
     handleSubmit,
     formState: { errors, isSubmitting },
   } = methods;
-  const { mutate: updatePartner } = usePartnerUpdateAPI();
+
   const handleCheckboxChange = (
     key: 'card' | 'remittance' | 'both',
     checked: boolean
   ) => {
-    const currentValues = watch('productType'); // Get the latest state before updating
-
+    const currentValues = watch('productType');
+    
     if (key === 'both') {
-      // If "Both" is checked, enable all checkboxes; otherwise, disable all
-      const updatedValues = {
+      setValue('productType', {
         card: checked,
         remittance: checked,
         both: checked,
-      };
-      setValue('productType', updatedValues, { shouldValidate: true });
-    } else {
-      // Update only the specific checkbox ("Card" or "Remittance")
-      setValue(`productType.${key}`, checked, { shouldValidate: true });
-
-      // Get the updated values after modifying state
-      const updatedValues = {
-        ...currentValues,
-        [key]: checked,
-      };
-
-      // If both "Card" and "Remittance" are checked, check "Both"
-      const isBothChecked = updatedValues.card && updatedValues.remittance;
-      setValue('productType.both', isBothChecked, { shouldValidate: true });
-
-      // re-render using a temporary state change
-      setValue(
-        'productType',
-        { ...updatedValues, both: isBothChecked },
-        { shouldValidate: true }
-      );
+      }, { shouldValidate: true });
+      return;
     }
+    
+    // For card/remittance, set 'both' to true only if both are checked
+    const updatedValues = {
+      ...currentValues,
+      [key]: checked,
+      both: (key === 'card' && checked && currentValues.remittance) || 
+            (key === 'remittance' && checked && currentValues.card),
+    };
+    
+    setValue('productType', updatedValues, { shouldValidate: true });
   };
 
   useEffect(() => {
     if (selectedRow && Object.keys(selectedRow).length > 0) {
+      const productTypeValues = {
+        card: selectedRow.products?.some((p: any) => p.name === 'Card') || false,
+        remittance: selectedRow.products?.some((p: any) => p.name === 'Remittance') || false,
+        both: false,
+      };
+      
       reset({
         firstName: selectedRow.first_name || '',
         lastName: selectedRow.last_name || '',
         email: selectedRow.email || '',
+        businessType: selectedRow.business_type || 'large_enterprise',
         productType: {
-          card:
-            selectedRow.products?.some((p: any) => p.name === 'Card') || false,
-          remittance:
-            selectedRow.products?.some((p: any) => p.name === 'Remittance') ||
-            false,
-          both:
-            selectedRow.products?.some((p: any) => p.name === 'Both') || false,
+          ...productTypeValues,
+          both: productTypeValues.card && productTypeValues.remittance,
         },
       });
     }
-  }, [selectedRow, reset]); // Ensure `reset` runs when `selectedRow` changes
+  }, [selectedRow, reset]);
 
   const handleFormSubmit = handleSubmit(async (formdata: PartnerFormData) => {
-    if (isEditMode) {
-      await updatePartner({ data: formdata, productOptions });
-    } else {
-      createPartner({
-        ...formdata,
-        hashed_key: '',
-      });
+    try {
+      if (!formdata.productType.card && !formdata.productType.remittance) {
+        toast.error('Please select at least one product type');
+        return;
+      }
+
+      if (isEditMode) {
+        await updatePartner({ 
+          data: {
+            ...formdata,
+            isActive: selectedRow?.is_active ?? true,
+            role: selectedRow?.role_id,
+          }, 
+          productOptions 
+        });
+      } else {
+        await createPartner({
+          ...formdata,
+          isActive: true,
+        });
+      }
+    } catch (error) {
+      toast.error(error instanceof Error ? error.message : 'An error occurred');
     }
   });
+
+  // Show API errors if any
+  useEffect(() => {
+    const error = createError || updateError;
+    if (error) {
+      toast.error(error instanceof Error ? error.message : 'An error occurred');
+    }
+  }, [createError, updateError]);
 
   return (
     <FormProvider methods={methods}>
@@ -207,6 +226,7 @@ const PartnerCreationFormPage = () => {
                   name: 'businessType',
                   control,
                   errors,
+                  disabled: true
                 })}
               </div>
             </FieldWrapper>
@@ -218,10 +238,10 @@ const PartnerCreationFormPage = () => {
         <button
           type="submit"
           className="bg-primary text-white px-4 py-2 rounded-md"
-          disabled={isSubmitting || isLoading}
+          disabled={isSubmitting || isCreating || isUpdating}
           onClick={handleFormSubmit}
         >
-          {isSubmitting || isLoading
+          {isSubmitting || isCreating || isUpdating
             ? isEditMode
               ? 'Updating...'
               : 'Submitting...'
@@ -233,4 +253,5 @@ const PartnerCreationFormPage = () => {
     </FormProvider>
   );
 };
+
 export default PartnerCreationFormPage;

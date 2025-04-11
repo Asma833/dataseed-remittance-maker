@@ -15,10 +15,12 @@ import { Input } from '@/components/ui/input';
 import { useLogin } from '../hooks/useLogin';
 import { loginSchema, LoginSchema } from '../schemas/login.schema';
 import { Link } from 'react-router';
+import usePasswordHash from '@/hooks/usePasswordHash';
 
 const LoginForm = () => {
   const [showPassword, setShowPassword] = React.useState(false);
   const { mutate, isLoading } = useLogin();
+  const { hashPassword } = usePasswordHash();
 
   const form = useForm<LoginSchema>({
     resolver: zodResolver(loginSchema),
@@ -28,10 +30,12 @@ const LoginForm = () => {
     },
   });
 
-  const handleLogin = (values: LoginSchema) => {
-    console.log('Login values:', values);
-    
-    mutate(values);
+  const handleLogin = async (values: LoginSchema) => {
+    const hashedPassword = await hashPassword(values.password);
+    mutate({
+      ...values,
+      password: hashedPassword
+    });
   };
 
   return (
