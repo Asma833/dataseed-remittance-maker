@@ -102,15 +102,18 @@ export function DynamicTable<T extends Record<string, any>>({
     mode === 'dynamic' && dynamicData.length > 0 ? dynamicData : initialData;
 
   const { sortedData, sortColumn, sortDirection, toggleSort } = useTableSorting(
-    dataSource,
+    dataSource || [], // Ensure dataSource is an array
     defaultSortColumn as string | undefined,
     defaultSortDirection
   );
 
+  // Ensure sortedData is always an array before filtering
+  const dataToFilter = Array.isArray(sortedData) ? sortedData : [];
+
   // Only filter data in static mode
   const filteredData =
     mode === 'static'
-      ? sortedData.filter((item) => {
+      ? dataToFilter.filter((item) => {
           // Apply search filter
           if (filters.search && filter?.filterOption) {
             const searchTerm = filters.search.toLowerCase();
