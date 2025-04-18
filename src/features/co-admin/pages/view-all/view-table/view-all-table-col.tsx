@@ -52,8 +52,8 @@ export const getTransactionTableColumns = () => [
     className: 'min-w-0',
   },
   {
-    key: 'incident_completion_date',
-    id: 'incident_completion_date',
+    key: 'esign_status_completion_date',
+    id: 'esign_status_completion_date',
     name: 'E-Sign Status Completion Date',
     className: 'min-w-0',
   },

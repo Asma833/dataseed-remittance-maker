@@ -72,7 +72,7 @@ export function DynamicTable<T extends Record<string, any>>({
   initialPageSize = 10,
   defaultSortColumn,
   defaultSortDirection = 'asc',
-  pageSizeOption = [5, 10, 15, 20, 25],
+  pageSizeOption = [10, 15, 20, 25, 50],
   onRowClick,
   filter,
   refreshAction,
@@ -175,18 +175,6 @@ export function DynamicTable<T extends Record<string, any>>({
     setCurrentPage,
   } = useTablePagination(filteredData, initialPageSize, pageSizeOption);
 
-  // Add debugging - log pagination state to help diagnose the issue
-  console.log('DynamicTable pagination:', {
-    currentPage,
-    pageSize,
-    totalPages,
-    filteredDataLength: filteredData.length,
-    paginatedDataLength: paginatedData.length,
-    // Show sample items from paginated data
-    firstItem: paginatedData[0]
-      ? JSON.stringify(paginatedData[0]).substring(0, 50)
-      : 'none',
-  });
 
   // We need to track filter operations separately
   const [lastFiltered, setLastFiltered] = useState<number>(0);
@@ -203,7 +191,6 @@ export function DynamicTable<T extends Record<string, any>>({
       return;
     }
 
-    // console.log('Filter applied, resetting to page 1');
     setLastFiltered(now);
     setCurrentPage(1);
   };

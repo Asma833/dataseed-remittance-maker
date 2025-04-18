@@ -1,9 +1,9 @@
 import { useNavigate } from 'react-router-dom';
+import { PlusIcon } from 'lucide-react';
 import { DynamicTable } from '@/components/common/dynamic-table/DynamicTable';
 import { getUserTableColumns } from './n-user-creation-table-col';
 import { useEffect } from 'react';
 import { Button } from '@/components/ui/button';
-import { PlusIcon } from 'lucide-react';
 import { useFilterApi } from '@/components/common/dynamic-table/hooks/useFilterApi';
 import { API } from '@/core/constant/apis';
 import { usePageTitle } from '@/hooks/usePageTitle';
