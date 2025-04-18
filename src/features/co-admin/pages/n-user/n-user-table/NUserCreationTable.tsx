@@ -6,7 +6,6 @@ import { Button } from '@/components/ui/button';
 import { PlusIcon } from 'lucide-react';
 import { useFilterApi } from '@/components/common/dynamic-table/hooks/useFilterApi';
 import { API } from '@/core/constant/apis';
-import { useDynamicPagination } from '@/components/common/dynamic-table/hooks/useDynamicPagination';
 import { usePageTitle } from '@/hooks/usePageTitle';
 import { useUpdateStatusAPI } from '@/features/co-admin/hooks/useUserUpdateStatus';
 import { useGetUserApi } from '@/features/co-admin/hooks/useGetUser';
@@ -37,17 +36,6 @@ const NuserCreationTable = () => {
     });
   };
 
-  const isTableFilterDynamic = false;
-  const isPaginationDynamic = false;
-
-  // Use the dynamic pagination hook
-  const pagination = useDynamicPagination({
-    endpoint: API.NUSERS.USER.LIST,
-    initialPageSize: 10,
-    dataPath: 'transactions',
-    totalRecordsPath: 'totalRecords',
-  });
-
   const handleCreateUser = () => {
     navigate('create-user');
   };
@@ -68,10 +56,10 @@ const NuserCreationTable = () => {
     <div className="">
       <div className="flex flex-col">
         <div className="mb-4 flex items-center">
-          {(filterApi.loading || pagination.loading || loading) && (
+          {filterApi.loading && (
             <span className="text-blue-500">Loading data...</span>
           )}
-          {(filterApi.error || pagination.error || error) && (
+          {filterApi.error && (
             <span className="text-red-500">Error loading data</span>
           )}
         </div>
@@ -91,26 +79,14 @@ const NuserCreationTable = () => {
             <PlusIcon /> Create User
           </Button>
         )}
-        loading={pagination.loading ?? loading}
-        paginationMode={isPaginationDynamic ? 'dynamic' : 'static'}
-        onPageChange={
-          isPaginationDynamic
-            ? pagination.handlePageChange
-            : async (_page: number, _pageSize: number) => []
-        }
-        totalRecords={pagination.totalRecords}
+        loading={loading}
+        totalRecords={users?.length || 0}
         filter={{
           filterOption: true,
-          mode: isTableFilterDynamic ? 'dynamic' : 'static',
+          mode: 'static',
           renderFilterOptions: {
             search: true,
           },
-          // Dynamic callbacks - API functions
-          dynamicCallbacks: isTableFilterDynamic
-            ? {
-                onSearch: filterApi.search,
-              }
-            : undefined,
         }}
       />
     </div>

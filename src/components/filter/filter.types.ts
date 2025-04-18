@@ -64,11 +64,21 @@ export interface SetFilters {
 }
 
 export interface TableSearchFilterProps {
-  filters: SetFilters;
+  filters: {
+    search: string;
+    status: string;
+    role: string;
+    dateRange: {
+      from: Date | undefined;
+      to: Date | undefined;
+    };
+    customFilterValues: Record<string, string>;
+  };
   filterConfig: FilterConfig;
-  setFilters: React.Dispatch<React.SetStateAction<SetFilters>>;
+  setFilters: React.Dispatch<React.SetStateAction<any>>;
   onFilter?: () => void;
   onReset?: () => void;
-  setLoading?: (loading: boolean) => void;
-  setDynamicData?: (data: any[]) => void;
+  setLoading?: React.Dispatch<React.SetStateAction<boolean>>;
+  setDynamicData?: React.Dispatch<React.SetStateAction<any[]>>;
+  isPaginationAction?: boolean; // Add this property
 }

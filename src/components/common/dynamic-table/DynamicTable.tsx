@@ -72,14 +72,12 @@ export function DynamicTable<T extends Record<string, any>>({
   initialPageSize = 10,
   defaultSortColumn,
   defaultSortDirection = 'asc',
-  pageSizeOption = [10, 15, 20, 25],
+  pageSizeOption = [5, 10, 15, 20, 25],
   onRowClick,
-  paginationMode,
   filter,
   refreshAction,
   loading: externalLoading,
   renderComponents,
-  onPageChange,
   totalRecords,
 }: DynamicTableProps<T>) {
   const [filters, setFilters] = useState<SetFilters>({
@@ -92,6 +90,9 @@ export function DynamicTable<T extends Record<string, any>>({
 
   const [internalLoading, setInternalLoading] = useState(false);
   const [dynamicData, setDynamicData] = useState<T[]>([]);
+
+  // Track pagination action state
+  const [isPaginationAction, setIsPaginationAction] = useState(false);
 
   // Use dynamic data if in dynamic mode, otherwise use filtered data
   const mode = filter?.mode || 'static';
@@ -174,11 +175,49 @@ export function DynamicTable<T extends Record<string, any>>({
     setCurrentPage,
   } = useTablePagination(filteredData, initialPageSize, pageSizeOption);
 
+  // Add debugging - log pagination state to help diagnose the issue
+  console.log('DynamicTable pagination:', {
+    currentPage,
+    pageSize,
+    totalPages,
+    filteredDataLength: filteredData.length,
+    paginatedDataLength: paginatedData.length,
+    // Show sample items from paginated data
+    firstItem: paginatedData[0]
+      ? JSON.stringify(paginatedData[0]).substring(0, 50)
+      : 'none',
+  });
+
+  // We need to track filter operations separately
+  const [lastFiltered, setLastFiltered] = useState<number>(0);
+
+  // Force only one filter operation per 500ms
   const handleFilter = () => {
+    const now = Date.now();
+    // Skip if we're in the middle of a pagination action
+    if (isPaginationAction) {
+      return;
+    }
+
+    if (now - lastFiltered < 500) {
+      return;
+    }
+
+    // console.log('Filter applied, resetting to page 1');
+    setLastFiltered(now);
     setCurrentPage(1);
   };
 
   const handleReset = () => {
+    // Skip if we're in the middle of a pagination action
+    if (isPaginationAction) return;
+
+    const now = Date.now();
+    // Skip if we just filtered recently
+    if (now - lastFiltered < 500) return;
+
+    setLastFiltered(now);
+
     setFilters({
       search: '',
       status: 'all',
@@ -191,6 +230,21 @@ export function DynamicTable<T extends Record<string, any>>({
     // Reset dynamic data to empty if in dynamic mode
     if (mode === 'dynamic') {
       setDynamicData([]);
+    }
+  };
+
+  // Track when setCurrentPage is called with proper timeout
+  const handlePageChange = (page: number) => {
+    // Only log when the page is actually changing to reduce noise
+    if (page !== currentPage) {
+      // Set pagination action flag to true before changing page
+      setIsPaginationAction(true);
+      // Set the page
+      setCurrentPage(page);
+      // Clear the pagination flag after a short delay
+      setTimeout(() => {
+        setIsPaginationAction(false);
+      }, 200);
     }
   };
 
@@ -235,6 +289,7 @@ export function DynamicTable<T extends Record<string, any>>({
                   onReset={handleReset}
                   setLoading={setInternalLoading}
                   setDynamicData={setDynamicData}
+                  isPaginationAction={isPaginationAction}
                 />
               </div>
             )}
@@ -276,25 +331,33 @@ export function DynamicTable<T extends Record<string, any>>({
             <TableBody className="odz-table-body">
               {!loading ? (
                 paginatedData.length > 0 ? (
-                  paginatedData.map((row, idx) => (
-                    <TableRow
-                      key={idx}
-                      className={cn(
-                        'odz-table-row',
-                        onRowClick && 'cursor-pointer hover:bg-gray-50'
-                      )}
-                      onClick={() => onRowClick?.(row)}
-                    >
-                      {columns.map((col: Column<T>) => (
-                        <TableCell
-                          className="odz-table-cell border-r-2 border-[--table-border] text-center"
-                          key={`${idx}-${col.key}`}
-                        >
-                          {getCellContent(row, col)}
-                        </TableCell>
-                      ))}
-                    </TableRow>
-                  ))
+                  paginatedData.map((row, idx) => {
+                    // Try to use a unique key from the row, fallback to idx
+                    const rowKey =
+                      row.id ??
+                      row.niumId ??
+                      row._id ??
+                      `${currentPage}-${idx}`;
+                    return (
+                      <TableRow
+                        key={rowKey}
+                        className={cn(
+                          'odz-table-row',
+                          onRowClick && 'cursor-pointer hover:bg-gray-50'
+                        )}
+                        onClick={() => onRowClick?.(row)}
+                      >
+                        {columns.map((col: Column<T>) => (
+                          <TableCell
+                            className="odz-table-cell border-r-2 border-[--table-border] text-center"
+                            key={`${rowKey}-${col.key}`}
+                          >
+                            {getCellContent(row, col)}
+                          </TableCell>
+                        ))}
+                      </TableRow>
+                    );
+                  })
                 ) : (
                   <TableRow className="odz-table-row">
                     <TableCell
@@ -330,10 +393,8 @@ export function DynamicTable<T extends Record<string, any>>({
           pageSize={pageSize}
           pageSizeOption={pageSizeOption}
           setPageSize={setPageSize}
-          setCurrentPage={setCurrentPage}
+          setCurrentPage={handlePageChange}
           filteredDataLength={filteredData.length}
-          paginationMode={paginationMode || 'static'}
-          onPageChange={onPageChange}
           totalRecords={totalRecords ? totalRecords : filteredData.length}
         />
       )}

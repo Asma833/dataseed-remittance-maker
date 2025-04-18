@@ -1,7 +1,7 @@
 import dayjs from 'dayjs';
 import { CalendarDays, RefreshCw } from 'lucide-react';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
-import { useEffect, useState, useCallback } from 'react';
+import { useEffect, useState, useCallback, useRef } from 'react';
 
 import { SearchInput } from './SearchInput';
 import { TableSearchFilterProps } from './filter.types';
@@ -30,6 +30,7 @@ const TableSearchFilter = ({
   onReset,
   setLoading,
   setDynamicData,
+  isPaginationAction,
 }: TableSearchFilterProps) => {
   const { search, dateRange, status, selects } =
     filterConfig.renderFilterOptions;
@@ -42,6 +43,10 @@ const TableSearchFilter = ({
   const [localCustomFilters, setLocalCustomFilters] = useState(
     filters.customFilterValues
   );
+
+  // Add refs for debounce timer and previous search value to optimize search
+  const searchDebounceRef = useRef<NodeJS.Timeout | null>(null);
+  const prevSearchValueRef = useRef(filters.search);
 
   const executeAsyncOperation = useCallback(
     async <T,>(operation: () => Promise<T>) => {
@@ -59,7 +64,7 @@ const TableSearchFilter = ({
     [setLoading]
   );
 
-  // Handle search clear/reset - moved up before it's referenced in useEffect
+  // Handle search clear/reset with optimization
   const handleSearchClear = useCallback(async () => {
     // Only reset the search filter, keep other filters intact
     if (mode === 'dynamic' && callbacks?.onSearch) {
@@ -67,43 +72,80 @@ const TableSearchFilter = ({
       if (setDynamicData && result) setDynamicData(result);
     } else {
       // For static mode
-      if (onFilter) onFilter();
+      if (onFilter && !isPaginationAction) onFilter();
     }
-  }, [mode, callbacks, setDynamicData, onFilter, executeAsyncOperation]);
-
-  // For dynamic search with debounce
-  useEffect(() => {
-    let handler: NodeJS.Timeout | undefined;
-
-    if (filters.search) {
-      handler = setTimeout(async () => {
-        if (mode === 'dynamic' && callbacks?.onSearch) {
-          const result = await executeAsyncOperation(() =>
-            callbacks.onSearch!(filters.search)
-          );
-          if (setDynamicData && result) setDynamicData(result);
-        } else {
-          // For static mode, apply filter immediately
-          if (onFilter) onFilter();
-        }
-      }, 500);
-    } else {
-      // If search is cleared, immediately reset/refresh the table
-      handleSearchClear();
-    }
-
-    return () => {
-      if (handler) clearTimeout(handler);
-    };
   }, [
-    filters.search,
     mode,
     callbacks,
     setDynamicData,
     onFilter,
     executeAsyncOperation,
-    handleSearchClear,
+    isPaginationAction,
   ]);
+
+  // Improved search handling with better debounce
+  const handleSearchInputChange = useCallback(
+    (value: string) => {
+      // First update the state with the new search value
+      setFilters((prev: typeof filters) => ({ ...prev, search: value }));
+
+      // Clear any existing timeout to implement debounce
+      if (searchDebounceRef.current) {
+        clearTimeout(searchDebounceRef.current);
+      }
+
+      // Don't trigger search if in pagination action
+      if (isPaginationAction) {
+        return;
+      }
+
+      // Set a new timeout for the search action
+      searchDebounceRef.current = setTimeout(async () => {
+        // Only perform search if the value has really changed from last execution
+        if (value !== prevSearchValueRef.current) {
+          prevSearchValueRef.current = value;
+
+          if (value === '') {
+            // Handle empty search - clear results
+            await handleSearchClear();
+          } else if (mode === 'dynamic' && callbacks?.onSearch) {
+            // For dynamic search
+            const result = await executeAsyncOperation(() =>
+              callbacks.onSearch!(value)
+            );
+            if (setDynamicData && result) setDynamicData(result);
+          } else {
+            // For static filtering
+            if (onFilter && !isPaginationAction) onFilter();
+          }
+        }
+      }, 500);
+    },
+    [
+      setFilters,
+      handleSearchClear,
+      mode,
+      callbacks,
+      executeAsyncOperation,
+      setDynamicData,
+      onFilter,
+      isPaginationAction,
+    ]
+  );
+
+  // Clean up debounce timer on unmount
+  useEffect(() => {
+    return () => {
+      if (searchDebounceRef.current) {
+        clearTimeout(searchDebounceRef.current);
+      }
+    };
+  }, []);
+
+  // Update the previous search value ref when filters.search changes
+  useEffect(() => {
+    prevSearchValueRef.current = filters.search;
+  }, [filters.search]);
 
   const handleDateChange = useCallback(
     (key: 'from' | 'to', date: Date | null) => {
@@ -140,13 +182,6 @@ const TableSearchFilter = ({
     }));
   }, []);
 
-  const handleSearchInputChange = useCallback(
-    (value: string) => {
-      setFilters((prev: typeof filters) => ({ ...prev, search: value }));
-    },
-    [setFilters]
-  );
-
   const handleDynamicFilter = useCallback(async () => {
     const updatedFilters = {
       ...filters,
@@ -157,7 +192,8 @@ const TableSearchFilter = ({
 
     setFilters(updatedFilters);
 
-    if (onFilter) await onFilter();
+    // Only call onFilter if we're not in the middle of a pagination action
+    if (onFilter && !isPaginationAction) await onFilter();
 
     if (mode === 'dynamic' && callbacks?.onFilterApply && setDynamicData) {
       const result = await executeAsyncOperation(
@@ -175,11 +211,16 @@ const TableSearchFilter = ({
     onFilter,
     setDynamicData,
     setFilters,
-    setLoading,
     executeAsyncOperation,
+    isPaginationAction,
   ]);
 
   const handleDynamicReset = useCallback(async () => {
+    // Clear any pending search
+    if (searchDebounceRef.current) {
+      clearTimeout(searchDebounceRef.current);
+    }
+
     const resetFilters = {
       search: '',
       status: 'all',
@@ -188,12 +229,16 @@ const TableSearchFilter = ({
       customFilterValues: {},
     };
 
+    // Update prev search value ref to match reset state
+    prevSearchValueRef.current = '';
+
     setLocalDateRange(resetFilters.dateRange);
     setLocalStatus(resetFilters.status);
     setLocalCustomFilters(resetFilters.customFilterValues);
     setFilters({ ...filters, ...resetFilters });
 
-    if (onReset) onReset();
+    // Only call onReset if we're not in the middle of a pagination action
+    if (onReset && !isPaginationAction) onReset();
 
     if (mode === 'dynamic' && callbacks?.onFilterApply && setDynamicData) {
       const result = await executeAsyncOperation(
@@ -208,8 +253,8 @@ const TableSearchFilter = ({
     onReset,
     setDynamicData,
     setFilters,
-    setLoading,
     executeAsyncOperation,
+    isPaginationAction,
   ]);
 
   return (
