@@ -1,10 +1,10 @@
+import { useState, useEffect } from 'react';
+import { toast } from 'sonner';
 import { DynamicTable } from '@/components/common/dynamic-table/DynamicTable';
 import { getAssignCreationColumns } from './assign-creation-table-col';
-import { useState, useEffect } from 'react';
 import { useFilterApi } from '@/components/common/dynamic-table/hooks/useFilterApi';
 import { useDynamicPagination } from '@/components/common/dynamic-table/hooks/useDynamicPagination';
 import { Button } from '@/components/ui/button';
-import { toast } from 'sonner';
 import { API } from '@/core/constant/apis';
 import { usePageTitle } from '@/hooks/usePageTitle';
 import axiosInstance from '@/core/services/axios/axiosInstance';
@@ -28,9 +28,24 @@ const AssignCreationTable = () => {
   });
 
   const [selectedRows, setSelectedRows] = useState<string[]>([]);
+  const [tableData, setTableData] = useState(data || []);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const isTableFilterDynamic = false;
   const isPaginationDynamic = false;
+
+  // Update tableData when data changes
+  useEffect(() => {
+    if (data) {
+      setTableData(data);
+    }
+  }, [data]);
+
+  // Display error toast if API request fails
+  useEffect(() => {
+    if (error) {
+      toast.error('Failed to load assign list. Please try again.');
+    }
+  }, [error]);
 
   // Use the dynamic pagination hook
   const pagination = useDynamicPagination({
@@ -55,6 +70,13 @@ const AssignCreationTable = () => {
         return prev.filter((id) => id !== rowId);
       }
     });
+
+    // Also update the tableData to reflect the checked state
+    setTableData((prevData) =>
+      prevData.map((row) =>
+        row.partner_order_id === rowId ? { ...row, select: checked } : row
+      )
+    );
   };
 
   const handleTakeRequest = async () => {
@@ -95,7 +117,7 @@ const AssignCreationTable = () => {
     <div className="flex flex-col">
       <DynamicTable
         columns={columns}
-        data={data || []}
+        data={tableData || []}
         defaultSortColumn="nium_order_id"
         defaultSortDirection="asc"
         loading={isLoading}

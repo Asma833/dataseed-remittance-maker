@@ -6,22 +6,18 @@ export const getAssignCreationColumns = (
     id: 'select',
     name: 'Select',
     className: 'min-w-0 p-2',
-    cell: (value: any, row: any) => (
-      <input
-        type="checkbox"
-        checked={value}
-        onChange={(e) =>
-          handleSelectionChange(row.partner_order_id, e.target.checked)
-        }
-        className={`h-5 w-5 cursor-pointer rounded-sm border-2 transition-all duration-300`}
-        style={{
-          accentColor: '#E53888', // Consistent color instead of conditional
-          display: 'inline-block',
-          verticalAlign: 'middle',
-          position: 'relative',
-        }}
-      />
-    ),
+    cell: (value: boolean, row: any) => {
+      return (
+        <input
+          type="checkbox"
+          checked={value}
+          onChange={(e) =>
+            handleSelectionChange(row.partner_order_id, e.target.checked)
+          }
+          className="relative h-5 w-5 cursor-pointer rounded-sm border-2 transition-all duration-300 inline-block align-middle accent-[#E53888]"
+        />
+      );
+    },
   },
   {
     key: 'nium_order_id',
