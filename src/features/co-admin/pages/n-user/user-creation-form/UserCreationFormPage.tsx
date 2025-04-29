@@ -15,6 +15,8 @@ import { useParams, useLocation } from 'react-router-dom';
 import { useUpdateAPI } from '@/features/co-admin/hooks/useUserUpdate';
 import { useProductOptions } from '@/features/co-admin/hooks/useProductOptions';
 import { UserFormData } from '@/features/co-admin/types/user.type';
+import { useCurrentUser } from '@/utils/getUserFromRedux';
+
 const useScreenSize = () => {
   const [screenWidth, setScreenWidth] = useState(window.innerWidth);
 
@@ -28,18 +30,6 @@ const useScreenSize = () => {
   return screenWidth;
 };
 
-interface UserApiPayload {
-  role_id: string;
-  email: string;
-  password: string;
-  is_active: boolean;
-  business_type: string;
-  created_by?: string;
-  updated_by?: string;
-  branch_id: string;
-  bank_account_id: string;
-}
-
 const UserCreationFormPage = () => {
   const screenWidth = useScreenSize();
   const { productOptions } = useProductOptions();
@@ -52,22 +42,20 @@ const UserCreationFormPage = () => {
   useEffect(() => {
     setTitle(isEditMode ? 'Edit User' : 'Create User');
   }, [setTitle]);
-
+const {getBusinessType} = useCurrentUser();
   const methods = useForm({
     resolver: zodResolver(userSchema),
     defaultValues: {
       email: '',
       password: '',
       confirmPassword: '',
-      businessType: 'large_enterprise',
+      businessType: getBusinessType() || '',
     },
   });
-
+  
   const {
     control,
     reset,
-    watch,
-    setValue,
     formState: { errors, isSubmitting },
     handleSubmit,
   } = methods;

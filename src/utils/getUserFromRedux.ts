@@ -11,6 +11,7 @@ interface BankAccount {
 interface Branch {
   id: string;
   name: string;
+  business_type: string; 
 }
 
 interface Role {
@@ -70,7 +71,10 @@ export const useCurrentUser = () => {
   const getBankAccountId = (): string | undefined => {
     return user?.bank_account.id;
   };
-
+  const getBusinessType = (): string | undefined => {
+    return user?.business_type
+    ;
+  };
   return {
     user,
     getUserHashedKey,
@@ -79,5 +83,6 @@ export const useCurrentUser = () => {
     getUserEmail,
     getBranchId,
     getBankAccountId,
+    getBusinessType
   };
 };
