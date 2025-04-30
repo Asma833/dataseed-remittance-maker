@@ -6,9 +6,12 @@ export interface PartnerCreationRequest {
   last_name: string;
   email: string;
   password: string;
-  product_ids: string[];
   branch_id: string;
   bank_account_id: string;
+  created_by?: string;
+  updated_by?: string;
+  product_ids?: string[];
+  products?: string[];
 }
 export interface PartnerStatusRequest {
   is_active: boolean;
@@ -83,6 +86,7 @@ export interface UserCreationRequest {
   business_type?: string;
   created_by?: string;
   updated_by?: string;
+  products?: string[],
   productType: {
     card: boolean;
     remittance: boolean;

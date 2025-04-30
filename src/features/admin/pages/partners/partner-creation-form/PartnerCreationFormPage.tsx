@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
+import { useParams, useLocation } from 'react-router-dom';
 import { toast } from 'sonner';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { FormProvider } from '@/components/form/context/FormProvider';
@@ -10,9 +11,8 @@ import CheckboxWrapper from '@/components/form/wrapper/CheckboxWrapper';
 import Spacer from '@/components/form/wrapper/Spacer';
 import { FormContentWrapper } from '@/components/form/wrapper/FormContentWrapper';
 import { usePageTitle } from '@/hooks/usePageTitle';
-import { useParams, useLocation } from 'react-router-dom';
 import { useCreatePartner } from '@/features/admin/hooks/useCreatePartners';
-import { usePartnerUpdateAPI } from '@/features/admin/hooks/usePartnerUpdate';
+import { usePartnerUpdate } from '@/features/admin/hooks/usePartnerUpdate';
 import { useProductOptions } from '@/features/admin/hooks/useProductOptions';
 import { PartnerFormData } from '@/features/admin/types/partner.type';
 import { useCurrentUser } from '@/utils/getUserFromRedux';
@@ -64,7 +64,7 @@ const PartnerCreationFormPage = () => {
     mutate: updatePartner,
     isLoading: isUpdating,
     error: updateError,
-  } = usePartnerUpdateAPI();
+  } = usePartnerUpdate();
 
   const methods = useForm({
     resolver: zodResolver(userSchema),
@@ -151,6 +151,8 @@ const PartnerCreationFormPage = () => {
   }, [selectedRow, reset]);
 
   const handleFormSubmit = handleSubmit(async (formdata: PartnerFormData) => {
+    console.log('formdata:', formdata)
+
     try {
       if (!formdata.productType.card && !formdata.productType.remittance) {
         toast.error('Please select at least one product type');
