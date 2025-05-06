@@ -2,7 +2,7 @@ import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { updateIncidentFormSchema } from './update-incident-form.schema';
 import { useState, useEffect } from 'react';
-import { FormProvider } from '@/components/form/context/FormProvider';
+import { FormProvider } from '@/components/form/providers/FormProvider';
 import { getController } from '@/components/form/utils/getController';
 import FormFieldRow from '@/components/form/wrapper/FormFieldRow';
 import FieldWrapper from '@/components/form/wrapper/FieldWrapper';
@@ -36,11 +36,8 @@ type PropTypes = {
 
 const useScreenSize = () => {
   const [screenWidth, setScreenWidth] = useState(window.innerWidth);
-  const { setTitle } = usePageTitle();
+  usePageTitle('Update Incident');
 
-  useEffect(() => {
-    setTitle('Update Incident');
-  }, [setTitle]);
   useEffect(() => {
     const handleResize = () => setScreenWidth(window.innerWidth);
     window.addEventListener('resize', handleResize);

@@ -3,7 +3,7 @@ import { useForm } from 'react-hook-form';
 import { useParams, useLocation } from 'react-router-dom';
 import { toast } from 'sonner';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { FormProvider } from '@/components/form/context/FormProvider';
+import { FormProvider } from '@/components/form/providers/FormProvider';
 import { getController } from '@/components/form/utils/getController';
 import FormFieldRow from '@/components/form/wrapper/FormFieldRow';
 import FieldWrapper from '@/components/form/wrapper/FieldWrapper';
@@ -16,7 +16,7 @@ import { usePartnerUpdate } from '@/features/admin/hooks/usePartnerUpdate';
 import { useProductOptions } from '@/features/admin/hooks/useProductOptions';
 import { PartnerFormData } from '@/features/admin/types/partner.type';
 import { useCurrentUser } from '@/utils/getUserFromRedux';
-import { userFormConfig } from './partner-form-config';
+import { userFormConfig } from './partner-form.config';
 import { userSchema } from './partner-form.schema';
 
 const useScreenSize = () => {

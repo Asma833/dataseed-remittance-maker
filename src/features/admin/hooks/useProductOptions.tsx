@@ -1,6 +1,6 @@
 import { useQuery } from '@tanstack/react-query';
 import { toast } from 'sonner';
-import { partnerApi } from '../api/partnerApi';
+import { partnerApi } from '../action/partnerApi';
 
 interface ProductOption {
   id: string;

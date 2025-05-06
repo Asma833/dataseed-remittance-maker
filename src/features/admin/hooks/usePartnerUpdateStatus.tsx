@@ -1,7 +1,7 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { toast } from 'sonner';
 import { UserStatusRequest } from '../types/user.type';
-import { partnerApi } from '../api/partnerApi';
+import { partnerApi } from '../action/partnerApi';
 
 export const usePartnerStatusUpdateAPI = () => {
   const queryClient = useQueryClient();

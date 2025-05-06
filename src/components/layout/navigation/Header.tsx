@@ -12,7 +12,7 @@ import {
   NavigationMenuTrigger,
   navigationMenuTriggerStyle,
 } from '@/components/ui/navigation-menu';
-import { HeaderProps } from './navigation.types';
+import { HeaderProps } from '../../types/navigation.types';
 import { MobileNav } from './MobileNav';
 import LogoutWrapper from '@/features/auth/components/LogoutWrapper';
 import { useActiveMenu } from '@/hooks/useActiveMenu';

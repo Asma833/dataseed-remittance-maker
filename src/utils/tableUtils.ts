@@ -1,4 +1,4 @@
-import { SetFilters } from '@/components/filter/filter.types';
+import { SetFilters } from '@/components/types/filter.types';
 
 /**
  * Utility function to create filter parameters for API requests

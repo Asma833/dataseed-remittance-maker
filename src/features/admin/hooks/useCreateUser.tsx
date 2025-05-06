@@ -1,5 +1,5 @@
 import { useMutation } from '@tanstack/react-query';
-import { userApi } from '../api/userApi';
+import { userApi } from '../action/userApi';
 import { toast } from 'sonner';
 import { useCurrentUser } from '@/utils/getUserFromRedux';
 import useGetRoleId from '@/hooks/useGetRoleId';

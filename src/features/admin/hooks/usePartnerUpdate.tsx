@@ -2,7 +2,7 @@ import { useMutation } from '@tanstack/react-query';
 import { toast } from 'sonner';
 import { useNavigate } from 'react-router-dom';
 import { useCurrentUser } from '@/utils/getUserFromRedux';
-import { partnerApi } from '../api/partnerApi';
+import { partnerApi } from '../action/partnerApi';
 import { UserCreationRequest } from '../types/partner.type';
 import { useGetProducts } from '@/hooks/useGetProducts';
 

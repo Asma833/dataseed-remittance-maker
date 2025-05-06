@@ -1,7 +1,6 @@
 import { DynamicTable } from '@/components/common/dynamic-table/DynamicTable';
-import { useEffect } from 'react';
 import { Button } from '@/components/ui/button';
-import { getTransactionTableColumns } from './completed-transaction-table-col';
+import { GetTransactionTableColumns } from './CompletedTransactionTableColumns';
 import { exportToCSV } from '@/utils/exportUtils';
 import { usePageTitle } from '@/hooks/usePageTitle';
 import useGetCheckerOrders from '@/features/checker/hooks/useGetCheckerOrders';
@@ -11,11 +10,7 @@ import {
 } from '../../config/table-filter.config';
 
 const CompletedTransactionTable = () => {
-  const { setTitle } = usePageTitle();
-
-  useEffect(() => {
-    setTitle('Completed Transaction');
-  }, [setTitle]);
+  usePageTitle('Completed Transaction');
 
   // Use our custom hook to fetch completed transactions
   const {
@@ -30,7 +25,7 @@ const CompletedTransactionTable = () => {
     orders: any[];
   }>('completed', true); // Start with "completed" type
 
-  const columns = getTransactionTableColumns();
+  const columns = GetTransactionTableColumns();
 
   // Transform checker orders data to match the table format
   const transformOrderForTable = (order: any) => {

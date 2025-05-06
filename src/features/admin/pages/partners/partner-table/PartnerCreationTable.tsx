@@ -1,8 +1,7 @@
-import { useEffect } from 'react';
-import { PlusIcon } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
+import { PlusIcon } from 'lucide-react';
 import { DynamicTable } from '@/components/common/dynamic-table/DynamicTable';
-import { getUserTableColumns } from './partner-creation-table-col';
+import { GetUserTableColumns } from './PartnerCreationTableColumns';
 import { Button } from '@/components/ui/button';
 import { useFilterApi } from '@/components/common/dynamic-table/hooks/useFilterApi';
 import { API } from '@/core/constant/apis';
@@ -11,14 +10,11 @@ import { usePageTitle } from '@/hooks/usePageTitle';
 import { usePartnerStatusUpdateAPI } from '@/features/admin/hooks/usePartnerUpdateStatus';
 import { useGetData } from '@/hooks/useGetData';
 import { PartnerRequest } from '@/features/admin/types/partner.type';
+import { cn } from '@/utils/cn';
 
 const PartnerCreationTable = () => {
   const navigate = useNavigate();
-  const { setTitle } = usePageTitle();
-
-  useEffect(() => {
-    setTitle('PARTNERS');
-  }, [setTitle]);
+  usePageTitle('Partners');
 
   const {
     data,
@@ -66,12 +62,18 @@ const PartnerCreationTable = () => {
     endpoint: API.NUSERS.PARTNERS.LIST,
     baseQueryParams: {},
   });
-  const columns = getUserTableColumns(handleStatusChange, handleNavigate);
+  const columns = GetUserTableColumns(handleStatusChange, handleNavigate);
 
   return (
-    <div className="">
+    <div className="table-wrap">
       <div className="flex flex-col">
-        <div className="mb-4 flex items-center">
+        <div
+          className={cn(
+            'mb-4 flex items-center',
+            !filterApi.loading ? 'hidden' : '',
+            !filterApi.error ? 'hidden' : ''
+          )}
+        >
           {(filterApi.loading || pagination.loading || loading) && (
             <span className="text-blue-500">Loading data...</span>
           )}

@@ -1,5 +1,5 @@
 import Sidebar from '@/components/layout/side-navigaion/SideNav';
-import { SideNavItems } from './side-nav-items';
+import { SideNavItems } from '../../config/side-nav-items.config';
 
 const SideNavigation = ({
   setIsSidebarOpen,

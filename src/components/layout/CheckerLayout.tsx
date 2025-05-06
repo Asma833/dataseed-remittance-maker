@@ -1,9 +1,8 @@
 import { useState } from 'react';
 import DashboardContentWrapper from '@/components/common/DashboardContentWrapper';
-import CheckerSideNavigation from './side-navigation/CheckerSideNav';
+import CheckerSideNavigation from '../../features/checker/components/side-navigation/CheckerSideNav';
 import Header from '@/components/layout/side-navigaion/HeaderNav';
 import { ReactNode } from 'react';
-import PageTitle from '@/components/layout/titles/PageTitle';
 
 interface CheckerLayoutProps {
   children: ReactNode;
@@ -34,10 +33,7 @@ const CheckerLayout = ({ children }: CheckerLayoutProps) => {
           setIsSidebarOpen(false);
         }}
       >
-        <DashboardContentWrapper>
-          <PageTitle />
-          {children}
-        </DashboardContentWrapper>
+        <DashboardContentWrapper>{children}</DashboardContentWrapper>
       </main>
     </div>
   );

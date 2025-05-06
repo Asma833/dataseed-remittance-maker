@@ -65,7 +65,7 @@ const NiumOrderID = ({
   );
 };
 
-export const getTransactionTableColumns = (
+export const GetTransactionTableColumns = (
   openModal: (value: string) => void,
   handleUnassign: (rowData: any) => void,
   handleRegeneratedEsignLink: (rowData: any) => void,

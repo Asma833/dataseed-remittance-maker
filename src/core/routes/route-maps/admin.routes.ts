@@ -1,6 +1,5 @@
 import { lazy } from 'react';
 import { ROUTES } from '../../constant/routePaths';
-import { checkerComponents } from './checker.routes';
 
 const adminComponents = {
   User: lazy(

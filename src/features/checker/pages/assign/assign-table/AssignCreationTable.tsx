@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { toast } from 'sonner';
 import { DynamicTable } from '@/components/common/dynamic-table/DynamicTable';
-import { getAssignCreationColumns } from './assign-creation-table-col';
+import { GetAssignCreationColumns } from './AssignCreationTableColumns';
 import { useFilterApi } from '@/components/common/dynamic-table/hooks/useFilterApi';
 import { useDynamicPagination } from '@/components/common/dynamic-table/hooks/useDynamicPagination';
 import { Button } from '@/components/ui/button';
@@ -14,13 +14,9 @@ import { useQueryInvalidation, QUERY_KEYS } from '@/hooks/useQueryInvalidation';
 
 const AssignCreationTable = () => {
   const { invalidateQueries } = useQueryInvalidation();
-  const { setTitle } = usePageTitle();
+  usePageTitle('Assign');
   const { getUserHashedKey } = useCurrentUser();
   const currentUserHashedKey = getUserHashedKey();
-
-  useEffect(() => {
-    setTitle('Assign');
-  }, [setTitle]);
 
   const { data, isLoading, error } = useGetData<any[]>({
     endpoint: API.CHECKER.ASSIGN.LIST,
@@ -111,7 +107,7 @@ const AssignCreationTable = () => {
     }
   };
 
-  const columns = getAssignCreationColumns(handleSelectionChange);
+  const columns = GetAssignCreationColumns(handleSelectionChange);
 
   return (
     <div className="flex flex-col">

@@ -2,7 +2,7 @@ import { Routes, Route } from 'react-router-dom';
 import { adminRoutes } from './Routes';
 import { ProtectedRoute } from './ProtectedRoute';
 import NotFoundPage from '@/components/common/NotFoundPage';
-import Layout from '@/features/admin/components/AdminLayout';
+import Layout from '@/components/layout/AdminLayout';
 
 export const AdminRoutes = () => {
   return (

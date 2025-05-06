@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { ChevronDown } from 'lucide-react';
-import { NavLinkProps } from './navigation.types';
+import { NavLinkProps } from '../../types/navigation.types';
 
 export const NavLink: React.FC<NavLinkProps> = ({
   item,

@@ -1,10 +1,10 @@
+import { useEffect, useState, useCallback, useRef } from 'react';
 import dayjs from 'dayjs';
 import { CalendarDays, RefreshCw } from 'lucide-react';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
-import { useEffect, useState, useCallback, useRef } from 'react';
 
 import { SearchInput } from './SearchInput';
-import { TableSearchFilterProps } from './filter.types';
+import { TableSearchFilterProps } from '../types/filter.types';
 import {
   Select,
   SelectContent,

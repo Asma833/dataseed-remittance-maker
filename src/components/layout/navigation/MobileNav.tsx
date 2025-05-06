@@ -8,7 +8,7 @@ import {
   AccordionTrigger,
 } from '@/components/ui/accordion';
 import { Button } from '@/components/ui/button';
-import { MobileNavProps } from './navigation.types';
+import { MobileNavProps } from '../../types/navigation.types';
 
 export const MobileNav: React.FC<MobileNavProps> = ({
   navItems,

@@ -16,7 +16,7 @@ interface HandleNavigate {
   (path: string, rowData: string): void;
 }
 
-export const getUserTableColumns = (
+export const GetUserTableColumns = (
   handleStatusChange: HandleStatusChange,
   handleNavigate: HandleNavigate
 ): TableColumn[] => {

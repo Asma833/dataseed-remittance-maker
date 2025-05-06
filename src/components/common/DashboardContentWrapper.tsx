@@ -1,5 +1,6 @@
 import { cn } from '@/utils/cn';
 import { DashboardContentWrapperProps } from '../types/common-components.types';
+import PageTitle from '../layout/titles/PageTitle';
 
 const DashboardContentWrapper = ({
   children,
@@ -12,6 +13,7 @@ const DashboardContentWrapper = ({
         className
       )}
     >
+      <PageTitle />
       {children}
     </div>
   );

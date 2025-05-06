@@ -1,4 +1,4 @@
-export const getAssignCreationColumns = (
+export const GetAssignCreationColumns = (
   handleSelectionChange: (rowId: string, checked: boolean) => void
 ) => [
   {

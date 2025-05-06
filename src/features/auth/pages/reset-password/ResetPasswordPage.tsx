@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
-import AuthLayout from '../../components/AuthLayout';
+import AuthLayout from '../../../../components/layout/AuthLayout';
 import ChangePasswordForm from '../../components/ChangePasswordForm';
 import { ROUTES } from '@/core/constant/routePaths';
 import {

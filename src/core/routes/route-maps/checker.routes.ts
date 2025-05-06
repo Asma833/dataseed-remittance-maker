@@ -13,7 +13,7 @@ export const checkerComponents = {
   UpdateIncident: lazy(
     () =>
       import(
-        '@/features/checker/pages/update-incident/update-incident-table/UpdateIncidentCreationTable'
+        '@/features/checker/pages/update-incident/update-incident-table/UpdateIncidentTable'
       )
   ),
   ViewAll: lazy(

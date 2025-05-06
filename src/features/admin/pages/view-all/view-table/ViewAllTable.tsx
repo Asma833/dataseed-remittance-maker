@@ -1,19 +1,14 @@
-import { useEffect } from 'react';
 import { DynamicTable } from '@/components/common/dynamic-table/DynamicTable';
 import { useDynamicPagination } from '@/components/common/dynamic-table/hooks/useDynamicPagination';
 import { Button } from '@/components/ui/button';
 import { API } from '@/core/constant/apis';
-import { getTransactionTableColumns } from './view-all-table-col';
+import { GetTransactionTableColumns } from './ViewAllTableColumns';
 import { exportToCSV } from '@/utils/exportUtils';
 import { usePageTitle } from '@/hooks/usePageTitle';
 import useGetAllOrders from '@/features/admin/hooks/useGetAllOrders';
 
 const ViewAllTable = () => {
-  const { setTitle } = usePageTitle();
-
-  useEffect(() => {
-    setTitle('View All');
-  }, [setTitle]);
+  usePageTitle('View All');
 
   const {
     data: viewAllData,
@@ -30,7 +25,7 @@ const ViewAllTable = () => {
     totalRecordsPath: 'totalRecords',
   });
 
-  const columns = getTransactionTableColumns();
+  const columns = GetTransactionTableColumns();
 
   const handleExportToCSV = () => {
     const dataToExport = viewAllData || [];

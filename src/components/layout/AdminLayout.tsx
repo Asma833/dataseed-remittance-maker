@@ -2,7 +2,7 @@ import { useState } from 'react';
 import DashboardContentWrapper from '@/components/common/DashboardContentWrapper';
 import Header from '@/components/layout/side-navigaion/HeaderNav';
 import { ReactNode } from 'react';
-import SideNavigation from './side-navigation/SideNav';
+import SideNavigation from '../../features/admin/components/side-navigation/SideNav';
 
 interface CoAdminLayoutProps {
   children: ReactNode;

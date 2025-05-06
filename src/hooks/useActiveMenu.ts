@@ -1,6 +1,6 @@
 import { useState, useEffect, useCallback } from 'react';
 import { useLocation } from 'react-router-dom';
-import { NavItem } from '@/components/layout/navigation/navigation.types';
+import { NavItem } from '@/components/types/navigation.types';
 
 export const useActiveMenu = (navItems: NavItem[]) => {
   const location = useLocation();

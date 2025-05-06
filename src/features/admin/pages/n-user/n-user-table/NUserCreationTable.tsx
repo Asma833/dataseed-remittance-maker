@@ -1,27 +1,27 @@
 import { useNavigate } from 'react-router-dom';
 import { PlusIcon } from 'lucide-react';
 import { DynamicTable } from '@/components/common/dynamic-table/DynamicTable';
-import { getUserTableColumns } from './n-user-creation-table-col';
-import { useEffect } from 'react';
+import { GetUserTableColumns } from './NUserCreationTableColumns';
 import { Button } from '@/components/ui/button';
 import { useFilterApi } from '@/components/common/dynamic-table/hooks/useFilterApi';
 import { API } from '@/core/constant/apis';
 import { usePageTitle } from '@/hooks/usePageTitle';
 import { useUpdateStatusAPI } from '@/features/admin/hooks/useUserUpdateStatus';
-import { useGetUserApi } from '@/features/admin/hooks/useGetUser';
+import { useGetData } from '@/hooks/useGetData';
+import { User } from '@/features/auth/types/auth.types';
+import { queryKeys } from '@/core/constant/queryKeys';
+import { cn } from '@/utils/cn';
 
 const NuserCreationTable = () => {
   const navigate = useNavigate();
-  const { setTitle } = usePageTitle();
-  useEffect(() => {
-    setTitle('N-Users');
-  }, [setTitle]);
+  usePageTitle('N-Users');
 
-  const {
-    data: users = [],
-    loading,
-    error,
-  } = useGetUserApi('NUSERS.USER.LIST');
+  const { data, isLoading: loading } = useGetData<User[]>({
+    endpoint: API.NUSERS.USER.LIST,
+    queryKey: queryKeys.user.allUsers,
+    dataPath: '',
+  });
+  const users = data || [];
 
   const { mutate: updateStatus } = useUpdateStatusAPI();
 
@@ -50,12 +50,18 @@ const NuserCreationTable = () => {
       // For example: clientId: '123'
     },
   });
-  const columns = getUserTableColumns(handleStatusChange, handleNavigate);
+  const columns = GetUserTableColumns(handleStatusChange, handleNavigate);
 
   return (
     <div className="">
       <div className="flex flex-col">
-        <div className="mb-4 flex items-center">
+        <div
+          className={cn(
+            'mb-4 flex items-center',
+            !filterApi.loading ? 'hidden' : '',
+            !filterApi.error ? 'hidden' : ''
+          )}
+        >
           {filterApi.loading && (
             <span className="text-blue-500">Loading data...</span>
           )}

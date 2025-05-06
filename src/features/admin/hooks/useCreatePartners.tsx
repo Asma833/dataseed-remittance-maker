@@ -5,7 +5,7 @@ import { UserApiPayload, UserCreationRequest } from '../types/partner.type';
 import { useGetProducts } from '@/hooks/useGetProducts';
 import { HEADER_KEYS } from '@/core/constant/apis';
 import { useCurrentUser } from '@/utils/getUserFromRedux';
-import { partnerApi } from '../api/partnerApi';
+import { partnerApi } from '../action/partnerApi';
 
 export const useCreatePartner = (
   roleCode: string,

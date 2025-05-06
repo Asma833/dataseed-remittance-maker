@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { SetFilters } from '@/components/filter/filter.types';
+import { SetFilters } from '@/components/types/filter.types';
 import axiosInstance from '@/core/services/axios/axiosInstance';
 
 interface UseFilterApiProps {

@@ -6,13 +6,9 @@ import { usePageTitle } from '@/hooks/usePageTitle';
 
 export const Dashboard: React.FC = () => {
   const { data: metrics, isLoading, error } = useGetDashboardCardMetrics();
-  const { setTitle } = usePageTitle();
+  usePageTitle('Dashboard');
   // Generate dashboard items using the fetched metrics
   const dashboardItems = createDashboardData(metrics);
-
-  useEffect(() => {
-    setTitle('Dashboard');
-  }, [setTitle]);
 
   return (
     <>

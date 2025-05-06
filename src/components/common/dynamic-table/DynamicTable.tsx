@@ -16,7 +16,7 @@ import {
   Column,
   DynamicTableProps,
 } from '@/components/types/common-components.types';
-import { SetFilters } from '@/components/filter/filter.types';
+import { SetFilters } from '@/components/types/filter.types';
 import { Button } from '@/components/ui/button';
 import { TablePagination } from './TablePagination';
 import TableDataLoader from './TableDataLoader';

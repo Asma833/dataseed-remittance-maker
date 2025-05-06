@@ -1,4 +1,4 @@
-export const getTransactionTableColumns = () => [
+export const GetTransactionTableColumns = () => [
   {
     key: 'nium_order_id',
     id: 'nium_order_id',

@@ -1,6 +1,6 @@
+import { useState } from 'react';
 import { DynamicTable } from '@/components/common/dynamic-table/DynamicTable';
-import { getTransactionTableColumns } from './update-incident-creation-table-col';
-import { useEffect, useState } from 'react';
+import { GetTransactionTableColumns } from './UpdateIncidentTableColumns';
 import { DialogWrapper } from '@/components/common/DialogWrapper';
 import { useDynamicPagination } from '@/components/common/dynamic-table/hooks/useDynamicPagination';
 import { useFilterApi } from '@/components/common/dynamic-table/hooks/useFilterApi';
@@ -10,6 +10,7 @@ import { useCurrentUser } from '@/utils/getUserFromRedux';
 import UpdateIncidentForm from '../incident-form/UpdateIncidentForm';
 import useUnassignChecker from '@/features/checker/hooks/useUnassignChecker';
 import { useSendEsignLink } from '@/features/checker/hooks/useSendEsignLink';
+import { cn } from '@/utils/cn';
 
 interface RowData {
   nium_order_id: string;
@@ -17,7 +18,7 @@ interface RowData {
 }
 
 const UpdateIncidentCreationTable = () => {
-  const { setTitle } = usePageTitle();
+  usePageTitle('Update Incident');
   const { getUserHashedKey } = useCurrentUser();
   const currentUserHashedKey = getUserHashedKey();
 
@@ -25,10 +26,6 @@ const UpdateIncidentCreationTable = () => {
   const { handleUnassign: unassignChecker, isPending: isUnassignPending } =
     useUnassignChecker();
   const { mutate: sendEsignLink, isSendEsignLinkLoading } = useSendEsignLink();
-
-  useEffect(() => {
-    setTitle('Update Incident');
-  }, [setTitle]);
 
   const requestData = {
     checkerId: currentUserHashedKey || '',
@@ -83,7 +80,7 @@ const UpdateIncidentCreationTable = () => {
     );
   };
 
-  const columns = getTransactionTableColumns(
+  const columns = GetTransactionTableColumns(
     openModal,
     handleUnassign,
     handleRegenerateEsignLink,
@@ -94,7 +91,13 @@ const UpdateIncidentCreationTable = () => {
   return (
     <div>
       <div className="flex flex-col">
-        <div className="mb-4 flex items-center">
+        <div
+          className={cn(
+            'mb-4 flex items-center',
+            !filterApi.loading ? 'hidden' : '',
+            !filterApi.error ? 'hidden' : ''
+          )}
+        >
           {(filterApi.loading || pagination.loading || isLoading) && (
             <span className="text-blue-500">Loading data...</span>
           )}
