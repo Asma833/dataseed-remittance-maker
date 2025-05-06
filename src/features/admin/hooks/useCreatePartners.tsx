@@ -23,11 +23,10 @@ export const useCreatePartner = (
   const productIds = getProductIds() || { card: '', remittance: '' };
   const { getUser } = useCurrentUser();
   const user = getUser();
-  
+
   const mapFormDataToApiPayload = async (
     formData: UserCreationRequest
   ): Promise<UserApiPayload> => {
-    
     const product_ids: string[] = [];
 
     if (formData.productType.both) {

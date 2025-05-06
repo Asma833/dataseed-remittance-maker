@@ -44,11 +44,13 @@ export const userSchema = z
       .regex(
         /[@$!%*?&]/,
         'Password must contain at least one special character (@, $, !, %, *, ?, &)'
-      ).optional(),
+      )
+      .optional(),
 
     confirmPassword: z
       .string()
-      .min(6, 'Confirm password must be at least 6 characters').optional(),
+      .min(6, 'Confirm password must be at least 6 characters')
+      .optional(),
   })
   .refine((data) => data.password === data.confirmPassword, {
     message: 'Passwords do not match',

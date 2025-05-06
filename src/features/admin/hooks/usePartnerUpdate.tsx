@@ -41,7 +41,7 @@ export const usePartnerUpdate = () => {
         hashed_key: getUserHashedKey() || '',
         password: data.password,
         updated_by: getUserId() || '',
-        products: product_ids  || [],
+        products: product_ids || [],
         role_id: data.role || '',
         is_active: data.isActive ?? true,
         branch_id: getBranchId() || '',

@@ -86,7 +86,7 @@ export interface UserCreationRequest {
   business_type?: string;
   created_by?: string;
   updated_by?: string;
-  products?: string[],
+  products?: string[];
   productType: {
     card: boolean;
     remittance: boolean;
