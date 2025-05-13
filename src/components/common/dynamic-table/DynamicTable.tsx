@@ -1,5 +1,5 @@
-import { useState } from "react";
-import { FileX2 } from "lucide-react";
+import { useState } from 'react';
+import { FileX2 } from 'lucide-react';
 import {
   Table,
   TableBody,
@@ -7,25 +7,28 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from "@/components/ui/table";
-import TableSearchFilter from "../../filter/TableSearchFilter";
-import TableDataLoader from "./TableDataLoader";
-import { TablePagination } from "./TablePagination";
-import { cn } from "@/utils/cn";
-import { useTableSorting } from "@/components/common/dynamic-table/hooks/useTableSorting";
-import { useTablePagination } from "@/components/common/dynamic-table/hooks/useTablePagination";
-import { Column, DynamicTableProps } from "../common-components.types";
-import { SetFilters } from "../../filter/filter.types";
-import { Button } from "@/components/ui/button";
+} from '@/components/ui/table';
+import TableSearchFilter from '@/components/filter/TableSearchFilter';
+import { cn } from '@/utils/cn';
+import { useTableSorting } from '@/components/common/dynamic-table/hooks/useTableSorting';
+import { useTablePagination } from '@/components/common/dynamic-table/hooks/useTablePagination';
+import {
+  Column,
+  DynamicTableProps,
+} from '@/components/types/common-components.types';
+import { SetFilters } from '@/components/types/filter.types';
+import { Button } from '@/components/ui/button';
+import { TablePagination } from './TablePagination';
+import TableDataLoader from './TableDataLoader';
 
 const formatDate = (date: Date | string | undefined) => {
-  if (!date) return "";
+  if (!date) return '';
   const d = new Date(date);
-  if (isNaN(d.getTime())) return "";
-  return d.toLocaleDateString("en-US", {
-    year: "numeric",
-    month: "2-digit",
-    day: "2-digit",
+  if (isNaN(d.getTime())) return '';
+  return d.toLocaleDateString('en-US', {
+    year: 'numeric',
+    month: '2-digit',
+    day: '2-digit',
   });
 };
 
@@ -37,28 +40,28 @@ const getCellContent = <T extends Record<string, any>>(
     return column.cell(row[column.id], row);
   }
 
-  const value = row[column.id] || "-";
+  const value = row[column.id] || '-';
 
   if (value instanceof Date) {
     return formatDate(value);
   }
 
-  if (typeof value === "string") {
+  if (typeof value === 'string') {
     const datePattern = /^\d{4}-\d{2}-\d{2}|^\d{2}[-/]\d{2}[-/]\d{4}/;
     if (datePattern.test(value) && !isNaN(Date.parse(value))) {
       return formatDate(value);
     }
   }
 
-  if (typeof value === "object" && value !== null) {
+  if (typeof value === 'object' && value !== null) {
     try {
       return JSON.stringify(value);
     } catch {
-      return "";
+      return '';
     }
   }
 
-  return String(value ?? "");
+  return String(value ?? '');
 };
 
 export function DynamicTable<T extends Record<string, any>>({
@@ -68,21 +71,19 @@ export function DynamicTable<T extends Record<string, any>>({
   data: initialData,
   initialPageSize = 10,
   defaultSortColumn,
-  defaultSortDirection = "asc",
-  pageSizeOption = [10, 15, 20, 25],
+  defaultSortDirection = 'asc',
+  pageSizeOption = [10, 15, 20, 25, 50],
   onRowClick,
-  paginationMode,
   filter,
   refreshAction,
   loading: externalLoading,
   renderComponents,
-  onPageChange,
   totalRecords,
 }: DynamicTableProps<T>) {
   const [filters, setFilters] = useState<SetFilters>({
-    search: "",
-    status: "all",
-    role: "",
+    search: '',
+    status: 'all',
+    role: '',
     dateRange: { from: undefined, to: undefined },
     customFilterValues: {},
   });
@@ -90,24 +91,30 @@ export function DynamicTable<T extends Record<string, any>>({
   const [internalLoading, setInternalLoading] = useState(false);
   const [dynamicData, setDynamicData] = useState<T[]>([]);
 
+  // Track pagination action state
+  const [isPaginationAction, setIsPaginationAction] = useState(false);
+
   // Use dynamic data if in dynamic mode, otherwise use filtered data
-  const mode = filter?.mode || "static";
+  const mode = filter?.mode || 'static';
   const loading = externalLoading || internalLoading;
 
   // Use either the dynamically fetched data or the original data based on mode
   const dataSource =
-    mode === "dynamic" && dynamicData.length > 0 ? dynamicData : initialData;
+    mode === 'dynamic' && dynamicData.length > 0 ? dynamicData : initialData;
 
   const { sortedData, sortColumn, sortDirection, toggleSort } = useTableSorting(
-    dataSource,
+    dataSource || [], // Ensure dataSource is an array
     defaultSortColumn as string | undefined,
     defaultSortDirection
   );
 
+  // Ensure sortedData is always an array before filtering
+  const dataToFilter = Array.isArray(sortedData) ? sortedData : [];
+
   // Only filter data in static mode
   const filteredData =
-    mode === "static"
-      ? sortedData.filter((item) => {
+    mode === 'static'
+      ? dataToFilter.filter((item) => {
           // Apply search filter
           if (filters.search && filter?.filterOption) {
             const searchTerm = filters.search.toLowerCase();
@@ -142,7 +149,7 @@ export function DynamicTable<T extends Record<string, any>>({
           if (
             filter?.statusFilerColumn &&
             filters.status &&
-            filters.status !== "all"
+            filters.status !== 'all'
           ) {
             const statusColumn = filter.statusFilerColumn as string;
             if (item[statusColumn] !== filters.status) return false;
@@ -152,7 +159,7 @@ export function DynamicTable<T extends Record<string, any>>({
           for (const [key, value] of Object.entries(
             filters.customFilterValues
           )) {
-            if (value && value !== "all" && item[key] !== value) return false;
+            if (value && value !== 'all' && item[key] !== value) return false;
           }
 
           return true;
@@ -168,23 +175,62 @@ export function DynamicTable<T extends Record<string, any>>({
     setCurrentPage,
   } = useTablePagination(filteredData, initialPageSize, pageSizeOption);
 
+  // We need to track filter operations separately
+  const [lastFiltered, setLastFiltered] = useState<number>(0);
+
+  // Force only one filter operation per 500ms
   const handleFilter = () => {
+    const now = Date.now();
+    // Skip if we're in the middle of a pagination action
+    if (isPaginationAction) {
+      return;
+    }
+
+    if (now - lastFiltered < 500) {
+      return;
+    }
+
+    setLastFiltered(now);
     setCurrentPage(1);
   };
 
   const handleReset = () => {
+    // Skip if we're in the middle of a pagination action
+    if (isPaginationAction) return;
+
+    const now = Date.now();
+    // Skip if we just filtered recently
+    if (now - lastFiltered < 500) return;
+
+    setLastFiltered(now);
+
     setFilters({
-      search: "",
-      status: "all",
-      role: "",
+      search: '',
+      status: 'all',
+      role: '',
       dateRange: { from: undefined, to: undefined },
       customFilterValues: {},
     });
     setCurrentPage(1);
 
     // Reset dynamic data to empty if in dynamic mode
-    if (mode === "dynamic") {
+    if (mode === 'dynamic') {
       setDynamicData([]);
+    }
+  };
+
+  // Track when setCurrentPage is called with proper timeout
+  const handlePageChange = (page: number) => {
+    // Only log when the page is actually changing to reduce noise
+    if (page !== currentPage) {
+      // Set pagination action flag to true before changing page
+      setIsPaginationAction(true);
+      // Set the page
+      setCurrentPage(page);
+      // Clear the pagination flag after a short delay
+      setTimeout(() => {
+        setIsPaginationAction(false);
+      }, 200);
     }
   };
 
@@ -195,11 +241,11 @@ export function DynamicTable<T extends Record<string, any>>({
           <Button
             onClick={refreshAction.onRefresh}
             variant="outline"
-            size={"sm"}
+            size={'sm'}
           >
             {refreshAction.refreshButtonText
               ? refreshAction.refreshButtonText
-              : "Refresh Data"}
+              : 'Refresh Data'}
           </Button>
 
           <div>
@@ -229,6 +275,7 @@ export function DynamicTable<T extends Record<string, any>>({
                   onReset={handleReset}
                   setLoading={setInternalLoading}
                   setDynamicData={setDynamicData}
+                  isPaginationAction={isPaginationAction}
                 />
               </div>
             )}
@@ -239,7 +286,7 @@ export function DynamicTable<T extends Record<string, any>>({
 
       <div
         className={cn(
-          "overflow-x-auto w-full bg-[--table-bg] rounded-lg shadow-sm",
+          'overflow-x-auto w-full bg-[--table-bg] rounded-lg shadow-sm',
           tableWrapperClass
         )}
       >
@@ -251,8 +298,8 @@ export function DynamicTable<T extends Record<string, any>>({
                   <TableHead
                     key={col.id}
                     className={cn(
-                      "min-w-40 odz-th border-r-2 border-[--table-border] text-center",
-                      col.sortable && "cursor-pointer",
+                      'min-w-40 odz-th border-r-2 border-[--table-border] text-center',
+                      col.sortable && 'cursor-pointer',
                       col.className
                     )}
                     onClick={() => col.sortable && toggleSort(col.id)}
@@ -260,7 +307,7 @@ export function DynamicTable<T extends Record<string, any>>({
                     {col.name}
                     {sortColumn === col.id && (
                       <span className="ml-2">
-                        {sortDirection === "asc" ? "↑" : "↓"}
+                        {sortDirection === 'asc' ? '↑' : '↓'}
                       </span>
                     )}
                   </TableHead>
@@ -270,25 +317,33 @@ export function DynamicTable<T extends Record<string, any>>({
             <TableBody className="odz-table-body">
               {!loading ? (
                 paginatedData.length > 0 ? (
-                  paginatedData.map((row, idx) => (
-                    <TableRow
-                      key={idx}
-                      className={cn(
-                        "odz-table-row",
-                        onRowClick && "cursor-pointer hover:bg-gray-50"
-                      )}
-                      onClick={() => onRowClick?.(row)}
-                    >
-                      {columns.map((col: Column<T>) => (
-                        <TableCell
-                          className="odz-table-cell border-r-2 border-[--table-border] text-center"
-                          key={`${idx}-${col.key}`}
-                        >
-                          {getCellContent(row, col)}
-                        </TableCell>
-                      ))}
-                    </TableRow>
-                  ))
+                  paginatedData.map((row, idx) => {
+                    // Try to use a unique key from the row, fallback to idx
+                    const rowKey =
+                      row.id ??
+                      row.niumId ??
+                      row._id ??
+                      `${currentPage}-${idx}`;
+                    return (
+                      <TableRow
+                        key={rowKey}
+                        className={cn(
+                          'odz-table-row',
+                          onRowClick && 'cursor-pointer hover:bg-gray-50'
+                        )}
+                        onClick={() => onRowClick?.(row)}
+                      >
+                        {columns.map((col: Column<T>) => (
+                          <TableCell
+                            className="odz-table-cell border-r-2 border-[--table-border] text-center"
+                            key={`${rowKey}-${col.key}`}
+                          >
+                            {getCellContent(row, col)}
+                          </TableCell>
+                        ))}
+                      </TableRow>
+                    );
+                  })
                 ) : (
                   <TableRow className="odz-table-row">
                     <TableCell
@@ -324,10 +379,8 @@ export function DynamicTable<T extends Record<string, any>>({
           pageSize={pageSize}
           pageSizeOption={pageSizeOption}
           setPageSize={setPageSize}
-          setCurrentPage={setCurrentPage}
+          setCurrentPage={handlePageChange}
           filteredDataLength={filteredData.length}
-          paginationMode={paginationMode || "static"}
-          onPageChange={onPageChange}
           totalRecords={totalRecords ? totalRecords : filteredData.length}
         />
       )}

@@ -1,8 +1,9 @@
-import { Routes, Route } from "react-router-dom";
-import { ProtectedRoute } from "./ProtectedRoute";
-import AdminLayout from "@/features/admin-portal/components/AdminLayout";
-import NotFoundPage from "@/components/common/NotFoundPage";
-import { adminRoutes } from "./RoutesConfig";
+import { Routes, Route } from 'react-router-dom';
+import { adminRoutes } from './Routes';
+import { ProtectedRoute } from './ProtectedRoute';
+import NotFoundPage from '@/components/common/NotFoundPage';
+import Layout from '@/components/layout/AdminLayout';
+
 export const AdminRoutes = () => {
   return (
     <Routes>
@@ -12,9 +13,9 @@ export const AdminRoutes = () => {
           path={path}
           element={
             <ProtectedRoute roles={roles} permission={permission}>
-              <AdminLayout>
+              <Layout>
                 <Element />
-              </AdminLayout>
+              </Layout>
             </ProtectedRoute>
           }
         />
@@ -22,9 +23,9 @@ export const AdminRoutes = () => {
       <Route
         path="*"
         element={
-          <AdminLayout>
+          <Layout>
             <NotFoundPage />
-          </AdminLayout>
+          </Layout>
         }
       />
     </Routes>

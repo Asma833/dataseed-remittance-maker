@@ -11,6 +11,7 @@ interface BankAccount {
 interface Branch {
   id: string;
   name: string;
+  business_type: string;
 }
 
 interface Role {
@@ -47,37 +48,45 @@ interface RootState {
 
 export const useCurrentUser = () => {
   const user = useSelector((state: RootState) => state.auth.user);
-  
+
   const getUserHashedKey = (): string | undefined => {
     return user?.hashed_key;
   };
-  
+
   const getUserRole = (): string | undefined => {
     return user?.role.name;
   };
-  
+
   const getUserId = (): string | undefined => {
     return user?.id;
   };
-  
+
+  const getUser = (): User | null => {
+    return user;
+  };
+
   const getUserEmail = (): string | undefined => {
     return user?.email;
   };
-  
+
   const getBranchId = (): string | undefined => {
     return user?.branch.id;
   };
   const getBankAccountId = (): string | undefined => {
     return user?.bank_account.id;
   };
-  
+  const getBusinessType = (): string | undefined => {
+    return user?.business_type;
+  };
   return {
     user,
     getUserHashedKey,
     getUserRole,
     getUserId,
+    getUser,
     getUserEmail,
     getBranchId,
-    getBankAccountId
+    getBankAccountId,
+    getBusinessType,
   };
 };

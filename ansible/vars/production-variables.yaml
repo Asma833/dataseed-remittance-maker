@@ -1,11 +1,15 @@
 # VPC Variables
-vpc_id: "vpc-0ca0aee089d8654df"
-cluster_name: "niumforex-ecs-cluster"
+vpc_id: 'vpc-0ca0aee089d8654df'
+cluster_name: 'niumforex-ecs-cluster'
 
 # Application Variables
-app_name: "forex-agent-portal-frontend"
-secret_arn: ""
-react_app_env: "production"
+app_name: 'forex-agent-portal-fe'
+secret_arn: 'arn:aws:secretsmanager:ap-south-1:187296086360:secret:Nium-forex-agent-portal-frontend-Preprod-rXRymC'
+react_app_env: 'production'
+
+container_port: 3000
+tg_port: 80 # This should be the port where your target group listens
+tg_health_check_path: '/login'
 
 # Scaling Variables
 desired_count: 2

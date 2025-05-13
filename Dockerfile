@@ -8,10 +8,12 @@ WORKDIR /app
 COPY package.json package-lock.json ./
 
 # Install dependencies
-RUN npm ci
+RUN npm install --legacy-peer-deps
 
 # Copy all application files
 COPY . .
+
+COPY .env .env
 
 # Build the application
 RUN npm run build
@@ -23,4 +25,4 @@ RUN npm install -g serve
 EXPOSE 3000
 
 # Start serve
-CMD ["serve", "-s", "build", "-l", "3000"]
+CMD ["serve", "-s", "dist", "-l", "3000"]

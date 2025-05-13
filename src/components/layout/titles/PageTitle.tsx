@@ -1,10 +1,12 @@
-import { usePageTitle } from "@/hooks/usePageTitle";
+import { usePageTitle } from '@/hooks/usePageTitle';
 
 const PageTitle = () => {
   const { title } = usePageTitle();
   return (
-    <div className="w-full">
-      <h1 className="text-2xl font-bold text-muted-foreground mb-3">{title}</h1>
+    <div className="page-title-wrap w-full">
+      <h2 className="page-title text-2xl font-bold text-muted-foreground mb-2">
+        {title}
+      </h2>
     </div>
   );
 };

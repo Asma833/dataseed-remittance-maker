@@ -1,97 +1,124 @@
-import { ChevronLeft, ChevronRight } from "lucide-react";
-import { Button } from "@/components/ui/button";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { TablePaginationProps } from '../common-components.types';
+import React from 'react';
+import {
+  Pagination,
+  PaginationContent,
+  PaginationItem,
+  PaginationNext,
+  PaginationPrevious,
+} from '@/components/ui/pagination';
+import { Button } from '@/components/ui/button';
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from '@/components/ui/select';
 
-export function TablePagination({
+interface TablePaginationProps {
+  currentPage: number;
+  totalPages: number;
+  setCurrentPage: (page: number) => void;
+  pageSize: number;
+  pageSizeOption?: number[];
+  setPageSize: (pageSize: number) => void;
+  filteredDataLength: number;
+  totalRecords: number;
+}
+
+export const TablePagination = ({
   currentPage,
   totalPages,
-  pageSize,
-  pageSizeOption,
-  setPageSize,
   setCurrentPage,
+  pageSize,
+  pageSizeOption = [10, 15, 20, 25],
+  setPageSize,
   filteredDataLength,
-  paginationMode,
-  onPageChange
-}: TablePaginationProps) {
-  const getPageNumbers = () => {
-    const pages: (number | string)[] = [];
-    const maxVisiblePages = 5;
-
-    if (totalPages <= maxVisiblePages) {
+  totalRecords,
+}: TablePaginationProps) => {
+  // Generate page numbers to display (max 5)
+  const generatePageNumbers = () => {
+    // If totalPages <= 5, display all pages
+    if (totalPages <= 5) {
       return Array.from({ length: totalPages }, (_, i) => i + 1);
     }
 
-    if (currentPage <= 3) {
-      for (let i = 1; i <= 4; i++) {
-        pages.push(i);
+    // Always include first and last page
+    const pages = new Set<number>([1, totalPages]);
+
+    // Add current page and one page before and after
+    pages.add(currentPage);
+    if (currentPage > 1) pages.add(currentPage - 1);
+    if (currentPage < totalPages) pages.add(currentPage + 1);
+
+    // Fill in any gaps if we have less than 5 pages
+    const pagesArray = Array.from(pages).sort((a, b) => a - b);
+    if (pagesArray.length < 5) {
+      // Add more pages before or after current page to reach 5
+      if (currentPage <= 3) {
+        // Add more pages after current
+        while (
+          pagesArray.length < 5 &&
+          pagesArray[pagesArray.length - 2] < totalPages - 1
+        ) {
+          const nextPage = pagesArray[pagesArray.length - 2] + 1;
+          pagesArray.splice(pagesArray.length - 1, 0, nextPage);
+        }
+      } else {
+        // Add more pages before current
+        while (pagesArray.length < 5 && pagesArray[1] > 2) {
+          const prevPage = pagesArray[1] - 1;
+          pagesArray.splice(1, 0, prevPage);
+        }
       }
-      pages.push("...");
-      pages.push(totalPages);
-    } else if (currentPage >= totalPages - 2) {
-      pages.push(1);
-      pages.push("...");
-      for (let i = totalPages - 3; i <= totalPages; i++) {
-        pages.push(i);
-      }
-    } else {
-      pages.push(1);
-      pages.push("...");
-      pages.push(currentPage - 1);
-      pages.push(currentPage);
-      pages.push(currentPage + 1);
-      pages.push("...");
-      pages.push(totalPages);
     }
 
-    return pages;
+    return pagesArray;
+  };
+
+  const handlePageSizeChange = (value: string) => {
+    const newSize = parseInt(value, 10);
+    setPageSize(newSize);
+    // Reset to page 1 when page size changes
+    setCurrentPage(1);
   };
 
   const handlePageChange = (page: number) => {
-    if (page === currentPage) return;
-    
-    if (paginationMode === 'dynamic' && onPageChange) {
-      // In dynamic mode, call the provided callback to fetch data for the new page
-      onPageChange(page, pageSize);
-    }
-    
-    // Always update the current page state
+    // Don't do anything if trying to go to same page or invalid page
+    if (page === currentPage || page < 1 || page > totalPages) return;
+
+    // Call the parent's setCurrentPage method
     setCurrentPage(page);
   };
 
-  const handlePageSizeChange = (size: number) => {
-    const newSize = Number(size);
-    
-    if (paginationMode === 'dynamic' && onPageChange) {
-      // When changing page size in dynamic mode, reset to page 1 and fetch new data
-      onPageChange(1, newSize);
-      setCurrentPage(1);
-    }
-    
-    // Always update the page size state
-    setPageSize(newSize);
-  };
+  const pageNumbers = generatePageNumbers();
 
   return (
-    <div className="flex flex-col sm:flex-row items-center justify-between px-2">
-      <p className="text-sm text-gray-700">
-        Showing {filteredDataLength > 0 ? (currentPage - 1) * pageSize + 1 : 0} to{" "}
-        {Math.min(currentPage * pageSize, filteredDataLength)} of {filteredDataLength} entries
-      </p>
-      <div className="flex gap-3">
-        <div>
-          <Select 
-            value={pageSize.toString()} 
-            onValueChange={(value) => handlePageSizeChange(Number(value))}
+    <div className="flex justify-between items-center mt-4 flex-col md:flex-row gap-4">
+      <div className="flex items-center space-x-4">
+        <span className="text-sm md:text-nowrap">
+          Showing{' '}
+          <span className="font-medium">
+            {filteredDataLength === 0 ? 0 : (currentPage - 1) * pageSize + 1}
+          </span>{' '}
+          to{' '}
+          <span className="font-medium">
+            {Math.min(currentPage * pageSize, totalRecords)}
+          </span>{' '}
+          of <span className="font-medium">{totalRecords}</span> results
+        </span>
+
+        <div className="flex items-center space-x-2">
+          <span className="text-sm">Show</span>
+          <Select
+            value={pageSize.toString()}
+            onValueChange={handlePageSizeChange}
           >
-            <SelectTrigger className="text-black">
-              <span className="flex items-center">
-                <span className="mr-2 text-muted-foreground">Rows per page:</span>
-                <SelectValue placeholder="Select rows per page" />
-              </span>
+            <SelectTrigger className="h-8 w-16">
+              <SelectValue placeholder={pageSize} />
             </SelectTrigger>
             <SelectContent>
-              {pageSizeOption?.map((size: number) => (
+              {pageSizeOption.map((size) => (
                 <SelectItem key={size} value={size.toString()}>
                   {size}
                 </SelectItem>
@@ -99,48 +126,59 @@ export function TablePagination({
             </SelectContent>
           </Select>
         </div>
-        <div className="flex items-center space-x-2">
-          <Button
-            variant="outline"
-            size="sm"
-            onClick={() => handlePageChange(Math.max(currentPage - 1, 1))}
-            disabled={currentPage === 1}
-            className="bg-white text-black"
-          >
-            <ChevronLeft className="h-4 w-4" />
-          </Button>
-
-          <div className="flex items-center gap-1">
-            {getPageNumbers().map((pageNum, idx) =>
-              pageNum === "..." ? (
-                <span key={`ellipsis-${idx}`} className="px-2">
-                  ...
-                </span>
-              ) : (
-                <Button
-                  key={`page-${pageNum}`}
-                  variant={currentPage === pageNum ? "default" : "outline"}
-                  size="sm"
-                  onClick={() => handlePageChange(Number(pageNum))}
-                  className={currentPage === pageNum ? "paginationActive" : "paginationInactive"}
-                >
-                  {pageNum}
-                </Button>
-              )
-            )}
-          </div>
-
-          <Button
-            variant="outline"
-            size="sm"
-            onClick={() => handlePageChange(Math.min(currentPage + 1, totalPages))}
-            disabled={currentPage === totalPages}
-            className="bg-white text-black"
-          >
-            <ChevronRight className="h-4 w-4" />
-          </Button>
-        </div>
       </div>
+
+      <Pagination>
+        <PaginationContent>
+          <PaginationItem>
+            <PaginationPrevious
+              aria-label="Go to previous page"
+              className={
+                currentPage === 1 ? 'pointer-events-none opacity-50' : ''
+              }
+              onClick={() => handlePageChange(currentPage - 1)}
+            />
+          </PaginationItem>
+
+          {pageNumbers.map((page, index) => {
+            const isCurrentPage = page === currentPage;
+            const isFirstPage = index === 0;
+            const isLastPage = index === pageNumbers.length - 1;
+            const showEllipsisBefore = isFirstPage && page > 1 && page !== 2;
+            const showEllipsisAfter =
+              isLastPage && page < totalPages && page !== totalPages - 1;
+
+            return (
+              <React.Fragment key={page}>
+                {showEllipsisBefore && <PaginationItem>...</PaginationItem>}
+                <PaginationItem>
+                  <Button
+                    variant={isCurrentPage ? 'default' : 'outline'}
+                    size="icon"
+                    onClick={() => handlePageChange(page)}
+                    className="h-8 w-8"
+                  >
+                    {page}
+                  </Button>
+                </PaginationItem>
+                {showEllipsisAfter && <PaginationItem>...</PaginationItem>}
+              </React.Fragment>
+            );
+          })}
+
+          <PaginationItem>
+            <PaginationNext
+              aria-label="Go to next page"
+              className={
+                currentPage === totalPages
+                  ? 'pointer-events-none opacity-50'
+                  : ''
+              }
+              onClick={() => handlePageChange(currentPage + 1)}
+            />
+          </PaginationItem>
+        </PaginationContent>
+      </Pagination>
     </div>
   );
-}
+};

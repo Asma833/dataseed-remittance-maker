@@ -1,6 +1,7 @@
 import axiosInstance from '@/core/services/axios/axiosInstance';
 import { useState, useEffect } from 'react';
 import { useCurrentUser } from '@/utils/getUserFromRedux';
+import { API } from '@/core/constant/apis';
 
 interface Role {
   id: string;
@@ -26,10 +27,12 @@ export const useGetRoleId = () => {
   useEffect(() => {
     const fetchRoles = async () => {
       try {
-        const response = await axiosInstance.get('/roles');
+        const response = await axiosInstance.get(API.USER.GET_ROLES);
         setRoles(response.data);
       } catch (err) {
-        setError(err instanceof Error ? err : new Error('Failed to fetch roles'));
+        setError(
+          err instanceof Error ? err : new Error('Failed to fetch roles')
+        );
       } finally {
         setLoading(false);
       }
@@ -40,13 +43,17 @@ export const useGetRoleId = () => {
 
   // Function to get role ID by name
   const getRoleId = (roleName: string): string | undefined => {
-    const role = roles.find((r) => r.name.toLowerCase() === roleName.toLowerCase());
+    const role = roles.find(
+      (r) => r.name.toLowerCase() === roleName.toLowerCase()
+    );
     return role?.id;
   };
 
   // Function to get hashed role key by name
   const getHashedRoleId = (roleName: string): string | undefined => {
-    const role = roles.find((r) => r.name.toLowerCase() === roleName.toLowerCase());
+    const role = roles.find(
+      (r) => r.name.toLowerCase() === roleName.toLowerCase()
+    );
     return role?.hashed_key;
   };
 

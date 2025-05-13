@@ -1,19 +1,26 @@
+import { useEffect, useState, useCallback, useRef } from 'react';
+import dayjs from 'dayjs';
+import { CalendarDays, RefreshCw } from 'lucide-react';
+import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 
-import dayjs from "dayjs";
-import { CalendarDays, RefreshCw } from "lucide-react";
-import { DatePicker } from "@mui/x-date-pickers/DatePicker";
-import { useEffect, useState } from "react";
-
-import { Button } from "../ui/button";
-import { SearchInput } from "./SearchInput";
-import { TableSearchFilterProps } from "./filter.types";
+import { SearchInput } from './SearchInput';
+import { TableSearchFilterProps } from '../types/filter.types';
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "../ui/select";
+} from '@/components/ui/select';
+import { Button } from '@/components/ui/button';
+
+const CustomCalendarIcon = () => {
+  return (
+    <div className="text-gray-500">
+      <CalendarDays className="h-4 w-4" />
+    </div>
+  );
+};
 
 const TableSearchFilter = ({
   filters,
@@ -23,9 +30,11 @@ const TableSearchFilter = ({
   onReset,
   setLoading,
   setDynamicData,
+  isPaginationAction,
 }: TableSearchFilterProps) => {
-  const { search, dateRange, status, selects } = filterConfig.rederFilerOptions;
-  const mode = filterConfig.mode || "static";
+  const { search, dateRange, status, selects } =
+    filterConfig.renderFilterOptions;
+  const mode = filterConfig.mode || 'static';
   const callbacks = filterConfig.dynamicCallbacks;
 
   // Store filter values locally to avoid applying them immediately
@@ -35,77 +44,145 @@ const TableSearchFilter = ({
     filters.customFilterValues
   );
 
-  // For dynamic search with debounce
-  useEffect(() => {
-    if (filters.search) {
-      const handler = setTimeout(async () => {
-        if (mode === "dynamic" && callbacks?.onSearch) {
-          if (setLoading) setLoading(true);
-          try {
-            const result = await callbacks?.onSearch?.(filters.search);
-            if (setDynamicData && result) setDynamicData(result);
-          } catch (error) {
-            console.error(error);
-          } finally {
-            if (setLoading) setLoading(false);
-          }
-        } else {
-          // For static mode, apply filter immediately
-          if (onFilter) onFilter();
-        }
-      }, 500);
+  // Add refs for debounce timer and previous search value to optimize search
+  const searchDebounceRef = useRef<NodeJS.Timeout | null>(null);
+  const prevSearchValueRef = useRef(filters.search);
 
-      return () => clearTimeout(handler);
-    } else {
-      // If search is cleared, immediately reset/refresh the table
-      handleSearchClear();
-    }
-    return undefined;
-  }, [filters.search]);
-
-  // Handle search clear/reset
-  const handleSearchClear = () => {
-    // Only reset the search filter, keep other filters intact
-    if (mode === "dynamic" && callbacks?.onSearch) {
+  const executeAsyncOperation = useCallback(
+    async <T,>(operation: () => Promise<T>) => {
       if (setLoading) setLoading(true);
       try {
-        callbacks?.onSearch?.("").then((result) => {
-          if (setDynamicData && result) setDynamicData(result);
-        });
+        const result = await operation();
+        return result;
       } catch (error) {
-        console.error(error);
+        console.error('Operation failed:', error);
+        return null;
       } finally {
         if (setLoading) setLoading(false);
       }
+    },
+    [setLoading]
+  );
+
+  // Handle search clear/reset with optimization
+  const handleSearchClear = useCallback(async () => {
+    // Only reset the search filter, keep other filters intact
+    if (mode === 'dynamic' && callbacks?.onSearch) {
+      const result = await executeAsyncOperation(() => callbacks.onSearch!(''));
+      if (setDynamicData && result) setDynamicData(result);
     } else {
       // For static mode
-      if (onFilter) onFilter();
+      if (onFilter && !isPaginationAction) onFilter();
     }
-  };
+  }, [
+    mode,
+    callbacks,
+    setDynamicData,
+    onFilter,
+    executeAsyncOperation,
+    isPaginationAction,
+  ]);
 
-  const handleDateChange = (key: "from" | "to", date: Date | null) => {
-    // Update local state but don't apply filter yet
-    setLocalDateRange({
-      ...localDateRange,
-      [key]: date || undefined,
-    });
-  };
+  // Improved search handling with better debounce
+  const handleSearchInputChange = useCallback(
+    (value: string) => {
+      // First update the state with the new search value
+      setFilters((prev: typeof filters) => ({ ...prev, search: value }));
 
-  const handleStatusChange = (value: string) => {
-    // Update local state but don't apply filter yet
-    setLocalStatus(value);
-  };
+      // Clear any existing timeout to implement debounce
+      if (searchDebounceRef.current) {
+        clearTimeout(searchDebounceRef.current);
+      }
 
-  const handleSelectChange = (id: string, value: string) => {
-    // Update local state but don't apply filter yet
-    setLocalCustomFilters({
-      ...localCustomFilters,
+      // Don't trigger search if in pagination action
+      if (isPaginationAction) {
+        return;
+      }
+
+      // Set a new timeout for the search action
+      searchDebounceRef.current = setTimeout(async () => {
+        // Only perform search if the value has really changed from last execution
+        if (value !== prevSearchValueRef.current) {
+          prevSearchValueRef.current = value;
+
+          if (value === '') {
+            // Handle empty search - clear results
+            await handleSearchClear();
+          } else if (mode === 'dynamic' && callbacks?.onSearch) {
+            // For dynamic search
+            const result = await executeAsyncOperation(() =>
+              callbacks.onSearch!(value)
+            );
+            if (setDynamicData && result) setDynamicData(result);
+          } else {
+            // For static filtering
+            if (onFilter && !isPaginationAction) onFilter();
+          }
+        }
+      }, 500);
+    },
+    [
+      setFilters,
+      handleSearchClear,
+      mode,
+      callbacks,
+      executeAsyncOperation,
+      setDynamicData,
+      onFilter,
+      isPaginationAction,
+    ]
+  );
+
+  // Clean up debounce timer on unmount
+  useEffect(() => {
+    return () => {
+      if (searchDebounceRef.current) {
+        clearTimeout(searchDebounceRef.current);
+      }
+    };
+  }, []);
+
+  // Update the previous search value ref when filters.search changes
+  useEffect(() => {
+    prevSearchValueRef.current = filters.search;
+  }, [filters.search]);
+
+  const handleDateChange = useCallback(
+    (key: 'from' | 'to', date: Date | null) => {
+      setLocalDateRange((prev) => {
+        const updated = { ...prev, [key]: date ?? undefined };
+
+        if (
+          updated.from &&
+          updated.to &&
+          dayjs(updated.from).isAfter(dayjs(updated.to), 'day')
+        ) {
+          updated.to = undefined; // Only clear "to" if "from" becomes greater
+        }
+
+        return updated;
+      });
+    },
+    []
+  );
+
+  const handleStatusChange = useCallback(
+    (value: string) => {
+      if (status?.options?.some((option) => option.value === value)) {
+        setLocalStatus(value);
+      }
+    },
+    [status?.options]
+  );
+
+  const handleSelectChange = useCallback((id: string, value: string) => {
+    setLocalCustomFilters((prev: typeof filters.customFilterValues) => ({
+      ...prev,
       [id]: value,
-    });
-  };
+    }));
+  }, []);
 
-  const handleDynamicFilter = async () => {
-    // Apply all filters at once when the Apply button is clicked
+  const handleDynamicFilter = useCallback(async () => {
     const updatedFilters = {
       ...filters,
       dateRange: localDateRange,
@@ -113,70 +190,88 @@ const TableSearchFilter = ({
       customFilterValues: localCustomFilters,
     };
 
-    // Update the parent component's filter state
     setFilters(updatedFilters);
 
-    if (onFilter) onFilter();
+    // Only call onFilter if we're not in the middle of a pagination action
+    if (onFilter && !isPaginationAction) await onFilter();
 
-    if (mode === "dynamic" && callbacks?.onFilterApply && setDynamicData) {
-      if (setLoading) setLoading(true);
-      try {
-        const result = await callbacks.onFilterApply(updatedFilters);
-        setDynamicData(result);
-      } catch (error) {
-        console.error(error);
-      } finally {
-        if (setLoading) setLoading(false);
-      }
+    if (mode === 'dynamic' && callbacks?.onFilterApply && setDynamicData) {
+      const result = await executeAsyncOperation(
+        () => callbacks?.onFilterApply?.(updatedFilters) ?? Promise.resolve([])
+      );
+      if (result) setDynamicData(result);
     }
-  };
+  }, [
+    filters,
+    localDateRange,
+    localStatus,
+    localCustomFilters,
+    mode,
+    callbacks,
+    onFilter,
+    setDynamicData,
+    setFilters,
+    executeAsyncOperation,
+    isPaginationAction,
+  ]);
 
-  const handleDynamicReset = async () => {
-    // Reset local states
-    setLocalDateRange({ from: undefined, to: undefined });
-    setLocalStatus("all");
-    setLocalCustomFilters({});
+  const handleDynamicReset = useCallback(async () => {
+    // Clear any pending search
+    if (searchDebounceRef.current) {
+      clearTimeout(searchDebounceRef.current);
+    }
 
-    // Reset parent component's filter state
-    setFilters({
-      ...filters,
-      search: "", // Also reset search
-      status: "all",
-      role: "",
+    const resetFilters = {
+      search: '',
+      status: 'all',
+      role: '',
       dateRange: { from: undefined, to: undefined },
       customFilterValues: {},
-    });
+    };
 
-    if (onReset) onReset();
+    // Update prev search value ref to match reset state
+    prevSearchValueRef.current = '';
 
-    // Additional reset logic for dynamic mode
-    if (mode === "dynamic" && callbacks?.onFilterApply && setDynamicData) {
-      if (setLoading) setLoading(true);
-      try {
-        const result = await callbacks.onFilterApply({
-          search: "",
-          status: "all",
-          role: "",
-          dateRange: { from: undefined, to: undefined },
-          customFilterValues: {},
-        });
-        setDynamicData(result);
-      } catch (error) {
-        console.error(error);
-      } finally {
-        if (setLoading) setLoading(false);
-      }
+    setLocalDateRange(resetFilters.dateRange);
+    setLocalStatus(resetFilters.status);
+    setLocalCustomFilters(resetFilters.customFilterValues);
+    setFilters({ ...filters, ...resetFilters });
+
+    // Only call onReset if we're not in the middle of a pagination action
+    if (onReset && !isPaginationAction) onReset();
+
+    if (mode === 'dynamic' && callbacks?.onFilterApply && setDynamicData) {
+      const result = await executeAsyncOperation(
+        () => callbacks?.onFilterApply?.(resetFilters) ?? Promise.resolve([])
+      );
+      if (result) setDynamicData(result);
     }
-  };
+  }, [
+    filters,
+    mode,
+    callbacks,
+    onReset,
+    setDynamicData,
+    setFilters,
+    executeAsyncOperation,
+    isPaginationAction,
+  ]);
 
   return (
-    <div className="flex flex-col gap-3 w-full">
+    <div
+      className="flex flex-col gap-3 w-full"
+      role="search"
+      aria-label="Table filter controls"
+    >
       <div className="flex items-end justify-between gap-4 flex-wrap text-[--primary-text]">
         <div className="flex items-end gap-2 flex-wrap">
           {dateRange && (
             <>
-              <div className="flex items-start flex-col ">
-                <span className="text-sm whitespace-nowrap text-gray-500">
+              <div className="flex items-start flex-col">
+                <span
+                  id="from-date-label"
+                  className="text-sm whitespace-nowrap text-gray-500"
+                >
                   From Date
                 </span>
                 <DatePicker
@@ -184,52 +279,65 @@ const TableSearchFilter = ({
                     localDateRange.from ? dayjs(localDateRange.from) : null
                   }
                   onChange={(date) =>
-                    handleDateChange("from", date?.toDate() || null)
+                    handleDateChange('from', date?.toDate() || null)
                   }
                   slotProps={{
                     textField: {
-                      size: "small",
+                      size: 'small',
+                      inputProps: {
+                        'aria-labelledby': 'from-date-label',
+                      },
                       sx: {
-                        borderRadius: "5px",
-                        width: "170px",
-                        "& .MuiOutlinedInput-notchedOutline": {
-                          border: "none",
-                          borderRadius: "20px",
+                        borderRadius: '5px',
+                        width: '170px',
+                        '& .MuiOutlinedInput-notchedOutline': {
+                          border: 'none',
+                          borderRadius: '20px',
                         },
                       },
                     },
                   }}
                   slots={{
-                    openPickerIcon: CalendarDays,
+                    openPickerIcon: () => <CustomCalendarIcon />,
                   }}
                   format="DD/MM/YYYY"
                   className="bg-[--filter-bg] text-[--filter-fg]"
                 />
               </div>
-              <div className="flex items-start flex-col ">
-                <span className="text-sm whitespace-nowrap text-gray-500">
+              <div className="flex items-start flex-col">
+                <span
+                  id="to-date-label"
+                  className="text-sm whitespace-nowrap text-gray-500"
+                >
                   To Date
                 </span>
                 <DatePicker
                   value={localDateRange.to ? dayjs(localDateRange.to) : null}
                   onChange={(date) =>
-                    handleDateChange("to", date?.toDate() || null)
+                    handleDateChange('to', date?.toDate() || null)
+                  }
+                  shouldDisableDate={(day) =>
+                    !!localDateRange.from &&
+                    day.isBefore(dayjs(localDateRange.from), 'day')
                   }
                   slotProps={{
                     textField: {
-                      size: "small",
+                      size: 'small',
+                      inputProps: {
+                        'aria-labelledby': 'to-date-label',
+                      },
                       sx: {
-                        borderRadius: "5px",
-                        width: "170px",
-                        "& .MuiOutlinedInput-notchedOutline": {
-                          border: "none",
-                          borderRadius: "20px",
+                        borderRadius: '5px',
+                        width: '170px',
+                        '& .MuiOutlinedInput-notchedOutline': {
+                          border: 'none',
+                          borderRadius: '20px',
                         },
                       },
                     },
                   }}
                   slots={{
-                    openPickerIcon: CalendarDays,
+                    openPickerIcon: () => <CustomCalendarIcon />,
                   }}
                   format="DD/MM/YYYY"
                   className="bg-[--filter-bg] text-[--filter-fg]"
@@ -241,7 +349,7 @@ const TableSearchFilter = ({
           {status && status.options && (
             <div className="flex items-start flex-col ">
               <span className="text-sm whitespace-nowrap text-gray-500">
-                {status.label || "Status"}:
+                {status.label || 'Status'}:
               </span>
               <Select value={localStatus} onValueChange={handleStatusChange}>
                 <SelectTrigger className="w-[180px] bg-[--filter-bg] text-[--filter-fg] border-none h-10">
@@ -267,7 +375,7 @@ const TableSearchFilter = ({
                   {select.label}:
                 </span>
                 <Select
-                  value={localCustomFilters[select.id] || ""}
+                  value={localCustomFilters[select.id] || ''}
                   onValueChange={(value) =>
                     handleSelectChange(select.id, value)
                   }
@@ -289,8 +397,8 @@ const TableSearchFilter = ({
                 </Select>
               </div>
             ))}
-          {filterConfig.rederFilerOptions.applyAction &&
-            filterConfig.rederFilerOptions.resetAction &&
+          {filterConfig.renderFilterOptions.applyAction &&
+            filterConfig.renderFilterOptions.resetAction &&
             (onFilter || onReset) && (
               <div className="flex justify-end gap-2">
                 {onFilter && (
@@ -299,6 +407,7 @@ const TableSearchFilter = ({
                     size="sm"
                     variant="default"
                     className="h-10"
+                    aria-label="Apply filters"
                   >
                     Apply Filters
                   </Button>
@@ -309,6 +418,7 @@ const TableSearchFilter = ({
                     size="sm"
                     variant="outline"
                     className="h-10 flex gap-1"
+                    aria-label="Reset filters"
                   >
                     <RefreshCw size={16} />
                     Reset
@@ -320,7 +430,8 @@ const TableSearchFilter = ({
         {search && (
           <SearchInput
             value={filters.search}
-            onChange={(value) => setFilters({ ...filters, search: value })}
+            onChange={handleSearchInputChange}
+            aria-label="Search table"
           />
         )}
       </div>

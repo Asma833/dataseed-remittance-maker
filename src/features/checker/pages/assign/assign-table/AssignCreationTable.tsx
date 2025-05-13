@@ -1,41 +1,54 @@
-import { DynamicTable } from "@/components/common/dynamic-table/DynamicTable";
-import { getAssignCreationColumns } from "./assign-creation-table-col";
-import { useState, useEffect } from "react";
-import { useFilterApi } from "@/components/common/dynamic-table/hooks/useFilterApi";
-import { useDynamicPagination } from "@/components/common/dynamic-table/hooks/useDynamicPagination";
-import { Button } from "@/components/ui/button";
-import { toast } from "sonner";
-import { API } from "@/core/constant/apis";
-import { usePageTitle } from "@/hooks/usePageTitle";
-import { useGetApi } from "@/features/checker/hooks/useGetApi";
-import axiosInstance from "@/core/services/axios/axiosInstance";
-import { useCurrentUser } from "@/utils/getUserFromRedux";
+import { useState, useEffect } from 'react';
+import { toast } from 'sonner';
+import { DynamicTable } from '@/components/common/dynamic-table/DynamicTable';
+import { GetAssignCreationColumns } from './AssignCreationTableColumns';
+import { useFilterApi } from '@/components/common/dynamic-table/hooks/useFilterApi';
+import { useDynamicPagination } from '@/components/common/dynamic-table/hooks/useDynamicPagination';
+import { Button } from '@/components/ui/button';
+import { API } from '@/core/constant/apis';
+import { usePageTitle } from '@/hooks/usePageTitle';
+import axiosInstance from '@/core/services/axios/axiosInstance';
+import { useCurrentUser } from '@/utils/getUserFromRedux';
+import { useGetData } from '@/hooks/useGetData';
+import { useQueryInvalidation, QUERY_KEYS } from '@/hooks/useQueryInvalidation';
 
 const AssignCreationTable = () => {
-  const { setTitle } = usePageTitle();
+  const { invalidateQueries } = useQueryInvalidation();
+  usePageTitle('Assign');
   const { getUserHashedKey } = useCurrentUser();
   const currentUserHashedKey = getUserHashedKey();
 
-  useEffect(() => {
-    setTitle("Assign");
-  }, [setTitle]);
-  const {
-    data: assignList,
-    loading,
-    error,
-    fetchData,
-  } = useGetApi<any>("CHECKER.ASSIGN.LIST");
+  const { data, isLoading, error } = useGetData<any[]>({
+    endpoint: API.CHECKER.ASSIGN.LIST,
+    queryKey: ['getAssignList'],
+  });
+
   const [selectedRows, setSelectedRows] = useState<string[]>([]);
+  const [tableData, setTableData] = useState(data || []);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const isTableFilterDynamic = false;
   const isPaginationDynamic = false;
+
+  // Update tableData when data changes
+  useEffect(() => {
+    if (data) {
+      setTableData(data);
+    }
+  }, [data]);
+
+  // Display error toast if API request fails
+  useEffect(() => {
+    if (error) {
+      toast.error('Failed to load assign list. Please try again.');
+    }
+  }, [error]);
 
   // Use the dynamic pagination hook
   const pagination = useDynamicPagination({
     endpoint: API.CHECKER.ASSIGN.LIST,
     initialPageSize: 10,
-    dataPath: "transactions",
-    totalRecordsPath: "totalRecords",
+    dataPath: 'transactions',
+    totalRecordsPath: 'totalRecords',
   });
 
   // Using the filter API hook
@@ -53,11 +66,18 @@ const AssignCreationTable = () => {
         return prev.filter((id) => id !== rowId);
       }
     });
+
+    // Also update the tableData to reflect the checked state
+    setTableData((prevData) =>
+      prevData.map((row) =>
+        row.partner_order_id === rowId ? { ...row, select: checked } : row
+      )
+    );
   };
 
   const handleTakeRequest = async () => {
     if (selectedRows.length === 0) {
-      toast.error("Please select at least one transaction");
+      toast.error('Please select at least one transaction');
       return;
     }
 
@@ -76,52 +96,28 @@ const AssignCreationTable = () => {
         toast.success(
           `Successfully assigned ${selectedRows.length} transaction(s)`
         );
-        fetchData();
+        await invalidateQueries([...QUERY_KEYS.ASSIGN_LIST]);
       }
 
       setSelectedRows([]);
     } catch (error) {
-      toast.error("Failed to take request. Please try again.");
+      toast.error('Failed to take request. Please try again.');
     } finally {
       setIsSubmitting(false);
     }
   };
 
-  const columns = getAssignCreationColumns(handleSelectionChange);
-
-  //Load initial data when the component mounts
-  useEffect(() => {
-    if (isPaginationDynamic) {
-      pagination.loadInitialData();
-    }
-  }, [fetchData, isPaginationDynamic, pagination]);
+  const columns = GetAssignCreationColumns(handleSelectionChange);
 
   return (
     <div className="flex flex-col">
-      {/* <div className="mb-4 flex items-center">
-        {(filterApi.loading || pagination.loading || loading) && (
-          <span className="text-blue-500">Loading data...</span>
-        )}
-        {(filterApi.error || pagination.error || error) && (
-          <span className="text-red-500">Error loading data</span>
-        )}
-      </div> */}
-
       <DynamicTable
         columns={columns}
-        data={
-          isPaginationDynamic
-            ? pagination.data ?? []
-            : isTableFilterDynamic
-            ? filterApi.data ?? []
-            : assignList ?? []
-        }
+        data={tableData || []}
         defaultSortColumn="nium_order_id"
         defaultSortDirection="asc"
-        loading={
-          filterApi.loading || pagination.loading || isSubmitting || loading
-        }
-        paginationMode={isPaginationDynamic ? "dynamic" : "static"}
+        loading={isLoading}
+        paginationMode={isPaginationDynamic ? 'dynamic' : 'static'}
         onPageChange={
           isPaginationDynamic
             ? pagination.handlePageChange
@@ -130,8 +126,8 @@ const AssignCreationTable = () => {
         totalRecords={pagination.totalRecords}
         filter={{
           filterOption: true,
-          mode: isTableFilterDynamic ? "dynamic" : "static",
-          rederFilerOptions: {
+          mode: isTableFilterDynamic ? 'dynamic' : 'static',
+          renderFilterOptions: {
             search: true,
           },
           // Dynamic callbacks - API functions
@@ -146,7 +142,7 @@ const AssignCreationTable = () => {
       <div className="w-full  flex flex-col items-center justify-start gap-3">
         <div className="text-sm text-gray-500">
           {selectedRows.length} transaction
-          {selectedRows.length !== 1 ? "s" : ""} selected
+          {selectedRows.length !== 1 ? 's' : ''} selected
         </div>
         <Button
           onClick={handleTakeRequest}
@@ -154,8 +150,8 @@ const AssignCreationTable = () => {
           className="border"
         >
           {isSubmitting
-            ? "Processing..."
-            : `Take Request${selectedRows.length !== 1 ? "s" : ""}`}
+            ? 'Processing...'
+            : `Take Request${selectedRows.length !== 1 ? 's' : ''}`}
         </Button>
       </div>
     </div>
