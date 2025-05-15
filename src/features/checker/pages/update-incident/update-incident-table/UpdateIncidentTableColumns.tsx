@@ -105,7 +105,9 @@ export const GetTransactionTableColumns = (
     name: 'Transaction Type',
     className: 'min-w-0',
     cell: (_: unknown, rowData: any) => (
-      <span>{rowData.transaction_type.text}</span>
+      <span>
+        {rowData.transaction_type ? rowData.transaction_type.text : '-'}
+      </span>
     ),
   },
   {
@@ -114,7 +116,7 @@ export const GetTransactionTableColumns = (
     name: 'Purpose Type',
     className: 'min-w-0 max-w-[70px]',
     cell: (_: unknown, rowData: any) => (
-      <span>{rowData.purpose_type.text}</span>
+      <span>{rowData.purpose_type ? rowData.purpose_type.text : '-'}</span>
     ),
   },
   {
