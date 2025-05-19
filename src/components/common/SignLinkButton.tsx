@@ -54,7 +54,6 @@ export const SignLinkButton: React.FC<SignLinkButtonProps> = ({
   const handleClick = () => {
     if (onClick) {
       onClick();
-      console.log('Button clicked');
     } else {
       if (buttonType === 'copy_link' && copyLinkUrl) {
         copyToClipboard(copyLinkUrl, `${toastInfoText}`);
