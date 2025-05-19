@@ -96,8 +96,4 @@ export const updateFormIncidentConfig = {
       placeholder: 'Enter Nium Invoice No',
     },
   },
-  tableData: [
-    { currency: 'USD/INR', rate: 87.84, amount: 500 },
-    { currency: 'EUR/INR', rate: 95.5, amount: 300 },
-  ],
 };

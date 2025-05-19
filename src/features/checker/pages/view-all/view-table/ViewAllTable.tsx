@@ -45,10 +45,8 @@ const ViewAllTable = () => {
       orderDate: new Date(order.createdAt).toLocaleString(),
       agentId: order.partner_id || '-',
       customerPan: order.customer_pan || '-',
-      transactionType:
-        order.transaction_type?.text || order?.transactionType?.name || '-',
-      purposeType:
-        order.purpose_type?.text || order?.purposeType?.purpose_name || '-',
+      transactionType: order?.transaction_type_name?.name || '-',
+      purposeType: order?.purpose_type_name?.purpose_name || '-',
       esignStatus: order.e_sign_status || '-',
       esignStatusCompletionDate: order.e_sign_customer_completion_date
         ? new Date(order.e_sign_customer_completion_date).toLocaleString()

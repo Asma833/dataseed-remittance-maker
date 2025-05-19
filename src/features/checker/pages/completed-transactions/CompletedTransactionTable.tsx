@@ -30,25 +30,25 @@ const CompletedTransactionTable = () => {
   // Transform checker orders data to match the table format
   const transformOrderForTable = (order: any) => {
     return {
-      niumId: order.nium_order_id || 'N/A',
+      niumId: order.nium_order_id || '-',
       orderDate: new Date(order.createdAt).toLocaleString(),
-      agentId: order.partner_id || 'N/A',
-      customerPan: order.customer_pan || 'N/A',
-      transactionType: order.transaction_type?.text || 'N/A',
-      purposeType: order.purpose_type?.text || 'N/A',
-      esignStatus: order.e_sign_status || 'N/A',
+      agentId: order.partner_id || '-',
+      customerPan: order.customer_pan || '-',
+      transactionType: order?.transaction_type_name?.name || '-',
+      purposeType: order?.purpose_type_name?.purpose_name || '-',
+      esignStatus: order.e_sign_status || '-',
       esignStatusCompletionDate: order.e_sign_customer_completion_date
         ? new Date(order.e_sign_customer_completion_date).toLocaleString()
-        : 'N/A',
-      vkycStatus: order.v_kyc_status || 'N/A',
+        : '-',
+      vkycStatus: order.v_kyc_status || '-',
       vkycCompletionDate: order.v_kyc_customer_completion_date
         ? new Date(order.v_kyc_customer_completion_date).toLocaleString()
-        : 'N/A',
+        : '-',
       incidentStatus: order.incident_status ? 'Yes' : 'No',
       incidentCompletionDate: order.incident_completion_date
         ? new Date(order.incident_completion_date).toLocaleString()
-        : 'N/A',
-      niumInvoiceNumber: order.nium_invoice_number || 'N/A',
+        : '-',
+      niumInvoiceNumber: order.nium_invoice_number || '-',
     };
   };
 

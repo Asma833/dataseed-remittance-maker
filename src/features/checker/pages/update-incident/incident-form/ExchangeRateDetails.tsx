@@ -1,10 +1,6 @@
-interface TableRow {
-  currency: string;
-  rate: number;
-  amount: number;
-}
+import { ExchangeRateTable } from "@/features/checker/types/updateIncident.type";
 
-const ExchangeRateDetails = ({ data }: { data: TableRow[] }) => {
+const ExchangeRateDetails = ({ data }: { data: ExchangeRateTable[] }) => {
   const totalCalculatedAmount = data.reduce(
     (acc, row) => acc + row.rate * row.amount,
     0

@@ -1,4 +1,6 @@
 import { SignLinkButton } from '@/components/common/SignLinkButton';
+import PurposeType from '@/features/checker/components/table/PurposeType';
+import TransactionType from '@/features/checker/components/table/TransactionType';
 import { ExternalLink } from 'lucide-react';
 
 const NiumOrderID = ({
@@ -96,26 +98,14 @@ export const GetTransactionTableColumns = (
     id: 'transaction_type',
     name: 'Transaction Type',
     className: 'min-w-0',
-    cell: (_: unknown, rowData: any) => (
-      <span>
-        {rowData?.transaction_type?.text ||
-          rowData?.transactionType?.name ||
-          '-'}
-      </span>
-    ),
+    cell: (_: unknown, rowData: any) => <TransactionType rowData={rowData} />,
   },
   {
     key: 'purpose_type',
     id: 'purpose_type',
     name: 'Purpose Type',
     className: 'min-w-0 max-w-[70px]',
-    cell: (_: unknown, rowData: any) => (
-      <span>
-        {rowData?.purpose_type?.text ||
-          rowData?.purposeType?.purpose_name ||
-          '-'}
-      </span>
-    ),
+    cell: (_: unknown, rowData: any) => <PurposeType rowData={rowData} />,
   },
   {
     key: 'e_sign_status',

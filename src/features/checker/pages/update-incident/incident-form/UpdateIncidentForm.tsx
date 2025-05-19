@@ -12,7 +12,10 @@ import { updateFormIncidentConfig } from './update-incident-form.config';
 import { Button } from '@/components/ui/button';
 import { cn } from '@/utils/cn';
 import { Loader2 } from 'lucide-react';
-import { UpdateIncidentRequest } from '@/features/checker/types/updateIncident.type';
+import {
+  UpdateIncidentFormData,
+  UpdateIncidentRequest,
+} from '@/features/checker/types/updateIncident.type';
 import { usePageTitle } from '@/hooks/usePageTitle';
 import { MaterialText } from '@/components/form/controller/MaterialText';
 import { Checkbox } from '@/components/ui/checkbox';
@@ -20,19 +23,12 @@ import { Label } from '@/components/ui/label';
 import useSubmitIncidentFormData from '../../completed-transactions/hooks/useSubmitIncidentFormData';
 import { toast } from 'sonner';
 import { useCurrentUser } from '@/utils/getUserFromRedux';
-import { determineBuySell } from '@/utils/getTransactionConfigTypes';
 import { FormHelperText } from '@mui/material';
 import { useQueryClient } from '@tanstack/react-query';
 import {
   baseGeneralFieldStyle,
   baseStyle,
 } from '@/components/form/styles/materialStyles';
-
-type PropTypes = {
-  formActionRight: string;
-  rowData?: any;
-  setIsModalOpen: (isOpen: boolean) => void;
-};
 
 const useScreenSize = () => {
   const [screenWidth, setScreenWidth] = useState(window.innerWidth);
@@ -47,8 +43,10 @@ const useScreenSize = () => {
   return screenWidth;
 };
 
-const UpdateIncidentForm = (props: PropTypes) => {
+const UpdateIncidentForm = (props: UpdateIncidentFormData) => {
   const { formActionRight, rowData, setIsModalOpen } = props;
+  const transactionType = rowData?.transaction_type_name?.name;
+  const purposeType = rowData?.purpose_type_name?.purpose_name;
   const screenWidth = useScreenSize();
   const { getUserHashedKey } = useCurrentUser();
   const { submitIncidentFormData, isPending } = useSubmitIncidentFormData();
@@ -141,7 +139,7 @@ const UpdateIncidentForm = (props: PropTypes) => {
   // Populate form with row data when available
   useEffect(() => {
     if (rowData) {
-      const buySellValue = determineBuySell(rowData.transaction_type);
+      const buySellValue = rowData?.transaction_mode;
       const shouldShowBuySell = buySellValue !== null;
       setShowBuySell(shouldShowBuySell);
 
@@ -150,12 +148,12 @@ const UpdateIncidentForm = (props: PropTypes) => {
         customerPan: rowData.customer_pan || '',
         customerName: rowData.customer_name || '',
         bmfOrderRef: rowData.partner_order_id || '',
-        transactionType: rowData.transaction_type?.text || '',
-        purpose: rowData.purpose_type?.text || '',
+        transactionType: rowData.transaction_type_name?.name || '',
+        purpose: rowData.purpose_type_name?.purpose_name || '',
         buySell: buySellValue || '',
-        incidentNumber: rowData.incident_number || '',
-        eonInvoiceNumber: rowData.eon_invoice_number || '',
         comment: rowData.incident_checker_comments || '',
+        incidentNumber: rowData?.incident_number || '',
+        eonInvoiceNumber: rowData?.eon_invoice_number || '',
         status: {
           approve: rowData.status?.approve ?? true,
           reject: rowData.status?.reject ?? false,
@@ -167,7 +165,13 @@ const UpdateIncidentForm = (props: PropTypes) => {
       Object.entries(mappedData).forEach(([key, value]) => {
         if (key === 'comment' || key === 'niumInvoiceNumber') {
           // These fields are directly under 'fields'
-          setValue(`fields.${key}`, value);
+          setValue(`fields.${key}`, value as string);
+        } else if (key === 'status') {
+          // Handle status object separately
+          setValue(
+            'fields.status',
+            value as { approve: boolean; reject: boolean }
+          );
         } else {
           setValue(`fields.${key}` as any, value);
         }
@@ -319,7 +323,8 @@ const UpdateIncidentForm = (props: PropTypes) => {
                       control,
                       errors,
                       disabled: formActionRight === 'view',
-                      forcedValue: rowData?.[field.name],
+                      forcedValue:
+                        rowData?.[field.name as keyof typeof rowData],
                     })}
                   </FieldWrapper>
                 );
@@ -339,7 +344,7 @@ const UpdateIncidentForm = (props: PropTypes) => {
                       control,
                       errors,
                       disabled: formActionRight === 'view',
-                      forcedValue: rowData?.[field.name].text,
+                      forcedValue: transactionType,
                     })}
                   </FieldWrapper>
                 );
@@ -359,7 +364,7 @@ const UpdateIncidentForm = (props: PropTypes) => {
                       control,
                       errors,
                       disabled: formActionRight === 'view',
-                      forcedValue: rowData?.[field.name].text,
+                      forcedValue: purposeType,
                     })}
                   </FieldWrapper>
                 );

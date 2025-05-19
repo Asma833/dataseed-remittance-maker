@@ -120,7 +120,8 @@
   @apply text-foreground;
 }
 .MuiInputBase-input.Mui-disabled {
-  background-color: rgb(238, 238, 238);
+  background-color: rgb(249 249 249);
+  -webkit-text-fill-color: rgb(0 0 0 / 72%);
 }
 .MuiPickersArrowSwitcher-button {
   @apply text-muted-foreground;

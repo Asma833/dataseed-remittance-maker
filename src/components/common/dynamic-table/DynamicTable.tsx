@@ -290,7 +290,7 @@ export function DynamicTable<T extends Record<string, any>>({
           tableWrapperClass
         )}
       >
-        <div className="border border-[--table-border]  overflow-clip">
+        <div className="border  overflow-clip">
           <Table className="odz-table w-full overflow-auto">
             <TableHeader className="bg-[--table-header]">
               <TableRow className="odz-table-row">
@@ -298,7 +298,7 @@ export function DynamicTable<T extends Record<string, any>>({
                   <TableHead
                     key={col.id}
                     className={cn(
-                      'min-w-40 odz-th border-r-2 border-[--table-border] text-center',
+                      'min-w-40 odz-th border-[--table-border] text-center',
                       col.sortable && 'cursor-pointer',
                       col.className
                     )}
@@ -335,7 +335,7 @@ export function DynamicTable<T extends Record<string, any>>({
                       >
                         {columns.map((col: Column<T>) => (
                           <TableCell
-                            className="odz-table-cell border-r-2 border-[--table-border] text-center"
+                            className="odz-table-cell text-center"
                             key={`${rowKey}-${col.key}`}
                           >
                             {getCellContent(row, col)}

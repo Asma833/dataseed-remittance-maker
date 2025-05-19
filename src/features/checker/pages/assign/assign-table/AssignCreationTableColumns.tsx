@@ -1,3 +1,6 @@
+import PurposeType from '@/features/checker/components/table/PurposeType';
+import TransactionType from '@/features/checker/components/table/TransactionType';
+
 export const GetAssignCreationColumns = (
   handleSelectionChange: (rowId: string, checked: boolean) => void
 ) => [
@@ -43,24 +46,12 @@ export const GetAssignCreationColumns = (
     key: 'transaction_type',
     id: 'transaction_type',
     name: 'Transaction Type',
-    cell: (_: unknown, rowData: any) => (
-      <span>
-        {rowData?.transaction_type?.text ||
-          rowData?.transactionType?.name ||
-          '-'}
-      </span>
-    ),
+    cell: (_: unknown, rowData: any) => <TransactionType rowData={rowData} />,
   },
   {
     key: 'purpose_type',
     id: 'purpose_type',
     name: 'Purpose Type',
-    cell: (_: unknown, rowData: any) => (
-      <span>
-        {rowData?.purpose_type?.text ||
-          rowData?.purposeType?.purpose_name ||
-          '-'}
-      </span>
-    ),
+    cell: (_: unknown, rowData: any) => <PurposeType rowData={rowData} />,
   },
 ];
