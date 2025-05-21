@@ -42,7 +42,7 @@ const ViewAllTable = () => {
   const transformOrderForTable = (order: any) => {
     return {
       niumId: order.nium_order_id || '-',
-      orderDate: new Date(order.createdAt).toLocaleString(),
+      orderDate: new Date(order.created_at).toLocaleString(),
       agentId: order.partner_id || '-',
       customerPan: order.customer_pan || '-',
       transactionType: order?.transaction_type_name?.name || '-',
@@ -109,7 +109,7 @@ const ViewAllTable = () => {
         filter={{
           filterOption: true,
           mode: 'static',
-          dateFilterColumn: 'orderDate',
+          dateFilterColumn: 'created_at',
           statusFilerColumn: 'status',
           roleFilerColumn: 'role',
           renderFilterOptions: {
@@ -132,16 +132,6 @@ const ViewAllTable = () => {
               },
             ],
           },
-          // Dynamic callbacks - API functions
-          // dynamicCallbacks: isTableFilterDynamic
-          //   ? {
-          //       onSearch: filterApi.search,
-          //       onDateRangeChange: filterApi.filterByDateRange,
-          //       onStatusChange: filterApi.filterByStatus,
-          //       onSelectChange: filterApi.filterBySelect,
-          //       onFilterApply: filterApi.applyFilters,
-          //     }
-          //   : undefined,
         }}
       />
       <div className="flex justify-center sm:justify-start mt-4 gap-3">

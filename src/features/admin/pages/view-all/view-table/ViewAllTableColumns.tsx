@@ -1,3 +1,5 @@
+import { formatDate } from '@/utils/dateFormat';
+
 export const GetTransactionTableColumns = () => [
   {
     key: 'nium_order_id',
@@ -6,7 +8,15 @@ export const GetTransactionTableColumns = () => [
     cell: (value: string) => <span className="text-pink-600">{value}</span>,
     className: 'min-w-0',
   },
-
+  {
+    key: 'created_at',
+    id: 'created_at',
+    name: 'Order Date',
+    className: 'min-w-0',
+    cell: (_: unknown, rowData: { created_at?: string }) => (
+      <span>{rowData.created_at ? formatDate(rowData.created_at) : null}</span>
+    ),
+  },
   {
     key: 'customer_pan',
     id: 'customer_pan',
@@ -36,6 +46,17 @@ export const GetTransactionTableColumns = () => [
     id: 'e_sign_status',
     name: 'E-Sign Status',
     className: 'min-w-0',
+    cell: (_: unknown, rowData: { e_sign_status?: string }) => (
+      <span>
+        {rowData.e_sign_status && (
+          <span
+            className={`status-badge vkyc-${rowData.e_sign_status.toLowerCase().replace(/\s+/g, '-')}`}
+          >
+            {rowData.e_sign_status}
+          </span>
+        )}
+      </span>
+    ),
   },
   {
     key: 'esign_status_completion_date',
@@ -48,6 +69,17 @@ export const GetTransactionTableColumns = () => [
     id: 'v_kyc_status',
     name: 'VKYC Status',
     className: 'min-w-0',
+    cell: (_: unknown, rowData: { v_kyc_status?: string }) => (
+      <span>
+        {rowData.v_kyc_status && (
+          <span
+            className={`status-badge vkyc-${rowData.v_kyc_status.toLowerCase().replace(/\s+/g, '-')}`}
+          >
+            {rowData.v_kyc_status}
+          </span>
+        )}
+      </span>
+    ),
   },
   {
     key: 'v_kyc_customer_completion_date',
@@ -60,12 +92,12 @@ export const GetTransactionTableColumns = () => [
     id: 'incident_status',
     name: 'Incident Status',
     className: 'min-w-0',
-    cell: (_: unknown, rowData: { incidentStatus?: boolean | null }) => (
+    cell: (_: unknown, rowData: { incident_status?: boolean | null }) => (
       <span>
-        {rowData.incidentStatus === null ||
-        rowData.incidentStatus === undefined ? (
+        {rowData.incident_status === null ||
+        rowData.incident_status === undefined ? (
           <span className="status-badge pending">Pending</span>
-        ) : rowData.incidentStatus ? (
+        ) : rowData.incident_status ? (
           <span className="status-badge approved">Approved</span>
         ) : (
           <span className="status-badge rejected">Rejected</span>

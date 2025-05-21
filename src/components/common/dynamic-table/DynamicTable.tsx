@@ -40,7 +40,19 @@ const getCellContent = <T extends Record<string, any>>(
     return column.cell(row[column.id], row);
   }
 
-  const value = row[column.id] || '-';
+  // Handle nested property paths with dot notation
+  let value;
+  if (column.id.includes('.')) {
+    const parts = column.id.split('.');
+    let nestedValue: any = row;
+    for (const part of parts) {
+      nestedValue = nestedValue?.[part];
+      if (nestedValue === undefined) break;
+    }
+    value = nestedValue || '-';
+  } else {
+    value = row[column.id] || '-';
+  }
 
   if (value instanceof Date) {
     return formatDate(value);
@@ -119,7 +131,22 @@ export function DynamicTable<T extends Record<string, any>>({
           if (filters.search && filter?.filterOption) {
             const searchTerm = filters.search.toLowerCase();
             const matchesSearch = columns.some((column) => {
-              const value = item[column.id];
+              // Try to get the value from the column id, which could be a nested path
+              let value: any;
+
+              if (column.id.includes('.')) {
+                // Handle nested properties for search as well
+                const parts = column.id.split('.');
+                let nestedValue: any = item;
+                for (const part of parts) {
+                  nestedValue = nestedValue?.[part];
+                  if (nestedValue === undefined) break;
+                }
+                value = nestedValue;
+              } else {
+                value = item[column.id];
+              }
+
               if (value === undefined || value === null) return false;
               return String(value).toLowerCase().includes(searchTerm);
             });
@@ -159,7 +186,24 @@ export function DynamicTable<T extends Record<string, any>>({
           for (const [key, value] of Object.entries(
             filters.customFilterValues
           )) {
-            if (value && value !== 'all' && item[key] !== value) return false;
+            if (value && value !== 'all') {
+              // Handle nested properties with dot notation (e.g., 'purpose_type_name.purpose_name')
+              if (key.includes('.')) {
+                const parts = key.split('.');
+                let nestedValue: any = item;
+                // Navigate through the nested objects
+                for (const part of parts) {
+                  nestedValue = nestedValue?.[part];
+                  if (nestedValue === undefined) break;
+                }
+                // If nestedValue is undefined or doesn't match, filter out
+                if (nestedValue === undefined || nestedValue !== value)
+                  return false;
+              } else if (item[key] !== value) {
+                // Standard property check
+                return false;
+              }
+            }
           }
 
           return true;

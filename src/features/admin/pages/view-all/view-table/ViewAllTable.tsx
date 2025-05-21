@@ -6,6 +6,10 @@ import { GetTransactionTableColumns } from './ViewAllTableColumns';
 import { exportToCSV } from '@/utils/exportUtils';
 import { usePageTitle } from '@/hooks/usePageTitle';
 import useGetAllOrders from '@/features/admin/hooks/useGetAllOrders';
+import {
+  purposeTypeOptions,
+  transactionTypeOptions,
+} from '@/features/checker/config/table-filter.config';
 
 const ViewAllTable = () => {
   usePageTitle('View All');
@@ -59,6 +63,33 @@ const ViewAllTable = () => {
         paginationMode={'static'}
         onPageChange={async (_page: number, _pageSize: number) => []}
         totalRecords={totalRecords}
+        filter={{
+          filterOption: true,
+          mode: 'static',
+          dateFilterColumn: 'created_at',
+          statusFilerColumn: 'status',
+          roleFilerColumn: 'role',
+          renderFilterOptions: {
+            search: true,
+            dateRange: true,
+            applyAction: true,
+            resetAction: true,
+            selects: [
+              {
+                id: 'purpose_type_name.purpose_name',
+                label: 'Purpose Type',
+                placeholder: 'Select',
+                options: purposeTypeOptions,
+              },
+              {
+                id: 'transaction_type_name.name',
+                label: 'Transaction Type',
+                placeholder: 'Select',
+                options: transactionTypeOptions,
+              },
+            ],
+          },
+        }}
       />
       <div className="flex justify-center sm:justify-start mt-4 gap-3">
         <Button onClick={handleExportToCSV}>Export CSV</Button>

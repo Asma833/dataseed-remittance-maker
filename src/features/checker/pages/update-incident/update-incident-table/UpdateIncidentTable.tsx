@@ -120,7 +120,7 @@ const UpdateIncidentCreationTable = () => {
         totalRecords={pagination.totalRecords}
         filter={{
           filterOption: true,
-          dateFilterColumn: 'createdAt',
+          dateFilterColumn: 'created_at',
           mode: isTableFilterDynamic ? 'dynamic' : 'static',
           renderFilterOptions: {
             search: true,

@@ -151,14 +151,14 @@ const UpdateIncidentForm = (props: UpdateIncidentFormData) => {
         transactionType: rowData.transaction_type_name?.name || '',
         purpose: rowData.purpose_type_name?.purpose_name || '',
         buySell: buySellValue || '',
-        comment: rowData.incident_checker_comments || '',
+        // comment: rowData.incident_checker_comments || '',
         incidentNumber: rowData?.incident_number || '',
         eonInvoiceNumber: rowData?.eon_invoice_number || '',
         status: {
           approve: rowData.status?.approve ?? true,
           reject: rowData.status?.reject ?? false,
         },
-        niumInvoiceNumber: rowData.nium_invoice_number || '', // Changed from niumInvoiceNo to niumInvoiceNumber
+        niumInvoiceNumber: rowData.nium_invoice_number || '',
       };
 
       // Set values using appropriate field paths
