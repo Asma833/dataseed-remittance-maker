@@ -1,4 +1,3 @@
-import React, { useEffect } from 'react';
 import { createDashboardData } from '../../config/card.config';
 import DashboardCard from '../../components/dashboard-card/DashboardCards';
 import { useGetDashboardCardMetrics } from '@/features/checker/hooks/useGetDashboardCardMatrics';

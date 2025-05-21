@@ -140,3 +140,30 @@ export const exportToExcel = <T extends Record<string, any>>(
     toast.error('Failed to export Excel file. Please try again.');
   }
 };
+
+/**
+ * Downloads a file from a given URL
+ * @param url The file URL
+ * @param filename Optional filename for the download
+ */
+export const downloadFromUrl = (url: string, filename?: string) => {
+  try {
+    if (!url) {
+      toast.error('No file URL provided');
+      return;
+    }
+    const link = document.createElement('a');
+    link.href = url;
+    if (filename) {
+      link.download = filename;
+    } else {
+      link.download = '';
+    }
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+    toast.success('Download started');
+  } catch (error) {
+    toast.error('Failed to download file. Please try again.');
+  }
+};

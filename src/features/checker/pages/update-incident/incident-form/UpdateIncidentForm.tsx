@@ -1,7 +1,12 @@
+import { useState, useEffect } from 'react';
 import { useForm } from 'react-hook-form';
+import { toast } from 'sonner';
+import { Loader2 } from 'lucide-react';
+import { FormHelperText } from '@mui/material';
+import { useQueryClient } from '@tanstack/react-query';
+// import { MaterialText } from '@/components/form/controller/MaterialText';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { updateIncidentFormSchema } from './update-incident-form.schema';
-import { useState, useEffect } from 'react';
 import { FormProvider } from '@/components/form/providers/FormProvider';
 import { getController } from '@/components/form/utils/getController';
 import FormFieldRow from '@/components/form/wrapper/FormFieldRow';
@@ -11,24 +16,22 @@ import { FormContentWrapper } from '@/components/form/wrapper/FormContentWrapper
 import { updateFormIncidentConfig } from './update-incident-form.config';
 import { Button } from '@/components/ui/button';
 import { cn } from '@/utils/cn';
-import { Loader2 } from 'lucide-react';
 import {
   UpdateIncidentFormData,
   UpdateIncidentRequest,
 } from '@/features/checker/types/updateIncident.type';
 import { usePageTitle } from '@/hooks/usePageTitle';
-import { MaterialText } from '@/components/form/controller/MaterialText';
 import { Checkbox } from '@/components/ui/checkbox';
 import { Label } from '@/components/ui/label';
-import useSubmitIncidentFormData from '../../completed-transactions/hooks/useSubmitIncidentFormData';
-import { toast } from 'sonner';
 import { useCurrentUser } from '@/utils/getUserFromRedux';
-import { FormHelperText } from '@mui/material';
-import { useQueryClient } from '@tanstack/react-query';
-import {
-  baseGeneralFieldStyle,
-  baseStyle,
-} from '@/components/form/styles/materialStyles';
+import useSubmitIncidentFormData from '../../completed-transactions/hooks/useSubmitIncidentFormData';
+import { useQueryInvalidator } from '@/hooks/useQueryInvalidator';
+import { downloadFromUrl } from '@/utils/exportUtils';
+
+// import {
+//   baseGeneralFieldStyle,
+//   baseStyle,
+// } from '@/components/form/styles/materialStyles';
 
 const useScreenSize = () => {
   const [screenWidth, setScreenWidth] = useState(window.innerWidth);
@@ -48,6 +51,7 @@ const UpdateIncidentForm = (props: UpdateIncidentFormData) => {
   const transactionType = rowData?.transaction_type_name?.name;
   const purposeType = rowData?.purpose_type_name?.purpose_name;
   const screenWidth = useScreenSize();
+  const { invalidateMultipleQueries } = useQueryInvalidator();
   const { getUserHashedKey } = useCurrentUser();
   const { submitIncidentFormData, isPending } = useSubmitIncidentFormData();
   const [showNiumInvoice, setShowNiumInvoice] = useState(true);
@@ -60,7 +64,7 @@ const UpdateIncidentForm = (props: UpdateIncidentFormData) => {
   const queryClient = useQueryClient();
 
   // State to track if we should show the buy/sell field
-  const [showBuySell, setShowBuySell] = useState(true);
+  // const [showBuySell, setShowBuySell] = useState(true);
 
   const methods = useForm<UpdateIncidentRequest>({
     resolver: zodResolver(updateIncidentFormSchema),
@@ -115,7 +119,7 @@ const UpdateIncidentForm = (props: UpdateIncidentFormData) => {
     setIsRejected(false);
     setDocumentUrl(null);
     setShowNiumInvoice(true);
-    setShowBuySell(true);
+    // setShowBuySell(true);
   };
 
   // Reset form when modal is closed
@@ -142,8 +146,8 @@ const UpdateIncidentForm = (props: UpdateIncidentFormData) => {
   useEffect(() => {
     if (rowData) {
       const buySellValue = rowData?.transaction_mode;
-      const shouldShowBuySell = buySellValue !== null;
-      setShowBuySell(shouldShowBuySell);
+      // const shouldShowBuySell = buySellValue !== null;
+      // setShowBuySell(shouldShowBuySell);
       setIsVkycDownloadLink(rowData.is_v_kyc_required ?? false);
       setIsEsignDocumentLink(rowData.is_esign_required ?? false);
 
@@ -271,7 +275,10 @@ const UpdateIncidentForm = (props: UpdateIncidentFormData) => {
             toast.success('Incident updated successfully');
             resetFormValues();
             setIsModalOpen(false); // Ensure this runs after successful submission
-            queryClient.invalidateQueries({ queryKey: ['updateIncident'] });
+            invalidateMultipleQueries([
+              ['updateIncident'],
+              ['dashboardMetrics'],
+            ]);
           },
           onError: (error) => {
             toast.error(error?.message || 'Failed to update incident');
@@ -286,6 +293,20 @@ const UpdateIncidentForm = (props: UpdateIncidentFormData) => {
   const handleViewDocument = () => {
     if (documentUrl) {
       window.open(documentUrl, '_blank');
+    }
+  };
+
+  // Download handler for eSign Document
+  const handleDownloadDocument = () => {
+    if (documentUrl) {
+      downloadFromUrl(documentUrl);
+    }
+  };
+
+  // Download handler for VKYC Document
+  const handleDownloadVideo = () => {
+    if (documentUrl) {
+      downloadFromUrl(documentUrl);
     }
   };
 
@@ -399,7 +420,7 @@ const UpdateIncidentForm = (props: UpdateIncidentFormData) => {
             {isEsignDocumentLink && (
               <Button
                 type="button"
-                onClick={handleViewDocument}
+                onClick={handleDownloadDocument}
                 disabled={!documentUrl}
               >
                 eSign Document
@@ -409,7 +430,7 @@ const UpdateIncidentForm = (props: UpdateIncidentFormData) => {
             {isVkycDownloadLink && (
               <Button
                 type="button"
-                onClick={handleViewDocument}
+                onClick={handleDownloadVideo}
                 disabled={!documentUrl}
               >
                 VKYC Document

@@ -10,10 +10,10 @@ import { usePageTitle } from '@/hooks/usePageTitle';
 import axiosInstance from '@/core/services/axios/axiosInstance';
 import { useCurrentUser } from '@/utils/getUserFromRedux';
 import { useGetData } from '@/hooks/useGetData';
-import { useQueryInvalidation, QUERY_KEYS } from '@/hooks/useQueryInvalidation';
+import { useQueryInvalidator } from '@/hooks/useQueryInvalidator';
 
 const AssignCreationTable = () => {
-  const { invalidateQueries } = useQueryInvalidation();
+  const { invalidateMultipleQueries } = useQueryInvalidator();
   usePageTitle('Assign');
   const { getUserHashedKey } = useCurrentUser();
   const currentUserHashedKey = getUserHashedKey();
@@ -89,14 +89,16 @@ const AssignCreationTable = () => {
           orderIds: selectedRows,
           checkerId: currentUserHashedKey,
         }
-      );
-
-      // Handle successful response
+      ); // Handle successful response
       if (response) {
         toast.success(
           `Successfully assigned ${selectedRows.length} transaction(s)`
         );
-        await invalidateQueries([...QUERY_KEYS.ASSIGN_LIST]);
+        // Use the hook-based implementation which uses the correct QueryClient instance
+        await invalidateMultipleQueries([
+          ['getAssignList'],
+          ['dashboardMetrics'],
+        ]);
       }
 
       setSelectedRows([]);
