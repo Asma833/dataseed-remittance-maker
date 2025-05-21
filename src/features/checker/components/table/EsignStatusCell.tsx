@@ -2,6 +2,7 @@ import _ from 'lodash';
 import { Order } from '../../types/updateIncident.type';
 
 const EsignStatusCell = ({ rowData }: { rowData: Order }) => {
+  console.log('rowData:', rowData);
   return (
     <span>
       {rowData.is_esign_required ? (

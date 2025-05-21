@@ -139,7 +139,9 @@ export const GetTransactionTableColumns = (
         disabled={
           rowData?.incident_status ||
           rowData?.incident_status === null ||
-          rowData?.incident_status === undefined
+          rowData?.incident_status === undefined ||
+          rowData?.e_sign_status === 'expired' ||
+          rowData?.e_sign_status === 'rejected'
         }
       />
     ),

@@ -1,83 +1,120 @@
 import { formatDate } from '@/utils/dateFormat';
+import IncidentStatusCell from '../../components/table/IncidentStatusCell';
+import VKycStatusCell from '../../components/table/VKycStatusCell';
+import EsignStatusCell from '../../components/table/EsignStatusCell';
+
 export const GetTransactionTableColumns = () => [
   {
-    key: 'niumId',
-    id: 'niumId',
+    key: 'nium_order_id',
+    id: 'nium_order_id',
     name: 'Nium ID',
     cell: (value: string) => <span className="text-pink-600">{value}</span>,
+    className: 'min-w-0',
   },
   {
     key: 'created_at',
     id: 'created_at',
     name: 'Order Date',
+    className: 'min-w-0',
+    cell: (_: unknown, rowData: { created_at?: string }) => (
+      <span>{rowData.created_at ? formatDate(rowData.created_at) : null}</span>
+    ),
   },
   {
-    key: 'agentId',
-    id: 'agentId',
-    name: 'Agent ID',
+    key: 'partner_id',
+    id: 'partner_id',
+    name: 'Partner ID',
+    className: 'min-w-0',
   },
   {
-    key: 'customerPan',
-    id: 'customerPan',
+    key: 'customer_pan',
+    id: 'customer_pan',
     name: 'Customer PAN',
+    className: 'min-w-0',
   },
   {
-    key: 'transactionType',
-    id: 'transactionType',
+    key: 'transaction_type_name',
+    id: 'transaction_type_name',
     name: 'Transaction Type',
+    className: 'min-w-0',
   },
   {
-    key: 'purposeType',
-    id: 'purposeType',
+    key: 'purpose_type_name',
+    id: 'purpose_type_name',
     name: 'Purpose Type',
+    className: 'min-w-0',
   },
   {
-    key: 'esignStatus',
-    id: 'esignStatus',
+    key: 'e_sign_status',
+    id: 'e_sign_status',
     name: 'E-Sign Status',
+    className: 'min-w-0',
+    cell: (_: unknown, rowData: any) => <EsignStatusCell rowData={rowData} />,
   },
   {
-    key: 'esignStatusCompletionDate',
-    id: 'esignStatusCompletionDate',
+    key: 'e_sign_customer_completion_date',
+    id: 'e_sign_customer_completion_date',
     name: 'E-Sign Status Completion Date',
-    cell: (_: unknown, rowData: any) => (
+    className: 'min-w-0',
+    cell: (
+      _: unknown,
+      rowData: { e_sign_customer_completion_date?: string }
+    ) => (
       <span>
-        {rowData?.esignStatusCompletionDate
-          ? formatDate(rowData?.esignStatusCompletionDate)
+        {rowData.e_sign_customer_completion_date
+          ? formatDate(rowData.e_sign_customer_completion_date)
           : null}
       </span>
     ),
   },
   {
-    key: 'vkycStatus',
-    id: 'vkycStatus',
+    key: 'v_kyc_status',
+    id: 'v_kyc_status',
     name: 'VKYC Status',
+    className: 'min-w-0',
+    cell: (_: unknown, rowData: any) => <VKycStatusCell rowData={rowData} />,
   },
   {
-    key: 'vkycCompletionDate',
-    id: 'vkycCompletionDate',
+    key: 'v_kyc_customer_completion_date',
+    id: 'v_kyc_customer_completion_date',
     name: 'VKYC Completion Date',
-    cell: (_: unknown, rowData: any) => (
+    className: 'min-w-0',
+    cell: (
+      _: unknown,
+      rowData: { v_kyc_customer_completion_date?: string }
+    ) => (
       <span>
-        {rowData?.esignStatusCompletionDate
-          ? formatDate(rowData?.esignStatusCompletionDate)
+        {rowData.v_kyc_customer_completion_date
+          ? formatDate(rowData.v_kyc_customer_completion_date)
           : null}
       </span>
     ),
   },
   {
-    key: 'incidentStatus',
-    id: 'incidentStatus',
+    key: 'incident_status',
+    id: 'incident_status',
     name: 'Incident Status',
+    className: 'min-w-0',
+    cell: (_: unknown, rowData: any) => (
+      <IncidentStatusCell rowData={rowData} />
+    ),
   },
   {
-    key: 'incidentCompletionDate',
-    id: 'incidentCompletionDate',
+    key: 'incident_completion_date',
+    id: 'incident_completion_date',
     name: 'Incident Completion Date',
+    className: 'min-w-0',
+    cell: (_: unknown, rowData: { incident_completion_date?: string }) => (
+      <span>
+        {rowData.incident_completion_date
+          ? formatDate(rowData.incident_completion_date)
+          : null}
+      </span>
+    ),
   },
   {
-    key: 'niumInvoiceNumber',
-    id: 'niumInvoiceNumber',
+    key: 'nium_invoice_number',
+    id: 'nium_invoice_number',
     name: 'NIUM INVOICE NUMBER',
   },
 ];

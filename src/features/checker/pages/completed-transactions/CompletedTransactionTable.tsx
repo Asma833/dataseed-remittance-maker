@@ -30,25 +30,27 @@ const CompletedTransactionTable = () => {
   // Transform checker orders data to match the table format
   const transformOrderForTable = (order: any) => {
     return {
-      niumId: order.nium_order_id || '-',
-      orderDate: new Date(order.createdAt).toLocaleString(),
-      agentId: order.partner_id || '-',
-      customerPan: order.customer_pan || '-',
-      transactionType: order?.transaction_type_name?.name || '-',
-      purposeType: order?.purpose_type_name?.purpose_name || '-',
-      esignStatus: order.e_sign_status || '-',
-      esignStatusCompletionDate: order.e_sign_customer_completion_date
+      nium_order_id: order.nium_order_id || '-',
+      created_at: new Date(order.created_at).toLocaleString(),
+      partner_id: order.partner_id || '-',
+      customer_pan: order.customer_pan || '-',
+      transaction_type_name: order?.transaction_type_name?.name || '-',
+      purpose_type_name: order?.purpose_type_name?.purpose_name || '-',
+      is_esign_required: order.is_esign_required || '-',
+      is_v_kyc_required: order.is_v_kyc_required || '-',
+      e_sign_status: order.e_sign_status || '-',
+      e_sign_customer_completion_date: order.e_sign_customer_completion_date
         ? new Date(order.e_sign_customer_completion_date).toLocaleString()
         : '-',
-      vkycStatus: order.v_kyc_status || '-',
-      vkycCompletionDate: order.v_kyc_customer_completion_date
+      v_kyc_status: order.v_kyc_status || '-',
+      v_kyc_customer_completion_date: order.v_kyc_customer_completion_date
         ? new Date(order.v_kyc_customer_completion_date).toLocaleString()
         : '-',
-      incidentStatus: order.incident_status ? 'Yes' : 'No',
-      incidentCompletionDate: order.incident_completion_date
+      incident_status: order.incident_status,
+      incident_completion_date: order.incident_completion_date
         ? new Date(order.incident_completion_date).toLocaleString()
         : '-',
-      niumInvoiceNumber: order.nium_invoice_number || '-',
+      nium_invoice_number: order.nium_invoice_number || '-',
     };
   };
 
@@ -99,8 +101,6 @@ const CompletedTransactionTable = () => {
           filterOption: true,
           mode: 'static',
           dateFilterColumn: 'created_at',
-          statusFilerColumn: 'status',
-          roleFilerColumn: 'role',
           renderFilterOptions: {
             search: true,
             dateRange: true,
@@ -111,13 +111,13 @@ const CompletedTransactionTable = () => {
               {
                 id: 'purposeType',
                 label: 'Purpose Type',
-                placeholder: '---Select---',
+                placeholder: 'Select',
                 options: purposeTypeOptions,
               },
               {
                 id: 'transactionType',
                 label: 'Transaction Type',
-                placeholder: '---Select---',
+                placeholder: 'Select',
                 options: transactionTypeOptions,
               },
             ],

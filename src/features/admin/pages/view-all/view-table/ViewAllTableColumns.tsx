@@ -1,3 +1,7 @@
+import CompletedTransactionStatusCell from '@/features/checker/components/table/CompletedTransactionStatusCell';
+import EsignStatusCell from '@/features/checker/components/table/EsignStatusCell';
+import IncidentStatusCell from '@/features/checker/components/table/IncidentStatusCell';
+import VKycStatusCell from '@/features/checker/components/table/VKycStatusCell';
 import { formatDate } from '@/utils/dateFormat';
 
 export const GetTransactionTableColumns = () => [
@@ -46,17 +50,7 @@ export const GetTransactionTableColumns = () => [
     id: 'e_sign_status',
     name: 'E-Sign Status',
     className: 'min-w-0',
-    cell: (_: unknown, rowData: { e_sign_status?: string }) => (
-      <span>
-        {rowData.e_sign_status && (
-          <span
-            className={`status-badge vkyc-${rowData.e_sign_status.toLowerCase().replace(/\s+/g, '-')}`}
-          >
-            {rowData.e_sign_status}
-          </span>
-        )}
-      </span>
-    ),
+    cell: (_: unknown, rowData: any) => <EsignStatusCell rowData={rowData} />,
   },
   {
     key: 'esign_status_completion_date',
@@ -69,17 +63,7 @@ export const GetTransactionTableColumns = () => [
     id: 'v_kyc_status',
     name: 'VKYC Status',
     className: 'min-w-0',
-    cell: (_: unknown, rowData: { v_kyc_status?: string }) => (
-      <span>
-        {rowData.v_kyc_status && (
-          <span
-            className={`status-badge vkyc-${rowData.v_kyc_status.toLowerCase().replace(/\s+/g, '-')}`}
-          >
-            {rowData.v_kyc_status}
-          </span>
-        )}
-      </span>
-    ),
+    cell: (_: unknown, rowData: any) => <VKycStatusCell rowData={rowData} />,
   },
   {
     key: 'v_kyc_customer_completion_date',
@@ -92,17 +76,8 @@ export const GetTransactionTableColumns = () => [
     id: 'incident_status',
     name: 'Incident Status',
     className: 'min-w-0',
-    cell: (_: unknown, rowData: { incident_status?: boolean | null }) => (
-      <span>
-        {rowData.incident_status === null ||
-        rowData.incident_status === undefined ? (
-          <span className="status-badge pending">Pending</span>
-        ) : rowData.incident_status ? (
-          <span className="status-badge approved">Approved</span>
-        ) : (
-          <span className="status-badge rejected">Rejected</span>
-        )}
-      </span>
+    cell: (_: unknown, rowData: any) => (
+      <IncidentStatusCell rowData={rowData} />
     ),
   },
   {
@@ -110,5 +85,14 @@ export const GetTransactionTableColumns = () => [
     id: 'incident_completion_date',
     name: 'Incident Completion Date',
     className: 'min-w-0',
+  },
+  {
+    key: 'doc_verification_status',
+    id: 'doc_verification_status',
+    name: 'Completed Transaction Status',
+    className: 'min-w-0  max-w-[70px]',
+    cell: (_: unknown, rowData: any) => (
+      <CompletedTransactionStatusCell rowData={rowData} />
+    ),
   },
 ];
