@@ -238,31 +238,62 @@ export function DynamicTable<T extends Record<string, any>>({
     setCurrentPage(1);
   };
 
-  const handleReset = () => {
-    // Skip if we're in the middle of a pagination action
-    if (isPaginationAction) return;
+  // const handleReset = () => {
+  //   // Skip if we're in the middle of a pagination action
+  //   if (isPaginationAction) return;
 
-    const now = Date.now();
-    // Skip if we just filtered recently
-    if (now - lastFiltered < 500) return;
+  //   const now = Date.now();
+  //   // Skip if we just filtered recently
+  //   if (now - lastFiltered < 500) return;
 
-    setLastFiltered(now);
+  //   setLastFiltered(now);
 
-    setFilters({
-      search: '',
-      status: 'all',
-      role: '',
-      dateRange: { from: undefined, to: undefined },
-      customFilterValues: {},
-    });
-    setCurrentPage(1);
+  //   setFilters({
+  //     search: '',
+  //     status: 'all',
+  //     role: '',
+  //     dateRange: { from: undefined, to: undefined },
+  //     customFilterValues: {},
+  //   });
+  //   setCurrentPage(1);
 
-    // Reset dynamic data to empty if in dynamic mode
-    if (mode === 'dynamic') {
-      setDynamicData([]);
-    }
-  };
+  //   // Reset dynamic data to empty if in dynamic mode
+  //   if (mode === 'dynamic') {
+  //     setDynamicData([]);
+  //   }
+  // };
+const [resetKey, setResetKey] = useState(0);
 
+const handleReset = () => {
+  if (isPaginationAction) return;
+
+  const now = Date.now();
+  if (now - lastFiltered < 500) return;
+
+  setLastFiltered(now);
+
+  setFilters({
+    search: '',
+    status: 'all',
+    role: '',
+    dateRange: { from: undefined, to: undefined },
+    customFilterValues: {},
+  });
+
+  setCurrentPage(1);
+
+  if (mode === 'dynamic') {
+    setDynamicData([]);
+  }
+//re-render of filter component
+  setResetKey(prev => prev + 1); 
+};
+const handleRefreshWithReset = () => {
+  // reset filters
+  handleReset();
+  // fetch fresh data               
+  refreshAction?.onRefresh();   
+};
   // Track when setCurrentPage is called with proper timeout
   const handlePageChange = (page: number) => {
     // Only log when the page is actually changing to reduce noise
@@ -283,7 +314,7 @@ export function DynamicTable<T extends Record<string, any>>({
       {refreshAction && refreshAction.isRefreshButtonVisible && (
         <div className="flex items-center justify-between">
           <Button
-            onClick={refreshAction.onRefresh}
+            onClick={handleRefreshWithReset}
             variant="outline"
             size={'sm'}
           >
@@ -312,6 +343,7 @@ export function DynamicTable<T extends Record<string, any>>({
             {filter?.filterOption && (
               <div className="w-full sm:flex-1">
                 <TableSearchFilter
+                  key={resetKey}
                   filters={filters}
                   filterConfig={filter}
                   setFilters={setFilters}
