@@ -1,7 +1,5 @@
-import { cn } from '@/utils/cn';
 import { Loader2 } from 'lucide-react';
-import React from 'react';
-import { useNavigate } from 'react-router-dom';
+import { cn } from '@/utils/cn';
 
 interface DashboardCardProps {
   count: number;
