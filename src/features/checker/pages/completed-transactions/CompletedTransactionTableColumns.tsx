@@ -7,12 +7,9 @@ export const GetTransactionTableColumns = () => [
     cell: (value: string) => <span className="text-pink-600">{value}</span>,
   },
   {
-    key: 'orderDate',
+    key: 'created_at',
     id: 'created_at',
     name: 'Order Date',
-    cell: (_: unknown, rowData: any) => (
-      <span>{rowData?.orderDate ? formatDate(rowData?.orderDate) : null}</span>
-    ),
   },
   {
     key: 'agentId',

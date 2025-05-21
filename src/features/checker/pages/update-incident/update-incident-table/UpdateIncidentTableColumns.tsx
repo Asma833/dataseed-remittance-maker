@@ -2,6 +2,10 @@ import { ExternalLink } from 'lucide-react';
 import { SignLinkButton } from '@/components/common/SignLinkButton';
 import PurposeType from '@/features/checker/components/table/PurposeType';
 import TransactionType from '@/features/checker/components/table/TransactionType';
+import IncidentStatusCell from '@/features/checker/components/table/IncidentStatusCell';
+import EsignStatusCell from '@/features/checker/components/table/EsignStatusCell';
+import VKycStatusCell from '@/features/checker/components/table/VKycStatusCell';
+import DocVerificationStatusCell from '@/features/checker/components/table/DocVerificationStatusCell';
 
 const NiumOrderID = ({
   rowData,
@@ -82,7 +86,7 @@ export const GetTransactionTableColumns = (
     className: 'min-w-0',
   },
   {
-    key: 'createdAt',
+    key: 'created_at',
     id: 'created_at',
     name: 'Order Date',
     className: 'min-w-0',
@@ -112,12 +116,14 @@ export const GetTransactionTableColumns = (
     id: 'e_sign_status',
     name: 'E-Sign Status',
     className: 'min-w-0',
+    cell: (_: unknown, rowData: any) => <EsignStatusCell rowData={rowData} />,
   },
   {
     key: 'v_kyc_status',
     id: 'v_kyc_status',
     name: 'VKYC Status',
     className: 'min-w-0',
+    cell: (_: unknown, rowData: any) => <VKycStatusCell rowData={rowData} />,
   },
   {
     key: 'incident_status',
@@ -125,16 +131,16 @@ export const GetTransactionTableColumns = (
     name: 'Incident Status',
     className: 'min-w-0  max-w-[70px]',
     cell: (_: unknown, rowData: any) => (
-      <span>
-        {rowData.incident_status === null ||
-        rowData.incident_status === undefined ? (
-          <span className="status-badge pending">Pending</span>
-        ) : rowData.incident_status ? (
-          <span className="status-badge approved">Approved</span>
-        ) : (
-          <span className="status-badge rejected">Rejected</span>
-        )}
-      </span>
+      <IncidentStatusCell rowData={rowData} />
+    ),
+  },
+  {
+    key: 'doc_verification_status',
+    id: 'doc_verification_status',
+    name: 'Document Verification Status',
+    className: 'min-w-0  max-w-[70px]',
+    cell: (_: unknown, rowData: any) => (
+     <DocVerificationStatusCell rowData={rowData} />
     ),
   },
   {

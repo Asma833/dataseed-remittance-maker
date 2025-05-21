@@ -132,16 +132,6 @@ const ViewAllTable = () => {
               },
             ],
           },
-          // Dynamic callbacks - API functions
-          // dynamicCallbacks: isTableFilterDynamic
-          //   ? {
-          //       onSearch: filterApi.search,
-          //       onDateRangeChange: filterApi.filterByDateRange,
-          //       onStatusChange: filterApi.filterByStatus,
-          //       onSelectChange: filterApi.filterBySelect,
-          //       onFilterApply: filterApi.applyFilters,
-          //     }
-          //   : undefined,
         }}
       />
       <div className="flex justify-center sm:justify-start mt-4 gap-3">
