@@ -2,13 +2,16 @@ import { formatDate } from '@/utils/dateFormat';
 import IncidentStatusCell from '../../components/table/IncidentStatusCell';
 import VKycStatusCell from '../../components/table/VKycStatusCell';
 import EsignStatusCell from '../../components/table/EsignStatusCell';
+import NiumOrderID from '../../components/table/NiumOrderIdCell';
 
-export const GetTransactionTableColumns = () => [
+export const GetTransactionTableColumns = (openModal: (value: string) => void) => [
   {
     key: 'nium_order_id',
     id: 'nium_order_id',
     name: 'Nium ID',
-    cell: (value: string) => <span className="text-pink-600">{value}</span>,
+     cell: (_: unknown, rowData: any) => (
+      <NiumOrderID rowData={rowData} openModal={openModal} />
+    ),
     className: 'min-w-0',
   },
   {

@@ -10,10 +10,13 @@ import {
   purposeTypeOptions,
   transactionTypeOptions,
 } from '@/features/checker/config/table-filter.config';
+import { useState } from 'react';
+import UpdateIncidentDialog from '@/features/checker/components/update-incident-dialog/UpdateIncidentDialog';
 
 const ViewAllTable = () => {
   usePageTitle('View All');
-
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [selectedRowData, setSelectedRowData] = useState<any>(null);
   const {
     data: checkerOrdersData,
     loading: checkerOrdersLoading,
@@ -27,7 +30,10 @@ const ViewAllTable = () => {
   }>('all', true);
 
   const isPaginationDynamic = false;
-
+  const openModal = (rowData: any) => {
+      setSelectedRowData(rowData);
+      setIsModalOpen(true);
+    };
   // Use the dynamic pagination hook for fallback
   const pagination = useDynamicPagination({
     endpoint: API.CHECKER.VIEW_ALL.SEARCH_FILTER,
@@ -36,7 +42,7 @@ const ViewAllTable = () => {
     totalRecordsPath: 'totalRecords',
   });
 
-  const columns = GetTransactionTableColumns();
+  const columns = GetTransactionTableColumns(openModal);
 
   // Transform checker orders data to match the table format
   const transformOrderForTable = (order: any) => {
@@ -137,6 +143,15 @@ const ViewAllTable = () => {
       <div className="flex justify-center sm:justify-start mt-4 gap-3">
         <Button onClick={handleExportToCSV}>Export CSV</Button>
       </div>
+       {isModalOpen && (
+        <UpdateIncidentDialog
+          pageId="viewAllIncident"
+          mode="view"
+          selectedRowData={selectedRowData}
+          isModalOpen={isModalOpen}
+          setIsModalOpen={setIsModalOpen}
+        />
+      )}
     </div>
   );
 };

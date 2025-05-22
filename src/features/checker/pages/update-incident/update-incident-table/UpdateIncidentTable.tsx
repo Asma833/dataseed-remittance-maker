@@ -11,6 +11,7 @@ import { cn } from '@/utils/cn';
 import { GetTransactionTableColumns } from './UpdateIncidentTableColumns';
 import { useGetUpdateIncident } from '../../../hooks/useGetUpdate';
 import UpdateIncidentForm from '../incident-form/UpdateIncidentForm';
+import UpdateIncidentDialog from '@/features/checker/components/update-incident-dialog/UpdateIncidentDialog';
 
 interface RowData {
   nium_order_id: string;
@@ -138,19 +139,12 @@ const UpdateIncidentCreationTable = () => {
       />
 
       {isModalOpen && (
-        <DialogWrapper
-          triggerBtnText=""
-          title="Update Incident"
-          footerBtnText=""
-          isOpen={isModalOpen}
-          setIsOpen={setIsModalOpen}
-          renderContent={
-            <UpdateIncidentForm
-              formActionRight="view"
-              rowData={selectedRowData}
-              setIsModalOpen={setIsModalOpen}
-            />
-          }
+        <UpdateIncidentDialog
+          pageId="updateIncident"
+          mode="edit"
+          selectedRowData={selectedRowData}
+          isModalOpen={isModalOpen}
+          setIsModalOpen={setIsModalOpen}
         />
       )}
     </div>

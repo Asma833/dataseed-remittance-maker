@@ -1,6 +1,6 @@
 import { DialogWrapper } from '@/components/common/DialogWrapper';
 import UpdateIncidentForm from '../../pages/update-incident/incident-form/UpdateIncidentForm';
-import { Order, UpdateIncidentFormData } from '../../types/updateIncident.type';
+import { Order } from '../../types/updateIncident.type';
 
 type Props = {
   pageId: string;
@@ -21,7 +21,7 @@ type Props = {
 const UpdateIncidentDialog = (props: Props) => {
   const {
     pageId,
-    mode = 'Edit',
+    mode,
     selectedRowData,
     isModalOpen,
     setIsModalOpen,

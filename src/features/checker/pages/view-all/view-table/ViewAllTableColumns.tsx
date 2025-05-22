@@ -1,16 +1,19 @@
 import CompletedTransactionStatusCell from '@/features/checker/components/table/CompletedTransactionStatusCell';
 import EsignStatusCell from '@/features/checker/components/table/EsignStatusCell';
 import IncidentStatusCell from '@/features/checker/components/table/IncidentStatusCell';
+import NiumOrderID from '@/features/checker/components/table/NiumOrderIdCell';
 import VKycStatusCell from '@/features/checker/components/table/VKycStatusCell';
 import { formatDate } from '@/utils/dateFormat';
 
-export const GetTransactionTableColumns = () => [
+export const GetTransactionTableColumns = (openModal: (value: string) => void) => [
   {
     key: 'nium_order_id',
     id: 'nium_order_id',
     name: 'Nium ID',
-    cell: (value: string) => <span className="text-pink-600">{value}</span>,
-    className: 'min-w-0',
+    className: 'min-w-0 p-2',
+      cell: (_: unknown, rowData: any) => (
+      <NiumOrderID rowData={rowData} openModal={openModal} />
+    ),
   },
   {
     key: 'created_at',

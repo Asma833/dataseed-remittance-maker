@@ -1,8 +1,10 @@
+import NiumOrderID from '@/features/checker/components/table/NiumOrderIdCell';
 import PurposeType from '@/features/checker/components/table/PurposeType';
 import TransactionType from '@/features/checker/components/table/TransactionType';
 
 export const GetAssignCreationColumns = (
-  handleSelectionChange: (rowId: string, checked: boolean) => void
+  handleSelectionChange: (rowId: string, checked: boolean) => void,
+  openModal: (value: string) => void
 ) => [
   {
     key: 'select',
@@ -26,6 +28,10 @@ export const GetAssignCreationColumns = (
     key: 'nium_order_id',
     id: 'nium_order_id',
     name: 'Nium ID',
+    className: 'min-w-0 p-2',
+     cell: (_: unknown, rowData: any) => (
+      <NiumOrderID rowData={rowData} openModal={openModal} />
+    ),
   },
   {
     key: 'partner_order_id',
