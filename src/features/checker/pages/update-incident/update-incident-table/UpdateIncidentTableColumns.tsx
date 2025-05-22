@@ -121,32 +121,32 @@ export const GetTransactionTableColumns = (
       />
     ),
   },
+  
   {
-    key: 'generate_esign_link',
-    id: 'generate_esign_link',
-    name: 'Generate Esign Link',
-    className: 'min-w-0 max-w-[100px]',
-    cell: (_: unknown, rowData: any) => (
+  key: 'generate_esign_link',
+  id: 'generate_esign_link',
+  name: 'Generate Esign Link',
+  className: 'min-w-0 max-w-[100px]',
+  cell: (_: unknown, rowData: any) => {
+    const { incident_status, e_sign_status, nium_order_id, v_kyc_link } = rowData;
+    const disabledStatuses = ['expired', 'rejected', 'not generated'];
+
+    return (
       <SignLinkButton
-        id={rowData.nium_order_id}
-        loading={
-          isSendEsignLinkLoading && loadingOrderId === rowData.nium_order_id
-        }
-        copyLinkUrl={rowData.v_kyc_link}
-        tooltipText={'Generate Esign Link'}
+        id={nium_order_id}
+        loading={isSendEsignLinkLoading && loadingOrderId === nium_order_id}
+        copyLinkUrl={v_kyc_link}
+        tooltipText="Generate Esign Link"
         buttonIconType="refresh"
         onClick={() => handleRegeneratedEsignLink(rowData)}
         disabled={
-          rowData?.incident_status ||
-          rowData?.incident_status === null ||
-          rowData?.incident_status === undefined ||
-          rowData?.e_sign_status === 'expired' ||
-          rowData?.e_sign_status === 'rejected' ||
-          rowData?.e_sign_status === 'not generated'
+          !incident_status || disabledStatuses.includes(e_sign_status)
         }
       />
-    ),
+    );
   },
+},
+
   {
     key: 'release',
     id: 'release',
