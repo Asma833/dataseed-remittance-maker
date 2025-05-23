@@ -47,7 +47,7 @@ const useScreenSize = () => {
 };
 
 const UpdateIncidentForm = (props: UpdateIncidentFormData) => {
-  const { formActionRight, rowData, setIsModalOpen } = props;
+  const { formActionRight, rowData, setIsModalOpen,mode,pageId } = props;
   const transactionType = rowData?.transaction_type_name?.name;
   const purposeType = rowData?.purpose_type_name?.purpose_name;
   const screenWidth = useScreenSize();
@@ -410,6 +410,7 @@ const UpdateIncidentForm = (props: UpdateIncidentFormData) => {
           {/* <ExchangeRateDetails data={updateFormIncidentConfig.tableData} /> */}
 
           <FormFieldRow rowCols={handleRowCols()}>
+            {mode === 'view' && (
             <Button
               type="button"
               onClick={handleViewDocument}
@@ -417,6 +418,7 @@ const UpdateIncidentForm = (props: UpdateIncidentFormData) => {
             >
               View Document
             </Button>
+            )}
             {isEsignDocumentLink && (
               <Button
                 type="button"
@@ -437,8 +439,8 @@ const UpdateIncidentForm = (props: UpdateIncidentFormData) => {
               </Button>
             )}
           </FormFieldRow>
-
-          <FormFieldRow rowCols={handleRowCols()}>
+            {mode === 'edit' && (
+              <FormFieldRow rowCols={handleRowCols()}>
             <div className="flex items-center space-x-8">
               <div className="flex items-center space-x-2">
                 <Checkbox
@@ -465,7 +467,9 @@ const UpdateIncidentForm = (props: UpdateIncidentFormData) => {
               </FormHelperText>
             </div>
           </FormFieldRow>
-
+            )}
+          
+         {mode === 'edit' && (
           <FormFieldRow rowCols={2}>
             <FormFieldRow className="flex-1">
               {getController({
@@ -485,14 +489,17 @@ const UpdateIncidentForm = (props: UpdateIncidentFormData) => {
                 })}
             </FormFieldRow>
           </FormFieldRow>
+         )}
+
         </Spacer>
       </FormContentWrapper>
-
+      {mode === 'edit' && (
       <div className="flex justify-center bg-background">
         <Button disabled={isPending} onClick={handleFormSubmit}>
           {isPending ? <Loader2 className="animate-spin" /> : 'Submit'}
         </Button>
       </div>
+      )}
     </FormProvider>
   );
 };

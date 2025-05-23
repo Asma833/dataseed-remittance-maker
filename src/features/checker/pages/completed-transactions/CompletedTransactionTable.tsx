@@ -8,6 +8,8 @@ import {
   purposeTypeOptions,
   transactionTypeOptions,
 } from '../../config/table-filter.config';
+import { useState } from 'react';
+import UpdateIncidentDialog from '../../components/update-incident-dialog/UpdateIncidentDialog';
 
 const CompletedTransactionTable = () => {
   usePageTitle('Completed Transaction');
@@ -24,8 +26,14 @@ const CompletedTransactionTable = () => {
     filterApplied: string;
     orders: any[];
   }>('completed', true); // Start with "completed" type
+const [isModalOpen, setIsModalOpen] = useState(false);
+ const [selectedRowData, setSelectedRowData] = useState<any>(null);
 
-  const columns = GetTransactionTableColumns();
+const openModal = (rowData: any) => {
+      setSelectedRowData(rowData);
+      setIsModalOpen(true);
+    };
+  const columns = GetTransactionTableColumns(openModal);
 
   // Transform checker orders data to match the table format
   const transformOrderForTable = (order: any) => {
@@ -127,6 +135,15 @@ const CompletedTransactionTable = () => {
       <div className="flex justify-center sm:justify-start mt-4 gap-3">
         <Button onClick={handleExportToCSV}>Export CSV</Button>
       </div>
+      {isModalOpen && (
+        <UpdateIncidentDialog
+          pageId="completedIncident"
+          mode="view"
+          selectedRowData={selectedRowData}
+          isModalOpen={isModalOpen}
+          setIsModalOpen={setIsModalOpen}
+        />
+      )}
     </div>
   );
 };

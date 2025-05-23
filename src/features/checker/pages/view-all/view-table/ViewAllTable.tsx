@@ -50,6 +50,10 @@ const ViewAllTable = () => {
 
   const isPaginationDynamic = false;
 
+  // const openModal = (rowData: any) => {
+  //     setSelectedRowData(rowData);
+  //     setIsModalOpen(true);
+  //   };
   // Use the dynamic pagination hook for fallback
   const pagination = useDynamicPagination({
     endpoint: API.CHECKER.VIEW_ALL.SEARCH_FILTER,
@@ -163,6 +167,16 @@ const ViewAllTable = () => {
       <div className="flex justify-center sm:justify-start mt-4 gap-3">
         <Button onClick={handleExportToCSV}>Export CSV</Button>
       </div>
+
+      {/* {isModalOpen && (
+        <UpdateIncidentDialog
+          pageId="viewAllIncident"
+          mode="view"
+          selectedRowData={selectedRowData}
+          isModalOpen={isModalOpen}
+          setIsModalOpen={setIsModalOpen}
+        />
+      )} */}
     </div>
   );
 };
