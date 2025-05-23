@@ -1,6 +1,5 @@
 import { useState } from 'react';
 import { DynamicTable } from '@/components/common/dynamic-table/DynamicTable';
-import { DialogWrapper } from '@/components/common/DialogWrapper';
 import { useDynamicPagination } from '@/components/common/dynamic-table/hooks/useDynamicPagination';
 import { useFilterApi } from '@/components/common/dynamic-table/hooks/useFilterApi';
 import { usePageTitle } from '@/hooks/usePageTitle';
@@ -9,11 +8,13 @@ import useUnassignChecker from '@/features/checker/hooks/useUnassignChecker';
 import { cn } from '@/utils/cn';
 import { GetTransactionTableColumns } from './UpdateIncidentTableColumns';
 import { useGetUpdateIncident } from '../../../hooks/useGetUpdate';
-import UpdateIncidentForm from '../incident-form/UpdateIncidentForm';
 import { Order } from '@/features/checker/types/updateIncident.type';
+import UpdateIncidentDialog from '@/features/checker/components/update-incident-dialog/UpdateIncidentDialog';
 
 const UpdateIncidentCreationTable = () => {
   usePageTitle('Update Incident');
+  const [selectedRowData, setSelectedRowData] = useState<any>(null);
+  const [isModalOpen, setIsModalOpen] = useState(false);
   const { getUserHashedKey } = useCurrentUser();
   const currentUserHashedKey = getUserHashedKey();
 
@@ -28,8 +29,6 @@ const UpdateIncidentCreationTable = () => {
 
   // Fetch data using the updated hook
   const { data, isLoading, error } = useGetUpdateIncident(requestData);
-  const [selectedRowData, setSelectedRowData] = useState<any>(null);
-  const [isModalOpen, setIsModalOpen] = useState(false);
 
   const isTableFilterDynamic = false;
   const isPaginationDynamic = false;
@@ -113,22 +112,15 @@ const UpdateIncidentCreationTable = () => {
         }}
       />
 
-      {/* {isModalOpen && (
-        <DialogWrapper
-          triggerBtnText=""
-          title="Update Incident"
-          footerBtnText=""
-          isOpen={isModalOpen}
-          setIsOpen={setIsModalOpen}
-          renderContent={
-            <UpdateIncidentForm
-              formActionRight="view"
-              rowData={selectedRowData}
-              setIsModalOpen={setIsModalOpen}
-            />
-          }
+      {isModalOpen && (
+        <UpdateIncidentDialog
+          pageId="updateIncident"
+          mode="edit"
+          selectedRowData={selectedRowData}
+          isModalOpen={isModalOpen}
+          setIsModalOpen={setIsModalOpen}
         />
-      )} */}
+      )}
     </div>
   );
 };

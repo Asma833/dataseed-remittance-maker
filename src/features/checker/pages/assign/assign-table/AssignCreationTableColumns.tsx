@@ -29,9 +29,7 @@ export const GetAssignCreationColumns = (
     id: 'nium_order_id',
     name: 'Nium ID',
     className: 'min-w-0 p-2',
-     cell: (_: unknown, rowData: any) => (
-      <NiumOrderID rowData={rowData} openModal={openModal} />
-    ),
+    cell: (_: unknown, rowData: any) => <NiumOrderID rowData={rowData} />,
   },
   {
     key: 'partner_order_id',

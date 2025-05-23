@@ -9,17 +9,21 @@ export const GetTransactionTableColumns = ({
   handleRegenerateEsignLink,
   isSendEsignLinkLoading,
   loadingOrderId,
+  openModal,
 }: {
   handleRegenerateEsignLink: (rowData: any) => void;
   isSendEsignLinkLoading: boolean;
   loadingOrderId: string;
+  openModal: (rowData: any) => void;
 }) => [
   {
     key: 'nium_order_id',
     id: 'nium_order_id',
     name: 'Nium ID',
     className: 'min-w-0 p-2',
-    cell: (_: unknown, rowData: any) => <NiumOrderID rowData={rowData} />,
+    cell: (_: unknown, rowData: any) => (
+      <NiumOrderID rowData={rowData} openModal={openModal} />
+    ),
   },
   {
     key: 'created_at',

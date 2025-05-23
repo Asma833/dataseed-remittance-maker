@@ -13,11 +13,14 @@ import {
 import { useSendEsignLink } from '@/features/checker/hooks/useSendEsignLink';
 import { Order } from '@/features/checker/types/updateIncident.type';
 import { useState } from 'react';
+import UpdateIncidentDialog from '@/features/checker/components/update-incident-dialog/UpdateIncidentDialog';
 
 const ViewAllTable = () => {
   usePageTitle('View All');
   const [loadingOrderId, setLoadingOrderId] = useState<string>('');
   const { mutate: sendEsignLink, isSendEsignLinkLoading } = useSendEsignLink();
+  const [selectedRowData, setSelectedRowData] = useState<any>(null);
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
   const {
     data: checkerOrdersData,
@@ -48,12 +51,13 @@ const ViewAllTable = () => {
     );
   };
 
+  const openModal = (rowData: any) => {
+    setSelectedRowData(rowData);
+    setIsModalOpen(true);
+  };
+
   const isPaginationDynamic = false;
 
-  // const openModal = (rowData: any) => {
-  //     setSelectedRowData(rowData);
-  //     setIsModalOpen(true);
-  //   };
   // Use the dynamic pagination hook for fallback
   const pagination = useDynamicPagination({
     endpoint: API.CHECKER.VIEW_ALL.SEARCH_FILTER,
@@ -111,6 +115,7 @@ const ViewAllTable = () => {
     handleRegenerateEsignLink,
     isSendEsignLinkLoading,
     loadingOrderId,
+    openModal,
   });
 
   // Get total records
@@ -168,7 +173,7 @@ const ViewAllTable = () => {
         <Button onClick={handleExportToCSV}>Export CSV</Button>
       </div>
 
-      {/* {isModalOpen && (
+      {isModalOpen && (
         <UpdateIncidentDialog
           pageId="viewAllIncident"
           mode="view"
@@ -176,7 +181,7 @@ const ViewAllTable = () => {
           isModalOpen={isModalOpen}
           setIsModalOpen={setIsModalOpen}
         />
-      )} */}
+      )}
     </div>
   );
 };
