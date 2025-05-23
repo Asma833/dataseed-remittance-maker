@@ -23,6 +23,25 @@ export interface UpdateIncidentRequest {
     niumInvoiceNumber?: string;
   };
 }
+export interface UpdateIncidentDialogProps {
+  mode: 'edit' | 'view';
+  pageId:
+    | 'updateIncident'
+    | 'viewAllIncident'
+    | 'assignIncident'
+    | 'completedIncident';
+  selectedRowData: Order & {
+    incident_number?: string;
+    eon_invoice_number?: string;
+    transaction_mode?: string;
+    status?: {
+      approve: boolean;
+      reject: boolean;
+    };
+  };
+  isModalOpen: boolean;
+  setIsModalOpen: (isOpen: boolean) => void;
+}
 
 export interface ExchangeRateTable {
   currency: string;
@@ -31,6 +50,8 @@ export interface ExchangeRateTable {
 }
 export interface UpdateIncidentFormData {
   formActionRight: string;
+  mode?: string;
+  pageId?: string;
   rowData?: Order & {
     incident_number?: string;
     eon_invoice_number?: string;

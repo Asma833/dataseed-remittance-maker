@@ -1,31 +1,26 @@
 import { useState } from 'react';
 import { DynamicTable } from '@/components/common/dynamic-table/DynamicTable';
-import { DialogWrapper } from '@/components/common/DialogWrapper';
 import { useDynamicPagination } from '@/components/common/dynamic-table/hooks/useDynamicPagination';
 import { useFilterApi } from '@/components/common/dynamic-table/hooks/useFilterApi';
 import { usePageTitle } from '@/hooks/usePageTitle';
 import { useCurrentUser } from '@/utils/getUserFromRedux';
 import useUnassignChecker from '@/features/checker/hooks/useUnassignChecker';
-import { useSendEsignLink } from '@/features/checker/hooks/useSendEsignLink';
 import { cn } from '@/utils/cn';
 import { GetTransactionTableColumns } from './UpdateIncidentTableColumns';
 import { useGetUpdateIncident } from '../../../hooks/useGetUpdate';
-import UpdateIncidentForm from '../incident-form/UpdateIncidentForm';
-
-interface RowData {
-  nium_order_id: string;
-  [key: string]: any;
-}
+import { Order } from '@/features/checker/types/updateIncident.type';
+import UpdateIncidentDialog from '@/features/checker/components/update-incident-dialog/UpdateIncidentDialog';
 
 const UpdateIncidentCreationTable = () => {
   usePageTitle('Update Incident');
+  const [selectedRowData, setSelectedRowData] = useState<any>(null);
+  const [isModalOpen, setIsModalOpen] = useState(false);
   const { getUserHashedKey } = useCurrentUser();
   const currentUserHashedKey = getUserHashedKey();
 
   // Call the hook at the top level of the component
   const { handleUnassign: unassignChecker, isPending: isUnassignPending } =
     useUnassignChecker();
-  const { mutate: sendEsignLink, isSendEsignLinkLoading } = useSendEsignLink();
 
   const requestData = {
     checkerId: currentUserHashedKey || '',
@@ -34,9 +29,6 @@ const UpdateIncidentCreationTable = () => {
 
   // Fetch data using the updated hook
   const { data, isLoading, error } = useGetUpdateIncident(requestData);
-  const [selectedRowData, setSelectedRowData] = useState<any>(null);
-  const [isModalOpen, setIsModalOpen] = useState(false);
-  const [loadingOrderId, setLoadingOrderId] = useState<string>('');
 
   const isTableFilterDynamic = false;
   const isPaginationDynamic = false;
@@ -59,33 +51,16 @@ const UpdateIncidentCreationTable = () => {
     baseQueryParams: {},
   });
 
-  const handleUnassign = (rowData: RowData): void => {
-    if (currentUserHashedKey) {
+  const handleUnassign = (rowData: Order): void => {
+    if (currentUserHashedKey && rowData.partner_order_id) {
       unassignChecker(rowData.partner_order_id, currentUserHashedKey);
     }
-  };
-
-  const handleRegenerateEsignLink = (rowData: RowData): void => {
-    setLoadingOrderId(rowData.nium_order_id);
-    sendEsignLink(
-      { partner_order_id: rowData.partner_order_id },
-      {
-        onSuccess: () => {
-          setLoadingOrderId('');
-        },
-        onError: () => {
-          setLoadingOrderId('');
-        },
-      }
-    );
   };
 
   const columns = GetTransactionTableColumns(
     openModal,
     handleUnassign,
-    handleRegenerateEsignLink,
-    isSendEsignLinkLoading,
-    loadingOrderId
+    isUnassignPending
   );
 
   return (
@@ -138,19 +113,12 @@ const UpdateIncidentCreationTable = () => {
       />
 
       {isModalOpen && (
-        <DialogWrapper
-          triggerBtnText=""
-          title="Update Incident"
-          footerBtnText=""
-          isOpen={isModalOpen}
-          setIsOpen={setIsModalOpen}
-          renderContent={
-            <UpdateIncidentForm
-              formActionRight="view"
-              rowData={selectedRowData}
-              setIsModalOpen={setIsModalOpen}
-            />
-          }
+        <UpdateIncidentDialog
+          pageId="updateIncident"
+          mode="edit"
+          selectedRowData={selectedRowData}
+          isModalOpen={isModalOpen}
+          setIsModalOpen={setIsModalOpen}
         />
       )}
     </div>

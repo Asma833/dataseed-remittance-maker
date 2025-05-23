@@ -11,6 +11,7 @@ import axiosInstance from '@/core/services/axios/axiosInstance';
 import { useCurrentUser } from '@/utils/getUserFromRedux';
 import { useGetData } from '@/hooks/useGetData';
 import { useQueryInvalidator } from '@/hooks/useQueryInvalidator';
+import UpdateIncidentDialog from '@/features/checker/components/update-incident-dialog/UpdateIncidentDialog';
 
 const AssignCreationTable = () => {
   const { invalidateMultipleQueries } = useQueryInvalidator();
@@ -28,7 +29,13 @@ const AssignCreationTable = () => {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const isTableFilterDynamic = false;
   const isPaginationDynamic = false;
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [selectedRowData, setSelectedRowData] = useState<any>(null);
 
+  const openModal = (rowData: any) => {
+        setSelectedRowData(rowData);
+        setIsModalOpen(true);
+      };
   // Update tableData when data changes
   useEffect(() => {
     if (data) {
@@ -109,7 +116,7 @@ const AssignCreationTable = () => {
     }
   };
 
-  const columns = GetAssignCreationColumns(handleSelectionChange);
+  const columns = GetAssignCreationColumns(handleSelectionChange,openModal);
 
   return (
     <div className="dynamic-table-wrap flex flex-col">
@@ -156,6 +163,15 @@ const AssignCreationTable = () => {
             : `Take Request${selectedRows.length !== 1 ? 's' : ''}`}
         </Button>
       </div>
+      {isModalOpen && (
+        <UpdateIncidentDialog
+          pageId="completedIncident"
+          mode="view"
+          selectedRowData={selectedRowData}
+          isModalOpen={isModalOpen}
+          setIsModalOpen={setIsModalOpen}
+        />
+        )}
     </div>
   );
 };

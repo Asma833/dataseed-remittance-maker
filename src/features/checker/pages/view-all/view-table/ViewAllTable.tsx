@@ -10,9 +10,17 @@ import {
   purposeTypeOptions,
   transactionTypeOptions,
 } from '@/features/checker/config/table-filter.config';
+import { useSendEsignLink } from '@/features/checker/hooks/useSendEsignLink';
+import { Order } from '@/features/checker/types/updateIncident.type';
+import { useState } from 'react';
+import UpdateIncidentDialog from '@/features/checker/components/update-incident-dialog/UpdateIncidentDialog';
 
 const ViewAllTable = () => {
   usePageTitle('View All');
+  const [loadingOrderId, setLoadingOrderId] = useState<string>('');
+  const { mutate: sendEsignLink, isSendEsignLinkLoading } = useSendEsignLink();
+  const [selectedRowData, setSelectedRowData] = useState<any>(null);
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
   const {
     data: checkerOrdersData,
@@ -26,6 +34,28 @@ const ViewAllTable = () => {
     orders: any[];
   }>('all', true);
 
+  const handleRegenerateEsignLink = (rowData: Order): void => {
+    if (rowData.nium_order_id) {
+      setLoadingOrderId(rowData.nium_order_id);
+    }
+    sendEsignLink(
+      { partner_order_id: rowData.partner_order_id || '' },
+      {
+        onSuccess: () => {
+          setLoadingOrderId('');
+        },
+        onError: () => {
+          setLoadingOrderId('');
+        },
+      }
+    );
+  };
+
+  const openModal = (rowData: any) => {
+    setSelectedRowData(rowData);
+    setIsModalOpen(true);
+  };
+
   const isPaginationDynamic = false;
 
   // Use the dynamic pagination hook for fallback
@@ -35,8 +65,6 @@ const ViewAllTable = () => {
     dataPath: 'transactions',
     totalRecordsPath: 'totalRecords',
   });
-
-  const columns = GetTransactionTableColumns();
 
   // Transform checker orders data to match the table format
   const transformOrderForTable = (order: any) => {
@@ -82,6 +110,13 @@ const ViewAllTable = () => {
   // const isLoading =
   //   checkerOrdersLoading || filterApi.loading || pagination.loading;
   // const hasError = checkerOrdersError || filterApi.error || pagination.error;
+
+  const columns = GetTransactionTableColumns({
+    handleRegenerateEsignLink,
+    isSendEsignLinkLoading,
+    loadingOrderId,
+    openModal,
+  });
 
   // Get total records
   const totalRecords =
@@ -137,6 +172,16 @@ const ViewAllTable = () => {
       <div className="flex justify-center sm:justify-start mt-4 gap-3">
         <Button onClick={handleExportToCSV}>Export CSV</Button>
       </div>
+
+      {isModalOpen && (
+        <UpdateIncidentDialog
+          pageId="viewAllIncident"
+          mode="view"
+          selectedRowData={selectedRowData}
+          isModalOpen={isModalOpen}
+          setIsModalOpen={setIsModalOpen}
+        />
+      )}
     </div>
   );
 };

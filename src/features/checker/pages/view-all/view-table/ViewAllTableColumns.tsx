@@ -1,16 +1,29 @@
-import CompletedTransactionStatusCell from '@/features/checker/components/table/CompletedTransactionStatusCell';
+import { SignLinkButton } from '@/components/common/SignLinkButton';
 import EsignStatusCell from '@/features/checker/components/table/EsignStatusCell';
 import IncidentStatusCell from '@/features/checker/components/table/IncidentStatusCell';
+import NiumOrderID from '@/features/checker/components/table/NiumOrderIdCell';
 import VKycStatusCell from '@/features/checker/components/table/VKycStatusCell';
 import { formatDate } from '@/utils/dateFormat';
 
-export const GetTransactionTableColumns = () => [
+export const GetTransactionTableColumns = ({
+  handleRegenerateEsignLink,
+  isSendEsignLinkLoading,
+  loadingOrderId,
+  openModal,
+}: {
+  handleRegenerateEsignLink: (rowData: any) => void;
+  isSendEsignLinkLoading: boolean;
+  loadingOrderId: string;
+  openModal: (rowData: any) => void;
+}) => [
   {
     key: 'nium_order_id',
     id: 'nium_order_id',
     name: 'Nium ID',
-    cell: (value: string) => <span className="text-pink-600">{value}</span>,
-    className: 'min-w-0',
+    className: 'min-w-0 p-2',
+    cell: (_: unknown, rowData: any) => (
+      <NiumOrderID rowData={rowData} openModal={openModal} />
+    ),
   },
   {
     key: 'created_at',
@@ -114,12 +127,36 @@ export const GetTransactionTableColumns = () => [
     ),
   },
   {
-    key: 'doc_verification_status',
-    id: 'doc_verification_status',
-    name: 'Completed Transaction Status',
-    className: 'min-w-0  max-w-[70px]',
+    key: 'generate_esign_link',
+    id: 'generate_esign_link',
+    name: 'Generate Esign Link',
+    className: 'min-w-0 max-w-[100px]',
     cell: (_: unknown, rowData: any) => (
-      <CompletedTransactionStatusCell rowData={rowData} />
+      <SignLinkButton
+        id={rowData.nium_order_id}
+        loading={
+          isSendEsignLinkLoading && loadingOrderId === rowData.nium_order_id
+        }
+        copyLinkUrl={rowData.v_kyc_link}
+        tooltipText={'Generate Esign Link'}
+        buttonIconType="refresh"
+        onClick={() => handleRegenerateEsignLink(rowData)}
+        disabled={(() => {
+          const { incident_status, e_sign_status } = rowData || {};
+          const disabledEsignStatuses = [
+            'expired',
+            'rejected',
+            'not generated',
+          ];
+
+          return (
+            incident_status === null ||
+            incident_status === undefined ||
+            Boolean(incident_status) ||
+            disabledEsignStatuses.includes(e_sign_status)
+          );
+        })()}
+      />
     ),
   },
 ];

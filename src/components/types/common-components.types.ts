@@ -73,7 +73,7 @@ export interface DynamicTableProps<T> {
 export type IconType = 'default' | 'upload' | 'download';
 
 export type DialogWrapperProps = {
-  triggerBtnText: string;
+  triggerBtnText?: string;
   renderContent?: React.ReactNode;
   title?: string;
   description?: string;

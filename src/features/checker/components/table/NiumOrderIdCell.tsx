@@ -1,16 +1,27 @@
+import { cn } from '@/utils/cn';
+
 const NiumOrderID = ({
   rowData,
   openModal,
+  className = '',
 }: {
   rowData: any;
-  openModal: (value: string) => void;
+  openModal?: (value: string) => void;
+  className?: string;
 }) => {
+  const handleOpenModal = (rowData: any) => {
+    if (openModal) {
+      openModal(rowData);
+    }
+  };
   return (
     <button
-      className="text-pink-600 cursor-pointer underline flex items-center justify-center gap-1 disabled:opacity-50"
-      onClick={() => {
-        openModal(rowData);
-      }}
+      className={cn(
+        'w-full text-primary cursor-pointer flex items-center justify-center gap-1 disabled:opacity-50',
+        openModal ? 'underline' : '',
+        className
+      )}
+      onClick={handleOpenModal}
     >
       {rowData.nium_order_id}
     </button>

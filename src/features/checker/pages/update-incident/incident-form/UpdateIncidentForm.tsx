@@ -3,8 +3,6 @@ import { useForm } from 'react-hook-form';
 import { toast } from 'sonner';
 import { Loader2 } from 'lucide-react';
 import { FormHelperText } from '@mui/material';
-import { useQueryClient } from '@tanstack/react-query';
-// import { MaterialText } from '@/components/form/controller/MaterialText';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { updateIncidentFormSchema } from './update-incident-form.schema';
 import { FormProvider } from '@/components/form/providers/FormProvider';
@@ -28,14 +26,9 @@ import useSubmitIncidentFormData from '../../completed-transactions/hooks/useSub
 import { useQueryInvalidator } from '@/hooks/useQueryInvalidator';
 import { downloadFromUrl } from '@/utils/exportUtils';
 
-// import {
-//   baseGeneralFieldStyle,
-//   baseStyle,
-// } from '@/components/form/styles/materialStyles';
-
 const useScreenSize = () => {
-  const [screenWidth, setScreenWidth] = useState(window.innerWidth);
   usePageTitle('Update Incident');
+  const [screenWidth, setScreenWidth] = useState(window.innerWidth);
 
   useEffect(() => {
     const handleResize = () => setScreenWidth(window.innerWidth);
@@ -47,13 +40,14 @@ const useScreenSize = () => {
 };
 
 const UpdateIncidentForm = (props: UpdateIncidentFormData) => {
-  const { formActionRight, rowData, setIsModalOpen } = props;
+  const { formActionRight, rowData, setIsModalOpen, mode, pageId } = props;
   const transactionType = rowData?.transaction_type_name?.name;
   const purposeType = rowData?.purpose_type_name?.purpose_name;
   const screenWidth = useScreenSize();
   const { invalidateMultipleQueries } = useQueryInvalidator();
   const { getUserHashedKey } = useCurrentUser();
   const { submitIncidentFormData, isPending } = useSubmitIncidentFormData();
+  // usestates
   const [showNiumInvoice, setShowNiumInvoice] = useState(true);
   const [documentUrl, setDocumentUrl] = useState<string | null>(null);
   const [isApproved, setIsApproved] = useState(true);
@@ -61,7 +55,6 @@ const UpdateIncidentForm = (props: UpdateIncidentFormData) => {
   const [isFormValid, setIsFormValid] = useState(false);
   const [isEsignDocumentLink, setIsEsignDocumentLink] = useState(false);
   const [isVkycDownloadLink, setIsVkycDownloadLink] = useState(false);
-  const queryClient = useQueryClient();
 
   // State to track if we should show the buy/sell field
   // const [showBuySell, setShowBuySell] = useState(true);
@@ -235,7 +228,6 @@ const UpdateIncidentForm = (props: UpdateIncidentFormData) => {
   };
 
   const handleFormSubmit = async () => {
-    const values = getValues();
     if (isApproved && !niumInvoiceNumber) {
       setError('fields.niumInvoiceNumber', {
         type: 'required',
@@ -274,7 +266,7 @@ const UpdateIncidentForm = (props: UpdateIncidentFormData) => {
           onSuccess: () => {
             toast.success('Incident updated successfully');
             resetFormValues();
-            setIsModalOpen(false); // Ensure this runs after successful submission
+            setIsModalOpen(false);
             invalidateMultipleQueries([
               ['updateIncident'],
               ['dashboardMetrics'],
@@ -410,89 +402,101 @@ const UpdateIncidentForm = (props: UpdateIncidentFormData) => {
           {/* <ExchangeRateDetails data={updateFormIncidentConfig.tableData} /> */}
 
           <FormFieldRow rowCols={handleRowCols()}>
-            <Button
-              type="button"
-              onClick={handleViewDocument}
-              disabled={!documentUrl}
-            >
-              View Document
-            </Button>
-            {isEsignDocumentLink && (
-              <Button
-                type="button"
-                onClick={handleDownloadDocument}
-                disabled={!documentUrl}
-              >
-                eSign Document
-              </Button>
-            )}
+            {mode === 'view' &&
+              (pageId === 'viewAllIncident' ||
+                pageId === 'completedIncident') && (
+                <Button
+                  type="button"
+                  onClick={handleViewDocument}
+                  disabled={!documentUrl}
+                >
+                  View Document
+                </Button>
+              )}
+            {isEsignDocumentLink &&
+              (pageId === 'updateIncident' ||
+                pageId === 'completedIncident') && (
+                <Button
+                  type="button"
+                  onClick={handleDownloadDocument}
+                  disabled={!documentUrl}
+                >
+                  eSign Document
+                </Button>
+              )}
 
-            {isVkycDownloadLink && (
-              <Button
-                type="button"
-                onClick={handleDownloadVideo}
-                disabled={!documentUrl}
-              >
-                VKYC Document
-              </Button>
-            )}
+            {isVkycDownloadLink &&
+              (pageId === 'updateIncident' ||
+                pageId === 'completedIncident') && (
+                <Button
+                  type="button"
+                  onClick={handleDownloadVideo}
+                  disabled={!documentUrl}
+                >
+                  VKYC Document
+                </Button>
+              )}
           </FormFieldRow>
-
-          <FormFieldRow rowCols={handleRowCols()}>
-            <div className="flex items-center space-x-8">
-              <div className="flex items-center space-x-2">
-                <Checkbox
-                  id="approve"
-                  checked={isApproved}
-                  onCheckedChange={handleApproveChange}
-                />
-                <Label htmlFor="approve" className="cursor-pointer">
-                  Approve
-                </Label>
+          {mode === 'edit' && (
+            <FormFieldRow rowCols={handleRowCols()}>
+              <div className="flex items-center space-x-8">
+                <div className="flex items-center space-x-2">
+                  <Checkbox
+                    id="approve"
+                    checked={isApproved}
+                    onCheckedChange={handleApproveChange}
+                  />
+                  <Label htmlFor="approve" className="cursor-pointer">
+                    Approve
+                  </Label>
+                </div>
+                <div className="flex items-center space-x-2">
+                  <Checkbox
+                    id="reject"
+                    checked={isRejected}
+                    onCheckedChange={handleRejectChange}
+                  />
+                  <Label htmlFor="reject" className="cursor-pointer">
+                    Reject
+                  </Label>
+                </div>
+                <FormHelperText error={!!errors.fields?.status}>
+                  {errors.fields?.status?.message}
+                </FormHelperText>
               </div>
-              <div className="flex items-center space-x-2">
-                <Checkbox
-                  id="reject"
-                  checked={isRejected}
-                  onCheckedChange={handleRejectChange}
-                />
-                <Label htmlFor="reject" className="cursor-pointer">
-                  Reject
-                </Label>
-              </div>
-              <FormHelperText error={!!errors.fields?.status}>
-                {errors.fields?.status?.message}
-              </FormHelperText>
-            </div>
-          </FormFieldRow>
-
-          <FormFieldRow rowCols={2}>
-            <FormFieldRow className="flex-1">
-              {getController({
-                ...updateFormIncidentConfig.checkFeedInput.comment,
-                control,
-                errors,
-                name: 'fields.comment',
-              })}
             </FormFieldRow>
-            <FormFieldRow className="flex-1">
-              {showNiumInvoice &&
-                getController({
-                  ...updateFormIncidentConfig.checkFeedInput.niumInvoiceNo,
+          )}
+
+          {mode === 'edit' && (
+            <FormFieldRow rowCols={2}>
+              <FormFieldRow className="flex-1">
+                {getController({
+                  ...updateFormIncidentConfig.checkFeedInput.comment,
                   control,
                   errors,
-                  name: 'fields.niumInvoiceNumber',
+                  name: 'fields.comment',
                 })}
+              </FormFieldRow>
+              <FormFieldRow className="flex-1">
+                {showNiumInvoice &&
+                  getController({
+                    ...updateFormIncidentConfig.checkFeedInput.niumInvoiceNo,
+                    control,
+                    errors,
+                    name: 'fields.niumInvoiceNumber',
+                  })}
+              </FormFieldRow>
             </FormFieldRow>
-          </FormFieldRow>
+          )}
         </Spacer>
       </FormContentWrapper>
-
-      <div className="flex justify-center bg-background">
-        <Button disabled={isPending} onClick={handleFormSubmit}>
-          {isPending ? <Loader2 className="animate-spin" /> : 'Submit'}
-        </Button>
-      </div>
+      {mode === 'edit' && (
+        <div className="flex justify-center bg-background">
+          <Button disabled={isPending} onClick={handleFormSubmit}>
+            {isPending ? <Loader2 className="animate-spin" /> : 'Submit'}
+          </Button>
+        </div>
+      )}
     </FormProvider>
   );
 };
