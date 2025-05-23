@@ -10,9 +10,14 @@ import {
   purposeTypeOptions,
   transactionTypeOptions,
 } from '@/features/checker/config/table-filter.config';
+import { useSendEsignLink } from '@/features/checker/hooks/useSendEsignLink';
+import { Order } from '@/features/checker/types/updateIncident.type';
+import { useState } from 'react';
 
 const ViewAllTable = () => {
   usePageTitle('View All');
+  const [loadingOrderId, setLoadingOrderId] = useState<string>('');
+  const { mutate: sendEsignLink, isSendEsignLinkLoading } = useSendEsignLink();
 
   const {
     data: checkerOrdersData,
@@ -26,6 +31,23 @@ const ViewAllTable = () => {
     orders: any[];
   }>('all', true);
 
+  const handleRegenerateEsignLink = (rowData: Order): void => {
+    if (rowData.nium_order_id) {
+      setLoadingOrderId(rowData.nium_order_id);
+    }
+    sendEsignLink(
+      { partner_order_id: rowData.partner_order_id || '' },
+      {
+        onSuccess: () => {
+          setLoadingOrderId('');
+        },
+        onError: () => {
+          setLoadingOrderId('');
+        },
+      }
+    );
+  };
+
   const isPaginationDynamic = false;
 
   // Use the dynamic pagination hook for fallback
@@ -35,8 +57,6 @@ const ViewAllTable = () => {
     dataPath: 'transactions',
     totalRecordsPath: 'totalRecords',
   });
-
-  const columns = GetTransactionTableColumns();
 
   // Transform checker orders data to match the table format
   const transformOrderForTable = (order: any) => {
@@ -82,6 +102,12 @@ const ViewAllTable = () => {
   // const isLoading =
   //   checkerOrdersLoading || filterApi.loading || pagination.loading;
   // const hasError = checkerOrdersError || filterApi.error || pagination.error;
+
+  const columns = GetTransactionTableColumns({
+    handleRegenerateEsignLink,
+    isSendEsignLinkLoading,
+    loadingOrderId,
+  });
 
   // Get total records
   const totalRecords =

@@ -1,18 +1,12 @@
 import { SignLinkButton } from '@/components/common/SignLinkButton';
 import PurposeType from '@/features/checker/components/table/PurposeType';
 import TransactionType from '@/features/checker/components/table/TransactionType';
-import IncidentStatusCell from '@/features/checker/components/table/IncidentStatusCell';
-import EsignStatusCell from '@/features/checker/components/table/EsignStatusCell';
-import VKycStatusCell from '@/features/checker/components/table/VKycStatusCell';
 import NiumOrderID from '@/features/checker/components/table/NiumOrderIdCell';
-import CompletedTransactionStatusCell from '@/features/checker/components/table/CompletedTransactionStatusCell';
 
 export const GetTransactionTableColumns = (
   openModal: (value: string) => void,
   handleUnassign: (rowData: any) => void,
-  handleRegeneratedEsignLink: (rowData: any) => void,
-  isSendEsignLinkLoading: boolean,
-  loadingOrderId: string // Add this parameter
+  isUnassignPending: boolean
 ) => [
   {
     key: 'nium_order_id',
@@ -63,9 +57,7 @@ export const GetTransactionTableColumns = (
     cell: (_: unknown, rowData: any) => (
       <SignLinkButton
         id={rowData.nium_order_id}
-        loading={
-          isSendEsignLinkLoading && loadingOrderId === rowData.nium_order_id
-        }
+        loading={isUnassignPending}
         copyLinkUrl={rowData.v_kyc_link}
         tooltipText={'Release Order'}
         buttonIconType={'remove'}

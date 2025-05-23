@@ -99,7 +99,7 @@ export const SignLinkButton: React.FC<SignLinkButtonProps> = ({
           size="sm"
           disabled={disabled}
           className={cn(
-            'text-gray-700  bg-transparent border-none shadow-none',
+            'text-foreground  bg-transparent border-none shadow-none',
             className,
             'hover:bg-primary hover:text-white  disabled:text-gray-500'
           )}
@@ -107,7 +107,9 @@ export const SignLinkButton: React.FC<SignLinkButtonProps> = ({
           {getIcon()}
         </Button>
       </TooltipTrigger>
-      <TooltipContent className="bg-gray-600">{tooltipText}</TooltipContent>
+      <TooltipContent className="bg-secondary text-foreground">
+        {tooltipText}
+      </TooltipContent>
     </Tooltip>
   );
 };
