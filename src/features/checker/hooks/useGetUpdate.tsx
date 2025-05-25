@@ -1,11 +1,11 @@
 import { useQuery } from '@tanstack/react-query';
 import { updateIncidentApi } from '../api/updateIncidentApi';
 import { toast } from 'sonner';
-import { UpdateGetRequestData } from '../types/updateIncident.type';
+import { UpdateGetRequestData } from '../types/updateIncident.types';
 
 export const useGetUpdateIncident = (incidentData: UpdateGetRequestData) => {
   const query = useQuery({
-    queryKey: ['updateIncident', incidentData],
+    queryKey: ['updateIncident'],
     queryFn: async () => {
       try {
         const response =
