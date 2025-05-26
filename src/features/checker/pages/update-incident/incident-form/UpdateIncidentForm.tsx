@@ -17,13 +17,12 @@ import { cn } from '@/utils/cn';
 import {
   UpdateIncidentFormData,
   UpdateIncidentRequest,
-} from '@/features/checker/types/updateIncident.type';
+} from '@/features/checker/types/updateIncident.types';
 import { usePageTitle } from '@/hooks/usePageTitle';
 import { Checkbox } from '@/components/ui/checkbox';
 import { Label } from '@/components/ui/label';
 import { useCurrentUser } from '@/utils/getUserFromRedux';
 import useSubmitIncidentFormData from '../../completed-transactions/hooks/useSubmitIncidentFormData';
-import { useQueryInvalidator } from '@/hooks/useQueryInvalidator';
 import { downloadFromUrl } from '@/utils/exportUtils';
 
 const useScreenSize = () => {
@@ -44,7 +43,6 @@ const UpdateIncidentForm = (props: UpdateIncidentFormData) => {
   const transactionType = rowData?.transaction_type_name?.name;
   const purposeType = rowData?.purpose_type_name?.purpose_name;
   const screenWidth = useScreenSize();
-  const { invalidateMultipleQueries } = useQueryInvalidator();
   const { getUserHashedKey } = useCurrentUser();
   const { submitIncidentFormData, isPending } = useSubmitIncidentFormData();
   // usestates
@@ -264,13 +262,9 @@ const UpdateIncidentForm = (props: UpdateIncidentFormData) => {
 
         await submitIncidentFormData(formattedData, {
           onSuccess: () => {
+            setIsModalOpen(false);
             toast.success('Incident updated successfully');
             resetFormValues();
-            setIsModalOpen(false);
-            invalidateMultipleQueries([
-              ['updateIncident'],
-              ['dashboardMetrics'],
-            ]);
           },
           onError: (error) => {
             toast.error(error?.message || 'Failed to update incident');
