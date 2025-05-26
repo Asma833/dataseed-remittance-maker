@@ -33,3 +33,25 @@
 .formCardHeader {
   @apply flex items-center justify-between;
 }
+.formFieldRow {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
+}
+
+.formFieldRow .fieldWrapper {
+  width: 100%;
+}
+
+@media (min-width: 768px) {
+  .formFieldRow .fieldWrapper {
+    width: calc(50% - 15px);
+  }
+}
+
+@media (min-width: 1024px) {
+  /* lg: 3 columns */
+  .formFieldRow .fieldWrapper {
+    width: calc(33.33% - 15px);
+  }
+}

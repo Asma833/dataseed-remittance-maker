@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import { useParams, useLocation } from 'react-router-dom';
 import { toast } from 'sonner';
@@ -19,20 +19,7 @@ import { useCurrentUser } from '@/utils/getUserFromRedux';
 import { userFormConfig } from './partner-form.config';
 import { userSchema } from './partner-form.schema';
 
-const useScreenSize = () => {
-  const [screenWidth, setScreenWidth] = useState(window.innerWidth);
-
-  useEffect(() => {
-    const handleResize = () => setScreenWidth(window.innerWidth);
-    window.addEventListener('resize', handleResize);
-    return () => window.removeEventListener('resize', handleResize);
-  }, []);
-
-  return screenWidth;
-};
-
 const PartnerCreationFormPage = () => {
-  const screenWidth = useScreenSize();
   const { productOptions } = useProductOptions();
   const { id } = useParams();
   const isEditMode = !!id;
@@ -40,9 +27,6 @@ const PartnerCreationFormPage = () => {
   const location = useLocation();
   const selectedRow = (location.state as any)?.selectedRow || null;
   const roleCode = 'checker';
-
-  const { getUser } = useCurrentUser();
-  const user = getUser();
 
   useEffect(() => {
     setTitle(isEditMode ? 'Edit Partner' : 'Create Partner');
@@ -193,7 +177,7 @@ const PartnerCreationFormPage = () => {
 
       <FormContentWrapper className="py-2 lg:pr-32 md:pr-0 w-full">
         <Spacer>
-          <FormFieldRow rowCols={screenWidth < 768 ? 1 : 2} className="mb-4">
+          <FormFieldRow className="mb-4">
             {Object.entries(userFormConfig.fields)
               .slice(0, 2)
               .map(([name, field]) => (
@@ -202,7 +186,7 @@ const PartnerCreationFormPage = () => {
                 </FieldWrapper>
               ))}
           </FormFieldRow>
-          <FormFieldRow rowCols={screenWidth < 768 ? 1 : 2} className="mb-2">
+          <FormFieldRow className="mb-2">
             <FieldWrapper>
               {getController({
                 ...userFormConfig.fields.email,
@@ -228,7 +212,7 @@ const PartnerCreationFormPage = () => {
             </FieldWrapper>
           </FormFieldRow>
 
-          <FormFieldRow rowCols={screenWidth < 768 ? 1 : 2} className="mb-2">
+          <FormFieldRow className="mb-2">
             {Object.entries(userFormConfig.fields)
               .slice(3, 5)
               .map(([name, field]) => (

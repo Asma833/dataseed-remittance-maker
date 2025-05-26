@@ -18,31 +18,17 @@ import {
   UpdateIncidentFormData,
   UpdateIncidentRequest,
 } from '@/features/checker/types/updateIncident.types';
-import { usePageTitle } from '@/hooks/usePageTitle';
 import { Checkbox } from '@/components/ui/checkbox';
 import { Label } from '@/components/ui/label';
 import { useCurrentUser } from '@/utils/getUserFromRedux';
 import useSubmitIncidentFormData from '../../completed-transactions/hooks/useSubmitIncidentFormData';
 import { downloadFromUrl } from '@/utils/exportUtils';
 
-const useScreenSize = () => {
-  usePageTitle('Update Incident');
-  const [screenWidth, setScreenWidth] = useState(window.innerWidth);
-
-  useEffect(() => {
-    const handleResize = () => setScreenWidth(window.innerWidth);
-    window.addEventListener('resize', handleResize);
-    return () => window.removeEventListener('resize', handleResize);
-  }, []);
-
-  return screenWidth;
-};
-
 const UpdateIncidentForm = (props: UpdateIncidentFormData) => {
   const { formActionRight, rowData, setIsModalOpen, mode, pageId } = props;
   const transactionType = rowData?.transaction_type_name?.name;
   const purposeType = rowData?.purpose_type_name?.purpose_name;
-  const screenWidth = useScreenSize();
+ 
   const { getUserHashedKey } = useCurrentUser();
   const { submitIncidentFormData, isPending } = useSubmitIncidentFormData();
   // usestates
@@ -221,9 +207,7 @@ const UpdateIncidentForm = (props: UpdateIncidentFormData) => {
     setIsFormValid(valid);
   }, [isApproved, isRejected, comment, niumInvoiceNumber]);
 
-  const handleRowCols = () => {
-    return screenWidth < 768 ? 1 : 3;
-  };
+  
 
   const handleFormSubmit = async () => {
     if (isApproved && !niumInvoiceNumber) {
@@ -318,7 +302,7 @@ const UpdateIncidentForm = (props: UpdateIncidentFormData) => {
     <FormProvider methods={methods}>
       <FormContentWrapper className="py-2 mt-0 rounded-none">
         <Spacer>
-          <FormFieldRow rowCols={handleRowCols()}>
+          <FormFieldRow>
             {Object.entries(updateFormIncidentConfig.basicDetails)
               .slice(1, 5)
               .map(([name, field]) => {
@@ -395,7 +379,7 @@ const UpdateIncidentForm = (props: UpdateIncidentFormData) => {
 
           {/* <ExchangeRateDetails data={updateFormIncidentConfig.tableData} /> */}
 
-          <FormFieldRow rowCols={handleRowCols()}>
+          <FormFieldRow >
             {mode === 'view' &&
               (pageId === 'viewAllIncident' ||
                 pageId === 'completedIncident') && (
@@ -432,7 +416,7 @@ const UpdateIncidentForm = (props: UpdateIncidentFormData) => {
               )}
           </FormFieldRow>
           {mode === 'edit' && (
-            <FormFieldRow rowCols={handleRowCols()}>
+            <FormFieldRow >
               <div className="flex items-center space-x-8">
                 <div className="flex items-center space-x-2">
                   <Checkbox
