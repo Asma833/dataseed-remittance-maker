@@ -39,7 +39,7 @@ const CompletedTransactionTable = () => {
   const { options: transactionTypeOptions } = useDynamicOptions(
     API.TRANSACTION.GET_TRANSACTIONS
   );
-  console.log('transactionTypeOptions:', transactionTypeOptions);
+  //console.log('transactionTypeOptions:', transactionTypeOptions);
 
   // Transform checker orders data to match the table format
   const transformOrderForTable = (order: any) => {

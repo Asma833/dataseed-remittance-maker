@@ -26,8 +26,9 @@ import { downloadFromUrl } from '@/utils/exportUtils';
 
 const UpdateIncidentForm = (props: UpdateIncidentFormData) => {
   const { formActionRight, rowData, setIsModalOpen, mode, pageId } = props;
-  const transactionType = rowData?.transaction_type_name?.name;
-  const purposeType = rowData?.purpose_type_name?.purpose_name;
+  //console.log('UpdateIncidentForm props:', rowData);
+  const transactionType = rowData?.transaction_type_name?.name || rowData?.transaction_type_name;
+  const purposeType = rowData?.purpose_type_name?.purpose_name || rowData?.purpose_type_name;
  
   const { getUserHashedKey } = useCurrentUser();
   const { submitIncidentFormData, isPending } = useSubmitIncidentFormData();
