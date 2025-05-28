@@ -25,7 +25,7 @@ const adminComponents = {
     () => import('@/features/admin/pages/partners/partner-creation-form/page')
   ),
   ViewAll: lazy(
-    () => import('@/features/admin/pages/view-all/view-table/ViewAllTable')
+    () => import('@/features/admin/pages/view-all/view-table/ViewAllTablePage')
   ),
 };
 
