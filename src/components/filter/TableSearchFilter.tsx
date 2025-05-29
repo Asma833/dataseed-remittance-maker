@@ -55,7 +55,7 @@ const TableSearchFilter = ({
         const result = await operation();
         return result;
       } catch (error) {
-        console.error('Operation failed:', error);
+        //console.error('Operation failed:', error);
         return null;
       } finally {
         if (setLoading) setLoading(false);
@@ -189,7 +189,7 @@ const TableSearchFilter = ({
       status: localStatus,
       customFilterValues: localCustomFilters,
     };
-   console.log('Applying dynamic filters:', updatedFilters);
+    // console.log('Applying dynamic filters:', updatedFilters);
     setFilters(updatedFilters);
 
     // Only call onFilter if we're not in the middle of a pagination action

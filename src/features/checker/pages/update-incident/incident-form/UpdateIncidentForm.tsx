@@ -18,31 +18,20 @@ import {
   UpdateIncidentFormData,
   UpdateIncidentRequest,
 } from '@/features/checker/types/updateIncident.types';
-import { usePageTitle } from '@/hooks/usePageTitle';
 import { Checkbox } from '@/components/ui/checkbox';
 import { Label } from '@/components/ui/label';
 import { useCurrentUser } from '@/utils/getUserFromRedux';
 import useSubmitIncidentFormData from '../../completed-transactions/hooks/useSubmitIncidentFormData';
 import { downloadFromUrl } from '@/utils/exportUtils';
 
-const useScreenSize = () => {
-  usePageTitle('Update Incident');
-  const [screenWidth, setScreenWidth] = useState(window.innerWidth);
-
-  useEffect(() => {
-    const handleResize = () => setScreenWidth(window.innerWidth);
-    window.addEventListener('resize', handleResize);
-    return () => window.removeEventListener('resize', handleResize);
-  }, []);
-
-  return screenWidth;
-};
-
 const UpdateIncidentForm = (props: UpdateIncidentFormData) => {
   const { formActionRight, rowData, setIsModalOpen, mode, pageId } = props;
-  const transactionType = rowData?.transaction_type_name?.name;
-  const purposeType = rowData?.purpose_type_name?.purpose_name;
-  const screenWidth = useScreenSize();
+  console.log('UpdateIncidentForm props:', rowData);
+  const transactionType = typeof rowData?.transaction_type_name === 'object'
+      ? (rowData?.transaction_type_name?.name?.trim() ? rowData.transaction_type_name.name : 'NA')
+      : (rowData?.transaction_type_name ? rowData.transaction_type_name : 'NA');
+  const purposeType = rowData?.purpose_type_name?.purpose_name ? rowData?.purpose_type_name?.purpose_name : rowData?.purpose_type_name;
+ 
   const { getUserHashedKey } = useCurrentUser();
   const { submitIncidentFormData, isPending } = useSubmitIncidentFormData();
   // usestates
@@ -149,21 +138,23 @@ const UpdateIncidentForm = (props: UpdateIncidentFormData) => {
       setIsEsignDocumentLink(rowData.is_esign_required ?? false);
 
       const mappedData = {
-        niumId: rowData.nium_order_id || '',
-        customerPan: rowData.customer_pan || '',
-        customerName: rowData.customer_name || '',
-        bmfOrderRef: rowData.partner_order_id || '',
-        transactionType: rowData.transaction_type_name?.name || '',
-        purpose: rowData.purpose_type_name?.purpose_name || '',
-        buySell: buySellValue || '',
+        niumId: rowData.nium_order_id || 'NA',
+        customerPan: rowData.customer_pan || 'NA',
+        customerName: rowData.customer_name || 'NA',
+        bmfOrderRef: rowData.partner_order_id || 'NA',
+        transactionType: typeof rowData.transaction_type_name === 'object'
+      ? (rowData.transaction_type_name?.name?.trim() ? rowData.transaction_type_name.name : 'NA')
+      : (rowData.transaction_type_name ? rowData.transaction_type_name : 'NA'),
+            purpose: rowData.purpose_type_name?.purpose_name || 'NA',
+            buySell: buySellValue || 'NA',
         // comment: rowData.incident_checker_comments || '',
-        incidentNumber: rowData?.incident_number || '',
-        eonInvoiceNumber: rowData?.eon_invoice_number || '',
+        incidentNumber: rowData?.incident_number || 'NA',
+        eonInvoiceNumber: rowData?.eon_invoice_number || 'NA',
         status: {
           approve: rowData.status?.approve ?? true,
           reject: rowData.status?.reject ?? false,
         },
-        niumInvoiceNumber: rowData.nium_invoice_number || '',
+        niumInvoiceNumber: rowData.nium_invoice_number || 'NA',
       };
 
       // Set values using appropriate field paths
@@ -227,21 +218,7 @@ const UpdateIncidentForm = (props: UpdateIncidentFormData) => {
     setIsFormValid(valid);
   }, [isApproved, isRejected, comment, niumInvoiceNumber]);
 
-  const handleRowCols = () => {
-    return screenWidth < 768 ? 1 : 3;
-  };
-
   const handleFormSubmit = async () => {
-    // if (isApproved && !niumInvoiceNumber) {
-    //   setError('fields.niumInvoiceNumber', {
-    //     type: 'required',
-    //     message: 'Nium Invoice Number is required when approving an incident',
-    //   });
-    //   return;
-    // } else {
-    //   clearErrors('fields.niumInvoiceNumber');
-    // }
-
     if (isRejected && !comment) {
       setError('fields.comment', {
         type: 'required',
@@ -324,7 +301,7 @@ const UpdateIncidentForm = (props: UpdateIncidentFormData) => {
     <FormProvider methods={methods}>
       <FormContentWrapper className="py-2 mt-0 rounded-none">
         <Spacer>
-          <FormFieldRow rowCols={handleRowCols()}>
+          <FormFieldRow>
             {Object.entries(updateFormIncidentConfig.basicDetails)
               .slice(1, 5)
               .map(([name, field]) => {
@@ -401,7 +378,7 @@ const UpdateIncidentForm = (props: UpdateIncidentFormData) => {
 
           {/* <ExchangeRateDetails data={updateFormIncidentConfig.tableData} /> */}
 
-          <FormFieldRow rowCols={handleRowCols()}>
+          <FormFieldRow>
             {mode === 'view' &&
               (pageId === 'viewAllIncident' ||
                 pageId === 'completedIncident') && (
@@ -438,7 +415,7 @@ const UpdateIncidentForm = (props: UpdateIncidentFormData) => {
               )}
           </FormFieldRow>
           {mode === 'edit' && (
-            <FormFieldRow rowCols={handleRowCols()}>
+            <FormFieldRow>
               <div className="flex items-center space-x-8">
                 <div className="flex items-center space-x-2">
                   <Checkbox
