@@ -6,10 +6,13 @@ import {
   Order,
   TransactionTypeEnum,
 } from '@/features/checker/types/updateIncident.types';
+import useDisableBackButton from '@/hooks/useDisableBackButton';
+import { useEffect } from 'react';
 
 const ViewAllTablePage = () => {
-  usePageTitle('View All Orders');
-
+  useEffect(() => {
+    useDisableBackButton();
+  }, []);
   const {
     data,
     loading: isLoading,
