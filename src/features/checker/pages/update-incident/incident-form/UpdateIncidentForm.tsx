@@ -386,7 +386,8 @@ const UpdateIncidentForm = (props: UpdateIncidentFormData) => {
                   type="button"
                   onClick={handleViewDocument}
                   disabled={!documentUrl}
-                >
+                  className="disabled:opacity-60"
+                  >
                   View Document
                 </Button>
               )}
@@ -397,7 +398,7 @@ const UpdateIncidentForm = (props: UpdateIncidentFormData) => {
                   type="button"
                   onClick={handleDownloadDocument}
                   disabled={!documentUrl}
-                >
+                  className="disabled:opacity-60">
                   eSign Document
                 </Button>
               )}
@@ -409,7 +410,7 @@ const UpdateIncidentForm = (props: UpdateIncidentFormData) => {
                   type="button"
                   onClick={handleDownloadVideo}
                   disabled={!documentUrl}
-                >
+                  className="disabled:opacity-60">
                   VKYC Document
                 </Button>
               )}

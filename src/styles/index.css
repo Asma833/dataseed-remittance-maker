@@ -178,7 +178,7 @@
 .MuiPickersCalendarHeader-label {
   @apply text-foreground;
 }
-.MuiInputBase-input.Mui-disabled {
+.light .MuiInputBase-input.Mui-disabled {
   background-color: rgb(249 249 249);
   -webkit-text-fill-color: rgb(0 0 0 / 72%);
 }
@@ -235,7 +235,7 @@ html[class='dark'] {
 
 .dark .MuiInputBase-input.Mui-disabled {
   background-color: hsl(var(--card));
-  color: hsl(var(--muted-foreground));
+  color: hsl(var(--muted-foreground)) ;
 }
 
 .dark .MuiPickersArrowSwitcher-button {
