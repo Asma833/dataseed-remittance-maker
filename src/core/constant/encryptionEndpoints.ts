@@ -40,7 +40,7 @@ export const ENDPOINT_MATCHING_RULES = {
     description: 'Checker orders endpoint',
   },
   orders: {
-    endpoint: '/orders',
+    endpoint: API.ORDERS.ORDERS,
     matchType: 'standard' as const,
     description: 'Checker orders endpoint',
   },
