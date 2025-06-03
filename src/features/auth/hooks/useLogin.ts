@@ -1,10 +1,10 @@
+import { toast } from 'sonner';
 import { useMutation } from '@tanstack/react-query';
 import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { authApi } from '../api/authApi';
 import { setCredentials } from '../store/authSlice';
-import { DEFAULT_ROUTES } from '../../../core/constant/routes';
-import { toast } from 'sonner';
+import { DEFAULT_ROUTES } from '../../../core/constant/manageDefaultRoutes';
 import { LoginResponse } from '../types/auth.types';
 import type { LoginCredentials } from '../api/authApi';
 

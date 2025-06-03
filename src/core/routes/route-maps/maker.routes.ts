@@ -2,42 +2,23 @@ import { lazy } from 'react';
 import { ROUTES } from '../../constant/routePaths';
 
 export const makerComponents = {
-  Dashboard: lazy(
-    () => import('@/features/checker/pages/dashboard/DashboardPage')
+  CreateTransaction: lazy(
+    () => import('@/features/maker/pages/create-transaction/CreateTransaction')
   ),
-  Assign: lazy(
-    () =>
-      import('@/features/checker/pages/assign/assign-table/AssignCreationTable')
-  ),
-
-  UpdateIncident: lazy(
-    () =>
-      import(
-        '@/features/checker/pages/update-incident/update-incident-table/UpdateIncidentTable'
-      )
-  ),
-  ViewAll: lazy(
-    () =>
-      import('@/features/checker/pages/view-all/view-table/ViewAllTablePage')
-  ),
-
-  CompletedTransaction: lazy(
-    () =>
-      import(
-        '@/features/checker/pages/completed-transactions/CompletedTransactionTable'
-      )
+  ViewStatus: lazy(
+    () => import('@/features/maker/pages/view-status/VIewStatus')
   ),
 };
 export const makerRoutes = [
   {
-    path: ROUTES.CHECKER.DASHBOARD,
-    element: makerComponents.Dashboard,
+    path: ROUTES.MAKER.VIEW_STATUS,
+    element: makerComponents.CreateTransaction,
     roles: ['maker'],
     permission: '',
   },
   {
-    path: ROUTES.CHECKER.ASSIGN,
-    element: makerComponents.Assign,
+    path: ROUTES.MAKER.CREATE_TRANSACTION,
+    element: makerComponents.ViewStatus,
     roles: ['maker'],
     permission: '',
   },

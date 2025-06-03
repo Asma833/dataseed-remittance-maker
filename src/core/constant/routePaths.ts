@@ -35,4 +35,8 @@ export const ROUTES = {
     UPDATE_INCIDENT: '/update-incident',
     COMPLETEDTRANSACTIONS: '/completed-transactions',
   },
+  MAKER: {
+    CREATE_TRANSACTION: '/create-transaction',
+    VIEW_STATUS: '/view-status',
+  },
 } as const;
