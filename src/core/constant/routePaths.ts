@@ -40,3 +40,18 @@ export const ROUTES = {
     VIEW_STATUS: '/view-status',
   },
 } as const;
+
+// Route prefixes for different user roles
+export const ROUTE_PREFIXES = {
+  ADMIN: '/admin',
+  CHECKER: '/checker',
+  MAKER: '/maker',
+} as const;
+
+// Helper function to generate navigation paths with prefixes
+export const getNavPath = (
+  role: keyof typeof ROUTE_PREFIXES,
+  route: string
+): string => {
+  return `${ROUTE_PREFIXES[role]}${route}`;
+};

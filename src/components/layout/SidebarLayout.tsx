@@ -15,7 +15,7 @@ const SidebarLayout = ({ children }: CheckerLayoutProps) => {
   const { getUserRole } = useCurrentUser();
 
   // Get navigation items based on user role
-  const userRole = getUserRole() || 'checker'; // Default to checker if role is not available
+  const userRole = getUserRole() || '';
   const navigationItems = getNavigationItemsByRole(userRole);
 
   return (

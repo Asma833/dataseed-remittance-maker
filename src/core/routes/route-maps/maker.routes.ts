@@ -1,5 +1,6 @@
 import { lazy } from 'react';
 import { ROUTES } from '../../constant/routePaths';
+import CreateTransaction from '@/features/maker/pages/create-transaction/CreateTransaction';
 
 export const makerComponents = {
   CreateTransaction: lazy(
@@ -12,13 +13,13 @@ export const makerComponents = {
 export const makerRoutes = [
   {
     path: ROUTES.MAKER.VIEW_STATUS,
-    element: makerComponents.CreateTransaction,
+    element: makerComponents.ViewStatus,
     roles: ['maker'],
     permission: '',
   },
   {
     path: ROUTES.MAKER.CREATE_TRANSACTION,
-    element: makerComponents.ViewStatus,
+    element: CreateTransaction,
     roles: ['maker'],
     permission: '',
   },

@@ -6,6 +6,7 @@ import {
   CreditCard,
   User,
 } from 'lucide-react';
+import { ROUTES, getNavPath } from './routePaths';
 
 // Navigation item type definition
 export interface NavigationItem {
@@ -20,13 +21,13 @@ export const SideNavOptions = {
   admin: [
     {
       title: 'N-User',
-      path: '/admin/users',
+      path: getNavPath('ADMIN', ROUTES.ADMIN.NUSER),
       icon: LayoutDashboard,
     },
     // Commented the following items as they are not used in the current phase
     // {
     //   title: 'Partners',
-    //   path: '/admin/partners',
+    //   path: getNavPath('ADMIN', ROUTES.ADMIN.PARTNER),
     //   icon: User,
     //   disabled: true,
     // },
@@ -38,45 +39,48 @@ export const SideNavOptions = {
     // },
     {
       title: 'View All',
-      path: '/admin/viewall',
+      path: getNavPath('ADMIN', ROUTES.ADMIN.VIEWALL),
       icon: Eye,
     },
   ] as NavigationItem[],
-
   checker: [
     // Disabling the dashboard for now
     // {
     //   title: 'Dashboard',
-    //   path: '/checker/dashboard',
+    //   path: getNavPath('CHECKER', ROUTES.CHECKER.DASHBOARD),
     //   icon: LayoutDashboard,
     //   disabled: true,
     // },
     {
       title: 'View All',
-      path: '/checker/viewall',
+      path: getNavPath('CHECKER', ROUTES.CHECKER.VIEWALL),
       icon: Eye,
     },
     {
       title: 'Assign',
-      path: '/checker/assign',
+      path: getNavPath('CHECKER', ROUTES.CHECKER.ASSIGN),
       icon: ClipboardList,
     },
     {
       title: 'Update Incident',
-      path: '/checker/update-incident',
+      path: getNavPath('CHECKER', ROUTES.CHECKER.UPDATE_INCIDENT),
       icon: FileEdit,
     },
     {
       title: 'Completed Transactions',
-      path: '/checker/completed-transactions',
+      path: getNavPath('CHECKER', ROUTES.CHECKER.COMPLETEDTRANSACTIONS),
       icon: CreditCard,
     },
   ] as NavigationItem[],
-
   maker: [
     {
-      title: 'View All',
-      path: '/checker/viewall',
+      title: 'Create Transaction',
+      path: getNavPath('MAKER', ROUTES.MAKER.CREATE_TRANSACTION),
+      icon: ClipboardList,
+    },
+    {
+      title: 'View Status',
+      path: getNavPath('MAKER', ROUTES.MAKER.VIEW_STATUS),
       icon: Eye,
     },
   ] as NavigationItem[],
