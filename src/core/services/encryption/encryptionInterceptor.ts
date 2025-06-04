@@ -7,18 +7,14 @@ import {
   encryptionService,
   EncryptionResult,
 } from '@/core/services/encryption/encryptionService';
-import {
-  shouldEncryptMethod,
-} from '@/core/services/encryption/encryptionConfig';
-import {
-  shouldEncryptEndpoint,
-} from '@/core/constant/encryptionEndpoints'; // ✅ Correct import
+import { shouldEncryptMethod } from '@/core/services/encryption/encryptionConfig';
+import { shouldEncryptEndpoint } from '@/core/constant/encryptionEndpoints'; // ✅ Correct import
 
 interface EncryptedRequestData {
   encryptedValue: string; // HEX_ENCRYPTED_AES_PAYLOAD
-  encryptedKey: string;   // HEX_RSA_ENCRYPTED_AES_KEY
-  iv: string;             // HEX_IV
-  originalData?: any;     // Optional: remove in production
+  encryptedKey: string; // HEX_RSA_ENCRYPTED_AES_KEY
+  iv: string; // HEX_IV
+  originalData?: any; // Optional: remove in production
 }
 
 interface EncryptedResponseData {
@@ -38,29 +34,60 @@ export const encryptRequestInterceptor = async (
 ): Promise<InternalAxiosRequestConfig> => {
   try {
     const url = config.url || '';
+    const method = config.method?.toLowerCase() || '';
     const shouldEncrypt = shouldEncryptEndpoint(url);
 
     // Other control flags
-    const headerSkipEncryption = config.headers?.['X-Skip-Encryption'] === 'true';
+    const headerSkipEncryption =
+      config.headers?.['X-Skip-Encryption'] === 'true';
     const configSkipEncryption = (config as any).skipEncryption === true;
 
     if (
       !shouldEncrypt ||
       headerSkipEncryption ||
       configSkipEncryption ||
-      !config.data ||
       !encryptionService.isEncryptionEnabled()
     ) {
       return config;
     }
 
-    // Encrypt only for specific HTTP methods
-    if (!shouldEncryptMethod(config.method || '')) {
+    // For GET requests that need encrypted responses, generate AES key and IV for headers
+    if (method === 'get') {
+      // Generate AES key and IV for encrypted response
+      const aesKey = encryptionService.generateAESKey();
+      const iv = encryptionService.generateIV();
+
+      // Ensure RSA public key is available
+      await encryptionService.ensureRSAPublicKey();
+
+      // Encrypt the AES key with RSA
+      const encryptedAESKey = encryptionService.encryptAESKeyWithRSA(aesKey);
+
+      // Store encryption context for response decryption
+      const contextKey = `${url}_${Date.now()}`;
+      encryptionContext.set(contextKey, {
+        aesKey,
+        iv,
+      });
+
+      (config as any).encryptionContextKey = contextKey;
+
+      // Add encryption headers for GET requests
+      if (config.headers) {
+        config.headers['x-encrypted-key'] = encryptedAESKey;
+        config.headers['x-iv'] = iv;
+      }
+
       return config;
     }
 
-   
-    const encryptionResult: EncryptionResult = await encryptionService.encryptPayload(config.data);
+    // For other methods (POST, PUT, PATCH), encrypt the request body
+    if (!shouldEncryptMethod(method) || !config.data) {
+      return config;
+    }
+
+    const encryptionResult: EncryptionResult =
+      await encryptionService.encryptPayload(config.data);
 
     const contextKey = `${url}_${Date.now()}`;
     encryptionContext.set(contextKey, {
@@ -80,8 +107,6 @@ export const encryptRequestInterceptor = async (
 
     if (config.headers) {
       config.headers['Content-Type'] = 'application/json';
-      // config.headers['x-encrypted-key'] = encryptionResult.encryptedAESKey;
-      // config.headers['x-iv'] = encryptionResult.iv;
     }
 
     return config;
@@ -138,7 +163,6 @@ export const decryptResponseInterceptor = (
       ...decryptedData,
       encryptedValue: undefined,
     };
-
     return response;
   } catch (error) {
     console.error('Error in response decryption interceptor:', error);
