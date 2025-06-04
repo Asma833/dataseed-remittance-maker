@@ -26,7 +26,7 @@ import useGetCheckerOrdersByPartnerId from '@/features/checker/hooks/useGetCheck
 
 const UpdateIncidentForm = (props: UpdateIncidentFormData) => {
   const { formActionRight, rowData, setIsModalOpen, mode, pageId } = props;
-  // console.log('rowData:', rowData);
+  console.log('rowData:', rowData);
   const transactionType =
     typeof rowData?.transaction_type_name === 'object'
       ? rowData?.transaction_type_name?.name?.trim()
@@ -289,30 +289,31 @@ const UpdateIncidentForm = (props: UpdateIncidentFormData) => {
     resources_videos_files,
   } = order || {};
 
+  const mergeDocument = merged_document?.url || '';
   const esignFile = esigns?.[0]?.esign_file_details?.esign_file || '';
-  const vkycDocumentFiles = order?.resources_documents_files || {};
-  const vkycVideoFiles = order?.resources_videos_files?.customer || {};
+  const vkycDocumentFiles = resources_documents_files || {};
+  const vkycVideoFiles = resources_videos_files?.customer || '';
   const vkycDocumentFilesArray = Object.values(vkycDocumentFiles);
 
   // console.log('resources_documents_files:', resources_documents_files);
   // console.log('resources_images_files:', resources_images_files);
   // console.log('resources_videos_files:', resources_videos_files);
   // console.log('esigns:', esignFile);
-  // console.log('order:', order);
+  console.log('order:', order);
   console.log('vkycVideoFiles:', vkycVideoFiles);
   console.log('vkycDocumentFilesArray:', vkycDocumentFilesArray);
   console.log('esignFile:', esignFile);
   console.log('vkycDocumentFiles:', vkycDocumentFiles);
 
   const handleViewDocument = () => {
-    if (documentUrl) {
-      window.open(documentUrl, '_blank');
+    if (mergeDocument) {
+      window.open(mergeDocument, '_blank');
     }
   };
 
   // Download handler for eSign Document
   const handleDownloadDocument = (
-    docType: 'esignDocument' | 'vkycDocument'
+    docType: 'esignDocument' | 'vkycDocument' | 'vkycVideo'
   ) => {
     if (docType && docType === 'esignDocument' && esignFile) {
       window.open(esignFile, '_blank');
@@ -326,6 +327,15 @@ const UpdateIncidentForm = (props: UpdateIncidentFormData) => {
         window.open(firstDocument, '_blank');
       } else {
         toast.error('No VKYC document available for download');
+      }
+    } else if (docType === 'vkycVideo' && vkycVideoFiles) {
+      const videoUrl = vkycVideoFiles || '';
+      console.log('videoUrl:', videoUrl);
+
+      if (videoUrl) {
+        window.open(videoUrl, '_blank');
+      } else {
+        toast.error('No VKYC video available for download');
       }
     } else {
       toast.error('No document available for download');
@@ -445,7 +455,7 @@ const UpdateIncidentForm = (props: UpdateIncidentFormData) => {
                 <Button
                   type="button"
                   onClick={handleViewDocument}
-                  disabled={!documentUrl}
+                  disabled={!mergeDocument}
                   className="disabled:opacity-60"
                 >
                   View Document
@@ -457,7 +467,7 @@ const UpdateIncidentForm = (props: UpdateIncidentFormData) => {
                 <Button
                   type="button"
                   onClick={() => handleDownloadDocument('esignDocument')}
-                  disabled={!documentUrl}
+                  disabled={!isEsignDocumentLink}
                   className="disabled:opacity-60"
                 >
                   eSign Document
@@ -470,10 +480,22 @@ const UpdateIncidentForm = (props: UpdateIncidentFormData) => {
                 <Button
                   type="button"
                   onClick={() => handleDownloadDocument('vkycDocument')}
-                  disabled={!documentUrl}
+                  disabled={!isVkycDownloadLink}
                   className="disabled:opacity-60"
                 >
                   VKYC Document
+                </Button>
+              )}
+            {vkycVideoFiles &&
+              (pageId === 'updateIncident' ||
+                pageId === 'completedIncident') && (
+                <Button
+                  type="button"
+                  onClick={() => handleDownloadDocument('vkycVideo')}
+                  disabled={!vkycVideoFiles}
+                  className="disabled:opacity-60"
+                >
+                  VKYC Video
                 </Button>
               )}
           </FormFieldRow>
