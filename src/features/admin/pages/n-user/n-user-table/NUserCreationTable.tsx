@@ -20,12 +20,12 @@ const NuserCreationTable = () => {
     queryKey: queryKeys.user.allUsers,
     dataPath: '',
   });
-  //console.log('NuserCreationTable data:', data);
- const users: Record<string, any>[] = data && typeof data === 'object' && !Array.isArray(data)
-  ? Object.values(data) as Record<string, any>[]
-  : Array.isArray(data)
-    ? data as Record<string, any>[]
-    : [];
+  const users: Record<string, any>[] =
+    data && typeof data === 'object' && !Array.isArray(data)
+      ? (Object.values(data) as Record<string, any>[])
+      : Array.isArray(data)
+        ? (data as Record<string, any>[])
+        : [];
   usePageTitle('N-Users');
 
   const { mutate: updateStatus } = useUpdateStatusAPI();
