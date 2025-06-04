@@ -47,8 +47,6 @@ const AssignCreationTable = () => {
     return [];
   }, [data]);
 
-  console.log('formateDataArray:', formateDataArray);
-  console.log('Type formateDataArray:', typeof formateDataArray);
   const [selectedRows, setSelectedRows] = useState<string[]>([]);
   const [tableData, setTableData] = useState<any[]>([]);
   const [isSubmitting, setIsSubmitting] = useState(false);

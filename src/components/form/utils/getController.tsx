@@ -39,6 +39,7 @@ export const getController = (field: any) => {
           disabled={field.disabled}
           forcedValue={field.forcedValue}
           className="w-full"
+          onInputChange={field.onInputChange}
         />
       );
     case 'email':

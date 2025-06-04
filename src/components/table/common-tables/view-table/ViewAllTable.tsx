@@ -146,7 +146,7 @@ const ViewAllTable: React.FC<ViewAllTableProps> = ({
   );
   return (
     <div className="dynamic-table-wrap">
-       <DynamicTable
+      <DynamicTable
         columns={tableColumns}
         data={tableData}
         defaultSortColumn="niumId"
@@ -189,8 +189,8 @@ const ViewAllTable: React.FC<ViewAllTableProps> = ({
             ],
           },
         }}
-      />                 
-      
+      />
+
       <div className="flex justify-center sm:justify-start mt-4 gap-3">
         <Button onClick={handleExportToCSV}>Export CSV</Button>
       </div>

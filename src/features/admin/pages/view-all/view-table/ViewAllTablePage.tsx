@@ -12,58 +12,45 @@ const ViewAllTablePage = () => {
     error,
     fetchData: refreshData,
   } = useGetAllOrders();
-  // Memoize table data to prevent unnecessary re-renders
-  // const tableData = useMemo(() => {
-  //   if (!data) return [];
-
-  //   // Ensure data is an array, handle different possible data structures
-  //   if (Array.isArray(data)) {
-  //     return data as Order[];
-  //   }
-
-  //   // If data has an orders property
-  //   if (data && typeof data === 'object' && 'orders' in data) {
-  //     return (data as any).orders || [];
-  //   }
-
-  //   return [];
-  // }, [data]);
   const tableData = useMemo(() => {
-  if (!data) return [];
+    if (!data) return [];
 
-  // If already an array
-  if (Array.isArray(data)) {
-    return (data as Order[]).filter(
-      (item): item is Order => !!item && typeof item === 'object' && 'created_at' in item
-    );
-  }
-
-  // If object with 'orders' property
-  if (typeof data === 'object' && 'orders' in data) {
-    const orders = (data as any).orders;
-    if (Array.isArray(orders)) {
-      return orders.filter(
-        (item: any): item is Order => !!item && typeof item === 'object' && 'created_at' in item
+    // If already an array
+    if (Array.isArray(data)) {
+      return (data as Order[]).filter(
+        (item): item is Order =>
+          !!item && typeof item === 'object' && 'created_at' in item
       );
     }
-    if (orders && typeof orders === 'object') {
-      return Object.values(orders).filter(
-        (item: any): item is Order => !!item && typeof item === 'object' && 'created_at' in item
+
+    // If object with 'orders' property
+    if (typeof data === 'object' && 'orders' in data) {
+      const orders = (data as any).orders;
+      if (Array.isArray(orders)) {
+        return orders.filter(
+          (item: any): item is Order =>
+            !!item && typeof item === 'object' && 'created_at' in item
+        );
+      }
+      if (orders && typeof orders === 'object') {
+        return Object.values(orders).filter(
+          (item: any): item is Order =>
+            !!item && typeof item === 'object' && 'created_at' in item
+        );
+      }
+      return [];
+    }
+
+    // If object of objects
+    if (typeof data === 'object') {
+      return Object.values(data).filter(
+        (item: any): item is Order =>
+          !!item && typeof item === 'object' && 'created_at' in item
       );
     }
+
     return [];
-  }
-
-  // If object of objects
-  if (typeof data === 'object') {
-    return Object.values(data).filter(
-      (item: any): item is Order => !!item && typeof item === 'object' && 'created_at' in item
-    );
-  }
-
-  return [];
-}, [data]);
-        
+  }, [data]);
 
   // Format error message consistently
   const errorMessage = useMemo(() => {

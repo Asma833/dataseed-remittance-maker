@@ -26,7 +26,6 @@ import useGetCheckerOrdersByPartnerId from '@/features/checker/hooks/useGetCheck
 
 const UpdateIncidentForm = (props: UpdateIncidentFormData) => {
   const { formActionRight, rowData, setIsModalOpen, mode, pageId } = props;
-  console.log('rowData:', rowData);
   const transactionType =
     typeof rowData?.transaction_type_name === 'object'
       ? rowData?.transaction_type_name?.name?.trim()
@@ -45,11 +44,11 @@ const UpdateIncidentForm = (props: UpdateIncidentFormData) => {
   // usestates
   const [showNiumInvoice, setShowNiumInvoice] = useState(true);
   const [documentUrl, setDocumentUrl] = useState<string | null>(null);
+  const [isVkycDownloadLink, setIsVkycDownloadLink] = useState(false);
+  const [isFormValid, setIsFormValid] = useState(false);
   const [isApproved, setIsApproved] = useState(true);
   const [isRejected, setIsRejected] = useState(false);
-  const [isFormValid, setIsFormValid] = useState(false);
   const [isEsignDocumentLink, setIsEsignDocumentLink] = useState(false);
-  const [isVkycDownloadLink, setIsVkycDownloadLink] = useState(false);
   const [partnerOrderId, setPartnerOrderId] = useState('');
 
   // State to track if we should show the buy/sell field
@@ -285,7 +284,6 @@ const UpdateIncidentForm = (props: UpdateIncidentFormData) => {
     merged_document,
     esigns,
     resources_documents_files,
-    resources_images_files,
     resources_videos_files,
   } = order || {};
 
@@ -294,16 +292,6 @@ const UpdateIncidentForm = (props: UpdateIncidentFormData) => {
   const vkycDocumentFiles = resources_documents_files || {};
   const vkycVideoFiles = resources_videos_files?.customer || '';
   const vkycDocumentFilesArray = Object.values(vkycDocumentFiles);
-
-  // console.log('resources_documents_files:', resources_documents_files);
-  // console.log('resources_images_files:', resources_images_files);
-  // console.log('resources_videos_files:', resources_videos_files);
-  // console.log('esigns:', esignFile);
-  console.log('order:', order);
-  console.log('vkycVideoFiles:', vkycVideoFiles);
-  console.log('vkycDocumentFilesArray:', vkycDocumentFilesArray);
-  console.log('esignFile:', esignFile);
-  console.log('vkycDocumentFiles:', vkycDocumentFiles);
 
   const handleViewDocument = () => {
     if (mergeDocument) {
@@ -330,7 +318,6 @@ const UpdateIncidentForm = (props: UpdateIncidentFormData) => {
       }
     } else if (docType === 'vkycVideo' && vkycVideoFiles) {
       const videoUrl = vkycVideoFiles || '';
-      console.log('videoUrl:', videoUrl);
 
       if (videoUrl) {
         window.open(videoUrl, '_blank');
@@ -474,13 +461,17 @@ const UpdateIncidentForm = (props: UpdateIncidentFormData) => {
                 </Button>
               )}
 
-            {isVkycDownloadLink &&
+            {Array.isArray(vkycDocumentFilesArray) &&
+              vkycDocumentFilesArray.length > 0 &&
               (pageId === 'updateIncident' ||
                 pageId === 'completedIncident') && (
                 <Button
                   type="button"
                   onClick={() => handleDownloadDocument('vkycDocument')}
-                  disabled={!isVkycDownloadLink}
+                  disabled={
+                    !Array.isArray(vkycDocumentFilesArray) ||
+                    vkycDocumentFilesArray.length === 0
+                  }
                   className="disabled:opacity-60"
                 >
                   VKYC Document
@@ -537,6 +528,12 @@ const UpdateIncidentForm = (props: UpdateIncidentFormData) => {
                   control,
                   errors,
                   name: 'fields.comment',
+                  onInputChange: (value: string) => {
+                    // Clear validation errors when user starts typing
+                    if (value && value.trim().length > 0) {
+                      clearErrors('fields.comment');
+                    }
+                  },
                 })}
               </FormFieldRow>
             )}
