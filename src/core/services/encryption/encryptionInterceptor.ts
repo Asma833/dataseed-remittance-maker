@@ -163,7 +163,7 @@ export const decryptResponseInterceptor = (
       ...decryptedData,
       encryptedValue: undefined,
     };
-
+   // console.log('Decrypted response data:', response);
     return response;
   } catch (error) {
     console.error('Error in response decryption interceptor:', error);

@@ -39,6 +39,16 @@ export const ENDPOINT_MATCHING_RULES = {
     matchType: 'exact-only' as const,
     description: 'Create partners endpoint',
   },
+   'partnerlist': {
+    endpoint: API.NUSERS.USER.LIST,
+    matchType: 'exact-only' as const,
+    description: 'Partner list endpoint',
+  },
+  'viewAll': {
+    endpoint: API.ORDERS.LIST,
+    matchType: 'exact-only' as const,
+    description: 'Partner list endpoint',
+  },
 } as const;
 
 /**
