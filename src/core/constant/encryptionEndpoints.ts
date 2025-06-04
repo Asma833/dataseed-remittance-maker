@@ -7,7 +7,8 @@ export const ENDPOINT_MATCHING_RULES = {
   users: {
     endpoint: API.AUTH.LOGIN,
     matchType: 'exact-only' as const,
-    description: 'User creation and management endpoints - exact match only to avoid conflicts with auth endpoints',
+    description:
+      'User creation and management endpoints - exact match only to avoid conflicts with auth endpoints',
   },
   'auth-logout': {
     endpoint: API.AUTH.LOGOUT,
@@ -24,7 +25,7 @@ export const ENDPOINT_MATCHING_RULES = {
     matchType: 'standard' as const,
     description: 'Forgot password endpoint',
   },
-  'orders': {
+  orders: {
     endpoint: API.ORDERS.CHECKER_ORDERS,
     matchType: 'exact-only' as const,
     description: 'Checker orders endpoint',
@@ -34,17 +35,17 @@ export const ENDPOINT_MATCHING_RULES = {
     matchType: 'exact-only' as const,
     description: 'Unassign orders endpoint',
   },
-   'partner': {
+  partner: {
     endpoint: API.NUSERS.USER.CREATE,
     matchType: 'exact-only' as const,
     description: 'Create partners endpoint',
   },
-   'partnerlist': {
+  partnerlist: {
     endpoint: API.NUSERS.USER.LIST,
     matchType: 'exact-only' as const,
     description: 'Partner list endpoint',
   },
-  'viewAll': {
+  viewAll: {
     endpoint: API.ORDERS.LIST,
     matchType: 'exact-only' as const,
     description: 'Partner list endpoint',
@@ -81,7 +82,9 @@ export function normalizeEndpointPath(path: string): string {
 /**
  * Get matching rule based on actual URL
  */
-export function getEndpointMatchingRuleByUrl(url: string): EndpointRule | undefined {
+export function getEndpointMatchingRuleByUrl(
+  url: string
+): EndpointRule | undefined {
   const normalizedUrl = normalizeEndpointPath(url);
 
   return Object.values(ENDPOINT_MATCHING_RULES).find((rule) => {

@@ -31,7 +31,8 @@ export const getController = (field: any) => {
           disabled={field.disabled}
           forcedValue={field.forcedValue}
         />
-      );    case 'textarea':
+      );
+    case 'textarea':
       return (
         <MaterialTextArea
           {...baseProps}

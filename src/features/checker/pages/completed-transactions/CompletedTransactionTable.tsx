@@ -24,7 +24,6 @@ const CompletedTransactionTable = () => {
     fetchData: refreshData,
   } = useGetCheckerOrders(TransactionTypeEnum.COMPLETED, true);
 
-  console.log('checkerOrdersData:', checkerOrdersData);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedRowData, setSelectedRowData] = useState<any>(null);
 

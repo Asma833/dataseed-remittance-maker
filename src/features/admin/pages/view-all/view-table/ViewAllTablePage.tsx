@@ -13,41 +13,44 @@ const ViewAllTablePage = () => {
     fetchData: refreshData,
   } = useGetAllOrders();
   const tableData = useMemo(() => {
-  if (!data) return [];
+    if (!data) return [];
 
-  // If already an array
-  if (Array.isArray(data)) {
-    return (data as Order[]).filter(
-      (item): item is Order => !!item && typeof item === 'object' && 'created_at' in item
-    );
-  }
-
-  // If object with 'orders' property
-  if (typeof data === 'object' && 'orders' in data) {
-    const orders = (data as any).orders;
-    if (Array.isArray(orders)) {
-      return orders.filter(
-        (item: any): item is Order => !!item && typeof item === 'object' && 'created_at' in item
+    // If already an array
+    if (Array.isArray(data)) {
+      return (data as Order[]).filter(
+        (item): item is Order =>
+          !!item && typeof item === 'object' && 'created_at' in item
       );
     }
-    if (orders && typeof orders === 'object') {
-      return Object.values(orders).filter(
-        (item: any): item is Order => !!item && typeof item === 'object' && 'created_at' in item
+
+    // If object with 'orders' property
+    if (typeof data === 'object' && 'orders' in data) {
+      const orders = (data as any).orders;
+      if (Array.isArray(orders)) {
+        return orders.filter(
+          (item: any): item is Order =>
+            !!item && typeof item === 'object' && 'created_at' in item
+        );
+      }
+      if (orders && typeof orders === 'object') {
+        return Object.values(orders).filter(
+          (item: any): item is Order =>
+            !!item && typeof item === 'object' && 'created_at' in item
+        );
+      }
+      return [];
+    }
+
+    // If object of objects
+    if (typeof data === 'object') {
+      return Object.values(data).filter(
+        (item: any): item is Order =>
+          !!item && typeof item === 'object' && 'created_at' in item
       );
     }
+
     return [];
-  }
-
-  // If object of objects
-  if (typeof data === 'object') {
-    return Object.values(data).filter(
-      (item: any): item is Order => !!item && typeof item === 'object' && 'created_at' in item
-    );
-  }
-
-  return [];
-}, [data]);
-        
+  }, [data]);
 
   // Format error message consistently
   const errorMessage = useMemo(() => {

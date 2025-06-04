@@ -33,7 +33,6 @@ const UpdateIncidentCreationTable = () => {
 
   // Fetch data using the updated hook
   const { data, isLoading, error } = useGetUpdateIncident(requestData);
-  console.log('data:UpdateIncidentCreationTable', data);
 
   const isTableFilterDynamic = false;
   const isPaginationDynamic = false;
