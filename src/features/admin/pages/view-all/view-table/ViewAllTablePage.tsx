@@ -12,22 +12,6 @@ const ViewAllTablePage = () => {
     error,
     fetchData: refreshData,
   } = useGetAllOrders();
-  // Memoize table data to prevent unnecessary re-renders
-  // const tableData = useMemo(() => {
-  //   if (!data) return [];
-
-  //   // Ensure data is an array, handle different possible data structures
-  //   if (Array.isArray(data)) {
-  //     return data as Order[];
-  //   }
-
-  //   // If data has an orders property
-  //   if (data && typeof data === 'object' && 'orders' in data) {
-  //     return (data as any).orders || [];
-  //   }
-
-  //   return [];
-  // }, [data]);
   const tableData = useMemo(() => {
   if (!data) return [];
 
