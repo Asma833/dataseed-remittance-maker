@@ -49,9 +49,6 @@ export const ROUTE_PREFIXES = {
 } as const;
 
 // Helper function to generate navigation paths with prefixes
-export const getNavPath = (
-  role: keyof typeof ROUTE_PREFIXES,
-  route: string
-): string => {
+export const getNavPath = (role: keyof typeof ROUTE_PREFIXES, route: string): string => {
   return `${ROUTE_PREFIXES[role]}${route}`;
 };

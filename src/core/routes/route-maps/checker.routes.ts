@@ -2,31 +2,15 @@ import { lazy } from 'react';
 import { ROUTES } from '../../constant/routePaths';
 
 export const checkerComponents = {
-  Dashboard: lazy(
-    () => import('@/features/checker/pages/dashboard/DashboardPage')
-  ),
-  Assign: lazy(
-    () =>
-      import('@/features/checker/pages/assign/assign-table/AssignCreationTable')
-  ),
+  Dashboard: lazy(() => import('@/features/checker/pages/dashboard/DashboardPage')),
+  Assign: lazy(() => import('@/features/checker/pages/assign/assign-table/AssignCreationTable')),
 
   UpdateIncident: lazy(
-    () =>
-      import(
-        '@/features/checker/pages/update-incident/update-incident-table/UpdateIncidentTable'
-      )
+    () => import('@/features/checker/pages/update-incident/update-incident-table/UpdateIncidentTable')
   ),
-  ViewAll: lazy(
-    () =>
-      import('@/features/checker/pages/view-all/view-table/ViewAllTablePage')
-  ),
+  ViewAll: lazy(() => import('@/features/checker/pages/view-all/view-table/ViewAllTablePage')),
 
-  CompletedTransaction: lazy(
-    () =>
-      import(
-        '@/features/checker/pages/completed-transactions/CompletedTransactionTable'
-      )
-  ),
+  CompletedTransaction: lazy(() => import('@/features/checker/pages/completed-transactions/CompletedTransactionTable')),
 };
 export const checkerRoutes = [
   {

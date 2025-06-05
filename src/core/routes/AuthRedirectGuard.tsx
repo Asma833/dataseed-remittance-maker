@@ -18,9 +18,7 @@ const selectAuthState = createSelector(
   })
 );
 
-export const AuthRedirectGuard: React.FC<AuthRedirectGuardProps> = ({
-  children,
-}) => {
+export const AuthRedirectGuard: React.FC<AuthRedirectGuardProps> = ({ children }) => {
   const { user, isAuthenticated, isLoading } = useSelector(selectAuthState);
 
   // Show loading while checking authentication status

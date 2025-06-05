@@ -16,19 +16,13 @@ export const transactionFormSchema = z.object({
     .string()
     .min(2, 'Applicant name must be at least 2 characters')
     .max(100, 'Applicant name must not exceed 100 characters')
-    .regex(
-      /^[a-zA-Z\s]+$/,
-      'Applicant name must contain only letters and spaces'
-    ),
+    .regex(/^[a-zA-Z\s]+$/, 'Applicant name must contain only letters and spaces'),
 
   applicantPanNumber: z
     .string()
     .min(10, 'PAN number must be 10 characters')
     .max(10, 'PAN number must be 10 characters')
-    .regex(
-      /^[A-Z]{5}[0-9]{4}[A-Z]{1}$/,
-      'Invalid PAN format (e.g., ABCDE1234F)'
-    ),
+    .regex(/^[A-Z]{5}[0-9]{4}[A-Z]{1}$/, 'Invalid PAN format (e.g., ABCDE1234F)'),
 
   // Transaction Details
   transactionType: z.string().min(1, 'Transaction type is required'),
@@ -36,10 +30,7 @@ export const transactionFormSchema = z.object({
   purpose: z.string().min(1, 'Purpose is required'),
 
   // Document Uploads
-  panDocument: z
-    .array(fileSchema)
-    .min(1, 'PAN document is required')
-    .max(3, 'Maximum 3 PAN documents allowed'),
+  panDocument: z.array(fileSchema).min(1, 'PAN document is required').max(3, 'Maximum 3 PAN documents allowed'),
 
   passportDocument: z
     .array(fileSchema)
@@ -68,17 +59,9 @@ export const transactionFormSchema = z.object({
 export type TransactionFormData = z.infer<typeof transactionFormSchema>;
 
 // Individual file validation for upload
-export const validateFile = (
-  file: File
-): { isValid: boolean; error?: string } => {
+export const validateFile = (file: File): { isValid: boolean; error?: string } => {
   const maxSize = 10 * 1024 * 1024; // 10MB
-  const allowedTypes = [
-    'application/pdf',
-    'image/jpeg',
-    'image/jpg',
-    'image/png',
-    'image/gif',
-  ];
+  const allowedTypes = ['application/pdf', 'image/jpeg', 'image/jpg', 'image/png', 'image/gif'];
 
   if (file.size > maxSize) {
     return { isValid: false, error: 'File size must be less than 10MB' };

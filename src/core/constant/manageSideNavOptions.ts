@@ -1,11 +1,4 @@
-import {
-  LayoutDashboard,
-  ClipboardList,
-  FileEdit,
-  Eye,
-  CreditCard,
-  User,
-} from 'lucide-react';
+import { LayoutDashboard, ClipboardList, FileEdit, Eye, CreditCard, User } from 'lucide-react';
 import { ROUTES, getNavPath } from './routePaths';
 
 // Navigation item type definition

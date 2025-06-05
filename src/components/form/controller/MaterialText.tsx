@@ -46,9 +46,7 @@ export const MaterialText = ({
             disabled={disabled}
             required={required}
             onChange={(e) => {
-              const value = uppercase
-                ? e.target.value.toUpperCase()
-                : e.target.value;
+              const value = uppercase ? e.target.value.toUpperCase() : e.target.value;
               field.onChange(value);
               // Call the onInputChange callback if provided
               if (onInputChange) {

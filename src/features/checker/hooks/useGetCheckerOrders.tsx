@@ -4,19 +4,13 @@ import { useQuery } from '@tanstack/react-query';
 import axiosInstance from '@/core/services/axios/axiosInstance';
 import { API } from '@/core/constant/apis';
 import { useCurrentUser } from '@/utils/getUserFromRedux';
-import {
-  Order,
-  TransactionType,
-  TransactionTypeEnum,
-} from '../types/updateIncident.types';
+import { Order, TransactionType, TransactionTypeEnum } from '../types/updateIncident.types';
 
 export const useGetCheckerOrders = (
   initialTransactionType: TransactionType = TransactionTypeEnum.ALL,
   autoFetch: boolean = true
 ) => {
-  const [transactionType, setTransactionType] = useState<TransactionType>(
-    initialTransactionType
-  );
+  const [transactionType, setTransactionType] = useState<TransactionType>(initialTransactionType);
 
   // Get the current user once
   const { user } = useCurrentUser();
@@ -75,9 +69,7 @@ export const useGetCheckerOrders = (
     fetchData,
     transactionType,
     getAllTransactions: changeTransactionType(TransactionTypeEnum.ALL),
-    getCompletedTransactions: changeTransactionType(
-      TransactionTypeEnum.COMPLETED
-    ),
+    getCompletedTransactions: changeTransactionType(TransactionTypeEnum.COMPLETED),
     getPendingTransactions: changeTransactionType(TransactionTypeEnum.PENDING),
   };
 };

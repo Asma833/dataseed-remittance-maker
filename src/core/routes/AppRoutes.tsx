@@ -25,10 +25,7 @@ export const AppRoutes = () => {
       <Route path="/admin/*" element={<AdminRoutes />} />
       <Route path="/checker/*" element={<CheckerRoutes />} />
       <Route path="/maker/*" element={<MakerRoutes />} />
-      <Route
-        path="/"
-        element={<Navigate to={getDefaultRoute(user?.role.name)} replace />}
-      />
+      <Route path="/" element={<Navigate to={getDefaultRoute(user?.role.name)} replace />} />
       <Route path="*" element={<NotFoundPage />} />
     </Routes>
   );

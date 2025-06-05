@@ -1,7 +1,4 @@
-import {
-  SideNavOptions,
-  getNavigationItemsByRole,
-} from '@/core/constant/manageSideNavOptions';
+import { SideNavOptions, getNavigationItemsByRole } from '@/core/constant/manageSideNavOptions';
 
 // Legacy export for backward compatibility (deprecated - use SideNavOptions.checker instead)
 export const SideNavItems = SideNavOptions.maker;

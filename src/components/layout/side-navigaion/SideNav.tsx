@@ -10,18 +10,17 @@ interface SidebarProps {
   setIsSidebarOpen: (open: boolean) => void;
 }
 
-const Sidebar: React.FC<
-  SidebarProps & { setIsSidebarOpen: (open: boolean) => void }
-> = ({ navItems, setIsSidebarOpen }) => {
+const Sidebar: React.FC<SidebarProps & { setIsSidebarOpen: (open: boolean) => void }> = ({
+  navItems,
+  setIsSidebarOpen,
+}) => {
   const navigate = useNavigate();
   const location = useLocation();
   const [activeItem, setActiveItem] = useState<string | null>(null);
   const [openDropdown, setOpenDropdown] = useState<string | null>(null);
 
   useEffect(() => {
-    const currentItem = navItems.find(
-      (item) => item.path === location.pathname
-    );
+    const currentItem = navItems.find((item) => item.path === location.pathname);
     if (currentItem) {
       setActiveItem(currentItem.title);
     }
@@ -44,9 +43,7 @@ const Sidebar: React.FC<
           {navItems.map((item, idx) => (
             <li key={idx} className="list-none">
               <a
-                onClick={() =>
-                  item.path && handleNavigation(item.path, item.title)
-                }
+                onClick={() => item.path && handleNavigation(item.path, item.title)}
                 className={cn(
                   'flex items-center text-center flex-col gap-2 my-2 w-full rounded-md cursor-pointer transition-colors text-[12px] px-2',
                   activeItem === item.title

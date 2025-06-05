@@ -43,11 +43,7 @@ export function slugify(text: string): string {
  * @example
  * truncate('This is a long text', 10) // returns 'This is...'
  */
-export function truncate(
-  str: string,
-  length: number,
-  ending: string = '...'
-): string {
+export function truncate(str: string, length: number, ending: string = '...'): string {
   return _.truncate(str, { length, omission: ending });
 }
 

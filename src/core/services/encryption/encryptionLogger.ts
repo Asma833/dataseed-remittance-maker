@@ -20,8 +20,7 @@ class EncryptionLogger {
 
   private constructor() {
     this.isDevelopment = import.meta.env.VITE_ENV === 'development';
-    this.isEncryptionDebugEnabled =
-      import.meta.env.VITE_ENCRYPTION_DEBUG === 'true';
+    this.isEncryptionDebugEnabled = import.meta.env.VITE_ENCRYPTION_DEBUG === 'true';
     this.logLevel = (import.meta.env.VITE_LOG_LEVEL as LogLevel) || 'error';
   }
 
@@ -59,9 +58,7 @@ class EncryptionLogger {
 
   debug(message: string, context?: LogContext): void {
     if (this.shouldLog('debug')) {
-      console.debug(
-        `[ENCRYPTION DEBUG] ${this.formatMessage(message, context)}`
-      );
+      console.debug(`[ENCRYPTION DEBUG] ${this.formatMessage(message, context)}`);
     }
   }
 
@@ -80,9 +77,7 @@ class EncryptionLogger {
   error(message: string, error?: Error, context?: LogContext): void {
     if (this.shouldLog('error')) {
       const errorMsg = error ? `${message}: ${error.message}` : message;
-      console.error(
-        `[ENCRYPTION ERROR] ${this.formatMessage(errorMsg, context)}`
-      );
+      console.error(`[ENCRYPTION ERROR] ${this.formatMessage(errorMsg, context)}`);
 
       // In development, also log the stack trace
       if (this.isDevelopment && error?.stack) {
@@ -134,28 +129,27 @@ class EncryptionLogger {
   }
 
   logApiResponse(
-  url: string,
-  responseData: any,
-  status?: number,
-  context: LogContext = { service: 'EncryptionInterceptor' }
-): void {
-  const safeData = this.isDevelopment ? responseData : '[hidden in prod]';
+    url: string,
+    responseData: any,
+    status?: number,
+    context: LogContext = { service: 'EncryptionInterceptor' }
+  ): void {
+    const safeData = this.isDevelopment ? responseData : '[hidden in prod]';
 
-  const enrichedContext: LogContext = {
-    ...context,
-    method: 'logApiResponse',
-    url,
-    status,
-  };
+    const enrichedContext: LogContext = {
+      ...context,
+      method: 'logApiResponse',
+      url,
+      status,
+    };
 
-  if (this.shouldLog('info')) {
-    console.groupCollapsed(`[ENCRYPTION] API Response: ${url} (status: ${status})`);
-    console.info('▶️ Decrypted Data:', safeData); //  DevTools will let you expand/collapse this
-    console.info('ℹ️ Context:', enrichedContext);
-    console.groupEnd();
+    if (this.shouldLog('info')) {
+      console.groupCollapsed(`[ENCRYPTION] API Response: ${url} (status: ${status})`);
+      console.info('▶️ Decrypted Data:', safeData); //  DevTools will let you expand/collapse this
+      console.info('ℹ️ Context:', enrichedContext);
+      console.groupEnd();
+    }
   }
-}
-
 }
 
 // Export singleton instance

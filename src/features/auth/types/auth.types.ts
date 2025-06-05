@@ -4,11 +4,7 @@ export enum Role {
   CHECKER = 'checker',
 }
 
-export type Permission =
-  | 'view_dashboard'
-  | 'manage_agents'
-  | 'view_transactions'
-  | 'approve_transactions';
+export type Permission = 'view_dashboard' | 'manage_agents' | 'view_transactions' | 'approve_transactions';
 
 export type UserRole = 'admin' | 'maker' | 'checker';
 

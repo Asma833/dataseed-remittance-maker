@@ -12,11 +12,7 @@ export const useLogin = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
-  const { mutate, isPending, error } = useMutation<
-    LoginResponse,
-    Error,
-    LoginCredentials
-  >({
+  const { mutate, isPending, error } = useMutation<LoginResponse, Error, LoginCredentials>({
     mutationFn: authApi.loginUser,
     onSuccess: (data) => {
       // Store user info in Redux

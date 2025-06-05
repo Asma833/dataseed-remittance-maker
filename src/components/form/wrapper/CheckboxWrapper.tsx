@@ -10,26 +10,12 @@ type Props = {
   disabled?: boolean;
 };
 
-export default function CheckboxWrapper({
-  children,
-  label,
-  id,
-  className,
-  error,
-}: Props) {
+export default function CheckboxWrapper({ children, label, id, className, error }: Props) {
   return (
     <div className="flex flex-col space-y-2">
-      <div
-        className={cn(
-          'flex flex-row items-direction-row items-center space-x-2',
-          className
-        )}
-      >
+      <div className={cn('flex flex-row items-direction-row items-center space-x-2', className)}>
         {id && (
-          <label
-            htmlFor={id}
-            className="leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
-          >
+          <label htmlFor={id} className="leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70">
             {label}
           </label>
         )}

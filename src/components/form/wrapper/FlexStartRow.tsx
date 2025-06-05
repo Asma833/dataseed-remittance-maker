@@ -7,9 +7,7 @@ type Props = {
 };
 
 const FlexStartRow = ({ children, className }: Props) => {
-  return (
-    <div className={cn('flex justify-start w-full', className)}>{children}</div>
-  );
+  return <div className={cn('flex justify-start w-full', className)}>{children}</div>;
 };
 
 export default FlexStartRow;
