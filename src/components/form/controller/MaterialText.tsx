@@ -2,6 +2,7 @@ import { Controller, useFormContext } from 'react-hook-form';
 import { TextField } from '@mui/material';
 import { SxProps, Theme } from '@mui/system';
 import { cn } from '@/utils/cn';
+import '../styles/form-layout.css';
 
 interface MaterialTextProps {
   name: string;

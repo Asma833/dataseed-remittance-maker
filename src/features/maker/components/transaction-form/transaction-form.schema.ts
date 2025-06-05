@@ -12,51 +12,117 @@ const fileSchema = z.object({
 // Transaction form schema
 export const transactionFormSchema = z.object({
   // Applicant Information
-  applicantName: z
-    .string()
-    .min(2, 'Applicant name must be at least 2 characters')
-    .max(100, 'Applicant name must not exceed 100 characters')
-    .regex(/^[a-zA-Z\s]+$/, 'Applicant name must contain only letters and spaces'),
+  applicantDetails: z.object({
+    applicantName: z
+      .string()
+      .optional()
+      .or(z.literal(''))
+      .refine(
+        (val) => !val || (val.length >= 2 && val.length <= 100 && /^[a-zA-Z\s]*$/.test(val)),
+        'Applicant name must be 2-100 characters and contain only letters and spaces'
+      ),
 
-  applicantPanNumber: z
-    .string()
-    .min(10, 'PAN number must be 10 characters')
-    .max(10, 'PAN number must be 10 characters')
-    .regex(/^[A-Z]{5}[0-9]{4}[A-Z]{1}$/, 'Invalid PAN format (e.g., ABCDE1234F)'),
+    applicantPanNumber: z
+      .string()
+      .optional()
+      .or(z.literal(''))
+      .refine(
+        (val) => !val || (val.length === 10 && /^[A-Z]{5}[0-9]{4}[A-Z]{1}$/.test(val)),
+        'Invalid PAN format (e.g., ABCDE1234F)'
+      ),
 
-  // Transaction Details
-  transactionType: z.string().min(1, 'Transaction type is required'),
+    // Transaction Details
+    transactionType: z.string().optional().or(z.literal('')),
 
-  purpose: z.string().min(1, 'Purpose is required'),
+    purposeType: z.string().optional().or(z.literal('')),
+  }),
 
   // Document Uploads
-  panDocument: z.array(fileSchema).min(1, 'PAN document is required').max(3, 'Maximum 3 PAN documents allowed'),
+  uploadDocuments: z.object({
+    pan: z.array(fileSchema).optional().default([]),
 
-  passportDocument: z
-    .array(fileSchema)
-    .min(1, 'Passport document is required')
-    .max(3, 'Maximum 3 passport documents allowed'),
+    passportAadharDrivingVoter: z
+      .object({
+        front: z.array(fileSchema).optional().default([]),
+        back: z.array(fileSchema).optional().default([]),
+      })
+      .optional()
+      .default({ front: [], back: [] }),
 
-  universityOfferLetter: z
-    .array(fileSchema)
-    .min(1, 'University offer letter is required')
-    .max(3, 'Maximum 3 university offer letters allowed'),
+    studentPassport: z
+      .object({
+        front: z.array(fileSchema).optional().default([]),
+        back: z.array(fileSchema).optional().default([]),
+      })
+      .optional()
+      .default({ front: [], back: [] }),
 
-  studentVisa: z
-    .array(fileSchema)
-    .min(1, 'Student visa document is required')
-    .max(3, 'Maximum 3 student visa documents allowed'),
+    studentUniversityOfferLetter: z.array(fileSchema).optional().default([]),
 
-  payerPanDocument: z.array(fileSchema).optional(),
+    studentVisa: z.array(fileSchema).optional().default([]),
 
-  relationshipProof: z.array(fileSchema).optional(),
+    payerPan: z.array(fileSchema).optional().default([]),
 
-  educationLoanDocument: z.array(fileSchema).optional(),
+    payerRelationshipProof: z.array(fileSchema).optional().default([]),
 
-  otherDocuments: z.array(fileSchema).optional(),
+    educationLoanDocument: z.array(fileSchema).optional().default([]),
+
+    otherDocuments: z.array(fileSchema).optional().default([]),
+  }),
 });
 
 export type TransactionFormData = z.infer<typeof transactionFormSchema>;
+
+// Strict validation schema for form submission
+export const transactionFormSubmissionSchema = z.object({
+  applicantDetails: z.object({
+    applicantName: z
+      .string()
+      .min(2, 'Applicant name must be at least 2 characters')
+      .max(100, 'Applicant name must not exceed 100 characters')
+      .regex(/^[a-zA-Z\s]+$/, 'Applicant name must contain only letters and spaces'),
+
+    applicantPanNumber: z
+      .string()
+      .min(10, 'PAN number must be 10 characters')
+      .max(10, 'PAN number must be 10 characters')
+      .regex(/^[A-Z]{5}[0-9]{4}[A-Z]{1}$/, 'Invalid PAN format (e.g., ABCDE1234F)'),
+
+    transactionType: z.string().min(1, 'Transaction type is required'),
+
+    purposeType: z.string().min(1, 'Purpose is required'),
+  }),
+
+  uploadDocuments: z.object({
+    pan: z.array(fileSchema).min(1, 'PAN document is required').max(3, 'Maximum 3 PAN documents allowed'),
+
+    passportAadharDrivingVoter: z
+      .object({
+        front: z.array(fileSchema).optional(),
+        back: z.array(fileSchema).optional(),
+      })
+      .optional(),
+
+    studentPassport: z
+      .object({
+        front: z.array(fileSchema).optional(),
+        back: z.array(fileSchema).optional(),
+      })
+      .optional(),
+
+    studentUniversityOfferLetter: z.array(fileSchema).optional(),
+
+    studentVisa: z.array(fileSchema).optional(),
+
+    payerPan: z.array(fileSchema).optional(),
+
+    payerRelationshipProof: z.array(fileSchema).optional(),
+
+    educationLoanDocument: z.array(fileSchema).optional(),
+
+    otherDocuments: z.array(fileSchema).optional(),
+  }),
+});
 
 // Individual file validation for upload
 export const validateFile = (file: File): { isValid: boolean; error?: string } => {

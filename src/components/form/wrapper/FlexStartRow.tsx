@@ -1,5 +1,5 @@
 import { cn } from '@/utils/cn';
-import React from 'react';
+import '../styles/form-layout.css';
 
 type Props = {
   children: React.ReactNode;

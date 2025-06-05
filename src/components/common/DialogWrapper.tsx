@@ -58,16 +58,14 @@ export function DialogWrapper({
           onClick={() => setIsOpen(false)}
         >
           <X className="w-7 h-7 text-custom-primary hover:opacity-95 outline-none font-bold" />
-        </button>
+        </button>{' '}
         {showHeader && (
           <DialogHeader>
             <DialogTitle>{title}</DialogTitle>
-            {description && <DialogDescription>{description}</DialogDescription>}
+            <DialogDescription>{description || ''}</DialogDescription>
           </DialogHeader>
         )}
-
         {renderContent}
-
         {showFooter && (
           <DialogFooter className="sm:justify-center">
             {triggerBtnText && onSave && (

@@ -1,6 +1,7 @@
 import { ChangeEvent, useState } from 'react';
-import { FileUpload } from './FileUpload';
 import { Eye, X } from 'lucide-react';
+import { FileUpload } from './FileUpload';
+import '../styles/form-layout.css';
 
 interface FileUploadProps {
   id?: string;
@@ -71,7 +72,7 @@ const FileUploadWithView = ({ id, name, label, className }: FileUploadProps) => 
   return (
     <div className="flex">
       <div className="flex flex-col w-full">
-        <span className="text-sm mb-2">{label}</span>
+        <span className="fileupload-label text-sm mb-2">{label}</span>
         <div className="flex w-full gap-2">
           <FileUpload
             id={id || name}

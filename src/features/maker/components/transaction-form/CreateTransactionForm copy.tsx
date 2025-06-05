@@ -1,5 +1,4 @@
 import { Fragment } from 'react';
-import { Check } from 'lucide-react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { FormProvider } from '@/components/form/providers/FormProvider';
@@ -16,6 +15,7 @@ import useGetPurposes from '@/hooks/useGetPurposes';
 import { CreateTransactionFormProps } from './transaction-form.types';
 import { Button } from '@/components/ui/button';
 import { DialogWrapper } from '@/components/common/DialogWrapper';
+import { Check } from 'lucide-react';
 
 const CreateTransactionForm = ({ mode }: CreateTransactionFormProps) => {
   const { transactionTypes } = useGetTransactionType();
@@ -39,51 +39,44 @@ const CreateTransactionForm = ({ mode }: CreateTransactionFormProps) => {
   const methods = useForm({
     resolver: zodResolver(transactionFormSchema),
     defaultValues: transactionFormDefaults,
-    mode: 'onChange',
   });
-
   const {
     control,
     getValues,
     reset,
-    watch,
     formState: { errors, isSubmitting },
     handleSubmit,
   } = methods;
-
-  // Watch for form changes to debug
-  const watchedValues = watch();
-
   const handleFormSubmit = () => {
-    const formData = watchedValues;
-    const manualFormData = getValues();
+    const formData = getValues();
+    console.log('Form submitted with data:', formData);
+    console.log('Form errors:', errors);
 
-    console.log('Watched Values:', formData);
-    console.log('GetValues Result:', manualFormData);
+    // Handle form submission logic here
+    reset(transactionFormDefaults);
   };
 
   return (
     <Fragment>
+      {/* <Form {...methods}> */}
       <FormProvider methods={methods}>
         <FormContentWrapper className="w-full bg-transparent">
           <Spacer>
             {' '}
             <FormFieldRow className="mb-4" rowCols={4}>
-              {Object.entries(formControllerMeta.fields.applicantDetails).map(([key, field]) => {
-                return (
-                  <FieldWrapper key={key}>
-                    {getController({
-                      ...field,
-                      control,
-                      errors,
-                    })}
-                  </FieldWrapper>
-                );
-              })}
+              {Object.entries(formControllerMeta.fields.applicantDetails).map(([key, field]) => (
+                <FieldWrapper key={key}>
+                  {getController({
+                    ...field,
+                    control,
+                    errors,
+                  })}
+                </FieldWrapper>
+              ))}
             </FormFieldRow>
             <span className="border-b border-gray-500 mb-3">Upload Document</span>
             <FormFieldRow className="mb-4" wrapperClassName="justify-between" rowCols={2}>
-              <FieldWrapper className="mb-4 w-full" error={errors?.uploadDocuments?.pan?.message || null}>
+              <FieldWrapper className="mb-4 w-full">
                 {getController({
                   id: formControllerMeta.fields.uploadDocuments.pan.id,
                   label: formControllerMeta.fields.uploadDocuments.pan.label,
@@ -204,6 +197,7 @@ const CreateTransactionForm = ({ mode }: CreateTransactionFormProps) => {
           Submit
         </Button>
       </FormProvider>
+      {/* </Form> */}
       <DialogWrapper
         isOpen={false}
         setIsOpen={() => {}}
@@ -222,7 +216,8 @@ const CreateTransactionForm = ({ mode }: CreateTransactionFormProps) => {
         triggerBtnClassName="bg-custom-primary text-white hover:bg-custom-primary-hover"
         className="sm:max-w-[80%] md:max-w-[50%] w-full max-h-[90%] overflow-auto"
         onSave={handleSubmit((data) => {
-          reset(transactionFormDefaults); // Reset form to default values after submission
+          console.log('Form Data:', data);
+          reset(transactionFormDefaults);
         })}
         footerBtnText="Submit"
       />

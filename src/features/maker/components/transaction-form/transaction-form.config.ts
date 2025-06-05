@@ -80,7 +80,7 @@ export const getFormControllerMeta = (options: FormControllerMetaOptions = {}) =
           front: {
             id: 'upload-passport-aadhar-driving-voter-front',
             name: 'uploadDocuments.passportAadharDrivingVoter.front',
-            label: 'Front Side',
+            label: 'Front',
             type: FieldType.Fileupload_View,
             required: false,
             maxFiles: 1,
@@ -90,7 +90,7 @@ export const getFormControllerMeta = (options: FormControllerMetaOptions = {}) =
           back: {
             id: 'upload-passport-aadhar-driving-voter-back',
             name: 'uploadDocuments.passportAadharDrivingVoter.back',
-            label: 'Back Side',
+            label: 'Back',
             type: FieldType.Fileupload_View,
             required: false,
             maxFiles: 1,
@@ -102,7 +102,7 @@ export const getFormControllerMeta = (options: FormControllerMetaOptions = {}) =
           front: {
             id: 'upload-student-passport-front',
             name: 'uploadDocuments.studentPassport.front',
-            label: 'Student Passport Front Side',
+            label: 'Front',
             type: FieldType.Fileupload_View,
             required: false,
             maxFiles: 1,
@@ -112,7 +112,7 @@ export const getFormControllerMeta = (options: FormControllerMetaOptions = {}) =
           back: {
             id: 'upload-student-passport-back',
             name: 'uploadDocuments.studentPassport.back',
-            label: 'Student Passport Back Side',
+            label: 'Back',
             type: FieldType.Fileupload_View,
             required: false,
             maxFiles: 1,

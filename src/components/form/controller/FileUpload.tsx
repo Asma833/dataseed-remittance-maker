@@ -1,6 +1,7 @@
 import { cn } from '@/utils/cn';
 import { ChangeEvent } from 'react';
 import { Controller, useFormContext } from 'react-hook-form';
+import '../styles/form-layout.css';
 
 interface FileUpload {
   id?: string;
@@ -66,7 +67,6 @@ export const FileUpload = ({
               </button>
             </div>
           </label>
-          {error && <p className="text-[hsl(var(--destructive))] text-sm mt-1">{error.message}</p>}
         </div>
       )}
     />

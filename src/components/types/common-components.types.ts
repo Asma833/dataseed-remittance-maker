@@ -119,5 +119,5 @@ export type FieldWrapperPropsType = {
   className?: string;
   rowCols?: number | string;
   flexdirection?: string;
-  error?: string;
+  error?: string | null;
 };

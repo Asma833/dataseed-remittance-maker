@@ -287,7 +287,7 @@ export function DynamicTable<T extends Record<string, any>>({
       </div>
 
       <div className={cn('overflow-x-auto w-full bg-[--table-bg] rounded-lg shadow-sm', tableWrapperClass)}>
-        <div className="border  overflow-clip">
+        <div className="border border-gray-200 overflow-clip">
           <Table className="odz-table w-full overflow-auto">
             <TableHeader className="bg-[--table-header]">
               <TableRow className="odz-table-row">
