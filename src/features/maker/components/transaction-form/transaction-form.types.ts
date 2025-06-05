@@ -17,3 +17,7 @@ export interface FormControllerMetaOptions {
   transactionTypes?: OptionType[];
   purposeTypes?: OptionType[];
 }
+
+export type CreateTransactionFormProps = {
+  mode?: 'create' | 'edit';
+};

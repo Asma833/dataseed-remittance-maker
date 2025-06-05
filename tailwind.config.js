@@ -47,6 +47,12 @@ export default {
           4: 'hsl(var(--chart-4))',
           5: 'hsl(var(--chart-5))',
         },
+        gray: {
+          100: 'var(--gray-100)',
+          150: 'var(--gray-150)',
+          200: 'var(--gray-200)',
+          300: 'var(--gray-300)',
+        },
         custom: {
           primary: '#fd0194',
           tablehead: '#f9fafc',

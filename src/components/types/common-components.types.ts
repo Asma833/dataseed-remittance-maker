@@ -108,3 +108,16 @@ export type ViewAllTableProps = {
   refreshData: () => void;
   disableColumns?: string[]; // Optional prop to disable specific columns
 };
+
+export type FieldWrapperPropsType = {
+  id?: string;
+  label?: string;
+  labelClass?: string;
+  name?: string;
+  children: React.ReactNode;
+  childrenClass?: string;
+  className?: string;
+  rowCols?: number | string;
+  flexdirection?: string;
+  error?: string;
+};

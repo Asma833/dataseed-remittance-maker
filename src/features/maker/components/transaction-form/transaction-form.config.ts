@@ -1,9 +1,7 @@
 import { FieldType } from '@/types/common.type';
 import { FormControllerMetaOptions } from './transaction-form.types';
 
-export const getFormControllerMeta = (
-  options: FormControllerMetaOptions = {}
-) => {
+export const getFormControllerMeta = (options: FormControllerMetaOptions = {}) => {
   const { transactionTypes = [], purposeTypes = [] } = options;
 
   // Convert arrays to options object format
@@ -56,10 +54,7 @@ export const getFormControllerMeta = (
           type: FieldType.Select,
           required: true,
           placeholder: 'Select Transaction Type',
-          options:
-            Object.keys(transactionOptions).length > 0
-              ? transactionOptions
-              : {},
+          options: Object.keys(transactionOptions).length > 0 ? transactionOptions : {},
         },
         purposeType: {
           name: 'applicantDetails.purposeType',
@@ -71,79 +66,106 @@ export const getFormControllerMeta = (
         },
       },
       uploadDocuments: {
-        panDocument: {
+        pan: {
           id: 'upload-pan-document',
-          name: 'uploadDocuments.panDocument',
-          label: 'PAN Document',
+          name: 'uploadDocuments.pan',
+          label: 'PAN',
           type: FieldType.Fileupload_View,
           required: true,
           maxFiles: 3,
           description: "Applicant's PAN card copy",
           helpText: 'Upload clear copy of PAN card (front side)',
         },
-        passportDocument: {
-          id: 'upload-passport-document',
-          name: 'uploadDocuments.passportDocument',
-          label: 'Passport Document',
-          type: FieldType.Fileupload_View,
-          required: true,
-          maxFiles: 3,
-          description: 'Valid passport copy',
-          helpText: 'Upload passport pages with photo and details',
+        passportAadharDrivingVoter: {
+          front: {
+            id: 'upload-passport-aadhar-driving-voter-front',
+            name: 'uploadDocuments.passportAadharDrivingVoter.front',
+            label: 'Front Side',
+            type: FieldType.Fileupload_View,
+            required: false,
+            maxFiles: 1,
+            description: 'Front side of Passport/Aadhar/Driving License/Voter ID',
+            helpText: 'Upload clear copy of front side of Passport/Aadhar/Driving License/Voter ID',
+          },
+          back: {
+            id: 'upload-passport-aadhar-driving-voter-back',
+            name: 'uploadDocuments.passportAadharDrivingVoter.back',
+            label: 'Back Side',
+            type: FieldType.Fileupload_View,
+            required: false,
+            maxFiles: 1,
+            description: 'Back side of Passport/Aadhar/Driving License/Voter ID',
+            helpText: 'Upload clear copy of back side of Passport/Aadhar/Driving License/Voter ID',
+          },
         },
-        universityOfferLetter: {
-          id: 'upload-university-offer-letter',
-          name: 'uploadDocuments.universityOfferLetter',
-          label: 'University Offer Letter',
+        studentPassport: {
+          front: {
+            id: 'upload-student-passport-front',
+            name: 'uploadDocuments.studentPassport.front',
+            label: 'Student Passport Front Side',
+            type: FieldType.Fileupload_View,
+            required: false,
+            maxFiles: 1,
+            description: 'Front side of student passport (if applicable)',
+            helpText: 'Upload clear copy of front side of student passport (if applicable)',
+          },
+          back: {
+            id: 'upload-student-passport-back',
+            name: 'uploadDocuments.studentPassport.back',
+            label: 'Student Passport Back Side',
+            type: FieldType.Fileupload_View,
+            required: false,
+            maxFiles: 1,
+            description: 'Back side of student passport (if applicable)',
+            helpText: 'Upload clear copy of back side of student passport (if applicable)',
+          },
+        },
+        studentUniversityOfferLetter: {
+          id: 'upload-student-university-offer-letter',
+          name: 'uploadDocuments.studentUniversityOfferLetter',
+          label: 'Valid Student University Offer Letter/I20',
           type: FieldType.Fileupload_View,
-          required: true,
-          maxFiles: 3,
-          description: 'Official university admission letter',
-          helpText:
-            'Upload the official offer/admission letter from university',
+          required: false,
+          maxFiles: 1,
+          description: 'University offer letter for student transactions',
+          helpText: 'Upload clear copy of university offer letter (if applicable)',
         },
         studentVisa: {
           id: 'upload-student-visa',
           name: 'uploadDocuments.studentVisa',
-          label: 'Student Visa',
-          type: FieldType.Fileupload_View,
-          required: true,
-          maxFiles: 3,
-          description: 'Valid student visa document',
-          helpText: 'Upload student visa or I-20 form',
-        },
-        payerPanDocument: {
-          id: 'upload-payer-pan-document',
-          name: 'uploadDocuments.payerPanDocument',
-          label: 'Payer PAN Document',
+          label: 'Valid Student Visa',
           type: FieldType.Fileupload_View,
           required: false,
-          maxFiles: 3,
-          description: 'PAN card of fee payer (if different from applicant)',
-          helpText:
-            'Required if someone else is paying the fees, e.g., parent or guardian',
+          maxFiles: 1,
+          description: 'Valid student visa copy (if applicable)',
+          helpText: 'Upload clear copy of valid student visa (if applicable)',
         },
-        relationshipProof: {
-          id: 'upload-relationship-proof',
-          name: 'uploadDocuments.relationshipProof',
-          label: 'Relationship Proof',
+        payerPan: {
+          id: 'upload-payer-pan',
+          name: 'uploadDocuments.payerPan',
+          label: 'Payer PAN',
           type: FieldType.Fileupload_View,
           required: false,
-          maxFiles: 3,
-          description: 'Proof of relationship with fee payer (if applicable)',
-          helpText:
-            'Birth certificate, family tree, or affidavit to establish relationship',
+          maxFiles: 1,
+          description: 'Payer PAN card copy (if different from applicant)',
+        },
+        payerRelationshipProof: {
+          id: 'upload-payer-relationship-proof',
+          name: 'uploadDocuments.payerRelationshipProof',
+          label: 'Payer Relationship Proof',
+          type: FieldType.Fileupload_View,
+          required: false,
+          maxFiles: 1,
+          description: 'Proof of relationship between applicant and payer (if applicable)',
         },
         educationLoanDocument: {
-          id: 'upload-education-loan-document',
+          id: 'upload-education-loan-documents',
           name: 'uploadDocuments.educationLoanDocument',
-          label: 'Education Loan Document',
+          label: 'Education Loan Documents',
           type: FieldType.Fileupload_View,
           required: false,
           maxFiles: 3,
-          description: 'Education loan sanction letter (if applicable)',
-          helpText:
-            'Upload loan approval or sanction letter from bank or financial institution',
+          description: 'Any documents related to education loan (if applicable)',
         },
         otherDocuments: {
           id: 'upload-other-documents',
@@ -152,8 +174,7 @@ export const getFormControllerMeta = (
           type: FieldType.Fileupload_View,
           required: false,
           maxFiles: 5,
-          description:
-            'Any additional supporting documents related to transaction',
+          description: 'Any additional supporting documents related to transaction',
         },
       },
     },
