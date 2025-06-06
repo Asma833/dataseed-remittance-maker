@@ -17,9 +17,9 @@ const ViewStatus: React.FC = () => {
       transaction_type_name: { name: 'Inward Remittance' },
       purpose_type_name: { purpose_name: 'Education Fee' },
       transaction_status: 'Completed',
-      e_sign_status: 'Signed',
+      e_sign_status: 'completed',
       e_sign_link: 'https://example.com/esign/12345',
-      view_action: 'View'
+      view_action:true
     },
     {
       nium_order_id: 'TX-12346',
@@ -30,9 +30,9 @@ const ViewStatus: React.FC = () => {
       transaction_type_name: { name: 'Outward Remittance' },
       purpose_type_name: { purpose_name: 'Medical Treatment' },
       transaction_status: 'Pending',
-      e_sign_status: 'Not Signed',
+      e_sign_status: 'rejected',
       e_sign_link: 'https://example.com/esign/12346',
-      view_action: 'View'
+      view_action:true
     },
     {
       nium_order_id: 'TX-12347',
@@ -43,9 +43,9 @@ const ViewStatus: React.FC = () => {
       transaction_type_name: { name: 'Inward Remittance' },
       purpose_type_name: { purpose_name: 'Family Maintenance' },
       transaction_status: 'In Progress',
-      e_sign_status: 'Expired',
+      e_sign_status: 'expired',
       e_sign_link: 'https://example.com/esign/12347',
-      view_action: 'View'
+      view_action:true
     },
     {
       nium_order_id: 'TX-12348',
@@ -56,9 +56,9 @@ const ViewStatus: React.FC = () => {
       transaction_type_name: { name: 'Outward Remittance' },
       purpose_type_name: { purpose_name: 'Business Travel' },
       transaction_status: 'Rejected',
-      e_sign_status: 'Not Required',
+      e_sign_status: 'pending',
       e_sign_link: '',
-      view_action: 'View'
+      view_action:true
     },
     {
       nium_order_id: 'TX-12349',
@@ -69,25 +69,12 @@ const ViewStatus: React.FC = () => {
       transaction_type_name: { name: 'Inward Remittance' },
       purpose_type_name: { purpose_name: 'Investment' },
       transaction_status: 'Completed',
-      e_sign_status: 'Signed',
+      e_sign_status: 'completed',
       e_sign_link: 'https://example.com/esign/12349',
-      view_action: 'View'
+      view_action:true
     }
   ], []);
 
-  // Options for filter dropdowns
-  const purposeTypeOptions = useMemo(() => [
-    { value: 'Education Fee', label: 'Education Fee' },
-    { value: 'Medical Treatment', label: 'Medical Treatment' },
-    { value: 'Family Maintenance', label: 'Family Maintenance' },
-    { value: 'Business Travel', label: 'Business Travel' },
-    { value: 'Investment', label: 'Investment' }
-  ], []);
-
-  const transactionTypeOptions = useMemo(() => [
-    { value: 'Inward Remittance', label: 'Inward Remittance' },
-    { value: 'Outward Remittance', label: 'Outward Remittance' }
-  ], []);
 
   // Table columns
   const tableColumns = ViewStatusColumns({});
@@ -103,7 +90,6 @@ const ViewStatus: React.FC = () => {
 
   return (
     <div className="dynamic-table-wrap">
-      <h1 className="text-2xl font-bold mb-4">View Transaction Status</h1>
       <DynamicTable
         columns={tableColumns}
         data={dummyData}
@@ -127,20 +113,6 @@ const ViewStatus: React.FC = () => {
             dateRange: true,
             applyAction: true,
             resetAction: true,
-            // selects: [
-            //   {
-            //     id: 'purpose_type_name.purpose_name',
-            //     label: 'Purpose Type',
-            //     placeholder: 'Select',
-            //     options: purposeTypeOptions,
-            //   },
-            //   {
-            //     id: 'transaction_type_name.name',
-            //     label: 'Transaction Type',
-            //     placeholder: 'Select',
-            //     options: transactionTypeOptions,
-            //   },
-            // ],
           },
         }}
       />
