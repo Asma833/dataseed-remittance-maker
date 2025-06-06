@@ -36,7 +36,6 @@ export const transactionFormSchema = z.object({
 
     purposeType: z.string().optional().or(z.literal('')),
   }),
-
   // Document Uploads
   uploadDocuments: z.object({
     pan: z.array(fileSchema).optional().default([]),

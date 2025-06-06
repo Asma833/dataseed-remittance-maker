@@ -17,6 +17,8 @@ import { CreateTransactionFormProps } from './transaction-form.types';
 import { Button } from '@/components/ui/button';
 import { DialogWrapper } from '@/components/common/DialogWrapper';
 
+const fieldWrapperBaseStyle = 'mb-4';
+
 const CreateTransactionForm = ({ mode }: CreateTransactionFormProps) => {
   const { transactionTypes } = useGetTransactionType();
   const { purposeTypes } = useGetPurposes();
@@ -67,8 +69,7 @@ const CreateTransactionForm = ({ mode }: CreateTransactionFormProps) => {
       <FormProvider methods={methods}>
         <FormContentWrapper className="w-full bg-transparent">
           <Spacer>
-            {' '}
-            <FormFieldRow className="mb-4" rowCols={4}>
+            <FormFieldRow className={fieldWrapperBaseStyle} rowCols={4}>
               {Object.entries(formControllerMeta.fields.applicantDetails).map(([key, field]) => {
                 return (
                   <FieldWrapper key={key}>
@@ -82,7 +83,7 @@ const CreateTransactionForm = ({ mode }: CreateTransactionFormProps) => {
               })}
             </FormFieldRow>
             <span className="border-b border-gray-500 mb-3">Upload Document</span>
-            <FormFieldRow className="mb-4" wrapperClassName="justify-between" rowCols={2}>
+            <FormFieldRow className={fieldWrapperBaseStyle} wrapperClassName="justify-between" rowCols={2}>
               <FieldWrapper className="mb-4 w-full" error={errors?.uploadDocuments?.pan?.message || null}>
                 {getController({
                   id: formControllerMeta.fields.uploadDocuments.pan.id,
@@ -93,7 +94,10 @@ const CreateTransactionForm = ({ mode }: CreateTransactionFormProps) => {
                   errors,
                 })}
               </FieldWrapper>
-              <FieldWrapper className="mb-4" error={errors?.uploadDocuments?.otherDocuments?.message || null}>
+              <FieldWrapper
+                className={fieldWrapperBaseStyle}
+                error={errors?.uploadDocuments?.otherDocuments?.message || null}
+              >
                 {getController({
                   id: formControllerMeta.fields.uploadDocuments.otherDocuments.id,
                   label: formControllerMeta.fields.uploadDocuments.otherDocuments.label,
@@ -103,7 +107,11 @@ const CreateTransactionForm = ({ mode }: CreateTransactionFormProps) => {
                   errors,
                 })}
               </FieldWrapper>
-              <FieldWrapper className="mb-4" flexdirection="row" label="Passport/Aadhar/Driving License/Voter ID">
+              <FieldWrapper
+                className={fieldWrapperBaseStyle}
+                flexdirection="row"
+                label="Passport/Aadhar/Driving License/Voter ID"
+              >
                 <FieldWrapper error={errors?.uploadDocuments?.passportAadharDrivingVoter?.front?.message || null}>
                   {getController({
                     id: formControllerMeta.fields.uploadDocuments.passportAadharDrivingVoter.front.id,
@@ -125,7 +133,10 @@ const CreateTransactionForm = ({ mode }: CreateTransactionFormProps) => {
                   })}
                 </FieldWrapper>
               </FieldWrapper>
-              <FieldWrapper className="mb-4 w-full" error={errors?.uploadDocuments?.otherDocuments?.message || null}>
+              <FieldWrapper
+                className="mb-4 md:mt-[28px] w-full"
+                error={errors?.uploadDocuments?.payerPan?.message || null}
+              >
                 {getController({
                   id: formControllerMeta.fields.uploadDocuments.payerPan.id,
                   label: formControllerMeta.fields.uploadDocuments.payerPan.label,
@@ -135,7 +146,7 @@ const CreateTransactionForm = ({ mode }: CreateTransactionFormProps) => {
                   errors,
                 })}
               </FieldWrapper>
-              <FieldWrapper className="mb-4" flexdirection="row" label="Valid Student Passport">
+              <FieldWrapper className={fieldWrapperBaseStyle} flexdirection="row" label="Valid Student Passport">
                 <FieldWrapper error={errors?.uploadDocuments?.studentPassport?.front?.message || null}>
                   {getController({
                     id: formControllerMeta.fields.uploadDocuments.studentPassport.front.id,
@@ -157,7 +168,10 @@ const CreateTransactionForm = ({ mode }: CreateTransactionFormProps) => {
                   })}
                 </FieldWrapper>
               </FieldWrapper>
-              <FieldWrapper className="mb-4" error={errors?.uploadDocuments?.payerRelationshipProof?.message || null}>
+              <FieldWrapper
+                className="mb-4 md:mt-[28px] w-full"
+                error={errors?.uploadDocuments?.payerRelationshipProof?.message || null}
+              >
                 {getController({
                   id: formControllerMeta.fields.uploadDocuments.payerRelationshipProof.id,
                   label: formControllerMeta.fields.uploadDocuments.payerRelationshipProof.label,
@@ -168,7 +182,7 @@ const CreateTransactionForm = ({ mode }: CreateTransactionFormProps) => {
                 })}
               </FieldWrapper>
               <FieldWrapper
-                className="mb-4"
+                className={fieldWrapperBaseStyle}
                 error={errors?.uploadDocuments?.studentUniversityOfferLetter?.message || null}
               >
                 {getController({
@@ -180,7 +194,10 @@ const CreateTransactionForm = ({ mode }: CreateTransactionFormProps) => {
                   errors,
                 })}
               </FieldWrapper>
-              <FieldWrapper className="mb-4" error={errors?.uploadDocuments?.educationLoanDocument?.message || null}>
+              <FieldWrapper
+                className={fieldWrapperBaseStyle}
+                error={errors?.uploadDocuments?.educationLoanDocument?.message || null}
+              >
                 {getController({
                   id: formControllerMeta.fields.uploadDocuments.educationLoanDocument.id,
                   label: formControllerMeta.fields.uploadDocuments.educationLoanDocument.label,
@@ -190,7 +207,10 @@ const CreateTransactionForm = ({ mode }: CreateTransactionFormProps) => {
                   errors,
                 })}
               </FieldWrapper>
-              <FieldWrapper className="mb-4" error={errors?.uploadDocuments?.studentVisa?.message || null}>
+              <FieldWrapper
+                className={fieldWrapperBaseStyle}
+                error={errors?.uploadDocuments?.studentVisa?.message || null}
+              >
                 {getController({
                   id: formControllerMeta.fields.uploadDocuments.studentVisa.id,
                   label: formControllerMeta.fields.uploadDocuments.studentVisa.label,

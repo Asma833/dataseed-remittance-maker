@@ -1,6 +1,7 @@
-import { ChangeEvent, useState } from 'react';
+import { ChangeEvent, useState, useEffect } from 'react';
 import { Eye, X } from 'lucide-react';
 import { FileUpload } from './FileUpload';
+import { useFormContext } from 'react-hook-form';
 import '../styles/form-layout.css';
 
 interface FileUploadProps {
@@ -18,10 +19,24 @@ interface FileUploadProps {
 const FileUploadWithView = ({ id, name, label, className }: FileUploadProps) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
+  const { watch } = useFormContext();
+
+  // Watch the form field to get the current file array
+  const fileArray = watch(name) || [];
+
+  useEffect(() => {
+    // Update selectedFile when the form value changes
+    if (fileArray.length > 0 && fileArray[0]?.file) {
+      setSelectedFile(fileArray[0].file);
+    } else {
+      setSelectedFile(null);
+    }
+  }, [fileArray]);
 
   const handleFileChange = (e: ChangeEvent<HTMLInputElement> | null) => {
     if (e && e.target.files?.[0]) {
       const file = e.target.files[0];
+      console.log('file:', file);
       setSelectedFile(file);
     }
   };
@@ -33,6 +48,7 @@ const FileUploadWithView = ({ id, name, label, className }: FileUploadProps) => 
 
     const fileType = selectedFile.type;
     const fileUrl = URL.createObjectURL(selectedFile);
+    console.log('fileUrl:', fileUrl);
 
     if (fileType.startsWith('image/')) {
       return (

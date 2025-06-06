@@ -18,6 +18,12 @@ export interface FormControllerMetaOptions {
   purposeTypes?: OptionType[];
 }
 
+export enum TransactionMode {
+  CREATE = 'create',
+  EDIT = 'edit',
+  VIEW = 'view',
+}
+
 export type CreateTransactionFormProps = {
-  mode?: 'create' | 'edit';
+  mode?: TransactionMode;
 };

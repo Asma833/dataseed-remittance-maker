@@ -20,7 +20,7 @@ interface FileUpload {
 
 export const FileUpload = ({
   id,
-  name,
+  name = '',
   label,
   className,
   handleFileChange,
@@ -33,12 +33,11 @@ export const FileUpload = ({
     if (!handleFileChange) return;
     handleFileChange(e);
   };
-
   return (
     <Controller
       name={name}
       control={control}
-      defaultValue={defaultValue || null}
+      defaultValue={[]}
       render={({ field: { value, onChange }, fieldState: { error } }) => (
         <div className={cn('w-full p-3 flex flex-col gap-2', className)}>
           {styleType == 'default' && <span className="text-sm"> {label}</span>}
@@ -49,8 +48,21 @@ export const FileUpload = ({
                 id={id}
                 type="file"
                 onChange={(e) => {
-                  const file = e.target.files?.[0] || null;
-                  onChange(file);
+                  const file = e.target.files?.[0];
+                  if (file) {
+                    // Transform file to match schema format
+                    const fileData = {
+                      file,
+                      name: file.name,
+                      size: file.size,
+                      type: file.type,
+                      lastModified: file.lastModified,
+                    };
+                    // Set as array to match schema
+                    onChange([fileData]);
+                  } else {
+                    onChange([]);
+                  }
                   handleChange(e);
                 }}
                 className="n-filetype-hidden"
@@ -62,7 +74,7 @@ export const FileUpload = ({
               >
                 <span className="text-nowrap font-semibold border-r-2 border-gray-400 py-2 pr-3 pl-4">Choose File</span>
                 <span className="ml-2 text-gray-500 font-semibold px-4 py-2">
-                  {value.name ? value.name : 'No file chosen'}
+                  {value && value.length > 0 && value[0]?.name ? value[0].name : 'No file chosen'}
                 </span>
               </button>
             </div>

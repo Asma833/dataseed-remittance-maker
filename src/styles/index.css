@@ -288,7 +288,12 @@ html[class='dark'] {
   color: hsl(var(--primary-foreground));
 }
 
-.dark .MuiInputBase-input.Mui-disabled {
+.dark .MuiList-root.MuiMenu-list {
+  -webkit-text-fill-color: rgba(218, 218, 218, 0.72);
+  background-color: black !important;
+}
+
+.dark .MuiList-root.MuiList-padding.MuiMenu-list {
   -webkit-text-fill-color: rgba(218, 218, 218, 0.72);
 }
 .dark [class*='MuiOutlinedInput'] {
