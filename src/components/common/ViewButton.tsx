@@ -2,7 +2,7 @@ import React from 'react';
 import { Eye, History } from 'lucide-react';
 import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip';
 import { cn } from '@/utils/cn';
-
+import { Button } from '@/components/ui/button';
 interface ViewButtonProps {
   onClick: () => void;
   tooltipText: string;
@@ -44,18 +44,19 @@ const ViewButton: React.FC<ViewButtonProps> = ({
   return (
     <Tooltip>
       <TooltipTrigger asChild>
-        <button
-          type="button"
-          disabled={disabled}
+         <Button
           onClick={handleClick}
-          data-button-type={buttonType}
+          variant="outline"
+          size="sm"
+          disabled={disabled}
           className={cn(
-            'flex items-center justify-center gap-1 px-3 py-1 rounded',
-            className
+            'text-foreground  bg-transparent border-none shadow-none',
+            className,
+            'hover:bg-primary hover:text-white  disabled:text-gray-500'
           )}
         >
           {renderIcon()}
-        </button>
+        </Button>
       </TooltipTrigger>
       <TooltipContent className="bg-secondary text-foreground">
         {tooltipText}
