@@ -70,6 +70,7 @@ export interface DynamicTableProps<T> {
     isLoading: boolean;
     hasError: boolean | string | null | Error;
   };
+  onFilteredDataChange?: (filteredData: T[]) => void;
 }
 
 export type IconType = 'default' | 'upload' | 'download';

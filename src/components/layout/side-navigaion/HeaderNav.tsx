@@ -18,7 +18,7 @@ const Header: React.FC<HeaderProps> = ({
   return (
     <nav
       className={cn(
-        `bg-secondary fixed top-0 right-0 h-[70px] z-40`,
+        `bg-secondary fixed top-0 right-0 h-[70px] z-[9999]`,
         className
       )}
     >

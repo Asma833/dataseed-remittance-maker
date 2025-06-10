@@ -18,7 +18,6 @@ import {
 } from '@/features/checker/types/updateIncident.types';
 
 const AssignCreationTable = () => {
-  usePageTitle('Assign');
   const { invalidateMultipleQueries } = useQueryInvalidator();
   const { getUserHashedKey } = useCurrentUser();
   const currentUserHashedKey = getUserHashedKey();
@@ -142,7 +141,7 @@ const AssignCreationTable = () => {
 
   return (
     <div className="dynamic-table-wrap flex flex-col">
-      <DynamicTable
+      {/* <DynamicTable
         columns={columns}
         data={formateDataArray || []}
         defaultSortColumn="nium_order_id"
@@ -168,7 +167,7 @@ const AssignCreationTable = () => {
               }
             : undefined,
         }}
-      />
+      /> */}
 
       <div className="w-full flex flex-col items-center justify-start gap-3">
         <div className="text-sm text-gray-500">

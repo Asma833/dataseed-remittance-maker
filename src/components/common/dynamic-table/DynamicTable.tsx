@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { FileX2 } from 'lucide-react';
 import {
   Table,
@@ -91,6 +91,7 @@ export function DynamicTable<T extends Record<string, any>>({
   loading: externalLoading,
   renderComponents,
   totalRecords,
+  onFilteredDataChange,
 }: DynamicTableProps<T>) {
   const [filters, setFilters] = useState<SetFilters>({
     search: '',
@@ -206,7 +207,6 @@ export function DynamicTable<T extends Record<string, any>>({
           return true;
         })
       : sortedData; // In dynamic mode, we don't filter locally
-
   const {
     paginatedData,
     totalPages,
@@ -215,6 +215,13 @@ export function DynamicTable<T extends Record<string, any>>({
     setPageSize,
     setCurrentPage,
   } = useTablePagination(filteredData, initialPageSize, pageSizeOption);
+
+  // Notify parent component when filtered data changes
+  useEffect(() => {
+    if (onFilteredDataChange) {
+      onFilteredDataChange(filteredData);
+    }
+  }, [filteredData, onFilteredDataChange]);
 
   // We need to track filter operations separately
   const [lastFiltered, setLastFiltered] = useState<number>(0);
@@ -349,11 +356,11 @@ export function DynamicTable<T extends Record<string, any>>({
                       <span className="ml-2">
                         {sortDirection === 'asc' ? '↑' : '↓'}
                       </span>
-                    )}
+                    )}{' '}
                   </TableHead>
                 ))}
               </TableRow>
-            </TableHeader>{' '}
+            </TableHeader>
             <TableBody className="odz-table-body">
               {!loading ? (
                 paginatedData.length > 0 ? (

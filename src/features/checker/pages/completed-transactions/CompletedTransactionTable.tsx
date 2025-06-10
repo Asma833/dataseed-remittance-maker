@@ -26,6 +26,7 @@ const CompletedTransactionTable = () => {
 
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedRowData, setSelectedRowData] = useState<any>(null);
+  const [filteredData, setFilteredData] = useState<any[]>([]);
 
   const openModal = (rowData: any) => {
     setSelectedRowData(rowData);
@@ -90,9 +91,10 @@ const CompletedTransactionTable = () => {
     }
     return [];
   };
-
   const handleExportToCSV = () => {
-    const dataToExport = getTableData();
+    // Use filtered data if available, otherwise fall back to all data
+    const dataToExport =
+      filteredData.length > 0 ? filteredData : getTableData();
 
     const exportColumns = columns.map((col) => ({
       accessorKey: col.id,
@@ -124,7 +126,6 @@ const CompletedTransactionTable = () => {
 
     return 0;
   })();
-
   return (
     <div className="dynamic-table-wrap">
       <DynamicTable
@@ -141,6 +142,7 @@ const CompletedTransactionTable = () => {
         loading={isLoading}
         paginationMode="static"
         totalRecords={totalRecords}
+        onFilteredDataChange={setFilteredData}
         filter={{
           filterOption: true,
           mode: 'static',

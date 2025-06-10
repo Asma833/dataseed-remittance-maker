@@ -29,6 +29,7 @@ const ViewAllTable: React.FC<ViewAllTableProps> = ({
   const { mutate: sendEsignLink, isSendEsignLinkLoading } = useSendEsignLink();
   const [selectedRowData, setSelectedRowData] = useState<Orders>();
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [filteredData, setFilteredData] = useState<Order[]>([]);
 
   const { options: purposeTypeOptions } = useDynamicOptions(
     API.PURPOSE.GET_PURPOSES
@@ -114,10 +115,12 @@ const ViewAllTable: React.FC<ViewAllTableProps> = ({
             : 'N/A',
     };
   };
-
   const handleExportToCSV = () => {
+    // Use filtered data if available, otherwise fall back to all data
     const dataToExport =
-      tableData.map((item) => transformOrderForTable(item)) || [];
+      filteredData.length > 0
+        ? filteredData.map((item) => transformOrderForTable(item))
+        : tableData.map((item) => transformOrderForTable(item)) || [];
 
     const exportColumns = columns.map((col) => ({
       accessorKey: col.id,
@@ -146,6 +149,7 @@ const ViewAllTable: React.FC<ViewAllTableProps> = ({
   );
   return (
     <div className="dynamic-table-wrap">
+      {' '}
       <DynamicTable
         columns={tableColumns}
         data={tableData}
@@ -164,6 +168,7 @@ const ViewAllTable: React.FC<ViewAllTableProps> = ({
             ? pagination.handlePageChange
             : async (_page: number, _pageSize: number) => []
         }
+        onFilteredDataChange={setFilteredData}
         filter={{
           filterOption: true,
           mode: 'static',
@@ -190,11 +195,9 @@ const ViewAllTable: React.FC<ViewAllTableProps> = ({
           },
         }}
       />
-
       <div className="flex justify-center sm:justify-start mt-4 gap-3">
         <Button onClick={handleExportToCSV}>Export CSV</Button>
       </div>
-
       {isModalOpen && selectedRowData && (
         <UpdateIncidentDialog
           pageId={IncidentPageId.VIEW_ALL}
