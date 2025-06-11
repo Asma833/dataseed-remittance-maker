@@ -18,7 +18,6 @@ import {
 } from '@/features/checker/types/updateIncident.types';
 
 const AssignCreationTable = () => {
-  usePageTitle('Assign');
   const { invalidateMultipleQueries } = useQueryInvalidator();
   const { getUserHashedKey } = useCurrentUser();
   const currentUserHashedKey = getUserHashedKey();

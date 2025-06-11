@@ -3,7 +3,6 @@ import { DynamicTable } from '@/components/common/dynamic-table/DynamicTable';
 import { Button } from '@/components/ui/button';
 import { GetTransactionTableColumns } from './CompletedTransactionTableColumns';
 import { exportToCSV } from '@/utils/exportUtils';
-import { usePageTitle } from '@/hooks/usePageTitle';
 import useGetCheckerOrders from '@/features/checker/hooks/useGetCheckerOrders';
 import { API } from '@/core/constant/apis';
 import UpdateIncidentDialog from '../../components/update-incident-dialog/UpdateIncidentDialog';
@@ -15,8 +14,6 @@ import {
 } from '../../types/updateIncident.types';
 
 const CompletedTransactionTable = () => {
-  usePageTitle('Completed Transaction');
-  // Use our custom hook with TanStack Query to fetch completed transactions
   const {
     data: checkerOrdersData,
     loading: checkerOrdersLoading,
@@ -26,6 +23,7 @@ const CompletedTransactionTable = () => {
 
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedRowData, setSelectedRowData] = useState<any>(null);
+  const [filteredData, setFilteredData] = useState<any[]>([]);
 
   const openModal = (rowData: any) => {
     setSelectedRowData(rowData);
@@ -90,9 +88,10 @@ const CompletedTransactionTable = () => {
     }
     return [];
   };
-
   const handleExportToCSV = () => {
-    const dataToExport = getTableData();
+    // Use filtered data if available, otherwise fall back to all data
+    const dataToExport =
+      filteredData.length > 0 ? filteredData : getTableData();
 
     const exportColumns = columns.map((col) => ({
       accessorKey: col.id,
@@ -124,7 +123,6 @@ const CompletedTransactionTable = () => {
 
     return 0;
   })();
-
   return (
     <div className="dynamic-table-wrap">
       <DynamicTable
@@ -141,6 +139,7 @@ const CompletedTransactionTable = () => {
         loading={isLoading}
         paginationMode="static"
         totalRecords={totalRecords}
+        onFilteredDataChange={setFilteredData}
         filter={{
           filterOption: true,
           mode: 'static',
