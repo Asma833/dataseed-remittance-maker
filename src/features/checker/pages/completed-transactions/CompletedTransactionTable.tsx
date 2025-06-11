@@ -153,7 +153,6 @@ const CompletedTransactionTable = () => {
             dateRange: true,
             applyAction: true,
             resetAction: true,
-
             selects: [
               {
                 id: 'purpose_type_name',

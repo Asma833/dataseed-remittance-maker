@@ -6,7 +6,6 @@ import { useFilterApi } from '@/components/common/dynamic-table/hooks/useFilterA
 import { useDynamicPagination } from '@/components/common/dynamic-table/hooks/useDynamicPagination';
 import { Button } from '@/components/ui/button';
 import { API } from '@/core/constant/apis';
-import { usePageTitle } from '@/hooks/usePageTitle';
 import axiosInstance from '@/core/services/axios/axiosInstance';
 import { useCurrentUser } from '@/utils/getUserFromRedux';
 import { useGetData } from '@/hooks/useGetData';
@@ -16,11 +15,19 @@ import {
   IncidentMode,
   IncidentPageId,
 } from '@/features/checker/types/updateIncident.types';
+import { useDynamicOptions } from '@/features/checker/hooks/useDynamicOptions';
 
 const AssignCreationTable = () => {
   const { invalidateMultipleQueries } = useQueryInvalidator();
   const { getUserHashedKey } = useCurrentUser();
   const currentUserHashedKey = getUserHashedKey();
+  const { options: purposeTypeOptions } = useDynamicOptions(
+    API.PURPOSE.GET_PURPOSES
+  );
+
+  const { options: transactionTypeOptions } = useDynamicOptions(
+    API.TRANSACTION.GET_TRANSACTIONS
+  );
 
   const { data, isLoading, error } = useGetData({
     endpoint: API.CHECKER.ASSIGN.LIST,
@@ -159,7 +166,24 @@ const AssignCreationTable = () => {
           mode: isTableFilterDynamic ? 'dynamic' : 'static',
           renderFilterOptions: {
             search: true,
+            applyAction: true,
+            resetAction: true,
+            selects: [
+              {
+                id: 'purpose_type',
+                label: 'Purpose Type',
+                placeholder: 'Select',
+                options: purposeTypeOptions,
+              },
+              {
+                id: 'transaction_type',
+                label: 'Transaction Type',
+                placeholder: 'Select',
+                options: transactionTypeOptions,
+              },
+            ],
           },
+
           // Dynamic callbacks - API functions
           dynamicCallbacks: isTableFilterDynamic
             ? {
