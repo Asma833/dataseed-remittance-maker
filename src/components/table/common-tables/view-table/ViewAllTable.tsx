@@ -103,7 +103,11 @@ const ViewAllTable: React.FC<ViewAllTableProps> = ({
           : order.v_kyc_customer_completion_date
             ? new Date(order.v_kyc_customer_completion_date).toLocaleString()
             : 'N/A',
-      incident_status: order.incident_status || 'Pending',
+      incident_status: order.incident_status
+        ? 'Approved'
+        : !order.incident_status
+          ? 'Rejected'
+          : 'Pending',
       incident_completion_date:
         order.incident_completion_date === 'N/A' ||
         order.incident_completion_date === 'NA'

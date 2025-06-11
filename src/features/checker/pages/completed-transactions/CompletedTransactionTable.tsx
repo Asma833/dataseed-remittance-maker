@@ -66,7 +66,11 @@ const CompletedTransactionTable = () => {
         order.v_kyc_customer_completion_date === 'NA'
           ? 'N/A'
           : new Date(order.v_kyc_customer_completion_date).toLocaleString(),
-      incident_status: order.incident_status,
+      incident_status: order.incident_status
+        ? 'Approved'
+        : !order.incident_status
+          ? 'Rejected'
+          : 'Pending',
       incident_completion_date:
         order.incident_completion_date === 'N/A' ||
         order.incident_completion_date === 'NA'
@@ -149,7 +153,6 @@ const CompletedTransactionTable = () => {
             dateRange: true,
             applyAction: true,
             resetAction: true,
-
             selects: [
               {
                 id: 'purpose_type_name',
@@ -173,7 +176,7 @@ const CompletedTransactionTable = () => {
       {isModalOpen && (
         <UpdateIncidentDialog
           pageId={IncidentPageId.COMPLETED}
-          mode={IncidentMode.VIEW}
+          mode={IncidentMode.EDIT_INVOICE}
           selectedRowData={selectedRowData}
           isModalOpen={isModalOpen}
           setIsModalOpen={setIsModalOpen}
