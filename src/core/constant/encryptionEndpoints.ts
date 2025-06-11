@@ -58,7 +58,7 @@ export const ENDPOINT_MATCHING_RULES: EndpointRulesConfig = {
     matchType: 'exact-only' as const,
     description: 'Generate e-sign link endpoint',
   },
-   'orders': {
+  orders: {
     endpoint: API.ORDERS.LIST,
     matchType: 'standard' as const,
     description: 'Order list endpoint',

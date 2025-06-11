@@ -1,4 +1,4 @@
-import { useState, useCallback, useEffect } from 'react';
+import { useState, useCallback } from 'react';
 import { toast } from 'sonner';
 import { useQuery } from '@tanstack/react-query';
 import axiosInstance from '@/core/services/axios/axiosInstance';
@@ -18,9 +18,7 @@ export const useGetCheckerOrders = (
     initialTransactionType
   );
 
-  // Get the current user once
-  const { user, getUserId } = useCurrentUser();
-  // const userHashedKey = user?.hashed_key;
+  const { getUserId } = useCurrentUser();
   const roleId = getUserId();
 
   // Define query key
@@ -34,10 +32,6 @@ export const useGetCheckerOrders = (
   } = useQuery({
     queryKey,
     queryFn: async () => {
-      // if (!userHashedKey) {
-      //   throw new Error('User hash key not available');
-      // }
-
       const { data } = await axiosInstance.post(API.ORDERS.CHECKER_ORDERS, {
         checkerId: roleId,
         transaction_type: transactionType,
