@@ -44,6 +44,7 @@ export enum IncidentPageId {
 export enum IncidentMode {
   EDIT = 'edit',
   VIEW = 'view',
+  EDIT_INVOICE = 'editInvoice',
 }
 
 export type UpdateIncidentDialogProps = {
