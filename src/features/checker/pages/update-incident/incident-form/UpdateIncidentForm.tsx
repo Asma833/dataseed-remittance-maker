@@ -283,7 +283,9 @@ const UpdateIncidentForm = (props: UpdateIncidentFormData) => {
   };
 
   // Download handler for eSign Document
-  const handleDownloadDocument = (docType: 'esignDocument' | 'vkycDocument' | 'vkycVideo') => {
+  const handleDownloadDocument = (
+    docType: 'esignDocument' | 'vkycDocument' | 'vkycVideo' | 'mergeDoc'
+  ) => {
     if (docType && docType === 'esignDocument' && esignFile) {
       window.open(esignFile, '_blank');
     } else if (docType === 'vkycDocument' && vkycDocumentFilesArray.length > 0) {
@@ -302,6 +304,9 @@ const UpdateIncidentForm = (props: UpdateIncidentFormData) => {
       } else {
         toast.error('No VKYC video available for download');
       }
+    } else if (docType === 'mergeDoc' && mergeDocument) {
+      const docUrl = mergeDocument || '';
+      window.open(docUrl, '_blank');
     } else {
       toast.error('No document available for download');
     }
@@ -399,7 +404,6 @@ const UpdateIncidentForm = (props: UpdateIncidentFormData) => {
                 <Button
                   type="button"
                   onClick={handleViewDocument}
-                  // disabled={!mergeDocument}
                   className="disabled:opacity-60"
                 >
                   View Document
@@ -410,7 +414,9 @@ const UpdateIncidentForm = (props: UpdateIncidentFormData) => {
                 pageId === 'completedIncident') && (
                 <Button
                   type="button"
-                  onClick={() => handleDownloadDocument('esignDocument')}
+                  onClick={() => {
+                    handleDownloadDocument('mergeDoc');
+                  }}
                   disabled={!isEsignDocumentLink}
                   className="disabled:opacity-60"
                 >
