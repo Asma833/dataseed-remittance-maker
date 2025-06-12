@@ -1,9 +1,23 @@
 import { SignLinkButton } from '@/components/common/SignLinkButton';
 import ViewButton from '@/components/common/ViewButton';
 import EsignStatusCell from '@/features/checker/components/table/EsignStatusCell';
-import { Eye, FileText, ExternalLink } from 'lucide-react'; // Import the necessary Lucide icons
+import VKycStatusCell from '@/features/checker/components/table/VKycStatusCell';
+import { formatDateWithFallback } from '@/utils/formatDateWithFallback';
 
-export const ViewStatusColumns = ({openModal}:{openModal: (rowData: any) => void;}) => [
+export const ViewStatusColumns = (
+ 
+  {
+     handleRegenerateEsignLink,
+    openModal,
+    isSendEsignLinkLoading = false,
+    loadingOrderId = null
+  }: {
+    handleRegenerateEsignLink: (rowData: any) => void;
+    openModal: (rowData: any) => void;
+    isSendEsignLinkLoading?: boolean;
+    loadingOrderId?: string | null;
+  }
+) => [
   {
     key: 'nium_order_id',
     id: 'nium_order_id',
@@ -14,7 +28,8 @@ export const ViewStatusColumns = ({openModal}:{openModal: (rowData: any) => void
     key: 'created_at',
     id: 'created_at',
     name: 'Created Date',
-    className: 'min-w-0 p-2'
+    className: 'min-w-0 p-2',
+    cell: (_: unknown, rowData: { created_at?: string }) => <span>{formatDateWithFallback(rowData.created_at)}</span>,
   },
   {
     key: 'expiry_date',
@@ -23,14 +38,14 @@ export const ViewStatusColumns = ({openModal}:{openModal: (rowData: any) => void
     className: 'min-w-0 p-2',
   },
   {
-    key: 'applicant_name',
-    id: 'applicant_name',
+    key: 'customer_name',
+    id: 'customer_name',
     name: 'Applicant Name',
     className: 'min-w-0 p-2'
   },
   {
-    key: 'applicant_pan_no',
-    id: 'applicant_pan_no',
+    key: 'customer_pan',
+    id: 'customer_pan',
     name: 'Applicant PAN No',
     className: 'min-w-0 p-2'
   },
@@ -47,8 +62,8 @@ export const ViewStatusColumns = ({openModal}:{openModal: (rowData: any) => void
     className: 'min-w-0 p-2'
   },
   {
-    key: 'transaction_status',
-    id: 'transaction_status',
+    key: 'incident_status',
+    id: 'incident_status',
     name: 'Transaction Status',
     className: 'min-w-0 p-2',
       cell: (_:any, value: any) => (
@@ -70,29 +85,64 @@ export const ViewStatusColumns = ({openModal}:{openModal: (rowData: any) => void
   name: 'E Sign Link',
   className: 'min-w-0 max-w-[80px]',
   cell: (_: unknown, rowData: any) => {
-    const { e_sign_link, e_sign_status, transaction_status } = rowData;
-    
-    const isActionNeeded = e_sign_status === 'rejected' || 
-                           e_sign_status === 'expired' || 
-                           transaction_status === 'rejected' || 
-                           transaction_status === 'expired';
-                           
-    return (
+    const { e_sign_link, e_sign_status, incident_status, e_sign_link_status } = rowData;
+    const isActionNeeded = e_sign_status === 'rejected' ||
+                           e_sign_status === 'expired' ||
+                           incident_status === 'rejected' ||
+                           incident_status === 'expired' ||
+                           e_sign_link_status === null
+
+return (
+  <SignLinkButton
+    id={rowData.nium_order_id}
+    copyLinkUrl={rowData.e_sign_link || ""} 
+    loading={isSendEsignLinkLoading && loadingOrderId === rowData.nium_order_id}
+    toastInfoText={'E Sign link copied successfully!'}
+    disabled={isActionNeeded ? false : !e_sign_link}  
+    {...(isActionNeeded ? { onClick: () => handleRegenerateEsignLink(rowData) } : {})}  
+    tooltipText={isActionNeeded ? 'Generate E sign Link' : 'Copy E sign Link'}
+    buttonType={isActionNeeded ? 'refresh' : 'copy_link'}
+    buttonIconType={isActionNeeded ? 'refresh' : 'copy_link'}
+  />
+);
+  }
+},
+ {
+    key: 'v_kyc_status',
+    id: 'v_kyc_status',
+    name: 'VKYC Status',
+    className: 'min-w-0',
+    cell: (_: unknown, rowData: any) => <VKycStatusCell rowData={rowData} />,
+  },
+  
+  {
+    key: 'v_kyc_link',
+    id: 'v_kyc_link',
+    name: 'VKYC Link',
+    className: 'min-w-0 max-w-[80px]',
+    cell: (_: unknown, rowData: any) => {
+    const {  v_kyc_status } = rowData;
+    const isActionNeeded = v_kyc_status !==  "N/A" && v_kyc_status !== 'completed' 
+      return   (
       <SignLinkButton
-        copyLinkUrl={e_sign_link}
-        toastInfoText={'E Sign link copied successfully!'}
-        disabled={!e_sign_link || e_sign_status === 'not generated'}
-        tooltipText={isActionNeeded ? 'Generate E sign Link' : 'Copy E sign Link'}
+        id={rowData.nium_order_id}
+        copyLinkUrl={rowData.v_kyc_link}
+        loading={isSendEsignLinkLoading && loadingOrderId === rowData.nium_order_id}
+        toastInfoText={'Vkyc Link link copied successfully!'}
+        disabled={isActionNeeded ? false : !rowData.v_kyc_link}
+         {...(isActionNeeded ? { onClick: () => handleRegenerateEsignLink(rowData) } : {})}  
+        tooltipText={isActionNeeded ? 'Generate VKYC Link' : 'Copy VKYC Link'}
         buttonType={isActionNeeded ? 'refresh' : 'copy_link'}
         buttonIconType={isActionNeeded ? 'refresh' : 'copy_link'}
       />
     );
-  }
-},
+    }
+    
+  },
   {
     key: 'view_action',
     id: 'view_action',
-    name: 'View',
+    name: 'Action',
     className: 'min-w-0 p-2',
     cell: (_: unknown, rowData: any) => (
       <ViewButton
