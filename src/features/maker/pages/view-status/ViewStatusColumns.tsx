@@ -80,24 +80,20 @@ export const ViewStatusColumns = (
       <EsignStatusCell rowData={value} />
     )
   },
-  {
-    key: 'e_sign_status',
-    id: 'e_sign_status',
-    name: 'E Sign Status',
-    className: 'min-w-0 p-2',
-    cell: (_:any, value: any) => (
-      <EsignStatusCell rowData={value} />
-    )
-  },
- {
-  key: 'e_sign_link',
-  id: 'e_sign_link',
-  name: 'E Sign Link',
-  className: 'min-w-0 max-w-[80px]',
-  cell: (_: unknown, rowData: any) => {
-    // Extract necessary values from rowData
-    const { e_sign_link, e_sign_status, incident_status, merged_document, nium_order_id } = rowData;
-    
+{
+  key: 'e_sign_status',
+  id: 'e_sign_status',
+  name: 'E Sign Status',
+  className: 'min-w-0 p-2',
+  cell: (_: any, rowData: any) => {
+    const {
+      merged_document,
+      nium_order_id,
+      e_sign_link,
+      e_sign_status,
+      e_sign_link_status
+    } = rowData;
+
     // No action can be taken if there's no merged document
     if (merged_document === null) {
       return (
@@ -113,26 +109,26 @@ export const ViewStatusColumns = (
         />
       );
     }
-    
+
     // Check if we need to generate a new link (no existing link or status requires regeneration)
-    const needsGeneration = 
-      e_sign_link === null || 
-      e_sign_status === 'rejected' || 
+    const needsGeneration =
+      e_sign_link_status === 'expired' ||
+      e_sign_status === 'rejected' ||
       e_sign_status === 'expired';
-    
+
     // Button should be disabled if e-sign is completed and no regeneration is needed
     const isDisabled = e_sign_status === 'completed' && !needsGeneration;
-    
+
     // Determine if loading state applies to this row
     const isLoading = isSendEsignLinkLoading && loadingOrderId === nium_order_id;
-    
+
     // Set tooltip text based on whether we need generation or copy
     const tooltipText = needsGeneration ? 'Generate E Sign Link' : 'Copy E Sign Link';
-    
+
     return (
       <SignLinkButton
         id={nium_order_id}
-        copyLinkUrl={e_sign_link || ''} 
+        copyLinkUrl={e_sign_link || ''}
         loading={isLoading}
         toastInfoText="E Sign link copied successfully!"
         disabled={isDisabled}
@@ -144,13 +140,13 @@ export const ViewStatusColumns = (
     );
   }
 },
- {
-    key: 'v_kyc_status',
-    id: 'v_kyc_status',
-    name: 'VKYC Status',
-    className: 'min-w-0',
-    cell: (_: unknown, rowData: any) => <VKycStatusCell rowData={rowData} />,
-  },
+{
+  key: 'v_kyc_status',
+  id: 'v_kyc_status',
+  name: 'VKYC Status',
+  className: 'min-w-0',
+  cell: (_: unknown, rowData: any) => <VKycStatusCell rowData={rowData} />,
+},
   
   {
   key: 'v_kyc_link',
