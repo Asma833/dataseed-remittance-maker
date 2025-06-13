@@ -220,7 +220,6 @@ const TransactionForm = ({ mode }: TransactionFormProps) => {
             <Spacer>
               <FormFieldRow className={cn(fieldWrapperBaseStyle, 'mb-4')} rowCols={4}>
                 {Object.entries(formControllerMeta.fields.applicantDetails).map(([key, field]) => {
-                  
                   // Safely access nested error messages for applicantDetails fields
                   let errorMessage: string | undefined = undefined;
                   if (field.name.startsWith('applicantDetails.')) {
