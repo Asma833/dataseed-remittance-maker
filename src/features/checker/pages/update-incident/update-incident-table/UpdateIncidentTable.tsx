@@ -82,7 +82,6 @@ const UpdateIncidentCreationTable = () => {
         columns={columns}
         data={tableData}
         defaultSortColumn="nium_order_id"
-        defaultSortDirection="asc"
         loading={pagination.loading}
         paginationMode={isPaginationDynamic ? 'dynamic' : 'static'}
         onPageChange={

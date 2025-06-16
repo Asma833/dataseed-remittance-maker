@@ -134,7 +134,6 @@ const AssignCreationTable = () => {
         columns={columns}
         data={formateDataArray || []}
         defaultSortColumn="nium_order_id"
-        defaultSortDirection="asc"
         loading={isLoading}
         paginationMode={isPaginationDynamic ? 'dynamic' : 'static'}
         refreshAction={{

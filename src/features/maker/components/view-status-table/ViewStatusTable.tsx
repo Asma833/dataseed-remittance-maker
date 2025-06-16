@@ -158,7 +158,6 @@ const ViewStatusTable: React.FC = () => {
         columns={tableColumns}
         data={tableData}
         defaultSortColumn="nium_order_id"
-        defaultSortDirection="asc"
         // loading={isLoading}
         paginationMode={'static'}
         onPageChange={
