@@ -30,7 +30,6 @@ const UpdateIncidentCreationTable = () => {
   const { handleUnassign: unassignChecker, isPending: isUnassignPending } = useUnassignChecker();
 
   // Fetch data using the updated hook
-  // const { data, isLoading, error, refetch } = useGetUpdateIncident(requestData);
   const {
     data,
     loading: isLoading,
