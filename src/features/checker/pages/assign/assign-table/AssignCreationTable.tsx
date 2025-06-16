@@ -133,7 +133,7 @@ const AssignCreationTable = () => {
       <DynamicTable
         columns={columns}
         data={formateDataArray || []}
-        defaultSortColumn="nium_order_id"
+        defaultSortColumn=""
         loading={isLoading}
         paginationMode={isPaginationDynamic ? 'dynamic' : 'static'}
         refreshAction={{

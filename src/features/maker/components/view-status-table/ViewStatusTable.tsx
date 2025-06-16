@@ -157,7 +157,7 @@ const ViewStatusTable: React.FC = () => {
       <DynamicTable
         columns={tableColumns}
         data={tableData}
-        defaultSortColumn="nium_order_id"
+        defaultSortColumn=""
         // loading={isLoading}
         paginationMode={'static'}
         onPageChange={
