@@ -17,9 +17,14 @@ export const transactionFormSchema = z.object({
       .string()
       .optional()
       .or(z.literal(''))
+         .refine(
+        (val) => !val || (val.length >= 2 && val.length <= 100),
+        'Applicant name must be between 2-100 characters'
+      )
+      // Second refine for character validation
       .refine(
-        (val) => !val || (val.length >= 2 && val.length <= 100 && /^[a-zA-Z\s]*$/.test(val)),
-        'Applicant name must be 2-100 characters and contain only letters and spaces'
+        (val) => !val || /^[a-zA-Z\s]*$/.test(val),
+        'Applicant name must contain only letters and spaces'
       ),
     applicantPanNumber: z
       .string()
