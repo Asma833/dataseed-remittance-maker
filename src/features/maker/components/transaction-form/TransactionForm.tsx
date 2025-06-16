@@ -1,4 +1,4 @@
-import { Fragment, useState, useEffect } from 'react';
+import { Fragment, useState, useEffect, useMemo } from 'react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
@@ -45,10 +45,30 @@ const TransactionForm = ({ mode }: TransactionFormProps) => {
   const createTransactionMutation = useCreateTransaction();
   const updateOrderMutation = useUpdateOrder();
   const { data: allTransactionsData = [], loading: isLoading, error, fetchData: refreshData } = useGetAllOrders();
-  const typedAllTransactionsData = allTransactionsData as TransactionOrderData[];
+
+  // Transform data to array format - handle both array and object with 'orders' property
+  const typedAllTransactionsData = useMemo(() => {
+    if (!allTransactionsData) return [];
+
+    // If already an array
+    if (Array.isArray(allTransactionsData)) {
+      return allTransactionsData as TransactionOrderData[];
+    }
+
+    // If object with 'orders' property
+    if (typeof allTransactionsData === 'object' && 'orders' in allTransactionsData) {
+      const orders = (allTransactionsData as any).orders;
+      if (Array.isArray(orders)) {
+        return orders as TransactionOrderData[];
+      }
+    }
+
+    return [];
+  }, [allTransactionsData]);
+
   // extract the incident checker comments from the selected transaction data
   const seletedRowTransactionData = typedAllTransactionsData?.find(
-    (transaction: TransactionOrderData) => transaction.partner_order_id === partnerOrderId
+    (transaction: TransactionOrderData) => transaction?.partner_order_id === partnerOrderId
   );
   const checkerComments = seletedRowTransactionData?.incident_checker_comments || '';
   // Format transaction types and purpose types for form controller
