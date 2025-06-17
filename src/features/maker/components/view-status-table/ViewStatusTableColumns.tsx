@@ -148,13 +148,12 @@ export const ViewStatusTableColumns = ({
       className: 'min-w-0 max-w-[80px]',
       cell: (_: unknown, rowData: any) => {
         const { v_kyc_status, e_sign_status, is_v_kyc_required, nium_order_id, v_kyc_link } = rowData;
-        const isActionNeeded =
-          e_sign_status === 'completed' &&
-          is_v_kyc_required === true &&
-          (v_kyc_status !== 'completed' || v_kyc_status === 'rejected') &&
-          v_kyc_link === null;
+        const isActionNeeded = v_kyc_status === 'N/A' || v_kyc_status === 'expired';
 
-        const isDisabled = v_kyc_status === 'completed' || v_kyc_status === 'N/A' || e_sign_status === 'pending';
+        const isDisabled =
+          is_v_kyc_required === false ||
+          v_kyc_status === 'completed' ||
+          (is_v_kyc_required === false && v_kyc_link === null && isActionNeeded === false);
 
         // Determine tooltip text
         const tooltipText = isActionNeeded ? 'Generate VKYC Link' : is_v_kyc_required ? 'Copy VKYC Link' : '';
@@ -207,10 +206,11 @@ export const ViewStatusTableColumns = ({
             onClick={() =>
               navigate(`/maker/update-transaction?partner-order-id=${rowData.partner_order_id}&action=update`)
             }
-            icon={<Upload size={16} />}
+            icon={<Upload size={16} className="text-primary group-hover:text-white group-disabled:text-gray-400" />}
             tooltipText="Upload Document"
             variant="upload"
             disabled={rowData.merged_document !== null}
+            className="group"
           />
           <TooltipActionButton
             onClick={() => handleDelete(rowData)}

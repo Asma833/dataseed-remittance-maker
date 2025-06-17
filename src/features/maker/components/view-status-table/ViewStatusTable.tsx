@@ -158,6 +158,12 @@ const ViewStatusTable: React.FC = () => {
         defaultSortColumn="created_at"
         defaultSortDirection="desc"
         loading={isLoading}
+        refreshAction={{
+          isRefreshButtonVisible: true,
+          onRefresh: refreshData,
+          isLoading: isLoading,
+          hasError: error,
+        }}
         paginationMode={'static'}
         onPageChange={
           isPaginationDynamic ? pagination.handlePageChange : async (_page: number, _pageSize: number) => []
