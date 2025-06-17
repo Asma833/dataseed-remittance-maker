@@ -1,4 +1,4 @@
-import { AxiosRequestConfig, AxiosResponse, InternalAxiosRequestConfig } from 'axios';
+import { AxiosResponse, InternalAxiosRequestConfig } from 'axios';
 import { encryptionService, EncryptionResult } from '@/core/services/encryption/encryptionService';
 import { shouldEncryptMethod } from '@/core/services/encryption/encryptionConfig';
 import { shouldEncryptEndpoint } from '@/core/constant/encryptionEndpoints';
@@ -37,7 +37,7 @@ export const encryptRequestInterceptor = async (
       return config;
     }
 
-    if (method === 'get') {
+    if (method === 'get' || method === 'delete') {
       const aesKey = encryptionService.generateAESKey();
       const iv = encryptionService.generateIV();
 

@@ -6,6 +6,7 @@ import EsignStatusCell from '@/features/checker/components/table/EsignStatusCell
 import VKycStatusCell from '@/features/checker/components/table/VKycStatusCell';
 import { formatDateWithFallback } from '@/utils/formatDateWithFallback';
 import { Edit, Upload, Trash2, Eye } from 'lucide-react';
+import IncidentStatusCell from '@/features/checker/components/table/IncidentStatusCell';
 
 export const ViewStatusTableColumns = ({
   handleRegenerateEsignLink,
@@ -28,7 +29,7 @@ export const ViewStatusTableColumns = ({
     {
       key: 'nium_order_id',
       id: 'nium_order_id',
-      name: 'Transaction No',
+      name: 'Order ID',
       className: 'min-w-0 p-2',
     },
     {
@@ -74,17 +75,18 @@ export const ViewStatusTableColumns = ({
       name: 'Purpose',
       className: 'min-w-0 p-2',
     },
+
     {
-      key: 'incident_status',
-      id: 'incident_status',
-      name: 'Transaction Status',
+      key: 'e_sign_status',
+      id: 'e_sign_status',
+      name: 'Esign Status',
       className: 'min-w-0 p-2',
       cell: (_: any, value: any) => <EsignStatusCell rowData={value} />,
     },
     {
-      key: 'e_sign_status',
-      id: 'e_sign_status',
-      name: 'E Sign Status',
+      key: 'e_sign_link',
+      id: 'e_sign_link',
+      name: 'E Sign Link',
       className: 'min-w-0 p-2',
       cell: (_: any, rowData: any) => {
         const { merged_document, nium_order_id, e_sign_link, e_sign_status, e_sign_link_status } = rowData;
@@ -141,25 +143,19 @@ export const ViewStatusTableColumns = ({
       cell: (_: unknown, rowData: any) => <VKycStatusCell rowData={rowData} />,
     },
 
-  {
-  key: 'v_kyc_link',
-  id: 'v_kyc_link',
-  name: 'VKYC Link',
-  className: 'min-w-0 max-w-[80px]',
-  cell: (_: unknown, rowData: any) => {
-    // Create a local state to track if we've just generated a link
-   
-    
-    const { v_kyc_status, e_sign_status, is_v_kyc_required, nium_order_id, v_kyc_link } = rowData;
-    
-    // Modify action needed to respect the local state
-    const isActionNeeded =
-      !hasGeneratedLink && // Don't show refresh button if we just generated a link
-      is_v_kyc_required === true &&
-      (v_kyc_status !== 'pending' || v_kyc_status !== 'completed' || v_kyc_status === 'rejected' || v_kyc_status === null) &&
-      v_kyc_link === null;
+    {
+      key: 'v_kyc_link',
+      id: 'v_kyc_link',
+      name: 'VKYC Link',
+      className: 'min-w-0 max-w-[80px]',
+      cell: (_: unknown, rowData: any) => {
+        const { v_kyc_status, e_sign_status, is_v_kyc_required, nium_order_id, v_kyc_link } = rowData;
+        const isActionNeeded = v_kyc_status === 'N/A' || v_kyc_status === 'expired';
 
-    const isDisabled = v_kyc_status === 'completed' || v_kyc_status === 'N/A' || v_kyc_status === null ;
+        const isDisabled =
+          is_v_kyc_required === false ||
+          v_kyc_status === 'completed' ||
+          (is_v_kyc_required === false && v_kyc_link === null && isActionNeeded === false);
 
     // Determine tooltip text
     const tooltipText = isActionNeeded ? 'Generate VKYC Link' : is_v_kyc_required ? 'Copy VKYC Link' : '';
@@ -194,6 +190,13 @@ export const ViewStatusTableColumns = ({
   },
 },
     {
+      key: 'incident_status',
+      id: 'incident_status',
+      name: 'Incident Status',
+      className: 'min-w-0 p-2',
+      cell: (_: any, value: any) => <IncidentStatusCell rowData={value} />,
+    },
+    {
       key: 'view_action',
       id: 'view_action',
       name: 'Action',
@@ -216,10 +219,11 @@ export const ViewStatusTableColumns = ({
             onClick={() =>
               navigate(`/maker/update-transaction?partner-order-id=${rowData.partner_order_id}&action=update`)
             }
-            icon={<Upload size={16} />}
+            icon={<Upload size={16} className="text-primary group-hover:text-white group-disabled:text-gray-400" />}
             tooltipText="Upload Document"
             variant="upload"
             disabled={rowData.merged_document !== null}
+            className="group"
           />
           <TooltipActionButton
             onClick={() => handleDelete(rowData)}
