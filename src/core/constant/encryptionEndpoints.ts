@@ -33,16 +33,6 @@ export const ENDPOINT_MATCHING_RULES: EndpointRulesConfig = {
     matchType: 'exact-only' as const,
     description: 'Forgot password endpoint',
   },
-  'get-checker-orders-by-partner-order-id': {
-    endpoint: API.ORDERS.CHECKER_ORDERS_BY_PARTNER_ID,
-    matchType: 'exact-only' as const,
-    description: 'Fetch checker orders by partner order ID',
-  },
-  'update-order-details': {
-    endpoint: API.ORDERS.UPDATE_ORDER_DETAILS,
-    matchType: 'exact-only' as const,
-    description: 'Update order details endpoint',
-  },
   'unassign-orders': {
     endpoint: API.CHECKER.UPDATE_INCIDENT.UNASSIGN,
     matchType: 'standard' as const,
