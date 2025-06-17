@@ -149,12 +149,11 @@ export const ViewStatusTableColumns = ({
       cell: (_: unknown, rowData: any) => {
         const { v_kyc_status, e_sign_status, is_v_kyc_required, nium_order_id, v_kyc_link } = rowData;
         const isActionNeeded =
-          e_sign_status === 'completed' &&
           is_v_kyc_required === true &&
-          (v_kyc_status !== 'completed' || v_kyc_status === 'rejected') &&
+          (v_kyc_status !== 'pending' || v_kyc_status !== 'completed' || v_kyc_status === 'rejected' || v_kyc_status === null) &&
           v_kyc_link === null;
 
-        const isDisabled = v_kyc_status === 'completed' || v_kyc_status === 'N/A' || e_sign_status === 'pending';
+        const isDisabled = v_kyc_status === 'completed' || v_kyc_status === 'N/A' || v_kyc_status === null ;
 
         // Determine tooltip text
         const tooltipText = isActionNeeded ? 'Generate VKYC Link' : is_v_kyc_required ? 'Copy VKYC Link' : '';
