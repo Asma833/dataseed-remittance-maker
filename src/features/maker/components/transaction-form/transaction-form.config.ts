@@ -19,9 +19,9 @@ export const getFormControllerMeta = (options: FormControllerMetaOptions = {}) =
       const titleCaseLabel = type.label
         .toLowerCase()
         .split(' ')
-        .map(word => word.charAt(0).toUpperCase() + word.slice(1))
+        .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
         .join(' ');
-      
+
       acc[type.value] = { label: titleCaseLabel };
       return acc;
     },

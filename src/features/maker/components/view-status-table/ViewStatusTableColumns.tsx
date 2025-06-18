@@ -157,38 +157,38 @@ export const ViewStatusTableColumns = ({
           v_kyc_status === 'completed' ||
           (is_v_kyc_required === false && v_kyc_link === null && isActionNeeded === false);
 
-    // Determine tooltip text
-    const tooltipText = isActionNeeded ? 'Generate VKYC Link' : is_v_kyc_required ? 'Copy VKYC Link' : '';
+        // Determine tooltip text
+        const tooltipText = isActionNeeded ? 'Generate VKYC Link' : is_v_kyc_required ? 'Copy VKYC Link' : '';
 
-    // Determine if loading state applies to this row
-    const isLoading = isSendVkycLinkLoading && loadingOrderId === nium_order_id;
-    
-    // Create wrapper function for regenerating link
-    const handleGenerateLink = async () => {
-      try {
-        await handleRegenerateVkycLink(rowData);
-        // When link generation is successful, update our local state
-        setHasGeneratedLink(true);
-      } catch (error) {
-        console.error("Error generating VKYC link:", error);
-      }
-    };
+        // Determine if loading state applies to this row
+        const isLoading = isSendVkycLinkLoading && loadingOrderId === nium_order_id;
 
-    return (
-      <SignLinkButton
-        id={nium_order_id}
-        copyLinkUrl={rowData.v_kyc_link || ''}
-        loading={isLoading}
-        toastInfoText="VKYC Link copied successfully!"
-        disabled={isDisabled}
-        {...(isActionNeeded ? { onClick: handleGenerateLink } : {})}
-        tooltipText={tooltipText}
-        buttonType={(isLoading || hasGeneratedLink) ? 'copy_link' : (isActionNeeded ? 'refresh' : 'copy_link')}
-        buttonIconType={(isLoading || hasGeneratedLink) ? 'copy_link' : (isActionNeeded ? 'refresh' : 'copy_link')}
-      />
-    );
-  },
-},
+        // Create wrapper function for regenerating link
+        const handleGenerateLink = async () => {
+          try {
+            await handleRegenerateVkycLink(rowData);
+            // When link generation is successful, update our local state
+            setHasGeneratedLink(true);
+          } catch (error) {
+            console.error('Error generating VKYC link:', error);
+          }
+        };
+
+        return (
+          <SignLinkButton
+            id={nium_order_id}
+            copyLinkUrl={rowData.v_kyc_link || ''}
+            loading={isLoading}
+            toastInfoText="VKYC Link copied successfully!"
+            disabled={isDisabled}
+            {...(isActionNeeded ? { onClick: handleGenerateLink } : {})}
+            tooltipText={tooltipText}
+            buttonType={isLoading || hasGeneratedLink ? 'copy_link' : isActionNeeded ? 'refresh' : 'copy_link'}
+            buttonIconType={isLoading || hasGeneratedLink ? 'copy_link' : isActionNeeded ? 'refresh' : 'copy_link'}
+          />
+        );
+      },
+    },
     {
       key: 'incident_status',
       id: 'incident_status',
