@@ -33,6 +33,7 @@ const TransactionForm = ({ mode }: TransactionFormProps) => {
   const [searchParams] = useSearchParams();
   const navigate = useNavigate();
   const partnerOrderIdParam = searchParams.get('partner-order-id') || '';
+  const pageTitle = searchParams.get('action') || '';
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [createdTransactionId, setCreatedTransactionId] = useState<string>('');
   const [niumForexOrderId, setNiumForexOrderId] = useState<string>('');
@@ -268,12 +269,15 @@ const TransactionForm = ({ mode }: TransactionFormProps) => {
   };
 
   return (
-    <Fragment>
+    <div>
+      <h1 className={cn('text-xl font-bold capitalize pl-2', pageTitle !== 'update' ? 'mb-6' : 'mb-0')}>
+        {pageTitle} Transaction
+      </h1>
       <FormProvider methods={methods}>
         {(!isUpdatePage || isViewPage) && (
           <FormContentWrapper className="w-full bg-transparent">
             <Spacer>
-              <FormFieldRow className={cn(fieldWrapperBaseStyle, 'mb-4')} rowCols={4}>
+              <FormFieldRow className={cn(fieldWrapperBaseStyle, 'mb-4 px-0')} rowCols={4}>
                 {Object.entries(formControllerMeta.fields.applicantDetails).map(([key, field]) => {
                   // Safely access nested error messages for applicantDetails fields
                   let errorMessage: string | undefined = undefined;
@@ -309,7 +313,7 @@ const TransactionForm = ({ mode }: TransactionFormProps) => {
           </FormContentWrapper>
         )}{' '}
         {!isUpdatePage && !isViewPage && (
-          <FormFieldRow>
+          <FormFieldRow className="px-2">
             <Button
               className="min-w-60"
               onClick={handleFormSubmit}
@@ -384,7 +388,7 @@ const TransactionForm = ({ mode }: TransactionFormProps) => {
         createdTransactionId={createdTransactionId}
         niumForexOrderId={niumForexOrderId}
       />
-    </Fragment>
+    </div>
   );
 };
 
