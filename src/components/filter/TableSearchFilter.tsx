@@ -2,7 +2,6 @@ import { useEffect, useState, useCallback, useRef } from 'react';
 import dayjs from 'dayjs';
 import { CalendarDays, RefreshCw } from 'lucide-react';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
-
 import { SearchInput } from './SearchInput';
 import { TableSearchFilterProps } from '../types/filter.types';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
@@ -34,9 +33,17 @@ const TableSearchFilter = ({
   const [localStatus, setLocalStatus] = useState(filters.status);
   const [localCustomFilters, setLocalCustomFilters] = useState(filters.customFilterValues);
 
+  // Add local state for search input to handle trailing spaces properly
+  const [localSearchValue, setLocalSearchValue] = useState(filters.search);
+
   // Add refs for debounce timer and previous search value to optimize search
   const searchDebounceRef = useRef<NodeJS.Timeout | null>(null);
-  const prevSearchValueRef = useRef(filters.search.trim().replace(/\s+/g, ' '));
+  const prevSearchValueRef = useRef(filters.search.trimEnd());
+
+  // Update local search value when filters.search changes externally (e.g., from reset)
+  useEffect(() => {
+    setLocalSearchValue(filters.search);
+  }, [filters.search]);
 
   const executeAsyncOperation = useCallback(
     async <T,>(operation: () => Promise<T>) => {
@@ -67,9 +74,12 @@ const TableSearchFilter = ({
     }
   }, [mode, callbacks, setDynamicData, onFilter, executeAsyncOperation]);
 
-  // Improved search handling with better debounce
+  // Improved search handling with better debounce and proper state management
   const handleSearchInputChange = useCallback(
     (value: string) => {
+      // Update local search state immediately for UI responsiveness
+      setLocalSearchValue(value);
+
       // Clear any existing timeout to implement debounce
       if (searchDebounceRef.current) {
         clearTimeout(searchDebounceRef.current);
@@ -77,24 +87,25 @@ const TableSearchFilter = ({
 
       // Set a new timeout for the search action
       searchDebounceRef.current = setTimeout(async () => {
+        // Trim trailing spaces for the actual search operation
+        const processedValue = value.trimEnd();
+
+        // Update the main filter state with the processed value
         setFilters((prev: typeof filters) => ({
           ...prev,
-          search: value,
+          search: processedValue,
         }));
 
-        // Trim leading/trailing spaces and normalize internal spaces for search operations
-        const trimmedValue = value.trim().replace(/\s+/g, ' ');
+        // Only perform search if the processed value has changed
+        if (processedValue !== prevSearchValueRef.current) {
+          prevSearchValueRef.current = processedValue;
 
-        // Only perform search if the trimmed value has really changed from last execution
-        if (trimmedValue !== prevSearchValueRef.current) {
-          prevSearchValueRef.current = trimmedValue;
-
-          if (trimmedValue === '') {
+          if (processedValue === '') {
             // Handle empty search - clear results
             await handleSearchClear();
           } else if (mode === 'dynamic' && callbacks?.onSearch) {
-            // For dynamic search - use trimmed value for API call
-            const result = await executeAsyncOperation(() => callbacks.onSearch!(trimmedValue));
+            // For dynamic search - use processed value for API call
+            const result = await executeAsyncOperation(() => callbacks.onSearch!(processedValue));
             if (setDynamicData && result) setDynamicData(result);
           } else {
             // For static filtering - always call onFilter for search regardless of pagination state
@@ -116,11 +127,6 @@ const TableSearchFilter = ({
       }
     };
   }, []);
-
-  // Update the previous search value ref when filters.search changes
-  useEffect(() => {
-    prevSearchValueRef.current = filters.search.trim().replace(/\s+/g, ' ');
-  }, [filters.search]);
 
   const handleDateChange = useCallback((key: 'from' | 'to', date: Date | null) => {
     setLocalDateRange((prev) => {
@@ -203,6 +209,7 @@ const TableSearchFilter = ({
     setLocalDateRange(resetFilters.dateRange);
     setLocalStatus(resetFilters.status);
     setLocalCustomFilters(resetFilters.customFilterValues);
+    setLocalSearchValue(resetFilters.search); // Reset the local search state
     setFilters({ ...filters, ...resetFilters });
 
     // Always call onReset regardless of pagination state
@@ -353,7 +360,9 @@ const TableSearchFilter = ({
               </div>
             )}
         </div>
-        {search && <SearchInput value={filters.search} onChange={handleSearchInputChange} aria-label="Search table" />}
+        {search && (
+          <SearchInput value={localSearchValue} onChange={handleSearchInputChange} aria-label="Search table" />
+        )}
       </div>
     </div>
   );
