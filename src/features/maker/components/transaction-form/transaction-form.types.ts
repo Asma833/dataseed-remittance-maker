@@ -7,16 +7,17 @@ export type DocumentConfig = {
   helpText?: string;
 };
 
-export interface OptionType {
-  id: string | number;
+export type OptionType = {
   label: string;
   value: string;
-}
+};
 
-export interface FormControllerMetaOptions {
+export type Option = { typeId: string; label: string; value: string };
+
+export type FormControllerMetaOptions = {
   transactionTypes?: OptionType[];
   purposeTypes?: OptionType[];
-}
+};
 
 export enum TransactionMode {
   CREATE = 'create',

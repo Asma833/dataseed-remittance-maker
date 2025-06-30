@@ -1,4 +1,4 @@
-import { Fragment, useState, useEffect, useMemo } from 'react';
+import { useState, useEffect, useMemo } from 'react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
@@ -12,8 +12,6 @@ import { FormContentWrapper } from '@/components/form/wrapper/FormContentWrapper
 import { transactionFormSchema, transactionFormSubmissionSchema, TransactionFormData } from './transaction-form.schema';
 import { getFormControllerMeta } from './transaction-form.config';
 import { transactionFormDefaults } from './transaction-form.defaults';
-import useGetTransactionType from '@/hooks/useGetTransactionType';
-import useGetPurposes from '@/hooks/useGetPurposes';
 import { TransactionFormProps, TransactionMode } from './transaction-form.types';
 import { Button } from '@/components/ui/button';
 import { UploadDocuments } from '@/components/common/UploadDocuments';
@@ -26,6 +24,8 @@ import { TransactionOrderData } from '@/types/common.type';
 import { useSendEsignLink } from '@/features/checker/hooks/useSendEsignLink';
 import TransactionCreatedDialog from '../dialogs/TransactionCreatedDialog';
 import { useCurrentUser } from '@/utils/getUserFromRedux';
+import { useDynamicOptions } from '@/features/checker/hooks/useDynamicOptions';
+import { API } from '@/core/constant/apis';
 
 const fieldWrapperBaseStyle = 'mb-5';
 
@@ -40,8 +40,8 @@ const TransactionForm = ({ mode }: TransactionFormProps) => {
   const [partnerOrderId, setPartnerOrderId] = useState<string>(partnerOrderIdParam);
   const [showUploadSection, setShowUploadSection] = useState(false);
   const { mutate: sendEsignLink, isSendEsignLinkLoading } = useSendEsignLink();
-  const { transactionTypes } = useGetTransactionType();
-  const { purposeTypes } = useGetPurposes();
+  const { options: purposeTypeOptions } = useDynamicOptions(API.PURPOSE.GET_PURPOSES);
+  const { options: transactionTypeOptions } = useDynamicOptions(API.TRANSACTION.GET_TRANSACTIONS);
   const { getUserHashedKey } = useCurrentUser();
   const createTransactionMutation = useCreateTransaction();
   const updateOrderMutation = useUpdateOrder();
@@ -76,15 +76,15 @@ const TransactionForm = ({ mode }: TransactionFormProps) => {
         ? false
         : null;
   // Format transaction types and purpose types for form controller
-  const formatedTransactionTypes = transactionTypes.map((type) => ({
-    id: parseInt(type.id) || 0,
-    label: type.text,
-    value: type.text,
+  const formatedTransactionTypes = transactionTypeOptions.map((type) => ({
+    typeId: type.typeId,
+    label: type.value,
+    value: type.value,
   }));
-  const formatedPurposeTypes = purposeTypes.map((type) => ({
-    id: parseInt(type.id) || 0,
-    label: type.text,
-    value: type.text,
+  const formatedPurposeTypes = purposeTypeOptions.map((type) => ({
+    typeId: type.typeId,
+    label: type.value,
+    value: type.value,
   }));
   // Generate dynamic form config
   const formControllerMeta = getFormControllerMeta({
@@ -156,8 +156,8 @@ const TransactionForm = ({ mode }: TransactionFormProps) => {
         // Handle update operation
         const updateRequestData = transformFormDataToUpdateRequest(
           formData,
-          transactionTypes,
-          purposeTypes,
+          transactionTypeOptions,
+          purposeTypeOptions,
           getUserHashedKey() || 'unknown-user'
         );
 
@@ -171,7 +171,7 @@ const TransactionForm = ({ mode }: TransactionFormProps) => {
         refreshData();
       } else {
         // Handle create operation
-        const apiRequestData = transformFormDataToApiRequest(formData, transactionTypes, purposeTypes);
+        const apiRequestData = transformFormDataToApiRequest(formData, transactionTypeOptions, purposeTypeOptions);
         const response = await createTransactionMutation.mutateAsync(apiRequestData);
 
         // Extract response data based on your API specification
