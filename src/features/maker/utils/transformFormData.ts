@@ -1,4 +1,5 @@
 import { TransactionFormData } from '../components/transaction-form/transaction-form.schema';
+import { Option } from '../components/transaction-form/transaction-form.types';
 import { CreateTransactionRequest } from '../types/create-transaction.types';
 import { PartialUpdateOrderRequest } from '../types/update-order.types';
 
@@ -7,23 +8,23 @@ import { PartialUpdateOrderRequest } from '../types/update-order.types';
  */
 export const transformFormDataToApiRequest = (
   formData: TransactionFormData,
-  transactionTypes: Array<{ id: string; text: string }>,
-  purposeTypes: Array<{ id: string; text: string }>
+  transactionTypes: Array<Option>,
+  purposeTypes: Array<Option>
 ): CreateTransactionRequest => {
   // Find the transaction type ID by matching the text
   const selectedTransactionType = transactionTypes.find(
-    (type) => type.text === formData.applicantDetails.transactionType
+    (type) => type.value === formData.applicantDetails.transactionType
   );
 
   // Find the purpose type ID by matching the text
-  const selectedPurposeType = purposeTypes.find((type) => type.text === formData.applicantDetails.purposeType);
+  const selectedPurposeType = purposeTypes.find((type) => type.value === formData.applicantDetails.purposeType);
 
   return {
     partner_order_id: formData.applicantDetails.partnerOrderId || '',
-    transaction_type_id: selectedTransactionType?.id || '',
+    transaction_type_id: selectedTransactionType?.typeId || '',
     is_e_sign_required: true, // Always true as per requirement
     is_v_kyc_required: formData.applicantDetails.isVKycRequired === 'true',
-    purpose_type_id: selectedPurposeType?.id || '',
+    purpose_type_id: selectedPurposeType?.typeId || '',
     customer_name: formData.applicantDetails.applicantName || '',
     customer_email: formData.applicantDetails.email || '',
     customer_phone: formData.applicantDetails.mobileNumber || '',
@@ -37,21 +38,21 @@ export const transformFormDataToApiRequest = (
  */
 export const transformFormDataToUpdateRequest = (
   formData: TransactionFormData,
-  transactionTypes: Array<{ id: string; text: string }>,
-  purposeTypes: Array<{ id: string; text: string }>,
+  transactionTypes: Array<Option>,
+  purposeTypes: Array<Option>,
   currentUserId: string
 ): PartialUpdateOrderRequest => {
   // Find the transaction type ID by matching the text
   const selectedTransactionType = transactionTypes.find(
-    (type) => type.text === formData.applicantDetails.transactionType
+    (type) => type.value === formData.applicantDetails.transactionType
   );
 
   // Find the purpose type ID by matching the text
-  const selectedPurposeType = purposeTypes.find((type) => type.text === formData.applicantDetails.purposeType);
+  const selectedPurposeType = purposeTypes.find((type) => type.value === formData.applicantDetails.purposeType);
 
   return {
-    transaction_type: selectedTransactionType?.id || '',
-    purpose_type: selectedPurposeType?.id || '',
+    transaction_type: selectedTransactionType?.typeId || '',
+    purpose_type: selectedPurposeType?.typeId || '',
     is_v_kyc_required: formData.applicantDetails.isVKycRequired === 'true',
     customer_name: formData.applicantDetails.applicantName || '',
     customer_email: formData.applicantDetails.email || '',
