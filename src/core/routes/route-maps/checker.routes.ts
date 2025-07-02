@@ -1,5 +1,5 @@
 import { lazy } from 'react';
-import { ROUTES } from '../../constant/routePaths';
+import { ROLES, ROUTES } from '../../constant/routePaths';
 
 export const checkerComponents = {
   Dashboard: lazy(() => import('@/features/checker/pages/dashboard/DashboardPage')),
@@ -12,35 +12,38 @@ export const checkerComponents = {
 
   CompletedTransaction: lazy(() => import('@/features/checker/pages/completed-transactions/CompletedTransactionTable')),
 };
+
+const baseRole = ROLES.CHECKER;
+
 export const checkerRoutes = [
   {
     path: ROUTES.CHECKER.DASHBOARD,
     element: checkerComponents.Dashboard,
-    roles: ['checker'],
+    roles: [baseRole],
     permission: '',
   },
   {
     path: ROUTES.CHECKER.ASSIGN,
     element: checkerComponents.Assign,
-    roles: ['checker'],
+    roles: [baseRole],
     permission: '',
   },
   {
     path: ROUTES.CHECKER.UPDATE_INCIDENT,
     element: checkerComponents.UpdateIncident,
-    roles: ['checker'],
+    roles: [baseRole],
     permission: '',
   },
   {
     path: ROUTES.CHECKER.VIEWALL,
     element: checkerComponents.ViewAll,
-    roles: ['checker'],
+    roles: [baseRole],
     permission: '',
   },
   {
     path: ROUTES.CHECKER.COMPLETEDTRANSACTIONS,
     element: checkerComponents.CompletedTransaction,
-    roles: ['checker'],
+    roles: [baseRole],
     permission: '',
   },
 ];

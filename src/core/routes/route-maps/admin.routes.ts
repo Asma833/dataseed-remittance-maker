@@ -1,5 +1,5 @@
 import { lazy } from 'react';
-import { ROUTES } from '../../constant/routePaths';
+import { ROLES, ROUTES } from '../../constant/routePaths';
 
 const adminComponents = {
   User: lazy(() => import('@/features/admin/pages/n-user/CheckerTablePage')),
@@ -14,65 +14,67 @@ const adminComponents = {
   ViewAll: lazy(() => import('@/features/admin/pages/view-all/view-table/ViewAllTablePage')),
 };
 
+const baseRole = ROLES.ADMIN; // Admin routes are accessible to admin role
+
 export const adminRoutes = [
   {
     path: ROUTES.ADMIN.NUSER,
     element: adminComponents.User,
-    roles: ['admin'],
+    roles: [baseRole],
     permission: '',
   },
   {
     path: ROUTES.ADMIN.CREATEUSER,
     element: adminComponents.UserCreation,
-    roles: ['admin'],
+    roles: [baseRole],
     permission: '',
   },
   {
     path: ROUTES.ADMIN.UPDATEUSER,
     element: adminComponents.UpdateUser,
-    roles: ['admin'],
+    roles: [baseRole],
     permission: '',
   },
   {
     path: ROUTES.ADMIN.PARTNER,
     element: adminComponents.Partner,
-    roles: ['admin'],
+    roles: [baseRole],
     permission: '',
   },
   {
     path: ROUTES.ADMIN.MAKER,
     element: adminComponents.Maker,
-    roles: ['admin'],
+    roles: [baseRole],
     permission: '',
   },
   {
     path: ROUTES.ADMIN.CREATE_MAKER,
     element: adminComponents.CreateMaker,
-    roles: ['admin'],
+    roles: [baseRole],
     permission: '',
   },
   {
     path: ROUTES.ADMIN.UPDATE_MAKER,
     element: adminComponents.UpdateMaker,
-    roles: ['admin'],
+    roles: [baseRole],
     permission: '',
   },
   {
     path: ROUTES.ADMIN.VIEWALL,
     element: adminComponents.ViewAll,
-    roles: ['checker'],
+    roles: [baseRole],
     permission: '',
   },
   {
     path: ROUTES.ADMIN.CREATEPARTNER,
     element: adminComponents.PartnerCreation,
-    roles: ['admin'],
+    roles: [baseRole],
     permission: '',
   },
   {
     path: ROUTES.ADMIN.UPDATEPARTNER,
     element: adminComponents.UpdatePartner,
-    roles: ['admin'],
+    roles: [baseRole],
     permission: '',
   },
 ];
