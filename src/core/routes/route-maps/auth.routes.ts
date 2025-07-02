@@ -10,30 +10,32 @@ const authComponents = {
   ResetPassword: lazy(() => import("@/features/auth/pages/reset-password/ResetPasswordPage"))
 };
 
+const baseRole = '*'; // Public routes are accessible to all roles
+
 export const publicRoutes = [
   {
     path: ROUTES.AUTH.LOGIN,
     element: authComponents.Login,
-    roles: ['*'],
+    roles: [baseRole],
   },
   {
     path: ROUTES.AUTH.FORGET_PASSWORD,
     element: authComponents.ResetPasswordPage,
-    roles: ['*'],
+    roles: [baseRole],
   },
   {
     path: ROUTES.AUTH.SEND_PASSWORD_RESET,
     element: authComponents.SendEmail,
-    roles: ['*'],
+    roles: [baseRole],
   },
   {
     path: ROUTES.AUTH.RESET_LINK_CONFIRMATION,
     element: authComponents.ResetConfirmation,
-    roles: ['*'],
+    roles: [baseRole],
   },
   {
     path: ROUTES.AUTH.RESET_PASSWORD,
     element: authComponents.ResetPassword,
-    roles: ['*'],
+    roles: [baseRole],
   },
 ];

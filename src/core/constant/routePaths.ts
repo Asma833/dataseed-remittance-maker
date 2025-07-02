@@ -58,3 +58,9 @@ export const ROUTE_PREFIXES = {
 export const getNavPath = (role: keyof typeof ROUTE_PREFIXES, route: string): string => {
   return `${ROUTE_PREFIXES[role]}${route}`;
 };
+
+export const ROLES = {
+  ADMIN: 'admin',
+  CHECKER: 'checker',
+  MAKER: 'maker',
+};

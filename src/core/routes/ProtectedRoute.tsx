@@ -4,12 +4,12 @@ import { createSelector } from '@reduxjs/toolkit';
 import LoadingFallback from '@/components/loader/LoadingFallback';
 import { UserRole } from '@/features/auth/types/auth.types';
 import { RootState } from '@/store';
-import { ROUTES } from '../constant/routePaths';
+import { ROLES, ROUTES } from '../constant/routePaths';
 
 interface ProtectedRouteProps {
   children: React.ReactNode;
   allowedRoles?: UserRole[];
-  roles: string[];
+  roles?: string[];
   permission?: string;
 }
 
@@ -30,9 +30,18 @@ const publicPaths = [
   ROUTES.AUTH.RESET_PASSWORD,
 ];
 
-export const ProtectedRoute: React.FC<ProtectedRouteProps> = ({ children, allowedRoles = [], roles }) => {
+const defaultAllowedRoles = Object.values(ROLES);
+
+export const ProtectedRoute: React.FC<ProtectedRouteProps> = ({
+  children,
+  allowedRoles = [],
+  roles = defaultAllowedRoles,
+}) => {
   const { user, isAuthenticated, isLoading } = useSelector(selectAuthState);
   const location = useLocation();
+
+  // Use roles parameter if provided, otherwise fall back to allowedRoles
+  const requiredRoles = roles.length > 0 ? roles : allowedRoles;
 
   // Check if the current path is public
   const isPublicPath = publicPaths.some((path) => {
@@ -49,7 +58,7 @@ export const ProtectedRoute: React.FC<ProtectedRouteProps> = ({ children, allowe
   });
 
   // Check if it's a wildcard role (public route)
-  const isWildcardRole = roles.includes('*');
+  const isWildcardRole = requiredRoles.includes('*');
 
   // If it's a public route or has a wildcard role, allow access without authentication
   if (isPublicPath || isWildcardRole) {
@@ -64,7 +73,8 @@ export const ProtectedRoute: React.FC<ProtectedRouteProps> = ({ children, allowe
     return <Navigate to="/login" replace />;
   }
 
-  const hasRequiredRole = allowedRoles.length === 0 || (user.role && allowedRoles.includes(user.role.name));
+  // Check if user has required role
+  const hasRequiredRole = requiredRoles.length === 0 || (user.role && requiredRoles.includes(user.role.name));
 
   if (!hasRequiredRole) {
     return <Navigate to="/unauthorized" replace />;

@@ -26,6 +26,7 @@ import TransactionCreatedDialog from '../dialogs/TransactionCreatedDialog';
 import { useCurrentUser } from '@/utils/getUserFromRedux';
 import { useDynamicOptions } from '@/features/checker/hooks/useDynamicOptions';
 import { API } from '@/core/constant/apis';
+import { useSendVkycLink } from '@/features/checker/hooks/useSendVkycLink';
 
 const fieldWrapperBaseStyle = 'mb-5';
 
@@ -45,6 +46,7 @@ const TransactionForm = ({ mode }: TransactionFormProps) => {
   const { getUserHashedKey } = useCurrentUser();
   const createTransactionMutation = useCreateTransaction();
   const updateOrderMutation = useUpdateOrder();
+  const { mutate: sendVkycLink, isSendVkycLinkLoading } = useSendVkycLink();
   const { data: allTransactionsData = [], loading: isLoading, error, fetchData: refreshData } = useGetAllOrders();
 
   const typedAllTransactionsData = useMemo(() => {
@@ -173,6 +175,16 @@ const TransactionForm = ({ mode }: TransactionFormProps) => {
         // Handle create operation
         const apiRequestData = transformFormDataToApiRequest(formData, transactionTypeOptions, purposeTypeOptions);
         const response = await createTransactionMutation.mutateAsync(apiRequestData);
+        if (formData?.applicantDetails?.isVKycRequired?.toLowerCase() === 'true' && response?.status === 201) {
+          sendVkycLink(
+            { partner_order_id: response.data?.partner_order_id || formData.applicantDetails.partnerOrderId },
+            {
+              onError: () => {
+                toast.error('Failed to generated VKYC link');
+              },
+            }
+          );
+        }
 
         // Extract response data based on your API specification
         const partnerOrder = response.data?.partner_order_id || formData.applicantDetails.partnerOrderId || 'PO123';
@@ -303,7 +315,8 @@ const TransactionForm = ({ mode }: TransactionFormProps) => {
                         disabled:
                           isUpdatePage ||
                           isViewPage ||
-                          (isEditPage && field.name === 'applicantDetails.partnerOrderId'),
+                          (isEditPage && field.name === 'applicantDetails.partnerOrderId') ||
+                          ((isEditPage || isUpdatePage) && field.name === 'applicantDetails.isVKycRequired'),
                       })}
                     </FieldWrapper>
                   );
@@ -331,8 +344,9 @@ const TransactionForm = ({ mode }: TransactionFormProps) => {
         )}
         {isViewPage && checkerComments && (
           <FormFieldRow className="mb-4 w-full">
-            <div>
-              Comment: <span className="text-red-500">{checkerComments}</span>
+            <div className="flex flex-col gap-2 w-full bg-[#e6e6e6] p-3 rounded-md">
+              <strong className="text-gray-600">Rejection Summary:</strong>{' '}
+              <span className="text-red-500">{checkerComments}</span>
             </div>
           </FormFieldRow>
         )}

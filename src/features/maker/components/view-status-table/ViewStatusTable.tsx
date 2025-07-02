@@ -150,6 +150,8 @@ const ViewStatusTable: React.FC = () => {
     handleRegenerateVkycLink,
   });
 
+  console.log('tableData', tableData);
+
   return (
     <div className="dynamic-table-wrap">
       <DynamicTable

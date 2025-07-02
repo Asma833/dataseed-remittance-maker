@@ -157,7 +157,10 @@ export const ViewStatusTableColumns = ({
       cell: (_: unknown, rowData: any) => {
         const { v_kyc_status, e_sign_status, is_v_kyc_required, nium_order_id, v_kyc_link } = rowData;
         const isActionNeeded =
-          v_kyc_status === 'N/A' || v_kyc_status === 'expired' || (is_v_kyc_required && !v_kyc_link);
+          v_kyc_status === 'N/A' ||
+          v_kyc_status === 'expired' ||
+          v_kyc_status === 'rejected' ||
+          (is_v_kyc_required && !v_kyc_link);
 
         const isDisabled =
           !is_v_kyc_required ||
