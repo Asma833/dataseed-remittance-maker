@@ -6,7 +6,7 @@ import EsignStatusCell from '@/features/checker/components/table/EsignStatusCell
 import VKycStatusCell from '@/features/checker/components/table/VKycStatusCell';
 import { formatDateWithFallback } from '@/utils/formatDateWithFallback';
 import { Edit, Upload, Trash2, Eye } from 'lucide-react';
-import IncidentStatusCell from '@/features/checker/components/table/IncidentStatusCell';
+import OrderStatusCell from '@/features/checker/components/table/OrderStatusCell';
 
 export const ViewStatusTableColumns = ({
   handleRegenerateEsignLink,
@@ -204,7 +204,7 @@ export const ViewStatusTableColumns = ({
       id: 'incident_status',
       name: 'Incident Status',
       className: 'min-w-0 p-2',
-      cell: (_: any, value: any) => <IncidentStatusCell rowData={value} />,
+      cell: (_: any, value: any) => <OrderStatusCell rowData={value} />,
     },
     {
       key: 'view_action',
