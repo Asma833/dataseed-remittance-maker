@@ -1,8 +1,6 @@
 import { Order } from '../../types/updateIncident.types';
 
 const IncidentStatusCell = ({ rowData }: { rowData: Order }) => {
-  console.log('IncidentStatusCell rowData', rowData);
-
   return (
     <span>
       {!rowData.incident_status ? (
