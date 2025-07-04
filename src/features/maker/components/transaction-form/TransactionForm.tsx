@@ -42,6 +42,7 @@ const TransactionForm = ({ mode }: TransactionFormProps) => {
   const [showUploadSection, setShowUploadSection] = useState(false);
   const { mutate: sendEsignLink, isSendEsignLinkLoading } = useSendEsignLink();
   const { options: purposeTypeOptions } = useDynamicOptions(API.PURPOSE.GET_PURPOSES);
+  console.log('purposeTypeOptions:', purposeTypeOptions);
   const { options: transactionTypeOptions } = useDynamicOptions(API.TRANSACTION.GET_TRANSACTIONS);
   const { getUserHashedKey } = useCurrentUser();
   const createTransactionMutation = useCreateTransaction();
@@ -65,7 +66,7 @@ const TransactionForm = ({ mode }: TransactionFormProps) => {
   const seletedRowTransactionData = typedAllTransactionsData?.find(
     (transaction: TransactionOrderData) => transaction?.partner_order_id === partnerOrderId
   );
-  
+
   const mergedDocumentUrl = seletedRowTransactionData?.merged_document?.url || '';
   const vkycVideoUrl = seletedRowTransactionData?.vkycs?.[0]?.resources_videos_files || '';
   const vkycDocumentUrl = seletedRowTransactionData?.vkycs?.[0]?.resources_documents_files || '';
