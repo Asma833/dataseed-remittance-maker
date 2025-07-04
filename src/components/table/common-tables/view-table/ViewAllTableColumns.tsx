@@ -125,7 +125,7 @@ export const GetTransactionTableColumns = ({
       <SignLinkButton
         copyLinkUrl={rowData.e_sign_link}
         toastInfoText={'E Sign link copied successfully!'}
-        disabled={!rowData.e_sign_link || rowData.e_sign_status === 'not generated'}
+        disabled={!rowData.e_sign_link || rowData.e_sign_status === 'not generated' || rowData.e_sign_status === 'completed'}
         tooltipText={'Copy E sign Link'}
         buttonType="copy_link"
         buttonIconType="copy_link"
@@ -141,7 +141,7 @@ export const GetTransactionTableColumns = ({
       <SignLinkButton
         copyLinkUrl={rowData.v_kyc_link}
         toastInfoText={'Vkyc Link link copied successfully!'}
-        disabled={rowData.v_kyc_link === null}
+        disabled={rowData.v_kyc_link === null || rowData.v_kyc_status === 'not generated' || rowData.v_kyc_status === 'completed'}
         tooltipText={'Copy VKYC Link'}
         buttonType="copy_link"
         buttonIconType="copy_link"
