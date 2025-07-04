@@ -80,8 +80,8 @@ export const GetTransactionTableColumns = (openModal: (value: string) => void) =
     ),
   },
   {
-    key: 'incident_status',
-    id: 'incident_status',
+    key: 'order_status',
+    id: 'order_status',
     name: 'Incident Status',
     className: 'min-w-0',
     cell: (_: unknown, rowData: any) => <OrderStatusCell rowData={rowData} />,
