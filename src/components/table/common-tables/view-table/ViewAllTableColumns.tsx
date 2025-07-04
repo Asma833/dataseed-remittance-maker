@@ -26,14 +26,6 @@ export const GetTransactionTableColumns = ({
   const isLinkDisabled = (link: string | null | undefined, status: string | undefined) =>
     !link || status === 'not generated' || status === 'completed';
 
-  const isGenerateEsignLinkDisabled = (rowData: any) => {
-    const { order_status, merged_document, e_sign_link } = rowData || {};
-    console.log(
-      'isGenerateEsignLinkDisabled',
-      order_status === 'completed' || !merged_document || Boolean(e_sign_link)
-    );
-    return e_sign_link !== 'completed' || !merged_document;
-  };
   return [
     {
       key: 'nium_order_id',
@@ -177,8 +169,10 @@ export const GetTransactionTableColumns = ({
           disabled={(() => {
             const { order_status, e_sign_status, merged_document, e_sign_link } = rowData || {};
             const disabledEsignStatuses = ['expired', 'rejected', 'not generated'];
-
-            return order_status === 'completed' || disabledEsignStatuses.includes(e_sign_status) || !merged_document;
+            return (
+              !merged_document &&
+              (order_status === 'completed' || disabledEsignStatuses.includes(e_sign_status) || e_sign_link === null)
+            );
           })()}
         />
       ),
