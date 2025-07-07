@@ -176,7 +176,7 @@ export const GetTransactionTableColumns = ({
           onClick={() => handleRegenerateEsignLink(rowData)}
           disabled={(() => {
             const { order_status, e_sign_status, merged_document, e_sign_link } = rowData || {};
-            const disabledEsignStatuses = ['expired', 'rejected', 'not generated'];
+            const disabledEsignStatuses = ['expired', 'rejected', 'not generated', 'completed'];
 
             return order_status === 'completed' || disabledEsignStatuses.includes(e_sign_status) || !merged_document;
           })()}
