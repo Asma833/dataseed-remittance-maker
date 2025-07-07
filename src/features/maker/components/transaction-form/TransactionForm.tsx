@@ -42,7 +42,6 @@ const TransactionForm = ({ mode }: TransactionFormProps) => {
   const [showUploadSection, setShowUploadSection] = useState(false);
   const { mutate: sendEsignLink, isSendEsignLinkLoading } = useSendEsignLink();
   const { options: purposeTypeOptions } = useDynamicOptions(API.PURPOSE.GET_PURPOSES);
-  console.log('purposeTypeOptions:', purposeTypeOptions);
   const { options: transactionTypeOptions } = useDynamicOptions(API.TRANSACTION.GET_TRANSACTIONS);
   const { getUserHashedKey } = useCurrentUser();
   const createTransactionMutation = useCreateTransaction();

@@ -46,12 +46,6 @@ export const ViewStatusTableColumns = ({
       className: 'min-w-0',
     },
     {
-      key: 'expiry_date',
-      id: 'expiry_date',
-      name: 'Expiry Date',
-      className: 'min-w-0 p-2',
-    },
-    {
       key: 'customer_name',
       id: 'customer_name',
       name: 'Applicant Name',
