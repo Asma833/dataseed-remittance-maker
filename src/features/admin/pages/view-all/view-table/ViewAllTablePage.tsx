@@ -11,35 +11,38 @@ const ViewAllTablePage = () => {
   const tableData = useMemo(() => {
     if (!data) return [];
 
+    // More robust order validation function
+    const isValidOrder = (item: any): item is Order => {
+      return (
+        !!item &&
+        typeof item === 'object' &&
+        // Check for essential order properties - be more flexible with created_at
+        (item.nium_order_id || item.partner_order_id || item.customer_pan)
+      );
+    };
+
+    let result: Order[] = [];
+
     // If already an array
     if (Array.isArray(data)) {
-      return (data as Order[]).filter(
-        (item): item is Order => !!item && typeof item === 'object' && 'created_at' in item
-      );
+      result = (data as Order[]).filter(isValidOrder);
     }
-
     // If object with 'orders' property
-    if (typeof data === 'object' && 'orders' in data) {
+    else if (typeof data === 'object' && 'orders' in data) {
       const orders = (data as any).orders;
       if (Array.isArray(orders)) {
-        return orders.filter((item: any): item is Order => !!item && typeof item === 'object' && 'created_at' in item);
+        result = orders.filter(isValidOrder);
+      } else if (orders && typeof orders === 'object') {
+        result = Object.values(orders).filter(isValidOrder);
       }
-      if (orders && typeof orders === 'object') {
-        return Object.values(orders).filter(
-          (item: any): item is Order => !!item && typeof item === 'object' && 'created_at' in item
-        );
-      }
-      return [];
     }
-
     // If object of objects
-    if (typeof data === 'object') {
-      return Object.values(data).filter(
-        (item: any): item is Order => !!item && typeof item === 'object' && 'created_at' in item
-      );
+    else if (typeof data === 'object') {
+      result = Object.values(data).filter(isValidOrder);
     }
 
-    return [];
+    console.log('ViewAllTablePage: Filtered tableData:', result);
+    return result;
   }, [data]);
 
   // Format error message consistently
