@@ -1,11 +1,9 @@
 import { useMemo } from 'react';
 import ViewAllTable from '@/components/table/common-tables/view-table/ViewAllTable';
 import useGetAllOrders from '@/features/admin/hooks/useGetAllOrders';
-import { usePageTitle } from '@/hooks/usePageTitle';
 import { Order } from '@/features/checker/types/updateIncident.types';
 
 const ViewAllTablePage = () => {
-  console.log('ViewAllTablePage: Rendering==>');
   const { data, loading: isLoading, error, fetchData: refreshData } = useGetAllOrders();
 
   const tableData = useMemo(() => {
@@ -40,8 +38,6 @@ const ViewAllTablePage = () => {
     else if (typeof data === 'object') {
       result = Object.values(data).filter(isValidOrder);
     }
-
-    console.log('ViewAllTablePage: Filtered tableData:', result);
     return result;
   }, [data]);
 
