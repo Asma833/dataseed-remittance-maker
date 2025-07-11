@@ -7,6 +7,9 @@ import VKycStatusCell from '@/features/checker/components/table/VKycStatusCell';
 import { formatDateWithFallback } from '@/utils/formatDateWithFallback';
 import { Edit, Upload, Trash2, Eye } from 'lucide-react';
 import OrderStatusCell from '@/features/checker/components/table/OrderStatusCell';
+import { ESIGN_STATUSES } from '@/features/checker/types/esignStatus';
+import { ORDER_STATUSES } from '@/components/types/status';
+import { ACTION_NEEDED_VKYC_STATUSES, DISABLED_VKYC_STATUSES } from '@/features/checker/types/vkycStatus';
 
 export const ViewStatusTableColumns = ({
   handleRegenerateEsignLink,
@@ -93,55 +96,53 @@ export const ViewStatusTableColumns = ({
           order_status,
         } = rowData;
 
-        // No action can be taken if there's no merged document
-        if (merged_document === null) {
+        if (!merged_document) {
           return (
             <SignLinkButton
               id={nium_order_id}
               copyLinkUrl=""
               loading={false}
               toastInfoText=""
-              disabled={true} // Disable button when no merged document exists
+              disabled
               tooltipText="No document available"
               buttonType="copy_link"
               buttonIconType="copy_link"
             />
           );
         }
-
-        // Check if we need to generate a new link (no existing link or status requires regeneration)
         const needsGeneration =
-          e_sign_link_status === 'expired' ||
-          e_sign_link === null ||
-          e_sign_status === 'rejected' ||
-          e_sign_status === 'expired' ||
-          order_status === 'rejected';
-        // Button should be disabled if e-sign is completed and no regeneration is needed
+          e_sign_link_status === ESIGN_STATUSES.EXPIRED ||
+          e_sign_status === ESIGN_STATUSES.EXPIRED ||
+          e_sign_status === ESIGN_STATUSES.REJECTED ||
+          !e_sign_link;
+
         const isDisabled =
-          (e_sign_status === 'completed' && !needsGeneration) ||
-          (is_esign_required === true && e_sign_link === null && !needsGeneration);
-
-        // Determine if loading state applies to this row
+          e_sign_status === ESIGN_STATUSES.COMPLETED ||
+          (e_sign_status === ESIGN_STATUSES.COMPLETED &&
+            order_status === ORDER_STATUSES.REJECTED &&
+            !needsGeneration) ||
+          (is_esign_required === true && !e_sign_link && !needsGeneration);
         const isLoading = isSendEsignLinkLoading && loadingOrderId === nium_order_id;
-
-        // Set tooltip text based on whether we need generation or copy
         const tooltipText = needsGeneration ? 'Generate E Sign Link' : 'Copy E Sign Link';
+        const buttonType = needsGeneration ? 'refresh' : 'copy_link';
+        const buttonIconType = buttonType;
 
         return (
           <SignLinkButton
             id={nium_order_id}
-            copyLinkUrl={rowData.e_sign_link || ''}
+            copyLinkUrl={e_sign_link || ''}
             loading={isLoading}
             toastInfoText="E Sign link copied successfully!"
             disabled={isDisabled}
             {...(needsGeneration ? { onClick: () => handleRegenerateEsignLink(rowData) } : {})}
             tooltipText={tooltipText}
-            buttonType={needsGeneration ? 'refresh' : 'copy_link'}
-            buttonIconType={needsGeneration ? 'refresh' : 'copy_link'}
+            buttonType={buttonType}
+            buttonIconType={buttonIconType}
           />
         );
       },
     },
+
     {
       key: 'v_kyc_status',
       id: 'v_kyc_status',
@@ -156,46 +157,38 @@ export const ViewStatusTableColumns = ({
       name: 'VKYC Link',
       className: 'min-w-0 max-w-[80px]',
       cell: (_: unknown, rowData: any) => {
-        const { v_kyc_status, e_sign_status, is_v_kyc_required, nium_order_id, v_kyc_link } = rowData;
-        const isActionNeeded =
-          v_kyc_status === 'N/A' ||
-          v_kyc_status === 'expired' ||
-          v_kyc_status === 'rejected' ||
-          (is_v_kyc_required && !v_kyc_link);
-
+        const { v_kyc_status, is_v_kyc_required, nium_order_id, v_kyc_link } = rowData;
+        const isActionNeeded = ACTION_NEEDED_VKYC_STATUSES.includes(v_kyc_status) || (is_v_kyc_required && !v_kyc_link);
         const isDisabled =
           !is_v_kyc_required ||
-          v_kyc_status === 'completed' ||
-          (is_v_kyc_required && v_kyc_link === null && !isActionNeeded);
+          DISABLED_VKYC_STATUSES.includes(v_kyc_status) ||
+          (is_v_kyc_required && !v_kyc_link && !isActionNeeded);
 
-        // Determine tooltip text
+        const isLoading = isSendVkycLinkLoading && loadingOrderId === nium_order_id;
         const tooltipText = isActionNeeded ? 'Generate VKYC Link' : is_v_kyc_required ? 'Copy VKYC Link' : '';
 
-        // Determine if loading state applies to this row
-        const isLoading = isSendVkycLinkLoading && loadingOrderId === nium_order_id;
-
-        // Create wrapper function for regenerating link
         const handleGenerateLink = async () => {
           try {
             await handleRegenerateVkycLink(rowData);
-            // When link generation is successful, update our local state
             setHasGeneratedLink(true);
           } catch (error) {
             console.error('Error generating VKYC link:', error);
           }
         };
 
+        const buttonType = isLoading || hasGeneratedLink ? 'copy_link' : isActionNeeded ? 'refresh' : 'copy_link';
+
         return (
           <SignLinkButton
             id={nium_order_id}
-            copyLinkUrl={rowData.v_kyc_link || ''}
+            copyLinkUrl={v_kyc_link || ''}
             loading={isLoading}
             toastInfoText="VKYC Link copied successfully!"
             disabled={isDisabled}
             {...(isActionNeeded ? { onClick: handleGenerateLink } : {})}
             tooltipText={tooltipText}
-            buttonType={isLoading || hasGeneratedLink ? 'copy_link' : isActionNeeded ? 'refresh' : 'copy_link'}
-            buttonIconType={isLoading || hasGeneratedLink ? 'copy_link' : isActionNeeded ? 'refresh' : 'copy_link'}
+            buttonType={buttonType}
+            buttonIconType={buttonType}
           />
         );
       },

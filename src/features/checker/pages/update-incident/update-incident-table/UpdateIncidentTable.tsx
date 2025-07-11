@@ -106,13 +106,13 @@ const UpdateIncidentCreationTable = () => {
             resetAction: true,
             selects: [
               {
-                id: 'purpose_type_name',
+                id: 'purpose_type_name.purpose_name',
                 label: 'Purpose Type',
                 placeholder: 'Select',
                 options: purposeTypeOptions,
               },
               {
-                id: 'transaction_type_name',
+                id: 'transaction_type_name.name',
                 label: 'Transaction Type',
                 placeholder: 'Select',
                 options: transactionTypeOptions,
