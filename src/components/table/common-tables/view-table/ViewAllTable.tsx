@@ -12,7 +12,6 @@ import { useDynamicOptions } from '@/features/checker/hooks/useDynamicOptions';
 import { ViewAllTableProps } from '@/components/types/common-components.types';
 import { useSendVkycLink } from '@/features/checker/hooks/useSendVkycLink';
 import { formatDateWithFallback } from '@/utils/formatDateWithFallback';
-import { formatDate } from '@/utils/dateFormat';
 
 const ViewAllTable: React.FC<ViewAllTableProps> = ({
   tableData,
@@ -86,7 +85,7 @@ const ViewAllTable: React.FC<ViewAllTableProps> = ({
   const transformOrderForTable = (order: any) => {
     return {
       nium_order_id: order.nium_order_id || 'N/A',
-      created_at: order.created_at === 'N/A' || order.created_at === 'NA' ? 'N/A' : new Date(order.created_at).toLocaleDateString('en-GB'),
+      created_at: order.created_at === 'N/A' || order.created_at === 'NA' ? 'N/A' : formatDateWithFallback(order.created_at),
       partner_order_id: order.partner_order_id || 'N/A',
       customer_name: order.customer_name || 'N/A',
       customer_pan: order.customer_pan || 'N/A',
@@ -101,21 +100,21 @@ const ViewAllTable: React.FC<ViewAllTableProps> = ({
         order.e_sign_customer_completion_date === 'N/A' || order.e_sign_customer_completion_date === 'NA'
           ? 'N/A'
           : order.e_sign_customer_completion_date
-            ? new Date(order.e_sign_customer_completion_date).toLocaleDateString('en-GB')
+            ? formatDateWithFallback(order.e_sign_customer_completion_date)
             : 'N/A',
       v_kyc_status: order.v_kyc_status || null,
       v_kyc_customer_completion_date:
         order.v_kyc_customer_completion_date === 'N/A' || order.v_kyc_customer_completion_date === 'NA'
           ? 'N/A'
           : order.v_kyc_customer_completion_date
-            ? new Date(order.v_kyc_customer_completion_date).toLocaleDateString('en-GB')
+            ? formatDateWithFallback(order.v_kyc_customer_completion_date)
             : 'N/A',
       order_status: order.order_status === 'completed' ? 'approved' :order.order_status  || 'N/A',
       incident_completion_date:
         order.incident_completion_date === 'N/A' || order.incident_completion_date === 'NA'
           ? 'N/A'
           : order.incident_completion_date
-            ? new Date(order.incident_completion_date).toLocaleDateString('en-GB')
+            ? formatDateWithFallback(order.incident_completion_date)
             : 'N/A',
     };
   };
