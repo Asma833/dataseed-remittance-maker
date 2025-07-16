@@ -85,7 +85,6 @@ const CompletedTransactionTable = () => {
 
   // Transform checker orders data to match the table format
   const transformOrderForTable = (order: any) => {
-    console.log(STATUS_MAP[order.order_status])
     return {
       nium_order_id: order.nium_order_id || '',
       created_at: order.created_at === 'N/A' || order.created_at === 'NA' ? 'N/A' : formatDateWithFallback(order.created_at),
