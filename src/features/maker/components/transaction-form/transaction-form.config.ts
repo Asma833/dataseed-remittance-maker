@@ -55,6 +55,7 @@ export const getFormControllerMeta = (options: FormControllerMetaOptions = {}) =
           type: FieldType.Text,
           required: true,
           placeholder: 'Enter Applicant PAN Number',
+          uppercase: true,
         },
         transactionType: {
           name: 'applicantDetails.transactionType',

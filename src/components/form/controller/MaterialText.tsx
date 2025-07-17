@@ -31,6 +31,16 @@ export const MaterialText = ({
 }: MaterialTextProps) => {
   const { control } = useFormContext();
 
+  const handleChange = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
+    onChange: (value: string) => void
+  ) => {
+    const inputValue = uppercase ? e.target.value.toUpperCase() : e.target.value;
+    onChange(inputValue);
+    if (onInputChange) {
+      onInputChange(inputValue);
+    }
+  };
   return (
     <>
       <Controller
@@ -46,14 +56,7 @@ export const MaterialText = ({
             helperText={error?.message}
             disabled={disabled}
             required={required}
-            onChange={(e) => {
-              const value = uppercase ? e.target.value.toUpperCase() : e.target.value;
-              field.onChange(value);
-              // Call the onInputChange callback if provided
-              if (onInputChange) {
-                onInputChange(value);
-              }
-            }}
+            onChange={(e) => handleChange(e, field.onChange)}
             sx={baseStyle as SxProps<Theme>}
             className={cn(className)}
           />
