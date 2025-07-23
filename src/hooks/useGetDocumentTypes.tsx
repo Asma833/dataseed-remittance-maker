@@ -1,19 +1,20 @@
 import { useQuery } from '@tanstack/react-query';
 import axiosInstance from '@/core/services/axios/axiosInstance';
 import { API, HEADER_KEYS } from '@/core/constant/apis';
+import { string } from 'zod';
 
 export interface DocumentTypeItem {
-  id: string;
-  text: string;
+  id: string ;
+  name: string;
 }
 
 /**
  * Fetches document types from the API with proper headers
  * @returns Promise that resolves to an array of document types
  */
-const fetchDocumentTypes = async (): Promise<DocumentTypeItem[]> => {
+const fetchDocumentTypes = async (id:any): Promise<DocumentTypeItem[]> => {
   try {
-    const response = await axiosInstance.get(API.CONFIG.GET_DOCUMENT_TYPES, {
+    const response = await axiosInstance.get(API.CONFIG.GET_DOCUMENT_TYPES(id), {
       headers: {
         accept: 'application/json',
         api_key: HEADER_KEYS.API_KEY,
@@ -44,15 +45,15 @@ const useGetDocumentTypes = (id?: string) => {
     isLoading: loading,
     error,
     isError,
-  } = useQuery<DocumentTypeItem[], Error>({
-    queryKey: ['documentTypes'],
-    queryFn: fetchDocumentTypes,
+  } = useQuery<DocumentTypeItem[], Error, DocumentTypeItem[]>({
+    queryKey: ['documentTypes', id],
+    queryFn: ({ queryKey }) => fetchDocumentTypes(queryKey[1]),
     staleTime: 5 * 60 * 1000, // Cache data for 5 minutes
     retry: 1,
   });
 
   // Find the document type name if ID is provided
-  const documentType = id ? documentTypes.find((item) => item.id === id)?.text || null : null;
+  const documentType = id ? documentTypes.find((item) => item.id === id)?.name || null : null;
 
   return {
     documentType,

@@ -82,7 +82,7 @@ export const API = {
     GET_CONFIG: `/config`,
     GET_PURPOSE_TYPES: `/config?type=purpose_type`,
     GET_TRANSACTION_TYPES: `/config?type=transaction_type`,
-    GET_DOCUMENT_TYPES: `/config?type=document_type`,
+    GET_DOCUMENT_TYPES: (id: string) => `purpose/${id}/documents`,
   },
   DOCUMENTS: {
     UPLOAD: `/documents/upload`,
@@ -96,7 +96,7 @@ export const API = {
     GET_TRANSACTIONS: `/transaction_type`,
   },
   PURPOSE: {
-    GET_PURPOSES: `/purpose`,
+    GET_PURPOSES: `/fx/purposes`,
   },
 } as const;
 

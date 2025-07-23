@@ -31,6 +31,7 @@ interface UploadDocumentsProps {
   onUploadComplete?: (success: boolean) => void;
   onESignGenerated?: (success: boolean) => void;
   isResubmission?: boolean;
+  purposeTypeId: string;
 }
 
 const ALLOWED_FILE_TYPES = ['pdf', 'jpg', 'jpeg', 'png', 'gif'];
@@ -43,12 +44,16 @@ export const UploadDocuments: React.FC<UploadDocumentsProps> = ({
   onUploadComplete,
   onESignGenerated,
   isResubmission = false,
+  purposeTypeId, 
 }) => {
-  const { documentTypes, loading } = useGetDocumentTypes();
+  console.log('purposeTypeId:', purposeTypeId);
+  const { documentTypes, loading } = useGetDocumentTypes(purposeTypeId);
   const uploadDocumentMutation = useUploadDocument();
   const [uploadedDocuments, setUploadedDocuments] = useState<UploadedDocument[]>([]);
   const [showUploadDialog, setShowUploadDialog] = useState(false);
   const [currentDocument, setCurrentDocument] = useState<UploadedDocument | null>(null);
+  const [documentName, setDocumentName] = useState<string | null>(null);
+  const [currentIndex, setCurrentIndex] = useState<number | null>(null);
 
   const handleFileUpload = async (file: File, documentTypeId: string, documentTypeName: string) => {
     try {
@@ -67,10 +72,10 @@ export const UploadDocuments: React.FC<UploadDocumentsProps> = ({
         toast.error(`File size too large. Maximum size: ${formatFileSize(FILE_SIZE.ALL_DOC_MAX)}`);
         return;
       }
-
+     
       // Convert to base64
       const base64 = await convertFileToBase64(file);
-      console.log(documentTypeName, 'documentTypeName');
+      // console.log(documentTypeName, 'documentTypeName');
       const newDocument: UploadedDocument = {
         file,
         documentTypeId,
@@ -82,18 +87,22 @@ export const UploadDocuments: React.FC<UploadDocumentsProps> = ({
 
       // Check if document type already exists
       const existingIndex = uploadedDocuments.findIndex((doc) => doc.documentTypeId === documentTypeId);
-
+      setCurrentIndex(existingIndex);
+      console.log(existingIndex,"existingIndex")
       if (existingIndex >= 0) {
         // Replace existing document
         const updatedDocuments = [...uploadedDocuments];
         updatedDocuments[existingIndex] = { ...newDocument, isUploaded: false };
         setUploadedDocuments(updatedDocuments);
         toast.success(`${documentTypeName} document updated successfully`);
+        await handleSubmitDocument(updatedDocuments[existingIndex], false);
       } else {
         // Add new document
         setUploadedDocuments([...uploadedDocuments, newDocument]);
         toast.success(`${documentTypeName} document selected successfully`);
+        await handleSubmitDocument(newDocument, false);
       }
+      
     } catch (error) {
       console.error('Error processing file:', error);
       toast.error('Failed to process file');
@@ -105,9 +114,10 @@ export const UploadDocuments: React.FC<UploadDocumentsProps> = ({
     toast.success('Document removed successfully');
   };
 
-  const handleSubmitDocument = (document: UploadedDocument) => {
+  const handleSubmitDocument = (document: UploadedDocument, merge_doc: boolean) => {
     setCurrentDocument(document);
-    setShowUploadDialog(true);
+    handleUploadWithMerge(merge_doc);
+    // setShowUploadDialog(true);
   };
 
   const handleUploadWithMerge = async (mergeDoc: boolean) => {
@@ -191,23 +201,24 @@ export const UploadDocuments: React.FC<UploadDocumentsProps> = ({
 
       <div className="flex flex-wrap gap-4">
         {documentTypes
-          .sort((a, b) => {
-            if (a.text.includes('All Document')) return -1;
-            if (b.text.includes('All Document')) return 1;
-            return a.text.localeCompare(b.text);
-          })
+          // .sort((a, b) => {
+          //   if (a.text.includes('All Document')) return -1;
+          //   if (b.text.includes('All Document')) return 1;
+          //   return a.text.localeCompare(b.text);
+          // })
+          // .slice(0, 3)
           .map((docType) => {
             const uploadedDoc = uploadedDocuments.find((doc) => doc.documentTypeId === docType.id);
             const isAllDocumentUploaded = uploadedDocuments.some((doc) => doc.documentTypeName === 'All Documents');
             const isOtherDocumentUploaded = uploadedDocuments.some((doc) => doc.documentTypeName !== 'All Documents');
             const isDisabled =
-              (docType.text === 'All Documents' && isOtherDocumentUploaded) ||
-              (docType.text !== 'All Documents' && isAllDocumentUploaded);
+              (docType.name === 'All Documents' && isOtherDocumentUploaded) ||
+              (docType.name !== 'All Documents' && isAllDocumentUploaded);
 
             return (
-              <Card key={docType.id} className="relative flex-1 min-w-[250px] max-w-[250px] p-4 shadow-sm">
-                <CardHeader className="pb-3">
-                  <CardTitle className="text-sm font-medium">{docType.text}</CardTitle>
+              <Card key={docType.id} className="relative flex-1 min-w-[250px] max-w-[250px] p-2 shadow-sm">
+                <CardHeader className="pb-6">
+                  <CardTitle className="text-sm font-medium text-center">{docType.name}</CardTitle>
                   {uploadedDoc && (
                     <Button
                       variant="ghost"
@@ -221,7 +232,8 @@ export const UploadDocuments: React.FC<UploadDocumentsProps> = ({
                 </CardHeader>
                 <CardContent className="pt-0">
                   {uploadedDoc ? (
-                    <div className="space-y-3">
+                    <div className="space-y-3 flex flex-col justify-center">
+                      
                       <div className="flex items-center gap-2 text-sm">
                         {uploadedDoc.isUploaded ? (
                           <CheckCircle className="h-4 w-4 text-green-600" />
@@ -232,7 +244,7 @@ export const UploadDocuments: React.FC<UploadDocumentsProps> = ({
                       </div>
                       <div className="text-xs text-gray-500">{formatFileSize(uploadedDoc.file.size)}</div>
 
-                      <div className="flex gap-2">
+                      <div className="flex justify-center gap-2 pt-3">
                         <input
                           type="file"
                           accept=".pdf,.jpg,.jpeg,.png,.gif"
@@ -240,7 +252,7 @@ export const UploadDocuments: React.FC<UploadDocumentsProps> = ({
                           onChange={(e) => {
                             const file = e.target.files?.[0];
                             if (file) {
-                              handleFileUpload(file, docType.id, docType.text);
+                              handleFileUpload(file, docType.id, docType.name);
                             }
                           }}
                           className="hidden"
@@ -252,7 +264,7 @@ export const UploadDocuments: React.FC<UploadDocumentsProps> = ({
                             if (isDisabled) {
                               e.preventDefault();
                               toast.warning(
-                                docType.text === 'All Documents'
+                                docType.name === 'All Documents'
                                   ? 'Cannot upload All Documents when individual documents are selected.'
                                   : 'Cannot upload individual documents when All Documents is selected.'
                               );
@@ -269,7 +281,7 @@ export const UploadDocuments: React.FC<UploadDocumentsProps> = ({
                         </label>
                       </div>
 
-                      {!uploadedDoc.isUploaded && (
+                      {/* {!uploadedDoc.isUploaded && (
                         <Button
                           size="sm"
                           onClick={() => handleSubmitDocument(uploadedDoc)}
@@ -285,7 +297,7 @@ export const UploadDocuments: React.FC<UploadDocumentsProps> = ({
                             'Upload Document'
                           )}
                         </Button>
-                      )}
+                      )} */}
 
                       {uploadedDoc.isUploaded && (
                         <div className="flex items-center gap-2 text-sm text-green-600">
@@ -303,7 +315,7 @@ export const UploadDocuments: React.FC<UploadDocumentsProps> = ({
                         onChange={(e) => {
                           const file = e.target.files?.[0];
                           if (file) {
-                            handleFileUpload(file, docType.id, docType.text);
+                            handleFileUpload(file, docType.id, docType.name);
                           }
                         }}
                         className="hidden"
@@ -315,7 +327,7 @@ export const UploadDocuments: React.FC<UploadDocumentsProps> = ({
                           if (isDisabled) {
                             e.preventDefault();
                             toast.warning(
-                              docType.text === 'All Documents'
+                              docType.name === 'All Documents'
                                 ? 'Cannot upload All Documents when individual documents are selected.'
                                 : 'Cannot upload individual documents when All Documents is selected.'
                             );
@@ -330,7 +342,7 @@ export const UploadDocuments: React.FC<UploadDocumentsProps> = ({
                         <Upload className="h-8 w-8 mb-2" />
                         <span className="text-sm">Click to upload</span>
                         <span className="text-xs mt-1">
-                          {docType.text === 'All Documents'
+                          {docType.name === 'All Documents'
                             ? `PDF, JPG, PNG (max ${formatFileSize(FILE_SIZE.ALL_DOC_MAX)})`
                             : `PDF, JPG, PNG (max ${formatFileSize(FILE_SIZE.OTHER_DOC_MAX)})`}
                         </span>
@@ -339,10 +351,31 @@ export const UploadDocuments: React.FC<UploadDocumentsProps> = ({
                   )}
                 </CardContent>
               </Card>
+              
+              
             );
+            
           })}
+          <div className="flex items-end justify-center">
+          <Button
+            size="lg"
+            onClick={() => {
+              if (uploadedDocuments.length > 0) {
+                handleSubmitDocument(uploadedDocuments[0],true);
+              } else {
+                toast.warning('Please upload a document before submitting.');
+              }
+            }}
+            className="w-64"
+          >
+            Submit
+          </Button>
+          </div>
+           
       </div>
-
+   
+                       
+                     
       <Dialog open={showUploadDialog} onOpenChange={setShowUploadDialog}>
         <DialogContent>
           <DialogHeader>
@@ -362,7 +395,7 @@ export const UploadDocuments: React.FC<UploadDocumentsProps> = ({
               </Button>
             </div>
           </DialogHeader>
-          <div className="py-4">
+          {/* <div className="py-4">
             <p className="text-sm text-gray-600 mb-4">
               How would you like to upload "{currentDocument?.documentTypeName}"?
             </p>
@@ -373,15 +406,20 @@ export const UploadDocuments: React.FC<UploadDocumentsProps> = ({
                 <span className="text-gray-600 truncate">{currentDocument.file.name}</span>
               </div>
             )}
-          </div>
+          </div> */}
           <DialogFooter className="sm:flex-row sm:justify-center gap-2">
-            <Button
-              variant="outline"
-              onClick={() => handleUploadWithMerge(false)}
-              disabled={uploadDocumentMutation.isPending}
-            >
-              {uploadDocumentMutation.isPending ? 'Uploading...' : 'Continue Upload'}
-            </Button>
+           {/* {
+             documentName !== 'All Documents' && (
+               <Button
+                 variant="outline"
+                 onClick={() => handleUploadWithMerge(false)}
+                 disabled={uploadDocumentMutation.isPending}
+               >
+                 {uploadDocumentMutation.isPending ? 'Uploading...' : 'Continue Upload'}
+               </Button>
+             )
+           } */}
+            
             <Button onClick={() => handleUploadWithMerge(true)} disabled={uploadDocumentMutation.isPending}>
               {uploadDocumentMutation.isPending ? 'Processing...' : 'Generate E-Sign Link'}
             </Button>

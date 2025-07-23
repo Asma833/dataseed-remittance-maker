@@ -40,6 +40,7 @@ const TransactionForm = ({ mode }: TransactionFormProps) => {
   const [niumForexOrderId, setNiumForexOrderId] = useState<string>('');
   const [partnerOrderId, setPartnerOrderId] = useState<string>(partnerOrderIdParam);
   const [showUploadSection, setShowUploadSection] = useState(false);
+  const [purposeTypeId, setPurposeTypeId] = useState<string>('');
   const { mutate: sendEsignLink, isSendEsignLinkLoading } = useSendEsignLink();
   const { options: purposeTypeOptions } = useDynamicOptions(API.PURPOSE.GET_PURPOSES);
   const { options: transactionTypeOptions } = useDynamicOptions(API.TRANSACTION.GET_TRANSACTIONS);
@@ -91,6 +92,14 @@ const TransactionForm = ({ mode }: TransactionFormProps) => {
     label: type.value,
     value: type.value,
   }));
+  const handlePurposeTypeId = () => {
+    if (purposeTypeOptions.length >= 0) {
+      const purposeType = purposeTypeOptions.find((type) => type.value === purposeTypeId);
+      console.log('purposeType:', purposeType);
+      return purposeType ? purposeType.typeId : '';
+    }
+    return '';
+  };
   // Generate dynamic form config
   const formControllerMeta = getFormControllerMeta({
     transactionTypes: formatedTransactionTypes,
@@ -158,55 +167,57 @@ const TransactionForm = ({ mode }: TransactionFormProps) => {
     );
   };
   const onSubmit = async (formData: TransactionFormData) => {
-    try {
-      if (isEditPage) {
-        // Handle update operation
-        const updateRequestData = transformFormDataToUpdateRequest(
-          formData,
-          transactionTypeOptions,
-          purposeTypeOptions,
-          getUserHashedKey() || 'unknown-user'
-        );
+    console.log('Form submitted with data:', formData);
+    setPurposeTypeId(formData.applicantDetails.purposeType ?? '');
+    // try {
+    //   if (isEditPage) {
+    //     // Handle update operation
+    //     const updateRequestData = transformFormDataToUpdateRequest(
+    //       formData,
+    //       transactionTypeOptions,
+    //       purposeTypeOptions,
+    //       getUserHashedKey() || 'unknown-user'
+    //     );
 
-        await updateOrderMutation.mutateAsync({
-          partnerOrderId: formData?.applicantDetails.partnerOrderId || '',
-          data: updateRequestData,
-        });
+    //     await updateOrderMutation.mutateAsync({
+    //       partnerOrderId: formData?.applicantDetails.partnerOrderId || '',
+    //       data: updateRequestData,
+    //     });
 
-        // Show success message (handled by the mutation's onSuccess)
-        // Optionally refresh data or navigate
-        refreshData();
-      } else {
-        // Handle create operation
-        const apiRequestData = transformFormDataToApiRequest(formData, transactionTypeOptions, purposeTypeOptions);
-        const response = await createTransactionMutation.mutateAsync(apiRequestData);
-        if (formData?.applicantDetails?.isVKycRequired && response?.status === 201) {
-          sendVkycLink(
-            { partner_order_id: response.data?.partner_order_id || formData?.applicantDetails?.partnerOrderId },
-            {
-              onError: () => {
-                toast.error('Failed to generated VKYC link');
-              },
-            }
-          );
-        }
+    //     // Show success message (handled by the mutation's onSuccess)
+    //     // Optionally refresh data or navigate
+    //     refreshData();
+    //   } else {
+    //     // Handle create operation
+    //     const apiRequestData = transformFormDataToApiRequest(formData, transactionTypeOptions, purposeTypeOptions);
+    //     const response = await createTransactionMutation.mutateAsync(apiRequestData);
+    //     if (formData?.applicantDetails?.isVKycRequired && response?.status === 201) {
+    //       sendVkycLink(
+    //         { partner_order_id: response.data?.partner_order_id || formData?.applicantDetails?.partnerOrderId },
+    //         {
+    //           onError: () => {
+    //             toast.error('Failed to generated VKYC link');
+    //           },
+    //         }
+    //       );
+    //     }
 
-        // Extract response data based on your API specification
-        const partnerOrder = response.data?.partner_order_id || formData?.applicantDetails?.partnerOrderId || 'PO123';
-        const niumOrder = response.data?.nium_forex_order_id || 'NIUMF123';
-        setCreatedTransactionId(partnerOrder); // Using partner_order_id as transaction ID
-        setNiumForexOrderId(niumOrder);
-        setPartnerOrderId(partnerOrder);
-        setShowUploadSection(true);
-        setIsDialogOpen(true);
+    //     // Extract response data based on your API specification
+    //     const partnerOrder = response.data?.partner_order_id || formData?.applicantDetails?.partnerOrderId || 'PO123';
+    //     const niumOrder = response.data?.nium_forex_order_id || 'NIUMF123';
+    //     setCreatedTransactionId(partnerOrder); // Using partner_order_id as transaction ID
+    //     setNiumForexOrderId(niumOrder);
+    //     setPartnerOrderId(partnerOrder);
+    //     setShowUploadSection(true);
+    //     setIsDialogOpen(true);
 
-        // Reset form after successful submission
-        reset(transactionFormDefaults);
-      }
-    } catch (error) {
-      console.error('Form submission error:', error);
-      // Handle error (show toast, etc.)
-    }
+    //     // Reset form after successful submission
+    //     reset(transactionFormDefaults);
+    //   }
+    // } catch (error) {
+    //   console.error('Form submission error:', error);
+    //   // Handle error (show toast, etc.)
+    // }
   };
   const handleFormSubmit = async () => {
     try {
@@ -284,7 +295,7 @@ const TransactionForm = ({ mode }: TransactionFormProps) => {
       }
     }
   };
-
+  console.log('seletedRowTransactionData:', handlePurposeTypeId());
   return (
     <div>
       <h1 className={cn('text-xl font-bold capitalize pl-2', pageTitle !== 'update' ? 'mb-6' : 'mb-0')}>
@@ -390,17 +401,30 @@ const TransactionForm = ({ mode }: TransactionFormProps) => {
             </div>
           )}
         </div>
-        {shouldShowSection ? (
+        {/* {shouldShowSection ? (
           <FormFieldRow className="w-full">
             <UploadDocuments
               partnerOrderId={partnerOrderId}
+              purposeTypeId={seletedRowTransactionData?.purpose_type_id}
               onESignGenerated={() => {
                 handleRegenerateEsignLink(partnerOrderId);
               }}
               isResubmission={isUpdatePage && !orderStatus}
             />
           </FormFieldRow>
-        ) : null}
+        ) : null} */}
+       {handlePurposeTypeId() && (
+          <FormFieldRow className="w-full">
+            <UploadDocuments
+              partnerOrderId={partnerOrderId}
+              purposeTypeId={handlePurposeTypeId()}
+              onESignGenerated={() => {
+                handleRegenerateEsignLink(partnerOrderId);
+              }}
+              isResubmission={isUpdatePage && !orderStatus}
+            />
+          </FormFieldRow>
+       )}
       </FormProvider>
       <TransactionCreatedDialog
         isDialogOpen={isDialogOpen}
