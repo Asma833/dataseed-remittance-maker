@@ -57,7 +57,17 @@ export const ENDPOINT_MATCHING_RULES: EndpointRulesConfig = {
     endpoint: API.CHECKER.UPDATE_INCIDENT.REGENERATE_VKYC_LINK,
     matchType: 'standard' as const,
     description: 'Generate vkyc link endpoint',
-  }
+  },
+  'trans-purpose-document': {
+    endpoint: API.TRANSACTION_PURPOSE_MAP.CREATE,
+    matchType: 'standard' as const,
+    description: 'Transaction purpose document endpoint',
+  },
+  // 'fxorders': {
+  //   endpoint: '/fxorders/generate-order',
+  //   matchType: 'exact-only' as const,
+  //   description: 'Generate FX order endpoint',
+  // }
 } as const;
 
 /**

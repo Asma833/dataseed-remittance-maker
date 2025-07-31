@@ -1,4 +1,4 @@
-import { useState, useEffect, useMemo } from 'react';
+import { useState, useEffect, useMemo, useRef } from 'react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
@@ -12,7 +12,7 @@ import { FormContentWrapper } from '@/components/form/wrapper/FormContentWrapper
 import { transactionFormSchema, transactionFormSubmissionSchema, TransactionFormData } from './transaction-form.schema';
 import { getFormControllerMeta } from './transaction-form.config';
 import { transactionFormDefaults } from './transaction-form.defaults';
-import { TransactionFormProps } from './transaction-form.types';
+import { DocumentsByMappedId, TransactionFormProps, TransactionPurposeMap } from './transaction-form.types';
 import { Button } from '@/components/ui/button';
 import { UploadDocuments } from '@/components/common/UploadDocuments';
 import { useCreateTransaction } from '../../hooks/useCreateTransaction';
@@ -28,6 +28,10 @@ import { useDynamicOptions } from '@/features/checker/hooks/useDynamicOptions';
 import { API } from '@/core/constant/apis';
 import { useSendVkycLink } from '@/features/checker/hooks/useSendVkycLink';
 import { TransactionMode } from '@/types/enums';
+import { useCreateTransactionPurposeMap } from '../../hooks/useTransactionPurposeMap';
+import { useGetData } from '@/hooks/useGetData';
+import { queryKeys } from '@/core/constant/queryKeys';
+import useGetDocByTransPurpose from '../../hooks/useGetDocByTransPurpose';
 
 const fieldWrapperBaseStyle = 'mb-5';
 
@@ -41,15 +45,47 @@ const TransactionForm = ({ mode }: TransactionFormProps) => {
   const [niumForexOrderId, setNiumForexOrderId] = useState<string>('');
   const [partnerOrderId, setPartnerOrderId] = useState<string>(partnerOrderIdParam);
   const [showUploadSection, setShowUploadSection] = useState(false);
+  const [selectedMapDocId, setSelectedMapDocId] = useState<string>('');
+  console.log('selectedMapDocId:', selectedMapDocId);
+  const [filteredPurposesBySelectedTnxType, setFilteredPurposesBySelectedTnxType] = useState<TransactionPurposeMap[]>(
+    []
+  );
+  console.log('filteredPurposesBySelectedTnxType:', filteredPurposesBySelectedTnxType);
   const [purposeTypeId, setPurposeTypeId] = useState<string>('');
+  const [currentTransactionTypeId, setCurrentTransactionTypeId] = useState<string>('');
+  const [currentPurposeTypeId, setCurrentPurposeTypeId] = useState<string>('');
+  const lastProcessedCombination = useRef<string>('');
+  const debounceTimeout = useRef<NodeJS.Timeout | null>(null);
+  const isInitialLoad = useRef<boolean>(true);
   const { mutate: sendEsignLink, isSendEsignLinkLoading } = useSendEsignLink();
-  const { options: purposeTypeOptions } = useDynamicOptions(API.PURPOSE.GET_PURPOSES);
-  const { options: transactionTypeOptions } = useDynamicOptions(API.TRANSACTION.GET_TRANSACTIONS);
+  const { options: purposeTypeOptions } = useDynamicOptions(API.TRANSACTION.GET_MAPPED_PURPOSES);
+
+  // console.log('transactionPurposeMapData:', transactionPurposeMapData)
+  // console.log('purposeTypeOptions:', purposeTypeOptions)
+  const { options: transactionTypeOptions } = useDynamicOptions(API.TRANSACTION.GET_TRANSACTIONS_TYPES);
+  // console.log('transactionTypeOptions:', transactionTypeOptions);
   const { getUserHashedKey } = useCurrentUser();
   const createTransactionMutation = useCreateTransaction();
   const updateOrderMutation = useUpdateOrder();
   const { mutate: sendVkycLink, isSendVkycLinkLoading } = useSendVkycLink();
+  const createTransactionPurposeMapMutation = useCreateTransactionPurposeMap();
+  // Initially disabled
   const { data: allTransactionsData = [], loading: isLoading, error, fetchData: refreshData } = useGetAllOrders();
+  const { data: transactionPurposeMapData } = useGetData<TransactionPurposeMap[]>({
+    endpoint: API.TRANSACTION.GET_MAPPED_PURPOSES,
+    queryKey: queryKeys.transaction.transactionPurposeMap,
+    dataPath: 'data',
+  });
+  const {
+    docsByTransPurpose,
+    isLoading: isDocsLoading,
+    refetch: refetchDocs,
+    error: isDocsError,
+  } = useGetDocByTransPurpose({
+    mappedDocPurposeId: selectedMapDocId,
+  });
+
+  console.log('docsByTransPurpose:', docsByTransPurpose);
 
   const typedAllTransactionsData = useMemo(() => {
     if (!allTransactionsData) return [];
@@ -88,11 +124,26 @@ const TransactionForm = ({ mode }: TransactionFormProps) => {
     label: type.value,
     value: type.value,
   }));
-  const formatedPurposeTypes = purposeTypeOptions.map((type) => ({
-    typeId: type.typeId,
-    label: type.value,
-    value: type.value,
+  const formatedPurposeTypes = filteredPurposesBySelectedTnxType.map((type) => ({
+    mappedDocId: type.id || '',
+    typeId: type.purpose.id,
+    purposeHashKey: type.purpose?.hashed_key || '',
+    label: type.purpose.purpose_name,
+    purposeCode: type.purpose?.purpose_code || '',
+    value: type.purpose.purpose_name,
   }));
+  
+  // Create purpose types compatible with transform function
+  const transformCompatiblePurposeTypes = filteredPurposesBySelectedTnxType.map((type) => ({
+    ...type,
+    typeId: type.purpose.hashed_key,
+    label: type.purpose.purpose_name,
+    value: type.purpose.purpose_name,
+  }));
+  
+  console.log('formatedPurposeTypes:', formatedPurposeTypes);
+  console.log('transformCompatiblePurposeTypes:', transformCompatiblePurposeTypes);
+
   const handlePurposeTypeId = () => {
     // if (purposeTypeOptions.length >= 0) {
     //   const purposeType = purposeTypeOptions.find((type) => type.value === purposeTypeId);
@@ -101,6 +152,18 @@ const TransactionForm = ({ mode }: TransactionFormProps) => {
     // return '';
     return 'f2a2fc1a-c31a-47f8-b8f1-9b35f3083730';
   };
+
+  // Helper function to get typeId from transaction type value
+  // const getTransactionTypeId = (transactionTypeValue: string) => {
+  //   const selectedType = formatedTransactionTypes.find((type) => type.value === transactionTypeValue);
+  //   return selectedType?.typeId || '';
+  // };
+
+  // // Helper function to get typeId from purpose type value
+  // const getPurposeTypeId = (purposeTypeValue: string) => {
+  //   const selectedType = formatedPurposeTypes.find((type) => type.value === purposeTypeValue);
+  //   return selectedType?.typeId || '';
+  // };
   // Generate dynamic form config
   const formControllerMeta = getFormControllerMeta({
     transactionTypes: formatedTransactionTypes,
@@ -125,8 +188,52 @@ const TransactionForm = ({ mode }: TransactionFormProps) => {
   const isViewPage = mode === TransactionMode.VIEW;
   const isEditPage = mode === TransactionMode.EDIT;
 
-  const shouldShowSection =
-    (showUploadSection && partnerOrderId) || (isUpdatePage && !orderStatus) || (isViewPage && !orderStatus);
+  // Watch for changes in transaction type and purpose type
+  const { watch } = methods;
+  const watchedTransactionType = watch('applicantDetails.transactionType');
+  // Get the typeId from watchedTransactionType
+  const selectedTransactionType = formatedTransactionTypes.find((type) => type.value === watchedTransactionType);
+
+  const watchedTransactionTypeId = selectedTransactionType?.typeId || '';
+  const watchedPurposeType = watch('applicantDetails.purposeType');
+  const selectedPurposeType = formatedPurposeTypes.find((type) => type.value === watchedPurposeType);
+  const watchedPurposeTypeDocId = selectedPurposeType?.mappedDocId || '';
+  console.log('watchedPurposeTypeDocId:', watchedPurposeTypeDocId);
+
+  // Watch for changes in paidBy field to control OTHER document behavior
+  const watchedPaidBy = watch('applicantDetails.paidBy');
+
+  // Filter and modify documents based on paidBy selection
+  const enhancedDocsByTransPurpose = useMemo(() => {
+    const baseDocs = docsByTransPurpose || [];
+    
+    if (watchedPaidBy === 'self') {
+      // Filter out OTHER document when "Self" is selected
+      return baseDocs.filter(doc => doc.code !== 'OTHER');
+    } else if (watchedPaidBy && watchedPaidBy !== 'self') {
+      // Make OTHER document mandatory when someone other than "Self" is selected
+      return baseDocs.map(doc => {
+        if (doc.code === 'OTHER') {
+          return {
+            ...doc,
+            is_mandatory: true
+          };
+        }
+        return doc;
+      });
+    }
+    
+    // Default case: return all documents as they are
+    return baseDocs;
+  }, [docsByTransPurpose, watchedPaidBy]);
+
+  console.log('watchedPurposeType:', watchedPurposeType);
+  console.log('watchedTransactionType:', watchedTransactionType);
+  console.log('watchedPaidBy:', watchedPaidBy);
+  console.log('enhancedDocsByTransPurpose:', enhancedDocsByTransPurpose);
+
+  // const shouldShowSection =
+  //   (showUploadSection && partnerOrderId) || (isUpdatePage && !orderStatus) || (isViewPage && !orderStatus);
   // Initialize form values when data is loaded for edit/view mode
   useEffect(() => {
     if ((isEditPage || isViewPage) && seletedRowTransactionData && !isLoading) {
@@ -153,6 +260,83 @@ const TransactionForm = ({ mode }: TransactionFormProps) => {
     }
   }, [seletedRowTransactionData, isLoading, isEditPage, isViewPage, setValue]);
 
+  useEffect(() => {
+    if (transactionPurposeMapData && watchedTransactionTypeId) {
+      setFilteredPurposesBySelectedTnxType(() => [
+        ...transactionPurposeMapData.filter((purpose: TransactionPurposeMap) => {
+          // console.log('Filtering purpose:', purpose);
+          return purpose.transactionType.hashed_key === watchedTransactionTypeId;
+        }),
+      ]);
+    } else {
+      setFilteredPurposesBySelectedTnxType([]);
+    }
+  }, [watchedTransactionTypeId, transactionPurposeMapData]);
+
+  useEffect(() => {
+    if (watchedPurposeType && watchedPurposeTypeDocId) {
+      setSelectedMapDocId(watchedPurposeTypeDocId);
+      if (selectedMapDocId && refetchDocs) {
+        refetchDocs();
+      }
+    }
+  }, [watchedPurposeType, watchedPurposeTypeDocId]);
+
+  // Effect to handle transaction type and purpose type changes
+  useEffect(() => {
+    const selectedMappedDocId = '';
+    // Clear any existing timeout
+    if (debounceTimeout.current) {
+      clearTimeout(debounceTimeout.current);
+    }
+
+    if (watchedTransactionType && watchedPurposeType && !isViewPage && !isEditPage) {
+      // Debounce the API call to prevent rapid successive calls
+      debounceTimeout.current = setTimeout(() => {}, 500); // 500ms debounce
+    }
+
+    // Cleanup function
+    return () => {
+      if (debounceTimeout.current) {
+        clearTimeout(debounceTimeout.current);
+      }
+    };
+  }, [
+    watchedTransactionType,
+    watchedPurposeType,
+    formatedTransactionTypes,
+    formatedPurposeTypes,
+    isViewPage,
+    isEditPage,
+  ]);
+
+  // Reset purpose field when transaction type changes
+  useEffect(() => {
+    // Skip reset on initial load or if in edit/view mode
+    if (isInitialLoad.current || isEditPage || isViewPage) {
+      isInitialLoad.current = false;
+      return;
+    }
+
+    // Reset purpose field when transaction type changes
+    if (watchedTransactionType) {
+      setValue('applicantDetails.purposeType', '');
+      // Also reset the selected mapped doc ID when purpose is reset
+      setSelectedMapDocId('');
+    }
+  }, [watchedTransactionType, setValue, isEditPage, isViewPage]);
+
+  // Reset processed combination when form mode changes or component unmounts
+  useEffect(() => {
+    return () => {
+      lastProcessedCombination.current = '';
+      isInitialLoad.current = true; // Reset initial load flag
+      if (debounceTimeout.current) {
+        clearTimeout(debounceTimeout.current);
+      }
+    };
+  }, [isViewPage, isEditPage]);
+
   const handleRegenerateEsignLink = (pOrderId: string): void => {
     sendEsignLink(
       { partner_order_id: pOrderId || '' },
@@ -169,99 +353,99 @@ const TransactionForm = ({ mode }: TransactionFormProps) => {
   };
   const onSubmit = async (formData: TransactionFormData) => {
     setPurposeTypeId('f2a2fc1a-c31a-47f8-b8f1-9b35f3083730');
-    // try {
-    //   if (isEditPage) {
-    //     // Handle update operation
-    //     const updateRequestData = transformFormDataToUpdateRequest(
-    //       formData,
-    //       transactionTypeOptions,
-    //       purposeTypeOptions,
-    //       getUserHashedKey() || 'unknown-user'
-    //     );
+    try {
+      if (isEditPage) {
+        // Handle update operation
+        const updateRequestData = transformFormDataToUpdateRequest(
+          formData,
+          transactionTypeOptions,
+          transformCompatiblePurposeTypes,
+          getUserHashedKey() || 'unknown-user'
+        );
 
-    //     await updateOrderMutation.mutateAsync({
-    //       partnerOrderId: formData?.applicantDetails.partnerOrderId || '',
-    //       data: updateRequestData,
-    //     });
+        await updateOrderMutation.mutateAsync({
+          partnerOrderId: formData?.applicantDetails.partnerOrderId || '',
+          data: updateRequestData,
+        });
 
-    //     // Show success message (handled by the mutation's onSuccess)
-    //     // Optionally refresh data or navigate
-    //     refreshData();
-    //   } else {
-    //     // Handle create operation
-    //     const apiRequestData = transformFormDataToApiRequest(formData, transactionTypeOptions, purposeTypeOptions);
-    //     const response = await createTransactionMutation.mutateAsync(apiRequestData);
-    //     if (formData?.applicantDetails?.isVKycRequired && response?.status === 201) {
-    //       sendVkycLink(
-    //         { partner_order_id: response.data?.partner_order_id || formData?.applicantDetails?.partnerOrderId },
-    //         {
-    //           onError: () => {
-    //             toast.error('Failed to generated VKYC link');
-    //           },
-    //         }
-    //       );
-    //     }
+        // Show success message (handled by the mutation's onSuccess)
+        // Optionally refresh data or navigate
+        refreshData();
+      } else {
+        // Handle create operation
+        const apiRequestData = transformFormDataToApiRequest(formData, transactionTypeOptions, transformCompatiblePurposeTypes);
+        const response = await createTransactionMutation.mutateAsync(apiRequestData);
+        if (formData?.applicantDetails?.isVKycRequired && response?.status === 201) {
+          sendVkycLink(
+            { partner_order_id: response.data?.partner_order_id || formData?.applicantDetails?.partnerOrderId },
+            {
+              onError: () => {
+                toast.error('Failed to generated VKYC link');
+              },
+            }
+          );
+        }
 
-    //     // Extract response data based on your API specification
-    //     const partnerOrder = response.data?.partner_order_id || formData?.applicantDetails?.partnerOrderId || 'PO123';
-    //     const niumOrder = response.data?.nium_forex_order_id || 'NIUMF123';
-    //     setCreatedTransactionId(partnerOrder); // Using partner_order_id as transaction ID
-    //     setNiumForexOrderId(niumOrder);
-    //     setPartnerOrderId(partnerOrder);
-    //     setShowUploadSection(true);
-    //     setIsDialogOpen(true);
+        // Extract response data based on your API specification
+        const partnerOrder = response.data?.partner_order_id || formData?.applicantDetails?.partnerOrderId || '';
+        const niumOrder = response.data?.nium_forex_order_id || '';
+        setCreatedTransactionId(partnerOrder); // Using partner_order_id as transaction ID
+        setNiumForexOrderId(niumOrder);
+        setPartnerOrderId(partnerOrder);
+        setShowUploadSection(true);
+        setIsDialogOpen(true);
 
-    //     // Reset form after successful submission
-    //     reset(transactionFormDefaults);
-    //   }
-    // } catch (error) {
-    //   console.error('Form submission error:', error);
-    //   // Handle error (show toast, etc.)
-    // }
+        // Reset form after successful submission
+        reset(transactionFormDefaults);
+      }
+    } catch (error) {
+      console.error('Form submission error:', error);
+      // Handle error (show toast, etc.)
+    }
   };
   const handleFormSubmit = async () => {
-    // try {
-    //   // Get current form values
-    //   const currentValues = getValues();
+    try {
+      // Get current form values
+      const currentValues = getValues();
 
-    //   // Validate using the strict submission schema
-    //   const validationResult = transactionFormSubmissionSchema.safeParse(currentValues);
+      // Validate using the strict submission schema
+      const validationResult = transactionFormSubmissionSchema.safeParse(currentValues);
 
-    //   if (!validationResult.success) {
-    //     // Extract and display validation errors with user-friendly field names
-    //     const fieldNameMap: Record<string, string> = {
-    //       'applicantDetails.applicantName': 'Applicant Name',
-    //       'applicantDetails.applicantPanNumber': 'Applicant PAN Number',
-    //       'applicantDetails.email': 'Email',
-    //       'applicantDetails.mobileNumber': 'Mobile Number',
-    //       'applicantDetails.partnerOrderId': 'Partner Order ID',
-    //       'applicantDetails.isVKycRequired': 'V-KYC Required',
-    //       'applicantDetails.transactionType': 'Transaction Type',
-    //       'applicantDetails.purposeType': 'Purpose Type',
-    //       'uploadDocuments.pan': 'PAN Document',
-    //     };
+      if (!validationResult.success) {
+        // Extract and display validation errors with user-friendly field names
+        const fieldNameMap: Record<string, string> = {
+          'applicantDetails.applicantName': 'Applicant Name',
+          'applicantDetails.applicantPanNumber': 'Applicant PAN Number',
+          'applicantDetails.email': 'Email',
+          'applicantDetails.mobileNumber': 'Mobile Number',
+          'applicantDetails.partnerOrderId': 'Partner Order ID',
+          'applicantDetails.isVKycRequired': 'V-KYC Required',
+          'applicantDetails.transactionType': 'Transaction Type',
+          'applicantDetails.purposeType': 'Purpose Type',
+          'uploadDocuments.pan': 'PAN Document',
+        };
 
-    //     const errorMessages = validationResult.error.errors.map((err) => {
-    //       const fieldPath = err.path.join('.');
-    //       const friendlyFieldName = fieldNameMap[fieldPath] || fieldPath;
-    //       return `${friendlyFieldName}: ${err.message}`;
-    //     });
+        const errorMessages = validationResult.error.errors.map((err) => {
+          const fieldPath = err.path.join('.');
+          const friendlyFieldName = fieldNameMap[fieldPath] || fieldPath;
+          return `${friendlyFieldName}: ${err.message}`;
+        });
 
-    //     // Show the first error in a toast
-    //     toast.error(errorMessages[0] || 'Please fill in all required fields');
+        // Show the first error in a toast
+        toast.error(errorMessages[0] || 'Please fill in all required fields');
 
-    //     // Log all errors for debugging
-    //     console.error('Validation errors:', errorMessages);
+        // Log all errors for debugging
+        console.error('Validation errors:', errorMessages);
 
-    //     return; // Don't proceed with submission
-    //   }
+        return; // Don't proceed with submission
+      }
 
-    //   // If validation passes, trigger form submission
-    handleSubmit(onSubmit)();
-    // } catch (error) {
-    //   console.error('Form validation error:', error);
-    //   toast.error('Please check the form and try again');
-    // }
+      //   // If validation passes, trigger form submission
+      handleSubmit(onSubmit)();
+    } catch (error) {
+      console.error('Form validation error:', error);
+      toast.error('Please check the form and try again');
+    }
   };
 
   const handleView = (docUrl: string, docType: 'mergeDoc' | 'vkycDoc' | 'vkycVideo') => {
@@ -306,36 +490,38 @@ const TransactionForm = ({ mode }: TransactionFormProps) => {
             <Spacer>
               <FormFieldRow className={cn(fieldWrapperBaseStyle, 'mb-4 px-0')} rowCols={4}>
                 {Object.entries(formControllerMeta.fields.applicantDetails).map(([key, field]) => {
-                  // Safely access nested error messages for applicantDetails fields
-                  let errorMessage: string | undefined = undefined;
-                  if (field.name.startsWith('applicantDetails.')) {
-                    const subKey = field.name.split('.')[1] as keyof typeof errors.applicantDetails;
-                    const applicantDetailError = errors.applicantDetails?.[subKey];
-                    errorMessage =
-                      applicantDetailError &&
-                      typeof applicantDetailError === 'object' &&
-                      'message' in applicantDetailError
-                        ? (applicantDetailError as { message?: string }).message
-                        : undefined;
-                  } else {
-                    errorMessage = (errors as any)?.[field.name]?.message;
-                  }
+                    // Safely access nested error messages for applicantDetails fields
+                    let errorMessage: string | undefined = undefined;
+                    if (field.name.startsWith('applicantDetails.')) {
+                      const subKey = field.name.split('.')[1] as keyof typeof errors.applicantDetails;
+                      const applicantDetailError = errors.applicantDetails?.[subKey];
+                      errorMessage =
+                        applicantDetailError &&
+                        typeof applicantDetailError === 'object' &&
+                        'message' in applicantDetailError
+                          ? (applicantDetailError as { message?: string }).message
+                          : undefined;
+                    } else {
+                      errorMessage = (errors as any)?.[field.name]?.message;
+                    }
 
-                  return (
-                    <FieldWrapper key={key} className={fieldWrapperBaseStyle}>
-                      {getController({
-                        ...field,
-                        control,
-                        errors,
-                        disabled:
-                          isUpdatePage ||
-                          isViewPage ||
-                          (isEditPage && field.name === 'applicantDetails.partnerOrderId') ||
-                          ((isEditPage || isUpdatePage) && field.name === 'applicantDetails.isVKycRequired'),
-                      })}
-                    </FieldWrapper>
-                  );
-                })}
+                    return (
+                      <FieldWrapper key={key} className={fieldWrapperBaseStyle}>
+                        {getController({
+                          ...field,
+                          control,
+                          errors,
+                          disabled:
+                            isUpdatePage ||
+                            isViewPage ||
+                            (isEditPage && field.name === 'applicantDetails.partnerOrderId') ||
+                            ((isEditPage || isUpdatePage) && field.name === 'applicantDetails.isVKycRequired') ||
+                            // Disable purpose field when no transaction type is selected
+                            (field.name === 'applicantDetails.purposeType' && !watchedTransactionType),
+                        })}
+                      </FieldWrapper>
+                    );
+                  })}
               </FormFieldRow>
             </Spacer>
           </FormContentWrapper>
@@ -414,9 +600,20 @@ const TransactionForm = ({ mode }: TransactionFormProps) => {
         ) : null} */}
         {/* {handlePurposeTypeId() && ( */}
         <FormFieldRow className="w-full">
+          {(createTransactionPurposeMapMutation.isPending || isDocsLoading) && (
+            <div className="flex items-center gap-2 mb-4 p-3 bg-blue-50 border border-blue-200 rounded-md">
+              <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-blue-600"></div>
+              <span className="text-sm text-blue-700">
+                {createTransactionPurposeMapMutation.isPending
+                  ? 'Creating transaction purpose mapping...'
+                  : 'Loading document requirements...'}
+              </span>
+            </div>
+          )}
           <UploadDocuments
             partnerOrderId={partnerOrderId}
             purposeTypeId={handlePurposeTypeId()}
+            mappedDocuments={enhancedDocsByTransPurpose}
             onESignGenerated={() => {
               handleRegenerateEsignLink(partnerOrderId);
             }}

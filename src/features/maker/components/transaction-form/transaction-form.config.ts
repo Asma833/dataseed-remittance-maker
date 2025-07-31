@@ -3,6 +3,7 @@ import { FormControllerMetaOptions } from './transaction-form.types';
 
 export const getFormControllerMeta = (options: FormControllerMetaOptions = {}) => {
   const { transactionTypes = [], purposeTypes = [] } = options;
+  console.log('purposeTypes:', purposeTypes);
 
   // Convert arrays to options object format
   const transactionOptions = transactionTypes.reduce(
@@ -13,32 +14,42 @@ export const getFormControllerMeta = (options: FormControllerMetaOptions = {}) =
     {} as Record<string, { label: string; selected?: boolean }>
   );
 
-  const purposeOptions = purposeTypes.reduce(
-    (acc, type) => {
-      // Convert the label to title case
-      acc[type?.value] = { label: type?.label };
-      return acc;
-    },
-    {} as Record<string, { label: string; selected?: boolean }>
+  // const purposeOptions = purposeTypes.reduce(
+  //   (acc, type) => {
+  //     // Convert the label to title case
+  //     acc[type?.value] = { label: type?.label };
+  //     return acc;
+  //   },
+  //   {} as Record<string, { label: string; selected?: boolean }>
+  // );
+
+  // const formattedPurposeTypes = purposeTypes.map((type) => ({
+  //   id: type.id || '',
+  //   typeId: type.purpose.id,
+  //   label: type.purpose.purpose_name,
+  //   value: type.purpose.purpose_code,
+  // }));
+
+  const filteredOutPurposesWithSameHashKey = purposeTypes.filter(
+    (type, index, self) => index === self.findIndex((t) => t.purposeHashKey === type.purposeHashKey)
   );
 
-  
   const paidByOptions: Record<string, { label: string; selected?: boolean }> = {
     self: { label: 'Self' },
     father: { label: 'Father' },
     mother: { label: 'Mother' },
     brother: { label: 'Brother' },
-    sister: { label: 'Sister' }
+    sister: { label: 'Sister' },
   };
 
   // Set first option as selected if available
   if (transactionTypes.length > 0) {
     transactionOptions[transactionTypes[0].value].selected = true;
   }
-  if (purposeTypes.length > 0) {
-    purposeOptions[purposeTypes[0].value].selected = true;
-  }
-  
+  // if (purposeTypes.length > 0) {
+  //   purposeTypes[purposeTypes[0].value].selected = true;
+  // }
+
   return {
     sectionTitle: 'Create Transaction',
     description: 'Fill in the details to create a new transaction',
@@ -80,7 +91,7 @@ export const getFormControllerMeta = (options: FormControllerMetaOptions = {}) =
           type: FieldType.Select,
           required: true,
           placeholder: 'Select Purpose',
-          options: Object.keys(purposeOptions).length > 0 ? purposeOptions : {},
+          options: Object.keys(filteredOutPurposesWithSameHashKey).length > 0 ? filteredOutPurposesWithSameHashKey : {},
         },
         paidBy: {
           name: 'applicantDetails.paidBy',

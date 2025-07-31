@@ -1,21 +1,23 @@
 import React, { useState } from 'react';
 import { Button } from '@/components/ui/button';
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogFooter,
-  DialogHeader,
-  DialogTitle
-} from '@/components/ui/dialog';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Upload, FileText, X, CheckCircle, Loader2 } from 'lucide-react';
+import { Upload, FileText, X, CheckCircle, Loader2, AlertCircle } from 'lucide-react';
 import useGetDocumentTypes from '@/hooks/useGetDocumentTypes';
 import { useUploadDocument } from '@/hooks/useUploadDocuments';
+import { useMergePdf } from '@/hooks/useMergePdf';
 import { convertFileToBase64, formatFileSize, isValidFileType } from '@/utils/fileUtils';
 import { toast } from 'sonner';
 import FormFieldRow from '../form/wrapper/FormFieldRow';
 import FromSectionTitle from './FromSectionTitle';
+
+interface MappedDocument {
+  id: string;
+  document_id: string;
+  name: string;
+  display_name: string | null;
+  code: string;
+  is_back_required: boolean;
+  is_mandatory: boolean;
+}
 
 interface UploadedDocument {
   file: File;
@@ -32,6 +34,7 @@ interface UploadDocumentsProps {
   onESignGenerated?: (success: boolean) => void;
   isResubmission?: boolean;
   purposeTypeId: string;
+  mappedDocuments?: MappedDocument[];
 }
 
 const ALLOWED_FILE_TYPES = ['pdf', 'jpg', 'jpeg', 'png', 'gif'];
@@ -44,18 +47,26 @@ export const UploadDocuments: React.FC<UploadDocumentsProps> = ({
   onUploadComplete,
   onESignGenerated,
   isResubmission = false,
-  purposeTypeId, 
+  purposeTypeId,
+  mappedDocuments = [],
 }) => {
   const { documentTypes, loading } = useGetDocumentTypes(purposeTypeId);
   const uploadDocumentMutation = useUploadDocument();
+  const mergePdfMutation = useMergePdf();
   const [uploadedDocuments, setUploadedDocuments] = useState<UploadedDocument[]>([]);
-  const [showUploadDialog, setShowUploadDialog] = useState(false);
-  const [currentDocument, setCurrentDocument] = useState<UploadedDocument | null>(null);
-  const [documentName, setDocumentName] = useState<string | null>(null);
-  const [currentIndex, setCurrentIndex] = useState<number | null>(null);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+
+  // Disable upload if Partner Order ID is not available
+  const isUploadDisabled = !partnerOrderId || partnerOrderId.trim() === '';
 
   const handleFileUpload = async (file: File, documentTypeId: string, documentTypeName: string) => {
     try {
+      // Check if upload is disabled
+      if (isUploadDisabled) {
+        toast.error('Partner Order ID is required to upload documents');
+        return;
+      }
+
       // Validate file type
       if (!isValidFileType(file, ALLOWED_FILE_TYPES)) {
         toast.error(`Invalid file type. Allowed types: ${ALLOWED_FILE_TYPES.join(', ')}`);
@@ -80,24 +91,29 @@ export const UploadDocuments: React.FC<UploadDocumentsProps> = ({
         documentTypeName,
         base64,
         isUploaded: false,
-        isUploading: false,
+        isUploading: true, // Start uploading immediately
       };
 
       // Check if document type already exists
       const existingIndex = uploadedDocuments.findIndex((doc) => doc.documentTypeId === documentTypeId);
-      setCurrentIndex(existingIndex);
+      
       if (existingIndex >= 0) {
         // Replace existing document
         const updatedDocuments = [...uploadedDocuments];
-        updatedDocuments[existingIndex] = { ...newDocument, isUploaded: false };
+        updatedDocuments[existingIndex] = newDocument;
         setUploadedDocuments(updatedDocuments);
-        toast.success(`${documentTypeName} document updated successfully`);
-        await handleSubmitDocument(updatedDocuments[existingIndex], false);
+        toast.success(`${documentTypeName} document selected, uploading...`);
+        
+        // Upload immediately
+        await uploadDocumentImmediately(newDocument, existingIndex);
       } else {
         // Add new document
-        setUploadedDocuments([...uploadedDocuments, newDocument]);
-        toast.success(`${documentTypeName} document selected successfully`);
-        await handleSubmitDocument(newDocument, false);
+        const newDocuments = [...uploadedDocuments, newDocument];
+        setUploadedDocuments(newDocuments);
+        toast.success(`${documentTypeName} document selected, uploading...`);
+        
+        // Upload immediately
+        await uploadDocumentImmediately(newDocument, newDocuments.length - 1);
       }
       
     } catch (error) {
@@ -106,73 +122,193 @@ export const UploadDocuments: React.FC<UploadDocumentsProps> = ({
     }
   };
 
-  const handleRemoveDocument = (documentTypeId: string) => {
-    setUploadedDocuments(uploadedDocuments.filter((doc) => doc.documentTypeId !== documentTypeId));
-    toast.success('Document removed successfully');
-  };
-
-  const handleSubmitDocument = (document: UploadedDocument, merge_doc: boolean) => {
-    setCurrentDocument(document);
-    handleUploadWithMerge(merge_doc);
-    // setShowUploadDialog(true);
-  };
-
-  const handleUploadWithMerge = async (mergeDoc: boolean) => {
-    if (!currentDocument) return;
-
+  // Function to upload document immediately upon selection
+  const uploadDocumentImmediately = async (document: UploadedDocument, docIndex: number) => {
     try {
-      // Update document state to show loading
-      setUploadedDocuments((docs) =>
-        docs.map((doc) => (doc.documentTypeId === currentDocument.documentTypeId ? { ...doc, isUploading: true } : doc))
-      );
-
       const uploadData = {
         partner_order_id: partnerOrderId,
-        document_type_id: currentDocument.documentTypeId,
-        base64_file: currentDocument.base64,
-        merge_doc: mergeDoc,
+        document_type_id: document.documentTypeId,
+        base64_file: document.base64,
+        merge_doc: false, // Don't merge during individual uploads
       };
 
       await uploadDocumentMutation.mutateAsync(uploadData);
 
       // Update document state to show success
       setUploadedDocuments((docs) =>
-        docs.map((doc) =>
-          doc.documentTypeId === currentDocument.documentTypeId ? { ...doc, isUploaded: true, isUploading: false } : doc
+        docs.map((doc, index) => 
+          index === docIndex 
+            ? { ...doc, isUploaded: true, isUploading: false } 
+            : doc
         )
       );
-      setShowUploadDialog(false);
-      setCurrentDocument(null);
-      toast.success(`${currentDocument.documentTypeName} uploaded successfully`);
-
-      // Call the appropriate callback based on mergeDoc value
-      if (mergeDoc) {
-        onESignGenerated?.(true);
-      } else {
-        onUploadComplete?.(true);
-      }
+      
+      toast.success(`${document.documentTypeName} uploaded successfully`);
+      onUploadComplete?.(true);
     } catch (error) {
       console.error('Error uploading document:', error);
 
       // Update document state to show error
       setUploadedDocuments((docs) =>
-        docs.map((doc) =>
-          doc.documentTypeId === currentDocument.documentTypeId ? { ...doc, isUploading: false } : doc
+        docs.map((doc, index) =>
+          index === docIndex 
+            ? { ...doc, isUploading: false } 
+            : doc
         )
       );
 
-      toast.error(`Failed to upload ${currentDocument.documentTypeName}`);
-      setShowUploadDialog(false);
-      setCurrentDocument(null);
-
-      // Call the appropriate callback based on mergeDoc value for error handling
-      if (mergeDoc) {
-        onESignGenerated?.(false);
-      } else {
-        onUploadComplete?.(false);
-      }
+      toast.error(`Failed to upload ${document.documentTypeName}`);
+      onUploadComplete?.(false);
     }
   };
+
+  const handleRemoveDocument = (documentTypeId: string) => {
+    setUploadedDocuments(uploadedDocuments.filter((doc) => doc.documentTypeId !== documentTypeId));
+    toast.success('Document removed successfully');
+  };
+
+  // Validate if all required documents are uploaded
+  const validateRequiredDocuments = () => {
+    const documentsToRender = mappedDocuments.length > 0 
+      ? mappedDocuments.map(doc => ({
+          id: doc.document_id,
+          name: doc.display_name || doc.name,
+          isRequired: doc.is_mandatory,
+          isBackRequired: doc.is_back_required,
+        }))
+      : documentTypes.map(doc => ({
+          id: doc.id,
+          name: doc.name,
+          isRequired: true, // Assume all documentTypes are required if no mapped docs
+          isBackRequired: false,
+        }));
+
+    const requiredDocs = documentsToRender.filter(doc => doc.isRequired);
+    const uploadedRequiredDocs = requiredDocs.filter(reqDoc => 
+      uploadedDocuments.some(uploadedDoc => 
+        uploadedDoc.documentTypeId === reqDoc.id && uploadedDoc.isUploaded
+      )
+    );
+
+    return {
+      isValid: requiredDocs.length === uploadedRequiredDocs.length,
+      missing: requiredDocs.filter(reqDoc => 
+        !uploadedDocuments.some(uploadedDoc => 
+          uploadedDoc.documentTypeId === reqDoc.id && uploadedDoc.isUploaded
+        )
+      ).map(doc => doc.name),
+      total: requiredDocs.length,
+      uploaded: uploadedRequiredDocs.length
+    };
+  };
+
+  // Handle submit with validation and merge PDF
+  const handleSubmit = async () => {
+    try {
+      if (isUploadDisabled) {
+        toast.error('Partner Order ID is required');
+        return;
+      }
+
+      const validation = validateRequiredDocuments();
+      
+      if (!validation.isValid) {
+        toast.error(`Please upload all required documents. Missing: ${validation.missing.join(', ')}`);
+        return;
+      }
+
+      if (uploadedDocuments.length === 0) {
+        toast.error('Please upload at least one document before submitting');
+        return;
+      }
+
+      // Check if any documents are still uploading
+      const stillUploading = uploadedDocuments.some(doc => doc.isUploading);
+      if (stillUploading) {
+        toast.error('Please wait for all documents to finish uploading');
+        return;
+      }
+
+      setIsSubmitting(true);
+
+      // Call merge PDF API
+      const mergeResponse = await mergePdfMutation.mutateAsync({
+        partner_order_id: partnerOrderId
+      });
+
+      toast.success('Documents merged successfully');
+      onESignGenerated?.(true);
+    } catch (error) {
+      console.error('Error during submission:', error);
+      toast.error('Failed to process documents');
+      onESignGenerated?.(false);
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
+
+  // const handleSubmitDocument = (document: UploadedDocument, merge_doc: boolean) => {
+  //   setCurrentDocument(document);
+  //   handleUploadWithMerge(merge_doc);
+  //   // setShowUploadDialog(true);
+  // };
+
+  // const handleUploadWithMerge = async (mergeDoc: boolean) => {
+  //   if (!currentDocument) return;
+
+  //   try {
+  //     // Update document state to show loading
+  //     setUploadedDocuments((docs) =>
+  //       docs.map((doc) => (doc.documentTypeId === currentDocument.documentTypeId ? { ...doc, isUploading: true } : doc))
+  //     );
+
+  //     const uploadData = {
+  //       partner_order_id: partnerOrderId,
+  //       document_type_id: currentDocument.documentTypeId,
+  //       base64_file: currentDocument.base64,
+  //       merge_doc: mergeDoc,
+  //     };
+
+  //     await uploadDocumentMutation.mutateAsync(uploadData);
+
+  //     // Update document state to show success
+  //     setUploadedDocuments((docs) =>
+  //       docs.map((doc) =>
+  //         doc.documentTypeId === currentDocument.documentTypeId ? { ...doc, isUploaded: true, isUploading: false } : doc
+  //       )
+  //     );
+  //     setShowUploadDialog(false);
+  //     setCurrentDocument(null);
+  //     toast.success(`${currentDocument.documentTypeName} uploaded successfully`);
+
+  //     // Call the appropriate callback based on mergeDoc value
+  //     if (mergeDoc) {
+  //       onESignGenerated?.(true);
+  //     } else {
+  //       onUploadComplete?.(true);
+  //     }
+  //   } catch (error) {
+  //     console.error('Error uploading document:', error);
+
+  //     // Update document state to show error
+  //     setUploadedDocuments((docs) =>
+  //       docs.map((doc) =>
+  //         doc.documentTypeId === currentDocument.documentTypeId ? { ...doc, isUploading: false } : doc
+  //       )
+  //     );
+
+  //     toast.error(`Failed to upload ${currentDocument.documentTypeName}`);
+  //     setShowUploadDialog(false);
+  //     setCurrentDocument(null);
+
+  //     // Call the appropriate callback based on mergeDoc value for error handling
+  //     if (mergeDoc) {
+  //       onESignGenerated?.(false);
+  //     } else {
+  //       onUploadComplete?.(false);
+  //     }
+  //   }
+  // };
 
   if (loading) {
     return (
@@ -184,245 +320,174 @@ export const UploadDocuments: React.FC<UploadDocumentsProps> = ({
       </div>
     );
   }
-  console.log(documentTypes,"documentTypes")
+
+  // Show loading if we're waiting for mapped documents and don't have documentTypes either
+  if (mappedDocuments.length === 0 && documentTypes.length === 0) {
+    return (
+      <div className="flex items-center justify-center p-8">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600 mx-auto"></div>
+          <p className="mt-2 text-sm text-gray-600">Loading documents...</p>
+        </div>
+      </div>
+    );
+  }
+  
+  // Use mapped documents if available, otherwise fall back to documentTypes
+  const documentsToRender = mappedDocuments.length > 0 
+    ? mappedDocuments.map(doc => ({
+        id: doc.document_id,
+        name: doc.display_name || doc.name,
+        isRequired: doc.is_mandatory,
+        isBackRequired: doc.is_back_required,
+      }))
+    : documentTypes.map(doc => ({
+        id: doc.id,
+        name: doc.name,
+        isRequired: true,
+        isBackRequired: false,
+      }));
+
+  const validation = validateRequiredDocuments();
+
   return (
     <div className="space-y-6 w-full">
       <div className="w-full flex items-start flex-col">
         <FormFieldRow className="w-full">
           <FromSectionTitle>Upload Document</FromSectionTitle>
         </FormFieldRow>
-        <div className="text-md text-gray-600">
-          Partner Order ID: <span className="font-bold">{partnerOrderId}</span>
+        <div className="text-md text-gray-600 mb-2">
+          Partner Order ID: <span className="font-bold">{partnerOrderId || 'Not Available'}</span>
         </div>
+        
+        {/* Upload Status */}
+        {isUploadDisabled && (
+          <div className="flex items-center gap-2 mb-4 p-3 bg-red-50 border border-red-200 rounded-md w-full">
+            <AlertCircle className="h-4 w-4 text-red-600" />
+            <span className="text-sm text-red-700">
+              Partner Order ID is required to upload documents
+            </span>
+          </div>
+        )}
+        
+        {!isUploadDisabled && validation.total > 0 && (
+          <div className={`flex items-center gap-2 mb-4 p-3 rounded-md w-full ${
+            validation.isValid 
+              ? 'bg-green-50 border border-green-200' 
+              : 'bg-yellow-50 border border-yellow-200'
+          }`}>
+            {validation.isValid ? (
+              <CheckCircle className="h-4 w-4 text-green-600" />
+            ) : (
+              <AlertCircle className="h-4 w-4 text-yellow-600" />
+            )}
+            <span className={`text-sm ${
+              validation.isValid ? 'text-green-700' : 'text-yellow-700'
+            }`}>
+              {validation.isValid 
+                ? `All required documents uploaded (${validation.uploaded}/${validation.total})`
+                : `Required documents: ${validation.uploaded}/${validation.total} uploaded`
+              }
+            </span>
+          </div>
+        )}
       </div>
 
-      <div className="flex flex-wrap gap-4">
-        {documentTypes
-          // .sort((a, b) => {
-          //   if (a.text.includes('All Document')) return -1;
-          //   if (b.text.includes('All Document')) return 1;
-          //   return a.text.localeCompare(b.text);
-          // })
-          // .slice(0, 3)
-          .map((docType) => {
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+        {documentsToRender.map((docType) => {
             const uploadedDoc = uploadedDocuments.find((doc) => doc.documentTypeId === docType.id);
             const isAllDocumentUploaded = uploadedDocuments.some((doc) => doc.documentTypeName === 'All Documents');
             const isOtherDocumentUploaded = uploadedDocuments.some((doc) => doc.documentTypeName !== 'All Documents');
-            const isDisabled =
+            const isDisabled = isUploadDisabled ||
               (docType.name === 'All Documents' && isOtherDocumentUploaded) ||
               (docType.name !== 'All Documents' && isAllDocumentUploaded);
 
             return (
-              <Card key={docType.id} className="relative flex-1 min-w-[250px] max-w-[250px] p-2 shadow-sm">
-                <CardHeader className="pb-6">
-                  <CardTitle className="text-sm font-medium text-center">{docType.name}</CardTitle>
+              <div key={docType.id} className="space-y-2">
+                <label className="block text-sm font-medium text-gray-700">
+                  {docType.name}
+                  {docType.isRequired && <span className="text-red-500 ml-1">*</span>}
+                </label>
+                
+                <div className="relative">
+                  <input
+                    type="file"
+                    accept=".pdf,.jpg,.jpeg,.png,.gif"
+                    disabled={isDisabled}
+                    onChange={(e) => {
+                      const file = e.target.files?.[0];
+                      if (file) {
+                        handleFileUpload(file, docType.id, docType.name);
+                      }
+                    }}
+                    className={`w-full px-3 py-2 border rounded-md text-sm ${
+                      isDisabled
+                        ? 'bg-gray-100 border-gray-300 cursor-not-allowed text-gray-400'
+                        : 'bg-white border-gray-300 cursor-pointer hover:border-blue-400 focus:border-blue-500 focus:ring-1 focus:ring-blue-500'
+                    }`}
+                    id={`file-${docType.id}`}
+                  />
+                  
+                  {/* Upload Status Overlay */}
                   {uploadedDoc && (
-                    <Button
-                      variant="ghost"
-                      size="sm"
-                      className="absolute top-2 right-2 h-6 w-6 p-0"
-                      onClick={() => handleRemoveDocument(docType.id)}
-                    >
-                      <X className="h-4 w-4" />
-                    </Button>
-                  )}
-                </CardHeader>
-                <CardContent className="pt-0">
-                  {uploadedDoc ? (
-                    <div className="space-y-3 flex flex-col justify-center">
-                      
-                      <div className="flex items-center gap-2 text-sm">
-                        {uploadedDoc.isUploaded ? (
-                          <CheckCircle className="h-4 w-4 text-green-600" />
-                        ) : (
-                          <FileText className="h-4 w-4 text-blue-600" />
-                        )}
-                        <span className="truncate">{uploadedDoc.file.name}</span>
-                      </div>
-                      <div className="text-xs text-gray-500">{formatFileSize(uploadedDoc.file.size)}</div>
-
-                      <div className="flex justify-center gap-2 pt-3">
-                        <input
-                          type="file"
-                          accept=".pdf,.jpg,.jpeg,.png,.gif"
-                          disabled={isDisabled}
-                          onChange={(e) => {
-                            const file = e.target.files?.[0];
-                            if (file) {
-                              handleFileUpload(file, docType.id, docType.name);
-                            }
-                          }}
-                          className="hidden"
-                          id={`file-${docType.id}`}
-                        />
-                        <label
-                          htmlFor={`file-${docType.id}`}
-                          onClick={(e) => {
-                            if (isDisabled) {
-                              e.preventDefault();
-                              toast.warning(
-                                docType.name === 'All Documents'
-                                  ? 'Cannot upload All Documents when individual documents are selected.'
-                                  : 'Cannot upload individual documents when All Documents is selected.'
-                              );
-                            }
-                          }}
-                          className={`inline-flex items-center gap-1 px-2 py-1 text-xs rounded-md ${
-                            isDisabled
-                              ? 'bg-gray-100 text-gray-400 cursor-not-allowed border border-gray-200'
-                              : 'bg-gray-50 text-gray-700 cursor-pointer hover:bg-gray-100 border'
-                          }`}
-                        >
-                          <Upload className="h-3 w-3" />
-                          Replace
-                        </label>
-                      </div>
-
-                      {/* {!uploadedDoc.isUploaded && (
-                        <Button
-                          size="sm"
-                          onClick={() => handleSubmitDocument(uploadedDoc)}
-                          disabled={uploadedDoc.isUploading}
-                          className="w-full"
-                        >
-                          {uploadedDoc.isUploading ? (
-                            <>
-                              <Loader2 className="h-4 w-4 mr-2 animate-spin" />
-                              Uploading...
-                            </>
-                          ) : (
-                            'Upload Document'
-                          )}
-                        </Button>
-                      )} */}
-
-                      {uploadedDoc.isUploaded && (
-                        <div className="flex items-center gap-2 text-sm text-green-600">
+                    <div className="mt-2 flex items-center gap-2">
+                      {uploadedDoc.isUploading ? (
+                        <div className="flex items-center gap-2 text-blue-600">
+                          <Loader2 className="h-4 w-4 animate-spin" />
+                          <span className="text-sm">Uploading...</span>
+                        </div>
+                      ) : uploadedDoc.isUploaded ? (
+                        <div className="flex items-center gap-2 text-green-600">
                           <CheckCircle className="h-4 w-4" />
-                          <span>Document uploaded successfully</span>
+                          <span className="text-sm">Uploaded: {uploadedDoc.file.name}</span>
+                          <Button
+                            variant="ghost"
+                            size="sm"
+                            className="h-6 w-6 p-0 ml-auto"
+                            onClick={() => handleRemoveDocument(docType.id)}
+                          >
+                            <X className="h-4 w-4" />
+                          </Button>
+                        </div>
+                      ) : (
+                        <div className="flex items-center gap-2 text-gray-600">
+                          <FileText className="h-4 w-4" />
+                          <span className="text-sm">{uploadedDoc.file.name}</span>
                         </div>
                       )}
                     </div>
-                  ) : (
-                    <div>
-                      <input
-                        type="file"
-                        accept=".pdf,.jpg,.jpeg,.png,.gif"
-                        disabled={isDisabled}
-                        onChange={(e) => {
-                          const file = e.target.files?.[0];
-                          if (file) {
-                            handleFileUpload(file, docType.id, docType.name);
-                          }
-                        }}
-                        className="hidden"
-                        id={`file-${docType.id}`}
-                      />
-                      <label
-                        htmlFor={`file-${docType.id}`}
-                        onClick={(e) => {
-                          if (isDisabled) {
-                            e.preventDefault();
-                            toast.warning(
-                              docType.name === 'All Documents'
-                                ? 'Cannot upload All Documents when individual documents are selected.'
-                                : 'Cannot upload individual documents when All Documents is selected.'
-                            );
-                          }
-                        }}
-                        className={`flex flex-col items-center justify-center p-4 border-2 border-dashed rounded-lg ${
-                          isDisabled
-                            ? 'border-gray-300 bg-gray-100 cursor-not-allowed text-gray-400'
-                            : 'border-gray-300 cursor-pointer hover:border-blue-400 hover:bg-blue-50 text-gray-600'
-                        }`}
-                      >
-                        <Upload className="h-8 w-8 mb-2" />
-                        <span className="text-sm">Click to upload</span>
-                        <span className="text-xs mt-1">
-                          {docType.name === 'All Documents'
-                            ? `PDF, JPG, PNG (max ${formatFileSize(FILE_SIZE.ALL_DOC_MAX)})`
-                            : `PDF, JPG, PNG (max ${formatFileSize(FILE_SIZE.OTHER_DOC_MAX)})`}
-                        </span>
-                      </label>
-                    </div>
                   )}
-                </CardContent>
-              </Card>
-              
-              
+                </div>
+                
+                <div className="text-xs text-gray-500">
+                  {docType.name === 'All Documents'
+                    ? `PDF, JPG, PNG (max ${formatFileSize(FILE_SIZE.ALL_DOC_MAX)})`
+                    : `PDF, JPG, PNG (max ${formatFileSize(FILE_SIZE.OTHER_DOC_MAX)})`
+                  }
+                </div>
+              </div>
             );
-            
           })}
-          <div className="flex items-end justify-center">
-          <Button
-            size="lg"
-            onClick={() => {
-              if (uploadedDocuments.length > 0) {
-                handleSubmitDocument(uploadedDocuments[0],true);
-              } else {
-                toast.warning('Please upload a document before submitting.');
-              }
-            }}
-            className="w-64"
-          >
-            Submit
-          </Button>
-          </div>
-           
       </div>
-   
-                       
-                     
-      <Dialog open={showUploadDialog} onOpenChange={setShowUploadDialog}>
-        <DialogContent>
-          <DialogHeader>
-            <div className="flex items-center justify-between">
-              <div>
-                <DialogTitle>Upload Document</DialogTitle>
-                <DialogDescription>Choose how you want to process this document.</DialogDescription>
-              </div>
-              <Button
-                variant="ghost"
-                size="icon"
-                className="h-10 w-10 p-0"
-                onClick={() => setShowUploadDialog(false)}
-                aria-label="Close"
-              >
-                <X size={50} viewBox="0 0 20 20" className="h-16 w-16 text-primary" />
-              </Button>
-            </div>
-          </DialogHeader>
-          {/* <div className="py-4">
-            <p className="text-sm text-gray-600 mb-4">
-              How would you like to upload "{currentDocument?.documentTypeName}"?
-            </p>
-            {currentDocument && (
-              <div className="flex items-center gap-2 text-sm bg-gray-50 p-3 rounded-md">
-                <FileText className="h-4 w-4 text-gray-400" />
-                <span className="font-medium">{currentDocument.documentTypeName}:</span>
-                <span className="text-gray-600 truncate">{currentDocument.file.name}</span>
-              </div>
-            )}
-          </div> */}
-          <DialogFooter className="sm:flex-row sm:justify-center gap-2">
-           {/* {
-             documentName !== 'All Documents' && (
-               <Button
-                 variant="outline"
-                 onClick={() => handleUploadWithMerge(false)}
-                 disabled={uploadDocumentMutation.isPending}
-               >
-                 {uploadDocumentMutation.isPending ? 'Uploading...' : 'Continue Upload'}
-               </Button>
-             )
-           } */}
-            
-            <Button onClick={() => handleUploadWithMerge(true)} disabled={uploadDocumentMutation.isPending}>
-              {uploadDocumentMutation.isPending ? 'Processing...' : 'Generate E-Sign Link'}
-            </Button>
-          </DialogFooter>
-        </DialogContent>
-      </Dialog>
+
+      {/* Submit Button */}
+      <div className="flex justify-center pt-4">
+        <Button
+          size="lg"
+          onClick={handleSubmit}
+          disabled={isUploadDisabled || isSubmitting || mergePdfMutation.isPending}
+          className="min-w-64"
+        >
+          {isSubmitting || mergePdfMutation.isPending ? (
+            <>
+              <Loader2 className="h-4 w-4 mr-2 animate-spin" />
+              Processing...
+            </>
+          ) : (
+            'Submit Documents'
+          )}
+        </Button>
+      </div>
     </div>
   );
 };

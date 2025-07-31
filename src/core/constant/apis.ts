@@ -88,15 +88,22 @@ export const API = {
     UPLOAD: `/documents/upload`,
     UPLOAD_WITH_MERGE: `/documents/upload-with-merge`,
     UPDATE: `/documents/update`,
+    MERGE_PDF: `/documents/merge-pdf`,
   },
   PRODUCTS: {
     GET_PRODUCTS: '/products',
   },
   TRANSACTION: {
-    GET_TRANSACTIONS: `/transaction_type`,
+    GET_ALL_TRANSACTIONS: `/transaction_type/all`,
+    GET_TRANSACTIONS_TYPES: `/transaction_type`,
+    GET_MAPPED_PURPOSES: `/transaction-purpose-map`,
   },
   PURPOSE: {
     GET_PURPOSES: `/fx/purposes`,
+  },
+  TRANSACTION_PURPOSE_MAP: {
+    CREATE: `/transaction-purpose-map`,
+    GET_DOCUMENTS: (transactionTypeId: string) => `/trans-purpose-document/${transactionTypeId}/documents`,
   },
 } as const;
 

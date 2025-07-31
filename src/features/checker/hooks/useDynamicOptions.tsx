@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef } from 'react';
 import axiosInstance from '@/core/services/axios/axiosInstance';
-import {Option} from '@/features/maker/components/transaction-form/transaction-form.types';
+import { Option, TransactionPurposeMap } from '@/features/maker/components/transaction-form/transaction-form.types';
 
 export const useDynamicOptions = (apiUrl: string) => {
   const [options, setOptions] = useState<Option[]>([]);
@@ -18,6 +18,7 @@ export const useDynamicOptions = (apiUrl: string) => {
         const { data } = await axiosInstance.get(apiUrl);
         const options = data.data ? data.data : data;
         const formattedOptions = options?.map((item: any) => ({
+          id: item.id || '',
           typeId: item.transaction_type_id || item.hashed_key,
           label: item.transaction_name || item.purpose_name,
           value: item.transaction_name || item.purpose_name,
