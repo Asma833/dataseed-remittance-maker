@@ -63,11 +63,11 @@ export const ENDPOINT_MATCHING_RULES: EndpointRulesConfig = {
     matchType: 'standard' as const,
     description: 'Transaction purpose document endpoint',
   },
-  // 'fxorders': {
-  //   endpoint: '/fxorders/generate-order',
-  //   matchType: 'exact-only' as const,
-  //   description: 'Generate FX order endpoint',
-  // }
+  'merge-doc': {
+    endpoint: API.DOCUMENTS.MERGE_PDF,
+    matchType: 'exact-only' as const,
+    description: 'Merge documents endpoint',
+  }
 } as const;
 
 /**

@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Button } from '@/components/ui/button';
-import { Upload, FileText, X, CheckCircle, Loader2, AlertCircle } from 'lucide-react';
+import { FileText, X, CheckCircle, Loader2, AlertCircle } from 'lucide-react';
 import useGetDocumentTypes from '@/hooks/useGetDocumentTypes';
 import { useUploadDocument } from '@/hooks/useUploadDocuments';
 import { useMergePdf } from '@/hooks/useMergePdf';
@@ -247,87 +247,29 @@ export const UploadDocuments: React.FC<UploadDocumentsProps> = ({
     }
   };
 
-  // const handleSubmitDocument = (document: UploadedDocument, merge_doc: boolean) => {
-  //   setCurrentDocument(document);
-  //   handleUploadWithMerge(merge_doc);
-  //   // setShowUploadDialog(true);
-  // };
-
-  // const handleUploadWithMerge = async (mergeDoc: boolean) => {
-  //   if (!currentDocument) return;
-
-  //   try {
-  //     // Update document state to show loading
-  //     setUploadedDocuments((docs) =>
-  //       docs.map((doc) => (doc.documentTypeId === currentDocument.documentTypeId ? { ...doc, isUploading: true } : doc))
-  //     );
-
-  //     const uploadData = {
-  //       partner_order_id: partnerOrderId,
-  //       document_type_id: currentDocument.documentTypeId,
-  //       base64_file: currentDocument.base64,
-  //       merge_doc: mergeDoc,
-  //     };
-
-  //     await uploadDocumentMutation.mutateAsync(uploadData);
-
-  //     // Update document state to show success
-  //     setUploadedDocuments((docs) =>
-  //       docs.map((doc) =>
-  //         doc.documentTypeId === currentDocument.documentTypeId ? { ...doc, isUploaded: true, isUploading: false } : doc
-  //       )
-  //     );
-  //     setShowUploadDialog(false);
-  //     setCurrentDocument(null);
-  //     toast.success(`${currentDocument.documentTypeName} uploaded successfully`);
-
-  //     // Call the appropriate callback based on mergeDoc value
-  //     if (mergeDoc) {
-  //       onESignGenerated?.(true);
-  //     } else {
-  //       onUploadComplete?.(true);
-  //     }
-  //   } catch (error) {
-  //     console.error('Error uploading document:', error);
-
-  //     // Update document state to show error
-  //     setUploadedDocuments((docs) =>
-  //       docs.map((doc) =>
-  //         doc.documentTypeId === currentDocument.documentTypeId ? { ...doc, isUploading: false } : doc
-  //       )
-  //     );
-
-  //     toast.error(`Failed to upload ${currentDocument.documentTypeName}`);
-  //     setShowUploadDialog(false);
-  //     setCurrentDocument(null);
-
-  //     // Call the appropriate callback based on mergeDoc value for error handling
-  //     if (mergeDoc) {
-  //       onESignGenerated?.(false);
-  //     } else {
-  //       onUploadComplete?.(false);
-  //     }
-  //   }
-  // };
-
   if (loading) {
     return (
       <div className="flex items-center justify-center p-8">
         <div className="text-center">
-          <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600 mx-auto"></div>
-          <p className="mt-2 text-sm text-gray-600">Loading document types...</p>
+          <Loader2 className="h-6 w-6 animate-spin text-blue-600 mx-auto" />
+          <p className="mt-3 text-sm font-medium text-gray-700">Loading document types...</p>
         </div>
       </div>
     );
   }
 
-  // Show loading if we're waiting for mapped documents and don't have documentTypes either
+  // Show waiting message if we're waiting for mapped documents and don't have documentTypes either
   if (mappedDocuments.length === 0 && documentTypes.length === 0) {
     return (
-      <div className="flex items-center justify-center p-8">
+      <div className="flex items-center justify-center p-8 w-full border border-gray-400 rounded-md bg-gray-50">
         <div className="text-center">
-          <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600 mx-auto"></div>
-          <p className="mt-2 text-sm text-gray-600">Loading documents...</p>
+          <div className="w-12 h-12 rounded-full bg-blue-50 flex items-center justify-center mx-auto mb-3">
+            <FileText className="h-6 w-6 text-blue-600" />
+          </div>
+          <p className="text-sm font-medium text-gray-700 mb-2">Document Upload</p>
+          <p className="text-xs text-gray-500 max-w-md">
+            Please select a transaction type and purpose type above to see the required documents for upload.
+          </p>
         </div>
       </div>
     );
@@ -354,18 +296,18 @@ export const UploadDocuments: React.FC<UploadDocumentsProps> = ({
     <div className="space-y-6 w-full">
       <div className="w-full flex items-start flex-col">
         <FormFieldRow className="w-full">
-          <FromSectionTitle>Upload Document</FromSectionTitle>
+          <FromSectionTitle className='font-bold text-xl'>Upload Document</FromSectionTitle>
         </FormFieldRow>
-        <div className="text-md text-gray-600 mb-2">
+        {/* <div className="text-md text-gray-600 mb-2">
           Partner Order ID: <span className="font-bold">{partnerOrderId || 'Not Available'}</span>
-        </div>
+        </div> */}
         
         {/* Upload Status */}
         {isUploadDisabled && (
           <div className="flex items-center gap-2 mb-4 p-3 bg-red-50 border border-red-200 rounded-md w-full">
             <AlertCircle className="h-4 w-4 text-red-600" />
             <span className="text-sm text-red-700">
-              Partner Order ID is required to upload documents
+              Partner Order ID is required to upload documents. Please generate an order to proceed.
             </span>
           </div>
         )}

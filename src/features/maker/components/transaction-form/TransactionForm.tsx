@@ -3,6 +3,7 @@ import { useNavigate, useSearchParams } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { toast } from 'sonner';
+import { CheckCircle, Loader2 } from 'lucide-react';
 import { FormProvider } from '@/components/form/providers/FormProvider';
 import { getController } from '@/components/form/utils/getController';
 import FormFieldRow from '@/components/form/wrapper/FormFieldRow';
@@ -12,7 +13,7 @@ import { FormContentWrapper } from '@/components/form/wrapper/FormContentWrapper
 import { transactionFormSchema, transactionFormSubmissionSchema, TransactionFormData } from './transaction-form.schema';
 import { getFormControllerMeta } from './transaction-form.config';
 import { transactionFormDefaults } from './transaction-form.defaults';
-import { DocumentsByMappedId, TransactionFormProps, TransactionPurposeMap } from './transaction-form.types';
+import { TransactionFormProps, TransactionPurposeMap } from './transaction-form.types';
 import { Button } from '@/components/ui/button';
 import { UploadDocuments } from '@/components/common/UploadDocuments';
 import { useCreateTransaction } from '../../hooks/useCreateTransaction';
@@ -54,6 +55,7 @@ const TransactionForm = ({ mode }: TransactionFormProps) => {
   const [purposeTypeId, setPurposeTypeId] = useState<string>('');
   const [currentTransactionTypeId, setCurrentTransactionTypeId] = useState<string>('');
   const [currentPurposeTypeId, setCurrentPurposeTypeId] = useState<string>('');
+  const [isOrderGenerated, setIsOrderGenerated] = useState<boolean>(false);
   const lastProcessedCombination = useRef<string>('');
   const debounceTimeout = useRef<NodeJS.Timeout | null>(null);
   const isInitialLoad = useRef<boolean>(true);
@@ -136,7 +138,7 @@ const TransactionForm = ({ mode }: TransactionFormProps) => {
   // Create purpose types compatible with transform function
   const transformCompatiblePurposeTypes = filteredPurposesBySelectedTnxType.map((type) => ({
     ...type,
-    typeId: type.purpose.hashed_key,
+    typeId: type.purpose.id,
     label: type.purpose.purpose_name,
     value: type.purpose.purpose_name,
   }));
@@ -351,6 +353,37 @@ const TransactionForm = ({ mode }: TransactionFormProps) => {
       }
     );
   };
+
+  // Handle successful document submission and reset form
+  const handleDocumentSubmissionSuccess = () => {
+    // Reset form to defaults after successful document submission
+    reset(transactionFormDefaults);
+    setIsOrderGenerated(false);
+    setPartnerOrderId('');
+    setCreatedTransactionId('');
+    setNiumForexOrderId('');
+    setShowUploadSection(false);
+    setSelectedMapDocId('');
+    setFilteredPurposesBySelectedTnxType([]);
+    toast.success('Transaction completed successfully!');
+    // Navigate to status page
+    navigate(`/maker/view-status`);
+  };
+
+  // Handle creating a new transaction
+  const handleCreateNewTransaction = () => {
+    // Reset form to defaults
+    reset(transactionFormDefaults);
+    setIsOrderGenerated(false);
+    setPartnerOrderId('');
+    setCreatedTransactionId('');
+    setNiumForexOrderId('');
+    setShowUploadSection(false);
+    setSelectedMapDocId('');
+    setFilteredPurposesBySelectedTnxType([]);
+    setIsDialogOpen(false);
+    toast.success('Ready to create a new transaction');
+  };
   const onSubmit = async (formData: TransactionFormData) => {
     setPurposeTypeId('f2a2fc1a-c31a-47f8-b8f1-9b35f3083730');
     try {
@@ -394,9 +427,10 @@ const TransactionForm = ({ mode }: TransactionFormProps) => {
         setPartnerOrderId(partnerOrder);
         setShowUploadSection(true);
         setIsDialogOpen(true);
+        setIsOrderGenerated(true); // Set order generated flag
 
-        // Reset form after successful submission
-        reset(transactionFormDefaults);
+        // Don't reset form - keep user input values until document submission
+        // reset(transactionFormDefaults);
       }
     } catch (error) {
       console.error('Form submission error:', error);
@@ -481,9 +515,19 @@ const TransactionForm = ({ mode }: TransactionFormProps) => {
   };
   return (
     <div>
-      <h1 className={cn('text-xl font-bold capitalize pl-2', pageTitle !== 'update' ? 'mb-6' : 'mb-0')}>
-        {pageTitle || 'Create'} Transaction
-      </h1>
+      <div className={cn('flex items-center justify-between pl-2', pageTitle !== 'update' ? 'mb-6' : 'mb-0')}>
+        <h1 className="text-xl font-bold capitalize">
+          {pageTitle || 'Create'} Transaction
+        </h1>
+        {isOrderGenerated && (
+          <Button
+            onClick={handleCreateNewTransaction}
+            className="flex items-center gap-2"
+          >
+            <span>Create New Transaction</span>
+          </Button>
+        )}
+      </div>
       <FormProvider methods={methods}>
         {(!isUpdatePage || isViewPage) && (
           <FormContentWrapper className="w-full bg-transparent">
@@ -514,6 +558,7 @@ const TransactionForm = ({ mode }: TransactionFormProps) => {
                           disabled:
                             isUpdatePage ||
                             isViewPage ||
+                            isOrderGenerated || // Disable fields after order generation
                             (isEditPage && field.name === 'applicantDetails.partnerOrderId') ||
                             ((isEditPage || isUpdatePage) && field.name === 'applicantDetails.isVKycRequired') ||
                             // Disable purpose field when no transaction type is selected
@@ -526,7 +571,7 @@ const TransactionForm = ({ mode }: TransactionFormProps) => {
             </Spacer>
           </FormContentWrapper>
         )}{' '}
-        {!isUpdatePage && !isViewPage && (
+        {!isUpdatePage && !isViewPage && !isOrderGenerated && (
           <FormFieldRow className="px-2">
             <Button
               className="min-w-60"
@@ -586,6 +631,24 @@ const TransactionForm = ({ mode }: TransactionFormProps) => {
             </div>
           )}
         </div>
+        {/* Show success message after order generation */}
+        {isOrderGenerated && (
+          <FormFieldRow className="mb-4 w-full">
+            <div className="flex flex-col gap-2 w-full bg-green-50 border border-green-200 p-3 rounded-md">
+              <div className="flex items-center gap-2">
+                <CheckCircle className="h-5 w-5 text-green-600" />
+                <strong className="text-green-800">Order Generated Successfully!</strong>
+              </div>
+              <span className="text-green-700 text-sm">
+                Partner Order ID: <span className="font-semibold">{partnerOrderId}</span>
+              </span>
+              <span className="text-green-700 text-sm">
+                Please upload the required documents below to complete the transaction.
+              </span>
+            </div>
+          </FormFieldRow>
+        )}
+        
         {/* {shouldShowSection ? (
           <FormFieldRow className="w-full">
             <UploadDocuments
@@ -601,9 +664,9 @@ const TransactionForm = ({ mode }: TransactionFormProps) => {
         {/* {handlePurposeTypeId() && ( */}
         <FormFieldRow className="w-full">
           {(createTransactionPurposeMapMutation.isPending || isDocsLoading) && (
-            <div className="flex items-center gap-2 mb-4 p-3 bg-blue-50 border border-blue-200 rounded-md">
-              <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-blue-600"></div>
-              <span className="text-sm text-blue-700">
+            <div className="flex items-center justify-center gap-3 mb-6 p-4 bg-gradient-to-r from-blue-50 to-indigo-50 border border-blue-200 rounded-lg shadow-sm">
+              <Loader2 className="h-5 w-5 animate-spin text-blue-600" />
+              <span className="text-sm font-medium text-blue-800">
                 {createTransactionPurposeMapMutation.isPending
                   ? 'Creating transaction purpose mapping...'
                   : 'Loading document requirements...'}
@@ -614,9 +677,7 @@ const TransactionForm = ({ mode }: TransactionFormProps) => {
             partnerOrderId={partnerOrderId}
             purposeTypeId={handlePurposeTypeId()}
             mappedDocuments={enhancedDocsByTransPurpose}
-            onESignGenerated={() => {
-              handleRegenerateEsignLink(partnerOrderId);
-            }}
+            onESignGenerated={handleDocumentSubmissionSuccess}
             isResubmission={isUpdatePage && !orderStatus}
           />
         </FormFieldRow>
