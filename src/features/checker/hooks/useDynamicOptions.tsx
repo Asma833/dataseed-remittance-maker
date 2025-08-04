@@ -19,7 +19,7 @@ export const useDynamicOptions = (apiUrl: string) => {
         const options = data.data ? data.data : data;
         const formattedOptions = options?.map((item: any) => ({
           id: item.id || '',
-          typeId: item.transaction_type_id || item.hashed_key,
+          typeId: item.hashed_key,
           label: item.transaction_name || item.purpose_name,
           value: item.transaction_name || item.purpose_name,
         }));

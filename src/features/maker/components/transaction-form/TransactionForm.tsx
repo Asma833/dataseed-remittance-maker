@@ -54,7 +54,7 @@ const TransactionForm = ({ mode }: TransactionFormProps) => {
   console.log('filteredPurposesBySelectedTnxType:', filteredPurposesBySelectedTnxType);
   const [purposeTypeId, setPurposeTypeId] = useState<string>('');
   const [currentTransactionTypeId, setCurrentTransactionTypeId] = useState<string>('');
-  console.log('currentTransactionTypeId:', currentTransactionTypeId)
+  console.log('currentTransactionTypeId:', currentTransactionTypeId);
   const [currentPurposeTypeId, setCurrentPurposeTypeId] = useState<string>('');
   const [isOrderGenerated, setIsOrderGenerated] = useState<boolean>(false);
   const lastProcessedCombination = useRef<string>('');
@@ -75,14 +75,14 @@ const TransactionForm = ({ mode }: TransactionFormProps) => {
   // Initially disabled
   const { data: allTransactionsData = [], loading: isLoading, error, fetchData: refreshData } = useGetAllOrders();
 
-  const { data: transactionPurposeMapData } = useGetData<TransactionPurposeMap[]>({
+  const { data: transactionPurposeMapData, refetch: refetchTransactionPurposeMap } = useGetData<TransactionPurposeMap[]>({
     endpoint: API.TRANSACTION.GET_MAPPED_PURPOSES_BY_ID(currentTransactionTypeId),
     queryKey: queryKeys.transaction.transactionPurposeMap,
     dataPath: 'data',
     enabled: !!currentTransactionTypeId,
   });
-  
-  console.log('transactionPurposeMapData:', transactionPurposeMapData)
+
+  console.log('transactionPurposeMapData:', transactionPurposeMapData);
   const {
     docsByTransPurpose,
     isLoading: isDocsLoading,
@@ -148,7 +148,7 @@ const TransactionForm = ({ mode }: TransactionFormProps) => {
   //   purposeCode: type.purpose?.purpose_code || '',
   //   value: type.purpose.purpose_name,
   // }));
-  
+
   // Create purpose types compatible with transform function
   const transformCompatiblePurposeTypes = filteredPurposesBySelectedTnxType.map((type) => ({
     ...type,
@@ -156,18 +156,16 @@ const TransactionForm = ({ mode }: TransactionFormProps) => {
     label: type.purpose.purpose_name,
     value: type.purpose.purpose_name,
   }));
-  
+
   console.log('formatedPurposeTypes:', formatedPurposeTypes);
   console.log('filteredPurposesBySelectedTnxType:', filteredPurposesBySelectedTnxType);
   console.log('transformCompatiblePurposeTypes:', transformCompatiblePurposeTypes);
 
   const handlePurposeTypeId = () => {
-    // if (purposeTypeOptions.length >= 0) {
-    //   const purposeType = purposeTypeOptions.find((type) => type.value === purposeTypeId);
-    //   return purposeType ? purposeType.typeId : '';
-    // }
-    // return '';
-    return 'f2a2fc1a-c31a-47f8-b8f1-9b35f3083730';
+    if (selectedMapDocId) {
+      return selectedMapDocId;
+    }
+    return '';
   };
 
   // Helper function to get typeId from transaction type value
@@ -186,7 +184,7 @@ const TransactionForm = ({ mode }: TransactionFormProps) => {
     transactionTypes: formatedTransactionTypes,
     purposeTypes: formatedPurposeTypes ?? [],
   });
-  
+
   const methods = useForm<TransactionFormData>({
     resolver: zodResolver(transactionFormSchema),
     defaultValues: transactionFormDefaults,
@@ -211,13 +209,13 @@ const TransactionForm = ({ mode }: TransactionFormProps) => {
   const watchedTransactionType = watch('applicantDetails.transactionType');
   // Get the typeId from watchedTransactionType
   const selectedTransactionType = formatedTransactionTypes.find((type) => type.value === watchedTransactionType);
-  console.log('selectedTransactionType:', selectedTransactionType)
+  console.log('selectedTransactionType:', selectedTransactionType);
 
   const watchedTransactionTypeId = selectedTransactionType?.typeId || '';
-  console.log('watchedTransactionTypeId:', watchedTransactionTypeId)
+  console.log('watchedTransactionTypeId:', watchedTransactionTypeId);
   const watchedPurposeType = watch('applicantDetails.purposeType');
   const selectedPurposeType = formatedPurposeTypes?.find((type) => type.value === watchedPurposeType);
-  console.log('selectedPurposeType:', selectedPurposeType)
+  console.log('selectedPurposeType:', selectedPurposeType);
   const watchedPurposeTypeDocId = selectedPurposeType?.transactionPurposeMapId || '';
   console.log('watchedPurposeTypeDocId:', watchedPurposeTypeDocId);
 
@@ -227,23 +225,23 @@ const TransactionForm = ({ mode }: TransactionFormProps) => {
   // Filter and modify documents based on paidBy selection
   const enhancedDocsByTransPurpose = useMemo(() => {
     const baseDocs = docsByTransPurpose || [];
-    
+
     if (watchedPaidBy === 'self') {
       // Filter out OTHER document when "Self" is selected
-      return baseDocs.filter(doc => doc.code !== 'OTHER');
+      return baseDocs.filter((doc) => doc.code !== 'OTHER');
     } else if (watchedPaidBy && watchedPaidBy !== 'self') {
       // Make OTHER document mandatory when someone other than "Self" is selected
-      return baseDocs.map(doc => {
+      return baseDocs.map((doc) => {
         if (doc.code === 'OTHER') {
           return {
             ...doc,
-            is_mandatory: true
+            is_mandatory: true,
           };
         }
         return doc;
       });
     }
-    
+
     // Default case: return all documents as they are
     return baseDocs;
   }, [docsByTransPurpose, watchedPaidBy]);
@@ -427,7 +425,7 @@ const TransactionForm = ({ mode }: TransactionFormProps) => {
         refreshData();
       } else {
         // Handle create operation
-        const apiRequestData = transformFormDataToApiRequest(formData, transactionTypeOptions, transformCompatiblePurposeTypes);
+        const apiRequestData = transformFormDataToApiRequest(formData, transactionTypeOptions, watchedPurposeTypeDocId);
         const response = await createTransactionMutation.mutateAsync(apiRequestData);
         if (formData?.applicantDetails?.isVKycRequired && response?.status === 201) {
           sendVkycLink(
@@ -537,14 +535,9 @@ const TransactionForm = ({ mode }: TransactionFormProps) => {
   return (
     <div>
       <div className={cn('flex items-center justify-between pl-2', pageTitle !== 'update' ? 'mb-6' : 'mb-0')}>
-        <h1 className="text-xl font-bold capitalize">
-          {pageTitle || 'Create'} Transaction
-        </h1>
+        <h1 className="text-xl font-bold capitalize">{pageTitle || 'Create'} Transaction</h1>
         {isOrderGenerated && (
-          <Button
-            onClick={handleCreateNewTransaction}
-            className="flex items-center gap-2"
-          >
+          <Button onClick={handleCreateNewTransaction} className="flex items-center gap-2">
             <span>Create New Transaction</span>
           </Button>
         )}
@@ -555,39 +548,39 @@ const TransactionForm = ({ mode }: TransactionFormProps) => {
             <Spacer>
               <FormFieldRow className={cn(fieldWrapperBaseStyle, 'mb-4 px-0')} rowCols={4}>
                 {Object.entries(formControllerMeta.fields.applicantDetails).map(([key, field]) => {
-                    // Safely access nested error messages for applicantDetails fields
-                    let errorMessage: string | undefined = undefined;
-                    if (field.name.startsWith('applicantDetails.')) {
-                      const subKey = field.name.split('.')[1] as keyof typeof errors.applicantDetails;
-                      const applicantDetailError = errors.applicantDetails?.[subKey];
-                      errorMessage =
-                        applicantDetailError &&
-                        typeof applicantDetailError === 'object' &&
-                        'message' in applicantDetailError
-                          ? (applicantDetailError as { message?: string }).message
-                          : undefined;
-                    } else {
-                      errorMessage = (errors as any)?.[field.name]?.message;
-                    }
+                  // Safely access nested error messages for applicantDetails fields
+                  let errorMessage: string | undefined = undefined;
+                  if (field.name.startsWith('applicantDetails.')) {
+                    const subKey = field.name.split('.')[1] as keyof typeof errors.applicantDetails;
+                    const applicantDetailError = errors.applicantDetails?.[subKey];
+                    errorMessage =
+                      applicantDetailError &&
+                      typeof applicantDetailError === 'object' &&
+                      'message' in applicantDetailError
+                        ? (applicantDetailError as { message?: string }).message
+                        : undefined;
+                  } else {
+                    errorMessage = (errors as any)?.[field.name]?.message;
+                  }
 
-                    return (
-                      <FieldWrapper key={key} className={fieldWrapperBaseStyle}>
-                        {getController({
-                          ...field,
-                          control,
-                          errors,
-                          disabled:
-                            isUpdatePage ||
-                            isViewPage ||
-                            isOrderGenerated || // Disable fields after order generation
-                            (isEditPage && field.name === 'applicantDetails.partnerOrderId') ||
-                            ((isEditPage || isUpdatePage) && field.name === 'applicantDetails.isVKycRequired') ||
-                            // Disable purpose field when no transaction type is selected
-                            (field.name === 'applicantDetails.purposeType' && !watchedTransactionType),
-                        })}
-                      </FieldWrapper>
-                    );
-                  })}
+                  return (
+                    <FieldWrapper key={key} className={fieldWrapperBaseStyle}>
+                      {getController({
+                        ...field,
+                        control,
+                        errors,
+                        disabled:
+                          isUpdatePage ||
+                          isViewPage ||
+                          isOrderGenerated || // Disable fields after order generation
+                          (isEditPage && field.name === 'applicantDetails.partnerOrderId') ||
+                          ((isEditPage || isUpdatePage) && field.name === 'applicantDetails.isVKycRequired') ||
+                          // Disable purpose field when no transaction type is selected
+                          (field.name === 'applicantDetails.purposeType' && !watchedTransactionType),
+                      })}
+                    </FieldWrapper>
+                  );
+                })}
               </FormFieldRow>
             </Spacer>
           </FormContentWrapper>
@@ -669,7 +662,6 @@ const TransactionForm = ({ mode }: TransactionFormProps) => {
             </div>
           </FormFieldRow>
         )}
-        
         {/* {shouldShowSection ? (
           <FormFieldRow className="w-full">
             <UploadDocuments

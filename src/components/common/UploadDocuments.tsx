@@ -50,7 +50,10 @@ export const UploadDocuments: React.FC<UploadDocumentsProps> = ({
   purposeTypeId,
   mappedDocuments = [],
 }) => {
-  const { documentTypes, loading } = useGetDocumentTypes(purposeTypeId);
+  const { documentTypes, loading } = useGetDocumentTypes({
+    id: purposeTypeId,
+    enable: !!purposeTypeId,
+  });
   const uploadDocumentMutation = useUploadDocument();
   const mergePdfMutation = useMergePdf();
   const [uploadedDocuments, setUploadedDocuments] = useState<UploadedDocument[]>([]);

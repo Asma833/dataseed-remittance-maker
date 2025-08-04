@@ -4,7 +4,7 @@ import { API, HEADER_KEYS } from '@/core/constant/apis';
 import { string } from 'zod';
 
 export interface DocumentTypeItem {
-  id: string ;
+  id: string;
   name: string;
 }
 
@@ -12,7 +12,7 @@ export interface DocumentTypeItem {
  * Fetches document types from the API with proper headers
  * @returns Promise that resolves to an array of document types
  */
-const fetchDocumentTypes = async (id:any): Promise<DocumentTypeItem[]> => {
+const fetchDocumentTypes = async (id: any): Promise<DocumentTypeItem[]> => {
   try {
     const response = await axiosInstance.get(API.CONFIG.GET_DOCUMENT_TYPES(id), {
       headers: {
@@ -39,17 +39,24 @@ const fetchDocumentTypes = async (id:any): Promise<DocumentTypeItem[]> => {
  * @param id Optional document type ID to look up
  * @returns Object containing found document type text and loading state
  */
-const useGetDocumentTypes = (id?: string) => {
+interface UseGetDocumentTypesOptions {
+  id?: string;
+  enable?: boolean;
+}
+
+const useGetDocumentTypes = ({ id, enable = true }: UseGetDocumentTypesOptions = {}) => {
   const {
     data: documentTypes = [],
     isLoading: loading,
     error,
     isError,
+    refetch,
   } = useQuery<DocumentTypeItem[], Error, DocumentTypeItem[]>({
     queryKey: ['documentTypes', id],
     queryFn: ({ queryKey }) => fetchDocumentTypes(queryKey[1]),
     staleTime: 5 * 60 * 1000, // Cache data for 5 minutes
     retry: 1,
+    enabled: enable,
   });
 
   // Find the document type name if ID is provided
@@ -60,6 +67,8 @@ const useGetDocumentTypes = (id?: string) => {
     documentTypes,
     loading,
     error: isError ? error : null,
+    refetch,
+    enable: enable,
   };
 };
 
