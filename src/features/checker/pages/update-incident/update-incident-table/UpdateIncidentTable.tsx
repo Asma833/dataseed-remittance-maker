@@ -20,7 +20,7 @@ const UpdateIncidentCreationTable = () => {
   const currentUserHashedKey = getUserHashedKey();
   const { options: purposeTypeOptions } = useDynamicOptions(API.PURPOSE.GET_PURPOSES);
 
-  const { options: transactionTypeOptions } = useDynamicOptions(API.TRANSACTION.GET_TRANSACTIONS);
+  const { options: transactionTypeOptions } = useDynamicOptions(API.TRANSACTION.GET_ALL_TRANSACTIONS_TYPES);
 
   // Call the hook at the top level of the component
   const { handleUnassign: unassignChecker, isPending: isUnassignPending } = useUnassignChecker();

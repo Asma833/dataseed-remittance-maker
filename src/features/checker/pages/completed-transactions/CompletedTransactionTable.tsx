@@ -82,7 +82,7 @@ const CompletedTransactionTable = () => {
   const columns = GetTransactionTableColumns(openModal);
   const { options: purposeTypeOptions } = useDynamicOptions(API.PURPOSE.GET_PURPOSES);
 
-  const { options: transactionTypeOptions } = useDynamicOptions(API.TRANSACTION.GET_TRANSACTIONS);
+  const { options: transactionTypeOptions } = useDynamicOptions(API.TRANSACTION.GET_ALL_TRANSACTIONS_TYPES);
 
   // Transform checker orders data to match the table format
   const transformOrderForTable = (order: any) => {

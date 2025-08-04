@@ -30,7 +30,7 @@ const ViewAllTable: React.FC<ViewAllTableProps> = ({
   const [filteredData, setFilteredData] = useState<Order[]>([]);
 
   const { options: purposeTypeOptions } = useDynamicOptions(API.PURPOSE.GET_PURPOSES);
-  const { options: transactionTypeOptions } = useDynamicOptions(API.TRANSACTION.GET_TRANSACTIONS);
+  const { options: transactionTypeOptions } = useDynamicOptions(API.TRANSACTION.GET_ALL_TRANSACTIONS_TYPES);
 
   const handleRegenerateEsignLink = (rowData: Order): void => {
     if (rowData.nium_order_id) {
