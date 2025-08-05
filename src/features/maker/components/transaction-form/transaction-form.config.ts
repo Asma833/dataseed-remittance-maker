@@ -47,7 +47,7 @@ export const getFormControllerMeta = (options: FormControllerMetaOptions = {}) =
         },
         applicantName: {
           name: 'applicantDetails.applicantName',
-          label: 'Applicant Name',
+          label: 'Applicant Name As Per Aadhar',
           type: FieldType.Text,
           required: true,
           placeholder: 'Enter Applicant Name As Per Aadhar',
