@@ -473,11 +473,6 @@ const TransactionForm = ({ mode }: TransactionFormProps) => {
     <div>
       <div className={cn('flex items-center justify-between pl-2', pageTitle !== 'update' ? 'mb-6' : 'mb-0')}>
         <h1 className="text-xl font-bold capitalize">{pageTitle || 'Create'} Transaction</h1>
-        {isOrderGenerated && (
-          <Button onClick={handleCreateNewTransaction} className="flex items-center gap-2">
-            <span>Create New Transaction</span>
-          </Button>
-        )}
       </div>
       <FormProvider methods={methods}>
         {
