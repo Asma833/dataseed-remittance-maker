@@ -50,14 +50,14 @@ export const getFormControllerMeta = (options: FormControllerMetaOptions = {}) =
           label: 'Applicant Name',
           type: FieldType.Text,
           required: true,
-          placeholder: 'Enter Applicant Name',
+          placeholder: 'Enter Applicant Name As Per Aadhar',
         },
         applicantPanNumber: {
           name: 'applicantDetails.applicantPanNumber',
-          label: 'Applicant Name As Per Aadhar',
+          label: 'Applicant PAN Number',
           type: FieldType.Text,
           required: true,
-          placeholder: 'Enter Applicant Name As Per Aadhar',
+          placeholder: 'Enter Applicant PAN Number',
           uppercase: true,
         },
         transactionType: {
