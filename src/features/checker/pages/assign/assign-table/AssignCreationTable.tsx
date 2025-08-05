@@ -11,8 +11,8 @@ import { useCurrentUser } from '@/utils/getUserFromRedux';
 import { useGetData } from '@/hooks/useGetData';
 import { useQueryInvalidator } from '@/hooks/useQueryInvalidator';
 import UpdateIncidentDialog from '@/features/checker/components/update-incident-dialog/UpdateIncidentDialog';
-import { IncidentMode, IncidentPageId } from '@/features/checker/types/updateIncident.types';
 import { useDynamicOptions } from '@/features/checker/hooks/useDynamicOptions';
+import { IncidentMode, IncidentPageId } from '@/types/enums';
 
 const AssignCreationTable = () => {
   const { invalidateMultipleQueries } = useQueryInvalidator();
@@ -20,7 +20,7 @@ const AssignCreationTable = () => {
   const currentUserHashedKey = getUserHashedKey();
   const { options: purposeTypeOptions } = useDynamicOptions(API.PURPOSE.GET_PURPOSES);
 
-  const { options: transactionTypeOptions } = useDynamicOptions(API.TRANSACTION.GET_TRANSACTIONS);
+  const { options: transactionTypeOptions } = useDynamicOptions(API.TRANSACTION.GET_ALL_TRANSACTIONS_TYPES);
 
   const { data, isLoading, error, refetch } = useGetData({
     endpoint: API.CHECKER.ASSIGN.LIST,

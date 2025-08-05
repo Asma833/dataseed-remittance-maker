@@ -1,4 +1,4 @@
-import { FieldType } from '@/types/common.type';
+import { FieldType } from '@/types/enums';
 import { FormControllerMetaOptions } from './transaction-form.types';
 
 export const getFormControllerMeta = (options: FormControllerMetaOptions = {}) => {
@@ -13,22 +13,25 @@ export const getFormControllerMeta = (options: FormControllerMetaOptions = {}) =
     {} as Record<string, { label: string; selected?: boolean }>
   );
 
-  const purposeOptions = purposeTypes.reduce(
-    (acc, type) => {
-      // Convert the label to title case
-      acc[type?.value] = { label: type?.label };
-      return acc;
-    },
-    {} as Record<string, { label: string; selected?: boolean }>
+  const filteredOutPurposesWithSameHashKey = purposeTypes.filter(
+    (type, index, self) => index === self.findIndex((t) => t.purposeHashKey === type.purposeHashKey)
   );
+
+  const paidByOptions: Record<string, { label: string; selected?: boolean }> = {
+    self: { label: 'Self' },
+    father: { label: 'Father' },
+    mother: { label: 'Mother' },
+    brother: { label: 'Brother' },
+    sister: { label: 'Sister' },
+  };
 
   // Set first option as selected if available
   if (transactionTypes.length > 0) {
     transactionOptions[transactionTypes[0].value].selected = true;
   }
-  if (purposeTypes.length > 0) {
-    purposeOptions[purposeTypes[0].value].selected = true;
-  }
+  // if (purposeTypes.length > 0) {
+  //   purposeTypes[purposeTypes[0].value].selected = true;
+  // }
 
   return {
     sectionTitle: 'Create Transaction',
@@ -51,10 +54,11 @@ export const getFormControllerMeta = (options: FormControllerMetaOptions = {}) =
         },
         applicantPanNumber: {
           name: 'applicantDetails.applicantPanNumber',
-          label: 'Applicant PAN Number',
+          label: 'Applicant Name As Per Aadhar',
           type: FieldType.Text,
           required: true,
-          placeholder: 'Enter Applicant PAN Number',
+          placeholder: 'Enter Applicant Name As Per Aadhar',
+          uppercase: true,
         },
         transactionType: {
           name: 'applicantDetails.transactionType',
@@ -70,9 +74,16 @@ export const getFormControllerMeta = (options: FormControllerMetaOptions = {}) =
           type: FieldType.Select,
           required: true,
           placeholder: 'Select Purpose',
-          options: Object.keys(purposeOptions).length > 0 ? purposeOptions : {},
+          options: Object.keys(filteredOutPurposesWithSameHashKey).length > 0 ? filteredOutPurposesWithSameHashKey : {},
         },
-
+        paidBy: {
+          name: 'applicantDetails.paidBy',
+          label: 'Paid By',
+          type: FieldType.Select,
+          required: true,
+          placeholder: 'Select Paid By',
+          options: Object.keys(paidByOptions).length > 0 ? paidByOptions : {},
+        },
         email: {
           name: 'applicantDetails.email',
           label: 'Email',

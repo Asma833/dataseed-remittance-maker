@@ -22,13 +22,13 @@ export const API = {
     UPDATE_PREFERENCES: `/users/preferences`,
   },
   ORDERS: {
-    ORDERS: '/orders',
-    LIST: `/orders`,
+    ORDERS: '/fxorders',
+    LIST: `/fxorders`,
     CREATE: `/orders`,
     GET_BY_ID: (id: string) => `/orders/${id}`,
     UPDATE: (id: string) => `/orders/${id}`,
     DELETE: (id: string) => `/orders/${id}`,
-    CHECKER_ORDERS: `/orders/get-checker-orders`,
+    CHECKER_ORDERS: `/fxorders/get-checker-orders`,
     CHECKER_ORDERS_BY_PARTNER_ID: `/orders/get-checker-orders-by-partner-order-id`,
     UPDATE_ORDER_DETAILS: `/orders/update-order-details`,
     UNASSIGN_CHECKER: `/orders/unassign-checker`,
@@ -57,7 +57,7 @@ export const API = {
     },
   },
   MAKER: {
-    GENERATE_ORDER: `/orders/generate-order`,
+    GENERATE_ORDER: `/fxorders/generate-order`,
   },
   FEATURES: {
     ENABLE_GEMINI_FLASH: `/features/gemini-flash/enable`,
@@ -82,21 +82,29 @@ export const API = {
     GET_CONFIG: `/config`,
     GET_PURPOSE_TYPES: `/config?type=purpose_type`,
     GET_TRANSACTION_TYPES: `/config?type=transaction_type`,
-    GET_DOCUMENT_TYPES: `/config?type=document_type`,
+    GET_DOCUMENT_TYPES: (id: string) => `trans-purpose-document/${id}/documents`,
   },
   DOCUMENTS: {
     UPLOAD: `/documents/upload`,
     UPLOAD_WITH_MERGE: `/documents/upload-with-merge`,
     UPDATE: `/documents/update`,
+    MERGE_PDF: `/documents/merge-pdf`,
   },
   PRODUCTS: {
     GET_PRODUCTS: '/products',
   },
   TRANSACTION: {
-    GET_TRANSACTIONS: `/transaction_type`,
+    GET_ALL_TRANSACTIONS_TYPES: `/transaction_type/all`,
+    GET_TRANSACTIONS_TYPES: `/transaction_type`,
+    GET_MAPPED_PURPOSES: `/transaction-purpose-map`,
+    GET_MAPPED_PURPOSES_BY_ID: (id: string) => `/transaction-purpose-map/purposes/${id}`,
   },
   PURPOSE: {
-    GET_PURPOSES: `/purpose`,
+    GET_PURPOSES: `/fx/purposes`,
+  },
+  TRANSACTION_PURPOSE_MAP: {
+    CREATE: `/transaction-purpose-map`,
+    GET_DOCUMENTS: (transactionTypeId: string) => `/trans-purpose-document/${transactionTypeId}/documents`,
   },
 } as const;
 

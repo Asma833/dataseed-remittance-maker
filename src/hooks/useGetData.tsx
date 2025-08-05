@@ -37,7 +37,7 @@ export const useGetData = <T,>({
 
       return dataPath.split('.').reduce((obj, key) => obj?.[key], response.data) ?? null;
     },
-    enabled: enabled && (!id || !!id),
+    enabled: enabled,
   });
 
   return {

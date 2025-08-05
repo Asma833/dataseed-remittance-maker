@@ -8,27 +8,22 @@ import { PartialUpdateOrderRequest } from '../types/update-order.types';
  */
 export const transformFormDataToApiRequest = (
   formData: TransactionFormData,
-  transactionTypes: Array<Option>,
-  purposeTypes: Array<Option>
+  // transactionTypes: Array<Option>,
+  watchedTransactionTypeHashKey: string,
+  // purposeTypes: Array<Option>
+  watchedPurposeTypeDocId: string
 ): CreateTransactionRequest => {
-  // Find the transaction type ID by matching the text
-  const selectedTransactionType = transactionTypes.find(
-    (type) => type.value === formData.applicantDetails.transactionType
-  );
-
-  // Find the purpose type ID by matching the text
-  const selectedPurposeType = purposeTypes.find((type) => type.value === formData.applicantDetails.purposeType);
-
   return {
     partner_order_id: formData.applicantDetails.partnerOrderId || '',
-    transaction_type_id: selectedTransactionType?.typeId || '',
+    transaction_type_id: watchedTransactionTypeHashKey || '',
     is_e_sign_required: true, // Always true as per requirement
     is_v_kyc_required: formData.applicantDetails.isVKycRequired || false,
-    purpose_type_id: selectedPurposeType?.typeId || '',
+    purpose_type_id: watchedPurposeTypeDocId || '',
     customer_name: formData.applicantDetails.applicantName || '',
     customer_email: formData.applicantDetails.email || '',
     customer_phone: formData.applicantDetails.mobileNumber || '',
     customer_pan: formData.applicantDetails.applicantPanNumber || '',
+    paid_by: formData.applicantDetails.paidBy || '',
   };
 };
 

@@ -1,5 +1,5 @@
 import { SignLinkButton } from '@/components/common/SignLinkButton';
-import { DISABLED_ESIGN_STATUSES, EsignStatus } from '@/components/types/status';
+import { DISABLED_ESIGN_STATUSES, DISABLED_ORDER_STATUSES, EsignStatus } from '@/components/types/status';
 import EsignStatusCell from '@/features/checker/components/table/EsignStatusCell';
 import NiumOrderID from '@/features/checker/components/table/NiumOrderIdCell';
 import OrderStatusCell from '@/features/checker/components/table/OrderStatusCell';
@@ -48,12 +48,6 @@ export const GetTransactionTableColumns = ({
       className: 'min-w-0',
     },
     {
-      key: 'partner_id',
-      id: 'partner_id',
-      name: 'Partner ID',
-      className: 'min-w-0',
-    },
-    {
       key: 'customer_pan',
       id: 'customer_pan',
       name: 'Customer PAN',
@@ -83,7 +77,7 @@ export const GetTransactionTableColumns = ({
     {
       key: 'e_sign_customer_completion_date',
       id: 'e_sign_customer_completion_date',
-      name: 'E-Sign Status Completion Date',
+      name: 'E-Sign Completion Date',
       className: 'min-w-0',
       cell: (_: unknown, rowData: { e_sign_customer_completion_date?: string }) => (
         <span>{formatDateWithFallback(rowData.e_sign_customer_completion_date)}</span>
@@ -106,8 +100,8 @@ export const GetTransactionTableColumns = ({
       ),
     },
     {
-      key: 'incident_status',
-      id: 'incident_status',
+      key: 'order_status',
+      id: 'order_status',
       name: 'Incident Status',
       className: 'min-w-0',
       cell: (_: unknown, rowData: any) => <OrderStatusCell rowData={rowData} />,
@@ -163,19 +157,13 @@ export const GetTransactionTableColumns = ({
           id={rowData.nium_order_id}
           loading={isSendEsignLinkLoading && loadingOrderId === rowData.nium_order_id}
           copyLinkUrl={rowData.v_kyc_link}
-          tooltipText={'Generate Esign Link'}
+          tooltipText="Generate Esign Link"
           buttonIconType="refresh"
           onClick={() => handleRegenerateEsignLink(rowData)}
           disabled={(() => {
             const { e_sign_status, order_status } = rowData || {};
-            const disabledEsignStatuses = ['expired', 'rejected', 'not generated'];
-            const disabledOrderStatuses = [null, undefined, 'completed'];
 
-            return (
-              disabledOrderStatuses.includes(order_status) ||
-              Boolean(order_status) ||
-              disabledEsignStatuses.includes(e_sign_status)
-            );
+            return DISABLED_ORDER_STATUSES.includes(order_status) || DISABLED_ESIGN_STATUSES.includes(e_sign_status);
           })()}
         />
       ),

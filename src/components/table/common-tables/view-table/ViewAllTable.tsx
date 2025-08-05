@@ -6,11 +6,14 @@ import { API } from '@/core/constant/apis';
 import { GetTransactionTableColumns } from './ViewAllTableColumns';
 import { exportToCSV } from '@/utils/exportUtils';
 import { useSendEsignLink } from '@/features/checker/hooks/useSendEsignLink';
-import { IncidentMode, IncidentPageId, Order, Orders } from '@/features/checker/types/updateIncident.types';
+import {  Order, Orders } from '@/features/checker/types/updateIncident.types';
 import UpdateIncidentDialog from '@/features/checker/components/update-incident-dialog/UpdateIncidentDialog';
 import { useDynamicOptions } from '@/features/checker/hooks/useDynamicOptions';
 import { ViewAllTableProps } from '@/components/types/common-components.types';
 import { useSendVkycLink } from '@/features/checker/hooks/useSendVkycLink';
+import { formatDateWithFallback } from '@/utils/formatDateWithFallback';
+import { STATUS_MAP, STATUS_TYPES } from '@/core/constant/statusTypes';
+import { IncidentMode, IncidentPageId } from '@/types/enums';
 
 const ViewAllTable: React.FC<ViewAllTableProps> = ({
   tableData,
@@ -27,8 +30,7 @@ const ViewAllTable: React.FC<ViewAllTableProps> = ({
   const [filteredData, setFilteredData] = useState<Order[]>([]);
 
   const { options: purposeTypeOptions } = useDynamicOptions(API.PURPOSE.GET_PURPOSES);
-
-  const { options: transactionTypeOptions } = useDynamicOptions(API.TRANSACTION.GET_TRANSACTIONS);
+  const { options: transactionTypeOptions } = useDynamicOptions(API.TRANSACTION.GET_ALL_TRANSACTIONS_TYPES);
 
   const handleRegenerateEsignLink = (rowData: Order): void => {
     if (rowData.nium_order_id) {
@@ -85,9 +87,7 @@ const ViewAllTable: React.FC<ViewAllTableProps> = ({
   const transformOrderForTable = (order: any) => {
     return {
       nium_order_id: order.nium_order_id || 'N/A',
-      created_at:
-        order.created_at === 'N/A' || order.created_at === 'NA' ? 'N/A' : new Date(order.created_at).toLocaleString(),
-      partner_id: order.partner_id || 'N/A',
+      created_at: order.created_at === 'N/A' || order.created_at === 'NA' ? 'N/A' : formatDateWithFallback(order.created_at),
       partner_order_id: order.partner_order_id || 'N/A',
       customer_name: order.customer_name || 'N/A',
       customer_pan: order.customer_pan || 'N/A',
@@ -102,21 +102,21 @@ const ViewAllTable: React.FC<ViewAllTableProps> = ({
         order.e_sign_customer_completion_date === 'N/A' || order.e_sign_customer_completion_date === 'NA'
           ? 'N/A'
           : order.e_sign_customer_completion_date
-            ? new Date(order.e_sign_customer_completion_date).toLocaleString()
+            ? formatDateWithFallback(order.e_sign_customer_completion_date)
             : 'N/A',
       v_kyc_status: order.v_kyc_status || null,
       v_kyc_customer_completion_date:
         order.v_kyc_customer_completion_date === 'N/A' || order.v_kyc_customer_completion_date === 'NA'
           ? 'N/A'
           : order.v_kyc_customer_completion_date
-            ? new Date(order.v_kyc_customer_completion_date).toLocaleString()
+            ? formatDateWithFallback(order.v_kyc_customer_completion_date)
             : 'N/A',
-      incident_status: order.incident_status ? 'Approved' : !order.incident_status ? 'Rejected' : 'Pending',
+      order_status: STATUS_MAP[order.order_status] || STATUS_TYPES.NA,
       incident_completion_date:
         order.incident_completion_date === 'N/A' || order.incident_completion_date === 'NA'
           ? 'N/A'
           : order.incident_completion_date
-            ? new Date(order.incident_completion_date).toLocaleString()
+            ? formatDateWithFallback(order.incident_completion_date)
             : 'N/A',
     };
   };

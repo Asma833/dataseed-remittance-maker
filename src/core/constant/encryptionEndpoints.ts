@@ -58,6 +58,21 @@ export const ENDPOINT_MATCHING_RULES: EndpointRulesConfig = {
     matchType: 'standard' as const,
     description: 'Generate vkyc link endpoint',
   },
+  'trans-purpose-document': {
+    endpoint: API.TRANSACTION_PURPOSE_MAP.CREATE,
+    matchType: 'standard' as const,
+    description: 'Transaction purpose document endpoint',
+  },
+  'merge-doc': {
+    endpoint: API.DOCUMENTS.MERGE_PDF,
+    matchType: 'exact-only' as const,
+    description: 'Merge documents endpoint',
+  },
+  // 'g-order': {
+  //   endpoint: API.MAKER.GENERATE_ORDER,
+  //   matchType: 'exact-only' as const,
+  //   description: 'Generate order endpoint',
+  // }
 } as const;
 
 

@@ -80,12 +80,13 @@ export const MaterialSelect = ({
                 {isArrayOptions
                   ? (
                       options as Array<{
+                        id?: string;
                         value: string;
                         label: string;
                         selected?: boolean;
                       }>
                     ).map((option) => (
-                      <MenuItem key={option.value} value={option.value}>
+                      <MenuItem key={option.id ? option.id : option.value} value={option.value}>
                         {option.label}
                       </MenuItem>
                     ))
