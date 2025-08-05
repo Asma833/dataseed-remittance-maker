@@ -364,7 +364,7 @@ export const UploadDocuments: React.FC<UploadDocumentsProps> = ({
           // Check if All Documents (code 'AD') is uploaded
           const isAllDocumentUploaded = uploadedDocuments.some((doc) => {
             const uploadedMappedDoc = mappedDocuments.find((mapped) => mapped.document_id === doc.documentTypeId);
-            return uploadedMappedDoc?.code === 'AD';
+            return uploadedMappedDoc?.code === 'AD' && !docType.isRequired;
           });
 
           // Check if any other document (not 'AD') is uploaded
@@ -417,7 +417,13 @@ export const UploadDocuments: React.FC<UploadDocumentsProps> = ({
                           variant="ghost"
                           size="sm"
                           className="h-6 w-6 p-0 ml-auto"
-                          onClick={() => handleRemoveDocument(docType.id)}
+                          onClick={() => {
+                            handleRemoveDocument(docType.id);
+                            // Clear the file input when removing the document
+                            const input = document.getElementById(`file-${docType.id}`) as HTMLInputElement | null;
+                            if (input) input.value = '';
+                          }}
+                          type="button"
                         >
                           <X className="h-4 w-4" />
                         </Button>
