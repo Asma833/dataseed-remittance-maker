@@ -62,6 +62,13 @@ export const API = {
   FEATURES: {
     ENABLE_GEMINI_FLASH: `/features/gemini-flash/enable`,
   },
+  USER_MANAGEMENT:{
+    AGENT_BRANCH_USER: {
+      LIST: `/agent-branch-users`,
+      CREATE: `/agent-branch-users`,
+      STATUS_UPDATE: `/agent-branch-users`,
+    },
+  },
   NUSERS: {
     PARTNERS: {
       LIST: `/partners`,
@@ -94,6 +101,8 @@ export const API = {
     GET_PRODUCTS: '/products',
   },
   TRANSACTION: {
+    GET_TRANSACTIONS: `/transaction_type`,
+    GET_ALL_TRANSACTIONS: `/transaction_type/all`,
     GET_ALL_TRANSACTIONS_TYPES: `/transaction_type/all`,
     GET_TRANSACTIONS_TYPES: `/transaction_type`,
     GET_MAPPED_PURPOSES: `/transaction-purpose-map`,
@@ -101,10 +110,25 @@ export const API = {
   },
   PURPOSE: {
     GET_PURPOSES: `/fx/purposes`,
+    CREATE_PURPOSE: `/fx/purpose`,
+    UPDATE_PURPOSE: `/fx/purpose/`,
+    TRANSACTION_MAPPING: `/transaction-purpose-map`,
+    GET_TRANSACTION_PURPOSES: `/transaction-purpose-map`,
+    GET_ALL_TRANSACTIONS_TYPES: `/transaction_type/all`,
+    GET_TRANSACTIONS_TYPES: `/transaction_type`,
+    GET_MAPPED_PURPOSES: `/transaction-purpose-map`,
+    GET_MAPPED_PURPOSES_BY_ID: (id: string) => `/transaction-purpose-map/purposes/${id}`,
   },
   TRANSACTION_PURPOSE_MAP: {
     CREATE: `/transaction-purpose-map`,
     GET_DOCUMENTS: (transactionTypeId: string) => `/trans-purpose-document/${transactionTypeId}/documents`,
+  },
+  DOCUMENT_MASTER: {
+    GET_DOCUMENTS: `/fx/documents`,
+    CREATE_DOCUMENT: `/fx/document`,
+    UPDATE_DOCUMENT: `/fx/document`,
+    DELETE_DOCUMENT: (id: string) => `/fx/document/${id}`,
+    DOC_PURPOSE_TRANS_MAPPING: `/trans-purpose-document/map`,
   },
 } as const;
 
