@@ -10,7 +10,7 @@ interface MaterialSelectProps {
   label: string;
   options:
     | { [key: string]: { label: string; selected?: boolean } }
-    | Array<{ value: string; label: string; selected?: boolean }>;
+    | Array<{ value: string; label: string; selected?: boolean; typeId?: string }>;
   baseStyle?: any;
   className?: string;
   placeholder?: string;
@@ -66,12 +66,16 @@ export const MaterialSelect = ({
                 label={label}
                 sx={baseStyle}
                 disabled={disabled}
-                className={cn(className)}
+                className={cn(className, 'w-full max-w-full')}
                 renderValue={(selected) => {
                   if (!selected || selected === '') {
                     return <em>{placeholder}</em>;
                   }
-                  return Array.isArray(selected) ? toTitleCase(selected.join(', ')) : selected;
+                  return (
+                    <span className="block truncate">
+                      {Array.isArray(selected) ? toTitleCase(selected.join(', ')) : selected}
+                    </span>
+                  );
                 }}
               >
                 <MenuItem disabled value="">
@@ -84,6 +88,7 @@ export const MaterialSelect = ({
                         value: string;
                         label: string;
                         selected?: boolean;
+                        typeId?: string;
                       }>
                     ).map((option) => (
                       <MenuItem key={option.id ? option.id : option.value} value={option.value}>
@@ -91,8 +96,12 @@ export const MaterialSelect = ({
                       </MenuItem>
                     ))
                   : Object.entries(options).map(([value, { label }]) => (
-                      <MenuItem key={value} value={value}>
-                        {label}
+                      <MenuItem
+                        key={value}
+                        value={value}
+                        className="!whitespace-nowrap !overflow-hidden !text-ellipsis max-w-full"
+                      >
+                        <span className="block truncate">{label}</span>
                       </MenuItem>
                     ))}
               </Select>
