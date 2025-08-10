@@ -15,10 +15,10 @@ import { Button } from '@/components/ui/button';
 import { useGetData } from '@/hooks/useGetData';
 import { API } from '@/core/constant/apis';
 import DeleteConfirmationDialog from '@/components/common/DeleteConfirmationDialog';
-import { useDeleteDocument } from '@/features/admin/hooks/super-admin/useDeleteDocument';
+import { useDeleteDocument } from '@/features/admin/hooks/useDeleteDocument';
 import { useTransactionPurposeMap } from '@/features/checker/hooks/useTransactionPurposeMap';
 import { toast } from 'sonner';
-import { useCreateDocumentTransactionMap } from '@/features/admin/hooks/super-admin/useCreateDocumentTransactionMap';
+import { useCreateDocumentTransactionMap } from '@/features/admin/hooks/useCreateDocumentTransactionMap';
 
 const PurposeDocumentsTable = () => {
   const { mutate, isPending: isDeleting } = useDeleteDocument();

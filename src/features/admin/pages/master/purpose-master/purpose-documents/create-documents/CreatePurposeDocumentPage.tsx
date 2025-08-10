@@ -8,8 +8,8 @@ import FieldWrapper from '@/components/form/wrapper/FieldWrapper';
 import { getController } from '@/components/form/utils/getController';
 import Spacer from '@/components/form/wrapper/Spacer';
 import { PurposeDocumentFormConfig } from './create-purpose-document-form.config';
-import { useCreateDocument } from '@/features/admin/hooks/super-admin/useCreateDocument';
-import { useUpdateDocument } from '@/features/admin/hooks/super-admin/useUpdateDocument';
+import { useCreateDocument } from '@/features/admin/hooks/useCreateDocument';
+import { useUpdateDocument } from '@/features/admin/hooks/useUpdateDocument';
 
 const CreatePurposeDocumentPage = (
   { 

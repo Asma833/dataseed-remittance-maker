@@ -10,7 +10,7 @@ import FieldWrapper from '@/components/form/wrapper/FieldWrapper';
 import { getController } from '@/components/form/utils/getController';
 
 import { useForm } from 'react-hook-form';
-import { useCreateTransactionMapping } from '@/features/admin/hooks/super-admin/useCreateTransactionMapping';
+import { useCreateTransactionMapping } from '@/features/admin/hooks/useCreateTransactionMapping';
 import { TransactionMappingForm, TransactionMappingPayload } from '@/features/admin/types/transaction.types';
 import { PurposeMasterTablePageRowData } from '@/features/admin/types/purpose.types';
 import { TransactionMappingSchema } from './transaction-mapping.schema';
