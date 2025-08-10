@@ -9,8 +9,8 @@ import { PurposeMasterSchema } from './create-purpose-master.schema';
 import { PurposeMasterConfig } from './create-purpose-master.config';
 import { PurposeApiPayload } from '@/features/admin/types/purpose.types';
 import { useEffect } from 'react';
-import { useCreatePurposeMaster } from '@/features/admin/hooks/super-admin/useCreatePurposeMaster';
-import { useUpdatePurposeMaster } from '@/features/admin/hooks/super-admin/useUpdatePurposeMaster';
+import { useCreatePurposeMaster } from '@/features/admin/hooks/useCreatePurposeMaster';
+import { useUpdatePurposeMaster } from '@/features/admin/hooks/useUpdatePurposeMaster';
 
 const CreatePurposeMasterPage = ({ setDialogTitle , rowData,refetch, setIsModalOpen }: { setDialogTitle: (title: string) => void , rowData: any, refetch: () => void, setIsModalOpen: (isOpen: boolean) => void }) => {
 
