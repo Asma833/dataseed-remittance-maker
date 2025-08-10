@@ -113,7 +113,7 @@ const PurposeDocumentsTable = () => {
     // Update the selection status for the specific document
     const updatedData = formateDataArray.map(doc => {
       if (doc.id === rowId) {
-        return { ...doc, requirement: false,backRequirement: false,isSelected: isSelected };
+        return { ...doc,isSelected: isSelected };
       }
       return doc;
     });
@@ -125,7 +125,7 @@ const PurposeDocumentsTable = () => {
     // Update the requirement value for the specific document
     const updatedData = formateDataArray.map(doc => {
       if (doc.id === rowId) {
-        return { ...doc, requirement: value,backRequirement: false,isSelected:true};
+        return { ...doc, requirement: value,isSelected:true};
       }
       return doc;
     });
@@ -137,7 +137,7 @@ const PurposeDocumentsTable = () => {
     // Update the back requirement value for the specific document
     const updatedData = formateDataArray.map(doc => {
       if (doc.id === rowId) {
-        return { ...doc,requirement: false, backRequirement: value,isSelected: true };
+        return { ...doc,backRequirement: value,isSelected: true };
       }
       return doc;
     });

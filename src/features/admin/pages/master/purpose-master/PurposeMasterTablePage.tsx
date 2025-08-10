@@ -83,7 +83,7 @@ const PurposeMasterTablePage = () => {
               isOpen={isModalOpen}
               setIsOpen={(open) => {
               setIsModalOpen(open);
-              if (!open) {
+              if (open) {
                 setRowData(undefined);
                 setDialogTitle('Add Purpose');
               }
@@ -115,7 +115,7 @@ const PurposeMasterTablePage = () => {
 
 
 
-      <Dialog open={isMappingModalOpen} onClose={() => setIsMappingModalOpen(false)}>
+      <Dialog open={isMappingModalOpen} onClose={() => setIsMappingModalOpen(false)} >
         <DialogContent className={cn('sm:max-w-[400px] md:min-w-[500px] w-full max-h-[90%] overflow-auto')}>
           <div className="flex items-center justify-between">
         <h2 className="text-lg font-semibold">{'Transaction Mapping'}</h2>

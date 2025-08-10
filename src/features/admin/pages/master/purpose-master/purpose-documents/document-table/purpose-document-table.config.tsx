@@ -40,7 +40,7 @@ export const PurposeDocumentTableConfig = (
     {
       key: 'requirement',
       id: 'requirement',
-      name: 'Mandatory/Back Required',
+      name: 'Mandatory',
       cell: (value: string, row: any) => (
         <div className="flex flex-row gap-4 items-center justify-center">
           <label className="flex items-center gap-1">

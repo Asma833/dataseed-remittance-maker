@@ -1,4 +1,4 @@
-import { LayoutDashboard, ClipboardList, FileEdit, Eye, CreditCard, User } from 'lucide-react';
+import { LayoutDashboard, ClipboardList, FileEdit, Eye, CreditCard, User, BookCopy } from 'lucide-react';
 import { ROUTES, getNavPath } from './routePaths';
 
 // Navigation item type definition
@@ -38,7 +38,7 @@ export const SideNavOptions = {
     {
       title: 'Purpose Master',
       path: getNavPath('ADMIN', ROUTES.ADMIN.MASTER.PURPOSE_MASTER),
-      icon: Eye,
+      icon: BookCopy,
     },
     {
       title: 'View All Transactions',

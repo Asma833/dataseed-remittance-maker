@@ -18,23 +18,23 @@ export const PurposeMasterTableColumn = (
       id: 'purpose_code',
       name: 'Purpose Code',
     },
-    {
-      key: 'is_active',
-      id: 'is_active',
-      name: 'Status',
-      cell: (_: any, row: any) => {
-        return (
-          <div className="flex flex-col items-center zoom-in-50">
-            <Switch
-              checked={row?.is_active}
-              onCheckedChange={(checked) => {
-                //   handleStatusChange(row, checked);
-              }}
-            />
-          </div>
-        );
-      },
-    },
+    // {
+    //   key: 'is_active',
+    //   id: 'is_active',
+    //   name: 'Status',
+    //   cell: (_: any, row: any) => {
+    //     return (
+    //       <div className="flex flex-col items-center zoom-in-50">
+    //         <Switch
+    //           checked={row?.is_active}
+    //           onCheckedChange={(checked) => {
+    //             //   handleStatusChange(row, checked);
+    //           }}
+    //         />
+    //       </div>
+    //     );
+    //   },
+    // },
     {
       key: 'actions',
       id: 'actions',
