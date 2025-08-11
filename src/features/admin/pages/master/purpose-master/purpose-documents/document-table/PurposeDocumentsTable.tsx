@@ -118,11 +118,11 @@ const PurposeDocumentsTable = () => {
     // Update the state with the modified data
     setFormateDataArray(updatedData);
   };
-  const handleRequirementChange = (rowId: string, value: string) => {
+  const handleRequirementChange = (rowId: string, isChecked: boolean) => {
     // Update the requirement value for the specific document
     const updatedData = formateDataArray.map((doc) => {
       if (doc.id === rowId) {
-        return { ...doc, requirement: value, isSelected: true };
+        return { ...doc, requirement: isChecked, isSelected: isChecked || doc.backRequirement };
       }
       return doc;
     });
@@ -130,11 +130,11 @@ const PurposeDocumentsTable = () => {
     // Update the state with the modified data
     setFormateDataArray(updatedData);
   };
-  const handleBackRequirementChange = (rowId: string, value: string) => {
+  const handleBackRequirementChange = (rowId: string, isChecked: boolean) => {
     // Update the back requirement value for the specific document
     const updatedData = formateDataArray.map((doc) => {
       if (doc.id === rowId) {
-        return { ...doc, backRequirement: value, isSelected: true };
+        return { ...doc, backRequirement: isChecked, isSelected: isChecked || doc.requirement};
       }
       return doc;
     });

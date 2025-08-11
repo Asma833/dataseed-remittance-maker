@@ -1,3 +1,4 @@
+import { CustomCheckbox } from '@/components/common/Checkbox';
 import { Edit, Trash2 } from 'lucide-react';
 
 export const PurposeDocumentColumn = ({
@@ -10,8 +11,8 @@ export const PurposeDocumentColumn = ({
   handleDelete: (rowData: any) => void;
   handleEditDocument: (rowData: any) => void;
   handleSelectionChange: (rowId: string, isSelected: boolean) => void;
-  handleRequirementChange: (rowId: string, value: string) => void;
-  handleBackRequirementChange: (rowId: string, value: string) => void;
+  handleRequirementChange: (rowId: string, isChecked: boolean) => void;
+  handleBackRequirementChange: (rowId: string, isChecked: boolean) => void;
 }) => {
   return [
     {
@@ -21,11 +22,12 @@ export const PurposeDocumentColumn = ({
       className: 'min-w-0 p-2',
       cell: (value: boolean, row: any) => {
         return (
-          <input
-            type="checkbox"
-            checked={row.isSelected}
-            onChange={(e) => handleSelectionChange(row.id, e.target.checked)}
-            className="relative h-5 w-5 cursor-pointer rounded-sm border-2 transition-all duration-300 inline-block align-middle accent-[#E53888]"
+          <CustomCheckbox
+            rowId={row.id}
+            value={row.isSelected ? true : false}
+            label=""
+            requirementType="select"
+            onChange={handleSelectionChange}
           />
         );
       },
@@ -41,21 +43,13 @@ export const PurposeDocumentColumn = ({
       id: 'requirement',
       name: 'Mandatory',
       cell: (value: string, row: any) => (
-        <div className="flex flex-row gap-4 items-center justify-center">
-          <label className="flex items-center gap-1">
-            <input
-              type="checkbox"
-              name={`mandatory-${row.id}`}
-              value="mandatory"
-              // checked={value === 'mandatory'}
-              onChange={() => handleRequirementChange(row.id, 'mandatory')}
-              style={{
-                accentColor: '#E53888',
-              }}
-            />
-            Mandatory
-          </label>
-        </div>
+        <CustomCheckbox
+          rowId={row.id}
+          value={value ? true : false}
+          label="Mandatory"
+          requirementType="mandatory"
+          onChange={handleRequirementChange}
+        />
       ),
     },
     {
@@ -63,19 +57,13 @@ export const PurposeDocumentColumn = ({
       id: 'backRequirement',
       name: 'Back Required',
       cell: (value: string, row: any) => (
-        <div className="flex flex-row gap-4 items-center justify-center">
-          <label className="flex items-center gap-1">
-            <input
-              type="radio"
-              name={`back-required-${row.id}`}
-              value="back-required"
-              checked={value === 'back-required'}
-              onChange={(e) => handleBackRequirementChange(row.id, e.target.value)}
-              className="accent-pink-600"
-            />
-            Back Required
-          </label>
-        </div>
+        <CustomCheckbox
+          rowId={row.id}
+          value={value ? true : false}
+          label="Back Required"
+          requirementType="back-required"
+          onChange={handleBackRequirementChange}
+        />
       ),
     },
     {
