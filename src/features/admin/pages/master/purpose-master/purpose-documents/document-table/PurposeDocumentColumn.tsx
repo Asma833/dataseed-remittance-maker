@@ -34,6 +34,7 @@ export const PurposeDocumentColumn = ({
       key: 'name',
       id: 'name',
       name: 'Document Name',
+      className: 'text-left',
     },
     {
       key: 'requirement',
@@ -43,7 +44,7 @@ export const PurposeDocumentColumn = ({
         <div className="flex flex-row gap-4 items-center justify-center">
           <label className="flex items-center gap-1">
             <input
-              type="radio"
+              type="checkbox"
               name={`mandatory-${row.id}`}
               value="mandatory"
               checked={value === 'mandatory'}
