@@ -1,6 +1,6 @@
 import { Edit, Trash2 } from 'lucide-react';
 
-export const PurposeDocumentTableConfig = ({
+export const PurposeDocumentColumn = ({
   handleDelete,
   handleEditDocument,
   handleSelectionChange,

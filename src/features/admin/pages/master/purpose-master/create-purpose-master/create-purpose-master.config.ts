@@ -1,6 +1,6 @@
 import { FieldType } from '@/types/enums';
 
-export const PurposeMasterConfig = {
+export const purposeMasterConfig = {
   title: 'Purpose Master',
   description: 'Manage the purposes for the application',
   fields: {

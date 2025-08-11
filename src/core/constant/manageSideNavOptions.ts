@@ -36,7 +36,7 @@ export const SideNavOptions = {
     //   disabled: true,
     // },
     {
-      title: 'Purpose Master',
+      title: 'Master',
       path: getNavPath('ADMIN', ROUTES.ADMIN.MASTER.PURPOSE_MASTER),
       icon: BookCopy,
     },

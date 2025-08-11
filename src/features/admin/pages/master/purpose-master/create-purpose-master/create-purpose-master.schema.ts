@@ -1,6 +1,6 @@
 import { z } from 'zod';
 
-export const PurposeMasterSchema = z.object({
+export const purposeMasterSchema = z.object({
   purpose_name: z
     .string()
     .min(2, 'Purpose name must be at least 2 characters')

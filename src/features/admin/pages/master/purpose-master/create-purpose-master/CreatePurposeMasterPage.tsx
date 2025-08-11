@@ -1,14 +1,14 @@
+import { useEffect } from 'react';
+import { FormProvider, useForm } from 'react-hook-form';
 import { getController } from '@/components/form/utils/getController';
 import FieldWrapper from '@/components/form/wrapper/FieldWrapper';
 import { FormContentWrapper } from '@/components/form/wrapper/FormContentWrapper';
 import FormFieldRow from '@/components/form/wrapper/FormFieldRow';
 import Spacer from '@/components/form/wrapper/Spacer';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { FormProvider, useForm } from 'react-hook-form';
-import { PurposeMasterSchema } from './create-purpose-master.schema';
-import { PurposeMasterConfig } from './create-purpose-master.config';
+import { purposeMasterSchema } from './create-purpose-master.schema';
+import { purposeMasterConfig } from './create-purpose-master.config';
 import { PurposeApiPayload } from '@/features/admin/types/purpose.types';
-import { useEffect } from 'react';
 import { useCreatePurposeMaster } from '@/features/admin/hooks/useCreatePurposeMaster';
 import { useUpdatePurposeMaster } from '@/features/admin/hooks/useUpdatePurposeMaster';
 
@@ -16,7 +16,7 @@ const CreatePurposeMasterPage = ({ setDialogTitle , rowData,refetch, setIsModalO
 
   const isEditMode = !!rowData;
   const methods = useForm({
-    resolver: zodResolver(PurposeMasterSchema),
+    resolver: zodResolver(purposeMasterSchema),
     defaultValues: {
       purpose_name: '',
       purpose_code: '',
@@ -70,7 +70,7 @@ const { mutate: updatePurpose } = useUpdatePurposeMaster(
       <FormContentWrapper className="rounded-lg mr-auto bg-transparent w-full">
         <Spacer>
           <FormFieldRow className="mb-4 mt-1" rowCols={2} wrapperClassName="justify-center">
-            {Object.entries(PurposeMasterConfig.fields)
+            {Object.entries(purposeMasterConfig.fields)
               .slice(0, 2)
               .map(([name, field]) => (
                 <FieldWrapper key={name}>

@@ -1,13 +1,13 @@
 import { useEffect } from 'react';
 import { FormProvider, useForm } from 'react-hook-form';
-import { PurposeDocumentFormSchema } from './create-purpose-document-form.shema';
+import { purposeDocumentFormSchema } from './create-purpose-document-form.shema';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { FormContentWrapper } from '@/components/form/wrapper/FormContentWrapper';
 import FormFieldRow from '@/components/form/wrapper/FormFieldRow';
 import FieldWrapper from '@/components/form/wrapper/FieldWrapper';
 import { getController } from '@/components/form/utils/getController';
 import Spacer from '@/components/form/wrapper/Spacer';
-import { PurposeDocumentFormConfig } from './create-purpose-document-form.config';
+import { purposeDocumentFormConfig } from './create-purpose-document-form.config';
 import { useCreateDocument } from '@/features/admin/hooks/useCreateDocument';
 import { useUpdateMapDocument } from '@/features/admin/hooks/useUpdateDocument';
 
@@ -25,7 +25,7 @@ const CreatePurposeDocumentPage = ({
   const isEditMode = !!rowData;
 
   const methods = useForm({
-    resolver: zodResolver(PurposeDocumentFormSchema),
+    resolver: zodResolver(purposeDocumentFormSchema),
     defaultValues: {
       name: '',
       code: '',
@@ -84,7 +84,7 @@ const CreatePurposeDocumentPage = ({
         <FormContentWrapper className="p-2 rounded-lg mr-auto bg-transparent w-full">
           <Spacer>
             <FormFieldRow className="mt-1" rowCols={2}>
-              {Object.entries(PurposeDocumentFormConfig().fields).map(([name, field]) => (
+              {Object.entries(purposeDocumentFormConfig().fields).map(([name, field]) => (
                 <FieldWrapper key={name}>
                   {getController({
                     ...(typeof field === 'object' && field !== null ? field : {}),

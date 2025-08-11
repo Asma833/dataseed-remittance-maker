@@ -1,24 +1,24 @@
-import { DialogWrapper } from '@/components/common/DialogWrapper';
 import { useMemo, useState } from 'react';
+import { FormProvider, useForm } from 'react-hook-form';
+import { toast } from 'sonner';
+import { DialogWrapper } from '@/components/common/DialogWrapper';
 import CreatePurposeDocumentPage from '../create-documents/CreatePurposeDocumentPage';
 import { DynamicTable } from '@/components/common/dynamic-table/DynamicTable';
-import { PurposeDocumentTableConfig } from './purpose-document-table.config';
+import { PurposeDocumentColumn } from './PurposeDocumentColumn';
 import { useDynamicPagination } from '@/components/common/dynamic-table/hooks/useDynamicPagination';
 import FormFieldRow from '@/components/form/wrapper/FormFieldRow';
-import { PurposeDocumentFormConfig } from '../create-documents/create-purpose-document-form.config';
+import { purposeDocumentFormConfig } from '../create-documents/create-purpose-document-form.config';
 import FieldWrapper from '@/components/form/wrapper/FieldWrapper';
 import { getController } from '@/components/form/utils/getController';
-import { FormProvider, useForm } from 'react-hook-form';
 import { FormContentWrapper } from '@/components/form/wrapper/FormContentWrapper';
 import Spacer from '@/components/form/wrapper/Spacer';
 import { Button } from '@/components/ui/button';
 import { useGetData } from '@/hooks/useGetData';
-import { API } from '@/core/constant/apis';
 import DeleteConfirmationDialog from '@/components/common/DeleteConfirmationDialog';
 import { useTransactionPurposeMap } from '@/features/checker/hooks/useTransactionPurposeMap';
-import { toast } from 'sonner';
 import { useDeleteDocument } from '@/features/admin/hooks/useDeleteDocument';
 import { useCreateDocumentTransactionMap } from '@/features/admin/hooks/useCreateDocumentTransactionMap';
+import { API } from '@/core/constant/apis';
 
 const PurposeDocumentsTable = () => {
   const { mutate, isPending: isDeleting } = useDeleteDocument();
@@ -28,7 +28,7 @@ const PurposeDocumentsTable = () => {
   const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
   const [itemToDelete, setItemToDelete] = useState<any>(null);
   const { options: transactionPurposeTypeOptions } = useTransactionPurposeMap(API.PURPOSE.TRANSACTION_MAPPING);
-  const config = PurposeDocumentFormConfig(transactionPurposeTypeOptions);
+  const config = purposeDocumentFormConfig(transactionPurposeTypeOptions);
   interface DocumentsResponse {
     data?: any[];
     [key: string]: any;
@@ -43,7 +43,6 @@ const PurposeDocumentsTable = () => {
     endpoint: API.DOCUMENT_MASTER.GET_DOCUMENTS,
     queryKey: ['getDocumentsList'],
   });
-  
 
   const methods = useForm();
   const {
@@ -75,8 +74,6 @@ const PurposeDocumentsTable = () => {
     dataPath: 'transactions',
     totalRecordsPath: 'totalRecords',
   });
-  
-  
 
   const handleDelete = (rowData: any) => {
     setItemToDelete(rowData);
@@ -111,9 +108,9 @@ const PurposeDocumentsTable = () => {
   };
   const handleSelectionChange = (rowId: string, isSelected: boolean) => {
     // Update the selection status for the specific document
-    const updatedData = formateDataArray.map(doc => {
+    const updatedData = formateDataArray.map((doc) => {
       if (doc.id === rowId) {
-        return { ...doc,isSelected: isSelected };
+        return { ...doc, isSelected: isSelected };
       }
       return doc;
     });
@@ -123,9 +120,9 @@ const PurposeDocumentsTable = () => {
   };
   const handleRequirementChange = (rowId: string, value: string) => {
     // Update the requirement value for the specific document
-    const updatedData = formateDataArray.map(doc => {
+    const updatedData = formateDataArray.map((doc) => {
       if (doc.id === rowId) {
-        return { ...doc, requirement: value,isSelected:true};
+        return { ...doc, requirement: value, isSelected: true };
       }
       return doc;
     });
@@ -133,76 +130,70 @@ const PurposeDocumentsTable = () => {
     // Update the state with the modified data
     setFormateDataArray(updatedData);
   };
- const handleBackRequirementChange = (rowId: string, value: string) => {
+  const handleBackRequirementChange = (rowId: string, value: string) => {
     // Update the back requirement value for the specific document
-    const updatedData = formateDataArray.map(doc => {
+    const updatedData = formateDataArray.map((doc) => {
       if (doc.id === rowId) {
-        return { ...doc,backRequirement: value,isSelected: true };
+        return { ...doc, backRequirement: value, isSelected: true };
       }
       return doc;
     });
 
     // Update the state with the modified data
     setFormateDataArray(updatedData);
- }
-  const tableColumns = PurposeDocumentTableConfig({
+  };
+  const tableColumns = PurposeDocumentColumn({
     handleDelete,
     handleEditDocument,
     handleSelectionChange,
     handleRequirementChange,
-    handleBackRequirementChange
+    handleBackRequirementChange,
   });
 
   // State and handlers for DeleteConfirmationDialog
-  
-   const { mutate: mapDocument } = useCreateDocumentTransactionMap({
-        onCreateSuccess: () => {
-          reset({});
-          setIsModalOpen(false);
-          if (typeof refreshData === 'function') {
-            refreshData();
-          }
-          const updatedData = formateDataArray.map(doc => {
-          if (doc.id) {
-            return { ...doc,requirement: false,backRequirement: false,isSelected: false };
-          }
-          return doc;
-        });
-          setFormateDataArray(updatedData);
-        },
+
+  const { mutate: mapDocument } = useCreateDocumentTransactionMap({
+    onCreateSuccess: () => {
+      reset({});
+      setIsModalOpen(false);
+      if (typeof refreshData === 'function') {
+        refreshData();
+      }
+      const updatedData = formateDataArray.map((doc) => {
+        if (doc.id) {
+          return { ...doc, requirement: false, backRequirement: false, isSelected: false };
+        }
+        return doc;
       });
+      setFormateDataArray(updatedData);
+    },
+  });
 
+  const handleSaveDocuments = handleSubmit((formValues) => {
+    // Find the selected object from dropdown options
+    const selectedType = transactionPurposeTypeOptions.find((type) => type.value === formValues.transaction_type);
 
- const handleSaveDocuments = handleSubmit((formValues) => {
-  // Find the selected object from dropdown options
-  const selectedType = transactionPurposeTypeOptions.find(
-    (type) => type.value === formValues.transaction_type
-  );
+    if (!selectedType?.typeId) {
+      toast.error('Please select a Transaction-Purpose Type.');
+      return;
+    }
 
-  if (!selectedType?.typeId) {
-    toast.error("Please select a Transaction-Purpose Type.");
-    return;
-  }
+    const selectedDocuments = formateDataArray
+      .filter((doc) => doc.isSelected)
+      .map((doc) => ({
+        transaction_purpose_map_id: selectedType.typeId,
+        document_id: doc.id,
+        isBackRequired: doc.backRequirement === 'back-required',
+        is_mandatory: doc.requirement === 'mandatory',
+      }));
 
-  const selectedDocuments = formateDataArray
-    .filter((doc) => doc.isSelected)
-    .map((doc) => ({
-      transaction_purpose_map_id: selectedType.typeId,
-      document_id: doc.id,
-      isBackRequired: doc.backRequirement === 'back-required',
-      is_mandatory: doc.requirement === 'mandatory',
-    }));
+    if (selectedDocuments.length === 0) {
+      toast.error('Please select at least one document.');
+      return;
+    }
 
-  if (selectedDocuments.length === 0) {
-    toast.error("Please select at least one document.");
-    return;
-  }
-
-  mapDocument([...selectedDocuments]); 
-});
-
-
-
+    mapDocument([...selectedDocuments]);
+  });
 
   return (
     <div className="dynamic-table-wrap relative">
@@ -216,7 +207,7 @@ const PurposeDocumentsTable = () => {
                     ...(typeof field === 'object' && field !== null ? field : {}),
                     name,
                     control,
-                    errors
+                    errors,
                   })}
                 </FieldWrapper>
               ))}

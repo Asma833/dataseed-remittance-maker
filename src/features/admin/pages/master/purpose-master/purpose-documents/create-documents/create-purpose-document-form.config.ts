@@ -1,6 +1,6 @@
 import { FieldType } from "@/types/enums";
 
-export const PurposeDocumentFormConfig = (transactionPurposeTypeOptions: any[] = []) => ({
+export const purposeDocumentFormConfig = (transactionPurposeTypeOptions: any[] = []) => ({
   sectionTitle: 'Create Document',
   fields: {
     name: {

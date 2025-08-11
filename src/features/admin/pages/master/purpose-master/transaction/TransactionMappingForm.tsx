@@ -1,20 +1,18 @@
+import { useForm } from 'react-hook-form';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { FormProvider } from 'react-hook-form';
 import { API } from '@/core/constant/apis';
 import { useDynamicOptions } from '@/features/checker/hooks/useDynamicOptions';
-import React from 'react';
-import { TransactionMappingFormConfig } from './transaction-mapping-form.config';
-import { FormProvider } from 'react-hook-form';
+import { transactionMappingFormConfig } from './transaction-mapping-form.config';
 import { FormContentWrapper } from '@/components/form/wrapper/FormContentWrapper';
 import Spacer from '@/components/form/wrapper/Spacer';
 import FormFieldRow from '@/components/form/wrapper/FormFieldRow';
 import FieldWrapper from '@/components/form/wrapper/FieldWrapper';
 import { getController } from '@/components/form/utils/getController';
-
-import { useForm } from 'react-hook-form';
 import { useCreateTransactionMapping } from '@/features/admin/hooks/useCreateTransactionMapping';
 import { TransactionMappingForm, TransactionMappingPayload } from '@/features/admin/types/transaction.types';
 import { PurposeMasterTablePageRowData } from '@/features/admin/types/purpose.types';
 import { TransactionMappingSchema } from './transaction-mapping.schema';
-import { zodResolver } from '@hookform/resolvers/zod';
 
 const TransactionMapping = (
   { rowData , 
@@ -47,7 +45,7 @@ const TransactionMapping = (
     formState: { errors, isSubmitting },
   } = methods;
 
-  const formControllerMeta = TransactionMappingFormConfig({
+  const formControllerMeta = transactionMappingFormConfig({
     transactionTypes: formatedTransactionTypes,
   });
 

@@ -1,6 +1,6 @@
 import { TransactionOptions } from '@/features/maker/components/transaction-form/transaction-form.types';
 
-export const TransactionMappingFormConfig = (options: TransactionOptions = {}) => {
+export const transactionMappingFormConfig = (options: TransactionOptions = {}) => {
   const { transactionTypes = [] } = options;
 
   // // Convert arrays to options object format

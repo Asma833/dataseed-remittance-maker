@@ -1,6 +1,6 @@
 import { useMemo, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { GitFork, X } from 'lucide-react';
+import { GitFork } from 'lucide-react';
 import { useGetData } from '@/hooks/useGetData';
 import { API } from '@/core/constant/apis';
 import { cn } from '@/utils/cn';

@@ -1,12 +1,12 @@
-import { Edit, GitForkIcon, Trash2 } from 'lucide-react';
-import Switch from '@/components/ui/switch';
+import { Edit, GitForkIcon } from 'lucide-react';
 
-export const PurposeMasterTableColumn = (
-  { openTransactionMappingModal,
-    handleEditPurpose
-  }: { 
-    openTransactionMappingModal: (rowData: any) => void, 
-    handleEditPurpose: (rowData: any) => void }) => {
+export const PurposeMasterTableColumn = ({
+  openTransactionMappingModal,
+  handleEditPurpose,
+}: {
+  openTransactionMappingModal: (rowData: any) => void;
+  handleEditPurpose: (rowData: any) => void;
+}) => {
   return [
     {
       key: 'purpose_name',
@@ -18,23 +18,6 @@ export const PurposeMasterTableColumn = (
       id: 'purpose_code',
       name: 'Purpose Code',
     },
-    // {
-    //   key: 'is_active',
-    //   id: 'is_active',
-    //   name: 'Status',
-    //   cell: (_: any, row: any) => {
-    //     return (
-    //       <div className="flex flex-col items-center zoom-in-50">
-    //         <Switch
-    //           checked={row?.is_active}
-    //           onCheckedChange={(checked) => {
-    //             //   handleStatusChange(row, checked);
-    //           }}
-    //         />
-    //       </div>
-    //     );
-    //   },
-    // },
     {
       key: 'actions',
       id: 'actions',
@@ -54,17 +37,14 @@ export const PurposeMasterTableColumn = (
         );
       },
     },
-     {
+    {
       key: 'transaction_mapping',
       id: 'transaction_mapping',
       name: 'Transaction Mapping',
       cell: (_: any, rowData: any) => {
         return (
           <div className="flex flex-row items-center justify-center">
-            <button
-              className="p-2 rounded-md hover:bg-muted/20"
-              onClick={() => openTransactionMappingModal(rowData)}
-            >
+            <button className="p-2 rounded-md hover:bg-muted/20" onClick={() => openTransactionMappingModal(rowData)}>
               <GitForkIcon className="w-5 h-5 text-muted-foreground rotate-180" />
             </button>
           </div>

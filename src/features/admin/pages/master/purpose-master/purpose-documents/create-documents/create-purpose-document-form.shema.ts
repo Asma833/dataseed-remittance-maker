@@ -1,6 +1,6 @@
 import { z } from 'zod';
 
-export const PurposeDocumentFormSchema = z.object({
+export const purposeDocumentFormSchema = z.object({
   name: z
     .string()
     .min(1, 'Document Name is required')
