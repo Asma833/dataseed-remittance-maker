@@ -47,7 +47,7 @@ export const PurposeDocumentColumn = ({
               type="checkbox"
               name={`mandatory-${row.id}`}
               value="mandatory"
-              checked={value === 'mandatory'}
+              // checked={value === 'mandatory'}
               onChange={() => handleRequirementChange(row.id, 'mandatory')}
               style={{
                 accentColor: '#E53888',
