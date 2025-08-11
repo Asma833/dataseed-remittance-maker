@@ -1,17 +1,18 @@
 import { useMemo, useState } from 'react';
-import { DynamicTable } from '@/components/common/dynamic-table/DynamicTable';
-import { useDynamicPagination } from '@/components/common/dynamic-table/hooks/useDynamicPagination';
-import { PurposeMasterTableColumn } from './purpose-master-table-column';
-import { Button } from '@/components/ui/button';
-import { GitFork, Plus, PlusIcon, X } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
+import { GitFork, X } from 'lucide-react';
 import { useGetData } from '@/hooks/useGetData';
 import { API } from '@/core/constant/apis';
-import { DialogWrapper } from '@/components/common/DialogWrapper';
+import { cn } from '@/utils/cn';
+import { PurposeMasterTableColumn } from './purpose-master-table-column';
+import { Button } from '@/components/ui/button';
+import { Dialog, DialogContent } from '@/components/ui/dialog';
 import CreatePurposeMasterPage from './create-purpose-master/CreatePurposeMasterPage';
 import TransactionMapping from './transaction/TransactionMappingForm';
-import { Dialog, DialogContent } from '@mui/material';
-import { cn } from '@/utils/cn';
+import { DynamicTable } from '@/components/common/dynamic-table/DynamicTable';
+import { DialogWrapper } from '@/components/common/DialogWrapper';
+import { useDynamicPagination } from '@/components/common/dynamic-table/hooks/useDynamicPagination';
+import DialogCloseButton from '@/components/common/DialogCloseButton';
 
 const PurposeMasterTablePage = () => {
   const { data, isLoading, error, refetch } = useGetData({
@@ -75,37 +76,37 @@ const PurposeMasterTablePage = () => {
         defaultSortColumn="created_at"
         defaultSortDirection="desc"
         renderLeftSideActions={() => (
-            <>
+          <>
             <DialogWrapper
               triggerBtnText="Add Purpose"
               triggerBtnClassName="bg-custom-primary text-white hover:bg-custom-primary-hover"
               title={dialogTitle}
               isOpen={isModalOpen}
               setIsOpen={(open) => {
-              setIsModalOpen(open);
-              if (open) {
-                setRowData(undefined);
-                setDialogTitle('Add Purpose');
-              }
+                setIsModalOpen(open);
+                if (open) {
+                  setRowData(undefined);
+                  setDialogTitle('Add Purpose');
+                }
               }}
               description=""
               renderContent={
-              <>
-                <CreatePurposeMasterPage
-                setDialogTitle={setDialogTitle}
-                rowData={rowData}
-                refetch={refetch ?? (() => {})}
-                setIsModalOpen={setIsModalOpen}
-                />
-              </>
+                <>
+                  <CreatePurposeMasterPage
+                    setDialogTitle={setDialogTitle}
+                    rowData={rowData}
+                    refetch={refetch ?? (() => {})}
+                    setIsModalOpen={setIsModalOpen}
+                  />
+                </>
               }
               footerBtnText=""
             />
-            
+
             <Button onClick={handleCreateUser} className="bg-primary text-white hover:bg-primary ml-4">
-              <GitFork className='rotate-180' /> Document Mapping
+              <GitFork className="rotate-180" /> Document Mapping
             </Button>
-            </>
+          </>
         )}
         paginationMode={'static'}
         onPageChange={
@@ -113,22 +114,19 @@ const PurposeMasterTablePage = () => {
         }
       />
 
-
-
-      <Dialog open={isMappingModalOpen} onClose={() => setIsMappingModalOpen(false)} >
+      <Dialog open={isMappingModalOpen}>
         <DialogContent className={cn('sm:max-w-[400px] md:min-w-[500px] w-full max-h-[90%] overflow-auto')}>
           <div className="flex items-center justify-between">
-        <h2 className="text-lg font-semibold">{'Transaction Mapping'}</h2>
-        <Button
-          variant="ghost"
-          size="icon"
-          onClick={() => setIsMappingModalOpen(false)}
-          aria-label="Close"
-        >
-          <X className="w-8 h-8 text-primary hover:opacity-95 outline-none font-bold" />
-        </Button>
+            <h2 className="text-lg font-semibold">{'Transaction Mapping'}</h2>
+            <DialogCloseButton onClick={() => setIsMappingModalOpen(false)} />
           </div>
-          {rowData && <TransactionMapping rowData={rowData} setIsMappingModalOpen={setIsMappingModalOpen} refetch={refetch ?? (() => {})} />}
+          {rowData && (
+            <TransactionMapping
+              rowData={rowData}
+              setIsMappingModalOpen={setIsMappingModalOpen}
+              refetch={refetch ?? (() => {})}
+            />
+          )}
         </DialogContent>
       </Dialog>
     </div>

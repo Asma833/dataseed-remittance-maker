@@ -11,28 +11,26 @@ import { PurposeDocumentFormConfig } from './create-purpose-document-form.config
 import { useCreateDocument } from '@/features/admin/hooks/useCreateDocument';
 import { useUpdateMapDocument } from '@/features/admin/hooks/useUpdateDocument';
 
-const CreatePurposeDocumentPage = (
-  { 
-    setDialogTitle , 
-    setIsModalOpen ,
-    rowData,
-    refetch
-  }: 
-  { 
-    setDialogTitle: (title: string) => void , 
-    setIsModalOpen: (isOpen: boolean) => void,
-    rowData?:any,
-    refetch: () => void
-  }) => {
+const CreatePurposeDocumentPage = ({
+  setDialogTitle,
+  setIsModalOpen,
+  rowData,
+  refetch,
+}: {
+  setDialogTitle: (title: string) => void;
+  setIsModalOpen: (isOpen: boolean) => void;
+  rowData?: any;
+  refetch: () => void;
+}) => {
   const isEditMode = !!rowData;
 
   const methods = useForm({
     resolver: zodResolver(PurposeDocumentFormSchema),
     defaultValues: {
-      name:"",
-      code: "",
-      display_name: "",
-      description: ""
+      name: '',
+      code: '',
+      display_name: '',
+      description: '',
     },
   });
   const {
@@ -41,53 +39,52 @@ const CreatePurposeDocumentPage = (
     formState: { errors, isSubmitting },
     handleSubmit,
   } = methods;
-    const { mutate: updateDocument } = useUpdateMapDocument({
-      onDocumentUpdateSuccess: () => {
-        reset({});
-        setIsModalOpen(false);
-        refetch()
-      },
-    });
-    const { mutate: addDocument, isLoading } = useCreateDocument({
-      onDocumentCreateSuccess: () => {
-        reset({});
-        setIsModalOpen(false);
-        refetch();
-      },
-    });
+  const { mutate: updateDocument } = useUpdateMapDocument({
+    onDocumentUpdateSuccess: () => {
+      reset({});
+      setIsModalOpen(false);
+      refetch();
+    },
+  });
+  const { mutate: addDocument, isLoading } = useCreateDocument({
+    onDocumentCreateSuccess: () => {
+      reset({});
+      setIsModalOpen(false);
+      refetch();
+    },
+  });
 
   const handleFormSubmit = handleSubmit((data) => {
     if (isEditMode) {
-      console.log("Updating document with data:",rowData.id, data);
+      console.log('Updating document with data:', rowData.id, data);
       updateDocument({ id: rowData.id, data });
-      
     } else {
-       addDocument({
-         ...data,
-         type: '', 
-         fields_required: { number: '', dob: '' },
-       });
+      addDocument({
+        ...data,
+        type: '',
+        fields_required: { number: '', dob: '' },
+      });
     }
   });
-  
+
   useEffect(() => {
     if (rowData) {
       reset({
-        name: rowData.name || "NA",
-        code: rowData.code || "NA",
-        display_name: rowData.display_name || "NA",
-        description: rowData.description || "NA",
+        name: rowData.name || 'NA',
+        code: rowData.code || 'NA',
+        display_name: rowData.display_name || 'NA',
+        description: rowData.description || 'NA',
       });
     }
   }, [rowData, reset]);
+
   return (
     <div className="flex flex-col items-center justify-center">
       <FormProvider {...methods}>
         <FormContentWrapper className="p-2 rounded-lg mr-auto bg-transparent w-full">
           <Spacer>
             <FormFieldRow className="mt-1" rowCols={2}>
-              {Object.entries(PurposeDocumentFormConfig().fields)     
-              .map(([name, field]) => (
+              {Object.entries(PurposeDocumentFormConfig().fields).map(([name, field]) => (
                 <FieldWrapper key={name}>
                   {getController({
                     ...(typeof field === 'object' && field !== null ? field : {}),
@@ -98,20 +95,20 @@ const CreatePurposeDocumentPage = (
                 </FieldWrapper>
               ))}
             </FormFieldRow>
-        </Spacer>
+          </Spacer>
 
-        <div className="flex justify-center space-x-2 mt-4">
-          <button
-            type="submit"
-            className="bg-primary text-white px-4 py-2 mt-3 rounded-md min-w-[150px]"
-            disabled={isSubmitting}
-            onClick={handleFormSubmit}
-          >
-            {isSubmitting ? (isEditMode ? 'Updating...' : 'Submitting...') : isEditMode ? 'Update' : 'Submit'}
-          </button>
-        </div>
-      </FormContentWrapper>
-    </FormProvider>
+          <div className="flex justify-center space-x-2 mt-4">
+            <button
+              type="submit"
+              className="bg-primary text-white px-4 py-2 mt-3 rounded-md min-w-[150px]"
+              disabled={isSubmitting}
+              onClick={handleFormSubmit}
+            >
+              {isSubmitting ? (isEditMode ? 'Updating...' : 'Submitting...') : isEditMode ? 'Update' : 'Submit'}
+            </button>
+          </div>
+        </FormContentWrapper>
+      </FormProvider>
     </div>
   );
 };

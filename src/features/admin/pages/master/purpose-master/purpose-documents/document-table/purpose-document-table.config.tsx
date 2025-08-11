@@ -1,20 +1,18 @@
 import { Edit, Trash2 } from 'lucide-react';
 
-
-export const PurposeDocumentTableConfig = (
-  { handleDelete,
-    handleEditDocument,
-    handleSelectionChange,
-    handleRequirementChange,
-    handleBackRequirementChange
-  }: 
-  { handleDelete: (rowData: any) => void,
-    handleEditDocument: (rowData: any) => void,
-    handleSelectionChange: (rowId: string, isSelected: boolean) => void,
-    handleRequirementChange: (rowId: string, value: string) => void,
-    handleBackRequirementChange: (rowId: string, value: string) => void
-  }
-) => {
+export const PurposeDocumentTableConfig = ({
+  handleDelete,
+  handleEditDocument,
+  handleSelectionChange,
+  handleRequirementChange,
+  handleBackRequirementChange,
+}: {
+  handleDelete: (rowData: any) => void;
+  handleEditDocument: (rowData: any) => void;
+  handleSelectionChange: (rowId: string, isSelected: boolean) => void;
+  handleRequirementChange: (rowId: string, value: string) => void;
+  handleBackRequirementChange: (rowId: string, value: string) => void;
+}) => {
   return [
     {
       key: 'select',
@@ -51,7 +49,7 @@ export const PurposeDocumentTableConfig = (
               checked={value === 'mandatory'}
               onChange={() => handleRequirementChange(row.id, 'mandatory')}
               style={{
-                accentColor: '#E53888' 
+                accentColor: '#E53888',
               }}
             />
             Mandatory
@@ -59,7 +57,7 @@ export const PurposeDocumentTableConfig = (
         </div>
       ),
     },
-     {
+    {
       key: 'backRequirement',
       id: 'backRequirement',
       name: 'Back Required',
@@ -71,7 +69,7 @@ export const PurposeDocumentTableConfig = (
               name={`back-required-${row.id}`}
               value="back-required"
               checked={value === 'back-required'}
-              onChange={e => handleBackRequirementChange(row.id, e.target.value)}
+              onChange={(e) => handleBackRequirementChange(row.id, e.target.value)}
               className="accent-pink-600"
             />
             Back Required
@@ -86,16 +84,15 @@ export const PurposeDocumentTableConfig = (
       cell: (_: any, rowData: any) => {
         return (
           <div className="flex flex-row items-center justify-center">
-            <button
-              className="p-2 rounded-md hover:bg-muted/20"
-              onClick={() => handleEditDocument(rowData)}
-            >
+            <button className="p-2 rounded-md hover:bg-muted/20" onClick={() => handleEditDocument(rowData)}>
               <Edit className="w-5 h-5 text-muted-foreground" />
             </button>
-            <button className="p-2 rounded-md hover:bg-muted/20" 
-            onClick={() => {
-              handleDelete(rowData);
-            }}>
+            <button
+              className="p-2 rounded-md hover:bg-muted/20"
+              onClick={() => {
+                handleDelete(rowData);
+              }}
+            >
               <Trash2 className="w-5 h-5 text-muted-foreground" />
             </button>
           </div>
