@@ -6,16 +6,12 @@ import { useCurrentUser } from '@/utils/getUserFromRedux';
 import useUnassignChecker from '@/features/checker/hooks/useUnassignChecker';
 import { cn } from '@/utils/cn';
 import { GetTransactionTableColumns } from './UpdateIncidentTableColumns';
-import {
-  IncidentMode,
-  IncidentPageId,
-  Order,
-  TransactionTypeEnum,
-} from '@/features/checker/types/updateIncident.types';
+import { Order } from '@/features/checker/types/updateIncident.types';
 import UpdateIncidentDialog from '@/features/checker/components/update-incident-dialog/UpdateIncidentDialog';
 import useGetCheckerOrders from '@/features/checker/hooks/useGetCheckerOrders';
 import { useDynamicOptions } from '@/features/checker/hooks/useDynamicOptions';
 import { API } from '@/core/constant/apis';
+import { IncidentMode, IncidentPageId, TransactionTypeEnum } from '@/types/enums';
 
 const UpdateIncidentCreationTable = () => {
   const [selectedRowData, setSelectedRowData] = useState<any>(null);
@@ -24,7 +20,7 @@ const UpdateIncidentCreationTable = () => {
   const currentUserHashedKey = getUserHashedKey();
   const { options: purposeTypeOptions } = useDynamicOptions(API.PURPOSE.GET_PURPOSES);
 
-  const { options: transactionTypeOptions } = useDynamicOptions(API.TRANSACTION.GET_TRANSACTIONS);
+  const { options: transactionTypeOptions } = useDynamicOptions(API.TRANSACTION.GET_ALL_TRANSACTIONS_TYPES);
 
   // Call the hook at the top level of the component
   const { handleUnassign: unassignChecker, isPending: isUnassignPending } = useUnassignChecker();
@@ -106,13 +102,13 @@ const UpdateIncidentCreationTable = () => {
             resetAction: true,
             selects: [
               {
-                id: 'purpose_type_name',
+                id: 'purpose_type_name.purpose_name',
                 label: 'Purpose Type',
                 placeholder: 'Select',
                 options: purposeTypeOptions,
               },
               {
-                id: 'transaction_type_name',
+                id: 'transaction_type_name.name',
                 label: 'Transaction Type',
                 placeholder: 'Select',
                 options: transactionTypeOptions,

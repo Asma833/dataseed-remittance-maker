@@ -58,6 +58,31 @@ export const ENDPOINT_MATCHING_RULES: EndpointRulesConfig = {
     matchType: 'standard' as const,
     description: 'Generate vkyc link endpoint',
   },
+  'trans-purpose-document': {
+    endpoint: API.TRANSACTION_PURPOSE_MAP.CREATE,
+    matchType: 'standard' as const,
+    description: 'Transaction purpose document endpoint',
+  },
+  'merge-doc': {
+    endpoint: API.DOCUMENTS.MERGE_PDF,
+    matchType: 'exact-only' as const,
+    description: 'Merge documents endpoint',
+  },
+  'create-purpose':{
+    endpoint: API.PURPOSE.CREATE_PURPOSE,
+    matchType: 'standard' as const,
+    description: 'Create purpose endpoint',
+  },
+  'add-document':{
+    endpoint: API.DOCUMENT_MASTER.CREATE_DOCUMENT,
+    matchType: 'standard' as const,
+    description: 'Add document endpoint',
+  },
+  'document-map':{
+    endpoint: API.DOCUMENT_MASTER.DOC_PURPOSE_TRANS_MAPPING,
+    matchType: 'standard' as const,
+    description: 'Document mapping endpoint',
+  }
 } as const;
 
 

@@ -20,6 +20,7 @@ import { Label } from '@/components/ui/label';
 import { useCurrentUser } from '@/utils/getUserFromRedux';
 import useSubmitIncidentFormData from '../../completed-transactions/hooks/useSubmitIncidentFormData';
 import useGetCheckerOrdersByPartnerId from '@/features/checker/hooks/useGetCheckerOrdersByPartnerId';
+import { IncidentPageId } from '@/types/enums';
 
 const UpdateIncidentForm = (props: UpdateIncidentFormData) => {
   const { formActionRight, rowData, setIsModalOpen, mode, pageId } = props;
@@ -115,7 +116,7 @@ const UpdateIncidentForm = (props: UpdateIncidentFormData) => {
   }, []);
 
   useEffect(() => {
-    if (pageId === 'completedIncident') {
+    if (pageId === IncidentPageId.COMPLETED) {
       setShowNiumInvoice(true);
     }
   }, [pageId]);
@@ -268,6 +269,7 @@ const UpdateIncidentForm = (props: UpdateIncidentFormData) => {
   const esignFile = esigns?.[0]?.esign_file_details?.esign_file || '';
   const vkycDocumentFiles = resources_documents_files || {};
   const vkycVideoFiles = resources_videos_files?.customer || '';
+  const agentVkycVideo = resources_videos_files?.agent || '';
   const vkycDocumentFilesArray = Object.values(vkycDocumentFiles);
 
   const handleViewDocument = () => {
@@ -383,12 +385,12 @@ const UpdateIncidentForm = (props: UpdateIncidentFormData) => {
           {/* <ExchangeRateDetails data={updateFormIncidentConfig.tableData} /> */}
 
           <FormFieldRow>
-            {mode === 'view' && pageId === 'viewAllIncident' && rowData?.merged_document !== null && (
+            {mode === 'view' && pageId === IncidentPageId.VIEW_ALL && rowData?.merged_document !== null && (
               <Button type="button" onClick={handleViewDocument} className="disabled:opacity-60">
                 View Document
               </Button>
             )}
-            {isEsignDocumentLink && (pageId === 'updateIncident' || pageId === 'completedIncident') && (
+            {isEsignDocumentLink && (pageId === IncidentPageId.UPDATE || pageId === IncidentPageId.COMPLETED) && (
               <Button
                 type="button"
                 onClick={() => {
@@ -403,7 +405,7 @@ const UpdateIncidentForm = (props: UpdateIncidentFormData) => {
 
             {Array.isArray(vkycDocumentFilesArray) &&
               vkycDocumentFilesArray.length > 0 &&
-              (pageId === 'updateIncident' || pageId === 'completedIncident') && (
+              (pageId === IncidentPageId.UPDATE || pageId === IncidentPageId.COMPLETED) && (
                 <Button
                   type="button"
                   onClick={() => handleDownloadDocument('vkycDocument')}
@@ -413,14 +415,24 @@ const UpdateIncidentForm = (props: UpdateIncidentFormData) => {
                   VKYC Document
                 </Button>
               )}
-            {vkycVideoFiles && (pageId === 'updateIncident' || pageId === 'completedIncident') && (
+            {vkycVideoFiles && (pageId === IncidentPageId.UPDATE || pageId === IncidentPageId.COMPLETED) && (
               <Button
                 type="button"
                 onClick={() => handleDownloadDocument('vkycVideo')}
                 disabled={!vkycVideoFiles}
                 className="disabled:opacity-60"
               >
-                VKYC Video
+                VKYC Customer Video
+              </Button>
+            )}
+            {agentVkycVideo && (pageId === IncidentPageId.UPDATE || pageId === IncidentPageId.COMPLETED) && (
+              <Button
+                type="button"
+                onClick={() => handleDownloadDocument('vkycVideo')}
+                disabled={!agentVkycVideo}
+                className="disabled:opacity-60"
+              >
+                VKYC Agent Video
               </Button>
             )}
           </FormFieldRow>
@@ -461,7 +473,7 @@ const UpdateIncidentForm = (props: UpdateIncidentFormData) => {
                 })}
               </FormFieldRow>
             )}
-            {(pageId === 'updateIncident' || pageId === 'completedIncident') && (
+            {(pageId === IncidentPageId.UPDATE || pageId === IncidentPageId.COMPLETED) && (
               <FormFieldRow className="flex-1">
                 {showNiumInvoice &&
                   getController({
@@ -475,7 +487,7 @@ const UpdateIncidentForm = (props: UpdateIncidentFormData) => {
           </FormFieldRow>
         </Spacer>
       </FormContentWrapper>
-      {(pageId === 'updateIncident' || pageId === 'completedIncident') && (
+      {(pageId === IncidentPageId.UPDATE || pageId === IncidentPageId.COMPLETED) && (
         <div className="flex justify-center bg-background">
           <Button disabled={isPending} onClick={handleFormSubmit}>
             {isPending ? <Loader2 className="animate-spin" /> : 'Submit'}

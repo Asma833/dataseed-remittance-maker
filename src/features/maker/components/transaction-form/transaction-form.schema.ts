@@ -60,6 +60,7 @@ export const transactionFormSchema = z.object({
     transactionType: z.string().optional().or(z.literal('')),
 
     purposeType: z.string().optional().or(z.literal('')),
+    paidBy: z.string().optional().or(z.literal('')),
   }),
   // Document Uploads
 });
@@ -107,6 +108,8 @@ export const transactionFormSubmissionSchema = z.object({
     transactionType: z.string().min(1, 'Transaction type is required'),
 
     purposeType: z.string().min(1, 'Purpose is required'),
+    
+    paidBy: z.string().min(1, 'Paid by selection is required'),
   }),
 });
 

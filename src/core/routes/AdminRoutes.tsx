@@ -14,7 +14,12 @@ export const AdminRoutes = () => {
           element={
             <ProtectedRoute roles={roles} permission={permission}>
               <SidebarLayout>
-                <Element />
+                <Element
+                  setDialogTitle={() => {}}
+                  rowData={null}
+                  refetch={() => {}}
+                  setIsModalOpen={() => {}}
+                />
               </SidebarLayout>
             </ProtectedRoute>
           }
