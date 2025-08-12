@@ -331,10 +331,6 @@ html[class='dark'] {
   z-index: 9999;
   pointer-events: all;
 }
-.css-pa188r-MuiModal-root-MuiPopover-root-MuiMenu-root {
-  z-index: 99999999 !important;
-  pointer-events: all !important;
-}
 .MuiSvgIcon-root{
   width: 28px !important;
   height: 28px !important;
