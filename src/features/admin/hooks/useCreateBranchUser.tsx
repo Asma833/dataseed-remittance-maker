@@ -1,7 +1,7 @@
 import { useMutation } from '@tanstack/react-query';
 import { toast } from 'sonner';
-import { AgentBranchUserPayload } from '../../types/user.types';
-import { agentBranchUserApi } from '../../action/agentBranchUser';
+import { AgentBranchUserPayload } from '../types/user.types';
+import { agentBranchUserApi } from '../action/agentBranchUser';
 
 export const useCreateBranchUser = ({ onCreateSuccess }: { onCreateSuccess: (data: AgentBranchUserPayload) => void }
 ) => {
