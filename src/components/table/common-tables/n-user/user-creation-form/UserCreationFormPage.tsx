@@ -67,6 +67,8 @@ const UserCreationFormPage = ({ formConfig, schema, role }: UserCreationFormPage
     if (selectedRow && Object.keys(selectedRow).length > 0) {
       reset({
         email: selectedRow.email || '',
+        password: '',
+        confirmPassword: '',
       });
     }
   }, [selectedRow, reset]);
