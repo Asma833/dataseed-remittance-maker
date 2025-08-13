@@ -23,6 +23,8 @@ export const getFormControllerMeta = (options: FormControllerMetaOptions = {}) =
     mother: { label: 'Mother' },
     brother: { label: 'Brother' },
     sister: { label: 'Sister' },
+    husband: { label: 'Husband' },
+    wife: { label: 'Wife' },
   };
 
   // Set first option as selected if available
