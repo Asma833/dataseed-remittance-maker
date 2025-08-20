@@ -23,7 +23,7 @@ export const API = {
   },
   ORDERS: {
     ORDERS: '/fxorders',
-    LIST: `/fxorders`,
+    LIST: `/fxorders/maker`,
     CREATE: `/orders`,
     GET_BY_ID: (id: string) => `/orders/${id}`,
     UPDATE: (id: string) => `/orders/${id}`,
@@ -57,7 +57,7 @@ export const API = {
     },
   },
   MAKER: {
-    GENERATE_ORDER: `/fxorders/generate-order`,
+    GENERATE_ORDER: `/fxorders/generate-order-maker`,
   },
   FEATURES: {
     ENABLE_GEMINI_FLASH: `/features/gemini-flash/enable`,
