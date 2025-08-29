@@ -7,9 +7,7 @@ import { UserRole } from '@/features/auth/types/auth.types';
 import { RootState } from '@/store';
 import NotFoundPage from '@/components/common/NotFoundPage';
 import UnauthorizedPage from '@/components/common/UnauthorizedPage';
-import { CheckerRoutes } from './CheckerRoutes';
 import { AdminRoutes } from './AdminRoutes';
-import { MakerRoutes } from './MakerRoutes';
 import { ProtectedRoute } from './ProtectedRoute';
 
 export const AppRoutes = () => {
@@ -29,22 +27,6 @@ export const AppRoutes = () => {
         element={
           <ProtectedRoute>
             <AdminRoutes />
-          </ProtectedRoute>
-        }
-      />
-      <Route
-        path="/checker/*"
-        element={
-          <ProtectedRoute>
-            <CheckerRoutes />
-          </ProtectedRoute>
-        }
-      />
-      <Route
-        path="/maker/*"
-        element={
-          <ProtectedRoute>
-            <MakerRoutes />
           </ProtectedRoute>
         }
       />
