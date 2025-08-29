@@ -5,15 +5,15 @@ import { Button } from '@/components/ui/button';
 import { API } from '@/core/constant/apis';
 import { GetTransactionTableColumns } from './ViewAllTableColumns';
 import { exportToCSV } from '@/utils/exportUtils';
-import { useSendEsignLink } from '@/features/checker/hooks/useSendEsignLink';
-import {  Order, Orders } from '@/features/checker/types/updateIncident.types';
-import UpdateIncidentDialog from '@/features/checker/components/update-incident-dialog/UpdateIncidentDialog';
-import { useDynamicOptions } from '@/features/checker/hooks/useDynamicOptions';
+import {  Order, Orders } from '@/types/common/updateIncident.types';
+import UpdateIncidentDialog from '@/components/update-incident-dialog/UpdateIncidentDialog';
 import { ViewAllTableProps } from '@/components/types/common-components.types';
-import { useSendVkycLink } from '@/features/checker/hooks/useSendVkycLink';
 import { formatDateWithFallback } from '@/utils/formatDateWithFallback';
 import { STATUS_MAP, STATUS_TYPES } from '@/core/constant/statusTypes';
 import { IncidentMode, IncidentPageId } from '@/types/enums';
+import { useDynamicOptions } from '@/hooks/common/useDynamicOptions';
+import { useSendEsignLink } from '@/hooks/common/useSendEsignLink';
+import { useSendVkycLink } from '@/hooks/common/useSendVkycLink';
 
 const ViewAllTable: React.FC<ViewAllTableProps> = ({
   tableData,

@@ -1,11 +1,11 @@
 import { SignLinkButton } from '@/components/common/SignLinkButton';
 import { DISABLED_ESIGN_STATUSES, DISABLED_ORDER_STATUSES, EsignStatus } from '@/components/types/status';
-import EsignStatusCell from '@/features/checker/components/table/EsignStatusCell';
-import NiumOrderID from '@/features/checker/components/table/NiumOrderIdCell';
-import OrderStatusCell from '@/features/checker/components/table/OrderStatusCell';
-import PurposeType from '@/features/checker/components/table/PurposeType';
-import TransactionType from '@/features/checker/components/table/TransactionType';
-import VKycStatusCell from '@/features/checker/components/table/VKycStatusCell';
+import EsignStatusCell from '@/features/admin/table/EsignStatusCell';
+import NiumOrderID from '@/features/admin/table/NiumOrderIdCell';
+import OrderStatusCell from '@/features/admin/table/OrderStatusCell';
+import PurposeType from '@/features/admin/table/PurposeType';
+import TransactionType from '@/features/admin/table/TransactionType';
+import VKycStatusCell from '@/features/admin/table/VKycStatusCell';
 import { formatDateWithFallback } from '@/utils/formatDateWithFallback';
 
 export const GetTransactionTableColumns = ({

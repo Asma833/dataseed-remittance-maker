@@ -1,15 +1,16 @@
-import { useForm, Controller } from 'react-hook-form';
+import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { FormProvider } from 'react-hook-form';
-import { useMemo } from 'react';
 import { API } from '@/core/constant/apis';
-import { useDynamicOptions } from '@/features/checker/hooks/useDynamicOptions';
+
 import { useCreateTransactionMapping } from '@/features/admin/hooks/useCreateTransactionMapping';
-import { TransactionMappingForm, TransactionMappingPayload } from '@/features/admin/types/transaction.types';
+import { TransactionMappingForm } from '@/features/admin/types/transaction.types';
 import { PurposeMasterTablePageRowData } from '@/features/admin/types/purpose.types';
 import { TransactionMappingSchema } from './transaction-mapping.schema';
 import { DialogSelect } from "@/components/ui/dialog-select";
 import { Button } from "@/components/ui/button";
+import { useDynamicOptions } from '@/hooks/common/useDynamicOptions';
+
 
 const TransactionMapping = (
   { rowData , 
@@ -24,17 +25,6 @@ const TransactionMapping = (
   // Use dynamic options from API
   const { options: transactionTypeOptions } = useDynamicOptions(API.TRANSACTION.GET_ALL_TRANSACTIONS);
   
-  // const { options: transactionTypeOptions } = useDynamicOptions(API.TRANSACTION.GET_ALL_TRANSACTIONS);
-  
-  // Memoize formatted transaction types to prevent recreation on every render
-  const formatedTransactionTypes = useMemo(() => {
-    return transactionTypeOptions?.map((type) => ({
-      typeId: type.typeId,
-      label: type.value,
-      value: type.value,
-    }));
-  }, [transactionTypeOptions]);
-
   const methods = useForm({
     resolver: zodResolver(TransactionMappingSchema),
     defaultValues: {
