@@ -3,13 +3,13 @@ import { DynamicTable } from '@/components/common/dynamic-table/DynamicTable';
 import { useDynamicPagination } from '@/components/common/dynamic-table/hooks/useDynamicPagination';
 import { useFilterApi } from '@/components/common/dynamic-table/hooks/useFilterApi';
 import { useCurrentUser } from '@/utils/getUserFromRedux';
-import useUnassignChecker from '@/features/checker/hooks/useUnassignChecker';
+import useUnassignChecker from '@/hooks/common/useUnassignChecker';
 import { cn } from '@/utils/cn';
 import { GetTransactionTableColumns } from './UpdateIncidentTableColumns';
-import { Order } from '@/features/checker/types/updateIncident.types';
-import UpdateIncidentDialog from '@/features/checker/components/update-incident-dialog/UpdateIncidentDialog';
-import useGetCheckerOrders from '@/features/checker/hooks/useGetCheckerOrders';
-import { useDynamicOptions } from '@/features/checker/hooks/useDynamicOptions';
+import { Order } from '@/types/common/updateIncident.types';
+import UpdateIncidentDialog from '@/components/update-incident-dialog/UpdateIncidentDialog';
+import useGetCheckerOrders from '@/hooks/common/useGetCheckerOrders';
+import { useDynamicOptions } from '@/hooks/common/useDynamicOptions';
 import { API } from '@/core/constant/apis';
 import { IncidentMode, IncidentPageId, TransactionTypeEnum } from '@/types/enums';
 

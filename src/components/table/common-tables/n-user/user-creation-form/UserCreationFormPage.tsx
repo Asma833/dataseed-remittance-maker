@@ -14,7 +14,7 @@ import { useProductOptions } from '@/features/admin/hooks/useProductOptions';
 import { UserFormData } from '@/features/admin/types/user.types';
 import { useCurrentUser } from '@/utils/getUserFromRedux';
 import { useCreateUser } from '@/features/admin/hooks/useCreateUser';
-
+import { Button } from 'primereact/button';
 interface UserCreationFormPageProps {
   formConfig: any;
   schema: any;
@@ -144,7 +144,7 @@ const UserCreationFormPage = ({ formConfig, schema, role }: UserCreationFormPage
           </Spacer>
 
           <div className="flex justify-start space-x-2 mt-4">
-            <button
+            {/* <button
               type="submit"
               className="bg-primary text-white px-4 py-2 mt-3 rounded-md min-w-[150px]"
               disabled={isSubmitting || isLoading}
@@ -157,7 +157,8 @@ const UserCreationFormPage = ({ formConfig, schema, role }: UserCreationFormPage
                 : isEditMode
                   ? 'Update'
                   : 'Submit'}
-            </button>
+            </button> */}
+            <Button type="button" label="Messages" icon="pi pi-users" outlined badge="2" badgeClassName="p-badge-danger" />
           </div>
         </FormContentWrapper>
       </FormProvider>

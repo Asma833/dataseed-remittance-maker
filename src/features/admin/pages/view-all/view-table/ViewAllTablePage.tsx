@@ -1,7 +1,7 @@
 import { useMemo } from 'react';
 import ViewAllTable from '@/components/table/common-tables/view-table/ViewAllTable';
 import useGetAllOrders from '@/features/admin/hooks/useGetAllOrders';
-import { Order } from '@/features/checker/types/updateIncident.types';
+import { Order } from '@/types/common/updateIncident.types';
 
 const ViewAllTablePage = () => {
   const { data, loading: isLoading, error, fetchData: refreshData } = useGetAllOrders();

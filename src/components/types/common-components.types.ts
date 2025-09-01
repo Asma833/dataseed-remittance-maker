@@ -1,4 +1,4 @@
-import { Order } from '@/features/checker/types/updateIncident.types';
+import { Order } from '@/types/common/updateIncident.types';
 
 export type CommonProps = {
   className?: string;
