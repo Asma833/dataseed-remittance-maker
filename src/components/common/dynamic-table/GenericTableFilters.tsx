@@ -1,6 +1,6 @@
-import React, { useState, useEffect, useCallback, useRef } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { Button } from 'primereact/button';
-import { SetFilters, FilterConfig, RenderFilterOptions, DateRange } from '@/components/types/filter.types';
+import { SetFilters, FilterConfig, DateRange } from '@/components/types/filter.types';
 import GenericTableSearch from './GenericTableSearch.tsx';
 import GenericTableDateRangeFilter from './GenericTableDateRangeFilter.tsx';
 import GenericTableStatusFilter from './GenericTableStatusFilter.tsx';
@@ -10,8 +10,8 @@ interface GenericTableFiltersProps {
   filters: SetFilters;
   filterConfig: FilterConfig;
   setFilters: React.Dispatch<React.SetStateAction<SetFilters>>;
-  onFilter?: () => void;
-  onReset?: () => void;
+  onFilter?: () => void | Promise<void>;
+  onReset?: () => void | Promise<void>;
   setLoading?: React.Dispatch<React.SetStateAction<boolean>>;
   setDynamicData?: React.Dispatch<React.SetStateAction<any[]>>;
 }
@@ -27,13 +27,11 @@ const GenericTableFilters: React.FC<GenericTableFiltersProps> = ({
 }) => {
   const { renderFilterOptions, mode, dynamicCallbacks } = filterConfig;
 
-  // Store filter values locally to avoid applying them immediately
   const [localDateRange, setLocalDateRange] = useState<DateRange>(filters.dateRange);
   const [localStatus, setLocalStatus] = useState<string>(filters.status);
   const [localCustomFilters, setLocalCustomFilters] = useState<Record<string, string>>(filters.customFilterValues);
   const [localSearch, setLocalSearch] = useState<string>(filters.search);
 
-  // Update local states when filters change externally
   useEffect(() => {
     setLocalDateRange(filters.dateRange);
     setLocalStatus(filters.status);
@@ -45,11 +43,10 @@ const GenericTableFilters: React.FC<GenericTableFiltersProps> = ({
     async <T,>(operation: () => Promise<T>) => {
       if (setLoading) setLoading(true);
       try {
-        const result = await operation();
-        return result;
+        return await operation();
       } catch (error) {
         console.error('Operation failed:', error);
-        return null;
+        return null as unknown as T;
       } finally {
         if (setLoading) setLoading(false);
       }
@@ -66,10 +63,7 @@ const GenericTableFilters: React.FC<GenericTableFiltersProps> = ({
   }, []);
 
   const handleCustomFilterChange = useCallback((id: string, value: string) => {
-    setLocalCustomFilters(prev => ({
-      ...prev,
-      [id]: value,
-    }));
+    setLocalCustomFilters(prev => ({ ...prev, [id]: value }));
   }, []);
 
   const handleSearchChange = useCallback((search: string) => {
@@ -78,7 +72,6 @@ const GenericTableFilters: React.FC<GenericTableFiltersProps> = ({
   }, [setFilters]);
 
   const handleApplyFilters = useCallback(async () => {
-    // Update the filters in the parent component
     const updatedFilters: SetFilters = {
       ...filters,
       dateRange: localDateRange,
@@ -88,15 +81,13 @@ const GenericTableFilters: React.FC<GenericTableFiltersProps> = ({
     };
 
     setFilters(updatedFilters);
-
-    // Always call onFilter regardless of pagination state
     if (onFilter) await onFilter();
 
     if (mode === 'dynamic' && dynamicCallbacks?.onFilterApply && setDynamicData) {
       const result = await executeAsyncOperation(
         () => dynamicCallbacks.onFilterApply!(updatedFilters) ?? Promise.resolve([])
       );
-      if (result) setDynamicData(result);
+      if (result) setDynamicData(result as any[]);
     }
   }, [
     filters,
@@ -127,179 +118,101 @@ const GenericTableFilters: React.FC<GenericTableFiltersProps> = ({
     setLocalSearch(resetFilters.search);
     setFilters(resetFilters);
 
-    // Always call onReset regardless of pagination state
-    if (onReset) onReset();
+    if (onReset) await onReset();
 
     if (mode === 'dynamic' && dynamicCallbacks?.onFilterApply && setDynamicData) {
       const result = await executeAsyncOperation(
         () => dynamicCallbacks.onFilterApply!(resetFilters) ?? Promise.resolve([])
       );
-      if (result) setDynamicData(result);
+      if (result) setDynamicData(result as any[]);
     }
-  }, [
-    mode,
-    dynamicCallbacks,
-    onReset,
-    setDynamicData,
-    setFilters,
-    executeAsyncOperation,
-  ]);
+  }, [mode, dynamicCallbacks, onReset, setDynamicData, setFilters, executeAsyncOperation]);
 
-  // Check if any filters are present
-  const hasFilters = renderFilterOptions.dateRange || renderFilterOptions.status || (renderFilterOptions.selects && renderFilterOptions.selects.length > 0);
+  const hasFilters =
+    renderFilterOptions.dateRange ||
+    renderFilterOptions.status ||
+    (renderFilterOptions.selects && renderFilterOptions.selects.length > 0);
+
+  // Responsive slot sizes — tweak to your content
+  const slot = 'flex-1 min-w-[220px] max-w-[340px]';         // generic filter slot
+  const slotDate = 'flex-1 min-w-[220px] max-w-[340px]';     // date group (internal handles 2 slots)
+  const slotButtons = 'shrink-0';                            // buttons never shrink
+  const slotSearch = 'w-full md:w-80 md:ml-auto';            // search full-width on small, right on md+
 
   return (
-    <div className="flex flex-col gap-4 w-full p-4 bg-gray-50 rounded-lg">
-      {/* Mobile/Tablet Layout */}
-      <div className="block lg:hidden space-y-4">
-        {/* Filters Section */}
-        {hasFilters && (
-          <div className="flex flex-col gap-4">
-            <div className="flex flex-wrap gap-4">
-              {/* Date Range Filter */}
-              {renderFilterOptions.dateRange && (
-                <GenericTableDateRangeFilter
-                  dateRange={localDateRange}
-                  onDateRangeChange={handleDateRangeChange}
-                />
-              )}
-
-              {/* Status Filter */}
-              {renderFilterOptions.status && (
-                <GenericTableStatusFilter
-                  status={localStatus}
-                  statusConfig={renderFilterOptions.status}
-                  onStatusChange={handleStatusChange}
-                />
-              )}
-
-              {/* Custom Select Filters */}
-              {renderFilterOptions.selects &&
-                renderFilterOptions.selects.map((select) => (
-                  <GenericTableCustomSelectFilter
-                    key={select.id}
-                    selectConfig={select}
-                    value={localCustomFilters[select.id] || 'all'}
-                    onValueChange={handleCustomFilterChange}
-                  />
-                ))}
-            </div>
+    <div className="w-full p-4 bg-gray-50 rounded-lg">
+      {/* Single responsive row that WRAPS (no scroll) */}
+      <div className="flex flex-wrap items-end gap-1" role="toolbar" aria-label="Table filters">
+        {/* Date range group */}
+        {hasFilters && renderFilterOptions.dateRange && (
+          <div >
+            <GenericTableDateRangeFilter
+              dateRange={localDateRange}
+              onDateRangeChange={handleDateRangeChange}
+              className="w-full"
+            />
           </div>
         )}
 
-        {/* Buttons and Search Section */}
-        <div className="flex flex-col sm:flex-row gap-4 items-stretch sm:items-end">
-          {/* Action Buttons */}
-          {renderFilterOptions.applyAction && renderFilterOptions.resetAction && (
-            <div className="flex gap-2 flex-1 sm:flex-none">
-              {renderFilterOptions.applyAction && (
-                <Button
-                  label="Apply Filters"
-                  icon="pi pi-check"
-                  onClick={handleApplyFilters}
-                  className="p-button-primary flex-1 sm:flex-none"
-                  style={{ height: '40px', fontWeight: '500' }}
-                />
-              )}
-              {renderFilterOptions.resetAction && (
-                <Button
-                  label="Reset"
-                  icon="pi pi-refresh"
-                  onClick={handleResetFilters}
-                  className="p-button-secondary flex-1 sm:flex-none"
-                  style={{ height: '40px', fontWeight: '500' }}
-                />
-              )}
-            </div>
-          )}
-
-          {/* Search Filter */}
-          {renderFilterOptions.search && (
-            <div className="flex-1 sm:flex-none sm:w-80">
-              <GenericTableSearch
-                value={localSearch}
-                onChange={handleSearchChange}
-                placeholder="Search..."
-                className="w-full"
-                showClearButton={true}
-              />
-            </div>
-          )}
-        </div>
-      </div>
-
-      {/* Desktop Layout */}
-      <div className="hidden lg:flex items-end gap-4">
-        {/* Left side - Filters */}
-        {hasFilters && (
-          <div className="flex flex-wrap items-end gap-4 flex-1">
-            {/* Date Range Filter */}
-            {renderFilterOptions.dateRange && (
-              <GenericTableDateRangeFilter
-                dateRange={localDateRange}
-                onDateRangeChange={handleDateRangeChange}
-              />
-            )}
-
-            {/* Status Filter */}
-            {renderFilterOptions.status && (
-              <GenericTableStatusFilter
-                status={localStatus}
-                statusConfig={renderFilterOptions.status}
-                onStatusChange={handleStatusChange}
-              />
-            )}
-
-            {/* Custom Select Filters */}
-            {renderFilterOptions.selects &&
-              renderFilterOptions.selects.map((select) => (
-                <GenericTableCustomSelectFilter
-                  key={select.id}
-                  selectConfig={select}
-                  value={localCustomFilters[select.id] || 'all'}
-                  onValueChange={handleCustomFilterChange}
-                />
-              ))}
+        {/* Status */}
+        {hasFilters && renderFilterOptions.status && (
+          <div >
+            <GenericTableStatusFilter
+              status={localStatus}
+              statusConfig={renderFilterOptions.status}
+              onStatusChange={handleStatusChange}
+              className="w-full"
+            />
           </div>
         )}
 
-        {/* Right side - Buttons and Search */}
-        <div className="flex items-end gap-4 ml-auto">
-          {/* Action Buttons */}
-          {renderFilterOptions.applyAction && renderFilterOptions.resetAction && (
-            <div className="flex gap-2">
-              {renderFilterOptions.applyAction && (
-                <Button
-                  label="Apply Filters"
-                  icon="pi pi-check"
-                  onClick={handleApplyFilters}
-                  className="p-button-primary"
-                  style={{ height: '40px', fontWeight: '500' }}
-                />
-              )}
-              {renderFilterOptions.resetAction && (
-                <Button
-                  label="Reset"
-                  icon="pi pi-refresh"
-                  onClick={handleResetFilters}
-                  className="p-button-secondary"
-                  style={{ height: '40px', fontWeight: '500' }}
-                />
-              )}
-            </div>
-          )}
+        {/* Custom Selects */}
+        {hasFilters && renderFilterOptions.selects?.map((select) => (
+          <div key={select.id} >
+            <GenericTableCustomSelectFilter
+              selectConfig={select}
+              value={localCustomFilters[select.id] || 'all'}
+              onValueChange={handleCustomFilterChange}
+              className="w-full"
+            />
+          </div>
+        ))}
 
-          {/* Search Filter - always after reset button */}
-          {renderFilterOptions.search && (
+        {/* Buttons */}
+        {(renderFilterOptions.applyAction || renderFilterOptions.resetAction) && (
+          <div className={`flex items-end gap-2 ${slotButtons}`}>
+            {renderFilterOptions.applyAction && (
+              <Button
+                label="Apply Filters"
+                icon="pi pi-check"
+                onClick={handleApplyFilters}
+                className="bg-indigo-600 p-2 outline-none text-white"
+               
+              />
+            )}
+            {renderFilterOptions.resetAction && (
+              <Button
+                label="Reset"
+                icon="pi pi-refresh"
+                onClick={handleResetFilters}
+                className="bg-slate-400 p-2 outline-none" 
+              />
+            )}
+          </div>
+        )}
+
+        {/* Search — goes to new line on small; floats right on md+ */}
+        {renderFilterOptions.search && (
+          <div>
             <GenericTableSearch
               value={localSearch}
               onChange={handleSearchChange}
               placeholder="Search..."
-              className="w-80"
-              showClearButton={true}
+              className="w-full"
+              showClearButton
             />
-          )}
-        </div>
+          </div>
+        )}
       </div>
     </div>
   );

@@ -35,7 +35,7 @@ export const GenericTableStatusFilter: React.FC<GenericTableStatusFilterProps> =
 
   return (
     <div className={`flex flex-col ${className}`}>
-      <label className="text-sm text-gray-600 mb-1">
+      <label className="text-sm text-gray-600 mb-1 font-bold">
         {statusConfig.label || 'Status'}
       </label>
       <Dropdown
