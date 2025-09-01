@@ -1,16 +1,18 @@
 import { useState, useEffect, useRef } from 'react';
 import { FileX2 } from 'lucide-react';
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
+import { DataTable } from 'primereact/datatable';
+import { Column as PrimeColumn } from 'primereact/column';
+import { Button } from '@/components/ui/button';
 import TableSearchFilter from '@/components/filter/TableSearchFilter';
 import { cn } from '@/utils/cn';
 import { useTableSorting } from '@/components/common/dynamic-table/hooks/useTableSorting';
-import { useTablePagination } from '@/components/common/dynamic-table/hooks/useTablePagination';
 import { Column, DynamicTableProps } from '@/components/types/common-components.types';
 import { SetFilters } from '@/components/types/filter.types';
-import { Button } from '@/components/ui/button';
-import { TablePagination } from './TablePagination';
 import TableDataLoader from './TableDataLoader';
+import GenericTableSearch from './GenericTableSearch';
+import GenericTableFilters from './GenericTableFilters';
 import { useCurrentUser } from '@/utils/getUserFromRedux';
+import './DynamicTable.css';
 
 const formatDate = (date: Date | string | undefined) => {
   if (!date) return '';
@@ -93,6 +95,9 @@ export function DynamicTable<T extends Record<string, any>>({
   const [internalLoading, setInternalLoading] = useState(false);
   const [dynamicData, setDynamicData] = useState<T[]>([]);
 
+  // Handle search for PrimeReact - moved before filtering logic
+  const [globalFilter, setGlobalFilter] = useState<string>('');
+
   // Add user change detection to clear stale data
   const { getUserHashedKey } = useCurrentUser();
   const currentUserKey = getUserHashedKey();
@@ -120,6 +125,8 @@ export function DynamicTable<T extends Record<string, any>>({
   // Use either the dynamically fetched data or the original data based on mode
   const dataSource = mode === 'dynamic' && dynamicData.length > 0 ? dynamicData : initialData;
 
+  // For PrimeReact, we'll let it handle sorting and pagination internally
+  // But keep the custom sorting hook for backward compatibility if needed
   const { sortedData, sortColumn, sortDirection, toggleSort } = useTableSorting(
     dataSource || [], // Ensure dataSource is an array
     defaultSortColumn as string | undefined,
@@ -133,8 +140,8 @@ export function DynamicTable<T extends Record<string, any>>({
   const filteredData =
     mode === 'static'
       ? dataToFilter.filter((item) => {
-          // Apply search filter
-          if (filters.search && filter?.filterOption) {
+          // Apply search filter (but let PrimeReact handle global search)
+          if (filters.search && filter?.filterOption && !globalFilter) {
             const searchTerm = filters.search.toLowerCase();
             const matchesSearch = columns.some((column) => {
               // Try to get the value from the column id, which could be a nested path
@@ -206,11 +213,13 @@ export function DynamicTable<T extends Record<string, any>>({
           return true;
         })
       : sortedData; // In dynamic mode, we don't filter locally
-  const { paginatedData, totalPages, currentPage, pageSize, setPageSize, setCurrentPage } = useTablePagination(
-    filteredData,
-    initialPageSize,
-    pageSizeOption
-  );
+
+  // Use PrimeReact's built-in pagination state
+  const [primeCurrentPage, setPrimeCurrentPage] = useState(0);
+  const [primePageSize, setPrimePageSize] = useState(initialPageSize);
+
+  // Calculate total records for display
+  const totalRecordsForDisplay = mode === 'static' && filters.search ? filteredData.length : totalRecords || filteredData.length;
 
   // Track previous filtered data to avoid infinite loops
   const prevFilteredDataRef = useRef<T[]>([]);
@@ -231,7 +240,7 @@ export function DynamicTable<T extends Record<string, any>>({
     const now = Date.now();
 
     // Always reset to page 1 when filtering, regardless of timing
-    setCurrentPage(1);
+    setPrimeCurrentPage(0);
 
     // Only limit frequency of filter operations, not whether they can occur
     if (now - lastFiltered < 500) {
@@ -258,7 +267,7 @@ export function DynamicTable<T extends Record<string, any>>({
       customFilterValues: {},
     });
 
-    setCurrentPage(1);
+    setPrimeCurrentPage(0);
 
     if (mode === 'dynamic') {
       setDynamicData([]);
@@ -272,14 +281,53 @@ export function DynamicTable<T extends Record<string, any>>({
     // fetch fresh data
     refreshAction?.onRefresh();
   };
-  // Track when setCurrentPage is called with proper timeout
+
+  // Handle page change for PrimeReact pagination
   const handlePageChange = (page: number) => {
-    // Only log when the page is actually changing to reduce noise
-    if (page !== currentPage) {
-      // Set the page
-      setCurrentPage(page);
-    }
+    setPrimeCurrentPage(page - 1); // Convert to 0-based indexing
   };
+
+  const handleSearchChange = (value: string) => {
+    setGlobalFilter(value);
+    // Update the filters state for backward compatibility
+    setFilters(prev => ({ ...prev, search: value }));
+    // Reset to first page when searching
+    setPrimeCurrentPage(0);
+  };
+
+  // Generate PrimeReact columns from our column definition
+  const primeColumns = columns.map((col: Column<T>) => (
+    <PrimeColumn
+      key={col.id}
+      field={col.id}
+      header={
+        <div className="text-center w-full">
+          {col.sortable ? (
+            <div className="flex items-center justify-center cursor-pointer" onClick={() => toggleSort(col.id)}>
+              <span>{col.name}</span>
+              <span className="ml-2">
+                {sortColumn === col.id && (
+                  <span className="text-primary">
+                    {sortDirection === 'asc' ? '↑' : '↓'}
+                  </span>
+                )}
+                {sortColumn !== col.id && (
+                  <span className="text-gray-400">↕</span>
+                )}
+              </span>
+            </div>
+          ) : (
+            <span>{col.name}</span>
+          )}
+        </div>
+      }
+      sortable={col.sortable}
+      body={(rowData: T) => getCellContent(rowData, col)}
+      className={`text-center odz-table-cell ${col.className || ''}`}
+      headerClassName="text-center font-medium odz-th"
+      bodyClassName="text-center odz-table-cell"
+    />
+  ));
 
   return (
     <div className="space-y-4 dynamic-table-container w-full">
@@ -295,13 +343,15 @@ export function DynamicTable<T extends Record<string, any>>({
           </div>
         </div>
       )}
+
       <div className="flex flex-wrap justify-end items-center w-full gap-4 md:flex-row flex-col">
         {renderLeftSideActions && <div className="flex-1 py-2">{renderLeftSideActions()}</div>}
         {(filter || renderComponents) && (
           <div className="w-full sm:flex-1 items-center sm:py-2">
+            {/* New PrimeReact filters implementation */}
             {filter?.filterOption && (
               <div className="w-full sm:flex-1">
-                <TableSearchFilter
+                <GenericTableFilters
                   key={resetKey}
                   filters={filters}
                   filterConfig={filter}
@@ -318,86 +368,46 @@ export function DynamicTable<T extends Record<string, any>>({
         )}
         {renderRightSideActions && <div className="flex flex-row justify-end py-2">{renderRightSideActions()}</div>}
       </div>
-      <div className={cn('overflow-x-auto w-full bg-[--table-bg] rounded-lg shadow-sm', tableWrapperClass)}>
-        <div className="border border-gray-200 overflow-clip">
-          <Table className="odz-table w-full overflow-auto">
-            <TableHeader className="bg-[--table-header]">
-              <TableRow className="odz-table-row">
-                {columns.map((col: Column<T>) => (
-                  <TableHead
-                    key={col.id}
-                    className={cn(
-                      'min-w-40 odz-th border-[--table-border] text-center',
-                      col.sortable && 'cursor-pointer',
-                      col.className
-                    )}
-                    onClick={() => col.sortable && toggleSort(col.id)}
-                  >
-                    {col.name}
-                    {sortColumn === col.id && (
-                      <span className="ml-2">
-                        {/* disabling static sorting in this phase */}
-                        {/* {sortDirection === 'asc' ? '↑' : '↓'} */}
-                      </span>
-                    )}{' '}
-                  </TableHead>
-                ))}
-              </TableRow>
-            </TableHeader>
-            <TableBody className="odz-table-body">
-              {!loading ? (
-                paginatedData.length > 0 ? (
-                  paginatedData
-                    .filter((row) => row != null)
-                    .map((row, idx) => {
-                      const rowKey = row.id ?? row.niumId ?? row._id ?? `${currentPage}-${idx}`;
-                      return (
-                        <TableRow
-                          key={rowKey}
-                          className={cn('odz-table-row', onRowClick && 'cursor-pointer hover:bg-gray-50')}
-                          onClick={() => onRowClick?.(row)}
-                        >
-                          {columns.map((col: Column<T>) => (
-                            <TableCell className={cn("odz-table-cell text-center", col.className)} key={`${rowKey}-${col.key}`}>
-                              {getCellContent(row, col)}
-                            </TableCell>
-                          ))}
-                        </TableRow>
-                      );
-                    })
-                ) : (
-                  <TableRow className="odz-table-row">
-                    <TableCell className="odz-table-cell" colSpan={columns.length}>
-                      <div className="odz-table-cell-inner flex items-center justify-center space-x-2 py-20 text-primary">
-                        <FileX2 size="20px" />
-                        <div className="not-data-found-w">Data Not Found</div>
-                      </div>
-                    </TableCell>
-                  </TableRow>
-                )
-              ) : (
-                <TableRow className="odz-table-row">
-                  <TableCell className="odz-table-cell" colSpan={columns.length}>
-                    <TableDataLoader />
-                  </TableCell>
-                </TableRow>
-              )}
-            </TableBody>
-          </Table>
-        </div>
-      </div>{' '}
-      {initialData?.length !== 0 && (
-        <TablePagination
-          currentPage={currentPage}
-          totalPages={totalPages}
-          pageSize={pageSize}
-          pageSizeOption={pageSizeOption}
-          setPageSize={setPageSize}
-          setCurrentPage={handlePageChange}
-          filteredDataLength={filteredData.length}
-          totalRecords={mode === 'static' && filters.search ? filteredData.length : totalRecords || filteredData.length}
-        />
-      )}
+
+
+      <div className={cn('w-full', tableWrapperClass)}>
+        <DataTable
+          value={filteredData}
+          loading={loading}
+          globalFilter={globalFilter}
+          filterDisplay="menu"
+          paginator
+          rows={primePageSize}
+          first={primeCurrentPage * primePageSize}
+          onPage={(e) => {
+            setPrimeCurrentPage(e.page || 0);
+            setPrimePageSize(e.rows || initialPageSize);
+          }}
+          totalRecords={totalRecordsForDisplay}
+          lazy={mode === 'dynamic'}
+          emptyMessage={
+            <div className="flex items-center justify-center space-x-2 py-20 text-primary">
+              <FileX2 size="20px" />
+              <div className="not-data-found-w">Data Not Found</div>
+            </div>
+          }
+          loadingIcon={<TableDataLoader />}
+          className="p-datatable-sm odz-table center-aligned-table"
+          stripedRows
+          showGridlines
+          size="small"
+          tableClassName="odz-table-body"
+          tableStyle={{ textAlign: 'center' }}
+          onRowClick={(e) => onRowClick?.(e.data as T)}
+          selectionMode={onRowClick ? 'single' : undefined}
+          paginatorTemplate="FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink RowsPerPageDropdown"
+          rowsPerPageOptions={pageSizeOption}
+          currentPageReportTemplate={`Showing {first} to {last} of {totalRecords} entries`}
+          globalFilterFields={columns.map(col => col.id)}
+        >
+          {primeColumns}
+        </DataTable>
+      </div>
     </div>
   );
 }
