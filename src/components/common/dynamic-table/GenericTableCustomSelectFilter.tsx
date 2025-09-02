@@ -35,7 +35,7 @@ export const GenericTableCustomSelectFilter: React.FC<GenericTableCustomSelectFi
 
   return (
     <div className={`flex flex-col ${className}`}>
-      <label className="text-sm text-gray-600 mb-1">
+      <label className="text-sm text-gray-600 mb-1 font-bold">
         {selectConfig.label}
       </label>
       <Dropdown
@@ -43,7 +43,7 @@ export const GenericTableCustomSelectFilter: React.FC<GenericTableCustomSelectFi
         options={options}
         onChange={handleValueChange}
         placeholder={selectConfig.placeholder || `Select ${selectConfig.label}`}
-        className="w-64 h-10"
+        className="w-52 h-10"
         optionLabel="label"
         optionValue="value"
         showClear
