@@ -6,7 +6,7 @@ import { logout } from '../store/auth-slice';
 import { toast } from 'sonner';
 import { ConfirmationAlert } from '@/components/common/confirmation-alert';
 import { ROUTES } from '@/core/constant/route-paths';
-import { clearAllQueryCache } from '@/core/services/query/queryCacheManager';
+import { clearAllQueryCache } from '@/core/services/query/query-cache-manager';
 
 interface LogoutWrapperProps {
   children: React.ReactNode;

@@ -1,6 +1,6 @@
 import AuthLayout from '../../../../components/layout/auth-layout';
 import ChangePasswordForm from '../../components/change-password-form';
-import { AuthRedirectGuard } from '@/core/routes/AuthRedirectGuard';
+import { AuthRedirectGuard } from '@/core/routes/auth-redirect-guard';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 
 const ForgetPassword = () => {

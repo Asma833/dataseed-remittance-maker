@@ -6,7 +6,7 @@ import {
   encryptRequestInterceptor,
   decryptResponseInterceptor,
 } from '@/core/services/encryption/encryption-Interceptor';
-import { clearAllQueryCache } from '@/core/services/query/queryCacheManager';
+import { clearAllQueryCache } from '@/core/services/query/query-cache-manager';
 
 interface RefreshTokenResponse {
   data: {

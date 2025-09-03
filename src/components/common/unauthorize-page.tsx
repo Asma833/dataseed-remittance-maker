@@ -5,7 +5,7 @@ import { toast } from 'sonner';
 import { useNavigate } from 'react-router-dom';
 import { useCurrentUser } from '@/utils/getUserFromRedux';
 import { DEFAULT_ROUTES } from '@/core/constant/manage-default-routes';
-import { clearAllQueryCache } from '@/core/services/query/queryCacheManager';
+import { clearAllQueryCache } from '@/core/services/query/query-cache-manager';
 import { logout } from '@/features/auth/store/auth-slice';
 import { ROUTES } from '@/core/constant/route-paths';
 

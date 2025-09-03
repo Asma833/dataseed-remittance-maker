@@ -1,6 +1,6 @@
 import AuthLayout from '../../../../components/layout/auth-layout';
 import LoginForm from '../../components/login-form';
-import { AuthRedirectGuard } from '@/core/routes/AuthRedirectGuard';
+import { AuthRedirectGuard } from '@/core/routes/auth-redirect-guard';
 
 const LoginPage = () => {
   return (

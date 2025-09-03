@@ -7,84 +7,50 @@ export interface NavigationItem {
   path: string;
   icon?: any;
   disabled?: boolean;
+  subMenus?: NavigationItem[];
 }
 
 // User role navigation configurations
 export const SideNavOptions = {
   admin: [
     {
-      title: 'Checker',
+      title: 'User Management',
       path: getNavPath('ADMIN', ROUTES.ADMIN.NUSER),
       icon: LayoutDashboard,
+      subMenus: [
+        {
+          title: 'View Users',
+          path: getNavPath('ADMIN', ROUTES.ADMIN.NUSER),
+          icon: Eye,
+        },
+        {
+          title: 'Create User',
+          path: getNavPath('ADMIN', ROUTES.ADMIN.CREATEUSER),
+          icon: FileEdit,
+        },
+        {
+          title: 'N User Management',
+          path: getNavPath('ADMIN', ROUTES.ADMIN.USER_MANAGEMENT.N_USER),
+          icon: User,
+        },
+      ],
     },
     {
-      title: 'Maker',
-      path: getNavPath('ADMIN', ROUTES.ADMIN.MAKER),
-      icon: LayoutDashboard,
-    },
-    // Commented the following items as they are not used in the current phase
-    // {
-    //   title: 'Partners',
-    //   path: getNavPath('ADMIN', ROUTES.ADMIN.PARTNER),
-    //   icon: User,
-    //   disabled: true,
-    // },
-    // {
-    //   title: 'Reports',
-    //   path: '/admin/reports',
-    //   icon: ClipboardList,
-    //   disabled: true,
-    // },
-    {
-      title: 'Master',
+      title: 'Master Data',
       path: getNavPath('ADMIN', ROUTES.ADMIN.MASTER.PURPOSE_MASTER),
       icon: BookCopy,
-    },
-    {
-      title: 'View All Transactions',
-      path: getNavPath('ADMIN', ROUTES.ADMIN.VIEWALL),
-      icon: Eye,
-    },
-  ] as NavigationItem[],
-  checker: [
-    // Disabling the dashboard for now
-    // {
-    //   title: 'Dashboard',
-    //   path: getNavPath('CHECKER', ROUTES.CHECKER.DASHBOARD),
-    //   icon: LayoutDashboard,
-    //   disabled: true,
-    // },
-    {
-      title: 'View All Transactions',
-      path: getNavPath('CHECKER', ROUTES.CHECKER.VIEWALL),
-      icon: Eye,
-    },
-    {
-      title: 'Assign',
-      path: getNavPath('CHECKER', ROUTES.CHECKER.ASSIGN),
-      icon: ClipboardList,
-    },
-    {
-      title: 'Update Incident',
-      path: getNavPath('CHECKER', ROUTES.CHECKER.UPDATE_INCIDENT),
-      icon: FileEdit,
-    },
-    {
-      title: 'Completed Transactions',
-      path: getNavPath('CHECKER', ROUTES.CHECKER.COMPLETEDTRANSACTIONS),
-      icon: CreditCard,
-    },
-  ] as NavigationItem[],
-  maker: [
-    {
-      title: 'Create Transaction',
-      path: getNavPath('MAKER', ROUTES.MAKER.CREATE_TRANSACTION),
-      icon: ClipboardList,
-    },
-    {
-      title: 'View Status',
-      path: getNavPath('MAKER', ROUTES.MAKER.VIEW_STATUS),
-      icon: Eye,
+      subMenus: [
+        {
+          title: 'Purpose Master',
+          path: getNavPath('ADMIN', ROUTES.ADMIN.MASTER.PURPOSE_MASTER),
+          icon: ClipboardList,
+        },
+        {
+          title: 'Document Master',
+          path: getNavPath('ADMIN', ROUTES.ADMIN.MASTER.DOCUMENT_MASTER),
+          icon: FileEdit,
+        },
+      ],
     },
   ] as NavigationItem[],
 };
