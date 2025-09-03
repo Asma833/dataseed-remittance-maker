@@ -1,0 +1,69 @@
+:root {
+  /* Map app HSL variables to Prime tokens */
+  --p-primary-color: hsl(var(--primary));
+  --p-primary-contrast-color: hsl(var(--primary-foreground));
+  --p-text-color: hsl(var(--foreground));
+  --p-content-border-color: hsl(var(--border));
+  --p-surface-0: hsl(var(--background));
+  --p-surface-50: hsl(var(--secondary));
+  --p-surface-100: hsl(var(--secondary));
+  --p-highlight-background: hsl(var(--primary) / 0.14);
+  --p-highlight-focus-background: hsl(var(--primary) / 0.2);
+  --p-highlight-foreground: hsl(var(--foreground));
+}
+
+/* Buttons */
+.p-button {
+  background: hsl(var(--primary));
+  border-color: hsl(var(--primary));
+  color: hsl(var(--primary-foreground));
+}
+.p-button:enabled:hover {
+  background: color-mix(in hsl, hsl(var(--primary)) 92%, white);
+  border-color: color-mix(in hsl, hsl(var(--primary)) 92%, white);
+}
+.p-button:enabled:active {
+  background: color-mix(in hsl, hsl(var(--primary)) 88%, black);
+  border-color: color-mix(in hsl, hsl(var(--primary)) 88%, black);
+}
+.p-button.p-button-outlined {
+  background: transparent;
+  color: hsl(var(--primary));
+  border-color: hsl(var(--primary));
+}
+.p-button.p-button-text {
+  background: transparent;
+  color: hsl(var(--primary));
+  border-color: transparent;
+}
+
+/* Checkbox / Radio checked state */
+.p-checkbox .p-checkbox-box.p-highlight,
+.p-radiobutton .p-radiobutton-box.p-highlight {
+  background: hsl(var(--primary));
+  border-color: hsl(var(--primary));
+}
+
+/* Dropdown and list active item */
+.p-dropdown-panel .p-dropdown-items .p-highlight,
+.p-select-list .p-select-list-item.p-highlight,
+.p-datatable .p-highlight {
+  background: var(--p-highlight-background);
+  color: var(--p-highlight-foreground);
+}
+
+/* Focus rings */
+.p-focus {
+  outline: 2px solid hsl(var(--primary) / 0.6);
+  outline-offset: 2px;
+}
+
+/* Surface & text harmonization */
+.p-component,
+.p-inputtext,
+.p-dropdown,
+.p-datatable,
+.p-panel,
+.p-dialog {
+  color: var(--p-text-color);
+}

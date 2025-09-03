@@ -10,7 +10,6 @@ import { ThemeProvider } from './providers/ThemeProvider';
 import { PersistGate } from 'redux-persist/integration/react';
 import { persistor, store } from './store';
 import ErrorBoundary from './components/error-boundary/ErrorBoundary';
-import { MUIProviders } from './providers/MUIProviders';
 import { Toaster } from './components/ui/sonner';
 import { TooltipProvider } from '@/components/ui/tooltip';
 import { setGlobalQueryClient } from './core/services/query/queryCacheManager';
@@ -31,7 +30,6 @@ const App = () => {
   }, []);
 
   return (
-    <MUIProviders>
       <ThemeProvider>
         <Provider store={store}>
           <PersistGate loading={<LoadingFallback />} persistor={persistor}>
@@ -51,7 +49,6 @@ const App = () => {
           </PersistGate>
         </Provider>
       </ThemeProvider>
-    </MUIProviders>
   );
 };
 

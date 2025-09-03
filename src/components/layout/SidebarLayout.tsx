@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import DashboardContentWrapper from '@/components/common/DashboardContentWrapper';
-import Header from '@/components/layout/side-navigaion/HeaderNav';
-import Sidebar from '@/components/layout/side-navigaion/SideNav';
+import Header from '@/components/layout/side-navigaion/header-nav';
+import SideNav from '@/components/layout/side-navigaion/sidenav';
 import { ReactNode } from 'react';
 import { getNavigationItemsByRole } from '@/core/constant/manageSideNavOptions';
 import { useCurrentUser } from '@/utils/getUserFromRedux';
@@ -11,7 +11,8 @@ interface CheckerLayoutProps {
 }
 
 const SidebarLayout = ({ children }: CheckerLayoutProps) => {
-  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+  // Keep sidebar open by default, allow collapsing to icon-only
+  const [collapsed, setCollapsed] = useState<boolean>(false);
   const { getUserRole } = useCurrentUser();
 
   // Get navigation items based on user role
@@ -20,24 +21,15 @@ const SidebarLayout = ({ children }: CheckerLayoutProps) => {
 
   return (
     <div className="flex min-h-screen bg-background">
-      <div
-        className={`fixed lg:static top-0 left-0 w-28 h-full bg-white shadow-md transition-transform transform 
-        ${isSidebarOpen ? 'translate-x-0' : '-translate-x-64'} lg:translate-x-0 z-50`}
-      >
-        {' '}
-        <Sidebar navItems={navigationItems} setIsSidebarOpen={setIsSidebarOpen} />
+      <div className="fixed top-0 left-0 h-full z-50">
+        <SideNav navItems={navigationItems} collapsed={collapsed} setCollapsed={setCollapsed} />
       </div>
 
-      <Header
-        isSidebarOpen={isSidebarOpen}
-        setIsSidebarOpen={setIsSidebarOpen}
-        className="fixed top-0 w-full lg:left-28 lg:w-[calc(100%-7rem)]  bg-secondary"
-      />
+      <Header collapsed={collapsed} setCollapsed={setCollapsed} className="fixed top-0 w-full bg-secondary" />
       <main
-        className="flex-1 w-[calc(100%-15rem)] h-[calc(100vh-70px)] mt-[70px] overflow-y-auto"
-        onClick={() => {
-          setIsSidebarOpen(false);
-        }}
+        className={`flex-1 h-[calc(100vh-50px)] mt-[70px] overflow-y-auto transition-all ${
+          collapsed ? 'ml-20' : 'ml-[188px]'
+        }`}
       >
         <DashboardContentWrapper>{children}</DashboardContentWrapper>
       </main>

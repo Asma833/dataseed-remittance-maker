@@ -7,7 +7,7 @@ import { UserRole } from '@/features/auth/types/auth.types';
 import { RootState } from '@/store';
 import NotFoundPage from '@/components/common/NotFoundPage';
 import UnauthorizedPage from '@/components/common/UnauthorizedPage';
-import { AdminRoutes } from './AdminRoutes';
+// import { AdminRoutes } from './AdminRoutes';
 import { ProtectedRoute } from './ProtectedRoute';
 
 export const AppRoutes = () => {
@@ -26,7 +26,8 @@ export const AppRoutes = () => {
         path="/admin/*"
         element={
           <ProtectedRoute>
-            <AdminRoutes />
+            {/* <AdminRoutes /> */}
+            <div>app</div>
           </ProtectedRoute>
         }
       />
