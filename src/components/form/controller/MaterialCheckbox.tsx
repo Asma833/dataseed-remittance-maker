@@ -1,8 +1,8 @@
 import { Controller, useFormContext } from 'react-hook-form';
 import { FormGroup, FormControlLabel, Checkbox, Radio } from '@mui/material';
 import { Circle, CircleCheck, Square, CheckSquare, CircleDot, Disc, SquareCheck } from 'lucide-react';
-import { ErrorMessage } from '../ErrorMessage';
-import { CustomRadioIcon, CustomSquareCheckIcon } from '@/components/common/CustomCheckboxIcons';
+import { ErrorMessage } from '../error-message';
+import { CustomRadioIcon, CustomSquareCheckIcon } from '@/components/common/custom-checkbox-icons';
 
 type CheckboxVariant = 'square_check' | 'circle_check' | 'radio_style' | 'circle_check_filled' | 'square_check_filled';
 type CheckboxSize = 'small' | 'medium' | 'large';

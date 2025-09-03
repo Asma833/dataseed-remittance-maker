@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import DashboardContentWrapper from '@/components/common/DashboardContentWrapper';
+import DashboardContentWrapper from '@/components/common/dashboard-wrapper';
 import Header from '@/components/layout/side-navigaion/header-nav';
 import SideNav from '@/components/layout/side-navigaion/sidenav';
 import { ReactNode } from 'react';

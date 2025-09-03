@@ -1,9 +1,9 @@
 import React from 'react';
 import { Menu, Power, ChevronLeft } from 'lucide-react';
-import LogoutWrapper from '@/features/auth/components/LogoutWrapper';
-import { ThemeToggle } from '@/components/common/ThemeToggle';
+import LogoutWrapper from '@/features/auth/components/logout-wrapper';
+import { ThemeToggle } from '@/components/common/theme-toggle';
 import { cn } from '@/utils/cn';
-import SidebarToggle from '@/components/common/SidebarToggle';
+import SidebarToggle from '@/components/common/sidebar-toggle';
 import Logo from '@/components/logo/Logo';
 
 interface HeaderProps {

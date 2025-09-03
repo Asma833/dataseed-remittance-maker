@@ -3,7 +3,7 @@ import { FormControl, InputLabel, MenuItem, Select } from '@mui/material';
 import { useMemo } from 'react';
 import { cn } from '@/utils/cn';
 import { toTitleCase } from '@/utils/textFormater';
-import { ErrorMessage } from '../ErrorMessage';
+import { ErrorMessage } from '../error-message';
 import '../styles/form-layout.css';
 
 interface MaterialSelectProps {

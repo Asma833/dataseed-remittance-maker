@@ -11,7 +11,7 @@ import {
 import { cn } from '@/utils/cn';
 import { Download, Loader2, PlusIcon, UploadIcon, X } from 'lucide-react';
 import { DialogWrapperProps } from '../types/common-components.types';
-import DialogCloseButton from './DialogCloseButton';
+import DialogCloseButton from './dialog-close-button';
 
 type IconType = 'default' | 'upload' | 'download';
 

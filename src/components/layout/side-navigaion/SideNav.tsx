@@ -5,7 +5,7 @@ import { cn } from '@/utils/cn';
 import Logo from '@/components/logo/Logo';
 import { NavigationItem } from '@/core/constant/manageSideNavOptions';
 import themeConfig from '@/core/configs/theme-config';
-import SidebarToggle from '@/components/common/SidebarToggle';
+import SidebarToggle from '@/components/common/sidebar-toggle';
 
 interface SidebarProps {
   navItems: NavigationItem[];

@@ -9,7 +9,7 @@ import LoadingFallback from './components/loader/LoadingFallback';
 import { ThemeProvider } from './providers/ThemeProvider';
 import { PersistGate } from 'redux-persist/integration/react';
 import { persistor, store } from './store';
-import ErrorBoundary from './components/error-boundary/ErrorBoundary';
+import ErrorBoundary from './components/error-boundary/error-boundary';
 import { Toaster } from './components/ui/sonner';
 import { TooltipProvider } from '@/components/ui/tooltip';
 import { setGlobalQueryClient } from './core/services/query/queryCacheManager';

@@ -1,5 +1,5 @@
 import { cn } from '@/utils/cn';
-import { ThemeToggle } from './ThemeToggle';
+import { ThemeToggle } from './theme-toggle';
 import { CommonProps } from '../types/common-components.types';
 import Logo from '@/components/logo/Logo';
 

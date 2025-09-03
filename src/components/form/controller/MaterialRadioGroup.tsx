@@ -1,6 +1,6 @@
 import { Controller, FieldValues, Path } from 'react-hook-form';
 import { FormControl, FormControlLabel, FormLabel, Radio, RadioGroup } from '@mui/material';
-import { ErrorMessage } from '../ErrorMessage';
+import { ErrorMessage } from '../error-message';
 import { Circle, CircleCheck } from 'lucide-react';
 
 type MaterialRadioGroupProps<T extends FieldValues> = {

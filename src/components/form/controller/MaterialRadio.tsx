@@ -1,6 +1,6 @@
 import { Controller, FieldValues, Path } from 'react-hook-form';
 import { Radio, RadioProps, FormControl } from '@mui/material';
-import { ErrorMessage } from '../ErrorMessage';
+import { ErrorMessage } from '../error-message';
 
 type MaterialRadioProps<T extends FieldValues> = Omit<RadioProps, 'name' | 'defaultValue'> & {
   name: Path<T>;

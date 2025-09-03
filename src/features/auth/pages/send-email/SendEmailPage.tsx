@@ -1,5 +1,5 @@
-import AuthLayout from '../../../../components/layout/AuthLayout';
-import SendEmailForm from '../../components/SendEmailForm';
+import AuthLayout from '../../../../components/layout/auth-layout';
+import SendEmailForm from '../../components/send-email-form';
 import { AuthRedirectGuard } from '@/core/routes/AuthRedirectGuard';
 
 const SendEmailPage = () => {

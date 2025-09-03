@@ -1,4 +1,4 @@
-import { SignLinkButton } from '@/components/common/SignLinkButton';
+import { SignLinkButton } from '@/components/common/single-link-button';
 import PurposeType from '@/features/checker/components/table/PurposeType';
 import TransactionType from '@/features/checker/components/table/TransactionType';
 import NiumOrderID from '@/features/checker/components/table/NiumOrderIdCell';

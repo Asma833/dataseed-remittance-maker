@@ -1,5 +1,5 @@
 import { CircleCheckBigIcon } from 'lucide-react';
-import AuthLayout from '../../../../components/layout/AuthLayout';
+import AuthLayout from '../../../../components/layout/auth-layout';
 import { Link } from 'react-router';
 
 const ResetLinkConfirmationAlert = () => {

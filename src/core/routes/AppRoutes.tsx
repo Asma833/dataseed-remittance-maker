@@ -5,8 +5,8 @@ import { publicRoutes } from './Routes';
 import { DEFAULT_ROUTES } from '@/core/constant/manageDefaultRoutes';
 import { UserRole } from '@/features/auth/types/auth.types';
 import { RootState } from '@/store';
-import NotFoundPage from '@/components/common/NotFoundPage';
-import UnauthorizedPage from '@/components/common/UnauthorizedPage';
+import NotFoundPage from '@/components/common/not-found-page';
+import UnauthorizedPage from '@/components/common/unauthorize-page';
 // import { AdminRoutes } from './AdminRoutes';
 import { ProtectedRoute } from './ProtectedRoute';
 

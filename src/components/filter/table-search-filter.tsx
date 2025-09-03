@@ -2,7 +2,7 @@ import { useEffect, useState, useCallback, useRef, useMemo } from 'react';
 import dayjs from 'dayjs';
 import { CalendarDays, RefreshCw } from 'lucide-react';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
-import { SearchInput } from './SearchInput';
+import { SearchInput } from './search-input';
 import { TableSearchFilterProps } from '../types/filter.types';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Button } from '@/components/ui/button';

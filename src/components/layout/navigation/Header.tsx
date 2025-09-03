@@ -14,7 +14,7 @@ import {
 } from '@/components/ui/navigation-menu';
 import { HeaderProps } from '../../types/navigation.types';
 import { MobileNav } from './mobile-nav';
-import LogoutWrapper from '@/features/auth/components/LogoutWrapper';
+import LogoutWrapper from '@/features/auth/components/logout-wrapper';
 import { useActiveMenu } from '@/hooks/useActiveMenu';
 
 const Header: React.FC<HeaderProps> = ({ navItems }) => {

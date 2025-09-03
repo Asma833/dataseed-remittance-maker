@@ -10,7 +10,7 @@ import { MaterialPhone } from '@/components/form/controller/MaterialPhone';
 import { MaterialIndianPhone } from '@/components/form/controller/MaterialIndianPhone';
 import MaterialPassword from '@/components/form/controller/MaterialPassword';
 import { MaterialTextArea } from '../controller/MaterialTextArea';
-import { baseGeneralFieldStyle, baseStyle } from '../styles/materialStyles';
+import { baseGeneralFieldStyle, baseStyle } from '../styles/material-styles';
 import { FileUpload } from '../controller/FileUpload';
 import FileUploadWithView from '../controller/FileUploadWithView';
 import { FileUploadWithButton } from '../controller/FileUploadWithButton';

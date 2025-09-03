@@ -1,5 +1,5 @@
 import { cn } from '@/utils/cn';
-import FeedbackCard from './FeedbackCard';
+import FeedbackCard from './fallback-card';
 import { RejectionSummaryProps } from '../types/common-components.types';
 
 const RejectionSummary = (props: RejectionSummaryProps) => {

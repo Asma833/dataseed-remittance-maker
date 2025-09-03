@@ -1,4 +1,4 @@
-import Image from '../common/Image';
+import Image from '../common/image';
 import logoUrl from '@/assets/images/nium-logo.svg';
 
 type Props = {

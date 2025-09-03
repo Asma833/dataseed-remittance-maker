@@ -1,7 +1,7 @@
 import { cn } from '@/utils/cn';
-import PageTitle from '../layout/titles/PageTitle';
+import PageTitle from '../layout/titles/page-title';
 import { DashboardContentWrapperProps } from '../types/common-components.types';
-import PoweredBy from '../layout/footer/PoweredBy';
+import PoweredBy from '../layout/footer/powered-by';
 
 const DashboardContentWrapper = ({ children, className }: DashboardContentWrapperProps) => {
   return (

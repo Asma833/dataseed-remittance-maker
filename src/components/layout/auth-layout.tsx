@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
-import LogoHeader from '@/components/common/LogoHeader';
-import PoweredBy from './footer/PoweredBy';
+import LogoHeader from '@/components/common/logo-header';
+import PoweredBy from './footer/powered-by';
 
 interface AuthLayoutProps {
   children: React.ReactNode;
