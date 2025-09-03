@@ -64,19 +64,15 @@ const Sidebar: React.FC<SidebarProps> = ({ navItems, collapsed, setCollapsed }) 
   return (
     <aside
       className={cn(
-        'bg-[--sidenav-bg] h-screen fixed top-0 left-0 flex flex-col transition-all z-30',
+        'bg-[--sidenav-bg] h-[calc(100vh-70px)] fixed bottom-0 left-0 flex flex-col transition-all z-30',
         collapsed ? 'w-20' : 'w-50',
         { 'bg-gradient-to-b sidenav-main': themeConfig.sidebar.isGradient }
       )}
     >
-      {/* Sidebar Logo */}
-      <div className={cn('mb-1 mt-4 flex items-center', collapsed ? 'justify-center' : 'pl-4')}>
-        <Logo className="invert-in-dark" />
-      </div>
       {/* Navigation List */}
       <nav className="px-3 mt-8">
         <ul className="space-y-1">
-          <li className='list-none relative h-3'>
+          <li className='list-none relative'>
             {' '}
             <SidebarToggle collapsed={collapsed} setCollapsed={setCollapsed} />
           </li>
@@ -122,9 +118,9 @@ const Sidebar: React.FC<SidebarProps> = ({ navItems, collapsed, setCollapsed }) 
                       <div
                         onClick={() => submenu.path && handleNavigation(submenu.path, submenu.title)}
                         className={cn(
-                          'flex items-center gap-3 py-2 px-2 cursor-pointer transition-colors text-sm',
+                          'submenu-item',
                           isSubmenuActive(submenu)
-                            ? 'bg-primary/40 text-primary-foreground font-medium'
+                            ? 'active'
                             : 'hover:bg-muted/20 text-muted-foreground',
                           submenu.disabled && 'opacity-50 cursor-not-allowed'
                         )}

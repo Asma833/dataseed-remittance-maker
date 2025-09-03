@@ -4,9 +4,9 @@
 @custom-variant dark (&:where(.dark, .dark *));
 
 @theme {
-  --color-primary: #643deb;
+  --color-primary: #1142bb;
   --color-primary-foreground: #fafafa;
-  --color-secondary: #f6f6f9;
+  --color-secondary: #f1f3ff;
   --color-secondary-foreground: #35354a;
   --color-destructive: #dc2626;
   --color-destructive-foreground: #dc2626;
@@ -22,6 +22,8 @@
   --color-ring: #dcdcde;
   --color-background: #ffffff;
   --color-foreground: #242434;
+  --color-primary-gradient-1: var(--color-primary);
+  --color-primary-gradient-2: #3f85dc;
 
   /* Custom badge colors */
   --color-pending-badge-bg: #fde68a;
@@ -31,13 +33,16 @@
   --color-optional: #d1fae5;
   --color-badge-fg: #111827;
 
-  /* Sidenav colors */
-  --color-sidenav-bg: #1142bb;
-  --color-sidenav-bg-2: #3f85dc;
-
   --radius: 0.625rem;
+
+  /* dashboard */
+  --color-dashboard-bg: #ffffff;
+  --color-dashboard-bg-2: #00cc66;
+  --dashboard-border: #e0e0e0;
+  --dashboard-title: #333333;
+  --dashboard-text: #666666;
 }
- 
+
 .dark {
   --background: oklch(0.145 0 0);
   --foreground: oklch(0.985 0 0);
@@ -88,7 +93,7 @@
 }
 
 .sidenav-main {
-  background-image: linear-gradient(to right, var(--color-sidenav-bg), var(--color-sidenav-bg-2));
+  background-image: linear-gradient(to right, var(--color-primary-gradient-1), var(--color-primary-gradient-2));
   color: #ffffff;
 }
 .sidemenu-active-menu {
@@ -96,6 +101,35 @@
   color: var(--color-primary-foreground);
 }
 
+.submenu-item {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding-top: 0.5rem;
+  padding-bottom: 0.5rem;
+  padding-left: 0.5rem;
+  padding-right: 0.5rem;
+  cursor: pointer;
+  transition:
+    color 0.15s ease-in-out,
+    background-color 0.15s ease-in-out,
+    border-color 0.15s ease-in-out,
+    text-decoration-color 0.15s ease-in-out,
+    fill 0.15s ease-in-out,
+    stroke 0.15s ease-in-out,
+    opacity 0.15s ease-in-out,
+    box-shadow 0.15s ease-in-out,
+    transform 0.15s ease-in-out,
+    filter 0.15s ease-in-out,
+    backdrop-filter 0.15s ease-in-out;
+  font-size: 0.875rem;
+  line-height: 1.25rem;
+}
+
+.submenu-item.active{
+  background-color: rgba(255, 255, 255, 0.3);
+  color: var(--color-primary-foreground);
+}
 .content-wrapper {
   width: 100%;
   display: flex;
