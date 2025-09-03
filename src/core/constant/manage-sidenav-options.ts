@@ -1,5 +1,5 @@
 import { LayoutDashboard, ClipboardList, FileEdit, Eye, CreditCard, User, BookCopy } from 'lucide-react';
-import { ROUTES, getNavPath } from './routePaths';
+import { ROUTES, getNavPath } from './route-paths';
 
 // Navigation item type definition
 export interface NavigationItem {

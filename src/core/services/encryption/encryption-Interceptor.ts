@@ -1,8 +1,8 @@
 import { AxiosResponse, InternalAxiosRequestConfig } from 'axios';
-import { encryptionService, EncryptionResult } from '@/core/services/encryption/encryptionService';
-import { shouldEncryptMethod } from '@/core/services/encryption/encryptionConfig';
-import { shouldEncryptEndpoint } from '@/core/constant/encryptionEndpoints';
-import encryptionLogger from './encryptionLogger';
+import { encryptionService, EncryptionResult } from '@/core/services/encryption/encryption.service';
+import { shouldEncryptMethod } from '@/core/services/encryption/encryption.config';
+import { shouldEncryptEndpoint } from '@/core/constant/encryption-endpoints';
+import encryptionLogger from './encryption.logger';
 
 interface EncryptedRequestData {
   encryptedValue: string;

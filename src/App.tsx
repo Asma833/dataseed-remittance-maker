@@ -6,7 +6,7 @@ import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
 // compometns import
 import { AppRoutes } from './core/routes/AppRoutes';
 import LoadingFallback from './components/loader/LoadingFallback';
-import { ThemeProvider } from './providers/ThemeProvider';
+import { ThemeProvider } from './providers/theme-provider';
 import { PersistGate } from 'redux-persist/integration/react';
 import { persistor, store } from './store';
 import ErrorBoundary from './components/error-boundary/error-boundary';

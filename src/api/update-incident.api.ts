@@ -1,4 +1,4 @@
-import axiosInstance from '@/core/services/axios/axiosInstance';
+import axiosInstance from '@/core/services/axios/axios-instance';
 import { API, HEADER_KEYS } from '@/core/constant/apis';
 import {
   EsignLinkRequest,

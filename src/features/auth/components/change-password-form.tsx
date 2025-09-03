@@ -4,12 +4,12 @@ import { toast } from 'sonner';
 import * as z from 'zod';
 import axios from 'axios';
 import { useForm } from 'react-hook-form';
-import { ROUTES } from '@/core/constant/routePaths';
+import { ROUTES } from '@/core/constant/route-paths';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
 import { zodResolver } from '@hookform/resolvers/zod';
-import axiosInstance from '@/core/services/axios/axiosInstance';
+import axiosInstance from '@/core/services/axios/axios-instance';
 import { API } from '@/core/constant/apis';
 
 interface ChangePasswordFormProps {

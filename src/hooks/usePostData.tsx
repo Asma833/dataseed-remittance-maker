@@ -1,4 +1,4 @@
-import axiosInstance from '@/core/services/axios/axiosInstance';
+import axiosInstance from '@/core/services/axios/axios-instance';
 import { useMutation, UseMutationResult, UseMutationOptions } from '@tanstack/react-query';
 
 type MutationConfig<TData, TVariables> = {

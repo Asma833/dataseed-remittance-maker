@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef } from 'react';
-import axiosInstance from '@/core/services/axios/axiosInstance';
+import axiosInstance from '@/core/services/axios/axios-instance';
 import { Option } from '@/types/common/transaction-form.types';
 
 export const useDynamicOptions = (apiUrl: string) => {

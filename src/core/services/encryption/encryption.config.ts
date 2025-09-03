@@ -2,7 +2,7 @@
  * Configuration for endpoints that should skip encryption
  */
 
-import { SKIP_ENCRYPTION_ENDPOINTS, matchesEndpointRule } from '@/core/constant/encryptionEndpoints';
+import { SKIP_ENCRYPTION_ENDPOINTS, matchesEndpointRule } from '@/core/constant/encryption-endpoints';
 
 /**
  * Exact endpoint paths that should never be encrypted

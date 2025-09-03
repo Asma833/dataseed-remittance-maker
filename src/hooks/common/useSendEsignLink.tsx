@@ -1,6 +1,6 @@
 import { toast } from 'sonner';
 import { useMutation } from '@tanstack/react-query';
-import { updateIncidentApi } from '@/api/updateIncidentApi';
+import { updateIncidentApi } from '@/api/update-incident.api';
 import { EsignLinkRequest, TransactionType } from '@/types/common/updateIncident.types';
 import { useQueryInvalidator } from '@/hooks/useQueryInvalidator';
 

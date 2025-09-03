@@ -3,7 +3,7 @@ import DashboardContentWrapper from '@/components/common/dashboard-wrapper';
 import Header from '@/components/layout/side-navigaion/header-nav';
 import SideNav from '@/components/layout/side-navigaion/sidenav';
 import { ReactNode } from 'react';
-import { getNavigationItemsByRole } from '@/core/constant/manageSideNavOptions';
+import { getNavigationItemsByRole } from '@/core/constant/manage-sidenav-options';
 import { useCurrentUser } from '@/utils/getUserFromRedux';
 
 interface CheckerLayoutProps {

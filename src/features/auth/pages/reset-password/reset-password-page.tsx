@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import AuthLayout from '../../../../components/layout/auth-layout';
 import ChangePasswordForm from '../../components/change-password-form';
-import { ROUTES } from '@/core/constant/routePaths';
+import { ROUTES } from '@/core/constant/route-paths';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Loader2 } from 'lucide-react';
 import axios from 'axios';

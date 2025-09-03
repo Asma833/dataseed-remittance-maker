@@ -1,7 +1,7 @@
 import { useState, useCallback } from 'react';
 import { toast } from 'sonner';
 import { useQuery } from '@tanstack/react-query';
-import axiosInstance from '@/core/services/axios/axiosInstance';
+import axiosInstance from '@/core/services/axios/axios-instance';
 import { API } from '@/core/constant/apis';
 import { useCurrentUser } from '@/utils/getUserFromRedux';
 import { Order, TransactionType } from '@/types/common/updateIncident.types';

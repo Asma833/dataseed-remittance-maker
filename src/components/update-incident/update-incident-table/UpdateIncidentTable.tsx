@@ -7,7 +7,7 @@ import useUnassignChecker from '@/hooks/common/useUnassignChecker';
 import { cn } from '@/utils/cn';
 import { GetTransactionTableColumns } from './UpdateIncidentTableColumns';
 import { Order } from '@/types/common/updateIncident.types';
-import UpdateIncidentDialog from '@/components/update-incident-dialog/UpdateIncidentDialog';
+import UpdateIncidentDialog from '@/components/update-incident-dialog/update-incident-dialog';
 import useGetCheckerOrders from '@/hooks/common/useGetCheckerOrders';
 import { useDynamicOptions } from '@/hooks/common/useDynamicOptions';
 import { API } from '@/core/constant/apis';

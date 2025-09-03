@@ -1,11 +1,11 @@
 import { AxiosError, AxiosInstance, AxiosRequestConfig, AxiosResponse } from 'axios';
 import { store } from '@/store';
-import { logout, updateAccessToken } from '@/features/auth/store/authSlice';
+import { logout, updateAccessToken } from '@/features/auth/store/auth-slice';
 import { API } from '@/core/constant/apis';
 import {
   encryptRequestInterceptor,
   decryptResponseInterceptor,
-} from '@/core/services/encryption/encryptionInterceptor';
+} from '@/core/services/encryption/encryption-Interceptor';
 import { clearAllQueryCache } from '@/core/services/query/queryCacheManager';
 
 interface RefreshTokenResponse {

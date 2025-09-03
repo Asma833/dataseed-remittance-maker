@@ -2,7 +2,7 @@ import { useMemo } from 'react';
 import { Routes, Route, Navigate } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import { publicRoutes } from './Routes';
-import { DEFAULT_ROUTES } from '@/core/constant/manageDefaultRoutes';
+import { DEFAULT_ROUTES } from '@/core/constant/manage-default-routes';
 import { UserRole } from '@/features/auth/types/auth.types';
 import { RootState } from '@/store';
 import NotFoundPage from '@/components/common/not-found-page';

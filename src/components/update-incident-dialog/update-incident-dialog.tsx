@@ -1,5 +1,5 @@
 import { DialogWrapper } from '@/components/common/dialog-wrapper';
-import UpdateIncidentForm from '../update-incident/incident-form/UpdateIncidentForm';
+import UpdateIncidentForm from '../update-incident/incident-form/update-incident-form';
 import { UpdateIncidentDialogProps } from '@/types/common/updateIncident.types';
 import { IncidentMode } from '@/types/enums';
 

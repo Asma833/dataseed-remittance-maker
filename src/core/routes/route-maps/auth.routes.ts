@@ -1,13 +1,13 @@
 import { lazy } from 'react';
-import { ROUTES } from '../../constant/routePaths';
+import { ROUTES } from '../../constant/route-paths';
 
 // prettier-ignore
 const authComponents = {
-  Login: lazy(() => import("@/features/auth/pages/login/LoginPage")),
-  ResetPasswordPage: lazy(() => import("@/features/auth/pages/reset-password/ResetPasswordPage")),
-  SendEmail: lazy(() => import("@/features/auth/pages/send-email/SendEmailPage")),
-  ResetConfirmation: lazy(() => import("@/features/auth/pages/send-email/ResetLinkConfirmationAlert")),
-  ResetPassword: lazy(() => import("@/features/auth/pages/reset-password/ResetPasswordPage"))
+  Login: lazy(() => import("@/features/auth/pages/login/login-page")),
+  ResetPasswordPage: lazy(() => import("@/features/auth/pages/reset-password/reset-password-page")),
+  SendEmail: lazy(() => import("@/features/auth/pages/send-email/send-email-page")),
+  ResetConfirmation: lazy(() => import("@/features/auth/pages/send-email/reset-link-confirmation-alert")),
+  ResetPassword: lazy(() => import("@/features/auth/pages/reset-password/reset-password-page"))
 };
 
 const baseRole = '*'; // Public routes are accessible to all roles

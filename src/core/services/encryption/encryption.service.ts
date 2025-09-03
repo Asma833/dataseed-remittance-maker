@@ -1,6 +1,6 @@
 import CryptoJS from 'crypto-js';
 import * as forge from 'node-forge';
-import { encryptionLogger } from './encryptionLogger';
+import { encryptionLogger } from './encryption.logger';
 
 export interface EncryptionResult {
   encryptedData: string;

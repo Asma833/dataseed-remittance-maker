@@ -2,10 +2,10 @@ import React, { useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 // import { authApi } from '../api/authApi';
-import { logout } from '../store/authSlice';
+import { logout } from '../store/auth-slice';
 import { toast } from 'sonner';
 import { ConfirmationAlert } from '@/components/common/confirmation-alert';
-import { ROUTES } from '@/core/constant/routePaths';
+import { ROUTES } from '@/core/constant/route-paths';
 import { clearAllQueryCache } from '@/core/services/query/queryCacheManager';
 
 interface LogoutWrapperProps {

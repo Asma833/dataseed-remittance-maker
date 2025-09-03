@@ -1,6 +1,6 @@
 import { toast } from 'sonner';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
-import axiosInstance from '@/core/services/axios/axiosInstance';
+import axiosInstance from '@/core/services/axios/axios-instance';
 import { UnassignCheckerParams } from '@/types/common/checker.types';
 
 const useUnassignChecker = () => {

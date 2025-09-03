@@ -4,10 +4,10 @@ import { ShieldAlert } from 'lucide-react';
 import { toast } from 'sonner';
 import { useNavigate } from 'react-router-dom';
 import { useCurrentUser } from '@/utils/getUserFromRedux';
-import { DEFAULT_ROUTES } from '@/core/constant/manageDefaultRoutes';
+import { DEFAULT_ROUTES } from '@/core/constant/manage-default-routes';
 import { clearAllQueryCache } from '@/core/services/query/queryCacheManager';
-import { logout } from '@/features/auth/store/authSlice';
-import { ROUTES } from '@/core/constant/routePaths';
+import { logout } from '@/features/auth/store/auth-slice';
+import { ROUTES } from '@/core/constant/route-paths';
 
 const UnauthorizedPage = () => {
   const { getUser } = useCurrentUser();

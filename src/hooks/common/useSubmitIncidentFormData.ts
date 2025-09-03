@@ -1,5 +1,5 @@
 import { useMutation } from '@tanstack/react-query';
-import axiosInstance from '@/core/services/axios/axiosInstance';
+import axiosInstance from '@/core/services/axios/axios-instance';
 import { API } from '@/core/constant/apis';
 import { useQueryInvalidator } from '@/hooks/useQueryInvalidator';
 

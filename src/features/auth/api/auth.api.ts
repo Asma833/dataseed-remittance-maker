@@ -1,4 +1,4 @@
-import axiosInstance from '@/core/services/axios/axiosInstance';
+import axiosInstance from '@/core/services/axios/axios-instance';
 import { ChangePasswordResponse, LoginResponse } from '../types/auth.types';
 import { getEndpoint } from '@/core/constant/apis';
 

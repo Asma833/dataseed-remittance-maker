@@ -2,11 +2,11 @@ import { toast } from 'sonner';
 import { useMutation } from '@tanstack/react-query';
 import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
-import { authApi } from '../api/authApi';
-import { setCredentials } from '../store/authSlice';
-import { DEFAULT_ROUTES } from '../../../core/constant/manageDefaultRoutes';
+import { authApi } from '../api/auth.api';
+import { setCredentials } from '../store/auth-slice';
+import { DEFAULT_ROUTES } from '../../../core/constant/manage-default-routes';
 import { LoginResponse } from '../types/auth.types';
-import type { LoginCredentials } from '../api/authApi';
+import type { LoginCredentials } from '../api/auth.api';
 
 export const useLogin = () => {
   const dispatch = useDispatch();

@@ -3,7 +3,7 @@ import { useNavigate, useLocation, NavLink } from 'react-router-dom';
 import { ChevronDown } from 'lucide-react';
 import { cn } from '@/utils/cn';
 import Logo from '@/components/logo/Logo';
-import { NavigationItem } from '@/core/constant/manageSideNavOptions';
+import { NavigationItem } from '@/core/constant/manage-sidenav-options';
 import themeConfig from '@/core/configs/theme-config';
 import SidebarToggle from '@/components/common/sidebar-toggle';
 

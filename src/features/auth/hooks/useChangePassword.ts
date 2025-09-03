@@ -1,6 +1,6 @@
 import { useMutation } from '@tanstack/react-query';
 import { toast } from 'sonner';
-import { authApi } from '../api/authApi';
+import { authApi } from '../api/auth.api';
 import type { ChangePasswordRequest, ChangePasswordResponse } from '../types/auth.types';
 import { useNavigate } from 'react-router-dom';
 

@@ -1,4 +1,4 @@
-import axiosInstance from '@/core/services/axios/axiosInstance';
+import axiosInstance from '@/core/services/axios/axios-instance';
 import { useState, useEffect } from 'react';
 import { useCurrentUser } from '@/utils/getUserFromRedux';
 import { API } from '@/core/constant/apis';

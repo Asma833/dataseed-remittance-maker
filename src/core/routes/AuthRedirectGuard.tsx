@@ -2,7 +2,7 @@ import { Navigate } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import { createSelector } from '@reduxjs/toolkit';
 import { RootState } from '@/store';
-import { DEFAULT_ROUTES } from '@/core/constant/manageDefaultRoutes';
+import { DEFAULT_ROUTES } from '@/core/constant/manage-default-routes';
 import LoadingFallback from '@/components/loader/LoadingFallback';
 
 interface AuthRedirectGuardProps {
