@@ -116,15 +116,15 @@ const Sidebar: React.FC<SidebarProps> = ({ navItems, collapsed, setCollapsed }) 
 
               {/* Submenu Items */}
               {!collapsed && item.subMenus && item.subMenus.length > 0 && openDropdowns.has(item.title) && (
-                <ul className="ml-4 mt-1 space-y-1 border-l border-muted/20 pl-4">
+                <ul className="ml-4 mt-1 space-y-1 border-l border-muted/20 ">
                   {item.subMenus.map((submenu, subIdx) => (
                     <li key={subIdx} className="list-none">
                       <div
                         onClick={() => submenu.path && handleNavigation(submenu.path, submenu.title)}
                         className={cn(
-                          'flex items-center gap-3 py-2 px-2 cursor-pointer transition-colors text-sm rounded-md',
+                          'flex items-center gap-3 py-2 px-2 cursor-pointer transition-colors text-sm',
                           isSubmenuActive(submenu)
-                            ? 'bg-primary/10 text-primary font-medium'
+                            ? 'bg-primary/40 text-primary-foreground font-medium'
                             : 'hover:bg-muted/20 text-muted-foreground',
                           submenu.disabled && 'opacity-50 cursor-not-allowed'
                         )}
