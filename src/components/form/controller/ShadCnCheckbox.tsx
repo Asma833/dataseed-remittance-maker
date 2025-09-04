@@ -23,6 +23,7 @@ interface ShadCnCheckboxProps {
   };
   disabled?: boolean;
   required?: boolean;
+  orientation?: 'horizontal' | 'vertical';
 }
 
 export const ShadCnCheckbox = ({
@@ -40,6 +41,7 @@ export const ShadCnCheckbox = ({
   },
   disabled = false,
   required = false,
+  orientation,
 }: ShadCnCheckboxProps) => {
   const { control, setValue, trigger, getValues } = useFormContext();
 
@@ -159,9 +161,13 @@ export const ShadCnCheckbox = ({
           name={fieldName}
           control={control}
           defaultValue={getDefaultValues()}
-          render={({ field }) => (
-            <div className={cn('space-y-2', classNames?.formGroup ?? '')}>
-              {Object.entries(options).map(([key, option]) => {
+          render={({ field }) => {
+            const numOptions = Object.keys(options).length;
+            const effectiveOrientation = orientation || (numOptions <= 3 ? 'horizontal' : 'vertical');
+            const containerClassName = effectiveOrientation === 'horizontal' ? 'flex space-x-4' : 'space-y-2';
+            return (
+              <div className={cn(containerClassName, classNames?.formGroup ?? '')}>
+                {Object.entries(options).map(([key, option]) => {
                 const isChecked = field.value?.[key] || false;
                 const icons = getIcons(isChecked);
 
@@ -226,8 +232,9 @@ export const ShadCnCheckbox = ({
                   </div>
                 );
               })}
-            </div>
-          )}
+              </div>
+            );
+          }}
         />
       </FormControl>
       <FormMessage />

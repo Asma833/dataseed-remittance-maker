@@ -13,6 +13,7 @@ interface ShadCnRadioGroupProps<T extends FieldValues> {
   forcedValue?: string;
   onChange?: (value: string) => void;
   defaultValue?: FieldPathValue<T, Path<T>>;
+  orientation?: 'horizontal' | 'vertical';
 }
 
 export const ShadCnRadioGroup = <T extends FieldValues>({
@@ -25,6 +26,7 @@ export const ShadCnRadioGroup = <T extends FieldValues>({
   forcedValue,
   onChange,
   defaultValue,
+  orientation,
 }: ShadCnRadioGroupProps<T>) => {
   return (
     <FormItem className={className}>
@@ -38,6 +40,9 @@ export const ShadCnRadioGroup = <T extends FieldValues>({
           {...(defaultValue !== undefined ? { defaultValue } : {})}
           render={({ field }) => {
             const currentValue = forcedValue ? forcedValue : (typeof field.value === 'boolean' ? field.value.toString() : field.value);
+            const numOptions = Object.keys(options).length;
+            const effectiveOrientation = orientation || (numOptions <= 3 ? 'horizontal' : 'vertical');
+            const radioClassName = effectiveOrientation === 'horizontal' ? 'flex space-x-4' : 'space-y-2';
             return (
               <RadioGroup
                 value={currentValue || ''}
@@ -53,7 +58,7 @@ export const ShadCnRadioGroup = <T extends FieldValues>({
                   }
                 }}
                 disabled={disabled}
-                className="space-y-2"
+                className={radioClassName}
               >
               {Object.entries(options).map(([value, option]) => (
                 <div key={value} className="flex items-center space-x-2">

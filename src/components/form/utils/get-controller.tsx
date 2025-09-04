@@ -103,6 +103,7 @@ export const getController = (field: any) => {
           variant={field.variant}
           size={field.size}
           classNames={field.classNames}
+          orientation={field.orientation}
         />
       );
     case 'select':
@@ -112,7 +113,7 @@ export const getController = (field: any) => {
     case 'radio':
       // Find the default checked option
       const defaultRadioValue = Object.keys(field.options).find(key => field.options[key].checked);
-      const radioProps = { ...baseProps, options: field.options, onChange: field.onChange };
+      const radioProps = { ...baseProps, options: field.options, onChange: field.onChange, orientation: field.orientation };
       if (defaultRadioValue) {
         (radioProps as any).defaultValue = defaultRadioValue;
       }
