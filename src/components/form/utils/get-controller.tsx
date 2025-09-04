@@ -1,19 +1,18 @@
-import { MaterialText } from '@/components/form/controller/MaterialText';
-import { MaterialSelect } from '@/components/form/controller/MaterialSelect';
-import { MaterialDatePicker } from '@/components/form/controller/MaterialDatePicker';
-import { MaterialRadioGroup } from '@/components/form/controller/MaterialRadioGroup';
-import { MaterialEmail } from '@/components/form/controller/MaterialEmail';
-import { MaterialFile } from '@/components/form/controller/MaterialFile';
-import { MaterialCheckbox } from '@/components/form/controller/MaterialCheckbox';
-import { MaterialNumber } from '@/components/form/controller/MaterialNumber';
-import { MaterialPhone } from '@/components/form/controller/MaterialPhone';
-import { MaterialIndianPhone } from '@/components/form/controller/MaterialIndianPhone';
-import MaterialPassword from '@/components/form/controller/MaterialPassword';
-import { MaterialTextArea } from '../controller/MaterialTextArea';
-import { baseGeneralFieldStyle, baseStyle } from '../styles/material-styles';
-import { FileUpload } from '../controller/FileUpload';
-import FileUploadWithView from '../controller/FileUploadWithView';
-import { FileUploadWithButton } from '../controller/FileUploadWithButton';
+import { ShadCnText } from '@/components/form/controller/ShadCnText';
+import { ShadCnSelect } from '@/components/form/controller/ShadCnSelect';
+import { ShadCnDatePicker } from '@/components/form/controller/ShadCnDatePicker';
+import { ShadCnRadioGroup } from '@/components/form/controller/ShadCnRadioGroup';
+import { ShadCnEmail } from '@/components/form/controller/ShadCnEmail';
+import { ShadCnFile } from '@/components/form/controller/ShadCnFile';
+import { ShadCnCheckbox } from '@/components/form/controller/ShadCnCheckbox';
+import { ShadCnNumber } from '@/components/form/controller/ShadCnNumber';
+import { ShadCnPhone } from '@/components/form/controller/ShadCnPhone';
+import { ShadCnIndianPhone } from '@/components/form/controller/ShadCnIndianPhone';
+import ShadCnPassword from '@/components/form/controller/ShadCnPassword';
+import { ShadCnTextArea } from '../controller/ShadCnTextArea';
+import { ShadCnFileUpload } from '../controller/ShadCnFileUpload';
+import { ShadCnFileUploadWithView } from '../controller/ShadCnFileUploadWithView';
+import { ShadCnFileUploadWithButton } from '../controller/ShadCnFileUploadWithButton';
 
 export const getController = (field: any) => {
   const baseProps = {
@@ -22,101 +21,96 @@ export const getController = (field: any) => {
     disabled: field.disabled,
     forcedValue: field.forcedValue,
     className: field.className,
-    classNames: field.classNames,
-    id: field.id,
-    required:field.required
-  };
-
-  const styledProps = {
-    ...baseProps,
-    baseStyle: baseStyle(field),
-    className: baseGeneralFieldStyle,
+    required: field.required
   };
 
   switch (field.type) {
     case 'text':
       return (
-        <MaterialText
-          {...styledProps}
+        <ShadCnText
           {...baseProps}
-          inputProps={field.inputProps}
           uppercase={field.uppercase}
-          disabled={field.disabled}
-          forcedValue={field.forcedValue}
-          required={field.required}
+          onInputChange={field.onInputChange}
         />
       );
     case 'textarea':
       return (
-        <MaterialTextArea
+        <ShadCnTextArea
           {...baseProps}
-          forcedValue={field.forcedValue}
-          className="w-full"
+          rows={field.rows}
+          maxRows={field.maxRows}
+          minRows={field.minRows}
+          placeholder={field.placeholder}
           onInputChange={field.onInputChange}
         />
       );
     case 'email':
-      return <MaterialEmail {...baseProps} {...styledProps} />;
+      return <ShadCnEmail {...baseProps} />;
     case 'number':
-      return <MaterialNumber {...baseProps} {...styledProps} />;
+      return <ShadCnNumber {...baseProps} min={field.min} step={field.step} />;
     case 'phone':
-      return <MaterialPhone {...baseProps} {...styledProps} />;
+      return <ShadCnPhone {...baseProps} />;
     case 'indian_phone':
-      return <MaterialIndianPhone {...baseProps} {...styledProps} />;
+      return <ShadCnIndianPhone {...baseProps} />;
     case 'file':
-      return <MaterialFile {...baseProps} className={baseGeneralFieldStyle} />;
+      return <ShadCnFile {...baseProps} />;
     case 'fileupload':
       return (
-        <FileUpload
+        <ShadCnFileUpload
           {...baseProps}
-          className={baseGeneralFieldStyle}
           maxFiles={field.maxFiles}
           description={field.description}
           helpText={field.helpText}
           accept={field.accept}
           multiple={field.maxFiles > 1}
+          handleFileChange={field.handleFileChange}
+          styleType={field.styleType}
         />
       );
     case 'fileupload_view':
       return (
-        <FileUploadWithView
+        <ShadCnFileUploadWithView
           {...baseProps}
-          className={baseGeneralFieldStyle}
           maxFiles={field.maxFiles}
           description={field.description}
           helpText={field.helpText}
           accept={field.accept}
           multiple={field.maxFiles > 1}
+          handleFileChange={field.handleFileChange}
           viewFile={field.viewFile}
         />
       );
     case 'fileupload_with_button':
       return (
-        <FileUploadWithButton
+        <ShadCnFileUploadWithButton
           name={field.name}
           label={field.label}
           onUpload={field.onUpload}
           disabled={field.disabled}
+          required={field.required}
         />
       );
     case 'checkbox':
       return (
-        <MaterialCheckbox
+        <ShadCnCheckbox
           {...baseProps}
           options={field.options}
           handleCheckboxChange={field.handleCheckboxChange}
           isMulti={field.isMulti}
           defaultSelected={field.defaultSelected}
+          variant={field.variant}
+          size={field.size}
+          classNames={field.classNames}
         />
       );
     case 'select':
-      return <MaterialSelect {...baseProps} {...styledProps} options={field.options} placeholder={field.placeholder} required={field.required} />;
+      return <ShadCnSelect {...baseProps} options={field.options} placeholder={field.placeholder} />;
     case 'date':
-      return <MaterialDatePicker {...baseProps} {...styledProps} error={field.error} />;
+      return <ShadCnDatePicker {...baseProps} placeholder={field.placeholder} />;
     case 'radio':
-      return <MaterialRadioGroup {...baseProps} options={field.options} />;
+      return <ShadCnRadioGroup {...baseProps} options={field.options} onChange={field.onChange} />;
     case 'password':
-      return <MaterialPassword {...styledProps} />;
+      return <ShadCnPassword {...baseProps} uppercase={field.uppercase} />;
     default:
       return null;
   }

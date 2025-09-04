@@ -1,0 +1,55 @@
+import { Controller, useFormContext } from 'react-hook-form';
+import { ShadCnFormInput } from './ShadCnFormInput';
+import { FormItem, FormLabel, FormControl, FormMessage } from '@/components/ui/form';
+
+interface ShadCnPasswordProps {
+  name: string;
+  label: string;
+  className?: string;
+  uppercase?: boolean;
+  disabled?: boolean;
+  required?: boolean;
+  forcedValue?: string;
+}
+
+const ShadCnPassword = ({
+  name,
+  label,
+  className,
+  uppercase,
+  disabled = false,
+  required = false,
+  forcedValue,
+}: ShadCnPasswordProps) => {
+  const { control } = useFormContext();
+
+  return (
+    <FormItem className={className}>
+      <FormLabel>
+        {label}
+        {required && <span className="text-destructive ml-1">*</span>}
+      </FormLabel>
+      <FormControl>
+        <Controller
+          name={name}
+          control={control}
+          defaultValue=""
+          render={({ field }) => (
+            <ShadCnFormInput
+              {...field}
+              type="password"
+              uppercase={uppercase}
+              disabled={disabled}
+              required={required}
+              forcedValue={forcedValue}
+              autoComplete="new-password"
+            />
+          )}
+        />
+      </FormControl>
+      <FormMessage />
+    </FormItem>
+  );
+};
+
+export default ShadCnPassword;

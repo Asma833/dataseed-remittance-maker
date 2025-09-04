@@ -1,0 +1,52 @@
+import { Controller, useFormContext } from 'react-hook-form';
+import { ShadCnFormInput } from './ShadCnFormInput';
+import { FormItem, FormLabel, FormControl, FormMessage } from '@/components/ui/form';
+
+interface ShadCnIndianPhoneProps {
+  name: string;
+  label: string;
+  className?: string;
+  disabled?: boolean;
+  required?: boolean;
+  forcedValue?: string;
+}
+
+export const ShadCnIndianPhone = ({
+  name,
+  label,
+  className,
+  disabled = false,
+  required = false,
+  forcedValue,
+}: ShadCnIndianPhoneProps) => {
+  const { control } = useFormContext();
+
+  return (
+    <FormItem className={className}>
+      <FormLabel>
+        {label}
+        {required && <span className="text-destructive ml-1">*</span>}
+      </FormLabel>
+      <FormControl>
+        <Controller
+          name={name}
+          control={control}
+          defaultValue=""
+          render={({ field }) => (
+            <ShadCnFormInput
+              {...field}
+              type="tel"
+              isIndianPhone={true}
+              disabled={disabled}
+              required={required}
+              forcedValue={forcedValue}
+              placeholder="+91 98765 43210"
+              maxLength={17}
+            />
+          )}
+        />
+      </FormControl>
+      <FormMessage />
+    </FormItem>
+  );
+};

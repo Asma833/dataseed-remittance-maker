@@ -1,42 +1,46 @@
 import { Controller, useFormContext } from 'react-hook-form';
-import { FormGroup, FormControlLabel, Checkbox, Radio } from '@mui/material';
+import { Checkbox } from '@/components/ui/checkbox';
+import { FormItem, FormLabel, FormControl, FormMessage } from '@/components/ui/form';
+import { cn } from '@/utils/cn';
 import { Circle, CircleCheck, Square, CheckSquare, CircleDot, Disc, SquareCheck } from 'lucide-react';
-import { ErrorMessage } from '../error-message';
-import { CustomRadioIcon, CustomSquareCheckIcon } from '@/components/common/custom-checkbox-icons';
+import { useMemo } from 'react';
 
 type CheckboxVariant = 'square_check' | 'circle_check' | 'radio_style' | 'circle_check_filled' | 'square_check_filled';
 type CheckboxSize = 'small' | 'medium' | 'large';
 
-interface MaterialCheckboxProps {
+interface ShadCnCheckboxProps {
   name: string;
   label?: string;
   options: Record<string, { label: string }>;
   handleCheckboxChange?: (key: string, checked: boolean) => void;
   isMulti: boolean;
   defaultSelected?: Record<string, boolean>;
-  error?: boolean | string;
   variant?: CheckboxVariant;
   size?: CheckboxSize;
   classNames?: {
     wrapper?: string;
     formGroup?: string;
   };
+  disabled?: boolean;
+  required?: boolean;
 }
 
-export const MaterialCheckbox = ({
+export const ShadCnCheckbox = ({
   name,
+  label,
   options,
   handleCheckboxChange,
   isMulti,
   defaultSelected = {},
-  error,
   variant = 'circle_check',
   size = 'medium',
   classNames = {
     wrapper: '',
     formGroup: '',
   },
-}: MaterialCheckboxProps) => {
+  disabled = false,
+  required = false,
+}: ShadCnCheckboxProps) => {
   const { control, setValue, trigger, getValues } = useFormContext();
 
   // Ensure name is a valid string
@@ -79,25 +83,24 @@ export const MaterialCheckbox = ({
       case 'square_check_filled':
         return {
           unchecked: (
-            <CustomSquareCheckIcon
+            <SquareCheck
               className="text-primary-foreground rounded-sm bg-primary"
               fill="var(--fill-foreground)"
               size={iconSize}
             />
           ),
           checked: (
-            <CustomSquareCheckIcon
+            <SquareCheck
               className="text-primary-foreground rounded-sm bg-primary"
               fill="var(--fill-primary)"
               size={iconSize}
-              selected
             />
           ),
         };
       case 'radio_style':
         return {
           unchecked: (
-            <CustomRadioIcon
+            <CircleDot
               size={iconSize}
               fill="white"
               color="var(--fill-primary)"
@@ -105,8 +108,7 @@ export const MaterialCheckbox = ({
             />
           ),
           checked: (
-            <CustomRadioIcon
-              selected
+            <CircleDot
               fill="var(--fill-foreground)"
               className="text-primary-foreground rounded-sm"
               size={iconSize}
@@ -119,48 +121,6 @@ export const MaterialCheckbox = ({
           unchecked: <Circle size={iconSize} />,
           checked: <CircleCheck className="text-primary" size={iconSize} />,
         };
-    }
-  };
-
-  // Function to check if a path exists in the form values
-  const getValueAtPath = (path: string) => {
-    const formValues = getValues();
-    const pathParts = path.split('.');
-    let value = formValues;
-
-    for (const part of pathParts) {
-      if (value === undefined || value === null) return undefined;
-      value = value[part];
-    }
-
-    return value;
-  };
-
-  const getDefaultValues = () => {
-    // For nested fields, try to get the value from the parent
-    if (isNestedField) {
-      const parentValue = getValueAtPath(parentPath);
-      if (
-        parentValue &&
-        typeof parentValue === 'object' &&
-        parentValue[lastPart] &&
-        typeof parentValue[lastPart] === 'object'
-      ) {
-        return parentValue[lastPart];
-      }
-    } else {
-      // For non-nested fields, try to get the value directly
-      const existingValues = getValueAtPath(fieldName);
-      if (existingValues && typeof existingValues === 'object') {
-        return existingValues;
-      }
-    }
-
-    // Otherwise create default values
-    if (isMulti) {
-      return Object.fromEntries(Object.keys(options).map((key) => [key, false]));
-    } else {
-      return Object.fromEntries(Object.keys(options).map((key) => [key, defaultSelected?.[key] || false]));
     }
   };
 
@@ -178,37 +138,47 @@ export const MaterialCheckbox = ({
   // For nested fields, we need special handling
   const { parentPath, lastPart } = isNestedField ? getNestedParts() : { parentPath: '', lastPart: fieldName };
 
+  const getDefaultValues = () => {
+    if (isMulti) {
+      return Object.fromEntries(Object.keys(options).map((key) => [key, false]));
+    } else {
+      return Object.fromEntries(Object.keys(options).map((key) => [key, defaultSelected?.[key] || false]));
+    }
+  };
+
   return (
-    <Controller
-      name={fieldName}
-      control={control}
-      defaultValue={getDefaultValues()}
-      render={({ field }) => (
-        <div className={classNames.wrapper}>
-          <FormGroup style={{ zoom: 0.9 }} className={classNames?.formGroup ?? ''}>
-            {Object.entries(options).map(([key, option]) => {
-              const isChecked = field.value?.[key] || false;
-              const icons = getIcons(isChecked);
+    <FormItem className={classNames.wrapper}>
+      {label && (
+        <FormLabel>
+          {label}
+          {required && <span className="text-destructive ml-1">*</span>}
+        </FormLabel>
+      )}
+      <FormControl>
+        <Controller
+          name={fieldName}
+          control={control}
+          defaultValue={getDefaultValues()}
+          render={({ field }) => (
+            <div className={cn('space-y-2', classNames?.formGroup ?? '')}>
+              {Object.entries(options).map(([key, option]) => {
+                const isChecked = field.value?.[key] || false;
+                const icons = getIcons(isChecked);
 
-              // Use Radio component for radio_style variant, Checkbox for others
-              const InputComponent = variant === 'radio_style' ? Radio : Checkbox;
-
-              return (
-                <FormControlLabel
-                  key={key}
-                  control={
-                    <InputComponent
+                return (
+                  <div key={key} className="flex items-center space-x-2">
+                    <Checkbox
+                      id={`${fieldName}-${key}`}
                       checked={isChecked}
-                      icon={icons.unchecked}
-                      checkedIcon={icons.checked}
-                      onChange={(e) => {
-                        const checked = e.target.checked;
-                        let updatedValue = { ...field.value, [key]: checked };
+                      disabled={disabled}
+                      onCheckedChange={(checked) => {
+                        const isChecked = checked === true;
+                        let updatedValue = { ...field.value, [key]: isChecked };
 
                         // For radio_style or single selection, uncheck all others when a new one is selected
                         if (!isMulti || variant === 'radio_style') {
                           updatedValue = Object.fromEntries(
-                            Object.keys(options).map((k) => [k, k === key ? checked : false])
+                            Object.keys(options).map((k) => [k, k === key ? isChecked : false])
                           );
                         }
 
@@ -240,21 +210,27 @@ export const MaterialCheckbox = ({
 
                         // Call handleCheckboxChange with the key and checked state if it exists
                         if (handleCheckboxChange) {
-                          handleCheckboxChange(key, checked);
+                          handleCheckboxChange(key, isChecked);
                         }
 
                         trigger(fieldName);
                       }}
+                      className="data-[state=checked]:bg-primary data-[state=checked]:border-primary"
                     />
-                  }
-                  label={option.label}
-                />
-              );
-            })}
-          </FormGroup>
-          <ErrorMessage name={fieldName} />
-        </div>
-      )}
-    />
+                    <label
+                      htmlFor={`${fieldName}-${key}`}
+                      className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+                    >
+                      {option.label}
+                    </label>
+                  </div>
+                );
+              })}
+            </div>
+          )}
+        />
+      </FormControl>
+      <FormMessage />
+    </FormItem>
   );
 };
