@@ -55,6 +55,12 @@ export interface TableConfig {
     multiple: boolean;
   };
   
+  export: {
+    enabled: boolean;
+    fileName?: string;
+    includeHeaders?: boolean;
+  };
+  
   // Loading and error states
   loading?: boolean;
   error?: string | null;

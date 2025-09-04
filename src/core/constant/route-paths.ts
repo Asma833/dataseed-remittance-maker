@@ -8,6 +8,7 @@ export const ROUTES = {
   },
   ADMIN: {
     DASHBOARD: '/dashboard',
+    AGENT_ADMIN: '/agent-admin',
     USER_MANAGEMENT: {
       N_USER: '/user-management/n-user',
       AGENT_BRANCH: '/user-management/agent-branch-user-creation',

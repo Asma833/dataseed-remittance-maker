@@ -19,8 +19,8 @@ export const SideNavOptions = {
       icon: LayoutDashboard,
       subMenus: [
         {
-          title: 'View Users',
-          path: getNavPath('ADMIN', ROUTES.ADMIN.NUSER),
+          title: 'Agent Admin',
+          path: getNavPath('ADMIN', ROUTES.ADMIN.AGENT_ADMIN),
           icon: Eye,
         },
         {

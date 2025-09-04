@@ -1,4 +1,4 @@
-"use client";
+'use client';
 
 import React, { useState, useMemo, useEffect } from 'react';
 import {
@@ -23,7 +23,14 @@ declare module '@tanstack/react-table' {
     className?: string;
   }
 }
-import { ChevronUpIcon, ChevronDownIcon, ChevronLeftIcon, ChevronRightIcon, ChevronsLeftIcon, ChevronsRightIcon } from 'lucide-react';
+import {
+  ChevronUpIcon,
+  ChevronDownIcon,
+  ChevronLeftIcon,
+  ChevronRightIcon,
+  ChevronsLeftIcon,
+  ChevronsRightIcon,
+} from 'lucide-react';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
@@ -34,7 +41,7 @@ import { defaultTableConfig } from './config';
 
 interface DataTableProps<T> {
   columns: TableColumn<T>[];
-  data: TableData<T>;
+  data: TableData<T> | T[]; // Support both TableData object and direct array
   config?: Partial<TableConfig>;
   actions?: TableActions<T>;
   className?: string;
@@ -47,23 +54,75 @@ export function DataTable<T>({
   actions = {},
   className,
 }: DataTableProps<T>) {
+  // Early error handling for invalid data
+  if (!data) {
+    return (
+      <div className="flex items-center justify-center p-8">
+        <div className="text-sm text-destructive">Error: No data provided to table</div>
+      </div>
+    );
+  }
+
+  // Ensure data.data is always an array
+  const safeData = useMemo(() => {
+    let processedData: T[] = [];
+
+    if (Array.isArray(data)) {
+      // If data is directly an array (legacy support)
+      processedData = data;
+    } else if (data && typeof data === 'object') {
+      if (Array.isArray(data.data)) {
+        processedData = data.data;
+      } else if (data.data === null || data.data === undefined) {
+        processedData = [];
+      } else {
+        // If data.data exists but is not an array, log warning and use empty array
+        console.warn('DataTable: data.data should be an array, received:', typeof data.data, data.data);
+        processedData = [];
+      }
+    } else {
+      // If data is not an object or array
+      console.warn('DataTable: data should be an object with data property or an array, received:', typeof data, data);
+      processedData = [];
+    }
+
+    return {
+      data: processedData,
+      totalCount: data && typeof data === 'object' && !Array.isArray(data) ? data.totalCount : processedData.length,
+      pageCount: data && typeof data === 'object' && !Array.isArray(data) ? data.pageCount : undefined,
+      currentPage: data && typeof data === 'object' && !Array.isArray(data) ? data.currentPage : undefined,
+    };
+  }, [data]);
+
+  // Early error handling for invalid columns
+  if (!columns || !Array.isArray(columns) || columns.length === 0) {
+    return (
+      <div className="flex items-center justify-center p-8">
+        <div className="text-sm text-destructive">Error: No columns provided to table</div>
+      </div>
+    );
+  }
+
   // Merge configuration
-  const config = useMemo(() => ({
-    ...defaultTableConfig,
-    ...configOverride,
-    pagination: { ...defaultTableConfig.pagination, ...configOverride.pagination },
-    search: { ...defaultTableConfig.search, ...configOverride.search },
-    filters: { ...defaultTableConfig.filters, ...configOverride.filters },
-    sorting: { ...defaultTableConfig.sorting, ...configOverride.sorting },
-    rowSelection: { ...defaultTableConfig.rowSelection, ...configOverride.rowSelection },
-  }), [configOverride]);
+  const config = useMemo(
+    () => ({
+      ...defaultTableConfig,
+      ...configOverride,
+      pagination: { ...defaultTableConfig.pagination, ...configOverride.pagination },
+      search: { ...defaultTableConfig.search, ...configOverride.search },
+      filters: { ...defaultTableConfig.filters, ...configOverride.filters },
+      sorting: { ...defaultTableConfig.sorting, ...configOverride.sorting },
+      rowSelection: { ...defaultTableConfig.rowSelection, ...configOverride.rowSelection },
+    }),
+    [configOverride]
+  );
 
   // Table state
   const [sorting, setSorting] = useState<SortingState>([]);
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
   const [globalFilter, setGlobalFilter] = useState('');
   const [pagination, setPagination] = useState<PaginationState>({
-    pageIndex: data.currentPage ? data.currentPage - 1 : 0,
+    pageIndex: safeData.currentPage ? safeData.currentPage - 1 : 0,
     pageSize: config.pagination.pageSize,
   });
 
@@ -110,14 +169,14 @@ export function DataTable<T>({
   // Calculate total data for static pagination
   const tableData = useMemo(() => {
     if (config.paginationMode === 'static') {
-      return data.data;
+      return safeData.data || [];
     }
-    return data.data;
-  }, [data.data, config.paginationMode]);
+    return safeData.data || [];
+  }, [safeData.data, config.paginationMode]);
 
-  // Table instance
+  // Table instance with error handling
   const tableOptions: any = {
-    data: tableData,
+    data: Array.isArray(tableData) ? tableData : [],
     columns: tanstackColumns,
     state: {
       sorting,
@@ -134,7 +193,7 @@ export function DataTable<T>({
     manualPagination: config.paginationMode === 'dynamic',
     manualSorting: config.sorting.sortMode === 'dynamic',
     manualFiltering: config.filters.filterMode === 'dynamic',
-    pageCount: config.paginationMode === 'dynamic' ? data.pageCount : undefined,
+    pageCount: config.paginationMode === 'dynamic' ? safeData.pageCount : undefined,
   };
 
   if (config.pagination.enabled) {
@@ -151,31 +210,48 @@ export function DataTable<T>({
 
   const table = useReactTable(tableOptions);
 
-  // Handle dynamic actions
+  // Handle dynamic actions with error boundaries
   useEffect(() => {
-    if (config.paginationMode === 'dynamic' && actions.onPaginationChange) {
-      actions.onPaginationChange(pagination);
+    try {
+      if (config.paginationMode === 'dynamic' && actions.onPaginationChange) {
+        actions.onPaginationChange(pagination);
+      }
+    } catch (error) {
+      console.error('Error in pagination change handler:', error);
     }
   }, [pagination, config.paginationMode, actions]);
 
   useEffect(() => {
-    if (config.sorting.sortMode === 'dynamic' && actions.onSortingChange) {
-      actions.onSortingChange(sorting);
+    try {
+      if (config.sorting.sortMode === 'dynamic' && actions.onSortingChange) {
+        actions.onSortingChange(sorting);
+      }
+    } catch (error) {
+      console.error('Error in sorting change handler:', error);
     }
   }, [sorting, config.sorting.sortMode, actions]);
 
   useEffect(() => {
-    if (config.search.searchMode === 'dynamic' && actions.onGlobalFilterChange) {
-      const timeoutId = setTimeout(() => {
-        actions.onGlobalFilterChange!(globalFilter);
-      }, config.search.debounceMs);
-      return () => clearTimeout(timeoutId);
+    try {
+      if (config.search.searchMode === 'dynamic' && actions.onGlobalFilterChange) {
+        const timeoutId = setTimeout(() => {
+          actions.onGlobalFilterChange!(globalFilter);
+        }, config.search.debounceMs);
+        return () => clearTimeout(timeoutId);
+      }
+    } catch (error) {
+      console.error('Error in global filter change handler:', error);
     }
+    return undefined;
   }, [globalFilter, config.search.searchMode, config.search.debounceMs, actions]);
 
   useEffect(() => {
-    if (config.filters.filterMode === 'dynamic' && actions.onColumnFiltersChange) {
-      actions.onColumnFiltersChange(columnFilters);
+    try {
+      if (config.filters.filterMode === 'dynamic' && actions.onColumnFiltersChange) {
+        actions.onColumnFiltersChange(columnFilters);
+      }
+    } catch (error) {
+      console.error('Error in column filters change handler:', error);
     }
   }, [columnFilters, config.filters.filterMode, actions]);
 
@@ -197,206 +273,242 @@ export function DataTable<T>({
     );
   }
 
-  return (
-    <div className={cn('space-y-4', className)}>
-      {/* Search and Filters Header */}
-      {(config.search.enabled || config.filters.enabled) && (
-        <div className="flex items-center justify-between gap-4">
-          <div className="flex items-center gap-4">
-            {/* Global Search */}
-            {config.search.enabled && (
-              <div className="relative max-w-sm">
-                <Input
-                  placeholder={config.search.placeholder}
-                  value={globalFilter}
-                  onChange={(e) => setGlobalFilter(e.target.value)}
-                  className="pl-3"
-                />
-              </div>
-            )}
+  // Wrap the entire table rendering in error boundary
+  try {
+    return (
+      <div className={cn('space-y-4 mb-20', className)}>
+        {/* Search and Filters Header */}
+        {(config.search.enabled || config.filters.enabled) && (
+          <div className="flex items-center justify-between gap-4">
+            <div className="flex items-center gap-4">
+              {/* Global Search */}
+              {config.search.enabled && (
+                <div className="relative max-w-sm">
+                  <Input
+                    placeholder={config.search.placeholder}
+                    value={globalFilter}
+                    onChange={(e) => setGlobalFilter(e.target.value)}
+                    className="pl-3"
+                  />
+                </div>
+              )}
+            </div>
           </div>
-          
-          {/* Additional filters can be added here */}
-          <div className="flex items-center gap-2">
-            {config.pagination.enabled && config.pagination.showPageSizeSelector && (
-              <div className="flex items-center gap-2">
-                <p className="text-sm font-medium">Rows per page:</p>
-                <Select
-                  value={table.getState().pagination.pageSize.toString()}
-                  onValueChange={(value) => {
-                    table.setPageSize(Number(value));
-                  }}
-                >
-                  <SelectTrigger className="h-8 w-16">
-                    <SelectValue placeholder={table.getState().pagination.pageSize} />
-                  </SelectTrigger>
-                  <SelectContent side="top">
-                    {config.pagination.pageSizeOptions.map((pageSize) => (
-                      <SelectItem key={pageSize} value={pageSize.toString()}>
-                        {pageSize}
-                      </SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
-              </div>
-            )}
-          </div>
-        </div>
-      )}
+        )}
 
-      {/* Table */}
-      <div className="rounded-md border">
-        <Table>
-          <TableHeader>
-            {table.getHeaderGroups().map((headerGroup) => (
-              <TableRow key={headerGroup.id}>
-                {headerGroup.headers.map((header) => (
-                  <TableHead
-                    key={header.id}
-                    className={cn(
-                      'select-none',
-                      header.column.getCanSort() && 'cursor-pointer hover:bg-muted/50',
-                      header.column.columnDef.meta?.headerAlign === 'center' && 'text-center',
-                      header.column.columnDef.meta?.headerAlign === 'right' && 'text-right',
-                      header.column.columnDef.meta?.className
-                    )}
-                    style={{
-                      width: header.getSize() !== 150 ? header.getSize() : undefined,
-                    }}
-                    onClick={header.column.getToggleSortingHandler()}
-                  >
-                    <div className="flex items-center gap-2">
-                      {header.isPlaceholder
-                        ? null
-                        : flexRender(header.column.columnDef.header, header.getContext())}
-                      {header.column.getCanSort() && (
-                        <div className="flex flex-col">
-                          <ChevronUpIcon
-                            className={cn(
-                              'h-3 w-3',
-                              header.column.getIsSorted() === 'asc'
-                                ? 'text-foreground'
-                                : 'text-muted-foreground/30'
-                            )}
-                          />
-                          <ChevronDownIcon
-                            className={cn(
-                              'h-3 w-3 -mt-1',
-                              header.column.getIsSorted() === 'desc'
-                                ? 'text-foreground'
-                                : 'text-muted-foreground/30'
-                            )}
-                          />
-                        </div>
-                      )}
-                    </div>
-                  </TableHead>
-                ))}
-              </TableRow>
-            ))}
-          </TableHeader>
-          <TableBody>
-            {table.getRowModel().rows?.length ? (
-              table.getRowModel().rows.map((row, index) => (
-                <TableRow
-                  key={row.id}
-                  data-state={row.getIsSelected() && 'selected'}
-                  className={cn(
-                    config.hover && 'hover:bg-muted/50',
-                    config.striped && index % 2 === 0 && 'bg-muted/25',
-                    actions.onRowClick && 'cursor-pointer',
-                    config.compact && 'h-8'
-                  )}
-                  onClick={() => actions.onRowClick?.(row.original as T)}
-                >
-                  {row.getVisibleCells().map((cell) => (
-                    <TableCell
-                      key={cell.id}
+        {/* Table */}
+        <div className="rounded-md border">
+          <Table>
+            <TableHeader>
+              {table.getHeaderGroups().map((headerGroup) => (
+                <TableRow key={headerGroup.id}>
+                  {headerGroup.headers.map((header) => (
+                    <TableHead
+                      key={header.id}
                       className={cn(
-                        cell.column.columnDef.meta?.cellAlign === 'center' && 'text-center',
-                        cell.column.columnDef.meta?.cellAlign === 'right' && 'text-right',
-                        cell.column.columnDef.meta?.className,
-                        config.compact && 'py-2'
+                        'select-none',
+                        header.column.getCanSort() && 'cursor-pointer hover:bg-muted/50',
+                        header.column.columnDef.meta?.headerAlign === 'center' && 'text-center',
+                        header.column.columnDef.meta?.headerAlign === 'right' && 'text-right',
+                        header.column.columnDef.meta?.className
                       )}
+                      style={{
+                        width: header.getSize() !== 150 ? header.getSize() : undefined,
+                      }}
+                      onClick={header.column.getToggleSortingHandler()}
                     >
-                      {flexRender(cell.column.columnDef.cell, cell.getContext())}
-                    </TableCell>
+                      <div className="flex items-center gap-2">
+                        {header.isPlaceholder ? null : flexRender(header.column.columnDef.header, header.getContext())}
+                        {header.column.getCanSort() && (
+                          <div className="flex flex-col">
+                            <ChevronUpIcon
+                              className={cn(
+                                'h-3 w-3',
+                                header.column.getIsSorted() === 'asc' ? 'text-foreground' : 'text-muted-foreground/30'
+                              )}
+                            />
+                            <ChevronDownIcon
+                              className={cn(
+                                'h-3 w-3 -mt-1',
+                                header.column.getIsSorted() === 'desc' ? 'text-foreground' : 'text-muted-foreground/30'
+                              )}
+                            />
+                          </div>
+                        )}
+                      </div>
+                    </TableHead>
                   ))}
                 </TableRow>
-              ))
-            ) : (
-              <TableRow>
-                <TableCell colSpan={columns.length} className="h-24 text-center">
-                  No results.
-                </TableCell>
-              </TableRow>
-            )}
-          </TableBody>
-        </Table>
-      </div>
-
-      {/* Pagination */}
-      {config.pagination.enabled && (
-        <div className="flex items-center justify-between px-2">
-          <div className="text-sm text-muted-foreground">
-            {config.paginationMode === 'dynamic' && data.totalCount !== undefined ? (
-              <>
-                Showing {pagination.pageIndex * pagination.pageSize + 1} to{' '}
-                {Math.min((pagination.pageIndex + 1) * pagination.pageSize, data.totalCount)} of{' '}
-                {data.totalCount} entries
-              </>
-            ) : (
-              <>
-                Showing {table.getState().pagination.pageIndex * table.getState().pagination.pageSize + 1} to{' '}
-                {Math.min(
-                  (table.getState().pagination.pageIndex + 1) * table.getState().pagination.pageSize,
-                  table.getFilteredRowModel().rows.length
-                )}{' '}
-                of {table.getFilteredRowModel().rows.length} entries
-              </>
-            )}
-          </div>
-          <div className="flex items-center gap-2">
-            <Button
-              variant="outline"
-              size="sm"
-              onClick={() => table.setPageIndex(0)}
-              disabled={!table.getCanPreviousPage()}
-            >
-              <ChevronsLeftIcon className="h-4 w-4" />
-            </Button>
-            <Button
-              variant="outline"
-              size="sm"
-              onClick={() => table.previousPage()}
-              disabled={!table.getCanPreviousPage()}
-            >
-              <ChevronLeftIcon className="h-4 w-4" />
-            </Button>
-            <div className="flex items-center gap-1">
-              <span className="text-sm font-medium">
-                Page {table.getState().pagination.pageIndex + 1} of {table.getPageCount()}
-              </span>
-            </div>
-            <Button
-              variant="outline"
-              size="sm"
-              onClick={() => table.nextPage()}
-              disabled={!table.getCanNextPage()}
-            >
-              <ChevronRightIcon className="h-4 w-4" />
-            </Button>
-            <Button
-              variant="outline"
-              size="sm"
-              onClick={() => table.setPageIndex(table.getPageCount() - 1)}
-              disabled={!table.getCanNextPage()}
-            >
-              <ChevronsRightIcon className="h-4 w-4" />
-            </Button>
-          </div>
+              ))}
+            </TableHeader>
+            <TableBody>
+              {table.getRowModel().rows?.length ? (
+                table.getRowModel().rows.map((row, index) => {
+                  // Add error handling for individual row rendering
+                  try {
+                    return (
+                      <TableRow
+                        key={row.id}
+                        data-state={row.getIsSelected() && 'selected'}
+                        className={cn(
+                          config.hover && 'hover:bg-muted/50',
+                          config.striped && index % 2 === 0 && 'bg-muted/25',
+                          actions.onRowClick && 'cursor-pointer',
+                          config.compact && 'h-8'
+                        )}
+                        onClick={() => actions.onRowClick?.(row.original as T)}
+                      >
+                        {row.getVisibleCells().map((cell) => {
+                          // Add error handling for individual cell rendering
+                          try {
+                            return (
+                              <TableCell
+                                key={cell.id}
+                                className={cn(
+                                  cell.column.columnDef.meta?.cellAlign === 'center' && 'text-center',
+                                  cell.column.columnDef.meta?.cellAlign === 'right' && 'text-right',
+                                  cell.column.columnDef.meta?.className,
+                                  config.compact && 'py-2'
+                                )}
+                              >
+                                {flexRender(cell.column.columnDef.cell, cell.getContext())}
+                              </TableCell>
+                            );
+                          } catch (cellError) {
+                            console.error('Error rendering cell:', cellError, cell);
+                            return (
+                              <TableCell
+                                key={cell.id}
+                                className={cn(
+                                  cell.column.columnDef.meta?.cellAlign === 'center' && 'text-center',
+                                  cell.column.columnDef.meta?.cellAlign === 'right' && 'text-right',
+                                  cell.column.columnDef.meta?.className,
+                                  config.compact && 'py-2'
+                                )}
+                              >
+                                <span className="text-destructive text-xs">Error</span>
+                              </TableCell>
+                            );
+                          }
+                        })}
+                      </TableRow>
+                    );
+                  } catch (rowError) {
+                    console.error('Error rendering row:', rowError, row);
+                    return (
+                      <TableRow key={`error-${index}`}>
+                        <TableCell colSpan={columns.length} className="text-center text-destructive text-xs">
+                          Error rendering row
+                        </TableCell>
+                      </TableRow>
+                    );
+                  }
+                })
+              ) : (
+                <TableRow>
+                  <TableCell colSpan={columns.length} className="h-24 text-center">
+                    {safeData.data.length === 0 ? 'No data available.' : 'No results found.'}
+                  </TableCell>
+                </TableRow>
+              )}
+            </TableBody>
+          </Table>
         </div>
-      )}
-    </div>
-  );
+
+        {/* Pagination */}
+        {config.pagination.enabled && (
+          <div className="flex items-center justify-between px-2">
+            <div>{config?.export?.enabled && <Button>Export</Button>}</div>
+            <div className="flex flex-1 items-center justify-end gap-5">
+              <div className="text-sm text-muted-foreground">
+                {config.paginationMode === 'dynamic' && safeData.totalCount !== undefined ? (
+                  <>
+                    Showing {pagination.pageIndex * pagination.pageSize + 1} to{' '}
+                    {Math.min((pagination.pageIndex + 1) * pagination.pageSize, safeData.totalCount)} of{' '}
+                    {safeData.totalCount} entries
+                  </>
+                ) : (
+                  <>
+                    Showing {table.getState().pagination.pageIndex * table.getState().pagination.pageSize + 1} to{' '}
+                    {Math.min(
+                      (table.getState().pagination.pageIndex + 1) * table.getState().pagination.pageSize,
+                      table.getFilteredRowModel().rows.length
+                    )}{' '}
+                    of {table.getFilteredRowModel().rows.length} entries
+                  </>
+                )}
+              </div>
+              <div className="flex items-center gap-2">
+                {config.pagination.enabled && config.pagination.showPageSizeSelector && (
+                  <div className="flex items-center gap-2">
+                    <p className="text-sm font-medium">Rows per page:</p>
+                    <Select
+                      value={table.getState().pagination.pageSize.toString()}
+                      onValueChange={(value) => {
+                        table.setPageSize(Number(value));
+                      }}
+                    >
+                      <SelectTrigger className="h-8 w-16">
+                        <SelectValue placeholder={table.getState().pagination.pageSize} />
+                      </SelectTrigger>
+                      <SelectContent side="top">
+                        {config.pagination.pageSizeOptions.map((pageSize) => (
+                          <SelectItem key={pageSize} value={pageSize.toString()}>
+                            {pageSize}
+                          </SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
+                  </div>
+                )}
+              </div>
+              <div className="flex items-center gap-2">
+                <Button
+                  variant="outline"
+                  size="sm"
+                  onClick={() => table.setPageIndex(0)}
+                  disabled={!table.getCanPreviousPage()}
+                >
+                  <ChevronsLeftIcon className="h-4 w-4" />
+                </Button>
+                <Button
+                  variant="outline"
+                  size="sm"
+                  onClick={() => table.previousPage()}
+                  disabled={!table.getCanPreviousPage()}
+                >
+                  <ChevronLeftIcon className="h-4 w-4" />
+                </Button>
+                <div className="flex items-center gap-1">
+                  <span className="text-sm font-medium">
+                    Page {table.getState().pagination.pageIndex + 1} of {Math.max(table.getPageCount(), 1)}
+                  </span>
+                </div>
+                <Button variant="outline" size="sm" onClick={() => table.nextPage()} disabled={!table.getCanNextPage()}>
+                  <ChevronRightIcon className="h-4 w-4" />
+                </Button>
+                <Button
+                  variant="outline"
+                  size="sm"
+                  onClick={() => table.setPageIndex(table.getPageCount() - 1)}
+                  disabled={!table.getCanNextPage()}
+                >
+                  <ChevronsRightIcon className="h-4 w-4" />
+                </Button>
+              </div>
+            </div>
+          </div>
+        )}
+      </div>
+    );
+  } catch (error) {
+    console.error('Error rendering DataTable:', error);
+    return (
+      <div className="flex items-center justify-center p-8">
+        <div className="text-sm text-destructive">
+          An error occurred while rendering the table. Please check the data format.
+        </div>
+      </div>
+    );
+  }
 }

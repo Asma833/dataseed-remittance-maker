@@ -26,6 +26,9 @@ export const defaultTableConfig: TableConfig = {
     multiSort: false,
     sortMode: 'static',
   },
+  export: {
+    enabled: false,
+  },
   rowSelection: {
     enabled: false,
     multiple: false,
@@ -47,14 +50,14 @@ export const tableConfigPresets = {
     filters: { ...defaultTableConfig.filters, enabled: false },
     sorting: { ...defaultTableConfig.sorting, enabled: false },
   },
-  
+
   // Full-featured table with all options
   advanced: {
     ...defaultTableConfig,
     sorting: { ...defaultTableConfig.sorting, multiSort: true },
     rowSelection: { ...defaultTableConfig.rowSelection, enabled: true, multiple: true },
   },
-  
+
   // Simple list without pagination
   simple: {
     ...defaultTableConfig,
@@ -63,7 +66,7 @@ export const tableConfigPresets = {
     filters: { ...defaultTableConfig.filters, enabled: false },
     bordered: false,
   },
-  
+
   // Dynamic table with server-side operations
   dynamic: {
     ...defaultTableConfig,
@@ -72,7 +75,7 @@ export const tableConfigPresets = {
     filters: { ...defaultTableConfig.filters, filterMode: 'dynamic' as const },
     sorting: { ...defaultTableConfig.sorting, sortMode: 'dynamic' as const },
   },
-  
+
   // User management table configuration (matching your design)
   userManagement: {
     ...defaultTableConfig,
@@ -95,10 +98,7 @@ export const tableConfigPresets = {
 };
 
 // Helper function to merge configs
-export function mergeTableConfig(
-  baseConfig: Partial<TableConfig>, 
-  overrides: Partial<TableConfig> = {}
-): TableConfig {
+export function mergeTableConfig(baseConfig: Partial<TableConfig>, overrides: Partial<TableConfig> = {}): TableConfig {
   return {
     ...defaultTableConfig,
     ...baseConfig,
@@ -110,3 +110,39 @@ export function mergeTableConfig(
     ...overrides,
   };
 }
+
+// Table configuration - static mode
+export const staticConfig: Partial<TableConfig> = {
+  ...tableConfigPresets.userManagement,
+  paginationMode: 'static',
+  search: {
+    enabled: true,
+    placeholder: 'Search...',
+    searchMode: 'static',
+  },
+  filters: {
+    enabled: true,
+    filterMode: 'static',
+    columnFilters: true,
+    globalFilter: true,
+  },
+  loading: false,
+};
+
+// Dynamic configuration example
+export const dynamicConfig: Partial<TableConfig> = {
+  ...tableConfigPresets.userManagement,
+  paginationMode: 'dynamic',
+  search: {
+    enabled: true,
+    placeholder: 'Search...',
+    searchMode: 'dynamic',
+  },
+  filters: {
+    enabled: true,
+    filterMode: 'dynamic',
+    columnFilters: true,
+    globalFilter: true,
+  },
+  loading: false,
+};
