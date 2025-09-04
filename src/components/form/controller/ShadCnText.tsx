@@ -12,6 +12,7 @@ interface ShadCnTextProps {
   required?: boolean;
   forcedValue?: string;
   onInputChange?: (value: string) => void;
+  placeholder?: string;
 }
 
 export const ShadCnText = ({
@@ -23,6 +24,7 @@ export const ShadCnText = ({
   required = false,
   forcedValue,
   onInputChange,
+  placeholder,
 }: ShadCnTextProps) => {
   const { control } = useFormContext();
 
@@ -41,6 +43,7 @@ export const ShadCnText = ({
             <ShadCnFormInput
               {...field}
               type="text"
+              placeholder={placeholder}
               uppercase={uppercase}
               disabled={disabled}
               required={required}

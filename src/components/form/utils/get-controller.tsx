@@ -21,7 +21,8 @@ export const getController = (field: any) => {
     disabled: field.disabled,
     forcedValue: field.forcedValue,
     className: field.className,
-    required: field.required
+    required: field.required,
+    placeholder: field.placeholder
   };
 
   switch (field.type) {
@@ -29,6 +30,7 @@ export const getController = (field: any) => {
       return (
         <ShadCnText
           {...baseProps}
+          placeholder={field.placeholder}
           uppercase={field.uppercase}
           onInputChange={field.onInputChange}
         />
@@ -108,7 +110,13 @@ export const getController = (field: any) => {
     case 'date':
       return <ShadCnDatePicker {...baseProps} placeholder={field.placeholder} />;
     case 'radio':
-      return <ShadCnRadioGroup {...baseProps} options={field.options} onChange={field.onChange} />;
+      // Find the default checked option
+      const defaultRadioValue = Object.keys(field.options).find(key => field.options[key].checked);
+      const radioProps = { ...baseProps, options: field.options, onChange: field.onChange };
+      if (defaultRadioValue) {
+        (radioProps as any).defaultValue = defaultRadioValue;
+      }
+      return <ShadCnRadioGroup {...radioProps} />;
     case 'password':
       return <ShadCnPassword {...baseProps} uppercase={field.uppercase} />;
     default:
