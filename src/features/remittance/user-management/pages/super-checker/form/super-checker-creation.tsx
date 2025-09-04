@@ -6,6 +6,7 @@ import { superCheckerCreationConfig } from "./super-checker-creation.config";
 import FieldWrapper from "@/components/form/wrapper/field-wrapper";
 import { FormProvider, useForm } from "react-hook-form";
 import { getController } from "@/components/form/utils/get-controller";
+import { Button } from "@/components/ui/button";
 
 
 export const CreateSuperChecker = () => {
@@ -14,8 +15,8 @@ export const CreateSuperChecker = () => {
 
   return (
     <FormProvider {...methods}>
-      <FormContentWrapper className="p-2 rounded-lg mr-auto bg-transparent">
-        <h2 className="text-xl font-bold mb-4 title-case">Super Checker Creation</h2>
+      <FormContentWrapper className="p-6 rounded-lg mr-auto shadow-md w-full">
+        <h2 className="text-xl font-bold mb-4 title-case p-2 border-b border-gray-300">Create Super Checker</h2>
         <Spacer>
           <FormFieldRow rowCols={4}>
             {(['fullName', 'email', 'phoneNumber', 'location'] as const).map((fieldName) => {
@@ -77,6 +78,10 @@ export const CreateSuperChecker = () => {
               );
             })}
           </FormFieldRow>
+          <div className="flex justify-items-start space-x-2 mt-4">
+            <Button variant="outline">Back</Button>
+            <Button type="submit">Submit</Button>
+          </div>
         </Spacer>
       </FormContentWrapper>
     </FormProvider>
