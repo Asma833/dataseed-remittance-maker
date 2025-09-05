@@ -151,7 +151,7 @@ export const ShadCnCheckbox = ({
   return (
     <FormItem className={classNames.wrapper}>
       {label && (
-        <FormLabel>
+        <FormLabel className="text-[var(--color-form-label)]">
           {label}
           {required && <span className="text-destructive ml-1">*</span>}
         </FormLabel>
@@ -173,18 +173,18 @@ export const ShadCnCheckbox = ({
 
                 return (
                   <div key={key} className="flex items-center space-x-2">
-                    <Checkbox
+                    <button
+                      type="button"
                       id={`${fieldName}-${key}`}
-                      checked={isChecked}
                       disabled={disabled}
-                      onCheckedChange={(checked) => {
-                        const isChecked = checked === true;
-                        let updatedValue = { ...field.value, [key]: isChecked };
+                      onClick={() => {
+                        const newChecked = !isChecked;
+                        let updatedValue = { ...field.value, [key]: newChecked };
 
                         // For radio_style or single selection, uncheck all others when a new one is selected
                         if (!isMulti || variant === 'radio_style') {
                           updatedValue = Object.fromEntries(
-                            Object.keys(options).map((k) => [k, k === key ? isChecked : false])
+                            Object.keys(options).map((k) => [k, k === key ? newChecked : false])
                           );
                         }
 
@@ -216,16 +216,26 @@ export const ShadCnCheckbox = ({
 
                         // Call handleCheckboxChange with the key and checked state if it exists
                         if (handleCheckboxChange) {
-                          handleCheckboxChange(key, isChecked);
+                          handleCheckboxChange(key, newChecked);
                         }
 
                         trigger(fieldName);
                       }}
-                      className="data-[state=checked]:bg-primary data-[state=checked]:border-primary"
-                    />
+                      className={cn(
+                        "flex items-center justify-center w-4 h-4 cursor-pointer disabled:cursor-not-allowed disabled:opacity-50",
+                        disabled ? "cursor-not-allowed opacity-50" : ""
+                      )}
+                    >
+                      {isChecked ? icons.checked : icons.unchecked}
+                    </button>
                     <label
                       htmlFor={`${fieldName}-${key}`}
-                      className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+                      className="text-sm font-medium leading-none cursor-pointer disabled:cursor-not-allowed disabled:opacity-70"
+                      onClick={() => {
+                        if (!disabled) {
+                          document.getElementById(`${fieldName}-${key}`)?.click();
+                        }
+                      }}
                     >
                       {option.label}
                     </label>

@@ -34,7 +34,7 @@ export const ShadCnTextArea = ({
 
   return (
     <FormItem className={className}>
-      <FormLabel>
+      <FormLabel className="text-[var(--color-form-label)]">
         {label}
         {required && <span className="text-destructive ml-1">*</span>}
       </FormLabel>
@@ -52,7 +52,7 @@ export const ShadCnTextArea = ({
               disabled={disabled}
               required={required}
               className={cn(
-                "resize-none",
+                "resize-none rounded-[10px] shadow-none",
                 error && "border-destructive focus-visible:ring-destructive"
               )}
               onChange={(e) => {

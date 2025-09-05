@@ -24,6 +24,7 @@
   --color-foreground: #242434;
   --color-primary-gradient-1: var(--color-primary);
   --color-primary-gradient-2: #3f85dc;
+  --color-form-label: #585858;
 
   /* Custom badge colors */
   --color-pending-badge-bg: #fde68a;

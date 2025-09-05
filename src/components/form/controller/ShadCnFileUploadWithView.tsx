@@ -40,7 +40,7 @@ export const ShadCnFileUploadWithView = ({
 
   return (
     <FormItem className={className}>
-      <FormLabel>
+      <FormLabel className="text-[var(--color-form-label)]">
         {label}
         {required && <span className="text-destructive ml-1">*</span>}
       </FormLabel>
@@ -80,7 +80,7 @@ export const ShadCnFileUploadWithView = ({
                     type="button"
                     variant="outline"
                     className={cn(
-                      "w-full flex items-center justify-center gap-2",
+                      "w-full flex items-center justify-center gap-2 rounded-[10px] shadow-none",
                       error && "border-destructive"
                     )}
                     disabled={disabled}
@@ -99,7 +99,7 @@ export const ShadCnFileUploadWithView = ({
                   variant="ghost"
                   size="sm"
                   onClick={() => viewFile(value[0])}
-                  className="w-fit"
+                  className="w-fit rounded-[10px] shadow-none"
                 >
                   View File
                 </Button>

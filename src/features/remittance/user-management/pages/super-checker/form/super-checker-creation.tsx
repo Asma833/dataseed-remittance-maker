@@ -8,7 +8,6 @@ import { FormProvider, useForm } from "react-hook-form";
 import { getController } from "@/components/form/utils/get-controller";
 import { Button } from "@/components/ui/button";
 
-
 export const CreateSuperChecker = () => {
   const methods = useForm();
   const { control, formState: { errors } } = methods;
@@ -79,8 +78,8 @@ export const CreateSuperChecker = () => {
             })}
           </FormFieldRow>
           <div className="flex justify-items-start space-x-2 mt-4">
-            <Button variant="outline">Back</Button>
-            <Button type="submit">Submit</Button>
+            <Button variant="outline" className="rounded-2xl w-28">Back</Button>
+            <Button type="submit" className="rounded-2xl w-28">Submit</Button>
           </div>
         </Spacer>
       </FormContentWrapper>

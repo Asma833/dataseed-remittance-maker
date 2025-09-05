@@ -28,7 +28,7 @@ export const ShadCnDatePicker = ({
 
   return (
     <FormItem className={className}>
-      <FormLabel>
+      <FormLabel className="text-[var(--color-form-label)]">
         {label}
         {required && <span className="text-destructive ml-1">*</span>}
       </FormLabel>
@@ -42,7 +42,7 @@ export const ShadCnDatePicker = ({
                 <Button
                   variant="outline"
                   className={cn(
-                    "w-full justify-start text-left font-normal",
+                    "w-full justify-start text-left font-normal rounded-[10px] shadow-none",
                     !field.value && "text-muted-foreground",
                     fieldState.error && "border-destructive focus:ring-destructive"
                   )}

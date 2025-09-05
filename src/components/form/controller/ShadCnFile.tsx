@@ -23,7 +23,7 @@ export const ShadCnFile = ({
 
   return (
     <FormItem className={className}>
-      <FormLabel>
+      <FormLabel className="text-[var(--color-form-label)]">
         {label}
         {required && <span className="text-destructive ml-1">*</span>}
       </FormLabel>
@@ -38,7 +38,7 @@ export const ShadCnFile = ({
                 <Button
                   variant="outline"
                   className={cn(
-                    "w-full cursor-pointer",
+                    "w-full cursor-pointer rounded-[10px] shadow-none",
                     error && "border-destructive"
                   )}
                   disabled={disabled}

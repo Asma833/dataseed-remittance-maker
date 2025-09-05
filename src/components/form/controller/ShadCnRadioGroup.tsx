@@ -1,8 +1,6 @@
 import { Controller, FieldValues, Path, FieldPathValue } from 'react-hook-form';
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
 import { FormItem, FormLabel, FormControl, FormMessage } from '@/components/ui/form';
-import { cn } from '@/utils/cn';
-
 interface ShadCnRadioGroupProps<T extends FieldValues> {
   name: Path<T>;
   label: string;
@@ -30,7 +28,7 @@ export const ShadCnRadioGroup = <T extends FieldValues>({
 }: ShadCnRadioGroupProps<T>) => {
   return (
     <FormItem className={className}>
-      <FormLabel>
+      <FormLabel className="text-[var(--color-form-label)]">
         {label}
         {required && <span className="text-destructive ml-1">*</span>}
       </FormLabel>

@@ -91,7 +91,7 @@ export const ShadCnSelect = ({
 
   return (
     <FormItem className={className}>
-      <FormLabel>
+      <FormLabel className="text-[var(--color-form-label)]">
         {label}
         {required && <span className="text-destructive ml-1">*</span>}
       </FormLabel>
@@ -106,7 +106,7 @@ export const ShadCnSelect = ({
               onValueChange={onChange}
               disabled={disabled}
             >
-              <SelectTrigger className={cn(error && "border-destructive focus:ring-destructive")}>
+              <SelectTrigger className={cn("rounded-[10px] shadow-none", error && "border-destructive focus:ring-destructive")}>
                 <SelectValue placeholder={placeholder}>
                   {getDisplayValue((forcedValue ? forcedValue : value) || '')}
                 </SelectValue>

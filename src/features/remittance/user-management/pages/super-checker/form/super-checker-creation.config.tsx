@@ -53,7 +53,7 @@ export const superCheckerCreationConfig = () => {
             'buy': { label: 'Buy', checked: true },
             'sell': { label: 'Sell' }
           },
-          variant: 'radio_style',
+          variant: 'circle_check',
           isMulti: false,
           defaultSelected: { 'buy': true }
         },

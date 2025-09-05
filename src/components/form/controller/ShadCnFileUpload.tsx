@@ -42,7 +42,7 @@ export const ShadCnFileUpload = ({
 
   return (
     <FormItem className={className}>
-      <FormLabel>
+      <FormLabel className="text-[var(--color-form-label)]">
         {label}
         {required && <span className="text-destructive ml-1">*</span>}
       </FormLabel>
@@ -86,7 +86,7 @@ export const ShadCnFileUpload = ({
                     type="button"
                     variant="outline"
                     className={cn(
-                      "w-full flex items-center justify-center gap-2",
+                      "w-full flex items-center justify-center gap-2 rounded-[10px] shadow-none",
                       error && "border-destructive"
                     )}
                     disabled={disabled}
