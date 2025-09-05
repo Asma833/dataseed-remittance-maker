@@ -15,14 +15,14 @@ export const adminRoutes = [
     permission: 'admin',
   },
   {
-    path: ROUTES.ADMIN.CREATEUSER,
-    element: CreateSuperChecker,
+    path: ROUTES.ADMIN.SUPER_CHECKER_TABLE,
+    element: SuperCheckerTablePage,
     roles: [baseRole],
     permission: 'admin',
   },
   {
-    path: ROUTES.ADMIN.SUPER_CHECKER_TABLE,
-    element: SuperCheckerTablePage,
+    path: ROUTES.ADMIN.SUPER_CHECKER_CREATION,
+    element: CreateSuperChecker,
     roles: [baseRole],
     permission: 'admin',
   },

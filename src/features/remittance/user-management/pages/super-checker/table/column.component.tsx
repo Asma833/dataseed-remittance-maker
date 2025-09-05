@@ -2,13 +2,9 @@ import { ActionButtons, StatusBadge, TableColumn } from '@/components/table';
 import { SuperCheckerData } from './types';
 
 const GetSuperCheckerTableColumns = ({
-  handleView,
-  handleEdit,
-  handleDelete,
+  handleEdit
 }: {
-  handleView: (user: SuperCheckerData) => void;
   handleEdit: (user: SuperCheckerData) => void;
-  handleDelete: (user: SuperCheckerData) => void;
 }): TableColumn<SuperCheckerData>[] => {
   return [
     {

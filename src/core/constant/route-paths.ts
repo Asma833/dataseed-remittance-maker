@@ -29,6 +29,7 @@ export const ROUTES = {
     CREATEUSER: '/users/create-user',
     UPDATEUSER: '/users/update-user/:id',
     SUPER_CHECKER_TABLE: '/users/super-checker-table',
+    SUPER_CHECKER_CREATION: '/users/super-checker-creation',
     PARTNER: '/partners',
     CREATEPARTNER: '/partners/create-partner',
     UPDATEPARTNER: '/partners/update-partner/:id',

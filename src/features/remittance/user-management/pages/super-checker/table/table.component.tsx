@@ -1,8 +1,10 @@
 import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import GetSuperCheckerTableColumns from './column.component';
 import { SuperCheckerData } from './types';
 import { Button } from '@/components/ui/button';
 import { DataTable, TableData, staticConfig } from '@/components/table';
+import { ROUTES } from '@/core/constant/route-paths';
 
 // Sample data matching the screenshot columns
 const sampleSuperCheckers: SuperCheckerData[] = [
@@ -36,14 +38,13 @@ const sampleSuperCheckers: SuperCheckerData[] = [
 ];
 
 const SuperCheckerTable = () => {
+  const navigate = useNavigate();
   const [superCheckers, setSuperCheckers] = useState<SuperCheckerData[]>(sampleSuperCheckers);
   const [loading, setLoading] = useState(false);
 
   // Define columns matching the screenshot
   const columns = GetSuperCheckerTableColumns({
-    handleView,
     handleEdit,
-    handleDelete,
   });
 
   // Table configuration
@@ -66,22 +67,10 @@ const SuperCheckerTable = () => {
     currentPage: 1,
   };
 
-  // Action handlers
-  function handleView(superChecker: SuperCheckerData) {
-    console.log('View super checker:', superChecker);
-    alert(`Viewing super checker: ${superChecker.fullName}`);
-  }
 
   function handleEdit(superChecker: SuperCheckerData) {
     console.log('Edit super checker:', superChecker);
     alert(`Editing super checker: ${superChecker.fullName}`);
-  }
-
-  function handleDelete(superChecker: SuperCheckerData) {
-    console.log('Delete super checker:', superChecker);
-    if (confirm(`Are you sure you want to delete ${superChecker.fullName}?`)) {
-      setSuperCheckers(prev => prev.filter(sc => sc.id !== superChecker.id));
-    }
   }
 
   function handleRowClick(superChecker: SuperCheckerData) {
@@ -109,18 +98,9 @@ const SuperCheckerTable = () => {
     onRowClick: handleRowClick,
   };
 
-  // Sample function to add new super checker
-  const addSampleSuperChecker = () => {
-    const newSuperChecker: SuperCheckerData = {
-      id: Date.now().toString(),
-      fullName: `Super Checker ${superCheckers.length + 1}`,
-      emailId: `superchecker${superCheckers.length + 1}@example.com`,
-      phoneNo: `99999${superCheckers.length + 1}`,
-      productType: 'Remittance',
-      productSubType: 'International Transfer',
-      status: Math.random() > 0.5 ? 'Active' : 'Inactive',
-    };
-    setSuperCheckers(prev => [...prev, newSuperChecker]);
+  // Navigate to super checker creation page
+  const handleAddSuperChecker = () => {
+    navigate('/admin/users/super-checker-creation');
   };
 
   return (
@@ -131,7 +111,7 @@ const SuperCheckerTable = () => {
           <h2 className="text-2xl font-semibold tracking-tight">Dataseed Super Checker</h2>
         </div>
         <div className="flex items-center gap-2">
-          <Button onClick={addSampleSuperChecker} size="sm">
+          <Button onClick={handleAddSuperChecker} size="sm">
             Add Super Checker
           </Button>
         </div>
