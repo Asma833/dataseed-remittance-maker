@@ -420,24 +420,6 @@ export function DataTable<T>({
           <div className="flex items-center justify-between px-2">
             <div>{config?.export?.enabled && <Button>Export</Button>}</div>
             <div className="flex flex-1 items-center justify-end gap-5">
-              <div className="text-sm text-muted-foreground">
-                {config.paginationMode === 'dynamic' && safeData.totalCount !== undefined ? (
-                  <>
-                    Showing {pagination.pageIndex * pagination.pageSize + 1} to{' '}
-                    {Math.min((pagination.pageIndex + 1) * pagination.pageSize, safeData.totalCount)} of{' '}
-                    {safeData.totalCount} entries
-                  </>
-                ) : (
-                  <>
-                    Showing {table.getState().pagination.pageIndex * table.getState().pagination.pageSize + 1} to{' '}
-                    {Math.min(
-                      (table.getState().pagination.pageIndex + 1) * table.getState().pagination.pageSize,
-                      table.getFilteredRowModel().rows.length
-                    )}{' '}
-                    of {table.getFilteredRowModel().rows.length} entries
-                  </>
-                )}
-              </div>
               <div className="flex items-center gap-2">
                 {config.pagination.enabled && config.pagination.showPageSizeSelector && (
                   <div className="flex items-center gap-2">
