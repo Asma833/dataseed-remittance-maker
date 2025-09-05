@@ -14,7 +14,7 @@ export const CreateSuperChecker = () => {
 
   return (
     <FormProvider {...methods}>
-      <FormContentWrapper className="p-6 rounded-lg mr-auto shadow-md w-full">
+      <FormContentWrapper className="p-6 rounded-lg mr-auto w-full shadow-top">
         <h2 className="text-xl font-bold mb-4 title-case p-2 border-b border-gray-300">Create Super Checker</h2>
         <Spacer>
           <FormFieldRow rowCols={4}>
