@@ -1,6 +1,6 @@
-import React from 'react';
 import { Button } from '@/components/ui/button';
 import { ActionButtonsProps } from './types';
+import { AiOutlineEye, AiOutlineEdit, AiOutlineDelete } from 'react-icons/ai';
 
 export function ActionButtons<T>({ row, onEdit, onDelete, onView }: ActionButtonsProps<T>) {
   return (
@@ -15,7 +15,7 @@ export function ActionButtons<T>({ row, onEdit, onDelete, onView }: ActionButton
           }}
           className="h-8 w-8 p-0 text-blue-600 hover:text-blue-800 hover:bg-blue-50"
         >
-          👁️
+          <AiOutlineEye className="h-4 w-4" />
         </Button>
       )}
       {onEdit && (
@@ -28,7 +28,7 @@ export function ActionButtons<T>({ row, onEdit, onDelete, onView }: ActionButton
           }}
           className="h-8 w-8 p-0 text-blue-600 hover:text-blue-800 hover:bg-blue-50"
         >
-          ✏️
+          <AiOutlineEdit className="h-4 w-4" />
         </Button>
       )}
       {onDelete && (
@@ -41,7 +41,7 @@ export function ActionButtons<T>({ row, onEdit, onDelete, onView }: ActionButton
           }}
           className="h-8 w-8 p-0 text-red-600 hover:text-red-800 hover:bg-red-50"
         >
-          🗑️
+          <AiOutlineDelete className="h-4 w-4" />
         </Button>
       )}
     </div>

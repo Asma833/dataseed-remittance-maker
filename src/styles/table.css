@@ -1,0 +1,39 @@
+/* Dynamic TanStack table border styling with white colors */
+.tanstack-table-border {
+  border-collapse: collapse;
+}
+
+.tanstack-table-border th,
+.tanstack-table-border td {
+  border: 1px solid #FFFFFF;
+  padding: 0.75rem;
+}
+
+.tanstack-table-border th {
+  background-color: #3F87DF;
+  color: #FFFFFF;
+  font-weight: 600;
+  text-align: left;
+  border-bottom: 2px solid #FFFFFF;
+}
+
+.tanstack-table-border tr:nth-child(even) {
+  background-color: #FFFFFF;
+}
+
+.tanstack-table-border tr:hover {
+  background-color: #FFFFFF;
+}
+
+/* Bootstrap-style table striped rows with #ECEEFF color */
+.table-striped tbody tr:nth-of-type(odd) {
+  background-color: #ECEEFF;
+}
+
+.table-striped tbody tr:nth-of-type(even) {
+  background-color: rgba(236, 238, 255, 0.5);
+}
+
+.table-striped tbody tr:hover {
+  background-color: rgba(236, 238, 255, 0.8);
+}

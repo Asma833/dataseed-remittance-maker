@@ -29,6 +29,11 @@ export const SideNavOptions = {
           icon: FileEdit,
         },
         {
+          title: 'Super Checker Table',
+          path: getNavPath('ADMIN', ROUTES.ADMIN.SUPER_CHECKER_TABLE),
+          icon: Eye,
+        },
+        {
           title: 'N User Management',
           path: getNavPath('ADMIN', ROUTES.ADMIN.USER_MANAGEMENT.N_USER),
           icon: User,

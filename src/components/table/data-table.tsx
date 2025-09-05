@@ -297,8 +297,8 @@ export function DataTable<T>({
         )}
 
         {/* Table */}
-        <div className="rounded-md border">
-          <Table>
+        <div className="rounded-md">
+          <Table className="tanstack-table-border table-striped">
             <TableHeader>
               {table.getHeaderGroups().map((headerGroup) => (
                 <TableRow key={headerGroup.id}>
