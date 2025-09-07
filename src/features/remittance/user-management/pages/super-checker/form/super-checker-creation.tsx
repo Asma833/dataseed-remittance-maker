@@ -4,20 +4,52 @@ import Spacer from "@/components/form/wrapper/spacer";
 import { useNavigate } from "react-router-dom";
 import { superCheckerCreationConfig } from "./super-checker-creation.config";
 import FieldWrapper from "@/components/form/wrapper/field-wrapper";
-import { FormProvider, useForm } from "react-hook-form";
+import { useForm } from "react-hook-form";
+import { FormProvider } from "@/components/form/providers/form-provider";
 import { getController } from "@/components/form/utils/get-controller";
 import { Button } from "@/components/ui/button";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { superCheckerSchema } from "./super-checker-creation.schema";
+
+import type { z } from "zod";
 
 export const CreateSuperChecker = () => {
-  const methods = useForm();
-  const { control, formState: { errors } } = methods;
+  type SuperCheckerFormType = z.infer<typeof superCheckerSchema>;
+  const methods = useForm<SuperCheckerFormType>({
+    resolver: zodResolver(superCheckerSchema),
+    defaultValues: {
+      checkerDetails: {
+        fullName: "",
+        email: "",
+        phoneNumber: "",
+        location: "",
+        productType: "remittance",
+        transactionType: "buy",
+        status: "active"
+      }
+    }
+  });
+    const {
+    control,
+    getValues,
+    reset,
+    setValue,
+    formState: { errors },
+    handleSubmit,
+  } = methods;
   const navigate = useNavigate();
+
   const handleBack = () => {
     navigate(-1);
   };
+
+    const onSubmit = async(e:any) =>{
+    const currentValues = getValues();
+    console.log(currentValues)
+    }
   return (
-    <FormProvider {...methods}>
-      <FormContentWrapper className="p-6 rounded-lg mr-auto w-full shadow-top">
+       <FormProvider methods={methods}>
+        <FormContentWrapper className="p-6 rounded-lg mr-auto w-full shadow-top">
         <h2 className="text-xl font-bold mb-4 title-case p-2 border-b border-gray-300">Create Super Checker</h2>
         <Spacer>
           <FormFieldRow rowCols={4}>
@@ -27,7 +59,7 @@ export const CreateSuperChecker = () => {
                 <FieldWrapper key={fieldName}>
                   {getController({
                     ...(typeof field === 'object' && field !== null ? field : {}),
-                    name: fieldName,
+                    name: `checkerDetails.${fieldName}`,
                     control,
                     errors,
                   })}
@@ -42,7 +74,7 @@ export const CreateSuperChecker = () => {
                 <FieldWrapper key={fieldName}>
                   {getController({
                     ...(typeof field === 'object' && field !== null ? field : {}),
-                    name: fieldName,
+                    name: `checkerDetails.${fieldName}`,
                     control,
                     errors,
                   })}
@@ -57,7 +89,7 @@ export const CreateSuperChecker = () => {
                 <FieldWrapper key={fieldName}>
                   {getController({
                     ...(typeof field === 'object' && field !== null ? field : {}),
-                    name: fieldName,
+                    name: `checkerDetails.${fieldName}`,
                     control,
                     errors,
                   })}
@@ -72,7 +104,7 @@ export const CreateSuperChecker = () => {
                 <FieldWrapper key={fieldName}>
                   {getController({
                     ...(typeof field === 'object' && field !== null ? field : {}),
-                    name: fieldName,
+                    name: `checkerDetails.${fieldName}`,
                     control,
                     errors,
                   })}
@@ -82,7 +114,7 @@ export const CreateSuperChecker = () => {
           </FormFieldRow>
           <div className="flex justify-items-start space-x-2 mt-4">
             <Button variant="outline" className="rounded-2xl w-28" onClick={handleBack}>Back</Button>
-            <Button type="submit" className="rounded-2xl w-28">Submit</Button>
+            <Button type="button" className="rounded-2xl w-28" onClick={onSubmit}>Submit</Button>
           </div>
         </Spacer>
       </FormContentWrapper>
