@@ -144,7 +144,9 @@ export const ShadCnCheckbox = ({
     if (isMulti) {
       return Object.fromEntries(Object.keys(options).map((key) => [key, false]));
     } else {
-      return Object.fromEntries(Object.keys(options).map((key) => [key, defaultSelected?.[key] || false]));
+      // For single selection, find the default selected key
+      const defaultKey = Object.keys(defaultSelected || {}).find(key => defaultSelected![key]);
+      return defaultKey || '';
     }
   };
 
@@ -168,7 +170,12 @@ export const ShadCnCheckbox = ({
             return (
               <div className={cn(containerClassName, classNames?.formGroup ?? '')}>
                 {Object.entries(options).map(([key, option]) => {
-                const isChecked = field.value?.[key] || false;
+                let isChecked = false;
+                if (isMulti) {
+                  isChecked = field.value?.[key] || false;
+                } else {
+                  isChecked = field.value === key;
+                }
                 const icons = getIcons(isChecked);
 
                 return (
@@ -179,13 +186,13 @@ export const ShadCnCheckbox = ({
                       disabled={disabled}
                       onClick={() => {
                         const newChecked = !isChecked;
-                        let updatedValue = { ...field.value, [key]: newChecked };
+                        let updatedValue;
 
-                        // For radio_style or single selection, uncheck all others when a new one is selected
-                        if (!isMulti || variant === 'radio_style') {
-                          updatedValue = Object.fromEntries(
-                            Object.keys(options).map((k) => [k, k === key ? newChecked : false])
-                          );
+                        if (isMulti) {
+                          updatedValue = { ...field.value, [key]: newChecked };
+                        } else {
+                          // For single selection, set the value to the key if checked, else empty
+                          updatedValue = newChecked ? key : '';
                         }
 
                         // Update the form state
