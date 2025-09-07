@@ -34,16 +34,23 @@ const ShadCnPassword = ({
           name={name}
           control={control}
           defaultValue=""
-          render={({ field }) => (
-            <ShadCnFormInput
-              {...field}
-              type="password"
-              uppercase={uppercase}
-              disabled={disabled}
-              required={required}
-              forcedValue={forcedValue}
-              autoComplete="new-password"
-            />
+          render={({ field, fieldState:{error} }) => (
+            <div>
+              <ShadCnFormInput
+                {...field}
+                type="password"
+                uppercase={uppercase}
+                disabled={disabled}
+                required={required}
+                forcedValue={forcedValue}
+                autoComplete="new-password"
+              />
+              {error && (
+                <p className="text-sm text-destructive mt-1">
+                  {error.message}
+                </p>
+              )}
+            </div>
           )}
         />
       </FormControl>

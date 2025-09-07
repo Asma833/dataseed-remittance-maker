@@ -33,6 +33,7 @@ export const ShadCnPhone = ({
           control={control}
           defaultValue=""
           render={({ field: { value, onChange, ...field }, fieldState: { error } }) => (
+            <div>
             <ShadCnFormInput
               {...field}
               type="tel"
@@ -44,10 +45,15 @@ export const ShadCnPhone = ({
                 onChange(limitedValue);
               }}
               disabled={disabled}
-              required={required}
               placeholder="Enter phone number"
               maxLength={10}
             />
+            {error && (
+                <p className="text-sm text-destructive mt-1">
+                  {error.message}
+                </p>
+              )}
+              </div>
           )}
         />
       </FormControl>

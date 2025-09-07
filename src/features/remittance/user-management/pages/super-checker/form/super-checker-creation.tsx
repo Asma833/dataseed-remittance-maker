@@ -43,10 +43,12 @@ export const CreateSuperChecker = () => {
     navigate(-1);
   };
 
-    const onSubmit = async(e:any) =>{
-    const currentValues = getValues();
-    console.log(currentValues)
-    }
+    const onSubmit = async (data: any) => {
+      console.log('Form submitted with data:', data);
+      // Add actual submission logic here
+    };
+
+    const handleFormSubmit = handleSubmit(onSubmit);
   return (
        <FormProvider methods={methods}>
         <FormContentWrapper className="p-6 rounded-lg mr-auto w-full shadow-top">
@@ -114,7 +116,7 @@ export const CreateSuperChecker = () => {
           </FormFieldRow>
           <div className="flex justify-items-start space-x-2 mt-4">
             <Button variant="outline" className="rounded-2xl w-28" onClick={handleBack}>Back</Button>
-            <Button type="button" className="rounded-2xl w-28" onClick={onSubmit}>Submit</Button>
+            <Button type="submit" className="rounded-2xl w-28" onClick={handleFormSubmit}>Submit</Button>
           </div>
         </Spacer>
       </FormContentWrapper>

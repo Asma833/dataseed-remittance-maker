@@ -2,6 +2,7 @@ import { Controller, useFormContext } from 'react-hook-form';
 import { ShadCnFormInput } from './ShadCnFormInput';
 import { FormItem, FormLabel, FormControl, FormMessage } from '@/components/ui/form';
 import { cn } from '@/utils/cn';
+import { divide } from 'lodash';
 
 interface ShadCnTextProps {
   name: string;
@@ -39,17 +40,23 @@ export const ShadCnText = ({
           name={name}
           control={control}
           defaultValue=""
-          render={({ field }) => (
+           render={({ field, fieldState: { error } }) => (
+            <div>
             <ShadCnFormInput
               {...field}
               type="text"
               placeholder={placeholder}
               uppercase={uppercase}
               disabled={disabled}
-              required={required}
               forcedValue={forcedValue}
               {...(onInputChange && { onInputChange })}
             />
+              {error && (
+                <p className="text-sm text-destructive mt-1">
+                  {error.message}
+                </p>
+              )}
+            </div>
           )}
         />
       </FormControl>

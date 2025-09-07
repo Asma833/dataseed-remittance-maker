@@ -37,6 +37,7 @@ export const ShadCnNumber = ({
           control={control}
           defaultValue=""
           render={({ field: { value, onChange, ...field }, fieldState: { error } }) => (
+            <div>
             <ShadCnFormInput
               {...field}
               type="number"
@@ -46,10 +47,15 @@ export const ShadCnNumber = ({
                 onChange(val === '' ? '' : val);
               }}
               disabled={disabled}
-              required={required}
               min={min}
               step={step}
             />
+            {error && (
+                <p className="text-sm text-destructive mt-1">
+                  {error.message}
+                </p>
+              )}
+            </div>
           )}
         />
       </FormControl>

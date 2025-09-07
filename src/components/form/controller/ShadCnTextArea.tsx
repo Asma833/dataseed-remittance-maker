@@ -44,25 +44,31 @@ export const ShadCnTextArea = ({
           control={control}
           defaultValue=""
           render={({ field, fieldState: { error } }) => (
-            <Textarea
-              {...field}
-              value={(forcedValue ? forcedValue : field.value) || ''}
-              rows={rows}
-              placeholder={placeholder}
-              disabled={disabled}
-              required={required}
-              className={cn(
-                "resize-none rounded-[10px] shadow-none",
-                error && "border-destructive focus-visible:ring-destructive"
+            <div>
+              <Textarea
+                {...field}
+                value={(forcedValue ? forcedValue : field.value) || ''}
+                rows={rows}
+                placeholder={placeholder}
+                disabled={disabled}
+                className={cn(
+                  "resize-none rounded-[10px] shadow-none",
+                  error && "border-destructive focus-visible:ring-destructive"
+                )}
+                onChange={(e) => {
+                  field.onChange(e);
+                  // Call the onInputChange callback if provided
+                  if (onInputChange) {
+                    onInputChange(e.target.value);
+                  }
+                }}
+              />
+              {error && (
+                <p className="text-sm text-destructive mt-1">
+                  {error.message}
+                </p>
               )}
-              onChange={(e) => {
-                field.onChange(e);
-                // Call the onInputChange callback if provided
-                if (onInputChange) {
-                  onInputChange(e.target.value);
-                }
-              }}
-            />
+            </div>
           )}
         />
       </FormControl>

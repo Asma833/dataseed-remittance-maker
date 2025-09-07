@@ -32,15 +32,21 @@ export const ShadCnEmail = ({
           name={name}
           control={control}
           defaultValue=""
-          render={({ field }) => (
+         render={({ field, fieldState: { error } }) => (
+          <div>
             <ShadCnFormInput
               {...field}
               type="email"
               disabled={disabled}
-              required={required}
               forcedValue={forcedValue}
               placeholder="Enter Email Address"
             />
+            {error && (
+                <p className="text-sm text-destructive mt-1">
+                  {error.message}
+                </p>
+              )}
+            </div>
           )}
         />
       </FormControl>
