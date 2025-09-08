@@ -134,7 +134,10 @@ const SuperCheckerTable = () => {
       <DataTable
         columns={columns}
         data={tableData}
-        config={config}
+        config={{
+          ...config,
+          export: { enabled: true, fileName: 'super-checkers.csv', includeHeaders: true },
+        }}
         actions={tableActions}
         className="rounded-lg"
       />

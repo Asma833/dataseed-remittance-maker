@@ -7,7 +7,6 @@ import { useGetData } from '@/hooks/useGetData';
 import { API } from '@/core/constant/apis';
 import { queryKeys } from '@/core/constant/query-keys';
 import { User } from '@/features/auth/types/auth.types';
-import { o } from 'node_modules/framer-motion/dist/types.d-Cjd591yU';
 
 const AgentAdminTable = () => {
   const [loading, setLoading] = useState(false);
@@ -99,7 +98,6 @@ const AgentAdminTable = () => {
       <div className="flex items-center justify-between">
         <div className="space-y-1">
           <h2 className="text-2xl font-semibold tracking-tight">User Management</h2>
-          <p className="text-muted-foreground">Manage your users and their access levels</p>
         </div>
       </div>
 
