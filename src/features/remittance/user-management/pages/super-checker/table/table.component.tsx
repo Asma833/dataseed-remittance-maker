@@ -70,18 +70,12 @@ const SuperCheckerTable = () => {
 
 
   const handleEdit = (superChecker: SuperCheckerData) => {
-    //console.log('Edit super checker:', superChecker);
     navigate('/admin/users/super-checker-creation', { state: { superChecker } });
-  };
-
-  const handleRowClick = (superChecker: SuperCheckerData) => {
-    //console.log('Row clicked:', superChecker);
   };
 
   // Dynamic table actions
   const tableActions = {
     onPaginationChange: (pagination: { pageIndex: number; pageSize: number }) => {
-      //console.log('Pagination changed:', pagination);
       setLoading(true);
       setTimeout(() => {
         setLoading(false);
