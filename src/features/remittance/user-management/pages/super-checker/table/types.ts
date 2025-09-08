@@ -6,4 +6,5 @@ export interface SuperCheckerData {
   productType: string;
   productSubType: string;
   status: 'Active' | 'Inactive';
+  location?: string;
 }
