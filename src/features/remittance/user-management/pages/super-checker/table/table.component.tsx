@@ -57,6 +57,21 @@ const SuperCheckerTable = () => {
       enabled: true,
       searchMode: 'static' as const,
     },
+    filters: {
+      ...staticConfig.filters,
+      enabled: true,
+      filterMode: 'static' as const,
+      columnFilters: true,
+      globalFilter: true,
+      statusFilter: {
+        enabled: true,
+        options: [
+          { value: 'Active', label: 'Active' },
+          { value: 'Inactive', label: 'Inactive' },
+        ],
+        columnId: 'status',
+      },
+    },
     loading,
   };
 

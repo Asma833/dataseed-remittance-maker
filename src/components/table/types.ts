@@ -34,12 +34,17 @@ export interface TableConfig {
     debounceMs?: number;
   };
   
-  // Filter settings  
+  // Filter settings
   filters: {
     enabled: boolean;
     filterMode: 'static' | 'dynamic';
     columnFilters: boolean;
     globalFilter: boolean;
+    statusFilter?: {
+      enabled: boolean;
+      options: { value: string; label: string }[];
+      columnId?: string;
+    };
   };
   
   // Sorting settings

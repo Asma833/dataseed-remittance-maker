@@ -1,5 +1,3 @@
-'use client';
-
 import React, { useState, useMemo, useEffect } from 'react';
 import {
   useReactTable,
@@ -30,6 +28,9 @@ import {
   ChevronRightIcon,
   ChevronsLeftIcon,
   ChevronsRightIcon,
+  ArrowRightIcon,
+  RefreshCwIcon,
+  SearchIcon,
 } from 'lucide-react';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
@@ -121,6 +122,8 @@ export function DataTable<T>({
   const [sorting, setSorting] = useState<SortingState>([]);
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
   const [globalFilter, setGlobalFilter] = useState('');
+  const [selectedStatusFilter, setSelectedStatusFilter] = useState<string>('all');
+  const [appliedStatusFilter, setAppliedStatusFilter] = useState<string>('all');
   const [pagination, setPagination] = useState<PaginationState>({
     pageIndex: safeData.currentPage ? safeData.currentPage - 1 : 0,
     pageSize: config.pagination.pageSize,
@@ -166,13 +169,52 @@ export function DataTable<T>({
     [columns, config.sorting.enabled, config.filters.columnFilters]
   );
 
-  // Calculate total data for static pagination
+  // Calculate total data for static pagination with manual status filtering
   const tableData = useMemo(() => {
-    if (config.paginationMode === 'static') {
-      return safeData.data || [];
+    let filteredData = safeData.data || [];
+
+    // Apply manual status filtering if a specific status is applied
+    if (appliedStatusFilter !== 'all' && config.filters.statusFilter?.enabled) {
+      const columnId = config.filters.statusFilter?.columnId || 'status';
+      filteredData = filteredData.filter((item: any) => {
+        const itemValue = item[columnId];
+        return itemValue === appliedStatusFilter;
+      });
+      console.log(`Applied filter for ${appliedStatusFilter}:`, filteredData.length, 'records');
     }
-    return safeData.data || [];
-  }, [safeData.data, config.paginationMode]);
+
+    if (config.paginationMode === 'static') {
+      return filteredData;
+    }
+    return filteredData;
+  }, [safeData.data, config.paginationMode, appliedStatusFilter, config.filters.statusFilter]);
+
+  // Helper function to clear all filters
+  const clearAllFilters = () => {
+    setGlobalFilter('');
+    setColumnFilters([]);
+    setSelectedStatusFilter('all');
+    setAppliedStatusFilter('all');
+  };
+
+  // Helper function to apply filters (for manual submission)
+  const applyFilters = () => {
+    // Apply the selected status filter
+    setAppliedStatusFilter(selectedStatusFilter);
+
+    if (selectedStatusFilter === 'all') {
+      // Clear all filters to show all data
+      setGlobalFilter('');
+      setColumnFilters([]);
+      console.log('Applied "All Status" filter - showing all data');
+    } else {
+      // Clear global filter and apply status filter
+      setGlobalFilter('');
+      setColumnFilters([]);
+
+      console.log('Applied status filter:', selectedStatusFilter);
+    }
+  };
 
   // Table instance with error handling
   const tableOptions: any = {
@@ -280,6 +322,58 @@ export function DataTable<T>({
         {/* Search and Filters Header */}
         {(config.search.enabled || config.filters.enabled) && (
           <div className="flex items-center justify-between gap-4">
+            {/* Left side - Filters */}
+            <div className="flex items-center gap-2">
+              {/* Status Filter */}
+              {config.filters.statusFilter?.enabled && (
+                <>
+                  <div className="relative">
+                    <Select
+                      value={selectedStatusFilter}
+                      onValueChange={(value) => {
+                        setSelectedStatusFilter(value);
+                      }}
+                    >
+                      <SelectTrigger className="w-32 bg-[#ECEEFF] border-[#ECEEFF]">
+                        <SelectValue placeholder="Status" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="all">All Status</SelectItem>
+                        {config.filters.statusFilter.options.map((option) => (
+                          <SelectItem key={option.value} value={option.value}>
+                            {option.label}
+                          </SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
+                  </div>
+
+                  {/* Arrow Right Button for Filter Submission */}
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    onClick={applyFilters}
+                    className="h-9 w-9 p-0 bg-[#ECEEFF] hover:bg-[#ECEEFF]/80 border-[#ECEEFF]"
+                    title="Apply Filters"
+                  >
+                    <ArrowRightIcon className="h-4 w-4 text-[#2C81E8]" />
+                  </Button>
+
+                  {/* Refresh Button to Clear Filters */}
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    onClick={clearAllFilters}
+                    className="h-9 w-9 p-0 bg-[#ECEEFF] hover:bg-[#ECEEFF]/80 border-[#ECEEFF]"
+                    title="Clear All Filters"
+                  >
+                    <RefreshCwIcon className="h-4 w-4 text-[#2C81E8]" />
+                  </Button>
+                </>
+              )}
+            </div>
+
+            {/* Right side - Search */}
             <div className="flex items-center gap-4">
               {/* Global Search */}
               {config.search.enabled && (
@@ -288,8 +382,9 @@ export function DataTable<T>({
                     placeholder={config.search.placeholder}
                     value={globalFilter}
                     onChange={(e) => setGlobalFilter(e.target.value)}
-                    className="pl-3"
+                    className="pl-3 pr-10 bg-[#ECEEFF] border-[#ECEEFF]"
                   />
+                  <SearchIcon className="absolute right-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-[#2C81E8]" />
                 </div>
               )}
             </div>
