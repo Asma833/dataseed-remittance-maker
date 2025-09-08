@@ -152,30 +152,27 @@ export function UserManagementTable() {
 
   // Action handlers
   function handleView(user: UserData) {
-    console.log('View user:', user);
     alert(`Viewing user: ${user.fullName}`);
   }
 
   function handleEdit(user: UserData) {
-    console.log('Edit user:', user);
     alert(`Editing user: ${user.fullName}`);
   }
 
   function handleDelete(user: UserData) {
-    console.log('Delete user:', user);
     if (confirm(`Are you sure you want to delete ${user.fullName}?`)) {
       setUsers(prev => prev.filter(u => u.id !== user.id));
     }
   }
 
   function handleRowClick(user: UserData) {
-    console.log('Row clicked:', user);
+    //console.log('Row clicked:', user);
   }
 
   // Dynamic table actions (when using dynamic mode)
   const tableActions = {
     onPaginationChange: (pagination: { pageIndex: number; pageSize: number }) => {
-      console.log('Pagination changed:', pagination);
+      //console.log('Pagination changed:', pagination);
       // Here you would typically make an API call
       setLoading(true);
       setTimeout(() => {
@@ -183,15 +180,15 @@ export function UserManagementTable() {
       }, 1000);
     },
     onSortingChange: (sorting: { id: string; desc: boolean }[]) => {
-      console.log('Sorting changed:', sorting);
+      //console.log('Sorting changed:', sorting);
       // Here you would typically make an API call
     },
     onGlobalFilterChange: (filter: string) => {
-      console.log('Global filter changed:', filter);
+      //console.log('Global filter changed:', filter);
       // Here you would typically make an API call
     },
     onColumnFiltersChange: (filters: { id: string; value: any }[]) => {
-      console.log('Column filters changed:', filters);
+      //console.log('Column filters changed:', filters);
       // Here you would typically make an API call
     },
     onRowClick: handleRowClick,
@@ -211,7 +208,7 @@ export function UserManagementTable() {
 
   // Export function
   const handleExport = () => {
-    console.log('Exporting data...');
+    //console.log('Exporting data...');
     alert('Export functionality would be implemented here');
   };
 

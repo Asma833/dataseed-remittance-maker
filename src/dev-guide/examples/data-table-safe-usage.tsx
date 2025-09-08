@@ -173,7 +173,7 @@ export function SafeDataTableExample() {
         }}
         actions={{
           onRowClick: (user) => {
-            console.log('Clicked user:', user);
+            //console.log('Clicked user:', user);
           },
         }}
       />
