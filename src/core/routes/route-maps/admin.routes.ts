@@ -3,7 +3,7 @@ import AdminAgentList from '@/features/remittance/user-management/pages/agent-ad
 
 import { CreateSuperChecker } from '@/features/remittance/user-management/pages/super-checker/form/super-checker-creation';
 import SuperCheckerTablePage from '@/features/remittance/user-management/pages/super-checker/table/page';
-
+import BranchAgentsPage from '@/features/remittance/user-management/pages/branch-agents/table/table.component';
 
 const baseRole = ROLES.ADMIN; // Admin routes are accessible to admin role
 
@@ -26,4 +26,10 @@ export const adminRoutes = [
     roles: [baseRole],
     permission: 'admin',
   },
+  {
+    path: ROUTES.ADMIN.USER_MANAGEMENT.BRANCH_AGENTS,
+    element: BranchAgentsPage,
+    roles: [baseRole],
+    permission: 'admin',
+  }
 ];

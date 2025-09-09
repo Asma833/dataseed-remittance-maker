@@ -18,26 +18,22 @@ export const SideNavOptions = {
       path: getNavPath('ADMIN', ROUTES.ADMIN.NUSER),
       icon: LayoutDashboard,
       subMenus: [
+         {
+          title: 'Dataseed Superchecker',
+          path: getNavPath('ADMIN', ROUTES.ADMIN.SUPER_CHECKER_TABLE),
+        },
         {
           title: 'Agent Admin',
           path: getNavPath('ADMIN', ROUTES.ADMIN.AGENT_ADMIN),
-          icon: Eye,
+        },
+         {
+          title: 'Branch Agents',
+          path: getNavPath('ADMIN', ROUTES.ADMIN.USER_MANAGEMENT.BRANCH_AGENTS),
         },
         {
           title: 'Create User',
           path: getNavPath('ADMIN', ROUTES.ADMIN.CREATEUSER),
-          icon: FileEdit,
-        },
-        {
-          title: 'Super Checker Table',
-          path: getNavPath('ADMIN', ROUTES.ADMIN.SUPER_CHECKER_TABLE),
-          icon: Eye,
-        },
-        {
-          title: 'N User Management',
-          path: getNavPath('ADMIN', ROUTES.ADMIN.USER_MANAGEMENT.N_USER),
-          icon: User,
-        },
+        }
       ],
     },
     {

@@ -31,6 +31,7 @@ import {
   ArrowRightIcon,
   RefreshCwIcon,
   SearchIcon,
+  DownloadIcon,
 } from 'lucide-react';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
@@ -513,7 +514,7 @@ export function DataTable<T>({
         {/* Pagination */}
         {config.pagination.enabled && (
           <div className="flex items-center justify-between px-2">
-            <div>{config?.export?.enabled && <Button>Export</Button>}</div>
+            <div>{config?.export?.enabled && <Button>Export <DownloadIcon className="h-4 w-4 ml-1" /></Button>}</div>
             <div className="flex flex-1 items-center justify-end gap-5">
               <div className="flex items-center gap-2">
                 {config.pagination.enabled && config.pagination.showPageSizeSelector && (
