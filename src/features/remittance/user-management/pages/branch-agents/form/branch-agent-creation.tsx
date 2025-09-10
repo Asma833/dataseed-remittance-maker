@@ -103,18 +103,18 @@ export const CreateBranchAgent = () => {
 
   return (
     <div className="space-y-1 w-full">
-      <div className="flex items-center space-x-2">
+      <div className="flex items-center space-x-2 pl-3">
         <ArrowLeft className="cursor-pointer h-5 w-5" onClick={handleBack} />
-        <h2 className="text-xl font-semibold tracking-tight">Branch Agents</h2>
+        <h2 className="text-xl font-semibold tracking-tight">
+            {branchAgent ? 'Update Branch Agent' : 'Create Branch Agent'}
+          </h2>
       </div>
 
       <FormProvider methods={methods}>
-        <FormContentWrapper className="p-3 rounded-lg mr-auto w-full shadow-top">
-          <h2 className="text-xl font-bold mb-4 title-case p-2 border-b border-gray-300">
-            {branchAgent ? 'Update Branch Agent' : 'Create Branch Agent'}
-          </h2>
+        <FormContentWrapper className="p-3 mr-auto w-full mt-0">
           <Spacer>
-            <FormFieldRow rowCols={4}>
+            <div className="form-bg p-4 rounded-sm">
+            <FormFieldRow rowCols={4} className="mt-2 mb-4 mx-2">
               {(['vendorName', 'vendorCode', 'fullName', 'emailId'] as const).map((fieldName) => {
                 const field = branchAgentCreationConfig().fields.agentDetails[fieldName];
                 return (
@@ -129,7 +129,7 @@ export const CreateBranchAgent = () => {
                 );
               })}
             </FormFieldRow>
-            <FormFieldRow rowCols={4}>
+            <FormFieldRow rowCols={4} className="mt-4 mb-2 mx-2">
               {(['mobileNo', 'state', 'city', 'branch'] as const).map((fieldName) => {
                 const field = branchAgentCreationConfig().fields.agentDetails[fieldName];
                 return (
@@ -144,7 +144,9 @@ export const CreateBranchAgent = () => {
                 );
               })}
             </FormFieldRow>
-            <FormFieldRow>
+           </div>
+           <div className="form-bg p-4 rounded-sm">
+            <FormFieldRow className="mt-2 mb-4 mx-2">
               {(['role'] as const).map((fieldName) => {
                 const field = branchAgentCreationConfig().fields.agentDetails[fieldName];
                 return (
@@ -159,7 +161,7 @@ export const CreateBranchAgent = () => {
                 );
               })}
             </FormFieldRow>
-            <FormFieldRow rowCols={4}>
+            <FormFieldRow rowCols={4} className="mt-4 mb-2 mx-2">
               {(['checkerList'] as const).map((fieldName) => {
                 const field = branchAgentCreationConfig().fields.agentDetails[fieldName];
                 return (
@@ -174,8 +176,9 @@ export const CreateBranchAgent = () => {
                 );
               })}
             </FormFieldRow>
-
-            <div className="flex justify-start space-x-2 mt-4">
+            </div>
+        
+            <div className="flex justify-start space-x-2 form-bg p-4 rounded-sm">
               <Button variant="outline" className="rounded-2xl w-28" onClick={handleBack}>
                 Back
               </Button>

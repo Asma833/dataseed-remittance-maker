@@ -99,7 +99,7 @@ export const CreateSuperChecker = () => {
         
        <FormProvider methods={methods}>
         <FormContentWrapper className="p-3 rounded-lg mr-auto w-full shadow-top">
-        <h2 className="text-xl font-bold mb-4 title-case p-2 border-b border-gray-300">{superChecker ? 'Update Super Checker' : 'Create Super Checker'}</h2>
+        <h2 className="text-xl font-bold mb-4 title-case p-2 pt-0 border-b border-gray-300">{superChecker ? 'Update Super Checker' : 'Create Super Checker'}</h2>
         <Spacer>
           <FormFieldRow rowCols={4}>
             {(['fullName', 'email', 'phoneNumber', 'location'] as const).map((fieldName) => {

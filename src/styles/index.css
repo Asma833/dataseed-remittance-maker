@@ -51,6 +51,7 @@
   --color-sidebar-toggle: #3d81db;
   --color-gray-200: #e5e7eb;
   --color-icon-primary: #2C81E8;
+  --form-background:#f1f3ff7a;
 }
 
 .shadow-top {
@@ -516,4 +517,7 @@ html[class='dark'] .MuiDateCalendar-root.MuiButtonBase-root.MuiPickersDay-root.M
 }
 .btn-icon-primary{
   color: var(--color-icon-primary);
+}
+.form-bg{
+  background-color: var(--form-background);
 }

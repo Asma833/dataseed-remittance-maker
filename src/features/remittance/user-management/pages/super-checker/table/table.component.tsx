@@ -4,6 +4,7 @@ import GetSuperCheckerTableColumns from './column.component';
 import { SuperCheckerData } from './types';
 import { Button } from '@/components/ui/button';
 import { DataTable, TableData, staticConfig } from '@/components/table';
+import { PlusCircle } from 'lucide-react';
 
 const sampleSuperCheckers: SuperCheckerData[] = [
   {
@@ -125,6 +126,7 @@ const SuperCheckerTable = () => {
         </div>
         <div className="flex items-center gap-2">
           <Button onClick={handleAddSuperChecker} size="sm">
+            <PlusCircle className="h-4 w-4" />
             Create Checker
           </Button>
         </div>
