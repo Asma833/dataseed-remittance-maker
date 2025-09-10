@@ -50,6 +50,7 @@
   --color-table-striped: #ECEEFF;
   --color-sidebar-toggle: #3d81db;
   --color-gray-200: #e5e7eb;
+  --color-icon-primary: #2C81E8;
 }
 
 .shadow-top {
@@ -505,8 +506,14 @@ html[class='dark'] .MuiDateCalendar-root.MuiButtonBase-root.MuiPickersDay-root.M
   max-width: 200px;
   font-size: 14px;
 }
-
-
 .form-input {
   border-radius: 5px;
+}
+.btn-light {
+  background-color: var(--color-secondary);
+  color: var(--color-secondary-foreground);
+  border: none;
+}
+.btn-icon-primary{
+  color: var(--color-icon-primary);
 }

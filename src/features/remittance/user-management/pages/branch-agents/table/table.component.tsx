@@ -4,7 +4,7 @@ import GetBranchAgentTableColumns from './column.component';
 import { BranchAgentData } from './types';
 import { Button } from '@/components/ui/button';
 import { DataTable, TableData, staticConfig } from '@/components/table';
-import { PlusIcon, UploadIcon } from 'lucide-react';
+import { PlusCircle, UploadIcon } from 'lucide-react';
 
 const sampleBranchAgents: BranchAgentData[] = [
   {
@@ -133,12 +133,12 @@ const BranchAgentTable = () => {
           <h2 className="text-xl font-semibold tracking-tight">Branch Agents</h2>
         </div>
         <div className="flex items-center gap-2">
-          <Button onClick={handleBulkUpload} variant="outline" size="sm">
-            <UploadIcon className="h-4 w-4 mr-2" />
+          <Button onClick={handleBulkUpload} variant="outline" size="sm" className="btn-light">
             Bulk Upload
+            <UploadIcon className="h-4 w-4 mr-2 btn-icon-primary" />
           </Button>
           <Button onClick={handleCreateBranchAgent} size="sm">
-            <PlusIcon className="h-4 w-4 mr-2" />
+            <PlusCircle className="h-4 w-4 mr-2" />
             Create Branch Agent
           </Button>
         </div>

@@ -144,7 +144,7 @@ export const CreateBranchAgent = () => {
                 );
               })}
             </FormFieldRow>
-            <FormFieldRow rowCols={4}>
+            <FormFieldRow>
               {(['role'] as const).map((fieldName) => {
                 const field = branchAgentCreationConfig().fields.agentDetails[fieldName];
                 return (
@@ -159,7 +159,7 @@ export const CreateBranchAgent = () => {
                 );
               })}
             </FormFieldRow>
-            <FormFieldRow>
+            <FormFieldRow rowCols={4}>
               {(['checkerList'] as const).map((fieldName) => {
                 const field = branchAgentCreationConfig().fields.agentDetails[fieldName];
                 return (
