@@ -73,7 +73,7 @@ export const ShadCnSelect = ({
   // Get display value for the selected option
   const getDisplayValue = (selected: string) => {
     if (!selected || selected === '') {
-      return placeholder;
+      return undefined; // Let SelectValue handle the placeholder
     }
 
     if (!options) {
@@ -108,13 +108,10 @@ export const ShadCnSelect = ({
             >
               <SelectTrigger className={cn("rounded-[10px] shadow-none", error && "border-destructive focus:ring-destructive")}>
                 <SelectValue placeholder={placeholder}>
-                  {getDisplayValue((forcedValue ? forcedValue : value) || '')}
+                  {getDisplayValue((forcedValue ? forcedValue : value) || '') || undefined}
                 </SelectValue>
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="" disabled>
-                  {placeholder}
-                </SelectItem>
                 {isArrayOptions
                   ? processedArrayOptions.map((option) => (
                       <SelectItem key={option._key} value={option.value}>
