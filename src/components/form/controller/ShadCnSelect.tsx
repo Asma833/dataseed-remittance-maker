@@ -106,7 +106,7 @@ export const ShadCnSelect = ({
               onValueChange={onChange}
               disabled={disabled}
             >
-              <SelectTrigger className={cn("rounded-[10px] shadow-none", error && "border-destructive focus:ring-destructive")}>
+              <SelectTrigger className={cn("form-input shadow-none", error && "border-destructive focus:ring-destructive")}>
                 <SelectValue placeholder={placeholder}>
                   {getDisplayValue((forcedValue ? forcedValue : value) || '') || undefined}
                 </SelectValue>

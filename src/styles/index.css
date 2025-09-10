@@ -507,3 +507,6 @@ html[class='dark'] .MuiDateCalendar-root.MuiButtonBase-root.MuiPickersDay-root.M
 }
 
 
+.form-input {
+  border-radius: 5px;
+}

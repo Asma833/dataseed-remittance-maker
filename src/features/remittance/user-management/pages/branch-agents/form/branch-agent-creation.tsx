@@ -114,7 +114,6 @@ export const CreateBranchAgent = () => {
             {branchAgent ? 'Update Branch Agent' : 'Create Branch Agent'}
           </h2>
           <Spacer>
-            {/* First Row: Vendor Name, Vendor Code, Full Name, Email ID */}
             <FormFieldRow rowCols={4}>
               {(['vendorName', 'vendorCode', 'fullName', 'emailId'] as const).map((fieldName) => {
                 const field = branchAgentCreationConfig().fields.agentDetails[fieldName];
@@ -130,8 +129,6 @@ export const CreateBranchAgent = () => {
                 );
               })}
             </FormFieldRow>
-
-            {/* Second Row: Mobile No, State, City, Branch */}
             <FormFieldRow rowCols={4}>
               {(['mobileNo', 'state', 'city', 'branch'] as const).map((fieldName) => {
                 const field = branchAgentCreationConfig().fields.agentDetails[fieldName];
@@ -147,9 +144,7 @@ export const CreateBranchAgent = () => {
                 );
               })}
             </FormFieldRow>
-
-            {/* Third Row: Role */}
-            <FormFieldRow>
+            <FormFieldRow rowCols={4}>
               {(['role'] as const).map((fieldName) => {
                 const field = branchAgentCreationConfig().fields.agentDetails[fieldName];
                 return (
@@ -164,8 +159,6 @@ export const CreateBranchAgent = () => {
                 );
               })}
             </FormFieldRow>
-
-            {/* Fourth Row: Checker List */}
             <FormFieldRow>
               {(['checkerList'] as const).map((fieldName) => {
                 const field = branchAgentCreationConfig().fields.agentDetails[fieldName];
