@@ -55,7 +55,7 @@ const BranchAgentTable = () => {
     ...staticConfig,
     search: {
       ...staticConfig.search,
-      placeholder: 'Search branch agents...',
+      placeholder: 'Search...',
       enabled: true,
       searchMode: 'static' as const,
     },

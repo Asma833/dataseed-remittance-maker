@@ -52,7 +52,7 @@ export const ShadCnTextArea = ({
                 placeholder={placeholder}
                 disabled={disabled}
                 className={cn(
-                  "resize-none rounded-[10px] shadow-none",
+                  "resize-none form-input shadow-none",
                   error && "border-destructive focus-visible:ring-destructive"
                 )}
                 onChange={(e) => {

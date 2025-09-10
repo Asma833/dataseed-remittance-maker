@@ -39,7 +39,7 @@ export const ShadCnFileUploadWithButton = ({
                 <Button
                   variant="outline"
                   className={cn(
-                    "cursor-pointer rounded-[10px] shadow-none",
+                    "cursor-pointer form-input shadow-none",
                     error && "border-destructive"
                   )}
                   disabled={disabled}

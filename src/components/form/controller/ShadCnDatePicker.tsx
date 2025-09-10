@@ -42,7 +42,7 @@ export const ShadCnDatePicker = ({
                 <Button
                   variant="outline"
                   className={cn(
-                    "w-full justify-start text-left font-normal rounded-[10px] shadow-none",
+                    "w-full justify-start text-left font-normal form-input shadow-none",
                     !field.value && "text-muted-foreground",
                     fieldState.error && "border-destructive focus:ring-destructive"
                   )}

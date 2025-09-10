@@ -38,7 +38,7 @@ export const ShadCnFile = ({
                 <Button
                   variant="outline"
                   className={cn(
-                    "w-full cursor-pointer rounded-[10px] shadow-none",
+                    "w-full cursor-pointer form-input shadow-none",
                     error && "border-destructive"
                   )}
                   disabled={disabled}

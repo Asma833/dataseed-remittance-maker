@@ -80,7 +80,7 @@ export const ShadCnFileUploadWithView = ({
                     type="button"
                     variant="outline"
                     className={cn(
-                      "w-full flex items-center justify-center gap-2 rounded-[10px] shadow-none",
+                      "w-full flex items-center justify-center gap-2 form-input shadow-none",
                       error && "border-destructive"
                     )}
                     disabled={disabled}
@@ -99,7 +99,7 @@ export const ShadCnFileUploadWithView = ({
                   variant="ghost"
                   size="sm"
                   onClick={() => viewFile(value[0])}
-                  className="w-fit rounded-[10px] shadow-none"
+                  className="w-fit form-input shadow-none"
                 >
                   View File
                 </Button>
