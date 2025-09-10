@@ -22,6 +22,7 @@ interface ShadCnSelectProps {
   disabled?: boolean;
   required?: boolean;
   forcedValue?: string;
+  errors?: any;
 }
 
 export const ShadCnSelect = ({
@@ -33,6 +34,7 @@ export const ShadCnSelect = ({
   disabled = false,
   required = false,
   forcedValue,
+  errors,
 }: ShadCnSelectProps) => {
   const { control } = useFormContext();
   const isArrayOptions = Array.isArray(options);
@@ -101,6 +103,7 @@ export const ShadCnSelect = ({
           control={control}
           defaultValue={defaultValue}
           render={({ field: { value, onChange }, fieldState: { error } }) => (
+            <div>
             <Select
               value={(forcedValue ? forcedValue : value) || ''}
               onValueChange={onChange}
@@ -128,10 +131,15 @@ export const ShadCnSelect = ({
                     )) : null}
               </SelectContent>
             </Select>
+             {error && (
+                <p className="text-sm text-destructive mt-1">
+                  {error.message}
+                </p>
+              )}
+            </div>
           )}
         />
-      </FormControl>
-      <FormMessage />
+      </FormControl>  
     </FormItem>
   );
 };

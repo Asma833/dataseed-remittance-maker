@@ -22,7 +22,8 @@ export const getController = (field: any) => {
     forcedValue: field.forcedValue,
     className: field.className,
     required: field.required,
-    placeholder: field.placeholder
+    placeholder: field.placeholder,
+    errors: field.errors
   };
 
   switch (field.type) {
