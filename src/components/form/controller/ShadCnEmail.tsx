@@ -38,6 +38,7 @@ export const ShadCnEmail = ({
               {...field}
               type="email"
               disabled={disabled}
+              className="shadow-none"
               forcedValue={forcedValue}
               placeholder="Enter Email Address"
             />

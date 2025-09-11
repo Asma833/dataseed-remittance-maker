@@ -38,6 +38,7 @@ export const ShadCnPhone = ({
               {...field}
               type="tel"
               value={(forcedValue ? forcedValue : value) || ''}
+              className="shadow-none"
               onChange={(e) => {
                 // Remove all non-numeric characters and limit to 10 digits
                 const numericValue = e.target.value.replace(/\D/g, '');

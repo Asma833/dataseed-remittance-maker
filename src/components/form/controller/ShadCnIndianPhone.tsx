@@ -38,6 +38,7 @@ export const ShadCnIndianPhone = ({
               {...field}
               type="tel"
               isIndianPhone={true}
+              className="shadow-none"
               disabled={disabled}
               forcedValue={forcedValue}
               placeholder="+91 98765 43210"

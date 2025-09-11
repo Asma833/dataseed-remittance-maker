@@ -41,6 +41,7 @@ export const ShadCnNumber = ({
             <ShadCnFormInput
               {...field}
               type="number"
+              className="shadow-none"
               value={(forcedValue !== undefined ? forcedValue : value) || ''}
               onChange={(e) => {
                 const val = e.target.value;

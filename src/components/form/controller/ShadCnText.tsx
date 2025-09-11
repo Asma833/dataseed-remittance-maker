@@ -48,6 +48,7 @@ export const ShadCnText = ({
               placeholder={placeholder}
               uppercase={uppercase}
               disabled={disabled}
+              className="shadow-none"
               forcedValue={forcedValue}
               {...(onInputChange && { onInputChange })}
             />
