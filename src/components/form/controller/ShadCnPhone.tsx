@@ -1,6 +1,7 @@
 import { Controller, useFormContext } from 'react-hook-form';
 import { ShadCnFormInput } from './ShadCnFormInput';
 import { FormItem, FormLabel, FormControl, FormMessage } from '@/components/ui/form';
+import { cn } from '@/utils/cn';
 
 interface ShadCnPhoneProps {
   name: string;
@@ -38,7 +39,7 @@ export const ShadCnPhone = ({
               {...field}
               type="tel"
               value={(forcedValue ? forcedValue : value) || ''}
-              className="shadow-none"
+              className={cn("form-input shadow-none focus-visible:ring-0", error && "border-destructive focus:ring-destructive")}
               onChange={(e) => {
                 // Remove all non-numeric characters and limit to 10 digits
                 const numericValue = e.target.value.replace(/\D/g, '');

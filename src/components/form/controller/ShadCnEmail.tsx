@@ -1,6 +1,7 @@
 import { Controller, useFormContext } from 'react-hook-form';
 import { ShadCnFormInput } from './ShadCnFormInput';
 import { FormItem, FormLabel, FormControl, FormMessage } from '@/components/ui/form';
+import { cn } from '@/utils/cn';
 
 interface ShadCnEmailProps {
   name: string;
@@ -38,7 +39,7 @@ export const ShadCnEmail = ({
               {...field}
               type="email"
               disabled={disabled}
-              className="shadow-none"
+              className={cn("form-input shadow-none focus-visible:ring-0", error && "border-destructive focus:ring-destructive")}
               forcedValue={forcedValue}
               placeholder="Enter Email Address"
             />

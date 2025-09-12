@@ -1,6 +1,7 @@
 import { Controller, useFormContext } from 'react-hook-form';
 import { ShadCnFormInput } from './ShadCnFormInput';
 import { FormItem, FormLabel, FormControl, FormMessage } from '@/components/ui/form';
+import { cn } from '@/utils/cn';
 
 interface ShadCnNumberProps {
   name: string;
@@ -41,7 +42,7 @@ export const ShadCnNumber = ({
             <ShadCnFormInput
               {...field}
               type="number"
-              className="shadow-none"
+              className={cn("form-input shadow-none focus-visible:ring-0", error && "border-destructive focus:ring-destructive")}
               value={(forcedValue !== undefined ? forcedValue : value) || ''}
               onChange={(e) => {
                 const val = e.target.value;
