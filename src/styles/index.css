@@ -4,9 +4,12 @@
 @custom-variant dark (&:where(.dark, .dark *));
 
 @theme {
-  --color-primary: #1142bb;
+  --color-primary:#8E2DE2;
   --color-primary-foreground: #fafafa;
   --color-secondary: #f1f3ff;
+  --color-white:#FFFFFF;
+  --color-title:#D71C57;
+  --color-background-icon:#FFD8E4;
   --color-secondary-foreground: #35354a;
   --color-destructive: #dc2626;
   --color-destructive-foreground: #dc2626;
@@ -23,7 +26,7 @@
   --color-background: #ffffff;
   --color-foreground: #242434;
   --color-primary-gradient-1: var(--color-primary);
-  --color-primary-gradient-2: #3f85dc;
+  --color-primary-gradient-2: #4A00E0;
   --color-form-label: #585858;
 
   /* Custom badge colors */
@@ -46,8 +49,8 @@
   /* Additional global colors */
   --color-white: #ffffff;
   --color-black: #000000;
-  --color-table-header-bg: #3F87DF;
-  --color-table-striped: #ECEEFF;
+  --color-table-header-bg: #E9E9E9;
+  --color-table-striped: #f1f1f19c;
   --color-sidebar-toggle: #3d81db;
   --color-gray-200: #e5e7eb;
   --color-icon-primary: #2C81E8;
@@ -442,6 +445,9 @@ html[class='dark'] .MuiDateCalendar-root {
 }
 html[class='dark'] .MuiDateCalendar-root.MuiButtonBase-root.MuiPickersDay-root.MuiPickersDay-dayWithMargin {
   color: white;
+}
+body{
+  background-color: #EDEDED !important;
 }
 /* Dark mode styles for MUI components */
 .dark .MuiDateCalendar-root {

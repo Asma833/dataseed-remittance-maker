@@ -335,7 +335,7 @@ export function DataTable<T>({
                         setSelectedStatusFilter(value);
                       }}
                     >
-                      <SelectTrigger className="w-32 bg-[#ECEEFF] border-[#ECEEFF]">
+                      <SelectTrigger className="w-32 filter-bg">
                         <SelectValue placeholder="Status" />
                       </SelectTrigger>
                       <SelectContent>
@@ -354,10 +354,10 @@ export function DataTable<T>({
                     variant="outline"
                     size="sm"
                     onClick={applyFilters}
-                    className="h-9 w-9 p-0 bg-[#ECEEFF] hover:bg-[#ECEEFF]/80 border-[#ECEEFF]"
+                    className="h-9 w-9 p-0 bg-icon hover:bg-bg-icon/80"
                     title="Apply Filters"
                   >
-                    <ArrowRightIcon className="h-4 w-4 text-[#2C81E8]" />
+                    <ArrowRightIcon className="h-4 w-4 secondary-color" />
                   </Button>
 
                   {/* Refresh Button to Clear Filters */}
@@ -365,17 +365,17 @@ export function DataTable<T>({
                     variant="outline"
                     size="sm"
                     onClick={clearAllFilters}
-                    className="h-9 w-9 p-0 bg-[#ECEEFF] hover:bg-[#ECEEFF]/80 border-[#ECEEFF]"
+                    className="h-9 w-9 p-0 bg-icon hover:bg-icon/80"
                     title="Clear All Filters"
                   >
-                    <RefreshCwIcon className="h-4 w-4 text-[#2C81E8]" />
+                    <RefreshCwIcon className="h-4 w-4 secondary-color" />
                   </Button>
                 </>
               )}
             </div>
 
             {/* Right side - Search */}
-            <div className="flex items-center gap-4">
+            <div className="flex items-center gap-2">
               {/* Global Search */}
               {config.search.enabled && (
                 <div className="relative max-w-sm">
@@ -383,17 +383,26 @@ export function DataTable<T>({
                     placeholder={config.search.placeholder}
                     value={globalFilter}
                     onChange={(e) => setGlobalFilter(e.target.value)}
-                    className="pl-3 pr-10 bg-[#ECEEFF] border-[#ECEEFF]"
+                    className="pl-3 pr-10 filter-bg"
                   />
-                  <SearchIcon className="absolute right-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-[#2C81E8]" />
+                  <SearchIcon className="absolute right-3 top-1/2 transform -translate-y-1/2 h-4 w-4 secondary-color" />
                 </div>
               )}
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={clearAllFilters}
+                className="h-9 w-9 p-0 download-button hover:download-button/80"
+                title="Clear All Filters"
+              >
+                <DownloadIcon className="h-4 w-4 text-" />
+              </Button>
             </div>
           </div>
         )}
 
         {/* Table */}
-        <div className="rounded-md">
+        <div className="rounded-md shadow-sm cursor-pointer">
           <Table className="tanstack-table-border table-striped">
             <TableHeader>
               {table.getHeaderGroups().map((headerGroup) => (

@@ -1,6 +1,7 @@
 /* Dynamic table border styling */
 .tanstack-table-border {
   border-collapse: collapse;
+  border:1px;
 }
 
 .tanstack-table-border th,
@@ -11,7 +12,7 @@
 
 .tanstack-table-border th {
   background-color: var(--color-table-header-bg);
-  color: var(--color-white);
+  color: black;
   font-weight: 600;
   text-align: left;
   border-bottom: 2px solid var(--color-white);
@@ -24,14 +25,27 @@
 .tanstack-table-border tr:hover {
   background-color: var(--color-white);
 }
-.table-striped tbody tr:nth-of-type(odd) {
+
+.table-striped tbody tr:nth-of-type(even) {
   background-color: var(--color-table-striped);
 }
 
-.table-striped tbody tr:nth-of-type(even) {
-  background-color: rgba(236, 238, 255, 0.5);
-}
-
 .table-striped tbody tr:hover {
-  background-color: rgba(236, 238, 255, 0.8);
+  background-color: var(--color-table-striped);
+}
+.bg-white{
+  background-color: var(--color-white);
+}
+.secondary-color{
+  color:var(--color-title);
+}
+.bg-icon{
+  background-color: var(--color-background-icon);
+}
+.filter-bg{
+  background-color: var(--color-table-header-bg);
+}
+.download-button{
+  color: var(--color-white);
+  background-color: var(--color-title);
 }
