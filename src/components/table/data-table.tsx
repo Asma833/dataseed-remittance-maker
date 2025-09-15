@@ -335,7 +335,7 @@ export function DataTable<T>({
                         setSelectedStatusFilter(value);
                       }}
                     >
-                      <SelectTrigger className="w-32 filter-bg">
+                      <SelectTrigger className="w-32 bg-[var(--color-table-header-bg)]">
                         <SelectValue placeholder="Status" />
                       </SelectTrigger>
                       <SelectContent>
@@ -354,10 +354,10 @@ export function DataTable<T>({
                     variant="outline"
                     size="sm"
                     onClick={applyFilters}
-                    className="h-9 w-9 p-0 bg-icon hover:bg-bg-icon/80"
+                    className="h-9 w-9 p-0 bg-[var(--color-background-icon)] hover:bg-[var(--color-background-icon)]/80"
                     title="Apply Filters"
                   >
-                    <ArrowRightIcon className="h-4 w-4 secondary-color" />
+                    <ArrowRightIcon className="h-4 w-4 text-[var(--color-title)]" />
                   </Button>
 
                   {/* Refresh Button to Clear Filters */}
@@ -365,10 +365,10 @@ export function DataTable<T>({
                     variant="outline"
                     size="sm"
                     onClick={clearAllFilters}
-                    className="h-9 w-9 p-0 bg-icon hover:bg-icon/80"
+                    className="h-9 w-9 p-0 bg-[var(--color-background-icon)] hover:bg-[var(--color-background-icon)]/80"
                     title="Clear All Filters"
                   >
-                    <RefreshCwIcon className="h-4 w-4 secondary-color" />
+                    <RefreshCwIcon className="h-4 w-4 text-[var(--color-title)]" />
                   </Button>
                 </>
               )}
@@ -383,16 +383,16 @@ export function DataTable<T>({
                     placeholder={config.search.placeholder}
                     value={globalFilter}
                     onChange={(e) => setGlobalFilter(e.target.value)}
-                    className="pl-3 pr-10 filter-bg"
+                    className="pl-3 pr-10 bg-[var(--color-table-header-bg)]"
                   />
-                  <SearchIcon className="absolute right-3 top-1/2 transform -translate-y-1/2 h-4 w-4 secondary-color" />
+                  <SearchIcon className="absolute right-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-[var(--color-title)]" />
                 </div>
               )}
               <Button
                 variant="outline"
                 size="sm"
                 onClick={clearAllFilters}
-                className="h-9 w-9 p-0 download-button hover:download-button/80"
+                className="h-9 w-9 p-0 text-[var(--color-white)] bg-[var(--color-title)] hover:bg-[var(--color-title)]/80"
                 title="Clear All Filters"
               >
                 <DownloadIcon className="h-4 w-4 text-" />
@@ -403,7 +403,7 @@ export function DataTable<T>({
 
         {/* Table */}
         <div className="rounded-md shadow-sm cursor-pointer">
-          <Table className="tanstack-table-border table-striped">
+          <Table className="border-collapse [&_th]:border [&_th]:border-[var(--color-white)] [&_th]:p-3 [&_th]:bg-[var(--color-table-header-bg)] [&_th]:text-black [&_th]:font-semibold [&_th]:text-left [&_th]:border-b-2 [&_th]:border-b-[var(--color-white)] [&_td]:border [&_td]:border-[var(--color-white)] [&_td]:p-3 [&_tbody_tr:nth-child(even)]:bg-[var(--color-table-striped)] [&_tbody_tr:hover]:bg-[var(--color-table-striped)]">
             <TableHeader>
               {table.getHeaderGroups().map((headerGroup) => (
                 <TableRow key={headerGroup.id}>

@@ -306,7 +306,7 @@ const TableSearchFilter = ({
                     openPickerIcon: () => <CustomCalendarIcon />,
                   }}
                   format="DD/MM/YYYY"
-                  className="bg-[--filter-bg] text-[--filter-fg]"
+                  className="bg-[var(--color-table-header-bg)] text-[var(--color-foreground)]"
                 />
               </div>
               <div className="flex items-start flex-col">
@@ -337,7 +337,7 @@ const TableSearchFilter = ({
                     openPickerIcon: () => <CustomCalendarIcon />,
                   }}
                   format="DD/MM/YYYY"
-                  className="bg-[--filter-bg] text-[--filter-fg]"
+                  className="bg-[var(--color-table-header-bg)] text-[var(--color-foreground)]"
                 />
               </div>
             </>
@@ -347,7 +347,7 @@ const TableSearchFilter = ({
             <div className="flex items-start flex-col ">
               <span className="text-sm whitespace-nowrap text-gray-500">{status.label || 'Status'}:</span>
               <Select value={localStatus} onValueChange={handleStatusChange}>
-                <SelectTrigger className="w-[180px] bg-[--filter-bg] text-[--filter-fg] border-none h-10">
+                <SelectTrigger className="w-[180px] bg-[var(--color-table-header-bg)] text-[var(--color-foreground)] border-none h-10">
                   <SelectValue placeholder={status.placeholder || `Select ${status.label}`} />
                 </SelectTrigger>
                 <SelectContent>
@@ -373,7 +373,7 @@ const TableSearchFilter = ({
                   }
                   onValueChange={(value) => handleSelectChange(select.id, value)}
                 >
-                  <SelectTrigger className="min-w-fit w-[180px] bg-[--filter-bg] text-[--filter-fg] border-none h-10">
+                  <SelectTrigger className="min-w-fit w-[180px] bg-[var(--color-table-header-bg)] text-[var(--color-foreground)] border-none h-10">
                     <SelectValue placeholder={select.placeholder || `Select ${select.label}`} />
                   </SelectTrigger>
                   <SelectContent>
