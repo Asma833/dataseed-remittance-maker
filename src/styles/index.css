@@ -40,7 +40,7 @@
   --radius: 0.625rem;
 
   /* dashboard */
-  --color-dashboard-bg: #ffffff;
+  --color-dashboard-bg: rgb(245 245 245);
   --color-dashboard-bg-2: #00cc66;
   --dashboard-border: #e0e0e0;
   --dashboard-title: #333333;
@@ -526,4 +526,35 @@ body{
 }
 .form-bg{
   background-color: var(--form-background);
+}
+
+/* Table styles using CSS variables */
+.table-border {
+  border-collapse: collapse;
+}
+
+.table-border th,
+.table-border td {
+  border: 1px solid var(--color-white);
+  padding: 0.75rem;
+}
+
+.table-border th {
+  background-color: var(--color-table-header-bg);
+  color: black;
+  font-weight: 600;
+  text-align: left;
+  border-bottom: 2px solid var(--color-white);
+}
+
+.table-border tbody tr:nth-child(even) {
+  background-color: var(--color-table-striped);
+}
+
+.table-border tbody tr:nth-child(odd) {
+  background-color: var(--color-white);
+}
+
+.table-border tbody tr:hover {
+  background-color: var(--color-table-striped);
 }

@@ -14,8 +14,8 @@ interface HeaderProps {
 
 const Header: React.FC<HeaderProps> = ({ collapsed, setCollapsed, className }) => {
   return (
-    <nav className={cn(`bg-secondary fixed top-0 right-0 h-[70px]`, className)}>
-      <div className="sm:px-6 lg:px-6 flex items-center h-16">
+    <nav className={cn(`fixed top-0 right-0 h-[50px]`, className)}>
+      <div className="sm:px-6 lg:px-6 flex items-center h-12">
         <Logo />
         <div className="flex items-center space-x-4 ml-auto">
           {/* <ThemeToggle /> */}

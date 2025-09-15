@@ -403,7 +403,7 @@ export function DataTable<T>({
 
         {/* Table */}
         <div className="rounded-md shadow-sm cursor-pointer">
-          <Table className="border-collapse [&_th]:border [&_th]:border-[var(--color-white)] [&_th]:p-3 [&_th]:bg-[var(--color-table-header-bg)] [&_th]:text-black [&_th]:font-semibold [&_th]:text-left [&_th]:border-b-2 [&_th]:border-b-[var(--color-white)] [&_td]:border [&_td]:border-[var(--color-white)] [&_td]:p-3 [&_tbody_tr:nth-child(even)]:bg-[var(--color-table-striped)] [&_tbody_tr:hover]:bg-[var(--color-table-striped)]">
+          <Table className="table-border">
             <TableHeader>
               {table.getHeaderGroups().map((headerGroup) => (
                 <TableRow key={headerGroup.id}>

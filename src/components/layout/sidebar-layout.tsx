@@ -20,15 +20,15 @@ const SidebarLayout = ({ children }: CheckerLayoutProps) => {
   const navigationItems = getNavigationItemsByRole(userRole);
 
   return (
-    <div className="flex min-h-screen bg-background">
-      <div className="fixed top-0 left-0 h-full z-50">
+    <div className="flex min-h-screen bg-[var(--color-dashboard-bg)] ">
+      <div className="fixed top-0 left-0 h-full z-50 p-2">
         <SideNav navItems={navigationItems} collapsed={collapsed} setCollapsed={setCollapsed} />
       </div>
 
-      <Header collapsed={collapsed} setCollapsed={setCollapsed} className="fixed top-0 w-full bg-header" />
+      <Header collapsed={collapsed} setCollapsed={setCollapsed} className="fixed top-0 w-full bg-white" />
       <main
-        className={`flex-1 h-[calc(100vh-70px)] mt-[70px] overflow-y-auto transition-all bg-[#EDEDED] ${
-          collapsed ? 'ml-20' : 'ml-[200px]'
+        className={`flex-1 h-[calc(100vh-50px)] mt-[50px] overflow-y-auto transition-all ${
+          collapsed ? 'ml-20' : 'ml-[210px]'
         }`}
       >
         <DashboardContentWrapper>{children}</DashboardContentWrapper>

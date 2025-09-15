@@ -64,7 +64,7 @@ const Sidebar: React.FC<SidebarProps> = ({ navItems, collapsed, setCollapsed }) 
   return (
     <aside
       className={cn(
-        'bg-[--sidenav-bg] h-[calc(100vh-70px)] fixed bottom-0 left-0 flex flex-col transition-all z-30 rounded-2xl m-2',
+        'bg-[--sidenav-bg] h-[calc(100vh-60px)] fixed bottom-0 left-0 flex flex-col transition-all z-30 rounded-2xl m-1',
         collapsed ? 'w-20' : 'w-50',
         { 'bg-gradient-to-b sidenav-main': themeConfig.sidebar.isGradient }
       )}
