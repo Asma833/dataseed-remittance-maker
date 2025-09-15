@@ -1,6 +1,7 @@
 import { Button } from '@/components/ui/button';
 import { ActionButtonsProps } from './types';
 import { AiOutlineEye, AiOutlineEdit, AiOutlineDelete } from 'react-icons/ai';
+import edit from '@/assets/icons/edit.svg'
 
 export function ActionButtons<T>({ row, onEdit, onDelete, onView }: ActionButtonsProps<T>) {
   return (
@@ -28,7 +29,8 @@ export function ActionButtons<T>({ row, onEdit, onDelete, onView }: ActionButton
           }}
           className="h-8 w-8 p-0 text-blue-600 hover:text-blue-800 hover:bg-blue-50"
         >
-          <AiOutlineEdit className="h-4 w-4" />
+          {/* <AiOutlineEdit className="h-4 w-4" /> */}
+          <img src={edit} />
         </Button>
       )}
       {onDelete && (

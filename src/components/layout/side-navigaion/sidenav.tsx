@@ -95,7 +95,7 @@ const Sidebar: React.FC<SidebarProps> = ({ navItems, collapsed, setCollapsed }) 
                 )}
               >
                 <div className={cn('flex items-center', collapsed ? 'gap-0' : 'gap-3')}>
-                  {item.icon && <item.icon className="h-5 w-5 flex-shrink-0" />}
+                  {item.icon && <img src={item.icon} className="h-5 w-5 flex-shrink-0"/>}
                   {!collapsed && <span className="truncate text-[13px]">{item.title}</span>}
                 </div>
                 {/* Dropdown Arrow - only show if not collapsed and has submenus */}

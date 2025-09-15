@@ -1,6 +1,7 @@
 import { LayoutDashboard, ClipboardList, FileEdit, Eye, CreditCard, User, BookCopy } from 'lucide-react';
 import { ROUTES, getNavPath } from './route-paths';
-
+import profile from '@/assets/icons/profile.svg';
+import master from '@/assets/icons/master.svg';
 // Navigation item type definition
 export interface NavigationItem {
   title: string;
@@ -16,7 +17,7 @@ export const SideNavOptions = {
     {
       title: 'User Management',
       path: getNavPath('ADMIN', ROUTES.ADMIN.NUSER),
-      icon: LayoutDashboard,
+      icon: profile,
       subMenus: [
          {
           title: 'Dataseed Superchecker',
@@ -39,17 +40,15 @@ export const SideNavOptions = {
     {
       title: 'Master Data',
       path: getNavPath('ADMIN', ROUTES.ADMIN.MASTER.PURPOSE_MASTER),
-      icon: BookCopy,
+      icon: master,
       subMenus: [
         {
           title: 'Purpose Master',
           path: getNavPath('ADMIN', ROUTES.ADMIN.MASTER.PURPOSE_MASTER),
-          icon: ClipboardList,
         },
         {
           title: 'Document Master',
           path: getNavPath('ADMIN', ROUTES.ADMIN.MASTER.DOCUMENT_MASTER),
-          icon: FileEdit,
         },
       ],
     },
