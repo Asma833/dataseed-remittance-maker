@@ -102,7 +102,7 @@ export const CreateSuperChecker = () => {
         <h2 className="text-xl font-bold mb-4 title-case p-2 pt-0 border-b border-gray-300">{superChecker ? 'Update Super Checker' : 'Create Super Checker'}</h2>
         <Spacer>
           <FormFieldRow rowCols={4}>
-            {(['fullName', 'email', 'phoneNumber', 'location'] as const).map((fieldName) => {
+            {(['fullName', 'email', 'phoneNumber'] as const).map((fieldName) => {
               const field = superCheckerCreationConfig().fields.checkerDetails[fieldName];
               return (
                 <FieldWrapper key={fieldName}>
@@ -162,8 +162,8 @@ export const CreateSuperChecker = () => {
             })}
           </FormFieldRow>
           <div className="flex justify-items-start space-x-2 mt-4">
-            <Button variant="outline" className="rounded-2xl w-28" onClick={handleBack}>Back</Button>
-            <Button type="submit" className="rounded-2xl w-28" onClick={handleFormSubmit}>{superChecker ? 'Update' : 'Create'}</Button>
+            <Button variant="outline" className="w-28" onClick={handleBack}>Back</Button>
+            <Button type="submit" variant="secondary" className="w-28" onClick={handleFormSubmit}>{superChecker ? 'Update' : 'Create'}</Button>
           </div>
         </Spacer>
       </FormContentWrapper>

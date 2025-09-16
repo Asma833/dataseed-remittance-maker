@@ -24,15 +24,7 @@ export const superCheckerCreationConfig = () => {
           name: 'checkerDetails.phoneNumber',
           label: 'Phone Number',
           type: FieldType.Phone,
-          required: true,
           placeholder: 'Enter Phone Number',
-        },
-        location: {
-          name: 'checkerDetails.location',
-          label: 'Location',
-          type: FieldType.Text,
-          required: true,
-          placeholder: 'Enter Location',
         },
         productType:{
           name: 'checkerDetails.productType',
