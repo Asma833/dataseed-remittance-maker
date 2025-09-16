@@ -523,6 +523,6 @@ body{
 .form-bg{
   background-color: var(--form-background);
 }
-.bg-secondary{
+.bg-danger{
   background-color: var(--color-title);
 }
