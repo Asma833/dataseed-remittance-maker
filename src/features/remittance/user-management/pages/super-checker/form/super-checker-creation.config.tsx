@@ -29,16 +29,21 @@ export const superCheckerCreationConfig = () => {
         productType:{
           name: 'checkerDetails.productType',
           label: 'Product Type',
-          type: FieldType.Radio,
+          type: FieldType.Checkbox,
           required: true,
           options: {
-            'cnc': { label: 'CNC' },
-            'remittance': { label: 'Remittance', checked: true }
-          }
+            'card': { label: 'Card' },
+            'currency': { label: 'Currency' },
+            'remittance': { label: 'Remittance', checked: true },
+            'referral': { label: 'Referral' },
+          },
+          variant: 'circle_check',
+          isMulti: false,
+          defaultSelected: { 'card': true }
         },
         transactionType:{
           name: 'checkerDetails.transactionType',
-          label: 'Transaction Type',
+          label: '',
           type: FieldType.Checkbox,
           required: true,
           options: {
@@ -59,6 +64,20 @@ export const superCheckerCreationConfig = () => {
             'inactive': { label: 'Inactive' }
           }
         },
+        password:{
+          name: 'checkerDetails.password',
+          label: 'Password',
+          type: FieldType.Password,
+          required:true,
+          placeholder: 'Enter Password',
+        },
+          confirmPassword:{
+          name: 'checkerDetails.confirmPassword',
+          label: 'Confirm Password',
+          type: FieldType.Password,
+          required:true,
+          placeholder: 'Enter Confirm Password',
+        }
       },
     },
   };

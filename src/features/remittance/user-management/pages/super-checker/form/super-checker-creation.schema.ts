@@ -30,7 +30,7 @@ export const superCheckerSchema = z.object({
       .max(100, "Location must be less than 100 characters"),
 
     productType: z
-      .enum(["cnc", "remittance"])
+      .enum(["card","currency","remittance","referral"])
       .refine((val) => val !== undefined, {
         message: "Please select a product type"
       }),

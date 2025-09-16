@@ -13,6 +13,7 @@ import { getController } from "@/components/form/utils/get-controller";
 import { Button } from "@/components/ui/button";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { superCheckerSchema } from "./super-checker-creation.schema";
+import { cn } from "@/utils/cn";
 
 
 export const CreateSuperChecker = () => {
@@ -25,7 +26,7 @@ export const CreateSuperChecker = () => {
         email: "",
         phoneNumber: "",
         location: "",
-        productType: "remittance",
+        productType: "card",
         transactionType: "buy",
         status: "active"
       }
@@ -62,7 +63,7 @@ export const CreateSuperChecker = () => {
           email: data.emailId || '',
           phoneNumber: data.phoneNo || '',
           location: data.location || '',
-          productType: data.productType?.toLowerCase() === 'remittance' ? 'remittance' : 'cnc',
+          productType: data.productType?.toLowerCase() === 'remittance' ? 'remittance' : 'card',
           transactionType: data.productSubType?.toLowerCase().includes('buy') ? 'buy' : 'sell',
           status: data.status?.toLowerCase() || 'active'
         }
@@ -79,7 +80,7 @@ export const CreateSuperChecker = () => {
         setValue('checkerDetails.email', mappedData.checkerDetails.email);
         setValue('checkerDetails.phoneNumber', mappedData.checkerDetails.phoneNumber);
         setValue('checkerDetails.location', mappedData.checkerDetails.location);
-        setValue('checkerDetails.productType', mappedData.checkerDetails.productType as 'cnc' | 'remittance');
+        setValue('checkerDetails.productType', mappedData.checkerDetails.productType as 'card' |'currency'| 'remittance' | 'referral');
         setValue('checkerDetails.transactionType', mappedData.checkerDetails.transactionType as 'buy' | 'sell');
         setValue('checkerDetails.status', mappedData.checkerDetails.status as 'active' | 'inactive');
 
@@ -101,7 +102,10 @@ export const CreateSuperChecker = () => {
         <FormContentWrapper className="p-3 rounded-lg mr-auto w-full shadow-top">
         <h2 className="text-xl font-bold mb-4 title-case p-2 pt-0 border-b border-gray-300">{superChecker ? 'Update Super Checker' : 'Create Super Checker'}</h2>
         <Spacer>
-          <FormFieldRow rowCols={4}>
+            <div className="relative p-1">
+            <label className="text-sm text-[var(--color-form-label)] font-medium absolute">Basic Details</label> 
+          </div>
+          <FormFieldRow rowCols={4} className="mt-1">
             {(['fullName', 'email', 'phoneNumber'] as const).map((fieldName) => {
               const field = superCheckerCreationConfig().fields.checkerDetails[fieldName];
               return (
@@ -116,26 +120,16 @@ export const CreateSuperChecker = () => {
               );
             })}
           </FormFieldRow>
-          <FormFieldRow>
-            {(['productType'] as const).map((fieldName) => {
+          <FormFieldRow rowCols={5}>
+            {(['productType','transactionType'] as const).map((fieldName) => {
               const field = superCheckerCreationConfig().fields.checkerDetails[fieldName];
               return (
-                <FieldWrapper key={fieldName}>
-                  {getController({
-                    ...(typeof field === 'object' && field !== null ? field : {}),
-                    name: `checkerDetails.${fieldName}`,
-                    control,
-                    errors,
-                  })}
-                </FieldWrapper>
-              );
-            })}
-          </FormFieldRow>
-          <FormFieldRow>
-            {(['transactionType'] as const).map((fieldName) => {
-              const field = superCheckerCreationConfig().fields.checkerDetails[fieldName];
-              return (
-                <FieldWrapper key={fieldName}>
+                <FieldWrapper key={fieldName} className={cn(fieldName === 'transactionType'? 'p-2 border-gray-300 rounded-lg h-fit' :"")}>    
+                  {
+                    fieldName === 'transactionType' && (
+                      <label className="text-sm">Choose Transaction Type : </label>
+                    )
+                  }
                   {getController({
                     ...(typeof field === 'object' && field !== null ? field : {}),
                     name: `checkerDetails.${fieldName}`,
@@ -148,6 +142,25 @@ export const CreateSuperChecker = () => {
           </FormFieldRow>
           <FormFieldRow>
             {(['status'] as const).map((fieldName) => {
+              const field = superCheckerCreationConfig().fields.checkerDetails[fieldName];
+              return (
+                <FieldWrapper key={fieldName}>
+                  {getController({
+                    ...(typeof field === 'object' && field !== null ? field : {}),
+                    name: `checkerDetails.${fieldName}`,
+                    control,
+                    errors,
+                  })}
+                </FieldWrapper>
+              );
+            })}
+          </FormFieldRow>
+          <div className="relative p-1">
+            <label className="text-sm text-[var(--color-form-label)] font-medium absolute">Create Password</label> 
+          </div>
+        
+           <FormFieldRow className="mt-2">    
+            {(['password','confirmPassword'] as const).map((fieldName) => {
               const field = superCheckerCreationConfig().fields.checkerDetails[fieldName];
               return (
                 <FieldWrapper key={fieldName}>
