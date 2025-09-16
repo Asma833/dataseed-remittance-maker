@@ -89,7 +89,7 @@ const Sidebar: React.FC<SidebarProps> = ({ navItems, collapsed, setCollapsed }) 
                 }}
                 className={cn(
                   'flex items-center my-1 w-full cursor-pointer transition-colors text-sm px-2',
-                  activeItem === item.title ? 'sidemenu-active-menu text-white' : 'hover:bg-muted/20',
+                  activeItem === item.title ? 'sidemenu-active-menu text-white' : 'hover:bg-muted/20 rounded-3xl',
                   collapsed ? 'gap-0 justify-center py-3' : 'gap-3 py-2 justify-between',
                   item.disabled && 'opacity-50 cursor-not-allowed'
                 )}
@@ -112,7 +112,7 @@ const Sidebar: React.FC<SidebarProps> = ({ navItems, collapsed, setCollapsed }) 
 
               {/* Submenu Items */}
               {!collapsed && item.subMenus && item.subMenus.length > 0 && openDropdowns.has(item.title) && (
-                <ul className="ml-4 mt-1 space-y-1 border-l border-muted/20 ">
+                <ul className="ml-4 mt-1 space-y-1 border-l border-muted/20">
                   {item.subMenus.map((submenu, subIdx) => (
                     <li key={subIdx} className="list-none">
                       <div
@@ -121,7 +121,7 @@ const Sidebar: React.FC<SidebarProps> = ({ navItems, collapsed, setCollapsed }) 
                           'submenu-item',
                           isSubmenuActive(submenu)
                             ? 'active'
-                            : 'hover:bg-muted/20 text-muted-foreground',
+                            : 'hover:bg-muted/20 text-muted-foreground rounded-3xl',
                           submenu.disabled && 'opacity-50 cursor-not-allowed'
                         )}
                       >

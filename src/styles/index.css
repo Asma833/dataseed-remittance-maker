@@ -114,9 +114,10 @@
   background-image: linear-gradient(to right, var(--color-primary-gradient-1), var(--color-primary-gradient-2));
   color: var(--color-white);
 }
-.sidemenu-active-menu {
-  background-color: rgba(255, 255, 255, 0.3);
+.sidemenu-active-menu,.submenu-item.active {
+  background-color: #06060642;
   color: var(--color-primary-foreground);
+  border-radius: 20px;
 }
 
 .submenu-item {
@@ -142,11 +143,6 @@
     backdrop-filter 0.15s ease-in-out;
   font-size: 0.875rem;
   line-height: 1.25rem;
-}
-
-.submenu-item.active{
-  background-color: rgba(255, 255, 255, 0.3);
-  color: var(--color-primary-foreground);
 }
 .content-wrapper {
   width: 100%;

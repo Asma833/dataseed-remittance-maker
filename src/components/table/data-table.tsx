@@ -403,7 +403,7 @@ export function DataTable<T>({
 
         {/* Table */}
         <div className="rounded-md shadow-sm cursor-pointer">
-          <Table className="table-border">
+          <Table className="border-collapse [&_th]:border [&_th]:border-white [&_th]:p-3 [&_th]:text-center [&_th]:bg-[var(--color-table-header-bg)] [&_th]:text-black [&_th]:font-semibold [&_th]:border-b-2 [&_th]:border-b-white [&_td]:border [&_td]:border-white [&_td]:p-3 [&_td]:text-center [&_tbody_tr:nth-child(even)]:bg-[var(--color-table-striped)] [&_tbody_tr:nth-child(odd)]:bg-white [&_tbody_tr:hover]:bg-[var(--color-table-striped)]">
             <TableHeader>
               {table.getHeaderGroups().map((headerGroup) => (
                 <TableRow key={headerGroup.id}>
@@ -411,9 +411,9 @@ export function DataTable<T>({
                     <TableHead
                       key={header.id}
                       className={cn(
-                        'select-none',
+                        'select-none text-center',
                         header.column.getCanSort() && 'cursor-pointer hover:bg-muted/50',
-                        header.column.columnDef.meta?.headerAlign === 'center' && 'text-center',
+                        header.column.columnDef.meta?.headerAlign === 'left' && 'text-left',
                         header.column.columnDef.meta?.headerAlign === 'right' && 'text-right',
                         header.column.columnDef.meta?.className
                       )}
@@ -422,7 +422,7 @@ export function DataTable<T>({
                       }}
                       onClick={header.column.getToggleSortingHandler()}
                     >
-                      <div className="flex items-center gap-2">
+                      <div className="flex items-center justify-center gap-2">
                         {header.isPlaceholder ? null : flexRender(header.column.columnDef.header, header.getContext())}
                         {header.column.getCanSort() && (
                           <div className="flex flex-col">
@@ -525,17 +525,17 @@ export function DataTable<T>({
           <div className="flex items-center justify-between px-2">
             <div>{config?.export?.enabled && <Button>Export <DownloadIcon className="h-4 w-4 ml-1" /></Button>}</div>
             <div className="flex flex-1 items-center justify-end gap-5">
-              <div className="flex items-center gap-2">
+              <div className="flex items-center">
                 {config.pagination.enabled && config.pagination.showPageSizeSelector && (
-                  <div className="flex items-center gap-2">
-                    <p className="text-sm font-medium">Rows per page:</p>
+                  <div className="flex items-center gap-2 bg-[var(--color-table-header-bg)] pl-3 rounded-sm font-bold">
+                    <p className="text-sm">Rows per page:</p>
                     <Select
                       value={table.getState().pagination.pageSize.toString()}
                       onValueChange={(value) => {
                         table.setPageSize(Number(value));
                       }}
                     >
-                      <SelectTrigger className="h-8 w-16">
+                      <SelectTrigger className="h-8 w-16 border-0 shadow-none">
                         <SelectValue placeholder={table.getState().pagination.pageSize} />
                       </SelectTrigger>
                       <SelectContent side="top">
@@ -550,14 +550,7 @@ export function DataTable<T>({
                 )}
               </div>
               <div className="flex items-center gap-2">
-                <Button
-                  variant="outline"
-                  size="sm"
-                  onClick={() => table.setPageIndex(0)}
-                  disabled={!table.getCanPreviousPage()}
-                >
-                  <ChevronsLeftIcon className="h-4 w-4" />
-                </Button>
+               
                 <Button
                   variant="outline"
                   size="sm"
@@ -574,14 +567,7 @@ export function DataTable<T>({
                 <Button variant="outline" size="sm" onClick={() => table.nextPage()} disabled={!table.getCanNextPage()}>
                   <ChevronRightIcon className="h-4 w-4" />
                 </Button>
-                <Button
-                  variant="outline"
-                  size="sm"
-                  onClick={() => table.setPageIndex(table.getPageCount() - 1)}
-                  disabled={!table.getCanNextPage()}
-                >
-                  <ChevronsRightIcon className="h-4 w-4" />
-                </Button>
+               
               </div>
             </div>
           </div>
