@@ -1,4 +1,5 @@
-import { useEffect } from "react";
+import { useEffect, useMemo } from "react";
+import { useWatch } from "react-hook-form";
 import { useForm } from "react-hook-form";
 import { ArrowLeft } from "lucide-react";
 import type { z } from "zod";
@@ -91,6 +92,14 @@ export const CreateSuperChecker = () => {
         }, 100);
       }
     }, [setValue, location.state, getValues]);
+
+    const cfg = superCheckerCreationConfig().fields.checkerDetails;
+
+    // All product options (e.g., [{label:'Card', value:'card'}, ...])
+    const productOptions = useMemo(() => (Object.entries(cfg.productType?.options ?? {}) as [string, {label: string}][]).map(([value, obj]) => ({ value, label: obj.label })), [cfg]);
+
+    // Selected products (single select)
+    const selectedProducts: string = useWatch({ control, name: "checkerDetails.productType" }) ?? "";
   return (
       <div className="space-y-1 w-full">
           <div className="flex items-center space-x-2">
@@ -120,7 +129,7 @@ export const CreateSuperChecker = () => {
               );
             })}
           </FormFieldRow>
-          <FormFieldRow rowCols={5}>
+          {/* <FormFieldRow rowCols={5}>
             {(['productType','transactionType'] as const).map((fieldName) => {
               const field = superCheckerCreationConfig().fields.checkerDetails[fieldName];
               return (
@@ -139,7 +148,50 @@ export const CreateSuperChecker = () => {
                 </FieldWrapper>
               );
             })}
+          </FormFieldRow> */}
+          <FormFieldRow rowCols={4}>
+            {(() => {
+              const fields: ('productType' | 'transactionType')[] = ['productType'];
+              if (selectedProducts === 'card' || selectedProducts === 'currency') {
+                fields.push('transactionType');
+              }
+              return fields.map((fieldName) => {
+                const field =
+                  superCheckerCreationConfig().fields.checkerDetails[fieldName];
+
+                return (
+                  <FieldWrapper
+                    key={fieldName}
+                    className={cn(
+                      fieldName === 'transactionType'
+                        ? // Bubble style with border + left notch
+                          "relative border border-gray-300 rounded-lg bg-gray-50 self-start [height:fit-content]" +
+                          "before:absolute before:-left-2 before:top-1/2 before:-translate-y-1/2 " +
+                          "before:h-3 before:w-3 before:rotate-45 before:bg-gray-50 before:content-[''] " +
+                          "after:absolute after:-left-[10px] after:top-1/2 after:-translate-y-1/2 " +
+                          "after:h-3 after:w-3 after:rotate-45 after:border after:border-gray-300 " +
+                          "after:bg-transparent after:content-['']"
+                        : ''
+                    )}
+                  >
+                    {fieldName === 'transactionType' && (
+                      <label className="mb-2 block text-sm font-medium text-gray-700">
+                        Choose Transaction Type <span className="text-red-500">*</span>
+                      </label>
+                    )}
+
+                    {getController({
+                      ...(typeof field === 'object' && field !== null ? field : {}),
+                      name: `checkerDetails.${fieldName}`,
+                      control,
+                      errors,
+                    })}
+                  </FieldWrapper>
+                );
+              });
+            })()}
           </FormFieldRow>
+
           <FormFieldRow>
             {(['status'] as const).map((fieldName) => {
               const field = superCheckerCreationConfig().fields.checkerDetails[fieldName];

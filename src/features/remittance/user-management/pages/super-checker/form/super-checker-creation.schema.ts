@@ -45,7 +45,9 @@ export const superCheckerSchema = z.object({
       .enum(["active", "inactive"])
       .refine((val) => val !== undefined, {
         message: "Please select a status"
-      })
+      }),
+
+    transactionTypeMap: z.record(z.enum(["card","currency","remittance","referral"]), z.enum(["buy", "sell"])).optional()
   })
 });
 
