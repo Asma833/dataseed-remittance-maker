@@ -38,7 +38,7 @@ export const superCheckerCreationConfig = () => {
             'referral': { label: 'Referral' },
           },
           variant: 'circle_check',
-          isMulti: false,
+          isMulti: true,
           defaultSelected: { 'card': true }
         },
         transactionType:{

@@ -26,8 +26,8 @@ export const CreateSuperChecker = () => {
         email: '',
         phoneNumber: '',
         location: '',
-        productType: 'card',
-        transactionType: 'sell',
+        productType: { card: true }, // Multi-checkbox expects object, not string
+        transactionType: 'buy', // Single checkbox expects string
         status: 'active',
         agents: [],
       },
@@ -58,13 +58,17 @@ export const CreateSuperChecker = () => {
   const handleFormSubmit = handleSubmit(onSubmit);
   const mapSuperCheckerData = (data: any) => {
     // Map incoming data fields to form field names
+    const productTypeValue = data.productType?.toLowerCase();
     const mappedData = {
       checkerDetails: {
         fullName: data.fullName || '',
         email: data.emailId || '',
         phoneNumber: data.phoneNo || '',
         location: data.location || '',
-        productType: data.productType?.toLowerCase() === 'remittance' ? 'remittance' : 'card',
+        productType: productTypeValue === 'remittance' ? { remittance: true } :
+                    productTypeValue === 'currency' ? { currency: true } :
+                    productTypeValue === 'referral' ? { referral: true } :
+                    { card: true }, // default to card
         transactionType: data.productSubType?.toLowerCase().includes('buy') ? 'buy' : 'sell',
         status: data.status?.toLowerCase() || 'active',
         agents: data.agents || [],
@@ -84,7 +88,12 @@ export const CreateSuperChecker = () => {
       setValue('checkerDetails.location', mappedData.checkerDetails.location);
       setValue(
         'checkerDetails.productType',
-        mappedData.checkerDetails.productType as 'card' | 'currency' | 'remittance' | 'referral'
+        {
+          card: Boolean(mappedData.checkerDetails.productType.card),
+          currency: Boolean(mappedData.checkerDetails.productType.currency),
+          remittance: Boolean(mappedData.checkerDetails.productType.remittance),
+          referral: Boolean(mappedData.checkerDetails.productType.referral),
+        } as Record<'card' | 'currency' | 'remittance' | 'referral', boolean>
       );
       setValue('checkerDetails.transactionType', mappedData.checkerDetails.transactionType as 'buy' | 'sell');
       setValue('checkerDetails.status', mappedData.checkerDetails.status as 'active' | 'inactive');
@@ -98,8 +107,9 @@ export const CreateSuperChecker = () => {
     }
   }, [setValue, location.state, getValues]);
 
-  // Selected products (single select)
-  const selectedProducts: string = useWatch({ control, name: 'checkerDetails.productType' }) ?? '';
+  // Selected products (multi-select - get first selected product for conditional logic)
+  const productTypeObj = useWatch({ control, name: 'checkerDetails.productType' }) as Record<string, boolean> || {};
+  const selectedProducts: string = (Object.keys(productTypeObj) as Array<'card' | 'currency' | 'remittance' | 'referral'>).find(key => productTypeObj[key]) || '';
 
   // Set default transaction type based on product type
   useEffect(() => {

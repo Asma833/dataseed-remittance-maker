@@ -142,7 +142,16 @@ export const ShadCnCheckbox = ({
 
   const getDefaultValues = () => {
     if (isMulti) {
-      return Object.fromEntries(Object.keys(options).map((key) => [key, false]));
+      // For multi-selection, start with all false, then apply defaultSelected
+      const defaults = Object.fromEntries(Object.keys(options).map((key) => [key, false]));
+      if (defaultSelected) {
+        Object.keys(defaultSelected).forEach(key => {
+          if (defaults.hasOwnProperty(key)) {
+            defaults[key] = defaultSelected[key];
+          }
+        });
+      }
+      return defaults;
     } else {
       // For single selection, find the default selected key
       const defaultKey = Object.keys(defaultSelected || {}).find(key => defaultSelected![key]);
