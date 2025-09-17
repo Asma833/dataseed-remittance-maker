@@ -242,7 +242,7 @@ export const CreateSuperChecker = () => {
                 );
               })}
             </FormFieldRow>
-            <div className="flex justify-items-start space-x-2 mt-4">
+            <div className="flex justify-items-start space-x-2 mt-4 px-1">
               <Button variant="outline" className="w-28" onClick={handleBack}>
                 Back
               </Button>
