@@ -1,7 +1,8 @@
 import { useEffect, useMemo } from 'react';
 import { useWatch } from 'react-hook-form';
 import { useForm } from 'react-hook-form';
-import { AlertCircle, ArrowLeft } from 'lucide-react';
+import { ArrowLeft } from 'lucide-react';
+import { NotificationBanner } from '@/components/ui/notification-banner';
 import type { z } from 'zod';
 import { FormContentWrapper } from '@/components/form/wrapper/form-content-wrapper';
 import FormFieldRow from '@/components/form/wrapper/form-field-row';
@@ -30,6 +31,8 @@ export const CreateSuperChecker = () => {
         transactionType: 'buy', // Single checkbox expects string
         status: 'active',
         agents: [],
+        password: '',
+        confirmPassword: '',
       },
     },
   });
@@ -72,6 +75,8 @@ export const CreateSuperChecker = () => {
         transactionType: data.productSubType?.toLowerCase().includes('buy') ? 'buy' : 'sell',
         status: data.status?.toLowerCase() || 'active',
         agents: data.agents || [],
+        password: data.password || '',
+        confirmPassword: data.confirmPassword || '',
       },
     };
     return mappedData;
@@ -98,6 +103,8 @@ export const CreateSuperChecker = () => {
       setValue('checkerDetails.transactionType', mappedData.checkerDetails.transactionType as 'buy' | 'sell');
       setValue('checkerDetails.status', mappedData.checkerDetails.status as 'active' | 'inactive');
       setValue('checkerDetails.agents', mappedData.checkerDetails.agents || []);
+      setValue('checkerDetails.password', mappedData.checkerDetails.password);
+      setValue('checkerDetails.confirmPassword', mappedData.checkerDetails.confirmPassword);
 
       // Trigger form validation and re-rendering
       setTimeout(() => {
@@ -149,7 +156,7 @@ export const CreateSuperChecker = () => {
                 );
               })}
             </FormFieldRow>
-            
+
           {/* Product and Transaction Type */}
           <div className="grid md:grid-cols-[30%_65%] lg:grid-cols-[15%_35%] md:gap-6 relative">
             {/* LEFT: Product Type */}
@@ -205,7 +212,6 @@ export const CreateSuperChecker = () => {
                       <div className="flex items-center leading-none">
                         {getController({
                           ...(superCheckerCreationConfig().fields.checkerDetails.transactionType ?? {}),
-                          type: 'radio',
                           inline: true,
                           options: [
                             { label: 'Buy', value: 'buy' },
@@ -258,11 +264,12 @@ export const CreateSuperChecker = () => {
               })}
             </FormFieldRow>
             {
-              !superChecker &&(
-              <span className="text-center p-2 bg-[#FFF2E3] text-amber-600 w-fit rounded-md text-sm flex items-start justify-center gap-2">
-              <AlertCircle className="h-5 w-5" />
-              Newly created Checkers active by default
-            </span>
+              !superChecker && (
+                <NotificationBanner
+                  message="Newly created checkers active by default"
+                  variant="warning"
+                  size="sm"
+                />
               )
             }
           

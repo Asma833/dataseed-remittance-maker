@@ -54,7 +54,22 @@ export const superCheckerSchema = z.object({
       .array(z.string())
       .min(1, "Please select at least one agent"),
 
+    password: z
+      .string()
+      .min(1, "Password is required")
+      .min(8, "Password must be at least 8 characters")
+      .max(50, "Password must be less than 50 characters")
+      .regex(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]/,
+        "Password must contain at least one uppercase letter, one lowercase letter, one number, and one special character"),
+
+    confirmPassword: z
+      .string()
+      .min(1, "Please confirm your password"),
+
     transactionTypeMap: z.record(z.enum(["card","currency","remittance","referral"]), z.enum(["buy", "sell"])).optional()
   })
+}).refine((data) => data.checkerDetails.password === data.checkerDetails.confirmPassword, {
+  message: "Passwords do not match",
+  path: ["checkerDetails", "confirmPassword"],
 });
 
