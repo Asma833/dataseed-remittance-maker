@@ -20,7 +20,7 @@ export const SideNavOptions = {
       icon: profile,
       subMenus: [
          {
-          title: 'Dataseed Superchecker',
+          title: 'Superchecker',
           path: getNavPath('ADMIN', ROUTES.ADMIN.SUPER_CHECKER_TABLE),
         },
         {

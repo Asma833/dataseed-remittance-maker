@@ -28,7 +28,7 @@ export const ShadCnRadioGroup = <T extends FieldValues>({
 }: ShadCnRadioGroupProps<T>) => {
   return (
     <FormItem className={className}>
-      <FormLabel className="text-[var(--color-form-label)]">
+      <FormLabel className={`text-[var(--color-form-label)] ${disabled ? 'text-gray-400' : ''}`}>
         {label}
         {required && <span className="text-destructive ml-1">*</span>}
       </FormLabel>
@@ -63,10 +63,14 @@ export const ShadCnRadioGroup = <T extends FieldValues>({
                   <RadioGroupItem
                     value={value}
                     id={`${name}-${value}`}
+                    disabled={disabled}
+                    className={disabled ? 'border-gray-300 bg-gray-100' : ''}
                   />
                   <label
                     htmlFor={`${name}-${value}`}
-                    className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+                    className={`text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70 ${
+                      disabled ? 'text-gray-400' : ''
+                    }`}
                   >
                     {option.label}
                   </label>

@@ -1,7 +1,7 @@
 import { useEffect, useMemo } from 'react';
 import { useWatch } from 'react-hook-form';
 import { useForm } from 'react-hook-form';
-import { ArrowLeft } from 'lucide-react';
+import { AlertCircle, ArrowLeft } from 'lucide-react';
 import type { z } from 'zod';
 import { FormContentWrapper } from '@/components/form/wrapper/form-content-wrapper';
 import FormFieldRow from '@/components/form/wrapper/form-field-row';
@@ -218,11 +218,16 @@ export const CreateSuperChecker = () => {
                       name: `checkerDetails.${fieldName}`,
                       control,
                       errors,
+                      disabled: !superChecker, // Disable status field in create mode
                     })}
                   </FieldWrapper>
                 );
               })}
             </FormFieldRow>
+            <div className="text-center p-2 bg-[#FFF2E3] text-amber-600 w-fit rounded-md text-sm flex items-start justify-center gap-2">
+              <AlertCircle className="h-5 w-5" />
+              Newly created Checkers active by default
+            </div>
             <div className="relative p-1">
               <label className="text-sm text-[var(--color-form-label)] font-medium absolute">Create Password</label>
             </div>
