@@ -1,4 +1,4 @@
-"use client"
+
 
 import * as React from "react"
 import { Command as CommandPrimitive } from "cmdk"
@@ -11,7 +11,7 @@ import {
   DialogDescription,
   DialogHeader,
   DialogTitle,
-} from "@/registry/default/ui/dialog"
+} from "./dialog"
 
 function Command({
   className,

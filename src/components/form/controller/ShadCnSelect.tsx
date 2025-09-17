@@ -9,7 +9,10 @@ import {
 import { FormItem, FormLabel, FormControl, FormMessage } from '@/components/ui/form';
 import { cn } from '@/utils/cn';
 import { toTitleCase } from '@/utils/textFormater';
-import { useMemo } from 'react';
+import { useMemo, useState, useRef, useEffect } from 'react';
+import MultipleSelector, { Option } from '@/components/ui/multiselect';
+import { CheckIcon, XIcon } from 'lucide-react';
+import { Button } from '@/components/ui/button';
 
 interface ShadCnSelectProps {
   name: string;
@@ -23,6 +26,7 @@ interface ShadCnSelectProps {
   required?: boolean;
   forcedValue?: string;
   errors?: any;
+  isMulti?: boolean;
 }
 
 export const ShadCnSelect = ({
@@ -35,9 +39,26 @@ export const ShadCnSelect = ({
   required = false,
   forcedValue,
   errors,
+  isMulti = false,
 }: ShadCnSelectProps) => {
   const { control } = useFormContext();
   const isArrayOptions = Array.isArray(options);
+
+  // Convert options to MultipleSelector format when isMulti is true
+  const multiSelectOptions: Option[] = useMemo(() => {
+    if (!isMulti) return [];
+    if (isArrayOptions) {
+      return (options as Array<{ value: string; label: string; selected?: boolean }>).map(opt => ({
+        value: opt.value,
+        label: opt.label,
+      }));
+    } else {
+      return Object.entries(options).map(([value, { label }]) => ({
+        value,
+        label,
+      }));
+    }
+  }, [options, isArrayOptions, isMulti]);
 
   // Generate stable, unique keys for array options to avoid duplicate key warnings.
   // Strategy: use provided id or value as base. If duplicates occur, append an incrementing suffix.
@@ -98,48 +119,170 @@ export const ShadCnSelect = ({
         {required && <span className="text-destructive ml-1">*</span>}
       </FormLabel>
       <FormControl>
-        <Controller
-          name={name}
-          control={control}
-          defaultValue={defaultValue}
-          render={({ field: { value, onChange }, fieldState: { error } }) => (
-            <div>
-            <Select
-              value={(forcedValue ? forcedValue : value) || ''}
-              onValueChange={onChange}
-              disabled={disabled}
-            >
-              <SelectTrigger className={cn("form-input shadow-none focus-visible:ring-0", "aria-invalid:focus-visible:ring-destructive/20 dark:aria-invalid:focus-visible:ring-destructive/40 aria-invalid:focus-visible:border-destructive")}>
-                <SelectValue placeholder={placeholder}>
-                  {getDisplayValue((forcedValue ? forcedValue : value) || '') || undefined}
-                </SelectValue>
-              </SelectTrigger>
-              <SelectContent>
-                {isArrayOptions
-                  ? processedArrayOptions.map((option) => (
-                      <SelectItem key={option._key} value={option.value}>
-                        {option.label}
-                      </SelectItem>
-                    ))
-                  : options ? Object.entries(options).map(([value, { label }]) => (
-                      <SelectItem
-                        key={value}
-                        value={value}
-                      >
-                        {label}
-                      </SelectItem>
-                    )) : null}
-              </SelectContent>
-            </Select>
-             {error && (
-                <p className="text-sm text-destructive mt-1">
-                  {error.message}
-                </p>
-              )}
-            </div>
-          )}
-        />
-      </FormControl>  
+        {isMulti ? (
+          <Controller
+            name={name}
+            control={control}
+            defaultValue={[]}
+            render={({ field: { value, onChange }, fieldState: { error } }) => {
+              const [isOpen, setIsOpen] = useState(false);
+              const dropdownRef = useRef<HTMLDivElement>(null);
+              const selectedValues: string[] = value || [];
+              const selectedOptions = selectedValues.map((v: string) => {
+                const option = multiSelectOptions.find(opt => opt.value === v);
+                return option ? option : { value: v, label: v };
+              });
+
+              const handleSelect = (optionValue: string) => {
+                const newValues = selectedValues.includes(optionValue)
+                  ? selectedValues.filter((v: string) => v !== optionValue)
+                  : [...selectedValues, optionValue];
+                onChange(newValues);
+              };
+
+              const handleRemoveChip = (optionValue: string) => {
+                const newValues = selectedValues.filter((v: string) => v !== optionValue);
+                onChange(newValues);
+              };
+
+              // Close dropdown when clicking outside
+              useEffect(() => {
+                const handleClickOutside = (event: MouseEvent) => {
+                  if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
+                    setIsOpen(false);
+                  }
+                };
+
+                if (isOpen) {
+                  document.addEventListener('mousedown', handleClickOutside);
+                }
+
+                return () => {
+                  document.removeEventListener('mousedown', handleClickOutside);
+                };
+              }, [isOpen]);
+
+              return (
+                <div className="space-y-2">
+                  {/* Select Trigger */}
+                  <div
+                    className={cn(
+                      "flex h-10 w-full items-center justify-between rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50",
+                      disabled && "cursor-not-allowed opacity-50"
+                    )}
+                    onClick={() => !disabled && setIsOpen(!isOpen)}
+                  >
+                    <span className="text-muted-foreground">
+                      {selectedValues.length > 0
+                        ? `${selectedValues.length} item${selectedValues.length > 1 ? 's' : ''} selected`
+                        : placeholder || 'Select options'
+                      }
+                    </span>
+                    <span className="ml-2">▼</span>
+                  </div>
+
+                  {/* Dropdown */}
+                  {isOpen && (
+                    <div ref={dropdownRef} className="relative">
+                      <div className="absolute z-50 w-full mt-1 bg-popover border border-border rounded-md shadow-lg">
+                        <div className="max-h-60 overflow-y-auto">
+                          {multiSelectOptions.map((option) => {
+                            const isSelected = selectedValues.includes(option.value);
+                            return (
+                              <div
+                                key={option.value}
+                                className={cn(
+                                  "flex items-center px-3 py-2 cursor-pointer hover:bg-accent hover:text-accent-foreground",
+                                  isSelected && "bg-accent text-accent-foreground"
+                                )}
+                                onClick={() => handleSelect(option.value)}
+                              >
+                                <div className="flex items-center justify-center w-4 h-4 mr-3">
+                                  {isSelected && <CheckIcon size={16} className="text-primary" />}
+                                </div>
+                                <span>{option.label}</span>
+                              </div>
+                            );
+                          })}
+                        </div>
+                      </div>
+                    </div>
+                  )}
+
+                  {/* Selected Chips */}
+                  {selectedOptions.length > 0 && (
+                    <div className="flex flex-wrap gap-2">
+                      {selectedOptions.map((option: Option) => (
+                        <div
+                          key={option.value}
+                          className="inline-flex items-center gap-1 px-2 py-1 bg-primary text-primary-foreground text-xs rounded-full"
+                        >
+                          <span>{option.label}</span>
+                          <button
+                            type="button"
+                            onClick={() => handleRemoveChip(option.value)}
+                            className="hover:bg-primary-foreground/20 rounded-full p-0.5"
+                          >
+                            <XIcon size={12} />
+                          </button>
+                        </div>
+                      ))}
+                    </div>
+                  )}
+
+                  {error && (
+                    <p className="text-sm text-destructive mt-1">
+                      {error.message}
+                    </p>
+                  )}
+                </div>
+              );
+            }}
+          />
+        ) : (
+          <Controller
+            name={name}
+            control={control}
+            defaultValue={defaultValue}
+            render={({ field: { value, onChange }, fieldState: { error } }) => (
+              <div>
+                <Select
+                  value={(forcedValue ? forcedValue : value) || ''}
+                  onValueChange={onChange}
+                  disabled={disabled}
+                >
+                  <SelectTrigger className={cn("form-input shadow-none focus-visible:ring-0", "aria-invalid:focus-visible:ring-destructive/20 dark:aria-invalid:focus-visible:ring-destructive/40 aria-invalid:focus-visible:border-destructive")}>
+                    <SelectValue placeholder={placeholder}>
+                      {getDisplayValue((forcedValue ? forcedValue : value) || '') || undefined}
+                    </SelectValue>
+                  </SelectTrigger>
+                  <SelectContent>
+                    {isArrayOptions
+                      ? processedArrayOptions.map((option) => (
+                          <SelectItem key={option._key} value={option.value}>
+                            {option.label}
+                          </SelectItem>
+                        ))
+                      : options ? Object.entries(options).map(([value, { label }]) => (
+                          <SelectItem
+                            key={value}
+                            value={value}
+                          >
+                            {label}
+                          </SelectItem>
+                        )) : null}
+                  </SelectContent>
+                </Select>
+                {error && (
+                  <p className="text-sm text-destructive mt-1">
+                    {error.message}
+                  </p>
+                )}
+              </div>
+            )}
+          />
+        )}
+      </FormControl>
     </FormItem>
   );
 };

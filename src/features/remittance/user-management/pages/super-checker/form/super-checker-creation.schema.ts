@@ -47,6 +47,10 @@ export const superCheckerSchema = z.object({
         message: "Please select a status"
       }),
 
+    agents: z
+      .array(z.string())
+      .min(1, "Please select at least one agent"),
+
     transactionTypeMap: z.record(z.enum(["card","currency","remittance","referral"]), z.enum(["buy", "sell"])).optional()
   })
 });

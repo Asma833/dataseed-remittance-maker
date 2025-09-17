@@ -29,6 +29,7 @@ export const CreateSuperChecker = () => {
         productType: 'card',
         transactionType: 'sell',
         status: 'active',
+        agents: [],
       },
     },
   });
@@ -66,6 +67,7 @@ export const CreateSuperChecker = () => {
         productType: data.productType?.toLowerCase() === 'remittance' ? 'remittance' : 'card',
         transactionType: data.productSubType?.toLowerCase().includes('buy') ? 'buy' : 'sell',
         status: data.status?.toLowerCase() || 'active',
+        agents: data.agents || [],
       },
     };
     return mappedData;
@@ -86,6 +88,7 @@ export const CreateSuperChecker = () => {
       );
       setValue('checkerDetails.transactionType', mappedData.checkerDetails.transactionType as 'buy' | 'sell');
       setValue('checkerDetails.status', mappedData.checkerDetails.status as 'active' | 'inactive');
+      setValue('checkerDetails.agents', mappedData.checkerDetails.agents || []);
 
       // Trigger form validation and re-rendering
       setTimeout(() => {
@@ -115,7 +118,7 @@ export const CreateSuperChecker = () => {
       <FormProvider methods={methods}>
         <FormContentWrapper className="p-4 rounded-lg mr-auto w-full shadow-top">
           <h2 className="text-xl font-bold mb-4 title-case p-2 pt-0 border-b border-gray-300">
-            {superChecker ? 'Update Super Checker' : 'Create Super Checker'}
+            {superChecker ? 'Update Superchecker' : 'Create New Superchecker'}
           </h2>
           <Spacer>
             <div className="relative p-1">
@@ -207,7 +210,22 @@ export const CreateSuperChecker = () => {
                 });
               })()}
             </div>
-
+            <FormFieldRow rowCols={4}>
+              {(['agents'] as const).map((fieldName) => {
+                const field = superCheckerCreationConfig().fields.checkerDetails[fieldName];
+                return (
+                  <FieldWrapper key={fieldName}>
+                    {getController({
+                      ...(typeof field === 'object' && field !== null ? field : {}),
+                      name: `checkerDetails.${fieldName}`,
+                      control,
+                      errors,
+                      isMulti:true
+                    })}
+                  </FieldWrapper>
+                );
+              })}
+            </FormFieldRow>
             <FormFieldRow>
               {(['status'] as const).map((fieldName) => {
                 const field = superCheckerCreationConfig().fields.checkerDetails[fieldName];
@@ -218,21 +236,26 @@ export const CreateSuperChecker = () => {
                       name: `checkerDetails.${fieldName}`,
                       control,
                       errors,
-                      disabled: !superChecker, // Disable status field in create mode
+                      disabled: fieldName === 'status' ? !superChecker : false, // Disable status field in create mode
                     })}
                   </FieldWrapper>
                 );
               })}
             </FormFieldRow>
-            <div className="text-center p-2 bg-[#FFF2E3] text-amber-600 w-fit rounded-md text-sm flex items-start justify-center gap-2">
+            {
+              !superChecker &&(
+              <span className="text-center p-2 bg-[#FFF2E3] text-amber-600 w-fit rounded-md text-sm flex items-start justify-center gap-2">
               <AlertCircle className="h-5 w-5" />
               Newly created Checkers active by default
-            </div>
+            </span>
+              )
+            }
+          
             <div className="relative p-1">
               <label className="text-sm text-[var(--color-form-label)] font-medium absolute">Create Password</label>
             </div>
 
-            <FormFieldRow>
+            <FormFieldRow rowCols={4}>
               {(['password', 'confirmPassword'] as const).map((fieldName) => {
                 const field = superCheckerCreationConfig().fields.checkerDetails[fieldName];
                 return (

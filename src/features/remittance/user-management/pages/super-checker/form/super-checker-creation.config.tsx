@@ -64,6 +64,19 @@ export const superCheckerCreationConfig = () => {
             'inactive': { label: 'Inactive' }
           }
         },
+        agents:{
+          name: 'checkerDetails.agents',
+          label: 'Agents',
+          type: FieldType.Select,
+          required: true,
+          options: [
+            { value: 'agent1', label: 'Agent 1' },
+            { value: 'agent2', label: 'Agent 2' },
+            { value: 'agent3', label: 'Agent 3' }
+          ],
+          placeholder: 'Select agents',
+          isMulti: true
+        },
         password:{
           name: 'checkerDetails.password',
           label: 'Password',

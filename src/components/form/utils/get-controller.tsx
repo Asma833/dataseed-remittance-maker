@@ -108,7 +108,7 @@ export const getController = (field: any) => {
         />
       );
     case 'select':
-      return <ShadCnSelect {...baseProps} options={field.options} placeholder={field.placeholder} />;
+      return <ShadCnSelect {...baseProps} options={field.options} placeholder={field.placeholder} isMulti={field.isMulti} />;
     case 'date':
       return <ShadCnDatePicker {...baseProps} placeholder={field.placeholder} />;
     case 'radio':
