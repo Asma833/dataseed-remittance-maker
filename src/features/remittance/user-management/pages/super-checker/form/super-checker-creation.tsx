@@ -1,7 +1,6 @@
-import { useEffect, useMemo } from 'react';
+import { useEffect } from 'react';
 import { useWatch } from 'react-hook-form';
 import { useForm } from 'react-hook-form';
-import { ArrowLeft } from 'lucide-react';
 import { NotificationBanner } from '@/components/ui/notification-banner';
 import type { z } from 'zod';
 import { FormContentWrapper } from '@/components/form/wrapper/form-content-wrapper';
@@ -26,7 +25,7 @@ export const CreateSuperChecker = () => {
         email: '',
         phoneNumber: '',
         location: '',
-        productType: { card: true }, // Multi-checkbox expects object, not string
+        productType: { card: true },
         transactionTypeMap: { card: 'buy', currency: 'sell'},
         status: 'active',
         agents: [],
@@ -114,7 +113,6 @@ export const CreateSuperChecker = () => {
 
   // Selected products (multi-select - get first selected product for conditional logic)
   const productTypeObj = useWatch({ control, name: 'checkerDetails.productType' }) as Record<string, boolean> || {};
-  const selectedProducts: string = (Object.keys(productTypeObj) as Array<'card' | 'currency' | 'remittance' | 'referral'>).find(key => productTypeObj[key]) || '';
 
   // Set default transaction type based on product type
   useEffect(() => {
