@@ -191,10 +191,7 @@ export const ShadCnSelect = ({
                             return (
                               <div
                                 key={option.value}
-                                className={cn(
-                                  "flex items-center px-4 py-3 cursor-pointer hover:bg-primary/10 transition-colors",
-                                  isSelected && "bg-primary/10 text-primary"
-                                )}
+                                className="flex items-center p-2 cursor-pointer hover:bg-primary/10 transition-colors"
                                 onClick={() => handleSelect(option.value)}
                               >
                                 <div className="flex items-center justify-center w-5 h-5 mr-3">
@@ -215,7 +212,7 @@ export const ShadCnSelect = ({
                       {selectedOptions.map((option: Option) => (
                         <div
                           key={option.value}
-                          className="inline-flex items-center gap-1 px-3 py-1 bg-[#eeeeee] text-sm rounded-full hover:bg-[#888]/20 transition-colors cursor-pointer"
+                          className="inline-flex items-center gap-1 px-3 py-1 bg-[#eeeeee] text-sm rounded-full hover:bg-[#888]/20 transition-colors"
                         >
                           <span className="font-medium">{option.label}</span>
                           <button
@@ -223,7 +220,7 @@ export const ShadCnSelect = ({
                             onClick={() => handleRemoveChip(option.value)}
                             className="hover:[var(--color-title)]/20 rounded-full  transition-colors"
                           >
-                             <CircleXIcon size={14} className='text-[var(--color-title)]'/>
+                             <CircleXIcon size={14} className='text-[var(--color-title)] cursor-pointer'/>
                           </button>
                         </div>
                       ))}
