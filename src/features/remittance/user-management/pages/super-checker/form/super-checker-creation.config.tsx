@@ -43,7 +43,7 @@ export const superCheckerCreationConfig = () => {
         },
         transactionType:{
           name: 'checkerDetails.transactionType',
-          label: '',
+          label: 'Choose transaction type',
           type: FieldType.Checkbox,
           required: true,
           options: {

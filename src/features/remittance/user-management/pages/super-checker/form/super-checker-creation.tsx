@@ -113,12 +113,12 @@ export const CreateSuperChecker = () => {
 
   // Set default transaction type based on product type
   useEffect(() => {
-    if (selectedProducts === 'card') {
+    if (productTypeObj.card) {
       setValue('checkerDetails.transactionType', 'buy');
-    } else if (selectedProducts === 'currency') {
+    } else if (productTypeObj.currency) {
       setValue('checkerDetails.transactionType', 'sell');
     }
-  }, [selectedProducts, setValue]);
+  }, [productTypeObj, setValue]);
   return (
     <div className="space-y-1 w-full">
       <div className="flex items-center space-x-2">
@@ -149,77 +149,82 @@ export const CreateSuperChecker = () => {
                 );
               })}
             </FormFieldRow>
+            
+          {/* Product and Transaction Type */}
+          <div className="grid md:grid-cols-[30%_65%] lg:grid-cols-[15%_35%] md:gap-6 relative">
+            {/* LEFT: Product Type */}
+            <FieldWrapper>
+              {getController({
+                ...(superCheckerCreationConfig().fields.checkerDetails.productType ?? {}),
+                name: 'checkerDetails.productType',
+                control,
+                errors,
+              })}
+            </FieldWrapper>
 
-            <div className="grid grid-cols-1 md:grid-cols-[15%_60%] lg:grid-cols-[10%_35%] md:gap-6 lg:gap:2">
-              {(() => {
-                const fields: ('productType' | 'transactionType')[] = ['productType'];
-                if (selectedProducts === 'card' || selectedProducts === 'currency') {
-                  fields.push('transactionType');
-                }
-                return fields.map((fieldName) => {
-                  const field = superCheckerCreationConfig().fields.checkerDetails[fieldName];
+            {/* RIGHT: one bubble per selected product (Card/Currency), stacked */}
+            <div className="grid items-start">
+              {(['card', 'currency'] as const)
+                .filter((p) => !!productTypeObj?.[p])
+                .map((p, idx) => (
+                  <FieldWrapper
+                    key={`txn-${p}`}
+                    className={[
+                      // bubble
+                      'relative overflow-visible self-start [height:fit-content]',
+                      'rounded-lg border border-gray-300 bg-gray-50 px-3 py-2',
 
-                  return (
-                    <FieldWrapper
-                      key={fieldName}
-                      className={cn(
-                        fieldName === 'transactionType'
-                          ? [
-                              // bubble
-                              'relative overflow-visible self-start [height:fit-content]',
-                              'rounded-lg border border-gray-300 bg-gray-50 p-2',
+                      // TRIANGLE NOTCH (16x13, fill + outline)
+                      'before:absolute before:top-1/2 before:-translate-y-1/2 before:-left-4',
+                      "before:content-[''] before:border-solid",
+                      'before:[border-right-width:16px] before:[border-top-width:6.5px] before:[border-bottom-width:6.5px]',
+                      'before:border-y-transparent before:[border-right-color:#D8D8D8]',
+                      'after:absolute after:top-1/2 after:-translate-y-1/2 after:left-[-17px]',
+                      "after:content-[''] after:border-solid",
+                      'after:[border-right-width:17px] after:[border-top-width:7.5px] after:[border-bottom-width:7.5px]',
+                      'after:border-y-transparent after:[border-right-color:#D1D5DB]',
 
-                              // TRIANGLE NOTCH
-                              'before:absolute before:top-1/2 before:-translate-y-1/2 before:-left-4',
-                              "before:content-[''] before:border-solid",
-                              'before:[border-right-width:16px] before:[border-top-width:6.5px] before:[border-bottom-width:6.5px]',
-                              'before:border-y-transparent before:[border-right-color:#D8D8D8]',
-
-                              'after:absolute after:top-1/2 after:-translate-y-1/2 after:left-[-17px]',
-                              "after:content-[''] after:border-solid",
-                              'after:[border-right-width:14px] after:[border-top-width:4.5px] after:[border-bottom-width:4.5px]',
-                              'after:border-y-transparent after:[border-right-color:#D1D5DB]',
-
-                              // Conditional margin based on product type
-                              selectedProducts === 'card'
-                                ? 'mt-3'
-                                : selectedProducts === 'currency'
-                                  ? 'sm:mt-3 md:mt-10'
-                                  : '',
-                            ].join(' ')
-                          : ''
-                      )}
+                      // spacing adjustment
+                      idx === 0 ? 'mt-1' : 'sm:mt-1 md:mt-[-35px]',
+                    ].join(' ')}
+                  >
+                    {/* Force single-row alignment inside, overriding getController defaults */}
+                    <div
+                      className={[
+                        'grid grid-cols-[auto_1fr] items-center',
+                        "[&_[data-slot='form-item']]:m-0",
+                        "[&_[data-slot='form-item']]:grid",
+                        "[&_[data-slot='form-item']]:grid-cols-[auto_auto]",
+                        "[&_[data-slot='form-item']]:items-center",
+                        "[&_[data-slot='form-item']>label]:m-0",
+                        "[&_[data-slot='form-item']>div]:m-0",
+                        "[&_.flex]:flex-row [&_.flex]:items-center",
+                      ].join(' ')}
                     >
-                      {fieldName === 'transactionType' && (
-                        <div className="flex items-center gap-3">
-                          <label className="text-sm font-medium text-gray-700">
-                            Choose Transaction Type <span className="text-red-500">*</span>
-                          </label>
-
-                          {/* Force radios inline */}
-                          <div className="flex items-center gap-6">
-                            {getController({
-                              ...(typeof field === 'object' && field !== null ? field : {}),
-                              name: `checkerDetails.${fieldName}`,
-                              control,
-                              errors,
-                            })}
-                          </div>
-                        </div>
-                      )}
-
-                      {fieldName !== 'transactionType' &&
-                        getController({
-                          ...(typeof field === 'object' && field !== null ? field : {}),
-                          name: `checkerDetails.${fieldName}`,
+                      {/* Right cell: radios inline */}
+                      <div className="flex items-center leading-none">
+                        {getController({
+                          ...(superCheckerCreationConfig().fields.checkerDetails.transactionType ?? {}),
+                          type: 'radio',
+                          inline: true,
+                          options: [
+                            { label: 'Buy', value: 'buy' },
+                            { label: 'Sell', value: 'sell' },
+                          ],
+                          name: `checkerDetails.transactionTypeMap.${p}`,
                           control,
                           errors,
                         })}
-                    </FieldWrapper>
-                  );
-                });
-              })()}
+                      </div>
+                    </div>
+                  </FieldWrapper>
+                ))}
             </div>
+          </div>
+
+
+
+
             <FormFieldRow rowCols={4}>
               {(['agents'] as const).map((fieldName) => {
                 const field = superCheckerCreationConfig().fields.checkerDetails[fieldName];
