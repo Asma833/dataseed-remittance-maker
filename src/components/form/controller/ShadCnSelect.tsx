@@ -11,7 +11,7 @@ import { cn } from '@/utils/cn';
 import { toTitleCase } from '@/utils/textFormater';
 import { useMemo, useState, useRef, useEffect } from 'react';
 import MultipleSelector, { Option } from '@/components/ui/multiselect';
-import { CheckIcon, XIcon } from 'lucide-react';
+import { CheckIcon, XIcon, ChevronDownIcon, CircleXIcon } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 
 interface ShadCnSelectProps {
@@ -167,7 +167,7 @@ export const ShadCnSelect = ({
                   {/* Select Trigger */}
                   <div
                     className={cn(
-                      "flex h-10 w-full items-center justify-between rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50",
+                      "flex h-10 w-full items-center justify-between rounded-lg border border-input bg-background px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 hover:border-primary/50 transition-colors disabled:cursor-not-allowed disabled:opacity-50",
                       disabled && "cursor-not-allowed opacity-50"
                     )}
                     onClick={() => !disabled && setIsOpen(!isOpen)}
@@ -178,13 +178,13 @@ export const ShadCnSelect = ({
                         : placeholder || 'Select options'
                       }
                     </span>
-                    <span className="ml-2">▼</span>
+                    <ChevronDownIcon size={16} className="ml-2 text-muted-foreground" />
                   </div>
 
                   {/* Dropdown */}
                   {isOpen && (
                     <div ref={dropdownRef} className="relative">
-                      <div className="absolute z-50 w-full mt-1 bg-popover border border-border rounded-md shadow-lg">
+                      <div className="absolute z-50 w-full mt-1 bg-popover border border-border rounded-lg shadow-lg">
                         <div className="max-h-60 overflow-y-auto">
                           {multiSelectOptions.map((option) => {
                             const isSelected = selectedValues.includes(option.value);
@@ -192,13 +192,13 @@ export const ShadCnSelect = ({
                               <div
                                 key={option.value}
                                 className={cn(
-                                  "flex items-center px-3 py-2 cursor-pointer hover:bg-accent hover:text-accent-foreground",
-                                  isSelected && "bg-accent text-accent-foreground"
+                                  "flex items-center px-4 py-3 cursor-pointer hover:bg-primary/10 transition-colors",
+                                  isSelected && "bg-primary/10 text-primary"
                                 )}
                                 onClick={() => handleSelect(option.value)}
                               >
-                                <div className="flex items-center justify-center w-4 h-4 mr-3">
-                                  {isSelected && <CheckIcon size={16} className="text-primary" />}
+                                <div className="flex items-center justify-center w-5 h-5 mr-3">
+                                  {isSelected && <CheckIcon size={18} className="text-primary" />}
                                 </div>
                                 <span>{option.label}</span>
                               </div>
@@ -215,15 +215,15 @@ export const ShadCnSelect = ({
                       {selectedOptions.map((option: Option) => (
                         <div
                           key={option.value}
-                          className="inline-flex items-center gap-1 px-2 py-1 bg-primary text-primary-foreground text-xs rounded-full"
+                          className="inline-flex items-center gap-1 px-3 py-1 bg-[#eeeeee] text-sm rounded-full hover:bg-[#888]/20 transition-colors cursor-pointer"
                         >
-                          <span>{option.label}</span>
+                          <span className="font-medium">{option.label}</span>
                           <button
                             type="button"
                             onClick={() => handleRemoveChip(option.value)}
-                            className="hover:bg-primary-foreground/20 rounded-full p-0.5"
+                            className="hover:[var(--color-title)]/20 rounded-full  transition-colors"
                           >
-                            <XIcon size={12} />
+                             <CircleXIcon size={14} className='text-[var(--color-title)]'/>
                           </button>
                         </div>
                       ))}
