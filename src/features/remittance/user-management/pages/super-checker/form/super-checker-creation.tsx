@@ -209,7 +209,8 @@ export const CreateSuperChecker = () => {
                       {/* Right cell: radios inline */}
                       <div className="flex items-center leading-none">
                         {getController({
-                          type: 'checkbox' as any,
+                          type: 'checkbox',
+                          variant: 'circle_check_filled',
                           inline: true,
                           options: {
                             'buy': { label: 'Buy' },

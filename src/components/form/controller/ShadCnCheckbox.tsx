@@ -1,11 +1,15 @@
 import { Controller, useFormContext } from 'react-hook-form';
-import { Checkbox } from '@/components/ui/checkbox';
 import { FormItem, FormLabel, FormControl, FormMessage } from '@/components/ui/form';
 import { cn } from '@/utils/cn';
-import { Circle, CircleCheck, Square, CheckSquare, CircleDot, Disc, SquareCheck } from 'lucide-react';
-import { useMemo } from 'react';
+import { Circle, CircleCheck, Square, CheckSquare, CircleDot, SquareCheck } from 'lucide-react';
+import React from 'react';
 
-type CheckboxVariant = 'square_check' | 'circle_check' | 'radio_style' | 'circle_check_filled' | 'square_check_filled';
+type CheckboxVariant =
+  | 'square_check'
+  | 'circle_check'
+  | 'radio_style'
+  | 'circle_check_filled'
+  | 'square_check_filled';
 type CheckboxSize = 'small' | 'medium' | 'large';
 
 interface ShadCnCheckboxProps {
@@ -35,128 +39,128 @@ export const ShadCnCheckbox = ({
   defaultSelected = {},
   variant = 'circle_check',
   size = 'medium',
-  classNames = {
-    wrapper: '',
-    formGroup: '',
-  },
+  classNames = { wrapper: '', formGroup: '' },
   disabled = false,
   required = false,
   orientation,
 }: ShadCnCheckboxProps) => {
   const { control, setValue, trigger, getValues } = useFormContext();
 
-  // Ensure name is a valid string
   const fieldName = typeof name === 'string' && name ? name : 'defaultName';
 
-  // Helper function to get icon size based on size prop
-  const getIconSize = () => {
+  // --- sizing helpers --------------------------------------------------------
+  const getIconPx = () => {
     switch (size) {
       case 'small':
-        return 16;
-      case 'medium':
-        return 20;
+        return 18;
       case 'large':
         return 24;
+      case 'medium':
       default:
         return 20;
     }
   };
+  const iconPx = getIconPx();
 
-  // Helper function to get icons based on variant
+  // --- icons -----------------------------------------------------------------
+  const FilledCircleCheck = React.memo(function FilledCircleCheck({
+    size,
+  }: {
+    size: number;
+  }) {
+    // Solid circle with white check
+    return (
+      <span
+        className="grid place-items-center rounded-full bg-primary"
+        style={{ width: size, height: size }}
+      >
+        <svg
+          width={Math.round(size * 0.78)}
+          height={Math.round(size * 0.78)}
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="white"
+          strokeWidth="3"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+          aria-hidden="true"
+        >
+          <path d="M20 6 9 17l-5-5" />
+        </svg>
+      </span>
+    );
+  });
+
+  const EmptyCircle = React.memo(function EmptyCircle({ size }: { size: number }) {
+    // Thin outlined circle (unselected)
+    return (
+      <span
+        className="rounded-full ring-1 ring-gray-300 bg-white block"
+        style={{ width: size, height: size }}
+      />
+    );
+  });
+
   const getIcons = (isChecked: boolean) => {
-    const iconSize = getIconSize();
-
     switch (variant) {
       case 'square_check':
         return {
-          unchecked: <Square size={iconSize} color="var(--fill-primary)" stroke="var(--fill-primary)" />,
-          checked: <CheckSquare className="text-primary" size={iconSize} />,
+          unchecked: <Square size={iconPx} color="var(--fill-primary)" stroke="var(--fill-primary)" />,
+          checked: <CheckSquare className="text-primary" size={iconPx} />,
         };
       case 'circle_check':
         return {
-          unchecked: <Circle size={iconSize} />,
-          checked: <CircleCheck className="text-primary" size={iconSize} />,
+          unchecked: <Circle size={iconPx} className="text-gray-400" />,
+          checked: <CircleCheck className="text-primary" size={iconPx} />,
         };
       case 'circle_check_filled':
+        // ← the one you asked to match the screenshot
         return {
-          unchecked: <Circle size={iconSize} />,
-          checked: <Disc className="text-primary" size={iconSize} />,
+          unchecked: <EmptyCircle size={iconPx} />,
+          checked: <FilledCircleCheck size={iconPx} />,
         };
       case 'square_check_filled':
         return {
           unchecked: (
-            <SquareCheck
-              className="text-primary-foreground rounded-sm bg-primary"
-              fill="var(--fill-foreground)"
-              size={iconSize}
-            />
+            <SquareCheck className="text-primary-foreground rounded-sm bg-primary" size={iconPx} />
           ),
           checked: (
-            <SquareCheck
-              className="text-primary-foreground rounded-sm bg-primary"
-              fill="var(--fill-primary)"
-              size={iconSize}
-            />
+            <SquareCheck className="text-primary-foreground rounded-sm bg-primary" size={iconPx} />
           ),
         };
       case 'radio_style':
         return {
-          unchecked: (
-            <CircleDot
-              size={iconSize}
-              fill="white"
-              color="var(--fill-primary)"
-              className="text-primary-foreground rounded-sm"
-            />
-          ),
-          checked: (
-            <CircleDot
-              fill="var(--fill-foreground)"
-              className="text-primary-foreground rounded-sm"
-              size={iconSize}
-              color="var(--fill-primary)"
-            />
-          ),
+          unchecked: <CircleDot size={iconPx} className="text-gray-400" />,
+          checked: <CircleDot size={iconPx} className="text-primary" />,
         };
       default:
         return {
-          unchecked: <Circle size={iconSize} />,
-          checked: <CircleCheck className="text-primary" size={iconSize} />,
+          unchecked: <Circle size={iconPx} />,
+          checked: <CircleCheck className="text-primary" size={iconPx} />,
         };
     }
   };
 
-  // Check if the field name contains dots (indicating a nested path)
+  // nested name support
   const isNestedField = fieldName.includes('.');
-
-  // Parse the nested path to get the parent and child parts
   const getNestedParts = () => {
     const parts = fieldName.split('.');
     const lastPart = parts.pop() || '';
     const parentPath = parts.join('.');
     return { parentPath, lastPart };
   };
-
-  // For nested fields, we need special handling
   const { parentPath, lastPart } = isNestedField ? getNestedParts() : { parentPath: '', lastPart: fieldName };
 
   const getDefaultValues = () => {
     if (isMulti) {
-      // For multi-selection, start with all false, then apply defaultSelected
       const defaults = Object.fromEntries(Object.keys(options).map((key) => [key, false]));
-      if (defaultSelected) {
-        Object.keys(defaultSelected).forEach(key => {
-          if (defaults.hasOwnProperty(key)) {
-            defaults[key] = defaultSelected[key];
-          }
-        });
-      }
+      Object.keys(defaultSelected || {}).forEach((k) => {
+        if (k in defaults) defaults[k] = !!defaultSelected[k];
+      });
       return defaults;
-    } else {
-      // For single selection, find the default selected key
-      const defaultKey = Object.keys(defaultSelected || {}).find(key => defaultSelected![key]);
-      return defaultKey || '';
     }
+    const defaultKey = Object.keys(defaultSelected || {}).find((k) => defaultSelected![k]);
+    return defaultKey || '';
   };
 
   return (
@@ -175,89 +179,78 @@ export const ShadCnCheckbox = ({
           render={({ field }) => {
             const numOptions = Object.keys(options).length;
             const effectiveOrientation = orientation || (numOptions <= 3 ? 'horizontal' : 'vertical');
-            const containerClassName = effectiveOrientation === 'horizontal' ? 'flex space-x-4' : 'space-y-2';
+            const containerClassName =
+              effectiveOrientation === 'horizontal'
+                ? 'flex flex-wrap gap-x-4 gap-y-2'
+                : 'flex flex-col gap-2';
+
             return (
               <div className={cn(containerClassName, classNames?.formGroup ?? '')}>
                 {Object.entries(options).map(([key, option]) => {
-                let isChecked = false;
-                if (isMulti) {
-                  isChecked = field.value?.[key] || false;
-                } else {
-                  isChecked = field.value === key;
-                }
-                const icons = getIcons(isChecked);
+                  const isChecked = isMulti ? !!field.value?.[key] : field.value === key;
+                  const icons = getIcons(isChecked);
 
-                return (
-                  <div key={key} className="flex items-center space-x-2">
-                    <button
-                      type="button"
-                      id={`${fieldName}-${key}`}
-                      disabled={disabled}
-                      onClick={() => {
-                        const newChecked = !isChecked;
-                        let updatedValue;
+                  return (
+                    <div key={key} className="inline-flex items-center gap-2">
+                      <button
+                        type="button"
+                        id={`${fieldName}-${key}`}
+                        aria-pressed={isChecked}
+                        aria-checked={isChecked}
+                        disabled={disabled}
+                        onClick={() => {
+                          const newChecked = !isChecked;
+                          const updatedValue = isMulti
+                            ? { ...(field.value || {}), [key]: newChecked }
+                            : newChecked
+                            ? key
+                            : '';
 
-                        if (isMulti) {
-                          updatedValue = { ...field.value, [key]: newChecked };
-                        } else {
-                          // For single selection, set the value to the key if checked, else empty
-                          updatedValue = newChecked ? key : '';
-                        }
+                          field.onChange(updatedValue);
 
-                        // Update the form state
-                        field.onChange(updatedValue);
+                          if (isNestedField) {
+                            const currentValues = getValues();
+                            const parentObj = parentPath
+                              .split('.')
+                              .reduce((obj: any, part: string) => (obj[part] ??= {}), currentValues);
+                            parentObj[lastPart] = updatedValue;
+                            setValue(parentPath, parentObj, {
+                              shouldDirty: true,
+                              shouldTouch: true,
+                              shouldValidate: true,
+                            });
+                          } else {
+                            setValue(fieldName, updatedValue, {
+                              shouldDirty: true,
+                              shouldTouch: true,
+                              shouldValidate: true,
+                            });
+                          }
 
-                        // Use setValue with the proper path to ensure nested fields are updated correctly
-                        if (isNestedField) {
-                          // For nested fields, we need to get the current parent object and update just the part we want
-                          const currentValues = getValues();
-                          const parentObj = parentPath.split('.').reduce((obj, part) => {
-                            if (!obj[part]) obj[part] = {};
-                            return obj[part];
-                          }, currentValues);
+                          handleCheckboxChange?.(key, newChecked);
+                          trigger(fieldName);
+                        }}
+                        className={cn(
+                          // match the icon box, prevents clipping
+                          'grid place-items-center rounded-full',
+                          'focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-violet-500',
+                          disabled && 'cursor-not-allowed opacity-50'
+                        )}
+                        style={{ width: iconPx, height: iconPx }}
+                      >
+                        {isChecked ? icons.checked : icons.unchecked}
+                      </button>
 
-                          // Update the nested part
-                          parentObj[lastPart] = updatedValue;
-
-                          // Set the entire parent object
-                          setValue(parentPath, parentObj, { shouldDirty: true, shouldTouch: true });
-                        } else {
-                          // For regular fields, just set the value directly
-                          setValue(fieldName, updatedValue, {
-                            shouldDirty: true,
-                            shouldTouch: true,
-                            shouldValidate: true,
-                          });
-                        }
-
-                        // Call handleCheckboxChange with the key and checked state if it exists
-                        if (handleCheckboxChange) {
-                          handleCheckboxChange(key, newChecked);
-                        }
-
-                        trigger(fieldName);
-                      }}
-                      className={cn(
-                        "flex items-center justify-center w-4 h-4 cursor-pointer disabled:cursor-not-allowed disabled:opacity-50",
-                        disabled ? "cursor-not-allowed opacity-50" : ""
-                      )}
-                    >
-                      {isChecked ? icons.checked : icons.unchecked}
-                    </button>
-                    <label
-                      htmlFor={`${fieldName}-${key}`}
-                      className="text-sm font-medium leading-none cursor-pointer disabled:cursor-not-allowed disabled:opacity-70"
-                      onClick={() => {
-                        if (!disabled) {
-                          document.getElementById(`${fieldName}-${key}`)?.click();
-                        }
-                      }}
-                    >
-                      {option.label}
-                    </label>
-                  </div>
-                );
-              })}
+                      <label
+                        htmlFor={`${fieldName}-${key}`}
+                        className="text-sm font-medium leading-none cursor-pointer select-none"
+                        onClick={() => !disabled && document.getElementById(`${fieldName}-${key}`)?.click()}
+                      >
+                        {option.label}
+                      </label>
+                    </div>
+                  );
+                })}
               </div>
             );
           }}

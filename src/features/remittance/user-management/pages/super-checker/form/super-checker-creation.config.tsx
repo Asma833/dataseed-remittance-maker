@@ -37,7 +37,7 @@ export const superCheckerCreationConfig = () => {
             'remittance': { label: 'Remittance', checked: true },
             'referral': { label: 'Referral' },
           },
-          variant: 'circle_check',
+          variant: 'circle_check_filled',
           isMulti: true,
           defaultSelected: { 'card': true }
         },
