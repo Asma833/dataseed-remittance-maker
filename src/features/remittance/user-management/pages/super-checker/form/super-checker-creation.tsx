@@ -15,7 +15,6 @@ import { getController } from '@/components/form/utils/get-controller';
 import { Button } from '@/components/ui/button';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { superCheckerSchema } from './super-checker-creation.schema';
-import { cn } from '@/utils/cn';
 
 export const CreateSuperChecker = () => {
   type SuperCheckerFormType = z.infer<typeof superCheckerSchema>;
@@ -28,7 +27,7 @@ export const CreateSuperChecker = () => {
         phoneNumber: '',
         location: '',
         productType: { card: true }, // Multi-checkbox expects object, not string
-        transactionType: 'buy', // Single checkbox expects string
+        transactionTypeMap: { card: 'buy', currency: 'sell'},
         status: 'active',
         agents: [],
         password: '',
@@ -72,7 +71,7 @@ export const CreateSuperChecker = () => {
                     productTypeValue === 'currency' ? { currency: true } :
                     productTypeValue === 'referral' ? { referral: true } :
                     { card: true }, // default to card
-        transactionType: data.productSubType?.toLowerCase().includes('buy') ? 'buy' : 'sell',
+        // transactionType removed - using transactionTypeMap instead
         status: data.status?.toLowerCase() || 'active',
         agents: data.agents || [],
         password: data.password || '',
@@ -100,7 +99,6 @@ export const CreateSuperChecker = () => {
           referral: Boolean(mappedData.checkerDetails.productType.referral),
         } as Record<'card' | 'currency' | 'remittance' | 'referral', boolean>
       );
-      setValue('checkerDetails.transactionType', mappedData.checkerDetails.transactionType as 'buy' | 'sell');
       setValue('checkerDetails.status', mappedData.checkerDetails.status as 'active' | 'inactive');
       setValue('checkerDetails.agents', mappedData.checkerDetails.agents || []);
       setValue('checkerDetails.password', mappedData.checkerDetails.password);
@@ -121,9 +119,10 @@ export const CreateSuperChecker = () => {
   // Set default transaction type based on product type
   useEffect(() => {
     if (productTypeObj.card) {
-      setValue('checkerDetails.transactionType', 'buy');
-    } else if (productTypeObj.currency) {
-      setValue('checkerDetails.transactionType', 'sell');
+      setValue('checkerDetails.transactionTypeMap.card', 'buy');
+    }
+    if (productTypeObj.currency) {
+      setValue('checkerDetails.transactionTypeMap.currency', 'sell');
     }
   }, [productTypeObj, setValue]);
   return (
@@ -208,15 +207,18 @@ export const CreateSuperChecker = () => {
                         "[&_.flex]:flex-row [&_.flex]:items-center",
                       ].join(' ')}
                     >
+                      <div className="text-sm mx-2 leading-[12px]">Choose Transaction Type <span className="text-destructive">*</span></div>
                       {/* Right cell: radios inline */}
                       <div className="flex items-center leading-none">
                         {getController({
-                          ...(superCheckerCreationConfig().fields.checkerDetails.transactionType ?? {}),
+                          type: 'checkbox' as any,
                           inline: true,
-                          options: [
-                            { label: 'Buy', value: 'buy' },
-                            { label: 'Sell', value: 'sell' },
-                          ],
+                          options: {
+                            'buy': { label: 'Buy' },
+                            'sell': { label: 'Sell' }
+                          },
+                          required:true,
+                          isMulti: false,
                           name: `checkerDetails.transactionTypeMap.${p}`,
                           control,
                           errors,
@@ -227,10 +229,6 @@ export const CreateSuperChecker = () => {
                 ))}
             </div>
           </div>
-
-
-
-
             <FormFieldRow rowCols={4}>
               {(['agents'] as const).map((fieldName) => {
                 const field = superCheckerCreationConfig().fields.checkerDetails[fieldName];

@@ -41,19 +41,6 @@ export const superCheckerCreationConfig = () => {
           isMulti: true,
           defaultSelected: { 'card': true }
         },
-        transactionType:{
-          name: 'checkerDetails.transactionType',
-          label: 'Choose transaction type',
-          type: FieldType.Checkbox,
-          required: true,
-          options: {
-            'buy': { label: 'Buy', checked: true },
-            'sell': { label: 'Sell' }
-          },
-          variant: 'circle_check',
-          isMulti: false,
-          defaultSelected: { 'buy': true }
-        },
         status: {
           name: 'checkerDetails.status',
           label: 'Status',

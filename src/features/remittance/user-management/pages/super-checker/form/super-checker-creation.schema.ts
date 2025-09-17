@@ -38,12 +38,6 @@ export const superCheckerSchema = z.object({
         message: "Please select at least one product type"
       }),
 
-    transactionType: z
-      .enum(["buy", "sell"])
-      .refine((val) => val !== undefined, {
-        message: "Please select a transaction type"
-      }),
-
     status: z
       .enum(["active", "inactive"])
       .refine((val) => val !== undefined, {
@@ -66,7 +60,13 @@ export const superCheckerSchema = z.object({
       .string()
       .min(1, "Please confirm your password"),
 
-    transactionTypeMap: z.record(z.enum(["card","currency","remittance","referral"]), z.enum(["buy", "sell"])).optional()
+    transactionTypeMap: z.record(z.enum(["card","currency","remittance","referral"]), z.enum(["buy", "sell"]))
+      .refine((val) => {
+        // Ensure transactionTypeMap has values for selected products
+        return val && Object.keys(val).length > 0;
+      }, {
+        message: "Please select transaction types for selected products"
+      })
   })
 }).refine((data) => data.checkerDetails.password === data.checkerDetails.confirmPassword, {
   message: "Passwords do not match",
