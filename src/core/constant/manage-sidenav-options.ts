@@ -23,35 +23,35 @@ export const SideNavOptions = {
           title: 'Superchecker',
           path: getNavPath('ADMIN', ROUTES.ADMIN.SUPER_CHECKER_TABLE),
         },
-        {
-          title: 'Agent Admin',
-          path: getNavPath('ADMIN', ROUTES.ADMIN.AGENT_ADMIN),
-        },
+        // {
+        //   title: 'Agent Admin',
+        //   path: getNavPath('ADMIN', ROUTES.ADMIN.AGENT_ADMIN),
+        // },
          {
           title: 'Branch Agents',
           path: getNavPath('ADMIN', ROUTES.ADMIN.USER_MANAGEMENT.BRANCH_AGENTS),
         },
-        {
-          title: 'Create User',
-          path: getNavPath('ADMIN', ROUTES.ADMIN.CREATEUSER),
-        }
+        // {
+        //   title: 'Create User',
+        //   path: getNavPath('ADMIN', ROUTES.ADMIN.CREATEUSER),
+        // }
       ],
     },
-    {
-      title: 'Master Data',
-      path: getNavPath('ADMIN', ROUTES.ADMIN.MASTER.PURPOSE_MASTER),
-      icon: master,
-      subMenus: [
-        {
-          title: 'Purpose Master',
-          path: getNavPath('ADMIN', ROUTES.ADMIN.MASTER.PURPOSE_MASTER),
-        },
-        {
-          title: 'Document Master',
-          path: getNavPath('ADMIN', ROUTES.ADMIN.MASTER.DOCUMENT_MASTER),
-        },
-      ],
-    },
+    // {
+    //   title: 'Master Data',
+    //   path: getNavPath('ADMIN', ROUTES.ADMIN.MASTER.PURPOSE_MASTER),
+    //   icon: master,
+    //   subMenus: [
+    //     {
+    //       title: 'Purpose Master',
+    //       path: getNavPath('ADMIN', ROUTES.ADMIN.MASTER.PURPOSE_MASTER),
+    //     },
+    //     {
+    //       title: 'Document Master',
+    //       path: getNavPath('ADMIN', ROUTES.ADMIN.MASTER.DOCUMENT_MASTER),
+    //     },
+    //   ],
+    // },
   ] as NavigationItem[],
 };
 
