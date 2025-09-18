@@ -187,7 +187,7 @@ export const ShadCnCheckbox = ({
           name={name}
           control={control}
           defaultValue={getDefaultValues()}
-          render={({ field, fieldState: { error } }) => {
+          render={({ field, fieldState:{error} }) => {
             const numOptions = Object.keys(options).length;
             const effectiveOrientation =
               orientation || (numOptions <= 3 ? "horizontal" : "vertical");
@@ -197,10 +197,10 @@ export const ShadCnCheckbox = ({
                 : "flex flex-col gap-4";
 
             return (
+              <>
               <div
                 className={cn(containerClassName, classNames?.formGroup ?? "")}
               >
-                
                 {Object.entries(options).map(([key, option]) => {
                   const isChecked = isMulti
                     ? !!field.value?.[key]
@@ -230,14 +230,13 @@ export const ShadCnCheckbox = ({
                             shouldValidate: false,
                           });
 
-                          // validate the form
-                          void trigger();
-
+                          // validate only this field
+                          void trigger(name);
 
                           handleCheckboxChange?.(key, newChecked);
                         }}
                         className={cn(
-                          "grid place-items-center rounded-full cursor-pointer",
+                          "grid place-items-center rounded-full",
                           "focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-violet-500",
                           disabled && "cursor-not-allowed opacity-50"
                         )}
@@ -259,17 +258,13 @@ export const ShadCnCheckbox = ({
                     </div>
                   );
                 })}
-                {error && (
-                  <p className="text-sm text-destructive mt-1">
-                    {error.message}
-                  </p>
-                )}
               </div>
+              <p>{error?.message}</p>
+              </>
             );
           }}
         />
       </FormControl>
-      
     </FormItem>
   );
 };

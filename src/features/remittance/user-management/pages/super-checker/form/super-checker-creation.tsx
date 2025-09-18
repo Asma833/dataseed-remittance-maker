@@ -14,6 +14,7 @@ import { getController } from '@/components/form/utils/get-controller';
 import { Button } from '@/components/ui/button';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { superCheckerSchema } from './super-checker-creation.schema';
+import { FieldType } from '@/types/enums';
 
 export const CreateSuperChecker = () => {
   type SuperCheckerFormType = z.infer<typeof superCheckerSchema>;
@@ -25,7 +26,7 @@ export const CreateSuperChecker = () => {
         email: '',
         phoneNumber: '',
         productType: { card: true },
-        transactionTypeMap: { card: 'buy', currency: 'sell'},
+        // transactionTypeMap: { card: 'buy', currency: 'sell'},
         status: 'active',
         agents: [],
         password: '',
@@ -113,14 +114,14 @@ export const CreateSuperChecker = () => {
   const productTypeObj = useWatch({ control, name: 'checkerDetails.productType' }) as Record<string, boolean> || {};
 
   // Set default transaction type based on product type
-  useEffect(() => {
-    if (productTypeObj.card) {
-      setValue('checkerDetails.transactionTypeMap.card', 'buy');
-    }
-    if (productTypeObj.currency) {
-      setValue('checkerDetails.transactionTypeMap.currency', 'sell');
-    }
-  }, [productTypeObj, setValue]);
+  // useEffect(() => {
+  //   if (productTypeObj.card) {
+  //     setValue('checkerDetails.transactionTypeMap.card', 'buy');
+  //   }
+  //   if (productTypeObj.currency) {
+  //     setValue('checkerDetails.transactionTypeMap.currency', 'sell');
+  //   }
+  // }, [productTypeObj, setValue]);
   return (
     <div className="space-y-1 w-full">
       <div className="flex items-center space-x-2">
@@ -207,9 +208,8 @@ export const CreateSuperChecker = () => {
                       {/* Right cell: radios inline */}
                       <div className="flex items-center leading-none">
                         {getController({
-                          type: 'checkbox',
+                          type: FieldType.Checkbox,
                           variant: 'circle_check_filled',
-                          inline: true,
                           options: {
                             'buy': { label: 'Buy' },
                             'sell': { label: 'Sell' }
