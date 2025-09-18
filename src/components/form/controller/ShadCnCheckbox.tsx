@@ -187,7 +187,7 @@ export const ShadCnCheckbox = ({
           name={name}
           control={control}
           defaultValue={getDefaultValues()}
-          render={({ field }) => {
+          render={({ field, fieldState: { error } }) => {
             const numOptions = Object.keys(options).length;
             const effectiveOrientation =
               orientation || (numOptions <= 3 ? "horizontal" : "vertical");
@@ -200,6 +200,7 @@ export const ShadCnCheckbox = ({
               <div
                 className={cn(containerClassName, classNames?.formGroup ?? "")}
               >
+                
                 {Object.entries(options).map(([key, option]) => {
                   const isChecked = isMulti
                     ? !!field.value?.[key]
@@ -229,8 +230,9 @@ export const ShadCnCheckbox = ({
                             shouldValidate: false,
                           });
 
-                          // validate only this field
-                          void trigger(name);
+                          // validate the form
+                          void trigger();
+
 
                           handleCheckboxChange?.(key, newChecked);
                         }}
@@ -257,6 +259,11 @@ export const ShadCnCheckbox = ({
                     </div>
                   );
                 })}
+                {error && (
+                  <p className="text-sm text-destructive mt-1">
+                    {error.message}
+                  </p>
+                )}
               </div>
             );
           }}

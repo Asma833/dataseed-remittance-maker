@@ -23,12 +23,6 @@ export const superCheckerSchema = z.object({
       .min(10, "Phone number must be at least 10 digits")
       .max(15, "Phone number must be less than 15 digits"),
 
-    location: z
-      .string()
-      .min(1, "Location is required")
-      .min(2, "Location must be at least 2 characters")
-      .max(100, "Location must be less than 100 characters"),
-
     productType: z
       .record(z.enum(["card","currency","remittance","referral"]), z.boolean())
       .refine((val) => {
@@ -60,7 +54,7 @@ export const superCheckerSchema = z.object({
       .string()
       .min(1, "Please confirm your password"),
 
-    transactionTypeMap: z.record(z.enum(["card","currency","remittance","referral"]), z.enum(["buy", "sell"]))
+    transactionTypeMap: z.record(z.enum(["card","currency"]), z.enum(["buy", "sell"]))
       .refine((val) => {
         // Ensure transactionTypeMap has values for selected products
         return val && Object.keys(val).length > 0;

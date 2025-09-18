@@ -24,7 +24,6 @@ export const CreateSuperChecker = () => {
         fullName: '',
         email: '',
         phoneNumber: '',
-        location: '',
         productType: { card: true },
         transactionTypeMap: { card: 'buy', currency: 'sell'},
         status: 'active',
@@ -88,7 +87,6 @@ export const CreateSuperChecker = () => {
       setValue('checkerDetails.fullName', mappedData.checkerDetails.fullName);
       setValue('checkerDetails.email', mappedData.checkerDetails.email);
       setValue('checkerDetails.phoneNumber', mappedData.checkerDetails.phoneNumber);
-      setValue('checkerDetails.location', mappedData.checkerDetails.location);
       setValue(
         'checkerDetails.productType',
         {
