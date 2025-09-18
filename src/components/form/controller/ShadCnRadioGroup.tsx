@@ -81,16 +81,16 @@ export const ShadCnRadioGroup = <T extends FieldValues>({
                         // Ensure no fill when checked (fights any global bg override)
                         "data-[state=checked]:!bg-white",
                         // Checked ring color
-                        `data-[state=checked]:border-violet-600`,
+                        `data-[state=checked]:border-primary`,
                         // Hide Radix indicator
                         "[&>span]:hidden",
                         // Inner dot (10px) that scales in when checked
                         "after:content-[''] after:absolute after:h-[10px] after:w-[10px] after:rounded-full",
-                        `after:bg-violet-600`,
+                        `after:bg-primary`,
                         "after:scale-0 data-[state=checked]:after:scale-100 after:transition-transform after:duration-150",
                         // Focus ring
                         "focus-visible:outline-none",
-                        `focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-violet-300`,
+                        `focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-primary`,
                         // Disabled
                         disabled && "bg-gray-100 border-gray-300 opacity-60 cursor-not-allowed"
                       )}
