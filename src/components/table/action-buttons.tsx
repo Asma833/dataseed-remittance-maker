@@ -5,7 +5,7 @@ import edit from '@/assets/icons/edit.svg'
 
 export function ActionButtons<T>({ row, onEdit, onDelete, onView }: ActionButtonsProps<T>) {
   return (
-    <div className="flex items-center gap-2">
+    <div className="flex items-center justify-center gap-2">
       {onView && (
         <Button
           variant="ghost"

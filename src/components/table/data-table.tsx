@@ -402,7 +402,7 @@ export function DataTable<T>({
         )}
 
         {/* Table */}
-        <div className="rounded-md shadow-sm cursor-pointer">
+        <div className="rounded-md shadow-sm">
           <Table className="border-collapse [&_th]:border [&_th]:border-white [&_th]:p-3 [&_th]:text-center [&_th]:bg-[var(--color-table-header-bg)] [&_th]:text-black [&_th]:font-semibold [&_th]:border-b-2 [&_th]:border-b-white [&_td]:border [&_td]:border-white [&_td]:p-3 [&_td]:text-center [&_tbody_tr:nth-child(even)]:bg-[var(--color-table-striped)] [&_tbody_tr:nth-child(odd)]:bg-white [&_tbody_tr:hover]:bg-[var(--color-table-striped)]">
             <TableHeader>
               {table.getHeaderGroups().map((headerGroup) => (
@@ -412,7 +412,7 @@ export function DataTable<T>({
                       key={header.id}
                       className={cn(
                         'select-none text-center',
-                        header.column.getCanSort() && 'cursor-pointer hover:bg-muted/50',
+                        // header.column.getCanSort() && 'cursor-pointer hover:bg-muted/50',
                         header.column.columnDef.meta?.headerAlign === 'left' && 'text-left',
                         header.column.columnDef.meta?.headerAlign === 'right' && 'text-right',
                         header.column.columnDef.meta?.className
@@ -424,7 +424,7 @@ export function DataTable<T>({
                     >
                       <div className="flex items-center justify-center gap-2">
                         {header.isPlaceholder ? null : flexRender(header.column.columnDef.header, header.getContext())}
-                        {header.column.getCanSort() && (
+                        {/* {header.column.getCanSort() && (
                           <div className="flex flex-col">
                             <ChevronUpIcon
                               className={cn(
@@ -439,7 +439,7 @@ export function DataTable<T>({
                               )}
                             />
                           </div>
-                        )}
+                        )} */}
                       </div>
                     </TableHead>
                   ))}
