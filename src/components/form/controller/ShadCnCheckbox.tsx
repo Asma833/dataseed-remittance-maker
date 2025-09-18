@@ -237,7 +237,7 @@ export const ShadCnCheckbox = ({
                           handleCheckboxChange?.(key, newChecked);
                         }}
                         className={cn(
-                          "grid place-items-center rounded-full",
+                          "grid place-items-center rounded-full cursor-pointer",
                           "focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-violet-500",
                           disabled && "cursor-not-allowed opacity-50"
                         )}
