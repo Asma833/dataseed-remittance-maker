@@ -8,8 +8,6 @@ import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '
 import { Input } from '@/components/ui/input';
 import { useLogin } from '../hooks/useLogin';
 import { loginSchema, LoginSchema } from '../schemas/login.schema';
-import  logo  from '@/assets/images/ebix-login-logo.svg';
-import  mask  from '@/assets/images/ebix-mask-group.svg';
 
 const LoginForm = () => {
   const [showPassword, setShowPassword] = React.useState(false);
@@ -28,16 +26,8 @@ const LoginForm = () => {
       ...values,
     });
   };
-  return ( 
-    <div className="w-full grid grid-cols-2 h-[70vh] rounded-lg">
-      <div className="flex flex-col items-center justify-center space-y-4 bg-[white]/30">
-      <img src={logo} alt="logo" className="max-w-[200px] h-auto" />
-      <img src={mask} alt="mask" className="max-w-[200px] h-auto" />
-      </div>
-      <div className="flex flex-col px-20 justify-center space-y-4 bg-[white]">
-      <h1 className="text-2xl font-semibold mb-3">Login</h1>
-      <p>Welcome back! Please login to your account</p>
-      <Form {...form}>
+  return (
+    <Form {...form}>
       <form onSubmit={form.handleSubmit(handleLogin)} className="space-y-6">
         <FormField
           control={form.control}
@@ -106,9 +96,6 @@ const LoginForm = () => {
         </Button>
       </form>
     </Form>
-    </div>
-    
-    </div>
   );
 };
 

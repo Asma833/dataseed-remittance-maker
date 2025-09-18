@@ -526,3 +526,11 @@ body{
 .bg-danger{
   background-color: var(--color-title);
 }
+.bg-gradient{
+  background: linear-gradient(50.74deg, #6E3494 0%, #B11F82 10.44%, #DB1A57 20.4%, #F26922 29.48%, #F3EC26 38.31%, #FCB921 45.75%, #E775AE 53.26%, #EE478E 61.47%, #427BBF 66.35%, #5AC5C4 71.69%);
+}
+.login-form{
+  background-color: #EDEDED;
+  width: 70%;
+  margin: auto;
+}

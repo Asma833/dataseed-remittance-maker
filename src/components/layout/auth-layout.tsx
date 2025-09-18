@@ -20,11 +20,10 @@ export const AuthLayout: React.FC<AuthLayoutProps> = ({ children, title }) => {
   }
 
   return (
-    <div className="min-h-screen w-full flex flex-col justify-start bg-secondary">
+    <div className="min-h-screen w-full flex flex-col justify-start bg-gradient">
       <LogoHeader />
       <div className="h-full w-full flex items-center justify-between flex-1">
-        <div className="max-w-md mx-auto w-full p-5 rounded-xl">
-          <h1 className="text-2xl font-semibold mb-3">{title}</h1>
+        <div className="max-w-[70%] mx-auto w-full rounded-xl">
           {children}
         </div>
       </div>
