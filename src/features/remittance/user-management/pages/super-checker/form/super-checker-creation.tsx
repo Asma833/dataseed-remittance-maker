@@ -18,22 +18,40 @@ import { FieldType } from '@/types/enums';
 
 export const CreateSuperChecker = () => {
   type SuperCheckerFormType = z.infer<typeof superCheckerSchema>;
+  // const methods = useForm<SuperCheckerFormType>({
+  //   resolver: zodResolver(superCheckerSchema),
+  //   defaultValues: {
+  //     checkerDetails: {
+  //       fullName: '',
+  //       email: '',
+  //       phoneNumber: '',
+  //       productType: { card: true },
+  //       // transactionTypeMap: { card: 'buy', currency: 'sell'},
+  //       status: 'active',
+  //       agents: [],
+  //       password: '',
+  //       confirmPassword: '',
+  //     },
+  //   },
+  // });
   const methods = useForm<SuperCheckerFormType>({
-    resolver: zodResolver(superCheckerSchema),
-    defaultValues: {
-      checkerDetails: {
-        fullName: '',
-        email: '',
-        phoneNumber: '',
-        productType: { card: true },
-        // transactionTypeMap: { card: 'buy', currency: 'sell'},
-        status: 'active',
-        agents: [],
-        password: '',
-        confirmPassword: '',
-      },
+  resolver: zodResolver(superCheckerSchema),
+  mode: "onChange",           
+  reValidateMode: "onChange", 
+  defaultValues: {
+    checkerDetails: {
+      fullName: "",
+      email: "",
+      phoneNumber: "",
+      productType: { card: true }, // your default
+      status: "active",
+      agents: [],
+      password: "",
+      confirmPassword: "",
     },
-  });
+  },
+});
+
   const {
     control,
     getValues,
@@ -113,15 +131,6 @@ export const CreateSuperChecker = () => {
   // Selected products (multi-select - get first selected product for conditional logic)
   const productTypeObj = useWatch({ control, name: 'checkerDetails.productType' }) as Record<string, boolean> || {};
 
-  // Set default transaction type based on product type
-  // useEffect(() => {
-  //   if (productTypeObj.card) {
-  //     setValue('checkerDetails.transactionTypeMap.card', 'buy');
-  //   }
-  //   if (productTypeObj.currency) {
-  //     setValue('checkerDetails.transactionTypeMap.currency', 'sell');
-  //   }
-  // }, [productTypeObj, setValue]);
   return (
     <div className="space-y-1 w-full">
       <div className="flex items-center space-x-2">
@@ -154,7 +163,7 @@ export const CreateSuperChecker = () => {
             </FormFieldRow>
 
           {/* Product and Transaction Type */}
-          <div className="grid md:grid-cols-[30%_65%] lg:grid-cols-[15%_35%] md:gap-6 relative">
+          <div className="grid md:grid-cols-[30%_65%] lg:grid-cols-[15%_45%] md:gap-6 relative">
             {/* LEFT: Product Type */}
             <FieldWrapper>
               {getController({
