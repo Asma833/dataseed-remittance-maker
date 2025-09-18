@@ -182,7 +182,7 @@ export const ShadCnCheckbox = ({
             const containerClassName =
               effectiveOrientation === 'horizontal'
                 ? 'flex flex-wrap gap-x-4 gap-y-2'
-                : 'flex flex-col gap-2';
+                : 'flex flex-col gap-4';
 
             return (
               <div className={cn(containerClassName, classNames?.formGroup ?? '')}>

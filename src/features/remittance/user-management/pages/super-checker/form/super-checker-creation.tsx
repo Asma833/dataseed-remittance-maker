@@ -176,7 +176,7 @@ export const CreateSuperChecker = () => {
                     className={[
                       // bubble
                       'relative overflow-visible self-start [height:fit-content]',
-                      'rounded-lg border border-gray-300 bg-gray-50 px-3 py-2',
+                      'rounded-lg  bg-gray-100/70 px-3 py-2',
 
                       // TRIANGLE NOTCH (16x13, fill + outline)
                       'before:absolute before:top-1/2 before:-translate-y-1/2 before:-left-4',
@@ -189,7 +189,7 @@ export const CreateSuperChecker = () => {
                       'after:border-y-transparent after:[border-right-color:#D1D5DB]',
 
                       // spacing adjustment
-                      idx === 0 ? 'mt-1' : 'sm:mt-1 md:mt-[-35px]',
+                      idx === 0 ? 'mt-3' : 'sm:mt-1 md:mt-[-50px]',
                     ].join(' ')}
                   >
                     {/* Force single-row alignment inside, overriding getController defaults */}
