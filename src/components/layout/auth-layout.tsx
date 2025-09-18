@@ -21,13 +21,13 @@ export const AuthLayout: React.FC<AuthLayoutProps> = ({ children, title }) => {
 
   return (
     <div className="min-h-screen w-full flex flex-col justify-start bg-gradient">
-      <LogoHeader />
+      {/* <LogoHeader /> */}
       <div className="h-full w-full flex items-center justify-between flex-1">
-        <div className="max-w-[70%] mx-auto w-full rounded-xl">
+        <div className="max-w-[70%] mx-auto w-full">
           {children}
         </div>
       </div>
-      <PoweredBy />
+      {/* <PoweredBy /> */}
     </div>
   );
 };
