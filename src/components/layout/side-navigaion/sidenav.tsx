@@ -112,7 +112,7 @@ const Sidebar: React.FC<SidebarProps> = ({ navItems, collapsed, setCollapsed }) 
 
               {/* Submenu Items */}
               {!collapsed && item.subMenus && item.subMenus.length > 0 && openDropdowns.has(item.title) && (
-                <ul className="ml-4 mt-1 space-y-1 border-l border-muted/20">
+                <ul className="mt-1 space-y-1">
                   {item.subMenus.map((submenu, subIdx) => (
                     <li key={subIdx} className="list-none">
                       <div

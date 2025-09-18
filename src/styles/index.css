@@ -123,11 +123,12 @@
 .submenu-item {
   display: flex;
   align-items: center;
+  /* justify-content: center; */
   text-align: center;
   gap: 0.75rem;
   padding-top: 0.5rem;
   padding-bottom: 0.5rem;
-  padding-left: 0.5rem;
+  padding-left: 2.5rem;
   padding-right: 0.5rem;
   cursor: pointer;
   transition:

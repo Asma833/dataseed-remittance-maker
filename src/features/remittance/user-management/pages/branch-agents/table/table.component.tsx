@@ -149,8 +149,7 @@ const BranchAgentTable = () => {
         columns={columns}
         data={tableData}
         config={{
-          ...config,
-          export: { enabled: true, fileName: 'branch-agents.csv', includeHeaders: true },
+          ...config
         }}
         actions={tableActions}
         className="rounded-lg"
