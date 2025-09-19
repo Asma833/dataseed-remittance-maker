@@ -1,6 +1,5 @@
-import { useEffect, useState } from 'react';
-import LogoHeader from '@/components/common/logo-header';
-import PoweredBy from './footer/powered-by';
+import { useEffect, useState } from "react";
+import PoweredBy from "./footer/powered-by";
 
 interface AuthLayoutProps {
   children: React.ReactNode;
@@ -20,14 +19,24 @@ export const AuthLayout: React.FC<AuthLayoutProps> = ({ children, title }) => {
   }
 
   return (
-    <div className="min-h-screen w-full flex flex-col justify-start bg-gradient">
-      {/* <LogoHeader /> */}
+    <div className="min-h-screen w-full flex flex-col justify-between bg-gradient">
+      {/* Main content */}
       <div className="h-full w-full flex items-center justify-between flex-1">
-        <div className="max-w-[70%] mx-auto w-full">
-          {children}
-        </div>
+        <div className="max-w-[70%] mx-auto w-full">{children}</div>
       </div>
-      {/* <PoweredBy /> */}
+
+      {/* Footer */}
+      <footer className="relative w-full py-4 px-6 flex items-center justify-center">
+        {/* Center text */}
+        <p className="text-white text-sm text-center">
+          © EbixCash. All rights reserved
+        </p>
+
+        {/* Right aligned powered by */}
+        <div className="absolute right-6 bottom-4">
+          <PoweredBy />
+        </div>
+      </footer>
     </div>
   );
 };

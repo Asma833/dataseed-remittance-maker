@@ -10,6 +10,7 @@ import { useLogin } from '../hooks/useLogin';
 import { loginSchema, LoginSchema } from '../schemas/login.schema';
 import logo from '@/assets/images/ebix-login-logo.svg';
 import mask from '@/assets/images/ebix-mask-group.svg';
+import { cn } from '@/utils/cn';
 
 const LoginForm = () => {
   const [showPassword, setShowPassword] = React.useState(false);
@@ -56,34 +57,40 @@ const LoginForm = () => {
             <FormField
               control={form.control}
               name="password"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Password</FormLabel>
-                  <FormControl>
-                    <div className="relative">
-                      <Input
-                        {...field}
-                        type={showPassword ? 'text' : 'password'}
-                        placeholder="Enter your password"
-                        autoComplete="off"
-                      />
-                      <button
-                        type="button"
-                        className="absolute inset-y-0 right-0 pr-3 flex items-center hover:text-accent-foreground"
-                        onClick={() => setShowPassword(!showPassword)}
-                      >
-                        {showPassword ? (
-                          <EyeOff className="h-5 w-5 text-muted-foreground" />
-                        ) : (
-                          <Eye className="h-5 w-5 text-muted-foreground" />
-                        )}
-                      </button>
-                    </div>
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
+              render={({ field, fieldState }) => {
+                const invalid = !!fieldState.error;
+                return (
+                  <FormItem>
+                    <FormLabel>Password</FormLabel>
+                    <FormControl>
+                      <div className="relative">
+                        <Input
+                          {...field}
+                          type={showPassword ? 'text' : 'password'}
+                          placeholder="********"
+                          autoComplete="current-password"
+                          aria-invalid={invalid}
+                          className={cn(
+                            'pr-10',
+                            invalid && '!border-red-500 !focus-visible:ring-red-500 !focus-visible:border-red-500'
+                          )}
+                        />
+                        <button
+                          type="button"
+                          className="absolute inset-y-0 right-0 pr-3 grid place-items-center text-muted-foreground hover:text-foreground"
+                          onClick={() => setShowPassword((s) => !s)}
+                          aria-label={showPassword ? 'Hide password' : 'Show password'}
+                        >
+                          {showPassword ? <EyeOff className="h-5 w-5" /> : <Eye className="h-5 w-5" />}
+                        </button>
+                      </div>
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                );
+              }}
             />
+
             {/* disabling for this phase */}
             {/* <div className="text-right">
           <Link

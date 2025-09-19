@@ -2,7 +2,8 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate, useLocation, NavLink } from 'react-router-dom';
 import { ChevronDown, ChevronRight } from 'lucide-react';
 import { cn } from '@/utils/cn';
-import Logo from '@/components/logo/Logo';
+import DataSeedLogo from '@/assets/images/dataseed-white-logo.svg';
+import PoweredBy from '@/assets/images/powered-by.svg';
 import { NavigationItem } from '@/core/constant/manage-sidenav-options';
 import themeConfig from '@/core/configs/theme-config';
 import SidebarToggle from '@/components/common/sidebar-toggle';
@@ -136,6 +137,32 @@ const Sidebar: React.FC<SidebarProps> = ({ navItems, collapsed, setCollapsed }) 
           ))}
         </ul>
       </nav>
+      <div className="mt-auto w-full px-3 pb-4">
+        <div
+          className={cn(
+            "w-full flex items-center justify-center",
+            "flex-col gap-1"
+          )}
+        >
+          <img
+            src={PoweredBy}
+            alt="Powered by"
+            className={cn(
+              "pointer-events-none select-none opacity-90",
+              collapsed ? "h-3" : "h-3" 
+            )}
+          />
+          <img
+            src={DataSeedLogo}
+            alt="DataSeed"
+            className={cn(
+              "pointer-events-none select-none opacity-95",
+              collapsed ? "h-6" : "h-8"
+            )}
+          />
+        </div>
+      </div>
+
     </aside>
   );
 };

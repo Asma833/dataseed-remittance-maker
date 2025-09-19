@@ -51,7 +51,7 @@ export const ShadCnTextArea = ({
                 rows={rows}
                 placeholder={placeholder}
                 disabled={disabled}
-                className={cn("form-input shadow-none focus-visible:ring-0", "aria-invalid:focus-visible:ring-destructive/20 dark:aria-invalid:focus-visible:ring-destructive/40 aria-invalid:focus-visible:border-destructive")}
+                className={cn("form-input", "aria-invalid:focus-visible:ring-destructive/20 dark:aria-invalid:focus-visible:ring-destructive/40 aria-invalid:focus-visible:border-destructive")}
                 onChange={(e) => {
                   field.onChange(e);
                   // Call the onInputChange callback if provided

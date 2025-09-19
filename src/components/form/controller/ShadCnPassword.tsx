@@ -47,7 +47,7 @@ const ShadCnPassword = ({
                 required={required}
                 forcedValue={forcedValue}
                 placeholder={placeholder}
-                className={cn("form-input shadow-none focus-visible:ring-0", error && "border-destructive focus:ring-destructive")}
+                className={cn("form-input", error && "border-destructive focus-visible:ring-destructive")}
                 autoComplete="new-password"
               />
               {error && (

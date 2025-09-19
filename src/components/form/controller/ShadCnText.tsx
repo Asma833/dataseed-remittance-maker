@@ -48,7 +48,7 @@ export const ShadCnText = ({
               placeholder={placeholder}
               uppercase={uppercase}
               disabled={disabled}
-              className={cn("form-input shadow-none focus-visible:ring-0", error && "border-destructive focus:ring-destructive")}
+              className={cn("form-input", error && "border-destructive focus:ring-destructive")}
               forcedValue={forcedValue}
               {...(onInputChange && { onInputChange })}
             />
