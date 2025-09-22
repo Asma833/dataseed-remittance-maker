@@ -97,16 +97,16 @@ export const CreateBranchAgent = () => {
   return (
     <div className="space-y-1 w-full">
       {/* Header */}
-      <div className="flex items-center space-x-2 pl-3">
-        <ArrowLeft className="cursor-pointer h-5 w-5" onClick={handleBack} />
-        <h2 className="text-xl font-semibold tracking-tight">
-          {branchAgent ? "Update Branch Agent" : "Create Branch Agent"}
-        </h2>
+      <div className="flex items-center space-x-2">
+        <h2 className="text-sm font-semibold tracking-tight">Super Checker List Table / <span className="text-[var(--color-title)]">{branchAgent ? "Update Branch Agent" : "Create Branch Agent"}</span></h2>
       </div>
 
       {/* Form */}
       <FormProvider methods={methods}>
-        <FormContentWrapper className="p-3 mr-auto w-full mt-0">
+        <FormContentWrapper className="p-4 rounded-lg mr-auto w-full shadow-top">
+            <h2 className="text-xl font-bold mb-4 title-case p-2 pt-0 border-b border-gray-300">
+            {branchAgent ? "Update Branch Agent" : "Create New Branch Agent"}
+          </h2>
           <Spacer>
             {/* Vendor Details */}
             <div className="relative p-1">
