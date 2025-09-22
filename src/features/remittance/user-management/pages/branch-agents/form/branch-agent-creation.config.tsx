@@ -61,7 +61,7 @@ export const branchAgentCreationConfig = () => {
         },
         city: {
           name: "agentDetails.address.city",
-          label:"city",
+          label:"City",
           type: FieldType.Text,
           required: true,
           placeholder: "Enter City",

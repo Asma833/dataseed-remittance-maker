@@ -208,7 +208,7 @@ export const ShadCnCheckbox = ({
           defaultValue={getDefaultValues()}
           render={({ field }) => {
             const numOptions = Object.keys(options).length;
-            const effectiveOrientation = orientation || (numOptions <= 3 ? "horizontal" : "vertical");
+            const effectiveOrientation = orientation || (numOptions <= 4 ? "horizontal" : "vertical");
             const containerClassName =
               effectiveOrientation === "horizontal" ? "flex flex-wrap gap-x-4 gap-y-2" : "flex flex-col gap-4";
 
@@ -257,7 +257,7 @@ export const ShadCnCheckbox = ({
 
                         <label
                           htmlFor={`${name}-${key}`}
-                          className="text-sm font-medium leading-none cursor-pointer select-none"
+                          className="text-sm text-[var(--color-form-label)] leading-none cursor-pointer select-none"
                           onClick={() => !disabled && document.getElementById(`${name}-${key}`)?.click()}
                         >
                           {option.label}

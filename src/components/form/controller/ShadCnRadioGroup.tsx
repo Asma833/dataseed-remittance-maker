@@ -99,7 +99,7 @@ export const ShadCnRadioGroup = <T extends FieldValues>({
                     <label
                       htmlFor={`${name}-${value}`}
                       className={cn(
-                        "text-sm font-medium leading-none cursor-pointer select-none",
+                        "text-sm leading-none cursor-pointer select-none",
                         disabled && "text-gray-400 cursor-not-allowed"
                       )}
                     >

@@ -128,7 +128,7 @@ export const CreateSuperChecker = () => {
           </h2>
           <Spacer>
             <div className="relative p-1">
-              <label className="text-sm text-[var(--color-form-label)] font-medium absolute">Basic Details</label>
+              <label className="text-sm font-medium absolute">Basic Details</label>
             </div>
             <FormFieldRow rowCols={4}>
               {(['fullName', 'email', 'phoneNumber'] as const).map((fieldName) => {
@@ -262,7 +262,7 @@ export const CreateSuperChecker = () => {
             }
           
             <div className="relative p-1">
-              <label className="text-sm text-[var(--color-form-label)] font-medium absolute">Create Password</label>
+              <label className="text-sm font-semibold absolute">Create Password</label>
             </div>
 
             <FormFieldRow rowCols={4}>

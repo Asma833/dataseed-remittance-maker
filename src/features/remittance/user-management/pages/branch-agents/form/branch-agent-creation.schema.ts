@@ -5,31 +5,31 @@ import * as z from "zod";
 export const vendorDetailsSchema = z.object({
   vendorName: z
     .string()
-    .min(1, "Vendor Name is required")
+    .min(1, "Vendor name is required")
     .describe("Agent Vendor Name"),
   vendorCode: z
     .string()
-    .min(1, "Vendor Code is required")
+    .min(1, "Vendor code is required")
     .describe("Agent Vendor Code"),
   systemCode: z
     .string()
-    .min(1, "System Code is required")
+    .min(1, "System code is required")
     .describe("System Code"),
 });
 
 export const basicDetailsSchema = z.object({
   fullName: z
     .string()
-    .min(1, "Full Name is required")
+    .min(1, "Full name is required")
     .describe("Full Name"),
   emailId: z
     .string()
     .min(1, "Email is required")
-    .email("Please enter a valid Email")
+    .email("Please enter a valid email")
     .describe("Email Id"),
   mobileNo: z
     .string()
-    .min(1, "Phone Number is required")
+    .min(1, "Phone number is required")
     .describe("Phone No."),
 });
 
@@ -47,7 +47,7 @@ export const roleStatusSchema = z.object({
     .describe("Choose Role"),
   checkerList: z
     .string()
-    .min(1, "Please select at least one Checker")
+    .min(1, "Please select at least one checker")
     .describe("Select Checker"),
   status: z
     .enum(["active", "inactive"], {
@@ -64,7 +64,7 @@ export const securitySchema = z
       .describe("Password"),
     confirmPassword: z
       .string()
-      .min(8, "Confirm Password must be at least 8 characters long")
+      .min(8, "Confirm password must be at least 8 characters long")
       .describe("Confirm Password"),
   })
   .superRefine(({ password, confirmPassword }, ctx) => {

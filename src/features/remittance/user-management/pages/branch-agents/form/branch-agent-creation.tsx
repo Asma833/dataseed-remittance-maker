@@ -110,7 +110,7 @@ export const CreateBranchAgent = () => {
           <Spacer>
             {/* Vendor Details */}
             <div className="relative p-1">
-              <label className="text-sm text-[--color-black] font-medium absolute">Vendor Details</label>
+              <label className="text-sm font-medium absolute">Vendor Details</label>
             </div>
               <FormFieldRow rowCols={4}>
                 {(["vendorName", "vendorCode", "systemCode"] as const).map((fieldName) => {
@@ -130,7 +130,7 @@ export const CreateBranchAgent = () => {
 
             {/* Basic Details */}
             <div className="relative p-1">
-              <label className="text-sm text-[--color-black] font-medium absolute">Basic Details</label>
+              <label className="text-sm font-medium absolute">Basic Details</label>
             </div>
               <FormFieldRow rowCols={4}>
                 {(["fullName", "emailId", "mobileNo"] as const).map((fieldName) => {
@@ -150,7 +150,7 @@ export const CreateBranchAgent = () => {
 
             {/* Address */}
             <div className="relative p-1">
-              <label className="text-sm text-[--color-black] font-medium absolute">Address</label>
+              <label className="text-sm font-medium absolute">Address</label>
             </div>
               <FormFieldRow rowCols={4}>
                 {(["state", "city", "branch"] as const).map((fieldName) => {
@@ -169,7 +169,7 @@ export const CreateBranchAgent = () => {
               </FormFieldRow>
 
             {/* Role / Checker / Status */}
-              <FormFieldRow rowCols={3}>
+              <FormFieldRow rowCols={2}>
                 {(["role"] as const).map((fieldName) => {
                   const field = config.fields.agentDetails[fieldName];
                   return (
@@ -217,7 +217,7 @@ export const CreateBranchAgent = () => {
 
             {/* Security */}
               <div className="relative p-1">
-              <label className="text-sm text-[--color-black] font-medium absolute">Create Password</label>
+              <label className="text-sm font-medium absolute">Create Password</label>
             </div>
               <FormFieldRow rowCols={4}>
                 {(["password", "confirmPassword"] as const).map((fieldName) => {
