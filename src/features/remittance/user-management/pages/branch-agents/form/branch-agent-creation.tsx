@@ -12,31 +12,44 @@ import { FormProvider } from "@/components/form/providers/form-provider";
 import { getController } from "@/components/form/utils/get-controller";
 import { Button } from "@/components/ui/button";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { branchAgentSchema } from "./branch-agent-creation.schema";
+import { BranchAgentForm, branchAgentSchema } from "./branch-agent-creation.schema";
+
 
 export const CreateBranchAgent = () => {
-  type BranchAgentFormType = z.infer<typeof branchAgentSchema>;
-  const methods = useForm<BranchAgentFormType>({
+  const methods = useForm<BranchAgentForm>({
     resolver: zodResolver(branchAgentSchema),
     defaultValues: {
       agentDetails: {
-        vendorName: "",
-        vendorCode: "",
-        fullName: "",
-        emailId: "",
-        mobileNo: "",
-        state: "",
-        city: "",
-        branch: "",
-        role: "checker"
-      }
-    }
+        vendorDetails: {
+          vendorName: "",
+          vendorCode: "",
+          systemCode: "",
+        },
+        basicDetails: {
+          fullName: "",
+          emailId: "",
+          mobileNo: "",
+        },
+        address: {
+          state: "",
+          city: "",
+          branch: "",
+        },
+        roleStatus: {
+          role: "maker",
+          checkerList: "",
+          status: "active",
+        },
+        security: {
+          password: "",
+          confirmPassword: "",
+        },
+      },
+    },
   });
 
   const {
     control,
-    getValues,
-    reset,
     setValue,
     trigger,
     formState: { errors },
@@ -48,142 +61,187 @@ export const CreateBranchAgent = () => {
   const branchAgent = location.state?.branchAgent;
 
   const handleBack = () => {
-    navigate('/admin/user-management/branch-agents');
+    navigate("/admin/user-management/branch-agents");
   };
 
-  const onSubmit = async (data: any) => {
-    console.log('Form submitted with data:', data);
-    // Add actual submission logic here
+  const onSubmit = async (data: BranchAgentForm) => {
+    console.log("Form submitted with data:", data);
+    // TODO: Add actual submission logic
   };
 
   const handleFormSubmit = handleSubmit(onSubmit);
 
-  const mapBranchAgentData = (data: any) => {
-    // Map incoming data fields to form field names
-    const mappedData = {
-      agentDetails: {
-        vendorName: data.vendorName || '',
-        vendorCode: data.vendorCode || '',
-        fullName: data.fullName || '',
-        emailId: data.emailId || '',
-        mobileNo: data.mobileNo || '',
-        state: data.state || '',
-        city: data.city || '',
-        branch: data.branch || '',
-        role: data.role?.toLowerCase() === 'maker' ? 'maker' : 'checker',
-        // checkerList: data.checkerList || ''
-      }
-    };
-    return mappedData;
-  };
-
+  /** Optional: map backend -> frontend values */
   useEffect(() => {
-    const branchAgent = location.state?.branchAgent;
     if (branchAgent) {
-      const mappedData = mapBranchAgentData(branchAgent);
-      // Patch values one by one to handle different field names
-      setValue('agentDetails.vendorName', mappedData.agentDetails.vendorName);
-      setValue('agentDetails.vendorCode', mappedData.agentDetails.vendorCode);
-      setValue('agentDetails.fullName', mappedData.agentDetails.fullName);
-      setValue('agentDetails.emailId', mappedData.agentDetails.emailId);
-      setValue('agentDetails.mobileNo', mappedData.agentDetails.mobileNo);
-      setValue('agentDetails.state', mappedData.agentDetails.state);
-      setValue('agentDetails.city', mappedData.agentDetails.city);
-      setValue('agentDetails.branch', mappedData.agentDetails.branch);
-      setValue('agentDetails.role', mappedData.agentDetails.role as 'maker' | 'checker');
-      // setValue('agentDetails.checkerList', mappedData.agentDetails.checkerList);
-
-      // Trigger form validation and re-rendering
-      setTimeout(() => {
-        trigger();
-        console.log('Form values after patching:', getValues());
-      }, 100);
+      setValue("agentDetails.vendorDetails.vendorName", branchAgent.vendorName || "");
+      setValue("agentDetails.vendorDetails.vendorCode", branchAgent.vendorCode || "");
+      setValue("agentDetails.vendorDetails.systemCode", branchAgent.systemCode || "");
+      setValue("agentDetails.basicDetails.fullName", branchAgent.fullName || "");
+      setValue("agentDetails.basicDetails.emailId", branchAgent.emailId || "");
+      setValue("agentDetails.basicDetails.mobileNo", branchAgent.mobileNo || "");
+      setValue("agentDetails.address.state", branchAgent.state || "");
+      setValue("agentDetails.address.city", branchAgent.city || "");
+      setValue("agentDetails.address.branch", branchAgent.branch || "");
+      setValue("agentDetails.roleStatus.role", branchAgent.role || "maker");
+      setValue("agentDetails.roleStatus.checkerList", branchAgent.checkerList || "");
+      setValue("agentDetails.roleStatus.status", branchAgent.status || "active");
+      setValue("agentDetails.security.password", "");
+      setValue("agentDetails.security.confirmPassword", "");
+      setTimeout(() => trigger(), 100);
     }
-  }, [setValue, location.state, getValues]);
+  }, [branchAgent, setValue, trigger]);
+
+  const config = branchAgentCreationConfig();
 
   return (
     <div className="space-y-1 w-full">
+      {/* Header */}
       <div className="flex items-center space-x-2 pl-3">
         <ArrowLeft className="cursor-pointer h-5 w-5" onClick={handleBack} />
         <h2 className="text-xl font-semibold tracking-tight">
-            {branchAgent ? 'Update Branch Agent' : 'Create Branch Agent'}
-          </h2>
+          {branchAgent ? "Update Branch Agent" : "Create Branch Agent"}
+        </h2>
       </div>
 
+      {/* Form */}
       <FormProvider methods={methods}>
         <FormContentWrapper className="p-3 mr-auto w-full mt-0">
           <Spacer>
-            <div className="form-bg p-4 rounded-sm">
-            <FormFieldRow rowCols={4} className="mt-2 mb-4 mx-2">
-              {(['vendorName', 'vendorCode', 'fullName', 'emailId'] as const).map((fieldName) => {
-                const field = branchAgentCreationConfig().fields.agentDetails[fieldName];
-                return (
-                  <FieldWrapper key={fieldName}>
-                    {getController({
-                      ...(typeof field === 'object' && field !== null ? field : {}),
-                      name: `agentDetails.${fieldName}`,
-                      control,
-                      errors,
-                    })}
-                  </FieldWrapper>
-                );
-              })}
-            </FormFieldRow>
-            <FormFieldRow rowCols={4} className="mt-4 mb-2 mx-2">
-              {(['mobileNo', 'state', 'city', 'branch'] as const).map((fieldName) => {
-                const field = branchAgentCreationConfig().fields.agentDetails[fieldName];
-                return (
-                  <FieldWrapper key={fieldName}>
-                    {getController({
-                      ...(typeof field === 'object' && field !== null ? field : {}),
-                      name: `agentDetails.${fieldName}`,
-                      control,
-                      errors,
-                    })}
-                  </FieldWrapper>
-                );
-              })}
-            </FormFieldRow>
-           </div>
-           <div className="form-bg p-4 rounded-sm">
-            <FormFieldRow className="mt-2 mb-4 mx-2">
-              {(['role'] as const).map((fieldName) => {
-                const field = branchAgentCreationConfig().fields.agentDetails[fieldName];
-                return (
-                  <FieldWrapper key={fieldName}>
-                    {getController({
-                      ...(typeof field === 'object' && field !== null ? field : {}),
-                      name: `agentDetails.${fieldName}`,
-                      control,
-                      errors,
-                    })}
-                  </FieldWrapper>
-                );
-              })}
-            </FormFieldRow>
-            <FormFieldRow rowCols={4} className="mt-4 mb-2 mx-2">
-              {(['checkerList'] as const).map((fieldName) => {
-                const field = branchAgentCreationConfig().fields.agentDetails[fieldName];
-                return (
-                  <FieldWrapper key={fieldName}>
-                    {getController({
-                      ...(typeof field === 'object' && field !== null ? field : {}),
-                      name: `agentDetails.${fieldName}`,
-                      control,
-                      errors,
-                    })}
-                  </FieldWrapper>
-                );
-              })}
-            </FormFieldRow>
+            {/* Vendor Details */}
+            <div className="relative p-1">
+              <label className="text-sm text-[--color-black] font-medium absolute">Vendor Details</label>
             </div>
-        
-            <div className="flex justify-start space-x-2 form-bg p-4 rounded-sm">
-              <Button variant="outline" className="rounded-2xl w-28" onClick={handleBack}>
+              <FormFieldRow rowCols={4}>
+                {(["vendorName", "vendorCode", "systemCode"] as const).map((fieldName) => {
+                  const field = config.fields.agentDetails[fieldName];
+                  return (
+                    <FieldWrapper key={fieldName}>
+                      {getController({
+                        ...(field ?? {}),
+                        name: field.name,
+                        control,
+                        errors,
+                      })}
+                    </FieldWrapper>
+                  );
+                })}
+              </FormFieldRow>
+
+            {/* Basic Details */}
+            <div className="relative p-1">
+              <label className="text-sm text-[--color-black] font-medium absolute">Basic Details</label>
+            </div>
+              <FormFieldRow rowCols={4}>
+                {(["fullName", "emailId", "mobileNo"] as const).map((fieldName) => {
+                  const field = config.fields.agentDetails[fieldName];
+                  return (
+                    <FieldWrapper key={fieldName}>
+                      {getController({
+                        ...(field ?? {}),
+                        name: field.name,
+                        control,
+                        errors,
+                      })}
+                    </FieldWrapper>
+                  );
+                })}
+              </FormFieldRow>
+
+            {/* Address */}
+            <div className="relative p-1">
+              <label className="text-sm text-[--color-black] font-medium absolute">Address</label>
+            </div>
+              <FormFieldRow rowCols={4}>
+                {(["state", "city", "branch"] as const).map((fieldName) => {
+                  const field = config.fields.agentDetails[fieldName];
+                  return (
+                    <FieldWrapper key={fieldName}>
+                      {getController({
+                        ...(field ?? {}),
+                        name: field.name,
+                        control,
+                        errors,
+                      })}
+                    </FieldWrapper>
+                  );
+                })}
+              </FormFieldRow>
+
+            {/* Role / Checker / Status */}
+              <FormFieldRow rowCols={3}>
+                {(["role"] as const).map((fieldName) => {
+                  const field = config.fields.agentDetails[fieldName];
+                  return (
+                    <FieldWrapper key={fieldName}>
+                      {getController({
+                        ...(field ?? {}),
+                        name: field.name,
+                        control,
+                        errors,
+                      })}
+                    </FieldWrapper>
+                  );
+                })}
+              </FormFieldRow>
+              <FormFieldRow rowCols={4}>
+                {(["checkerList"] as const).map((fieldName) => {
+                  const field = config.fields.agentDetails[fieldName];
+                  return (
+                    <FieldWrapper key={fieldName}>
+                      {getController({
+                        ...(field ?? {}),
+                        name: field.name,
+                        control,
+                        errors,
+                      })}
+                    </FieldWrapper>
+                  );
+                })}
+              </FormFieldRow>
+              <FormFieldRow rowCols={1}>
+                {(["status"] as const).map((fieldName) => {
+                  const field = config.fields.agentDetails[fieldName];
+                  return (
+                    <FieldWrapper key={fieldName}>
+                      {getController({
+                        ...(field ?? {}),
+                        name: field.name,
+                        control,
+                        errors,
+                      })}
+                    </FieldWrapper>
+                  );
+                })}
+              </FormFieldRow>
+
+            {/* Security */}
+              <div className="relative p-1">
+              <label className="text-sm text-[--color-black] font-medium absolute">Create Password</label>
+            </div>
+              <FormFieldRow rowCols={4}>
+                {(["password", "confirmPassword"] as const).map((fieldName) => {
+                  const field = config.fields.agentDetails[fieldName];
+                  return (
+                    <FieldWrapper key={fieldName}>
+                      {getController({
+                        ...(field ?? {}),
+                        name: field.name,
+                        control,
+                        errors,
+                      })}
+                    </FieldWrapper>
+                  );
+                })}
+              </FormFieldRow>
+
+            {/* Actions */}
+            <div className="flex justify-start space-x-2 px-1">
+              <Button variant="outline" className="w-28" onClick={handleBack}>
                 Back
               </Button>
-              <Button type="submit" className="rounded-2xl w-28" onClick={handleFormSubmit}>
-                {branchAgent ? 'Update' : 'Create'}
+              <Button variant="secondary" type="submit" className="w-28" onClick={handleFormSubmit}>
+                {branchAgent ? "Update" : "Create"}
               </Button>
             </div>
           </Spacer>

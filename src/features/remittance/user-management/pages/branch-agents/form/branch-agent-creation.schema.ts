@@ -1,73 +1,92 @@
-import { z } from "zod";
+import * as z from "zod";
 
-// Zod schema for branch agent creation form
+/** ---------- SECTIONED FIELDS (with specific messages) ---------- */
+
+export const vendorDetailsSchema = z.object({
+  vendorName: z
+    .string()
+    .min(1, "Vendor Name is required")
+    .describe("Agent Vendor Name"),
+  vendorCode: z
+    .string()
+    .min(1, "Vendor Code is required")
+    .describe("Agent Vendor Code"),
+  systemCode: z
+    .string()
+    .min(1, "System Code is required")
+    .describe("System Code"),
+});
+
+export const basicDetailsSchema = z.object({
+  fullName: z
+    .string()
+    .min(1, "Full Name is required")
+    .describe("Full Name"),
+  emailId: z
+    .string()
+    .min(1, "Email is required")
+    .email("Please enter a valid Email")
+    .describe("Email Id"),
+  mobileNo: z
+    .string()
+    .min(1, "Phone Number is required")
+    .describe("Phone No."),
+});
+
+export const addressSchema = z.object({
+  state: z.string().min(1, "State is required").describe("State"),
+  city: z.string().min(1, "City is required").describe("City"),
+  branch: z.string().min(1, "Branch is required").describe("Branch"),
+});
+
+export const roleStatusSchema = z.object({
+  role: z
+    .enum(["maker", "checker", "both", "admin"], {
+      message: "Role is required",
+    })
+    .describe("Choose Role"),
+  checkerList: z
+    .string()
+    .min(1, "Please select at least one Checker")
+    .describe("Select Checker"),
+  status: z
+    .enum(["active", "inactive"], {
+      message: "Status is required",
+    })
+    .describe("Status"),
+});
+
+export const securitySchema = z
+  .object({
+    password: z
+      .string()
+      .min(8, "Password must be at least 8 characters long")
+      .describe("Password"),
+    confirmPassword: z
+      .string()
+      .min(8, "Confirm Password must be at least 8 characters long")
+      .describe("Confirm Password"),
+  })
+  .superRefine(({ password, confirmPassword }, ctx) => {
+    if (password !== confirmPassword) {
+      ctx.addIssue({
+        code: "custom",
+        path: ["confirmPassword"],
+        message: "Passwords do not match",
+      });
+    }
+  });
+
+/** ---------- TOP-LEVEL FORM SCHEMA ---------- */
+
 export const branchAgentSchema = z.object({
   agentDetails: z.object({
-    vendorName: z
-      .string()
-      .min(1, "Vendor name is required")
-      .min(2, "Vendor name must be at least 2 characters")
-      .max(100, "Vendor name must be less than 100 characters")
-      .regex(/^[a-zA-Z\s]+$/, "Vendor name can only contain letters and spaces"),
-
-    vendorCode: z
-      .string()
-      .min(1, "Vendor code is required")
-      .min(2, "Vendor code must be at least 2 characters")
-      .max(50, "Vendor code must be less than 50 characters")
-      .regex(/^[A-Z0-9]+$/, "Vendor code can only contain uppercase letters and numbers"),
-
-    fullName: z
-      .string()
-      .min(1, "Full name is required")
-      .min(2, "Full name must be at least 2 characters")
-      .max(100, "Full name must be less than 100 characters")
-      .regex(/^[a-zA-Z\s]+$/, "Full name can only contain letters and spaces"),
-
-    emailId: z
-      .string()
-      .min(1, "Email ID is required")
-      .email("Please enter a valid email address")
-      .max(255, "Email ID must be less than 255 characters"),
-
-    mobileNo: z
-      .string()
-      .min(1, "Mobile number is required")
-      .regex(/^[\+]?[1-9][\d]{0,15}$/, "Please enter a valid mobile number")
-      .min(10, "Mobile number must be at least 10 digits")
-      .max(15, "Mobile number must be less than 15 digits"),
-
-    state: z
-      .string()
-      .min(1, "State is required")
-      .min(2, "State must be at least 2 characters")
-      .max(50, "State must be less than 50 characters")
-      .regex(/^[a-zA-Z\s]+$/, "State can only contain letters and spaces"),
-
-    city: z
-      .string()
-      .min(1, "City is required")
-      .min(2, "City must be at least 2 characters")
-      .max(50, "City must be less than 50 characters")
-      .regex(/^[a-zA-Z\s]+$/, "City can only contain letters and spaces"),
-
-    branch: z
-      .string()
-      .min(1, "Branch is required")
-      .min(2, "Branch must be at least 2 characters")
-      .max(100, "Branch must be less than 100 characters"),
-
-    role: z
-      .enum(["maker", "checker"])
-      .refine((val) => val !== undefined, {
-        message: "Please select a role"
-      }),
-
-    checkerList: z
-      .string()
-      .min(1, "Please select a checker")
-      .refine((val) => val !== "", {
-        message: "Please select a checker from the list"
-      })
-  })
+    vendorDetails: vendorDetailsSchema,
+    basicDetails: basicDetailsSchema,
+    address: addressSchema,
+    roleStatus: roleStatusSchema,
+    security: securitySchema,
+  }),
 });
+
+export type BranchAgentForm = z.infer<typeof branchAgentSchema>;

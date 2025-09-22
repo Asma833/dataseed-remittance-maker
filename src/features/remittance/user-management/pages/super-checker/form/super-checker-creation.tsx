@@ -18,22 +18,6 @@ import { FieldType } from '@/types/enums';
 
 export const CreateSuperChecker = () => {
   type SuperCheckerFormType = z.infer<typeof superCheckerSchema>;
-  // const methods = useForm<SuperCheckerFormType>({
-  //   resolver: zodResolver(superCheckerSchema),
-  //   defaultValues: {
-  //     checkerDetails: {
-  //       fullName: '',
-  //       email: '',
-  //       phoneNumber: '',
-  //       productType: { card: true },
-  //       // transactionTypeMap: { card: 'buy', currency: 'sell'},
-  //       status: 'active',
-  //       agents: [],
-  //       password: '',
-  //       confirmPassword: '',
-  //     },
-  //   },
-  // });
   const methods = useForm<SuperCheckerFormType>({
   resolver: zodResolver(superCheckerSchema),
   mode: "onChange",           

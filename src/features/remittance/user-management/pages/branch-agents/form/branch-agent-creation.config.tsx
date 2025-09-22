@@ -1,91 +1,133 @@
-import { FieldType } from '@/types/enums';
+import { FieldType } from "@/types/enums";
 
 export const branchAgentCreationConfig = () => {
   return {
-    sectionTitle: 'Branch Agent Creation',
-    description: 'Fill in the details to create a new branch agent',
+    sectionTitle: "Branch Agent Creation",
     fields: {
       agentDetails: {
+        // Vendor
         vendorName: {
-          name: 'agentDetails.vendorName',
-          label: 'Vendor Name',
+          name: "agentDetails.vendorDetails.vendorName",
+          label: "Vendor Name",
           type: FieldType.Text,
           required: true,
-          placeholder: 'Enter Vendor Name',
+          placeholder: "Enter Vendor Name",
         },
         vendorCode: {
-          name: 'agentDetails.vendorCode',
-          label: 'Vendor Code',
+          name: "agentDetails.vendorDetails.vendorCode",
+          label:"Vendor Code",
           type: FieldType.Text,
           required: true,
-          placeholder: 'Enter Vendor Code',
+          placeholder: "Enter Vendor Code",
         },
-        fullName: {
-          name: 'agentDetails.fullName',
-          label: 'Full Name',
+        systemCode: {
+          name: "agentDetails.vendorDetails.systemCode",
+          label: "System Code",
           type: FieldType.Text,
           required: true,
-          placeholder: 'Enter Full Name',
+          placeholder: "Enter System Code",
+        },
+
+        // Basic
+        fullName: {
+          name: "agentDetails.basicDetails.fullName",
+          label:"Full Name",
+          type: FieldType.Text,
+          required: true,
+          placeholder: "Enter Full Name",
         },
         emailId: {
-          name: 'agentDetails.emailId',
-          label: 'Email ID',
+          name: "agentDetails.basicDetails.emailId",
+          label: "Email Id",
           type: FieldType.Email,
           required: true,
-          placeholder: 'Enter Email ID',
+          placeholder: "Enter Email Id",
         },
         mobileNo: {
-          name: 'agentDetails.mobileNo',
-          label: 'Mobile No',
+          name: "agentDetails.basicDetails.mobileNo",
+          label:"Mobile No",
           type: FieldType.Phone,
           required: true,
-          placeholder: 'Enter Mobile Number',
+          placeholder: "Enter Phone No.",
         },
+
+        // Address
         state: {
-          name: 'agentDetails.state',
-          label: 'State',
+          name: "agentDetails.address.state",
+          label:"State",
           type: FieldType.Text,
           required: true,
-          placeholder: 'Enter State',
+          placeholder: "Enter State",
         },
         city: {
-          name: 'agentDetails.city',
-          label: 'City',
+          name: "agentDetails.address.city",
+          label:"city",
           type: FieldType.Text,
           required: true,
-          placeholder: 'Enter City',
+          placeholder: "Enter City",
         },
         branch: {
-          name: 'agentDetails.branch',
-          label: 'Branch',
+          name: "agentDetails.address.branch",
+          label:"Branch",
           type: FieldType.Text,
           required: true,
-          placeholder: 'Enter Branch',
+          placeholder: "Enter Branch",
         },
+
+        // Role / Checker / Status
         role: {
-          name: 'agentDetails.role',
-          label: 'Role',
+          name: "agentDetails.roleStatus.role",
+          label:"Choose Role",
+          type: FieldType.Checkbox,
+          required: true,
+          isMulti:true,
+          variant:"circle_check_filled",
+          options: {
+            maker: { label: "Maker" },
+            checker: { label: "Checker", checked: true },
+            both: { label: "Both" },
+            admin: { label: "Admin" },
+          },
+        },
+        checkerList: {
+          name: "agentDetails.roleStatus.checkerList",
+          label: "Checker List",
+          type: FieldType.Select,
+          required: true,
+          placeholder: "Select Checker",
+          options: [
+            { value: "checker1", label: "Sham Shetty" },
+            { value: "checker2", label: "Checker 2" },
+            { value: "checker3", label: "Checker 3" },
+          ],
+        },
+        status: {
+          name: "agentDetails.roleStatus.status",
+          label: "Status",
           type: FieldType.Radio,
           required: true,
           options: {
-            'maker': { label: 'Maker' },
-            'checker': { label: 'Checker', checked: true }
-          }
+            active: { label: "Active", checked: true },
+            inactive: { label: "Inactive" },
+          },
         },
-        checkerList: {
-          name: 'agentDetails.checkerList',
-          label: 'Checker List',
-          type: FieldType.Select,
+
+        // Security
+        password: {
+          name: "agentDetails.security.password",
+          label:"Password",
+          type: FieldType.Password,
           required: true,
-          placeholder: 'Select Checker',
-          options: [
-            { value: 'checker1', label: 'Checker 1' },
-            { value: 'checker2', label: 'Checker 2' },
-            { value: 'checker3', label: 'Checker 3' },
-          ]
+          placeholder: "Enter Password",
+        },
+        confirmPassword: {
+          name: "agentDetails.security.confirmPassword",
+          label: "Confirm Password",
+          type: FieldType.Password,
+          required: true,
+          placeholder: "Enter Password",
         },
       },
     },
   };
 };
-     
