@@ -18,9 +18,21 @@ export const ROUTES = {
       AGENT_PROFILE: '/user-management/agent-profile-creation',
       CREATE_AGENT: '/user-management/agent-profile-creation/create-new-agent',
     },
-   MASTER: {
+  //  MASTER: {
+  //     RATE_MASTER:'/master/rate-master',
+  //     PURPOSE_MASTER: '/master/purpose-master',
+  //     DOCUMENT_MASTER: '/master/purpose-master/document-mapping',
+  //     CREATE_PURPOSE_MASTER: '/master/purpose-master/add-purpose',
+  //     UPDATE_PURPOSE_MASTER: '/master/purpose-master/update/:id',
+  //   },
+    MASTER: {
+      RATE_MASTER: {
+        RATE_MARGIN: '/master/rate-master/rate-margin',
+        REMITTANCE: 'rate-master/remittance',
+        LIVE_RATES: 'rate-master/live-rates',
+        HOLIDAY_LIST: 'rate-master/holiday-list',
+      },
       PURPOSE_MASTER: '/master/purpose-master',
-      DOCUMENT_MASTER: '/master/purpose-master/document-mapping',
       CREATE_PURPOSE_MASTER: '/master/purpose-master/add-purpose',
       UPDATE_PURPOSE_MASTER: '/master/purpose-master/update/:id',
     },

@@ -1,14 +1,21 @@
 import { ROLES, ROUTES } from '@/core/constant/route-paths';
+import type { RouteConfig } from '@/types/route.types';
 import AdminAgentList from '@/features/remittance/user-management/pages/agent-admin-table/page';
 
 import { CreateSuperChecker } from '@/features/remittance/user-management/pages/super-checker/form/super-checker-creation';
 import SuperCheckerTablePage from '@/features/remittance/user-management/pages/super-checker/table/page';
 import BranchAgentsPage from '@/features/remittance/user-management/pages/branch-agents/table/table.component';
 import { CreateBranchAgent } from '@/features/remittance/user-management/pages/branch-agents/form/branch-agent-creation';
+import TransactionPage from '@/features/remittance/master/rate-master/Page';
+import Remittance from '@/features/remittance/master/rate-master/tabs/remittance/Remittance';
+import { getTabsFromRoute } from '@/utils/routeUtils';
+import LiveRates from '@/features/remittance/master/rate-master/tabs/live-rates/LiveRates';
+import HolidayList from '@/features/remittance/master/rate-master/tabs/holiday-list/HolidayList';
+import { CreateHoliday } from '@/features/remittance/master/rate-master/tabs/holiday-list/CreateHoliday';
 
 const baseRole = ROLES.ADMIN; // Admin routes are accessible to admin role
 
-export const adminRoutes = [
+export const adminRoutes: RouteConfig[] = [
   {
     path: ROUTES.ADMIN.AGENT_ADMIN,
     element: AdminAgentList,
@@ -38,5 +45,40 @@ export const adminRoutes = [
     element: CreateBranchAgent,
     roles: [baseRole],
     permission: 'admin',
-  }
+  },
+  {
+    path: '/master/*',
+    element: TransactionPage,
+    roles: [baseRole],
+    permission: '',
+    subRoutes: [
+      {
+        path: ROUTES.ADMIN.MASTER.RATE_MASTER.REMITTANCE,
+        label: 'Remittance',
+        element: Remittance,
+        permission: '',
+      },
+      {
+        path: ROUTES.ADMIN.MASTER.RATE_MASTER.LIVE_RATES,
+        label: 'Live Rates',
+        element: LiveRates,
+        permission: '',
+      },
+      {
+        path: ROUTES.ADMIN.MASTER.RATE_MASTER.HOLIDAY_LIST,
+        label: 'Holiday List',
+        element: HolidayList,
+        permission: '',
+      },
+    ],
+  },
+  {
+    path: '/master/holiday-creation',
+    element: CreateHoliday,
+    roles: [baseRole],
+    permission: 'admin',
+  },
 ];
+export const getAdminTransactionTabs = () => {
+  return getTabsFromRoute('/master/*', adminRoutes);
+};

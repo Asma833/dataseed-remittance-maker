@@ -7,24 +7,46 @@ import NotFoundPage from '@/components/common/not-found-page';
 export const AdminRoutes = () => {
   return (
     <Routes>
-      {adminRoutes.map(({ path, element: Element, roles, permission }) => (
-        <Route
-          key={path}
-          path={path}
-          element={
-            <ProtectedRoute roles={roles} permission={permission}>
-              <SidebarLayout>
-                <Element
-                  setDialogTitle={() => {}}
-                  rowData={null}
-                  refetch={() => {}}
-                  setIsModalOpen={() => {}}
-                />
-              </SidebarLayout>
-            </ProtectedRoute>
-          }
-        />
-      ))}
+      {adminRoutes.map(({ path, element: Element, roles, permission, subRoutes }) => {
+        // Make child paths relative to /admin/*
+        const normalizedPath = path.replace(/^\//, '');
+
+        // If route has subRoutes, render nested routes under the parent
+        if (subRoutes && subRoutes.length > 0) {
+          return (
+            <Route
+              key={path}
+              path={normalizedPath}
+              element={
+                <ProtectedRoute roles={roles} {...(permission ? { permission } : {})}>
+                  <SidebarLayout>
+                    <Element />
+                  </SidebarLayout>
+                </ProtectedRoute>
+              }
+            >
+              {subRoutes.map(({ path: subPath, element: SubElement }) => (
+                <Route key={subPath} path={subPath} element={<SubElement />} />
+              ))}
+            </Route>
+          );
+        }
+
+        // Simple route without subRoutes
+        return (
+          <Route
+            key={path}
+            path={normalizedPath}
+            element={
+              <ProtectedRoute roles={roles} {...(permission ? { permission } : {})}>
+                <SidebarLayout>
+                  <Element />
+                </SidebarLayout>
+              </ProtectedRoute>
+            }
+          />
+        );
+      })}
       <Route
         path="*"
         element={
