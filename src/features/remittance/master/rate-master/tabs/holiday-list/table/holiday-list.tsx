@@ -1,4 +1,4 @@
-import HolidayTable from './HolidayTable';
+import HolidayTable from './holiday-table';
 
 const HolidayList = () => {
   return <HolidayTable />;

@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import GetHolidayTableColumns from './GetHolidayTableColumns';
+import GetHolidayTableColumns from './holiday-table-columns';
 import { HolidayData } from './types';
 import { Button } from '@/components/ui/button';
 import { DataTable, TableData, staticConfig } from '@/components/table';

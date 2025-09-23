@@ -4,13 +4,13 @@ import { FormContentWrapper } from '@/components/form/wrapper/form-content-wrapp
 import FormFieldRow from '@/components/form/wrapper/form-field-row';
 import Spacer from '@/components/form/wrapper/spacer';
 import { useNavigate, useLocation } from 'react-router-dom';
-import { holidayFormConfig } from './holiday-form/holiday-form-config';
+import { holidayFormConfig } from './holiday-form-config';
 import FieldWrapper from '@/components/form/wrapper/field-wrapper';
 import { FormProvider } from '@/components/form/providers/form-provider';
 import { getController } from '@/components/form/utils/get-controller';
 import { Button } from '@/components/ui/button';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { HolidayFormSchema } from './holiday-form/holiday-form.schema';
+import { HolidayFormSchema } from './holiday-form.schema';
 
 export const CreateHoliday = () => {
   const methods = useForm({

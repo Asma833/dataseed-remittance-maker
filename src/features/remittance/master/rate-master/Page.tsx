@@ -2,8 +2,8 @@ import { NavLink, Outlet, useLocation } from 'react-router-dom';
 import { cn } from '@/utils/cn';
 // import { getTransactionTabs } from '@/core/routes/route-maps/maker.routes';
 import { getAdminTransactionTabs } from '@/core/routes/route-maps/admin.routes';
-import Remittance from './tabs/remittance/Remittance';
 import LiveRates from './tabs/live-rates/LiveRates';
+import Remittance from './tabs/remittance/remittance-table';
 
 const TransactionPage = () => {
   const location = useLocation();

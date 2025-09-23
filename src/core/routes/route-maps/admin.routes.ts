@@ -7,11 +7,11 @@ import SuperCheckerTablePage from '@/features/remittance/user-management/pages/s
 import BranchAgentsPage from '@/features/remittance/user-management/pages/branch-agents/table/table.component';
 import { CreateBranchAgent } from '@/features/remittance/user-management/pages/branch-agents/form/branch-agent-creation';
 import TransactionPage from '@/features/remittance/master/rate-master/Page';
-import Remittance from '@/features/remittance/master/rate-master/tabs/remittance/Remittance';
+import Remittance from '@/features/remittance/master/rate-master/tabs/remittance/remittance-table';
 import { getTabsFromRoute } from '@/utils/routeUtils';
 import LiveRates from '@/features/remittance/master/rate-master/tabs/live-rates/LiveRates';
-import HolidayList from '@/features/remittance/master/rate-master/tabs/holiday-list/HolidayList';
-import { CreateHoliday } from '@/features/remittance/master/rate-master/tabs/holiday-list/CreateHoliday';
+import HolidayList from '@/features/remittance/master/rate-master/tabs/holiday-list/table/holiday-list';
+import { CreateHoliday } from '@/features/remittance/master/rate-master/tabs/holiday-list/form/create-holiday';
 
 const baseRole = ROLES.ADMIN; // Admin routes are accessible to admin role
 
