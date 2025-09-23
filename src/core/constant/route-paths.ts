@@ -31,6 +31,8 @@ export const ROUTES = {
         REMITTANCE: 'rate-master/remittance',
         LIVE_RATES: 'rate-master/live-rates',
         HOLIDAY_LIST: 'rate-master/holiday-list',
+        CARD: 'rate-master/card',
+        CURRENCY: 'rate-master/currency',
       },
       PURPOSE_MASTER: '/master/purpose-master',
       CREATE_PURPOSE_MASTER: '/master/purpose-master/add-purpose',

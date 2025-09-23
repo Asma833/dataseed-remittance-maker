@@ -1,53 +1,53 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import GetHolidayTableColumns from './holiday-table-columns';
-import { HolidayData } from './types';
+import GetCardTableColumns from './card-table-columns';
+import { CardData } from './types';
 import { Button } from '@/components/ui/button';
 import { DataTable, TableData, staticConfig } from '@/components/table';
 import { PlusCircle } from 'lucide-react';
 
-const sampleHolidays: HolidayData[] = [
+const sampleCards: CardData[] = [
   {
     id: '1',
     sno: 1,
-    created_at: '2025-01-01',
-    holiday_name: "New Year's Day",
+    currency: 'USD',
+    working_10_12: '1.5%',
+    working_12_02: '2.0%',
+    working_02_3_30: '1.8%',
+    workingEnd: '3.0%',
+    ttHolidayMargin: '0.5%',
+    ttweekendMargin: '1.0%',
+    upperCircuit: '5.0%',
   },
   {
     id: '2',
     sno: 2,
-    created_at: '2025-01-26',
-    holiday_name: 'Republic Day',
+    currency: 'EUR',
+    working_10_12: '1.2%',
+    working_12_02: '1.8%',
+    working_02_3_30: '1.5%',
+    workingEnd: '2.5%',
+    ttHolidayMargin: '0.3%',
+    ttweekendMargin: '0.8%',
+    upperCircuit: '4.0%',
   },
   {
     id: '3',
     sno: 3,
-    created_at: '2025-03-29',
-    holiday_name: 'Holi',
-  },
-  {
-    id: '4',
-    sno: 4,
-    created_at: '2025-08-15',
-    holiday_name: 'Independence Day',
-  },
-  {
-    id: '5',
-    sno: 5,
-    created_at: '2025-10-02',
-    holiday_name: 'Gandhi Jayanti',
-  },
-  {
-    id: '6',
-    sno: 6,
-    created_at: '2025-12-25',
-    holiday_name: 'Christmas Day',
+    currency: 'GBP',
+    working_10_12: '1.8%',
+    working_12_02: '2.2%',
+    working_02_3_30: '2.0%',
+    workingEnd: '3.5%',
+    ttHolidayMargin: '0.7%',
+    ttweekendMargin: '1.2%',
+    upperCircuit: '6.0%',
   },
 ];
 
-const HolidayTable = () => {
+const CardTable = () => {
   const navigate = useNavigate();
-  const [holidays, setHolidays] = useState<HolidayData[]>(sampleHolidays);
+  const [cards, setCards] = useState<CardData[]>(sampleCards);
   const [loading, setLoading] = useState(false);
 
   // Table configuration
@@ -55,7 +55,7 @@ const HolidayTable = () => {
     ...staticConfig,
     search: {
       ...staticConfig.search,
-      placeholder: 'Search holidays...',
+      placeholder: 'Search cards...',
       enabled: true,
       searchMode: 'static' as const,
     },
@@ -70,15 +70,15 @@ const HolidayTable = () => {
   };
 
   // Table data
-  const tableData: TableData<HolidayData> = {
-    data: holidays,
-    totalCount: holidays.length,
-    pageCount: Math.ceil(holidays.length / (config.pagination?.pageSize || 10)),
+  const tableData: TableData<CardData> = {
+    data: cards,
+    totalCount: cards.length,
+    pageCount: Math.ceil(cards.length / (config.pagination?.pageSize || 10)),
     currentPage: 1,
   };
 
-  const handleEdit = (holiday: HolidayData) => {
-    navigate('/admin/master/holiday-creation', { state: { holiday } });
+  const handleEdit = (card: CardData) => {
+    navigate('/admin/master/card-creation', { state: { card } });
   };
 
   // Table actions
@@ -100,28 +100,13 @@ const HolidayTable = () => {
     },
   };
 
-  // Navigate to holiday creation page
-  const handleAddHoliday = () => {
-    navigate('/admin/master/holiday-creation');
-  };
-
   // Define columns
-  const columns = GetHolidayTableColumns({
+  const columns = GetCardTableColumns({
     handleEdit,
   });
 
   return (
     <div className="space-y-4 w-full">
-      {/* Header with controls */}
-      <div className="flex items-center justify-end">
-   
-        <div className="flex items-center gap-2">
-          <Button onClick={handleAddHoliday} size="sm">
-            <PlusCircle className="h-4 w-4" />
-            Add Holiday
-          </Button>
-        </div>
-      </div>
 
       {/* Data Table */}
       <DataTable
@@ -137,4 +122,4 @@ const HolidayTable = () => {
   );
 };
 
-export default HolidayTable;
+export default CardTable;
