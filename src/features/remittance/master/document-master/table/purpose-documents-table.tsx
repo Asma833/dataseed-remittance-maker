@@ -1,9 +1,10 @@
-import { DialogWrapper } from '@/components/common/DialogWrapper';
+
 import React, { useState } from 'react';
-import CreatePurposeDocumentPage from '../create-documents/CreatePurposeDocumentPage';
-import { DynamicTable } from '@/components/common/dynamic-table/DynamicTable';
+import CreatePurposeDocumentPage from '../form/create-purpose-document-page';
 import { PurposeDocumentTableConfig } from './purpose-document-table.config';
-import { useDynamicPagination } from '@/components/common/dynamic-table/hooks/useDynamicPagination';
+import { DialogWrapper } from '@/components/common/dialog-wrapper';
+import { DataTable } from '@/components/table/data-table';
+// import { useDynamicPagination } from '@/components/common/dynamic-table/hooks/useDynamicPagination';
 
 export const PurposeDocumentsTable = () => {
   //  const { data, loading: isLoading, error, fetchData: refreshData } = useGetAllOrders();
@@ -93,13 +94,6 @@ export const PurposeDocumentsTable = () => {
 
   const isPaginationDynamic = false;
 
-  // Use the dynamic pagination hook for fallback
-  const pagination = useDynamicPagination({
-    endpoint: '',
-    initialPageSize: 10,
-    dataPath: 'transactions',
-    totalRecordsPath: 'totalRecords',
-  });
 
   const tableColumns = PurposeDocumentTableConfig();
 
@@ -107,8 +101,8 @@ export const PurposeDocumentsTable = () => {
 
   return (
     <div className="dynamic-table-wrap relative">
-      <p className="absolute top-1 left-0 p-4 font-semibold">Required Documents</p>
-      <DynamicTable
+      {/* <p className="absolute top-1 left-0 p-4 font-semibold">Required Documents</p> */}
+      {/* <DataTable
         columns={tableColumns}
         data={dummyData}
         defaultSortColumn="created_at"
@@ -130,10 +124,8 @@ export const PurposeDocumentsTable = () => {
           />
         )}
         paginationMode={'static'}
-        onPageChange={
-          isPaginationDynamic ? pagination.handlePageChange : async (_page: number, _pageSize: number) => []
-        }
-      />
+        
+      /> */}
     </div>
   );
 };

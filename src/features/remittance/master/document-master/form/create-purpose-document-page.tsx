@@ -3,13 +3,14 @@ import { FormProvider, useForm } from 'react-hook-form';
 import { useParams } from 'react-router';
 import { PurposeDocumentFormSchema } from './create-purpose-document-form.shema';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { FormContentWrapper } from '@/components/form/wrapper/FormContentWrapper';
-import FormFieldRow from '@/components/form/wrapper/FormFieldRow';
-import FieldWrapper from '@/components/form/wrapper/FieldWrapper';
-import { getController } from '@/components/form/utils/getController';
-import Spacer from '@/components/form/wrapper/Spacer';
+
 import { PurposeDocumentFormConfig } from './create-purpose-document-form.config';
-import CheckboxWrapper from '@/components/form/wrapper/CheckboxWrapper';
+import { FormContentWrapper } from '@/components/form/wrapper/form-content-wrapper';
+import Spacer from '@/components/form/wrapper/spacer';
+import FormFieldRow from '@/components/form/wrapper/form-field-row';
+import FieldWrapper from '@/components/form/wrapper/field-wrapper';
+import { getController } from '@/components/form/utils/get-controller';
+import CheckboxWrapper from '@/components/form/wrapper/checkbox-wrapper';
 
 const CreatePurposeDocumentPage = ({ setDialogTitle }: { setDialogTitle: (title: string) => void }) => {
   const { id } = useParams();
@@ -18,9 +19,9 @@ const CreatePurposeDocumentPage = ({ setDialogTitle }: { setDialogTitle: (title:
   const methods = useForm({
     resolver: zodResolver(PurposeDocumentFormSchema),
     defaultValues: {
-      year: '',
-      date: '',
-      holidayName: '',
+      // year: '',
+      // date: '',
+      // holidayName: '',
     },
   });
   const {

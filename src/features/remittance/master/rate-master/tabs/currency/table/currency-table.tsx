@@ -100,11 +100,6 @@ const CurrencyTable = () => {
     },
   };
 
-  // Navigate to currency creation page
-  const handleAddCurrency = () => {
-    navigate('/admin/master/currency-creation');
-  };
-
   // Define columns
   const columns = GetCurrencyTableColumns({
     handleEdit,
@@ -112,19 +107,6 @@ const CurrencyTable = () => {
 
   return (
     <div className="space-y-4 w-full">
-      {/* Header with controls */}
-      <div className="flex items-center justify-between">
-        <div className="space-y-1">
-          <h2 className="text-lg font-semibold tracking-tight text-[var(--color-title)]">Currency List</h2>
-        </div>
-        <div className="flex items-center gap-2">
-          <Button onClick={handleAddCurrency} size="sm">
-            <PlusCircle className="h-4 w-4" />
-            Add Currency
-          </Button>
-        </div>
-      </div>
-
       {/* Data Table */}
       <DataTable
         columns={columns}

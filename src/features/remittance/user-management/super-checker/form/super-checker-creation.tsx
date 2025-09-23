@@ -15,6 +15,8 @@ import { Button } from '@/components/ui/button';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { superCheckerSchema } from './super-checker-creation.schema';
 import { FieldType } from '@/types/enums';
+import { TableTitle } from '@/features/auth/components/table-title';
+import { FormTitle } from '@/features/auth/components/form-title';
 
 export const CreateSuperChecker = () => {
   type SuperCheckerFormType = z.infer<typeof superCheckerSchema>;
@@ -118,14 +120,14 @@ export const CreateSuperChecker = () => {
   return (
     <div className="space-y-1 w-full">
       <div className="flex items-center space-x-2">
-        <h2 className="text-sm font-semibold tracking-tight">Super Checker List Table / <span className="text-[var(--color-title)]">Create Superchecker</span></h2>
+      <FormTitle tableName="Super Checker List Table"
+        actionName={superChecker ? 'Update Superchecker' : 'Create New Superchecker'}
+        />
       </div>
 
       <FormProvider methods={methods}>
         <FormContentWrapper className="p-4 rounded-lg mr-auto w-full shadow-top">
-          <h2 className="text-xl font-bold mb-4 title-case p-2 pt-0 border-b border-gray-300">
-            {superChecker ? 'Update Superchecker' : 'Create New Superchecker'}
-          </h2>
+          <TableTitle title={superChecker ? 'Update Superchecker' : 'Create New Superchecker'} titleClassName="text-black"/>
           <Spacer>
             <div className="relative p-1">
               <label className="text-sm font-medium absolute">Basic Details</label>

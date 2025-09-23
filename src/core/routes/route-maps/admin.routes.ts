@@ -1,11 +1,11 @@
 import { ROLES, ROUTES } from '@/core/constant/route-paths';
 import type { RouteConfig } from '@/types/route.types';
-import AdminAgentList from '@/features/remittance/user-management/pages/agent-admin-table/page';
+import AdminAgentList from '@/features/remittance/user-management/agent-admin-table/page';
 
-import { CreateSuperChecker } from '@/features/remittance/user-management/pages/super-checker/form/super-checker-creation';
-import SuperCheckerTablePage from '@/features/remittance/user-management/pages/super-checker/table/page';
-import BranchAgentsPage from '@/features/remittance/user-management/pages/branch-agents/table/table.component';
-import { CreateBranchAgent } from '@/features/remittance/user-management/pages/branch-agents/form/branch-agent-creation';
+import { CreateSuperChecker } from '@/features/remittance/user-management/super-checker/form/super-checker-creation';
+import SuperCheckerTablePage from '@/features/remittance/user-management/super-checker/table/page';
+import BranchAgentsPage from '@/features/remittance/user-management/branch-agents/table/table.component';
+import { CreateBranchAgent } from '@/features/remittance/user-management/branch-agents/form/branch-agent-creation';
 import TransactionPage from '@/features/remittance/master/rate-master/Page';
 import Remittance from '@/features/remittance/master/rate-master/tabs/remittance/remittance-table';
 import { getTabsFromRoute } from '@/utils/routeUtils';
@@ -14,6 +14,8 @@ import HolidayList from '@/features/remittance/master/rate-master/tabs/holiday-l
 import { CreateHoliday } from '@/features/remittance/master/rate-master/tabs/holiday-list/form/create-holiday';
 import Card from '@/features/remittance/master/rate-master/tabs/card/table/card-page';
 import Currency from '@/features/remittance/master/rate-master/tabs/currency/Currency';
+import PurposeMasterTablePage from '@/features/remittance/master/purpose-master/table/purpose-master-table-page';
+import CreatePurposeMasterPage from '@/features/remittance/master/purpose-master/form/create-purpose-master-page';
 
 const baseRole = ROLES.ADMIN; // Admin routes are accessible to admin role
 
@@ -89,6 +91,24 @@ export const adminRoutes: RouteConfig[] = [
   {
     path: '/master/holiday-creation',
     element: CreateHoliday,
+    roles: [baseRole],
+    permission: 'admin',
+  },
+  {
+    path: ROUTES.ADMIN.MASTER.PURPOSE_MASTER,
+    element: PurposeMasterTablePage,
+    roles: [baseRole],
+    permission: 'admin',
+  },
+  {
+    path: ROUTES.ADMIN.MASTER.CREATE_PURPOSE_MASTER,
+    element: CreatePurposeMasterPage,
+    roles: [baseRole],
+    permission: 'admin',
+  },
+  {
+    path: ROUTES.ADMIN.MASTER.UPDATE_PURPOSE_MASTER,
+    element: CreatePurposeMasterPage,
     roles: [baseRole],
     permission: 'admin',
   },

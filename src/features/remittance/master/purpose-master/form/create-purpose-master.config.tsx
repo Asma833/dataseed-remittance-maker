@@ -1,4 +1,4 @@
-import { FieldType } from '@/types/common.type';
+import { FieldType } from "@/types/enums";
 
 export const PurposeMasterConfig = {
   title: 'Purpose Master',

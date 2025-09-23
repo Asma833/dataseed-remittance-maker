@@ -1,7 +1,6 @@
 import { useQuery } from '@tanstack/react-query';
 import axiosInstance from '@/core/services/axios/axios-instance';
 import { API, HEADER_KEYS } from '@/core/constant/apis';
-import { string } from 'zod';
 
 export interface DocumentTypeItem {
   id: string;

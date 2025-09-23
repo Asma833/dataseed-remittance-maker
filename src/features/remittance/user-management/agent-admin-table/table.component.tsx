@@ -7,6 +7,7 @@ import { useGetData } from '@/hooks/useGetData';
 import { API } from '@/core/constant/apis';
 import { queryKeys } from '@/core/constant/query-keys';
 import { User } from '@/features/auth/types/auth.types';
+import { TableTitle } from '@/features/auth/components/table-title';
 
 const AgentAdminTable = () => {
   const [loading, setLoading] = useState(false);
@@ -96,9 +97,7 @@ const AgentAdminTable = () => {
     <div className="space-y-4 w-full">
       {/* Header with controls */}
       <div className="flex items-center justify-between">
-        <div className="space-y-1">
-          <h2 className="text-2xl font-semibold tracking-tight">User Management</h2>
-        </div>
+         <TableTitle title="User Management"/>
       </div>
 
       {/* Data Table */}

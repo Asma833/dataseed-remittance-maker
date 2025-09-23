@@ -13,6 +13,8 @@ import { getController } from "@/components/form/utils/get-controller";
 import { Button } from "@/components/ui/button";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { BranchAgentForm, branchAgentSchema } from "./branch-agent-creation.schema";
+import { FormTitle } from "@/features/auth/components/form-title";
+import { TableTitle } from "@/features/auth/components/table-title";
 
 
 export const CreateBranchAgent = () => {
@@ -98,15 +100,15 @@ export const CreateBranchAgent = () => {
     <div className="space-y-1 w-full">
       {/* Header */}
       <div className="flex items-center space-x-2">
-        <h2 className="text-sm font-semibold tracking-tight">Super Checker List Table / <span className="text-[var(--color-title)]">{branchAgent ? "Update Branch Agent" : "Create Branch Agent"}</span></h2>
+       <FormTitle tableName="Super Checker List Table"
+        actionName={branchAgent ? "Update Branch Agent" : "Create New Branch Agent"}
+        />
       </div>
 
       {/* Form */}
       <FormProvider methods={methods}>
         <FormContentWrapper className="p-4 rounded-lg mr-auto w-full shadow-top">
-            <h2 className="text-xl font-bold mb-4 title-case p-2 pt-0 border-b border-gray-300">
-            {branchAgent ? "Update Branch Agent" : "Create New Branch Agent"}
-          </h2>
+          <TableTitle title={branchAgent ? "Update Branch Agent" : "Create New Branch Agent"} titleClassName="text-black"/>
           <Spacer>
             {/* Vendor Details */}
             <div className="relative p-1">

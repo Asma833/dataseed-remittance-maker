@@ -1,53 +1,55 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import GetSuperCheckerTableColumns from './column.component';
-import { SuperCheckerData } from './types';
+import GetBranchAgentTableColumns from './column.component';
+import { BranchAgentData } from './types';
 import { Button } from '@/components/ui/button';
 import { DataTable, TableData, staticConfig } from '@/components/table';
-import { PlusCircle } from 'lucide-react';
+import { PlusCircle, UploadIcon } from 'lucide-react';
+import { TableTitle } from '@/features/auth/components/table-title';
 
-const sampleSuperCheckers: SuperCheckerData[] = [
+const sampleBranchAgents: BranchAgentData[] = [
   {
     id: '1',
+    agentVendorCode: 'AVC001',
+    agentEntityName: 'ABC Financial Services',
     fullName: 'John Doe',
-    emailId: 'john.doe@example.com',
+    emailId: 'john.doe@abc.com',
+    role: 'Branch Manager',
     phoneNo: '9876543210',
-    productType: 'Remittance',
-    productSubType: 'International Transfer',
+    checker: 'Jane Smith',
+    branch: 'Mumbai Central',
     status: 'Active',
   },
   {
     id: '2',
-    fullName: 'Jane Smith',
-    emailId: 'jane.smith@example.com',
+    agentVendorCode: 'AVC002',
+    agentEntityName: 'XYZ Money Transfer',
+    fullName: 'Mike Johnson',
+    emailId: 'mike.johnson@xyz.com',
+    role: 'Agent',
     phoneNo: '9876543211',
-    productType: 'Forex',
-    productSubType: 'Currency Exchange',
-    status: 'Inactive',
+    checker: 'Bob Wilson',
+    branch: 'Delhi North',
+    status: 'Active',
   },
   {
     id: '3',
-    fullName: 'Mike Johnson',
-    emailId: 'mike.johnson@example.com',
+    agentVendorCode: 'AVC003',
+    agentEntityName: 'Global Remittance Ltd',
+    fullName: 'Sarah Davis',
+    emailId: 'sarah.davis@global.com',
+    role: 'Senior Agent',
     phoneNo: '9876543212',
-    productType: 'Remittance',
-    productSubType: 'Domestic Transfer',
-    status: 'Active',
+    checker: 'Alice Brown',
+    branch: 'Bangalore South',
+    status: 'Inactive',
   },
 ];
 
-// Extended data with location for form editing
-const extendedSuperCheckers = sampleSuperCheckers.map(item => ({
-  ...item,
-  location: 'Mumbai, India' // Add location field for form
-}));
-
-const SuperCheckerTable = () => {
+const BranchAgentTable = () => {
   const navigate = useNavigate();
-  const [superCheckers, setSuperCheckers] = useState<SuperCheckerData[]>(extendedSuperCheckers);
+  const [branchAgents, setBranchAgents] = useState<BranchAgentData[]>(sampleBranchAgents);
   const [loading, setLoading] = useState(false);
-
-  
 
   // Table configuration
   const config = {
@@ -77,16 +79,15 @@ const SuperCheckerTable = () => {
   };
 
   // Table data
-  const tableData: TableData<SuperCheckerData> = {
-    data: superCheckers,
-    totalCount: superCheckers.length,
-    pageCount: Math.ceil(superCheckers.length / (config.pagination?.pageSize || 10)),
+  const tableData: TableData<BranchAgentData> = {
+    data: branchAgents,
+    totalCount: branchAgents.length,
+    pageCount: Math.ceil(branchAgents.length / (config.pagination?.pageSize || 10)),
     currentPage: 1,
   };
 
-
-  const handleEdit = (superChecker: SuperCheckerData) => {
-    navigate('/admin/users/super-checker-creation', { state: { superChecker } });
+  const handleEdit = (branchAgent: BranchAgentData) => {
+    navigate('/admin/user-management/branch-agent-creation', { state: { branchAgent } });
   };
 
   // Dynamic table actions
@@ -97,7 +98,7 @@ const SuperCheckerTable = () => {
         setLoading(false);
       }, 1000);
     },
- 
+
     onSortingChange: (sorting: { id: string; desc: boolean }[]) => {
       //console.log('Sorting changed:', sorting);
     },
@@ -109,25 +110,37 @@ const SuperCheckerTable = () => {
     },
   };
 
-  // Navigate to super checker creation page
-  const handleAddSuperChecker = () => {
-    navigate('/admin/users/super-checker-creation');
+  // Navigate to branch agent creation page
+  const handleCreateBranchAgent = () => {
+    navigate('/admin/user-management/branch-agent-creation');
   };
-   // Define columns matching the screenshot
-  const columns = GetSuperCheckerTableColumns({
+
+  // Handle bulk upload
+  const handleBulkUpload = () => {
+    // TODO: Implement bulk upload functionality
+    console.log('Bulk upload clicked');
+  };
+
+  // Define columns matching the requirements
+  const columns = GetBranchAgentTableColumns({
     handleEdit,
   });
+
   return (
     <div className="space-y-4 w-full">
       {/* Header with controls */}
       <div className="flex items-center justify-between">
         <div className="space-y-1">
-          <h2 className="text-lg font-semibold tracking-tight text-[var(--color-title)]">Super Checker List</h2>
+          <TableTitle title="Branch Agents"/>
         </div>
         <div className="flex items-center gap-2">
-          <Button onClick={handleAddSuperChecker} size="sm">
+          <Button onClick={handleBulkUpload} variant="outline" size="sm" className="btn-light">
+            Bulk Upload
+            <UploadIcon className="h-4 w-4 mr-2 btn-icon-primary" />
+          </Button>
+          <Button onClick={handleCreateBranchAgent} size="sm">
             <PlusCircle className="h-4 w-4" />
-            Create Checker
+            Create Branch Agent
           </Button>
         </div>
       </div>
@@ -137,8 +150,7 @@ const SuperCheckerTable = () => {
         columns={columns}
         data={tableData}
         config={{
-          ...config,
-          // export: { enabled: true, fileName: 'super-checkers.csv', includeHeaders: true },
+          ...config
         }}
         actions={tableActions}
         className="rounded-lg"
@@ -147,4 +159,4 @@ const SuperCheckerTable = () => {
   );
 };
 
-export default SuperCheckerTable;
+export default BranchAgentTable;
