@@ -17,6 +17,18 @@ export const agentAdminCreationSchema = z.object({
   monthlyCreditLimit: z.string().min(1, 'Monthly credit limit is required').transform(val => parseFloat(val)).refine(val => !isNaN(val) && val > 0, 'Monthly credit limit must be a positive number'),
   totalCreditDays: z.string().min(1, 'Total credit days is required').transform(val => parseInt(val)).refine(val => !isNaN(val) && val > 0, 'Total credit days must be a positive integer'),
 
+  // Company Details
+  gstClassification: z.string().optional(),
+  gstNumber: z.string().optional(),
+  gstPhoneNo: z.string().optional(),
+  flatDoorNumber: z.string().optional(),
+  roadStreet: z.string().optional(),
+  areaLocality: z.string().optional(),
+  gstCity: z.string().optional(),
+  gstState: z.string().optional(),
+  pinCode: z.string().optional(),
+  gstBranch: z.string().optional(),
+
   // Placeholder for other steps
   companyDetails: z.object({}).optional(),
   financeDetails: z.object({}).optional(),

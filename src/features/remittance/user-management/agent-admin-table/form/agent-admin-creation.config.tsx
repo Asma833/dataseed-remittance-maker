@@ -107,8 +107,87 @@ export const agentAdminCreationConfig = () => {
           placeholder: 'Enter Total Credit Days',
         },
       },
+      companyDetails: {
+        gstClassification: {
+          name: 'gstClassification',
+          label: 'GST Classification',
+          type: FieldType.Select,
+          required: true,
+          options: [
+            { value: 'regular', label: 'Regular' },
+            { value: 'composition', label: 'Composition' },
+          ],
+          placeholder: 'Select GST Classification',
+        },
+        gstNumber: {
+          name: 'gstNumber',
+          label: 'GST Number',
+          type: FieldType.Text,
+          required: true,
+          placeholder: 'Enter GST Number',
+        },
+        gstPhoneNo: {
+          name: 'gstPhoneNo',
+          label: 'Phone No',
+          type: FieldType.Phone,
+          placeholder: 'Enter Phone No',
+        },
+        flatDoorNumber: {
+          name: 'flatDoorNumber',
+          label: 'Flat/Door Number',
+          type: FieldType.Text,
+          placeholder: 'Enter Flat/Door Number',
+        },
+        roadStreet: {
+          name: 'roadStreet',
+          label: 'Road/Street',
+          type: FieldType.Text,
+          placeholder: 'Enter Road/Street',
+        },
+        areaLocality: {
+          name: 'areaLocality',
+          label: 'Area/Locality',
+          type: FieldType.Text,
+          placeholder: 'Enter Area/Locality',
+        },
+        gstCity: {
+          name: 'gstCity',
+          label: 'City',
+          type: FieldType.Text,
+          placeholder: 'Enter City',
+        },
+        gstState: {
+          name: 'gstState',
+          label: 'State',
+          type: FieldType.Select,
+          required: true,
+          options: [
+            { value: 'maharashtra', label: 'Maharashtra' },
+            { value: 'karnataka', label: 'Karnataka' },
+            // Add more states as needed
+          ],
+          placeholder: 'Select State',
+        },
+        pinCode: {
+          name: 'pinCode',
+          label: 'PIN Code',
+          type: FieldType.Text,
+          required: true,
+          placeholder: 'Enter PIN Code',
+        },
+        gstBranch: {
+          name: 'gstBranch',
+          label: 'Branch',
+          type: FieldType.Select,
+          required: true,
+          options: [
+            { value: 'branch1', label: 'Branch 1' },
+            { value: 'branch2', label: 'Branch 2' },
+          ],
+          placeholder: 'Select Branch',
+        },
+      },
       // Placeholder for other steps
-      companyDetails: {},
       financeDetails: {},
       documents: {},
       productPurpose: {},

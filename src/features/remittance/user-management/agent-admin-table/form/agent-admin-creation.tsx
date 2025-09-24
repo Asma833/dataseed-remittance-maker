@@ -47,6 +47,16 @@ const AgentAdminCreation: React.FC = () => {
       status: 'Active',
       monthlyCreditLimit: '',
       totalCreditDays: '',
+      gstClassification: '',
+      gstNumber: '',
+      gstPhoneNo: '',
+      flatDoorNumber: '',
+      roadStreet: '',
+      areaLocality: '',
+      gstCity: '',
+      gstState: '',
+      pinCode: '',
+      gstBranch: '',
     },
     mode: 'onSubmit',
   });
@@ -61,7 +71,7 @@ const AgentAdminCreation: React.FC = () => {
   const goToStep = (n: number) => setCurrentStep(clampStep(n));
 
   const handleNext = async () => {
-    const isValid = await trigger(); // optionally pass step fields only
+    const isValid = await trigger();
     if (isValid && currentStep < steps.length - 1) {
       setCompletedSteps((prev) => new Set([...prev, currentStep]));
       goToStep(currentStep + 1);
@@ -158,7 +168,9 @@ const AgentAdminCreation: React.FC = () => {
           </div>
           <hr className="border-gray-300"/>
           <FormProvider {...methods}>
+            <form id="agent-admin-create-form" onSubmit={onSubmit}>
               {renderStepContent()}
+            </form>
           </FormProvider>
         </CardContent>
       </Card>
