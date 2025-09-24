@@ -39,8 +39,19 @@ export const agentAdminCreationSchema = z.object({
   pinCode: z.string().min(1, 'PIN Code is required').regex(/^(?!\s)(?!.*\s$)/, 'Cannot start or end with spaces').regex(/^\d{6}$/, 'PIN Code must be 6 digits'),
   gstBranch: z.string().min(1, 'Branch is required').regex(/^(?!\s)(?!.*\s$)/, 'Cannot start or end with spaces'),
 
+  // Finance Details
+  financeSpocName: z.string().min(1, 'Financial SPOC Name is required').regex(/^(?!\s)(?!.*\s$)/, 'Cannot start or end with spaces'),
+  financeSpocEmail: z.string().min(1, 'Financial SPOC Email is required').email('Please enter a valid email address'),
+  financeSpocPhoneNo: z.string().min(1, 'Financial SPOC Phone No is required').regex(/^(?!\s)(?!.*\s$)/, 'Cannot start or end with spaces'),
+  bankAccounts: z.array(z.object({
+    bankName: z.string().min(1, 'Bank Name is required').regex(/^(?!\s)(?!.*\s$)/, 'Cannot start or end with spaces'),
+    branchName: z.string().min(1, 'Branch Name is required').regex(/^(?!\s)(?!.*\s$)/, 'Cannot start or end with spaces'),
+    accountHolder: z.string().min(1, 'Account Holder is required').regex(/^(?!\s)(?!.*\s$)/, 'Cannot start or end with spaces'),
+    accountNumber: z.string().min(1, 'Account Number is required').regex(/^(?!\s)(?!.*\s$)/, 'Cannot start or end with spaces'),
+    ifscCode: z.string().min(1, 'IFSC Code is required').regex(/^(?!\s)(?!.*\s$)/, 'Cannot start or end with spaces').regex(/^[A-Z]{4}0[A-Z0-9]{6}$/, 'Invalid IFSC Code format'),
+  })).max(3, 'Maximum 3 bank accounts allowed'),
+
   // Placeholder for other steps
-  financeDetails: z.object({}).optional(),
   documents: z.object({}).optional(),
   productPurpose: z.object({}).optional(),
   rateMargin: z.object({}).optional(),

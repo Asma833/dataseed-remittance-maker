@@ -57,6 +57,10 @@ const AgentAdminCreation: React.FC = () => {
       gstState: '',
       pinCode: '',
       gstBranch: '',
+      financeSpocName: '',
+      financeSpocEmail: '',
+      financeSpocPhoneNo: '',
+      bankAccounts: [],
     },
     mode: 'onChange',
   });
@@ -76,6 +80,8 @@ const AgentAdminCreation: React.FC = () => {
         return ['vendorCode', 'fullName', 'emailId', 'phoneNo', 'agentType', 'agentBranchCity', 'agentHOBranchState', 'ebixRMName', 'ebixRMBranchName', 'systemCode', 'status', 'monthlyCreditLimit', 'totalCreditDays'];
       case 1: // Company Details
         return ['gstClassification', 'gstNumber', 'gstPhoneNo', 'flatDoorNumber', 'roadStreet', 'areaLocality', 'gstCity', 'gstState', 'pinCode', 'gstBranch'];
+      case 2: // Finance Details
+        return ['financeSpocName', 'financeSpocEmail', 'financeSpocPhoneNo'];
       default:
         return [];
     }
