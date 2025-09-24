@@ -79,7 +79,15 @@ const AgentAdminCreation: React.FC = () => {
   };
 
   const handlePrevious = () => {
-    if (currentStep > 0) goToStep(currentStep - 1);
+    if (currentStep > 0) {
+      // Mark current step as incomplete when going back
+      setCompletedSteps((prev) => {
+        const newSet = new Set(prev);
+        newSet.delete(currentStep);
+        return newSet;
+      });
+      goToStep(currentStep - 1);
+    }
   };
 
   const onSubmit = handleSubmit(async (data) => {
@@ -145,16 +153,10 @@ const AgentAdminCreation: React.FC = () => {
             </div>
 
             <div className="flex items-center justify-end gap-2">
-              {
-                currentStep !== 0 && (
-                <Button type="button" variant="outline" onClick={handlePrevious} 
+                <Button type="button" variant="outline" disabled={currentStep === 0} onClick={handlePrevious} 
                  className="w-24">
                 Back
               </Button>
-                )
-              }
-              
-
               {currentStep < steps.length - 1 ? (
                 <Button variant="secondary" type="button" onClick={handleNext}  className="w-24">
                   Next
