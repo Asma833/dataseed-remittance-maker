@@ -18,99 +18,87 @@ export const BasicInformationStep: React.FC<BasicInformationStepProps> = ({ isCo
       <div>
         <h3 className="text-lg font-semibold mb-4">Basic Details</h3>
         <FormFieldRow className="mb-4" rowCols={3}>
-          <FieldWrapper>
-            {getController({
-              ...config.fields.basicInformation.vendorCode,
-              control,
-              errors,
-            })}
-          </FieldWrapper>
-          <FieldWrapper>
-            {getController({
-              ...config.fields.basicInformation.fullName,
-              control,
-              errors,
-            })}
-          </FieldWrapper>
-          <FieldWrapper>
-            {getController({
-              ...config.fields.basicInformation.emailId,
-              control,
-              errors,
-            })}
-          </FieldWrapper>
+          {(['vendorCode', 'fullName', 'emailId'] as const).map((fieldName) => {
+            const field = config.fields.basicInformation[fieldName];
+            return (
+              <FieldWrapper key={fieldName}>
+                {getController({
+                  ...(typeof field === 'object' && field !== null ? field : {}),
+                  name: fieldName,
+                  control,
+                  errors,
+                })}
+              </FieldWrapper>
+            );
+          })}
         </FormFieldRow>
         <FormFieldRow className="mb-4" rowCols={3}>
-          <FieldWrapper>
-            {getController({
-              ...config.fields.basicInformation.phoneNo,
-              control,
-              errors,
-            })}
-          </FieldWrapper>
-          <FieldWrapper>
-            {getController({
-              ...config.fields.basicInformation.agentType,
-              control,
-              errors,
-            })}
-          </FieldWrapper>
-          <FieldWrapper>
-            {getController({
-              ...config.fields.basicInformation.agentBranchCity,
-              control,
-              errors,
-            })}
-          </FieldWrapper>
+          {(['phoneNo', 'agentType', 'agentBranchCity'] as const).map((fieldName) => {
+            const field = config.fields.basicInformation[fieldName];
+            return (
+              <FieldWrapper key={fieldName}>
+                {getController({
+                  ...(typeof field === 'object' && field !== null ? field : {}),
+                  name: fieldName,
+                  control,
+                  errors,
+                })}
+              </FieldWrapper>
+            );
+          })}
         </FormFieldRow>
         <FormFieldRow className="mb-4" rowCols={3}>
-          <FieldWrapper>
-            {getController({
-              ...config.fields.basicInformation.agentHOBranchState,
-              control,
-              errors,
-            })}
-          </FieldWrapper>
-          <FieldWrapper>
-            {getController({
-              ...config.fields.basicInformation.ebixRMName,
-              control,
-              errors,
-            })}
-          </FieldWrapper>
-          <FieldWrapper>
-            {getController({
-              ...config.fields.basicInformation.ebixRMBranchName,
-              control,
-              errors,
-            })}
-          </FieldWrapper>
+          {(['agentHOBranchState', 'ebixRMName', 'ebixRMBranchName'] as const).map((fieldName) => {
+            const field = config.fields.basicInformation[fieldName];
+            return (
+              <FieldWrapper key={fieldName}>
+                {getController({
+                  ...(typeof field === 'object' && field !== null ? field : {}),
+                  name: fieldName,
+                  control,
+                  errors,
+                })}
+              </FieldWrapper>
+            );
+          })}
         </FormFieldRow>
       </div>
 
       <div>
         <h3 className="text-lg font-semibold mb-4">Other Details</h3>
         <FormFieldRow className="mb-4" rowCols={3}>
-          <FieldWrapper>
-            {getController({
-              ...config.fields.basicInformation.systemCode,
-              control,
-              errors,
-            })}
-          </FieldWrapper>
+          {(['systemCode'] as const).map((fieldName) => {
+            const field = config.fields.basicInformation[fieldName];
+            return (
+              <FieldWrapper key={fieldName}>
+                {getController({
+                  ...(typeof field === 'object' && field !== null ? field : {}),
+                  name: fieldName,
+                  control,
+                  errors,
+                })}
+              </FieldWrapper>
+            );
+          })}
         </FormFieldRow>
       </div>
 
       <div>
         <h3 className="text-lg font-semibold mb-4">Status</h3>
-        <FormFieldRow className="mb-4" rowCols={1}>
-          <FieldWrapper>
-            {getController({
-              ...config.fields.basicInformation.status,
-              control,
-              errors,
-            })}
-          </FieldWrapper>
+        <FormFieldRow className="mb-4" rowCols={3}>
+          {(['status'] as const).map((fieldName) => {
+            const field = config.fields.basicInformation[fieldName];
+            return (
+              <FieldWrapper key={fieldName}>
+                {getController({
+                  ...(typeof field === 'object' && field !== null ? field : {}),
+                  name: fieldName,
+                  control,
+                  errors,
+                })}
+              </FieldWrapper>
+            );
+          })}
         </FormFieldRow>
       </div>
 
@@ -120,20 +108,19 @@ export const BasicInformationStep: React.FC<BasicInformationStepProps> = ({ isCo
           Please input the desired line credit limit and credit days.
         </p>
         <FormFieldRow className="mb-4" rowCols={3}>
-          <FieldWrapper>
-            {getController({
-              ...config.fields.basicInformation.monthlyCreditLimit,
-              control,
-              errors,
-            })}
-          </FieldWrapper>
-          <FieldWrapper>
-            {getController({
-              ...config.fields.basicInformation.totalCreditDays,
-              control,
-              errors,
-            })}
-          </FieldWrapper>
+          {(['monthlyCreditLimit', 'totalCreditDays'] as const).map((fieldName) => {
+            const field = config.fields.basicInformation[fieldName];
+            return (
+              <FieldWrapper key={fieldName}>
+                {getController({
+                  ...(typeof field === 'object' && field !== null ? field : {}),
+                  name: fieldName,
+                  control,
+                  errors,
+                })}
+              </FieldWrapper>
+            );
+          })}
         </FormFieldRow>
       </div>
     </div>

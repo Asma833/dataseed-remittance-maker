@@ -13,85 +13,54 @@ export const CompanyDetailsStep: React.FC = () => {
     <div className="space-y-6">
       <div>
         <h3 className="text-lg font-semibold mb-4">GST Details</h3>
-        <FormFieldRow className="mb-4" rowCols={3}>
-          <FieldWrapper>
-            {getController({
-              ...config.fields.companyDetails.gstClassification,
-              control,
-              errors,
-            })}
-          </FieldWrapper>
-          <FieldWrapper>
-            {getController({
-              ...config.fields.companyDetails.gstNumber,
-              control,
-              errors,
-            })}
-          </FieldWrapper>
-          <FieldWrapper>
-            {getController({
-              ...config.fields.companyDetails.gstPhoneNo,
-              control,
-              errors,
-            })}
-          </FieldWrapper>
+        <FormFieldRow className="mb-4" rowCols={4}>
+          {(['gstClassification', 'gstNumber', 'gstPhoneNo'] as const).map((fieldName) => {
+            const field = config.fields.companyDetails[fieldName];
+            return (
+              <FieldWrapper key={fieldName}>
+                {getController({
+                  ...(typeof field === 'object' && field !== null ? field : {}),
+                  name: fieldName,
+                  control,
+                  errors,
+                })}
+              </FieldWrapper>
+            );
+          })}
         </FormFieldRow>
       </div>
 
       <div>
         <h3 className="text-lg font-semibold mb-4">Address as per GST</h3>
         <FormFieldRow className="mb-4" rowCols={4}>
-          <FieldWrapper>
-            {getController({
-              ...config.fields.companyDetails.flatDoorNumber,
-              control,
-              errors,
-            })}
-          </FieldWrapper>
-          <FieldWrapper>
-            {getController({
-              ...config.fields.companyDetails.roadStreet,
-              control,
-              errors,
-            })}
-          </FieldWrapper>
-          <FieldWrapper>
-            {getController({
-              ...config.fields.companyDetails.areaLocality,
-              control,
-              errors,
-            })}
-          </FieldWrapper>
-          <FieldWrapper>
-            {getController({
-              ...config.fields.companyDetails.gstCity,
-              control,
-              errors,
-            })}
-          </FieldWrapper>
+          {(['flatDoorNumber', 'roadStreet', 'areaLocality', 'gstCity'] as const).map((fieldName) => {
+            const field = config.fields.companyDetails[fieldName];
+            return (
+              <FieldWrapper key={fieldName}>
+                {getController({
+                  ...(typeof field === 'object' && field !== null ? field : {}),
+                  name: fieldName,
+                  control,
+                  errors,
+                })}
+              </FieldWrapper>
+            );
+          })}
         </FormFieldRow>
-        <FormFieldRow className="mb-4" rowCols={3}>
-          <FieldWrapper>
-            {getController({
-              ...config.fields.companyDetails.gstState,
-              control,
-              errors,
-            })}
-          </FieldWrapper>
-          <FieldWrapper>
-            {getController({
-              ...config.fields.companyDetails.pinCode,
-              control,
-              errors,
-            })}
-          </FieldWrapper>
-          <FieldWrapper>
-            {getController({
-              ...config.fields.companyDetails.gstBranch,
-              control,
-              errors,
-            })}
-          </FieldWrapper>
+        <FormFieldRow className="mb-4" rowCols={4}>
+          {(['gstState', 'pinCode', 'gstBranch'] as const).map((fieldName) => {
+            const field = config.fields.companyDetails[fieldName];
+            return (
+              <FieldWrapper key={fieldName}>
+                {getController({
+                  ...(typeof field === 'object' && field !== null ? field : {}),
+                  name: fieldName,
+                  control,
+                  errors,
+                })}
+              </FieldWrapper>
+            );
+          })}
         </FormFieldRow>
       </div>
     </div>
