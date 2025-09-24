@@ -1,0 +1,120 @@
+import { FieldType } from '@/types/enums';
+
+export const agentAdminCreationConfig = () => {
+  return {
+    sectionTitle: 'Agent Admin Creation',
+    description: 'Fill in the details to create a new agent admin',
+    steps: [
+      'Basic Information',
+      'Company Details',
+      'Finance Details',
+      'Documents',
+      'Product Purpose',
+      'Rate Margin',
+      'Commission',
+      'Corporate Onboarding',
+    ],
+    fields: {
+      basicInformation: {
+        vendorCode: {
+          name: 'vendorCode',
+          label: 'Vendor Code',
+          type: FieldType.Text,
+          placeholder: 'Enter Vendor Code',
+        },
+        fullName: {
+          name: 'fullName',
+          label: 'Full Name',
+          type: FieldType.Text,
+          required: true,
+          placeholder: 'Enter Full Name',
+        },
+        emailId: {
+          name: 'emailId',
+          label: 'Email Id',
+          type: FieldType.Email,
+          required: true,
+          placeholder: 'Enter Email Id',
+        },
+        phoneNo: {
+          name: 'phoneNo',
+          label: 'Phone No',
+          type: FieldType.Phone,
+          placeholder: 'Enter Phone No',
+        },
+        agentType: {
+          name: 'agentType',
+          label: 'Agent Type',
+          type: FieldType.Select,
+          options: [
+            { value: 'type1', label: 'Type 1' },
+            { value: 'type2', label: 'Type 2' },
+          ],
+          placeholder: 'Select Agent Type',
+        },
+        agentBranchCity: {
+          name: 'agentBranchCity',
+          label: 'Agent Branch City',
+          type: FieldType.Text,
+          placeholder: 'Enter Agent Branch City',
+        },
+        agentHOBranchState: {
+          name: 'agentHOBranchState',
+          label: 'Agent HO Branch State',
+          type: FieldType.Text,
+          placeholder: 'Enter Agent HO Branch State',
+        },
+        ebixRMName: {
+          name: 'ebixRMName',
+          label: 'Ebix RM Name',
+          type: FieldType.Text,
+          placeholder: 'Enter Ebix RM Name',
+        },
+        ebixRMBranchName: {
+          name: 'ebixRMBranchName',
+          label: 'Ebix RM Branch Name',
+          type: FieldType.Text,
+          placeholder: 'Enter Ebix RM Branch Name',
+        },
+        systemCode: {
+          name: 'systemCode',
+          label: 'System Code',
+          type: FieldType.Text,
+          placeholder: 'Enter System Code',
+        },
+        status: {
+          name: 'status',
+          label: 'Status',
+          type: FieldType.Radio,
+          required: true,
+          options: {
+            'Active': { label: 'Active', checked: true },
+            'Inactive': { label: 'Inactive' }
+          }
+        },
+        monthlyCreditLimit: {
+          name: 'monthlyCreditLimit',
+          label: 'Monthly Credit Limit (INR)',
+          type: FieldType.Number,
+          required: true,
+          placeholder: 'Enter Monthly Credit Limit',
+        },
+        totalCreditDays: {
+          name: 'totalCreditDays',
+          label: 'Total Credit Days',
+          type: FieldType.Number,
+          required: true,
+          placeholder: 'Enter Total Credit Days',
+        },
+      },
+      // Placeholder for other steps
+      companyDetails: {},
+      financeDetails: {},
+      documents: {},
+      productPurpose: {},
+      rateMargin: {},
+      commission: {},
+      corporateOnboarding: {},
+    },
+  };
+};

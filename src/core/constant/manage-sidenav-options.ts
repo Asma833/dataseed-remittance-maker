@@ -23,10 +23,10 @@ export const SideNavOptions = {
           title: 'Superchecker',
           path: getNavPath('ADMIN', ROUTES.ADMIN.SUPER_CHECKER_TABLE),
         },
-        // {
-        //   title: 'Agent Admin',
-        //   path: getNavPath('ADMIN', ROUTES.ADMIN.AGENT_ADMIN),
-        // },
+        {
+          title: 'Agent Admin',
+          path: getNavPath('ADMIN', ROUTES.ADMIN.AGENT_ADMIN),
+        },
          {
           title: 'Branch Agents',
           path: getNavPath('ADMIN', ROUTES.ADMIN.USER_MANAGEMENT.BRANCH_AGENTS),

@@ -1,24 +1,33 @@
 import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import GetAgentListTableColumns from './column.component';
-import { UserData } from './types';
+import { AgentAdminData } from './types';
 import { Button } from '@/components/ui/button';
 import { DataTable, dynamicConfig, staticConfig, TableConfig, tableConfigPresets, TableData } from '@/components/table';
 import { useGetData } from '@/hooks/useGetData';
 import { API } from '@/core/constant/apis';
 import { queryKeys } from '@/core/constant/query-keys';
+import { ROUTES } from '@/core/constant/route-paths';
 import { User } from '@/features/auth/types/auth.types';
 import { TableTitle } from '@/features/auth/components/table-title';
+import { PlusCircle } from 'lucide-react';
 
 const AgentAdminTable = () => {
+  const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
+
+  // Navigate to agent admin creation page
+  const handleAddAdminAgents = () => {
+    navigate(`/admin${ROUTES.ADMIN.AGENT_ADMIN_CREATION}`);
+  };
 
   const {
     data,
     isLoading: userLoading,
     error: userError,
-  } = useGetData<User[]>({
-    endpoint: API.NUSERS.USER.LIST,
-    queryKey: queryKeys.user.allUsers,
+  } = useGetData<AgentAdminData[]>({
+    endpoint: API.NUSERS.USER.LIST, // TODO: Update to agent admin endpoint if different
+    queryKey: queryKeys.user.allUsers, // TODO: Update query key if needed
     dataPath: '',
   });
 
@@ -41,23 +50,23 @@ const AgentAdminTable = () => {
   // };
 
   // Action handlers
-  function handleView(user: UserData) {
+  function handleView(user: AgentAdminData) {
     //console.log('View user:', user);
-    alert(`Viewing user: ${user.fullName}`);
+    alert(`Viewing agent: ${user.agentEntityName}`);
   }
 
-  function handleEdit(user: UserData) {
+  function handleEdit(user: AgentAdminData) {
     //console.log('Edit user:', user);
-    alert(`Editing user: ${user.fullName}`);
+    alert(`Editing agent: ${user.agentEntityName}`);
   }
 
-  function handleDelete(user: UserData) {
+  function handleDelete(user: AgentAdminData) {
     //console.log('Delete user:', user);
-    if (confirm(`Are you sure you want to delete ${user.fullName}?`)) {
+    if (confirm(`Are you sure you want to delete ${user.agentEntityName}?`)) {
     }
   }
 
-  function handleRowClick(user: UserData) {
+  function handleRowClick(user: AgentAdminData) {
     //console.log('Row clicked:', user);
   }
 
@@ -86,27 +95,29 @@ const AgentAdminTable = () => {
     onRowClick: handleRowClick,
   };
 
-  //console.log('Fetched users:', data, userLoading, userError);
-  //console.log('Type of data:', typeof data);
-  const valuesArray = Object.values(data || {});
-  //console.log('valuesArray:', valuesArray);
-  //console.log('Type of valuesArray:', typeof valuesArray);
-  //console.log('Type of valuesArray:', typeof ['a', 'b']);
+  //console.log('Fetched agents:', data, userLoading, userError);
 
   return (
     <div className="space-y-4 w-full">
       {/* Header with controls */}
       <div className="flex items-center justify-between">
-         <TableTitle title="User Management"/>
+        <div className="space-y-1">
+         <TableTitle title="Admin Agent List"/>
+        </div>
+        <div className="flex items-center gap-2">
+          <Button onClick={handleAddAdminAgents} size="sm">
+            <PlusCircle className="h-4 w-4" />
+            Create Admin Agent
+          </Button>
+        </div>
       </div>
 
       {/* Data Table */}
       <DataTable
         columns={columns}
-        data={(valuesArray as any) ?? []}
+        data={data ?? []}
         config={{
-          ...staticConfig,
-          export: { enabled: true, fileName: 'agent-admins.csv', includeHeaders: true },
+          ...staticConfig
         }}
         actions={tableActions}
       />

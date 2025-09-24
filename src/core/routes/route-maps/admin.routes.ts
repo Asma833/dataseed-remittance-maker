@@ -1,6 +1,5 @@
 import { ROLES, ROUTES } from '@/core/constant/route-paths';
 import type { RouteConfig } from '@/types/route.types';
-import AdminAgentList from '@/features/remittance/user-management/agent-admin-table/page';
 
 import { CreateSuperChecker } from '@/features/remittance/user-management/super-checker/form/super-checker-creation';
 import SuperCheckerTablePage from '@/features/remittance/user-management/super-checker/table/page';
@@ -16,6 +15,8 @@ import Card from '@/features/remittance/master/rate-master/tabs/card/table/card-
 import Currency from '@/features/remittance/master/rate-master/tabs/currency/Currency';
 import PurposeMasterTablePage from '@/features/remittance/master/purpose-master/table/purpose-master-table-page';
 import CreatePurposeMasterPage from '@/features/remittance/master/purpose-master/form/create-purpose-master-page';
+import AdminAgentList from '@/features/remittance/user-management/agent-admin-table/table/page';
+import AgentAdminCreation from '@/features/remittance/user-management/agent-admin-table/form/agent-admin-creation';
 
 const baseRole = ROLES.ADMIN; // Admin routes are accessible to admin role
 
@@ -23,6 +24,12 @@ export const adminRoutes: RouteConfig[] = [
   {
     path: ROUTES.ADMIN.AGENT_ADMIN,
     element: AdminAgentList,
+    roles: [baseRole],
+    permission: 'admin',
+  },
+  {
+    path: ROUTES.ADMIN.AGENT_ADMIN_CREATION,
+    element: AgentAdminCreation,
     roles: [baseRole],
     permission: 'admin',
   },
