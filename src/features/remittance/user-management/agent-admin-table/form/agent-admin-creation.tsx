@@ -58,7 +58,7 @@ const AgentAdminCreation: React.FC = () => {
       pinCode: '',
       gstBranch: '',
     },
-    mode: 'onSubmit',
+    mode: 'onChange',
   });
 
   const {
@@ -70,8 +70,20 @@ const AgentAdminCreation: React.FC = () => {
   const clampStep = (n: number) => Math.max(0, Math.min(steps.length - 1, n));
   const goToStep = (n: number) => setCurrentStep(clampStep(n));
 
+  const getStepFields = (step: number): string[] => {
+    switch (step) {
+      case 0: // Basic Information
+        return ['vendorCode', 'fullName', 'emailId', 'phoneNo', 'agentType', 'agentBranchCity', 'agentHOBranchState', 'ebixRMName', 'ebixRMBranchName', 'systemCode', 'status', 'monthlyCreditLimit', 'totalCreditDays'];
+      case 1: // Company Details
+        return ['gstClassification', 'gstNumber', 'gstPhoneNo', 'flatDoorNumber', 'roadStreet', 'areaLocality', 'gstCity', 'gstState', 'pinCode', 'gstBranch'];
+      default:
+        return [];
+    }
+  };
+
   const handleNext = async () => {
-    const isValid = await trigger();
+    const stepFields = getStepFields(currentStep) as (keyof typeof agentAdminCreationSchema.shape)[];
+    const isValid = await trigger(stepFields);
     if (isValid && currentStep < steps.length - 1) {
       setCompletedSteps((prev) => new Set([...prev, currentStep]));
       goToStep(currentStep + 1);
