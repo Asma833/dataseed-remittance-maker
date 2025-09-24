@@ -51,9 +51,19 @@ export const agentAdminCreationSchema = z.object({
     ifscCode: z.string().min(1, 'IFSC Code is required').regex(/^(?!\s)(?!.*\s$)/, 'Cannot start or end with spaces').regex(/^[A-Z]{4}0[A-Z0-9]{6}$/, 'Invalid IFSC Code format'),
   })).max(3, 'Maximum 3 bank accounts allowed'),
 
-  // Placeholder for other steps
+  // Documents
   documents: z.object({}).optional(),
-  productPurpose: z.object({}).optional(),
+
+  // Product Purpose
+  productPurpose: z.object({
+    addOnMargin: z.enum(['Yes', 'No'], { message: 'Please select an option for Add on Margin' }).optional(),
+    esignDocumentDownload: z.enum(['Yes', 'No'], { message: 'Please select an option for Esign Document Download' }).optional(),
+    vkycDocumentDownload: z.enum(['Yes', 'No'], { message: 'Please select an option for VKYC Document Download' }).optional(),
+    chooseProductType: z.array(z.string()).min(1, 'Please select at least one product type'),
+    creditType: z.array(z.string()).min(1, 'Please select at least one credit type'),
+    purposeTypesForCard: z.array(z.string()).min(1, 'Please select at least one purpose type for card'),
+  }).optional(),
+
   rateMargin: z.object({}).optional(),
   commission: z.object({}).optional(),
   corporateOnboarding: z.object({}).optional(),

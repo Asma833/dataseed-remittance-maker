@@ -61,6 +61,14 @@ const AgentAdminCreation: React.FC = () => {
       financeSpocEmail: '',
       financeSpocPhoneNo: '',
       bankAccounts: [],
+      productPurpose: {
+        addOnMargin: undefined,
+        esignDocumentDownload: undefined,
+        vkycDocumentDownload: undefined,
+        chooseProductType: [],
+        creditType: [],
+        purposeTypesForCard: [],
+      },
     },
     mode: 'onChange',
   });
@@ -82,6 +90,8 @@ const AgentAdminCreation: React.FC = () => {
         return ['gstClassification', 'gstNumber', 'gstPhoneNo', 'flatDoorNumber', 'roadStreet', 'areaLocality', 'gstCity', 'gstState', 'pinCode', 'gstBranch'];
       case 2: // Finance Details
         return ['financeSpocName', 'financeSpocEmail', 'financeSpocPhoneNo'];
+      case 4: // Product Purpose
+        return ['productPurpose.addOnMargin', 'productPurpose.esignDocumentDownload', 'productPurpose.vkycDocumentDownload', 'productPurpose.chooseProductType', 'productPurpose.creditType', 'productPurpose.purposeTypesForCard'];
       default:
         return [];
     }

@@ -256,7 +256,73 @@ export const agentAdminCreationConfig = () => {
           placeholder: 'Select Extension Month',
         },
       },
-      productPurpose: {},
+      productPurpose: {
+        addOnMargin: {
+          name: 'addOnMargin',
+          label: 'Add on Margin',
+          type: FieldType.Radio,
+          required: true,
+          options: {
+            'Yes': { label: 'Yes' },
+            'No': { label: 'No' }
+          }
+        },
+        esignDocumentDownload: {
+          name: 'esignDocumentDownload',
+          label: 'Esign Document Download',
+          type: FieldType.Radio,
+          required: true,
+          options: {
+            'Yes': { label: 'Yes' },
+            'No': { label: 'No' }
+          }
+        },
+        vkycDocumentDownload: {
+          name: 'vkycDocumentDownload',
+          label: 'VKYC Document Download',
+          type: FieldType.Radio,
+          required: true,
+          options: {
+            'Yes': { label: 'Yes' },
+            'No': { label: 'No' }
+          }
+        },
+        chooseProductType: {
+          name: 'chooseProductType',
+          label: 'Choose Product Type',
+          type: FieldType.Checkbox,
+          options: [
+            { value: 'Card', label: 'Card' },
+            { value: 'Currency', label: 'Currency' },
+            { value: 'Remittance', label: 'Remittance' },
+            { value: 'Referral', label: 'Referral' },
+          ],
+        },
+        creditType: {
+          name: 'creditType',
+          label: 'Credit Type',
+          type: FieldType.Checkbox,
+          required: true,
+          options: [
+            { value: 'CNC', label: 'CNC' },
+            { value: 'Line Credit', label: 'Line Credit' },
+          ],
+        },
+        purposeTypesForCard: {
+          name: 'purposeTypesForCard',
+          label: 'Please Select Purpose Types for Card',
+          type: FieldType.Checkbox,
+          required: true,
+          options: [
+            { value: 'Personal Travel', label: 'Personal Travel' },
+            { value: 'Business Travel', label: 'Business Travel' },
+            { value: 'Education', label: 'Education' },
+            { value: 'Immigration', label: 'Immigration' },
+            { value: 'Employment', label: 'Employment' },
+            { value: 'Medical', label: 'Medical' },
+          ],
+        },
+      },
       rateMargin: {},
       commission: {},
       corporateOnboarding: {},
