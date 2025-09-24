@@ -104,14 +104,10 @@ const AgentAdminCreation: React.FC = () => {
   return (
     <div className="w-full">
       <FormTitle tableName="Agent Admin List Table" actionName={config.sectionTitle} className="pb-3 px-2"/>
-      <Card className="border-none space-y-0 !p-0">
-        {/* <CardHeader>
-          <TableTitle title={config.sectionTitle} titleClassName="text-black px-6 py-2"/>
-        </CardHeader> */}
-
+      <Card className="border-none space-y-0 p-2">
         <CardContent>
           {/* TOP BAR: Stepper + Agent Code + Nav */}
-          <div className="w-full rounded-xl p-4 md:p-5">
+          <div className="w-full rounded-xl">
             <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
               {/* Stepper (takes full width) */}
               <div className="flex-1">
@@ -126,7 +122,12 @@ const AgentAdminCreation: React.FC = () => {
               </div>
             </div>
           </div>
-          {/* Agent Code + Buttons (aligned center with stepper row) */}
+      
+        </CardContent>
+      </Card>
+      <Card className="border-none space-y-0 px-4 mt-2">
+       <CardContent> 
+            {/* Agent Code + Buttons (aligned center with stepper row) */}
           <div className="w-full flex items-center justify-between gap-6 py-2">
             <div className="text-sm whitespace-nowrap ">
               <span className="text-muted-foreground font-semibold">Agent Code:&nbsp;</span>
@@ -156,11 +157,8 @@ const AgentAdminCreation: React.FC = () => {
             </div>
           </div>
           <hr className="border-gray-300"/>
-          {/* FORM */}
           <FormProvider {...methods}>
-            <form id="agent-admin-create-form" onSubmit={onSubmit} >
               {renderStepContent()}
-            </form>
           </FormProvider>
         </CardContent>
       </Card>
