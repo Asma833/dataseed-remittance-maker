@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { FormProvider, useForm, FieldPath } from 'react-hook-form';
 import { z } from 'zod';
-import { agentAdminCreationSchema } from './agent-admin-creation.schema';
+import { agentAdminCreationSchema, OnboardCorporateFormData } from './agent-admin-creation.schema';
 import { agentAdminCreationConfig } from './agent-admin-creation.config';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
@@ -94,18 +94,8 @@ const AgentAdminCreation: React.FC = () => {
   const goToStep = (n: number) => setCurrentStep(clampStep(n));
 
   const getStepFields = (step: number): FieldPath<AgentAdminFormType>[] => {
-    switch (step) {
-      case 0: // Basic Information
-        return ['vendorCode', 'fullName', 'emailId', 'phoneNo', 'agentType', 'agentBranchCity', 'agentHOBranchState', 'ebixRMName', 'ebixRMBranchName', 'systemCode', 'status', 'monthlyCreditLimit', 'totalCreditDays'];
-      case 1: // Company Details
-        return ['gstClassification', 'gstNumber', 'gstPhoneNo', 'flatDoorNumber', 'roadStreet', 'areaLocality', 'gstCity', 'gstState', 'pinCode', 'gstBranch'];
-      case 2: // Finance Details
-        return ['financeSpocName', 'financeSpocEmail', 'financeSpocPhoneNo'];
-      case 4: // Product Purpose
-        return ['productPurpose.addOnMargin', 'productPurpose.esignDocumentDownload', 'productPurpose.vkycDocumentDownload', 'productPurpose.chooseProductType', 'productPurpose.creditType', 'productPurpose.purposeTypesForCard'];
-      default:
-        return [];
-    }
+    // Temporarily disable validation for all steps to allow progression to Corporate Onboarding
+    return [];
   };
 
   const handleNext = async () => {
@@ -131,7 +121,7 @@ const AgentAdminCreation: React.FC = () => {
 
   const onSubmit = handleSubmit(async (data) => {
     console.log('Form data:', data);
-    navigate('/admin/users/agent-admin');
+    navigate('/admin/agent-admin');
   });
 
   const renderStepContent = () => {

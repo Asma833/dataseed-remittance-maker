@@ -1,6 +1,18 @@
 import { z } from 'zod';
 
 // Zod schema for agent admin creation form
+
+// Schema for onboard corporate form
+export const onboardCorporateSchema = z.object({
+  entityName: z.string().min(1, 'Entity Name is required'),
+  panNumber: z.string().min(1, 'PAN Number is required'),
+  dateOfIncorporation: z.string().min(1, 'Date of Incorporation is required'),
+  entityType: z.string().min(1, 'Entity Type is required'),
+  cin: z.string().optional(),
+  address: z.string().optional(),
+});
+
+export type OnboardCorporateFormData = z.infer<typeof onboardCorporateSchema>;
 export const agentAdminCreationSchema = z.object({
   // Basic Information
   vendorCode: z.string().regex(/^(?!\s)(?!.*\s$)/, 'Cannot start or end with spaces').optional().or(z.literal('')),
