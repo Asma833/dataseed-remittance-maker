@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { FormProvider, useForm, FieldPath } from 'react-hook-form';
 import { z } from 'zod';
-import { agentAdminCreationSchema, OnboardCorporateFormData } from './agent-admin-creation.schema';
+import { agentAdminCreationSchema } from './agent-admin-creation.schema';
 import { agentAdminCreationConfig } from './agent-admin-creation.config';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
@@ -18,7 +18,6 @@ import { ProductPurposeStep } from './steps/ProductPurposeStep';
 import { RateMarginStep } from './steps/RateMarginStep';
 
 import { Stepper } from './stepper';
-import { TableTitle } from '@/features/auth/components/table-title';
 import { FormTitle } from '@/features/auth/components/form-title';
 
 type AgentAdminFormType = z.infer<typeof agentAdminCreationSchema>;
@@ -33,7 +32,7 @@ const AgentAdminCreation: React.FC = () => {
 
   // Example: you likely get this from API/route state
   const agentCode = 'VPC0345';
-
+  console.log(currentStep,"currentStep")
   const methods = useForm({
     resolver: zodResolver(agentAdminCreationSchema),
     defaultValues: {
@@ -121,7 +120,7 @@ const AgentAdminCreation: React.FC = () => {
 
   const onSubmit = handleSubmit(async (data) => {
     console.log('Form data:', data);
-    navigate('/admin/agent-admin');
+    // navigate('/admin/agent-admin');
   });
 
   const renderStepContent = () => {
@@ -163,8 +162,17 @@ const AgentAdminCreation: React.FC = () => {
                   currentStep={currentStep}
                   completedSteps={completedSteps}
                   onStepClick={(i) => {
-                    if (i <= currentStep) goToStep(i); // allow jumping back only
+                    console.log('onStepClick called with i:', i, 'currentStep:', currentStep);
+                    // allow jumping back or staying on current step
+                    if (i <= currentStep) {
+                      console.log('Setting currentStep to:', i,currentStep);
+                      setCurrentStep(i);
+                    } else {
+                      console.log('Not allowing jump forward to:', i);
+                    }
                   }}
+
+
                 />
               </div>
             </div>
@@ -210,3 +218,4 @@ const AgentAdminCreation: React.FC = () => {
 };
 
 export default AgentAdminCreation;
+

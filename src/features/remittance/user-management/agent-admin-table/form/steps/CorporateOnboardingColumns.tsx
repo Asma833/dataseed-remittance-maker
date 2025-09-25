@@ -6,8 +6,8 @@ export interface CorporateData {
   panNumber: string;
   dateOfIncorporation: string;
   entityType: string;
-  cin?: string;
-  address?: string;
+  cin: string;
+  address: string;
 }
 
 const GetCorporateOnboardingColumns = ({

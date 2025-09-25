@@ -9,7 +9,7 @@ interface BasicInformationStepProps {
   isCompleted?: boolean;
 }
 
-export const BasicInformationStep: React.FC<BasicInformationStepProps> = ({ isCompleted = false }) => {
+export const BasicInformationStep: React.FC<BasicInformationStepProps> = () => {
   const { control, formState: { errors } } = useFormContext();
   const config = agentAdminCreationConfig();
 

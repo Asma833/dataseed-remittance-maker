@@ -8,6 +8,7 @@ export function ActionButtons<T>({ row, onEdit, onDelete, onView }: ActionButton
     <div className="flex items-center justify-center gap-2">
       {onView && (
         <Button
+          type="button"
           variant="ghost"
           size="sm"
           onClick={(e) => {
@@ -21,6 +22,7 @@ export function ActionButtons<T>({ row, onEdit, onDelete, onView }: ActionButton
       )}
       {onEdit && (
         <Button
+          type="button"
           variant="ghost"
           size="sm"
           onClick={(e) => {
@@ -35,6 +37,7 @@ export function ActionButtons<T>({ row, onEdit, onDelete, onView }: ActionButton
       )}
       {onDelete && (
         <Button
+          type="button"
           variant="ghost"
           size="sm"
           onClick={(e) => {

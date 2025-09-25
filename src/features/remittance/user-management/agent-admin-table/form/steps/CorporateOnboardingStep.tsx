@@ -56,10 +56,11 @@ export const CorporateOnboardingStep: React.FC = () => {
     currentPage: 1,
   };
 
+  console.log("CorporateOnboardingStep rendering");
   return (
     <div className="space-y-6">
-      <div className="flex items-center justify-between">
-        <TableTitle title="Corporate List" />
+      <div className="flex items-center justify-between mt-2">
+        <TableTitle title="Corporate List" /> 
         <Button
           type="button"
           onClick={() => setIsOnboardDialogOpen(true)}
