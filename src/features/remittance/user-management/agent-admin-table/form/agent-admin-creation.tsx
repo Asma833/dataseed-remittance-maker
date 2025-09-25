@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { FormProvider, useForm } from 'react-hook-form';
+import { FormProvider, useForm, FieldPath } from 'react-hook-form';
+import { z } from 'zod';
 import { agentAdminCreationSchema } from './agent-admin-creation.schema';
 import { agentAdminCreationConfig } from './agent-admin-creation.config';
 import { Button } from '@/components/ui/button';
@@ -20,6 +21,8 @@ import { Stepper } from './stepper';
 import { TableTitle } from '@/features/auth/components/table-title';
 import { FormTitle } from '@/features/auth/components/form-title';
 
+type AgentAdminFormType = z.infer<typeof agentAdminCreationSchema>;
+
 const AgentAdminCreation: React.FC = () => {
   const navigate = useNavigate();
   const [currentStep, setCurrentStep] = useState(0);
@@ -34,40 +37,48 @@ const AgentAdminCreation: React.FC = () => {
   const methods = useForm({
     resolver: zodResolver(agentAdminCreationSchema),
     defaultValues: {
-      vendorCode: '',
-      fullName: '',
-      emailId: '',
-      phoneNo: '',
-      agentType: '',
-      agentBranchCity: '',
-      agentHOBranchState: '',
-      ebixRMName: '',
-      ebixRMBranchName: '',
-      systemCode: '',
+      vendorCode: 'V001',
+      fullName: 'John Doe',
+      emailId: 'john.doe@example.com',
+      phoneNo: '1234567890',
+      agentType: 'Type A',
+      agentBranchCity: 'Mumbai',
+      agentHOBranchState: 'Maharashtra',
+      ebixRMName: 'RM Name',
+      ebixRMBranchName: 'Branch Name',
+      systemCode: 'SYS001',
       status: 'Active',
-      monthlyCreditLimit: '',
-      totalCreditDays: '',
-      gstClassification: '',
-      gstNumber: '',
-      gstPhoneNo: '',
-      flatDoorNumber: '',
-      roadStreet: '',
-      areaLocality: '',
-      gstCity: '',
-      gstState: '',
-      pinCode: '',
-      gstBranch: '',
-      financeSpocName: '',
-      financeSpocEmail: '',
-      financeSpocPhoneNo: '',
-      bankAccounts: [],
+      monthlyCreditLimit: '10000',
+      totalCreditDays: '30',
+      gstClassification: 'Regular',
+      gstNumber: '22AAAAA0000A1Z5',
+      gstPhoneNo: '9876543210',
+      flatDoorNumber: '123',
+      roadStreet: 'Main Street',
+      areaLocality: 'Locality',
+      gstCity: 'Mumbai',
+      gstState: 'Maharashtra',
+      pinCode: '400001',
+      gstBranch: 'Main Branch',
+      financeSpocName: 'Finance SPOC',
+      financeSpocEmail: 'finance@example.com',
+      financeSpocPhoneNo: '1234567890',
+      bankAccounts: [
+        {
+          bankName: 'Bank of Example',
+          branchName: 'Main Branch',
+          accountHolder: 'John Doe',
+          accountNumber: '123456789012',
+          ifscCode: 'EXAM0001234',
+        },
+      ],
       productPurpose: {
-        addOnMargin: undefined,
-        esignDocumentDownload: undefined,
-        vkycDocumentDownload: undefined,
-        chooseProductType: [],
-        creditType: [],
-        purposeTypesForCard: [],
+        addOnMargin: 'No',
+        esignDocumentDownload: 'No',
+        vkycDocumentDownload: 'No',
+        chooseProductType: { card: false, currency: false, remittance: true, referral: false },
+        creditType: { CNC: true, linecredit: false },
+        purposeTypesForCard: { personaltravel: true, businesstravel: false, education: false, immigration: false, employment: false, medical: false },
       },
     },
     mode: 'onChange',
@@ -82,7 +93,7 @@ const AgentAdminCreation: React.FC = () => {
   const clampStep = (n: number) => Math.max(0, Math.min(steps.length - 1, n));
   const goToStep = (n: number) => setCurrentStep(clampStep(n));
 
-  const getStepFields = (step: number): string[] => {
+  const getStepFields = (step: number): FieldPath<AgentAdminFormType>[] => {
     switch (step) {
       case 0: // Basic Information
         return ['vendorCode', 'fullName', 'emailId', 'phoneNo', 'agentType', 'agentBranchCity', 'agentHOBranchState', 'ebixRMName', 'ebixRMBranchName', 'systemCode', 'status', 'monthlyCreditLimit', 'totalCreditDays'];
@@ -98,7 +109,7 @@ const AgentAdminCreation: React.FC = () => {
   };
 
   const handleNext = async () => {
-    const stepFields = getStepFields(currentStep) as (keyof typeof agentAdminCreationSchema.shape)[];
+    const stepFields = getStepFields(currentStep);
     const isValid = await trigger(stepFields);
     if (isValid && currentStep < steps.length - 1) {
       setCompletedSteps((prev) => new Set([...prev, currentStep]));

@@ -264,7 +264,7 @@ export const agentAdminCreationConfig = () => {
           required: true,
           options: {
             'Yes': { label: 'Yes' },
-            'No': { label: 'No' }
+            'No': { label: 'No', checked: true }
           }
         },
         esignDocumentDownload: {
@@ -274,7 +274,7 @@ export const agentAdminCreationConfig = () => {
           required: true,
           options: {
             'Yes': { label: 'Yes' },
-            'No': { label: 'No' }
+            'No': { label: 'No', checked: true }
           }
         },
         vkycDocumentDownload: {
@@ -284,43 +284,46 @@ export const agentAdminCreationConfig = () => {
           required: true,
           options: {
             'Yes': { label: 'Yes' },
-            'No': { label: 'No' }
+            'No': { label: 'No', checked: true }
           }
         },
         chooseProductType: {
           name: 'chooseProductType',
           label: 'Choose Product Type',
           type: FieldType.Checkbox,
-          options: [
-            { value: 'Card', label: 'Card' },
-            { value: 'Currency', label: 'Currency' },
-            { value: 'Remittance', label: 'Remittance' },
-            { value: 'Referral', label: 'Referral' },
-          ],
+          options: {
+            'card': { label: 'Card' },
+            'currency': { label: 'Currency' },
+            'remittance': { label: 'Remittance' },
+            'referral': { label: 'Referral' },
+          },
+          isMulti: true,
         },
         creditType: {
           name: 'creditType',
           label: 'Credit Type',
           type: FieldType.Checkbox,
           required: true,
-          options: [
-            { value: 'CNC', label: 'CNC' },
-            { value: 'Line Credit', label: 'Line Credit' },
-          ],
+          options: {
+            'CNC': { label: 'CNC' },
+            'linecredit': { label: 'Line Credit' },
+          },
+          isMulti: true,
         },
         purposeTypesForCard: {
           name: 'purposeTypesForCard',
           label: 'Please Select Purpose Types for Card',
           type: FieldType.Checkbox,
           required: true,
-          options: [
-            { value: 'Personal Travel', label: 'Personal Travel' },
-            { value: 'Business Travel', label: 'Business Travel' },
-            { value: 'Education', label: 'Education' },
-            { value: 'Immigration', label: 'Immigration' },
-            { value: 'Employment', label: 'Employment' },
-            { value: 'Medical', label: 'Medical' },
-          ],
+          options: {
+            'personaltravel': { label: 'Personal Travel' },
+            'businesstravel': { label: 'Business Travel' },
+            'education': { label: 'Education' },
+            'immigration': { label: 'Immigration' },
+            'employment': { label: 'Employment' },
+            'medical': { label: 'Medical' },
+          },
+          isMulti: true,
         },
       },
       rateMargin: {},

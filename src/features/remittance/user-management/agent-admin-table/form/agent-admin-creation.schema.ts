@@ -59,12 +59,87 @@ export const agentAdminCreationSchema = z.object({
     addOnMargin: z.enum(['Yes', 'No'], { message: 'Please select an option for Add on Margin' }).optional(),
     esignDocumentDownload: z.enum(['Yes', 'No'], { message: 'Please select an option for Esign Document Download' }).optional(),
     vkycDocumentDownload: z.enum(['Yes', 'No'], { message: 'Please select an option for VKYC Document Download' }).optional(),
-    chooseProductType: z.array(z.string()).min(1, 'Please select at least one product type'),
-    creditType: z.array(z.string()).min(1, 'Please select at least one credit type'),
-    purposeTypesForCard: z.array(z.string()).min(1, 'Please select at least one purpose type for card'),
-  }).optional(),
-
+    chooseProductType: z
+        .record(z.enum(['card', 'currency', 'remittance', 'referral']), z.boolean())
+        .superRefine((val, ctx) => {
+          if (!Object.values(val || {}).some(Boolean)) {
+            ctx.addIssue({
+              code: z.ZodIssueCode.custom,
+              message: 'Please select at least one product type',
+              path: [], // attach to the object itself
+            });
+          }
+        }),
+    creditType: 
+     z.record(z.enum(['CNC', 'linecredit']), z.boolean())
+        .superRefine((val, ctx) => {
+          if (!Object.values(val || {}).some(Boolean)) {
+            ctx.addIssue({
+              code: z.ZodIssueCode.custom,
+              message: 'Please select at least one product type',
+              path: [], // attach to the object itself
+            });
+          }
+        }),
+    purposeTypesForCard:
+      z.record(z.enum(['personaltravel', 'businesstravel','education','immigration','employment','medical']), z.boolean())
+        .superRefine((val, ctx) => {
+          if (!Object.values(val || {}).some(Boolean)) {
+            ctx.addIssue({
+              code: z.ZodIssueCode.custom,
+              message: 'Please select at least one product type',
+              path: [], // attach to the object itself
+            });
+          }
+        }),
+    }),
   rateMargin: z.object({}).optional(),
   commission: z.object({}).optional(),
   corporateOnboarding: z.object({}).optional(),
 });
+
+export const defaultValues = {
+  vendorCode: 'V001',
+  fullName: 'John Doe',
+  emailId: 'john.doe@example.com',
+  phoneNo: '1234567890',
+  agentType: 'Type A',
+  agentBranchCity: 'Mumbai',
+  agentHOBranchState: 'Maharashtra',
+  ebixRMName: 'RM Name',
+  ebixRMBranchName: 'Branch Name',
+  systemCode: 'SYS001',
+  status: 'Active',
+  monthlyCreditLimit: '10000',
+  totalCreditDays: '30',
+  gstClassification: 'Regular',
+  gstNumber: '22AAAAA0000A1Z5',
+  gstPhoneNo: '9876543210',
+  flatDoorNumber: '123',
+  roadStreet: 'Main Street',
+  areaLocality: 'Locality',
+  gstCity: 'Mumbai',
+  gstState: 'Maharashtra',
+  pinCode: '400001',
+  gstBranch: 'Main Branch',
+  financeSpocName: 'Finance SPOC',
+  financeSpocEmail: 'finance@example.com',
+  financeSpocPhoneNo: '1234567890',
+  bankAccounts: [
+    {
+      bankName: 'Bank of Example',
+      branchName: 'Main Branch',
+      accountHolder: 'John Doe',
+      accountNumber: '123456789012',
+      ifscCode: 'EXAM0001234',
+    },
+  ],
+  productPurpose: {
+    addOnMargin: 'No',
+    esignDocumentDownload: 'No',
+    vkycDocumentDownload: 'No',
+    chooseProductType: { card: false, currency: false, remittance: true, referral: false },
+    creditType: { CNC: true, linecredit: false },
+    purposeTypesForCard: { personaltravel: true, businesstravel: false, education: false, immigration: false, employment: false, medical: false },
+  },
+};

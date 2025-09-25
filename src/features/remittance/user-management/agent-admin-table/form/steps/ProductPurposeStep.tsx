@@ -20,7 +20,7 @@ export const ProductPurposeStep: React.FC = () => {
               <FieldWrapper key={fieldName}>
                 {getController({
                   ...(typeof field === 'object' && field !== null ? field : {}),
-                  name: fieldName,
+                  name: `productPurpose.${fieldName}`,
                   control,
                   errors,
                 })}
@@ -32,31 +32,31 @@ export const ProductPurposeStep: React.FC = () => {
 
       <div>
         <h3 className="text-lg font-semibold mb-4">Product and Credit Types</h3>
-        <FormFieldRow className="mb-4">
+        <FormFieldRow className="mb-4" rowCols={1}>
           <FieldWrapper>
             {getController({
               ...config.fields.productPurpose.chooseProductType,
-              name: 'chooseProductType',
+              name: 'productPurpose.chooseProductType',
               control,
               errors,
             })}
           </FieldWrapper>
         </FormFieldRow>
-        <FormFieldRow className="mb-4">
+        <FormFieldRow className="mb-4" rowCols={1}>
           <FieldWrapper>
             {getController({
               ...config.fields.productPurpose.creditType,
-              name: 'creditType',
+              name: 'productPurpose.creditType',
               control,
               errors,
             })}
           </FieldWrapper>
         </FormFieldRow>
-        <FormFieldRow className="mb-4">
+        <FormFieldRow className="mb-4" rowCols={1}>
           <FieldWrapper>
             {getController({
               ...config.fields.productPurpose.purposeTypesForCard,
-              name: 'purposeTypesForCard',
+              name: 'productPurpose.purposeTypesForCard',
               control,
               errors,
             })}

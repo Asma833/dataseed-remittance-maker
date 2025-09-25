@@ -208,7 +208,7 @@ export const ShadCnCheckbox = ({
           defaultValue={getDefaultValues()}
           render={({ field }) => {
             const numOptions = Object.keys(options).length;
-            const effectiveOrientation = orientation || (numOptions <= 4 ? "horizontal" : "vertical");
+            const effectiveOrientation = orientation || (numOptions <= 10 ? "horizontal" : "vertical");
             const containerClassName =
               effectiveOrientation === "horizontal" ? "flex flex-wrap gap-x-4 gap-y-2" : "flex flex-col gap-4";
 
