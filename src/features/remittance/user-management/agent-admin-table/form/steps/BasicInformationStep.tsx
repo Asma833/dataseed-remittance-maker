@@ -4,6 +4,7 @@ import { agentAdminCreationConfig } from '../agent-admin-creation.config';
 import { getController } from '@/components/form/utils/get-controller';
 import FieldWrapper from '@/components/form/wrapper/field-wrapper';
 import FormFieldRow from '@/components/form/wrapper/form-field-row';
+import SubTitle from '../components/sub-title';
 
 interface BasicInformationStepProps {
   isCompleted?: boolean;
@@ -16,7 +17,7 @@ export const BasicInformationStep: React.FC<BasicInformationStepProps> = () => {
   return (
     <div className="space-y-6">
       <div>
-        <h3 className="text-lg font-semibold mb-4">Basic Details</h3>
+        <SubTitle title="Basic Details" />
         <FormFieldRow className="mb-4" rowCols={3}>
           {(['vendorCode', 'fullName', 'emailId'] as const).map((fieldName) => {
             const field = config.fields.basicInformation[fieldName];
@@ -65,7 +66,7 @@ export const BasicInformationStep: React.FC<BasicInformationStepProps> = () => {
       </div>
 
       <div>
-        <h3 className="text-lg font-semibold mb-4">Other Details</h3>
+        <SubTitle title="Other Details" />
         <FormFieldRow className="mb-4" rowCols={3}>
           {(['systemCode'] as const).map((fieldName) => {
             const field = config.fields.basicInformation[fieldName];
@@ -84,7 +85,7 @@ export const BasicInformationStep: React.FC<BasicInformationStepProps> = () => {
       </div>
 
       <div>
-        <h3 className="text-lg font-semibold mb-4">Status</h3>
+        <SubTitle title="Status" />
         <FormFieldRow className="mb-4" rowCols={3}>
           {(['status'] as const).map((fieldName) => {
             const field = config.fields.basicInformation[fieldName];
@@ -103,7 +104,7 @@ export const BasicInformationStep: React.FC<BasicInformationStepProps> = () => {
       </div>
 
       <div>
-        <h3 className="text-lg font-semibold mb-4">Credit Information</h3>
+        <SubTitle title="Credit Information" />
         <p className="text-sm text-muted-foreground mb-4">
           Please input the desired line credit limit and credit days.
         </p>

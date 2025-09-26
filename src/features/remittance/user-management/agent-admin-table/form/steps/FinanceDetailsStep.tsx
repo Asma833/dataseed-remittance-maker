@@ -7,7 +7,9 @@ import FormFieldRow from '@/components/form/wrapper/form-field-row';
 import { Button } from '@/components/ui/button';
 import { PlusCircle } from 'lucide-react';
 import { AddBankDialog } from '../components/AddBankDialog';
-import { BankTable } from '../components/BankTable';
+import GetBankTableColumns from '../components/bank-table-coulumn';
+import { GenericTable } from '../components/generic-table';
+import SubTitle from '../components/sub-title';
 
 
 export interface BankAccount {
@@ -57,12 +59,15 @@ export const FinanceDetailsStep: React.FC = () => {
   const closeEditDialog = () => {
     setEditingBank(null);
   };
-
+const columns = GetBankTableColumns({
+          handleEdit: openEditDialog,
+          handleDelete: handleDeleteBank,
+        })
   return (
     <div className="space-y-6">
       {/* Financial SPOC Details */}
       <div>
-        <h3 className="text-lg font-semibold mb-4">Financial SPOC Details</h3>
+        <SubTitle title="Financial SPOC Details" />
         <FormFieldRow className="mb-4" rowCols={3}>
           {(['financeSpocName', 'financeSpocEmail', 'financeSpocPhoneNo'] as const).map((fieldName) => {
             const field = config.fields.financeDetails[fieldName];
@@ -95,10 +100,9 @@ export const FinanceDetailsStep: React.FC = () => {
           </Button>
         </div>
 
-        <BankTable
-          bankAccounts={bankAccounts}
-          onEdit={openEditDialog}
-          onDelete={handleDeleteBank}
+        <GenericTable
+          columns={columns}
+          data={bankAccounts}
         />
       </div>
 

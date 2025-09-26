@@ -7,6 +7,7 @@ import { commissionDetailsConfig } from "./commission-details.config";
 import { FieldType } from "@/types/enums";
 import { getController } from "@/components/form/utils/get-controller";
 import { cn } from "@/utils/cn";
+import SubTitle from "../sub-title";
 
 const hCard = "rounded-xl bg-gray-50";
 const cardHeader = "px-4 pt-3 bg-muted/40 rounded-t-xl";
@@ -21,26 +22,26 @@ export default function CommissionDetailsPage() {
   const { control, formState: { errors }, watch, setValue } = useFormContext();
 
   // --- product margin state & effects ---
-  const isAllCurrencyChecked__product =
-    watch("commission_details.product_margin.all_currency")?.ALL_CURRENCY;
-  const allMargin_product = watch("commission_details.product_margin.all_currency_margin");
+  // const isAllCurrencyChecked__product =
+  //   watch("commission_details.product_margin.all_currency")?.ALL_CURRENCY;
+  // const allMargin_product = watch("commission_details.product_margin.all_currency_margin");
 
-  // State for disabled to force re-render
-  const [isAllCurrencyDisabled_product, setIsAllCurrencyDisabled_product] = useState(true);
-  useEffect(() => {
-    setIsAllCurrencyDisabled_product(!isAllCurrencyChecked__product);
-  }, [isAllCurrencyChecked__product]);
+  // // State for disabled to force re-render
+  // const [isAllCurrencyDisabled_product, setIsAllCurrencyDisabled_product] = useState(true);
+  // useEffect(() => {
+  //   setIsAllCurrencyDisabled_product(!isAllCurrencyChecked__product);
+  // }, [isAllCurrencyChecked__product]);
 
   // --- nostro charges state & effects ---
-  const isAllCurrencyChecked__nostro =
-    watch("commission_details.nostro_charges.all_currency")?.ALL_CURRENCY;
-  const allMargin_nostro = watch("commission_details.nostro_charges.all_currency_margin");
+  // const isAllCurrencyChecked__nostro =
+  //   watch("commission_details.nostro_charges.all_currency")?.ALL_CURRENCY;
+  // const allMargin_nostro = watch("commission_details.nostro_charges.all_currency_margin");
 
-  // State for disabled to force re-render
-  const [isAllCurrencyDisabled_nostro, setIsAllCurrencyDisabled_nostro] = useState(true);
-  useEffect(() => {
-    setIsAllCurrencyDisabled_nostro(!isAllCurrencyChecked__nostro);
-  }, [isAllCurrencyChecked__nostro]);
+  // // State for disabled to force re-render
+  // const [isAllCurrencyDisabled_nostro, setIsAllCurrencyDisabled_nostro] = useState(true);
+  // useEffect(() => {
+  //   setIsAllCurrencyDisabled_nostro(!isAllCurrencyChecked__nostro);
+  // }, [isAllCurrencyChecked__nostro]);
 
   // currency lists from config
   const pmCurrencies = commissionDetailsConfig.fields.product_margin.currency_list.currencies;
@@ -55,46 +56,46 @@ export default function CommissionDetailsPage() {
   const [nsLeft, nsRight] = useMemo(() => splitCurrencies(nsCurrencies), [nsCurrencies]);
 
   // Clear product all-currency margin when checkbox unchecked
-  useEffect(() => {
-    if (!isAllCurrencyChecked__product && allMargin_product) {
-      setValue("commission_details.product_margin.all_currency_margin", "", { shouldDirty: true, shouldValidate: true });
-      setValue("commissionDetails.product_margin.all_currency_margin", "", { shouldDirty: true, shouldValidate: true });
-    }
-  }, [isAllCurrencyChecked__product, allMargin_product, setValue]);
+  // useEffect(() => {
+  //   if (!isAllCurrencyChecked__product && allMargin_product) {
+  //     setValue("commission_details.product_margin.all_currency_margin", "", { shouldDirty: true, shouldValidate: true });
+  //     setValue("commissionDetails.product_margin.all_currency_margin", "", { shouldDirty: true, shouldValidate: true });
+  //   }
+  // }, [isAllCurrencyChecked__product, allMargin_product, setValue]);
 
-  // Auto fill / clear individual currency margins for Product Margin
-  useEffect(() => {
-    if (isAllCurrencyChecked__product) {
-      if (allMargin_product !== undefined && allMargin_product !== null && allMargin_product !== "") {
-        pmCurrencies.forEach(({ currency_code }) => {
-          setValue(`commission_details.product_margin.currency_list.${currency_code}`, allMargin_product, { shouldDirty: true, shouldValidate: true });
-          setValue(`commissionDetails.product_margin.currency_list.${currency_code}`, allMargin_product, { shouldDirty: true, shouldValidate: true });
-        });
-      } else {
-        pmCurrencies.forEach(({ currency_code }) => {
-          setValue(`commission_details.product_margin.currency_list.${currency_code}`, "", { shouldDirty: true, shouldValidate: true });
-          setValue(`commissionDetails.product_margin.currency_list.${currency_code}`, "", { shouldDirty: true, shouldValidate: true });
-        });
-      }
-    }
-  }, [isAllCurrencyChecked__product, allMargin_product, pmCurrencies, setValue]);
+  // // Auto fill / clear individual currency margins for Product Margin
+  // useEffect(() => {
+  //   if (isAllCurrencyChecked__product) {
+  //     if (allMargin_product !== undefined && allMargin_product !== null && allMargin_product !== "") {
+  //       pmCurrencies.forEach(({ currency_code }) => {
+  //         setValue(`commission_details.product_margin.currency_list.${currency_code}`, allMargin_product, { shouldDirty: true, shouldValidate: true });
+  //         setValue(`commissionDetails.product_margin.currency_list.${currency_code}`, allMargin_product, { shouldDirty: true, shouldValidate: true });
+  //       });
+  //     } else {
+  //       pmCurrencies.forEach(({ currency_code }) => {
+  //         setValue(`commission_details.product_margin.currency_list.${currency_code}`, "", { shouldDirty: true, shouldValidate: true });
+  //         setValue(`commissionDetails.product_margin.currency_list.${currency_code}`, "", { shouldDirty: true, shouldValidate: true });
+  //       });
+  //     }
+  //   }
+  // }, [isAllCurrencyChecked__product, allMargin_product, pmCurrencies, setValue]);
 
-  // Auto fill / clear individual currency margins for Nostro Charges
-  useEffect(() => {
-    if (isAllCurrencyChecked__nostro) {
-      if (allMargin_nostro !== undefined && allMargin_nostro !== null && allMargin_nostro !== "") {
-        nsCurrencies.forEach(({ currency_code }) => {
-          setValue(`commission_details.nostro_charges.currency_list.${currency_code}`, allMargin_nostro, { shouldDirty: true, shouldValidate: true });
-          setValue(`commissionDetails.nostro_charges.currency_list.${currency_code}`, allMargin_nostro, { shouldDirty: true, shouldValidate: true });
-        });
-      } else {
-        nsCurrencies.forEach(({ currency_code }) => {
-          setValue(`commission_details.nostro_charges.currency_list.${currency_code}`, "", { shouldDirty: true, shouldValidate: true });
-          setValue(`commissionDetails.nostro_charges.currency_list.${currency_code}`, "", { shouldDirty: true, shouldValidate: true });
-        });
-      }
-    }
-  }, [isAllCurrencyChecked__nostro, allMargin_nostro, nsCurrencies, setValue]);
+  // // Auto fill / clear individual currency margins for Nostro Charges
+  // useEffect(() => {
+  //   if (isAllCurrencyChecked__nostro) {
+  //     if (allMargin_nostro !== undefined && allMargin_nostro !== null && allMargin_nostro !== "") {
+  //       nsCurrencies.forEach(({ currency_code }) => {
+  //         setValue(`commission_details.nostro_charges.currency_list.${currency_code}`, allMargin_nostro, { shouldDirty: true, shouldValidate: true });
+  //         setValue(`commissionDetails.nostro_charges.currency_list.${currency_code}`, allMargin_nostro, { shouldDirty: true, shouldValidate: true });
+  //       });
+  //     } else {
+  //       nsCurrencies.forEach(({ currency_code }) => {
+  //         setValue(`commission_details.nostro_charges.currency_list.${currency_code}`, "", { shouldDirty: true, shouldValidate: true });
+  //         setValue(`commissionDetails.nostro_charges.currency_list.${currency_code}`, "", { shouldDirty: true, shouldValidate: true });
+  //       });
+  //     }
+  //   }
+  // }, [isAllCurrencyChecked__nostro, allMargin_nostro, nsCurrencies, setValue]);
 
   return (
     <div className="w-full">
@@ -141,7 +142,7 @@ export default function CommissionDetailsPage() {
         {/* ================= LEFT BIG CARD ================= */}
         <section className={hCard}>
           <header className={cardHeader}>
-            <h3 className={labelH}>Rate Margin</h3>
+            <SubTitle title="Rate Margin" className="" titleClassName={labelH} />
           </header>
           <div className={cardBody}>
             {/* Agent Fixed Markup (INR / Percentage) */}
@@ -172,7 +173,7 @@ export default function CommissionDetailsPage() {
                 {getController({
                   name: "commission_details.product_margin.all_currency_margin",
                   type: FieldType.Number,
-                  disabled: isAllCurrencyDisabled_product,
+                  // disabled: isAllCurrencyDisabled_product,
                   control,
                   errors,
                   className: inputH,
@@ -213,7 +214,7 @@ export default function CommissionDetailsPage() {
         {/* ================= MIDDLE BIG CARD ================= */}
         <section className={hCard}>
           <header className={cardHeader}>
-            <h3 className={labelH}>Nostro Charges</h3>
+            <SubTitle title="Nostro Charges" className="" titleClassName={labelH} />
           </header>
           <div className={cardBody}>
             {/* Type (FX / INR) */}
@@ -244,7 +245,7 @@ export default function CommissionDetailsPage() {
                 {getController({
                   name: "commission_details.nostro_charges.all_currency_margin",
                   type: FieldType.Number,
-                  disabled: isAllCurrencyDisabled_nostro,
+                  // disabled: isAllCurrencyDisabled_nostro,
                   control,
                   errors,
                   className: inputH,
@@ -287,7 +288,7 @@ export default function CommissionDetailsPage() {
           {/* TT Charges */}
           <section className={cn("pb-5",hCard)}>
             <header className={cardHeader}>
-              <h3 className={labelH}>TT Charges</h3>
+              <SubTitle title="TT Charges" className="" titleClassName={labelH} />
             </header>
             <div className={cardBody}>
               <div className="max-w-[260px]">
@@ -308,7 +309,7 @@ export default function CommissionDetailsPage() {
           {/* Other Charges */}
           <section className={cn("pb-5",hCard)}>
             <header className={cardHeader}>
-              <h3 className={labelH}>Other Charges</h3>
+              <SubTitle title="Other Charges" className="" titleClassName={labelH} />
             </header>
             <div className={cardBody}>
               <div className="max-w-[260px]">

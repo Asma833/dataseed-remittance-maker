@@ -8,7 +8,8 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Eye, Upload } from 'lucide-react';
-import { GenericTable } from '../components/BankTable';
+import { GenericTable }  from '../components/generic-table';
+import SubTitle from '../components/sub-title';
 
 export interface CompanyDocument {
   id: string;
@@ -56,43 +57,50 @@ export const DocumentsStep: React.FC = () => {
   };
 
   const documentColumns = [
-    { key: 'documentType', label: 'Document Type' },
+    {
+      id: 'documentType',
+      header: 'Document Type',
+      accessorKey: 'documentType'
+    },
+    {
+      id: 'actions',
+      header: 'Actions',
+      cell: ({ row }: { row: CompanyDocument }) => (
+        <div className="flex gap-2 justify-center">
+          <Button variant="secondary" size="sm" onClick={() => handleViewFile(row.file)} >
+            <Eye className="h-4 w-4" />
+          </Button>
+        </div>
+      ),
+    },
   ];
-
-  const renderDocumentActions = (doc: CompanyDocument) => (
-    <div className="flex gap-2">
-      <Button variant="ghost" size="sm" onClick={() => handleViewFile(doc.file)} disabled={!doc.file}>
-        <Eye className="h-4 w-4" />
-      </Button>
-    </div>
-  );
 
   return (
     <div className="space-y-6">
       {/* Agreement Details */}
-      <div>
-        <h3 className="text-lg font-semibold mb-4">Agreement Details</h3>
-        <FormFieldRow className="mb-4">
+      <SubTitle title="Agreement Details" />
+      <div className="bg-gray-100 p-2 pt-5 mb-2">
+        <FormFieldRow className="mb-4" rowCols={1}>
           <FieldWrapper>
             <div className="flex items-center gap-2">
               <Label>Agreement Copy</Label>
               <Button
                 type="button"
-                variant="ghost"
+                variant="light"
+                className="w-28 ml-10"
                 onClick={() => handleViewFile(agreementCopy)}
-                disabled={!agreementCopy}
+                // disabled={!agreementCopy}
               >
-                <Eye className="h-4 w-4 mr-2" />
+                <Eye className="h-4 w-4" />
                 View
               </Button>
-            </div>
-            <div className="flex gap-2 mt-2">
               <Button
                 type="button"
                 variant="default"
+                className="w-28"
                 onClick={() => agreementCopyRef.current?.click()}
               >
-                <Upload className="h-4 w-4 mr-2" />
+                <Upload className="h-4 w-4" />
                 Replace
               </Button>
               <Input
@@ -103,7 +111,11 @@ export const DocumentsStep: React.FC = () => {
               />
             </div>
           </FieldWrapper>
-          <FieldWrapper>
+         
+          
+        </FormFieldRow>
+         <FormFieldRow className="mb-4">
+            <FieldWrapper>
             {getController({
               ...(config.fields.documents?.agreementValid || {}),
               name: 'agreementValid',
@@ -111,33 +123,34 @@ export const DocumentsStep: React.FC = () => {
               errors,
             })}
           </FieldWrapper>
-        </FormFieldRow>
+          </FormFieldRow>
       </div>
 
       {/* RBI Details */}
-      <div>
-        <h3 className="text-lg font-semibold mb-4">RBI Details</h3>
-        <FormFieldRow className="mb-4">
+      <SubTitle title="RBI Details" />
+       <div className="bg-gray-100 p-2 pt-5">
+        
+        <FormFieldRow className="mb-4" rowCols={1}>
           <FieldWrapper>
             <div className="flex items-center gap-2">
               <Label>RBI License Copy</Label>
               <Button
                 type="button"
-                variant="ghost"
+                variant="light"
+                className="w-28 ml-10"
                 onClick={() => handleViewFile(rbiLicenseCopy)}
-                disabled={!rbiLicenseCopy}
+                // disabled={!rbiLicenseCopy}
               >
-                <Eye className="h-4 w-4 mr-2" />
+                <Eye className="h-4 w-4" />
                 View
               </Button>
-            </div>
-            <div className="flex gap-2 mt-2">
               <Button
                 type="button"
                 variant="default"
+                className="w-28"
                 onClick={() => rbiLicenseCopyRef.current?.click()}
               >
-                <Upload className="h-4 w-4 mr-2" />
+                <Upload className="h-4 w-4" />
                 Replace
               </Button>
               <Input
@@ -167,15 +180,14 @@ export const DocumentsStep: React.FC = () => {
       </div>
 
       {/* Company Documents */}
+
       <div>
-        <div className="flex items-center justify-between mb-4">
-          <h3 className="text-lg font-semibold">Company Documents</h3>
+       <div className="flex items-center justify-between">
+          <SubTitle title="Company Documents" className="" />
         </div>
         <GenericTable
           data={companyDocuments}
           columns={documentColumns}
-          renderActions={renderDocumentActions}
-          emptyMessage="No documents added yet."
         />
       </div>
     </div>

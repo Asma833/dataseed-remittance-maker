@@ -205,7 +205,7 @@ const AgentAdminCreation: React.FC = () => {
               )}
             </div>
           </div>
-          <hr className="border-gray-300"/>
+          <hr className="border-gray-300 mb-2"/>
           <FormProvider {...methods}>
             <form id="agent-admin-create-form" onSubmit={onSubmit}>
               {renderStepContent()}
