@@ -79,7 +79,7 @@ export const DocumentsStep: React.FC = () => {
     <div className="space-y-6">
       {/* Agreement Details */}
       <SubTitle title="Agreement Details" />
-      <div className="bg-gray-100 p-2 pt-5 mb-2">
+      <div className="bg-gray-100 p-2 pt-5 mb-2 rounded-lg">
         <FormFieldRow className="mb-4" rowCols={1}>
           <FieldWrapper>
             <div className="flex items-center gap-2">
@@ -128,7 +128,7 @@ export const DocumentsStep: React.FC = () => {
 
       {/* RBI Details */}
       <SubTitle title="RBI Details" />
-       <div className="bg-gray-100 p-2 pt-5">
+       <div className="bg-gray-100 p-2 pt-5 mb-2 rounded-lg">
         
         <FormFieldRow className="mb-4" rowCols={1}>
           <FieldWrapper>

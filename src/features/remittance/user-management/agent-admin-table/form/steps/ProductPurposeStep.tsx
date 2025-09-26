@@ -4,6 +4,7 @@ import { agentAdminCreationConfig } from '../agent-admin-creation.config';
 import { getController } from '@/components/form/utils/get-controller';
 import FieldWrapper from '@/components/form/wrapper/field-wrapper';
 import FormFieldRow from '@/components/form/wrapper/form-field-row';
+import SubTitle from '../components/sub-title';
 
 export const ProductPurposeStep: React.FC = () => {
   const { control, formState: { errors } } = useFormContext();
@@ -12,17 +13,18 @@ export const ProductPurposeStep: React.FC = () => {
   return (
     <div className="space-y-6">
       <div>
-        <h3 className="text-lg font-semibold mb-4">Document Downloads</h3>
+        <SubTitle title="Document Downloads" />
         <FormFieldRow className="mb-4" rowCols={3}>
           {(['addOnMargin', 'esignDocumentDownload', 'vkycDocumentDownload'] as const).map((fieldName) => {
             const field = config.fields.productPurpose[fieldName];
             return (
-              <FieldWrapper key={fieldName}>
+              <FieldWrapper key={fieldName} className="bg-gray-100 p-2 pt-3 mb-2 rounded-lg">
                 {getController({
                   ...(typeof field === 'object' && field !== null ? field : {}),
                   name: `productPurpose.${fieldName}`,
                   control,
                   errors,
+                  className:"justify-center"
                 })}
               </FieldWrapper>
             );
@@ -31,7 +33,7 @@ export const ProductPurposeStep: React.FC = () => {
       </div>
 
       <div>
-        <h3 className="text-lg font-semibold mb-4">Product and Credit Types</h3>
+        <SubTitle title="Product and Credit Types" />
         <FormFieldRow className="mb-4" rowCols={1}>
           <FieldWrapper>
             {getController({
@@ -52,16 +54,18 @@ export const ProductPurposeStep: React.FC = () => {
             })}
           </FieldWrapper>
         </FormFieldRow>
-        <FormFieldRow className="mb-4" rowCols={1}>
+        <FormFieldRow className="bg-gray-100 p-2 mb-2 rounded-lg" rowCols={1}>
           <FieldWrapper>
             {getController({
               ...config.fields.productPurpose.purposeTypesForCard,
               name: 'productPurpose.purposeTypesForCard',
               control,
-              errors,
+              variant:"pill",
+              errors
             })}
           </FieldWrapper>
         </FormFieldRow>
+       
       </div>
     </div>
   );

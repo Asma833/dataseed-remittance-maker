@@ -4,6 +4,7 @@ import { agentAdminCreationConfig } from '../agent-admin-creation.config';
 import { getController } from '@/components/form/utils/get-controller';
 import FieldWrapper from '@/components/form/wrapper/field-wrapper';
 import FormFieldRow from '@/components/form/wrapper/form-field-row';
+import SubTitle from '../components/sub-title';
 
 export const CompanyDetailsStep: React.FC = () => {
   const { control, formState: { errors } } = useFormContext();
@@ -12,7 +13,7 @@ export const CompanyDetailsStep: React.FC = () => {
   return (
     <div className="space-y-6">
       <div>
-        <h3 className="text-lg font-semibold mb-4">GST Details</h3>
+        <SubTitle title="GST Details" />
         <FormFieldRow className="mb-4" rowCols={4}>
           {(['gstClassification', 'gstNumber', 'gstPhoneNo'] as const).map((fieldName) => {
             const field = config.fields.companyDetails[fieldName];
@@ -31,7 +32,7 @@ export const CompanyDetailsStep: React.FC = () => {
       </div>
 
       <div>
-        <h3 className="text-lg font-semibold mb-4">Address as per GST</h3>
+        <SubTitle title="Address as per GST" />
         <FormFieldRow className="mb-4" rowCols={4}>
           {(['flatDoorNumber', 'roadStreet', 'areaLocality', 'gstCity'] as const).map((fieldName) => {
             const field = config.fields.companyDetails[fieldName];

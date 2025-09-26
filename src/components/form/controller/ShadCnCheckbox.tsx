@@ -13,6 +13,7 @@ import {
   CheckSquare,
   CircleDot,
   SquareCheck,
+  CheckCircle,
 } from "lucide-react";
 import React, { useEffect } from "react";
 
@@ -21,7 +22,8 @@ type CheckboxVariant =
   | "circle_check"
   | "radio_style"
   | "circle_check_filled"
-  | "square_check_filled";
+  | "square_check_filled"
+  | "pill";
 
 type CheckboxSize = "small" | "medium" | "large";
 
@@ -221,49 +223,80 @@ export const ShadCnCheckbox = ({
                     const isChecked = isMulti ? !!currentValue?.[key] : currentValue === key;
                     const icons = getIcons(isChecked);
 
-                    return (
-                      <div key={key} className="inline-flex items-center gap-2">
-                        <button
-                          type="button"
-                          id={`${name}-${key}`}
-                          aria-pressed={isChecked}
-                          aria-checked={isChecked}
-                          disabled={disabled}
-                          onClick={() => {
-                            const nextValue = isMulti
-                              ? normalizeMulti({ ...(currentValue || {}), [key]: !isChecked })
-                              : !isChecked
-                              ? key
-                              : "";
-
-                            // Update value (no global validation)
-                            // Prefer field.onChange for RHF to treat as a native change
-                            field.onChange(nextValue);
-
-                            // Immediate required feedback on THIS field only
-                            applyRequiredError(nextValue);
-
-                            handleCheckboxChange?.(key, !isChecked);
-                          }}
-                          className={cn(
-                            "grid place-items-center rounded-full cursor-pointer",
-                            "focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-violet-500",
-                            disabled && "cursor-not-allowed opacity-50"
-                          )}
-                          style={{ width: iconPx, height: iconPx }}
-                        >
-                          {isChecked ? icons.checked : icons.unchecked}
-                        </button>
-
-                        <label
-                          htmlFor={`${name}-${key}`}
-                          className="text-sm text-[var(--color-form-label)] leading-none cursor-pointer select-none"
-                          onClick={() => !disabled && document.getElementById(`${name}-${key}`)?.click()}
-                        >
-                          {option.label}
+                    if (variant === "pill") {
+                      return (
+                        <label key={key} className={cn("cursor-pointer select-none", disabled && "cursor-not-allowed")}>
+                          <input
+                            type="checkbox"
+                            className="sr-only peer"
+                            checked={isChecked}
+                            disabled={disabled}
+                            onChange={() => {
+                              const nextValue = isMulti
+                                ? normalizeMulti({ ...(currentValue || {}), [key]: !isChecked })
+                                : !isChecked ? key : "";
+                              field.onChange(nextValue);
+                              applyRequiredError(nextValue);
+                              handleCheckboxChange?.(key, !isChecked);
+                            }}
+                            aria-checked={isChecked}
+                          />
+                          <span
+                            className={[
+                              "inline-flex items-center gap-2 rounded-md px-3 py-1.5 text-sm",
+                              "ring-1 ring-gray-300 bg-white text-gray-700",
+                              "peer-focus-visible:outline-none peer-focus-visible:ring-2 peer-focus-visible:ring-purple-500/40",
+                              "transition",
+                              isChecked ? "bg-purple-50 ring-purple-600" : "hover:bg-gray-50",
+                              disabled && "cursor-not-allowed opacity-50",
+                            ].join(" ")}
+                          >
+                            <CheckCircle
+                              className={isChecked ? "h-4 w-4 text-purple-600" : "h-4 w-4 text-gray-300"}
+                              aria-hidden="true"
+                            />
+                            {option.label}
+                          </span>
                         </label>
-                      </div>
-                    );
+                      );
+                    } else {
+                      return (
+                        <div key={key} className="inline-flex items-center gap-2">
+                          <button
+                            type="button"
+                            id={`${name}-${key}`}
+                            aria-pressed={isChecked}
+                            aria-checked={isChecked}
+                            disabled={disabled}
+                            onClick={() => {
+                              const nextValue = isMulti
+                                ? normalizeMulti({ ...(currentValue || {}), [key]: !isChecked })
+                                : !isChecked
+                                ? key
+                                : "";
+                              field.onChange(nextValue);
+                              applyRequiredError(nextValue);
+                              handleCheckboxChange?.(key, !isChecked);
+                            }}
+                            className={cn(
+                              "grid place-items-center rounded-full cursor-pointer",
+                              "focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-violet-500",
+                              disabled && "cursor-not-allowed opacity-50"
+                            )}
+                            style={{ width: iconPx, height: iconPx }}
+                          >
+                            {isChecked ? icons.checked : icons.unchecked}
+                          </button>
+                          <label
+                            htmlFor={`${name}-${key}`}
+                            className="text-sm text-[var(--color-form-label)] leading-none cursor-pointer select-none"
+                            onClick={() => !disabled && document.getElementById(`${name}-${key}`)?.click()}
+                          >
+                            {option.label}
+                          </label>
+                        </div>
+                      );
+                    }
                   })}
                 </div>
 

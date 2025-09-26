@@ -65,7 +65,7 @@ export const ShadCnRadioGroup = <T extends FieldValues>({
                   onChange?.(v);
                 }}
                 disabled={disabled}
-                className={horizontal ? "flex items-center gap-6" : "flex flex-col gap-2"}
+                className={horizontal ? "flex items-center gap-6 justify-center" : "flex flex-col gap-2"}
               >
                 {Object.entries(options).map(([value, option]) => (
                   <div key={value} className="flex items-center gap-2">
