@@ -23,7 +23,7 @@ export const commissionDetailsConfig = {
     commission_type: {
       name: "commission_details.commission_type",
       label: "",
-      type: FieldType.Checkbox,
+      type: FieldType.Radio,
       // required: true,
       // single-select checkbox group (radio-like)
       options: {
@@ -41,7 +41,7 @@ export const commissionDetailsConfig = {
       agent_fixed_margin: {
         name: "commission_details.product_margin.agent_fixed_margin",
         label: "Agent Fixed Margin",
-        type: FieldType.Checkbox,
+        type: FieldType.Radio,
         required: true,
         // single-select (INR or Percentage)
         options: {
@@ -65,7 +65,7 @@ export const commissionDetailsConfig = {
       all_currency_checkbox: {
         name: "commission_details.product_margin.all_currency",
         label: "All Currency",
-        type: FieldType.Checkbox,
+        type: FieldType.Radio,
         required: false,
         options: {
           ALL_CURRENCY: { label: "All Currency" },
@@ -106,7 +106,7 @@ export const commissionDetailsConfig = {
       type: {
         name: "commission_details.nostro_charges.type",
         label: "Type",
-        type: FieldType.Checkbox,
+        type: FieldType.Radio,
         required: true,
         options: {
           FX: { label: "FX" },
@@ -129,7 +129,7 @@ export const commissionDetailsConfig = {
       all_currency_checkbox: {
         name: "commission_details.nostro_charges.all_currency",
         label: "All Currency",
-        type: FieldType.Checkbox,
+        type: FieldType.Radio,
         required: false,
         options: {
           ALL_CURRENCY: { label: "All Currency" },

@@ -85,7 +85,7 @@ export const BasicInformationStep: React.FC<BasicInformationStepProps> = () => {
       </div>
 
       <div>
-        <SubTitle title="Status" />
+        <SubTitle title="User Status" />
         <FormFieldRow className="mb-4" rowCols={3}>
           {(['status'] as const).map((fieldName) => {
             const field = config.fields.basicInformation[fieldName];
@@ -104,8 +104,8 @@ export const BasicInformationStep: React.FC<BasicInformationStepProps> = () => {
       </div>
 
       <div>
-        <SubTitle title="Credit Information" />
-        <p className="text-sm text-muted-foreground mb-4">
+        <SubTitle title="Credit Information" titleClassName="mb-0"/>
+        <p className="text-[12px] text-gray-500 pl-1 mb-2">
           Please input the desired line credit limit and credit days.
         </p>
         <FormFieldRow className="mb-4" rowCols={3}>

@@ -10,10 +10,7 @@ import { cn } from "@/utils/cn";
 import SubTitle from "../sub-title";
 
 const hCard = "rounded-xl bg-gray-50";
-const cardHeader = "px-4 pt-3 bg-muted/40 rounded-t-xl";
 const cardBody = "p-4 md:p-5";
-
-const labelH = "text-[13px] font-semibold text-[#D11E47]"; // pink section titles per figma
 const row = "flex items-center gap-3";
 const inlineRow = "flex items-center gap-4 flex-wrap";
 const inputH = "h-10"; // unify height
@@ -141,9 +138,7 @@ export default function CommissionDetailsPage() {
       <div className="grid gap-4 lg:grid-cols-[1fr_1fr_0.7fr]">
         {/* ================= LEFT BIG CARD ================= */}
         <section className={hCard}>
-          <header className={cardHeader}>
-            <SubTitle title="Rate Margin" className="" titleClassName={labelH} />
-          </header>
+            <SubTitle title="Rate Margin" className="px-4 pt-4" />
           <div className={cardBody}>
             {/* Agent Fixed Markup (INR / Percentage) */}
             <div className="mb-4">
@@ -213,9 +208,7 @@ export default function CommissionDetailsPage() {
 
         {/* ================= MIDDLE BIG CARD ================= */}
         <section className={hCard}>
-          <header className={cardHeader}>
-            <SubTitle title="Nostro Charges" className="" titleClassName={labelH} />
-          </header>
+            <SubTitle title="Nostro Charges" className="px-4 pt-4" />
           <div className={cardBody}>
             {/* Type (FX / INR) */}
             <div className="mb-4">
@@ -287,9 +280,7 @@ export default function CommissionDetailsPage() {
         <div className="grid gap-4 self-start">
           {/* TT Charges */}
           <section className={cn("pb-5",hCard)}>
-            <header className={cardHeader}>
-              <SubTitle title="TT Charges" className="" titleClassName={labelH} />
-            </header>
+              <SubTitle title="TT Charges" className="px-4 pt-4" />
             <div className={cardBody}>
               <div className="max-w-[260px]">
                 {getController({
@@ -308,9 +299,7 @@ export default function CommissionDetailsPage() {
 
           {/* Other Charges */}
           <section className={cn("pb-5",hCard)}>
-            <header className={cardHeader}>
-              <SubTitle title="Other Charges" className="" titleClassName={labelH} />
-            </header>
+              <SubTitle title="Other Charges" className="px-4 pt-4"  />
             <div className={cardBody}>
               <div className="max-w-[260px]">
                 {getController({
