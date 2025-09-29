@@ -35,7 +35,7 @@ export const CreateSuperChecker = () => {
       agents: [],
       password: "",
       confirmPassword: "",
-      transactionTypeMap: { }, // default transaction type
+      transactionTypeMap: { card: 'buy', currency: 'buy' }, // default transaction type
     },
   },
 });

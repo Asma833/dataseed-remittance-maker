@@ -45,8 +45,7 @@ export const superCheckerCreationConfig = () => {
             'referral': { label: 'Referral' },
           },
           variant: 'circle_check_filled',
-          isMulti: true,
-          defaultSelected: { 'card': true }
+          isMulti: true
         },
         // status: {
         //   name: 'checkerDetails.status',
