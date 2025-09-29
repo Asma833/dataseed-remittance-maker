@@ -40,21 +40,39 @@ export const superCheckerSchema = z
 
       password: z
         .string()
-        .min(1, 'Password is required')
         .min(8, 'Password must be at least 8 characters')
-        .max(50, 'Password must be less than 50 characters'),
+        .max(50, 'Password must be less than 50 characters')
+        .optional(),
 
-      confirmPassword: z.string().min(1, 'Please confirm your password'),
+      confirmPassword: z.string().optional(),
 
       transactionTypeMap: z
-        .record(z.enum(['card', 'currency']), z.enum(['buy', 'sell'], { message: 'Required' }))
-        .refine((val) => val && Object.keys(val).length > 0, {
-          message: 'Required',
-        }),
+        .record(z.enum(['card', 'currency']), z.enum(['buy', 'sell']))
+        .optional(),
 
     }),
   })
-  .refine((data) => data.checkerDetails.password === data.checkerDetails.confirmPassword, {
+  .refine((data) => {
+    const selectedProducts = (Object.keys(data.checkerDetails.productType) as (keyof typeof data.checkerDetails.productType)[]).filter(key => data.checkerDetails.productType[key]);
+    const needsTransaction = selectedProducts.filter(p => p === 'card' || p === 'currency');
+    if (needsTransaction.length > 0) {
+      if (!data.checkerDetails.transactionTypeMap) return false;
+      for (const product of needsTransaction) {
+        if (!data.checkerDetails.transactionTypeMap[product as 'card' | 'currency']) return false;
+      }
+    }
+    return true;
+  }, {
+    message: 'Transaction type is required for selected card or currency products',
+    path: ['checkerDetails', 'transactionTypeMap'],
+  })
+  .refine((data) => {
+    const p = data.checkerDetails.password;
+    const cp = data.checkerDetails.confirmPassword;
+    if (p && cp) return p === cp;
+    if (p || cp) return false;
+    return true;
+  }, {
     message: 'Passwords do not match',
     path: ['checkerDetails', 'confirmPassword'],
   });

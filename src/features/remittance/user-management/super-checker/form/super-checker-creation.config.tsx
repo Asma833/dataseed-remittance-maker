@@ -13,6 +13,7 @@ export const superCheckerCreationConfig = () => {
           type: FieldType.Text,
           required: true,
           placeholder: 'Enter Full Name',
+          autocomplete: 'name',
         },
         email: {
           id:'checkerDetails.email',
@@ -21,6 +22,7 @@ export const superCheckerCreationConfig = () => {
           type: FieldType.Email,
           required: true,
           placeholder: 'Enter Email Address',
+          autocomplete: 'email',
         },
         phoneNumber: {
           id:'checkerDetails.phoneNumber',
@@ -28,6 +30,7 @@ export const superCheckerCreationConfig = () => {
           label: 'Phone Number',
           type: FieldType.Phone,
           placeholder: 'Enter Phone Number',
+          autocomplete: 'tel',
         },
         productType:{
           id:'checkerDetails.productType',
@@ -38,7 +41,7 @@ export const superCheckerCreationConfig = () => {
           options: {
             'card': { label: 'Card' },
             'currency': { label: 'Currency' },
-            'remittance': { label: 'Remittance', checked: true },
+            'remittance': { label: 'Remittance' },
             'referral': { label: 'Referral' },
           },
           variant: 'circle_check_filled',
@@ -76,6 +79,7 @@ export const superCheckerCreationConfig = () => {
           type: FieldType.Password,
           required:true,
           placeholder: 'Enter Password',
+          autocomplete: 'new-password',
         },
           confirmPassword:{
           id:'checkerDetails.confirmPassword',
@@ -84,6 +88,7 @@ export const superCheckerCreationConfig = () => {
           type: FieldType.Password,
           required:true,
           placeholder: 'Enter Confirm Password',
+          autocomplete: 'new-password',
         }
       },
     },

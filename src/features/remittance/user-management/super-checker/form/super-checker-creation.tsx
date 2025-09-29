@@ -35,7 +35,7 @@ export const CreateSuperChecker = () => {
       agents: [],
       password: "",
       confirmPassword: "",
-      transactionTypeMap: {},
+      transactionTypeMap: { }, // default transaction type
     },
   },
 });
@@ -69,26 +69,31 @@ export const CreateSuperChecker = () => {
   
   //  const handleFormSubmit = handleSubmit(onSubmit);
      const handleFormSubmit = handleSubmit((formdata: SuperCheckerFormType) => {
-    const requestData = {
+      console.log(formdata, "formdata");
+      const requestData = {
       full_name: formdata.checkerDetails.fullName,
       email: formdata.checkerDetails.email,
       password: formdata.checkerDetails.password,
       phone_number: formdata.checkerDetails.phoneNumber,
-      agent_ids:  [
+      agent_ids: [
     "691ee70a-1a34-4012-83e8-e67883c2b772"
   ],
-      product_types: Object.keys(formdata.checkerDetails.productType)
-        .filter((key) => formdata.checkerDetails.productType[key as keyof typeof formdata.checkerDetails.productType])
-        .map((product) => {
-          const transaction = formdata.checkerDetails.transactionTypeMap[product as keyof typeof formdata.checkerDetails.transactionTypeMap];
-          return `${product.charAt(0).toUpperCase() + product.slice(1)}-${transaction.charAt(0).toUpperCase() + transaction.slice(1)}`;
-        }),
-    };
-
+    product_types: Object.keys(formdata.checkerDetails.productType)
+      .filter((key) => formdata.checkerDetails.productType[key as keyof typeof formdata.checkerDetails.productType])
+      .map((product) => {
+        if (product === 'card' || product === 'currency') {
+          const transaction = formdata.checkerDetails.transactionTypeMap?.[product as 'card' | 'currency'];
+          const trans = transaction ? transaction.charAt(0).toUpperCase() + transaction.slice(1) : 'Buy';
+          return `${product.charAt(0).toUpperCase() + product.slice(1)}-${trans}`;
+        } else {
+          return product.charAt(0).toUpperCase() + product.slice(1);
+        }
+      }),
+      }
     if (superChecker) {
       updateSuperChecker({ ...requestData, id: superChecker.id });
     } else {
-      createSuperChecker(requestData);
+      createSuperChecker({ ...requestData, password: requestData.password as string });
     }
   });
   const mapSuperCheckerData = (data: any) => {
@@ -174,7 +179,8 @@ export const CreateSuperChecker = () => {
       </div>
 
       <FormProvider methods={methods}>
-        <FormContentWrapper className="p-4 rounded-lg mr-auto w-full shadow-top">
+        <form onSubmit={handleFormSubmit}>
+          <FormContentWrapper className="p-4 rounded-lg mr-auto w-full shadow-top">
           <TableTitle title={superChecker ? 'Update Superchecker' : 'Create New Superchecker'} titleClassName="text-black"/>
           <Spacer>
             <div className="relative p-1">
@@ -334,12 +340,13 @@ export const CreateSuperChecker = () => {
               <Button variant="outline" className="w-28" onClick={handleBack}>
                 Back
               </Button>
-              <Button type="submit" variant="secondary" className="w-28" onClick={handleFormSubmit} disabled={isCreating || isUpdating}>
+              <Button type="submit" variant="secondary" className="w-28" disabled={isCreating || isUpdating}>
                 {isCreating || isUpdating ? 'Submitting...' : (superChecker ? 'Update' : 'Create')}
               </Button>
             </div>
           </Spacer>
-        </FormContentWrapper>
+          </FormContentWrapper>
+        </form>
       </FormProvider>
     </div>
   );

@@ -17,6 +17,7 @@ export interface CreateSuperCheckerRequest {
   agent_ids: string[];
 }
 
-export interface UpdateSuperCheckerRequest extends CreateSuperCheckerRequest {
+export interface UpdateSuperCheckerRequest extends Omit<CreateSuperCheckerRequest, 'password'> {
   id: string;
+  password?: string | undefined;
 }
