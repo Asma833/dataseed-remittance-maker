@@ -7,6 +7,7 @@ export const superCheckerCreationConfig = () => {
     fields: {
       checkerDetails: {
         fullName: {
+          id:'checkerDetails.fullName',
           name: 'checkerDetails.fullName',
           label: 'Full Name',
           type: FieldType.Text,
@@ -14,6 +15,7 @@ export const superCheckerCreationConfig = () => {
           placeholder: 'Enter Full Name',
         },
         email: {
+          id:'checkerDetails.email',
           name: 'checkerDetails.email',
           label: 'Email Address',
           type: FieldType.Email,
@@ -21,12 +23,14 @@ export const superCheckerCreationConfig = () => {
           placeholder: 'Enter Email Address',
         },
         phoneNumber: {
+          id:'checkerDetails.phoneNumber',
           name: 'checkerDetails.phoneNumber',
           label: 'Phone Number',
           type: FieldType.Phone,
           placeholder: 'Enter Phone Number',
         },
         productType:{
+          id:'checkerDetails.productType',
           name: 'checkerDetails.productType',
           label: 'Product Type',
           type: FieldType.Checkbox,
@@ -41,17 +45,18 @@ export const superCheckerCreationConfig = () => {
           isMulti: true,
           defaultSelected: { 'card': true }
         },
-        status: {
-          name: 'checkerDetails.status',
-          label: 'Status',
-          type: FieldType.Radio,
-          required: true,
-          options: {
-            'active': { label: 'Active', checked: true },
-            'inactive': { label: 'Inactive' }
-          }
-        },
+        // status: {
+        //   name: 'checkerDetails.status',
+        //   label: 'Status',
+        //   type: FieldType.Radio,
+        //   required: true,
+        //   options: {
+        //     'active': { label: 'Active', checked: true },
+        //     'inactive': { label: 'Inactive' }
+        //   }
+        // },
         agents:{
+          id:'checkerDetails.agents',
           name: 'checkerDetails.agents',
           label: 'Agents',
           type: FieldType.Select,
@@ -65,6 +70,7 @@ export const superCheckerCreationConfig = () => {
           isMulti: true
         },
         password:{
+          id:'checkerDetails.password',
           name: 'checkerDetails.password',
           label: 'Password',
           type: FieldType.Password,
@@ -72,6 +78,7 @@ export const superCheckerCreationConfig = () => {
           placeholder: 'Enter Password',
         },
           confirmPassword:{
+          id:'checkerDetails.confirmPassword',
           name: 'checkerDetails.confirmPassword',
           label: 'Confirm Password',
           type: FieldType.Password,

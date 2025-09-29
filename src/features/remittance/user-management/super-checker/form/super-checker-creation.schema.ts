@@ -34,19 +34,15 @@ export const superCheckerSchema = z
             });
           }
         }),
-      status: z.enum(['active', 'inactive'], { message: 'Please select a status' }),
+      // status: z.enum(['active', 'inactive'], { message: 'Please select a status' }),
 
-      agents: z.array(z.string()).min(1, 'Please select at least one agent'),
+      agents: z.array(z.string()).optional(),
 
       password: z
         .string()
         .min(1, 'Password is required')
         .min(8, 'Password must be at least 8 characters')
-        .max(50, 'Password must be less than 50 characters')
-        .regex(
-          /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]+$/,
-          'Password must contain at least one uppercase letter, one lowercase letter, one number, and one special character'
-        ),
+        .max(50, 'Password must be less than 50 characters'),
 
       confirmPassword: z.string().min(1, 'Please confirm your password'),
 
@@ -55,6 +51,7 @@ export const superCheckerSchema = z
         .refine((val) => val && Object.keys(val).length > 0, {
           message: 'Required',
         }),
+
     }),
   })
   .refine((data) => data.checkerDetails.password === data.checkerDetails.confirmPassword, {

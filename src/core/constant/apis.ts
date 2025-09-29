@@ -65,10 +65,14 @@ export const API = {
   },
   USER_MANAGEMENT:{
     AGENT_BRANCH_USER: {
-      LIST: `/agent-branch-users`,
-      CREATE: `/agent-branch-users`,
-      STATUS_UPDATE: `/agent-branch-users`,
+      LIST: `/rem-users/getAllBranchAgents`,
+      CREATE: `/rem-users/create-branch-agent`,
     },
+    SUPER_CHECKER:{
+      LIST:'/rem-users/getAllSuperCheckers',
+      CREATE:'/rem-users/create-super-checker',
+      UPDATE:'/rem-users/update-super-checker',
+    }
   },
   NUSERS: {
     PARTNERS: {

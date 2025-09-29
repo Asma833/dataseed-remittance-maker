@@ -17,6 +17,8 @@ import { superCheckerSchema } from './super-checker-creation.schema';
 import { FieldType } from '@/types/enums';
 import { TableTitle } from '@/features/auth/components/table-title';
 import { FormTitle } from '@/features/auth/components/form-title';
+import { useCreateSuperChecker } from '../../hooks/useCreateSuperChecker';
+import { useUpdateSuperChecker } from '../../hooks/useUpdateSuperChecker';
 
 export const CreateSuperChecker = () => {
   type SuperCheckerFormType = z.infer<typeof superCheckerSchema>;
@@ -30,7 +32,7 @@ export const CreateSuperChecker = () => {
       email: "",
       phoneNumber: "",
       productType: { card: true }, // your default
-      status: "active",
+      // status: "active",
       agents: [],
       password: "",
       confirmPassword: "",
@@ -51,17 +53,57 @@ export const CreateSuperChecker = () => {
   const location = useLocation();
   const superChecker = location.state?.superChecker;
 
+  const { mutate: createSuperChecker, isLoading: isCreating } = useCreateSuperChecker({
+    onSuperCheckerCreateSuccess: () => navigate(-1),
+  });
+  const { mutate: updateSuperChecker, isLoading: isUpdating } = useUpdateSuperChecker({
+    onSuperCheckerUpdateSuccess: () => navigate(-1),
+  });
+
   const handleBack = () => {
     navigate(-1);
   };
 
-  const onSubmit = async (data: any) => {
-    //console.log('Form submitted with data:', data);
-    // Add actual submission logic here
-  };
+  
 
-  const handleFormSubmit = handleSubmit(onSubmit);
+  
+  //  const handleFormSubmit = handleSubmit(onSubmit);
+     const handleFormSubmit = handleSubmit((formdata: SuperCheckerFormType) => {
+    const requestData = {
+      full_name: formdata.checkerDetails.fullName,
+      email: formdata.checkerDetails.email,
+      password: formdata.checkerDetails.password,
+      phone_number: formdata.checkerDetails.phoneNumber,
+      agent_ids:  [
+    "691ee70a-1a34-4012-83e8-e67883c2b772"
+  ],
+      product_types: Object.keys(formdata.checkerDetails.productType)
+        .filter((key) => formdata.checkerDetails.productType[key as keyof typeof formdata.checkerDetails.productType])
+        .map((product) => {
+          const transaction = formdata.checkerDetails.transactionTypeMap[product as keyof typeof formdata.checkerDetails.transactionTypeMap];
+          return `${product.charAt(0).toUpperCase() + product.slice(1)}-${transaction.charAt(0).toUpperCase() + transaction.slice(1)}`;
+        }),
+    };
+
+    if (superChecker) {
+      updateSuperChecker({ ...requestData, id: superChecker.id });
+    } else {
+      createSuperChecker(requestData);
+    }
+  });
   const mapSuperCheckerData = (data: any) => {
+    if (!data) return {
+      checkerDetails: {
+        fullName: '',
+        email: '',
+        phoneNumber: '',
+        productType: { card: true },
+        status: 'active',
+        agents: [],
+        password: '',
+        confirmPassword: '',
+      }
+    };
     // Map incoming data fields to form field names
     const productTypeValue = data.productType?.toLowerCase();
     const mappedData = {
@@ -95,13 +137,13 @@ export const CreateSuperChecker = () => {
       setValue(
         'checkerDetails.productType',
         {
-          card: Boolean(mappedData.checkerDetails.productType.card),
-          currency: Boolean(mappedData.checkerDetails.productType.currency),
-          remittance: Boolean(mappedData.checkerDetails.productType.remittance),
-          referral: Boolean(mappedData.checkerDetails.productType.referral),
-        } as Record<'card' | 'currency' | 'remittance' | 'referral', boolean>
+          card: Boolean((mappedData.checkerDetails.productType as any).card),
+          currency: Boolean((mappedData.checkerDetails.productType as any).currency),
+          remittance: Boolean((mappedData.checkerDetails.productType as any).remittance),
+          referral: Boolean((mappedData.checkerDetails.productType as any).referral),
+        }
       );
-      setValue('checkerDetails.status', mappedData.checkerDetails.status as 'active' | 'inactive');
+      // setValue('checkerDetails.status', mappedData.checkerDetails.status as 'active' | 'inactive');
       setValue('checkerDetails.agents', mappedData.checkerDetails.agents || []);
       setValue('checkerDetails.password', mappedData.checkerDetails.password);
       setValue('checkerDetails.confirmPassword', mappedData.checkerDetails.confirmPassword);
@@ -237,7 +279,7 @@ export const CreateSuperChecker = () => {
                 );
               })}
             </FormFieldRow>
-            <FormFieldRow>
+            {/* <FormFieldRow>
               {(['status'] as const).map((fieldName) => {
                 const field = superCheckerCreationConfig().fields.checkerDetails[fieldName];
                 return (
@@ -252,7 +294,7 @@ export const CreateSuperChecker = () => {
                   </FieldWrapper>
                 );
               })}
-            </FormFieldRow>
+            </FormFieldRow> */}
             {
               !superChecker && (
                 <NotificationBanner
@@ -286,8 +328,8 @@ export const CreateSuperChecker = () => {
               <Button variant="outline" className="w-28" onClick={handleBack}>
                 Back
               </Button>
-              <Button type="submit" variant="secondary" className="w-28" onClick={handleFormSubmit}>
-                {superChecker ? 'Update' : 'Create'}
+              <Button type="submit" variant="secondary" className="w-28" onClick={handleFormSubmit} disabled={isCreating || isUpdating}>
+                {isCreating || isUpdating ? 'Submitting...' : (superChecker ? 'Update' : 'Create')}
               </Button>
             </div>
           </Spacer>

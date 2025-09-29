@@ -82,6 +82,11 @@ export const ENDPOINT_MATCHING_RULES: EndpointRulesConfig = {
     endpoint: API.DOCUMENT_MASTER.DOC_PURPOSE_TRANS_MAPPING,
     matchType: 'standard' as const,
     description: 'Document mapping endpoint',
+  },
+  'create-super-checker':{
+    endpoint: API.USER_MANAGEMENT.SUPER_CHECKER.CREATE,
+    matchType: 'standard' as const,
+    description: 'Document mapping endpoint',
   }
 } as const;
 

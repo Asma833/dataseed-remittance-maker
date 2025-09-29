@@ -8,3 +8,16 @@ export interface SuperCheckerData {
   status: 'Active' | 'Inactive';
   location?: string;
 }
+
+export interface CreateSuperCheckerRequest {
+  full_name: string;
+  email: string;
+  password: string;
+  product_types: string[];
+  phone_number: string;
+  agent_ids: string[];
+}
+
+export interface UpdateSuperCheckerRequest extends CreateSuperCheckerRequest {
+  id: string;
+}
