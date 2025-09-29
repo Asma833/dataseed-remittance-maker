@@ -1,12 +1,11 @@
 export interface SuperCheckerData {
   id: string;
-  fullName: string;
-  emailId: string;
-  phoneNo: string;
-  productType: string;
-  productSubType: string;
-  status: 'Active' | 'Inactive';
-  location?: string;
+  full_name: string | null;
+  email: string;
+  phone_number: string | null;
+  product_types: string[] | null;
+  is_active: boolean;
+  created_at: string;
 }
 
 export interface CreateSuperCheckerRequest {

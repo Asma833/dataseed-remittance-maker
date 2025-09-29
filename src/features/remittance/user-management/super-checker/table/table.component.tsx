@@ -6,47 +6,11 @@ import { Button } from '@/components/ui/button';
 import { DataTable, TableData, staticConfig } from '@/components/table';
 import { PlusCircle } from 'lucide-react';
 import { TableTitle } from '@/features/auth/components/table-title';
-
-const sampleSuperCheckers: SuperCheckerData[] = [
-  {
-    id: '1',
-    fullName: 'John Doe',
-    emailId: 'john.doe@example.com',
-    phoneNo: '9876543210',
-    productType: 'Remittance',
-    productSubType: 'International Transfer',
-    status: 'Active',
-  },
-  {
-    id: '2',
-    fullName: 'Jane Smith',
-    emailId: 'jane.smith@example.com',
-    phoneNo: '9876543211',
-    productType: 'Forex',
-    productSubType: 'Currency Exchange',
-    status: 'Inactive',
-  },
-  {
-    id: '3',
-    fullName: 'Mike Johnson',
-    emailId: 'mike.johnson@example.com',
-    phoneNo: '9876543212',
-    productType: 'Remittance',
-    productSubType: 'Domestic Transfer',
-    status: 'Active',
-  },
-];
-
-// Extended data with location for form editing
-const extendedSuperCheckers = sampleSuperCheckers.map(item => ({
-  ...item,
-  location: 'Mumbai, India' // Add location field for form
-}));
+import { useGetSuperCheckers } from '../../../hooks/useGetSuperCheckers';
 
 const SuperCheckerTable = () => {
   const navigate = useNavigate();
-  const [superCheckers, setSuperCheckers] = useState<SuperCheckerData[]>(extendedSuperCheckers);
-  const [loading, setLoading] = useState(false);
+  const { data: superCheckers = [], isLoading: loading, error } = useGetSuperCheckers();
 
   
 
@@ -81,7 +45,7 @@ const SuperCheckerTable = () => {
   const tableData: TableData<SuperCheckerData> = {
     data: superCheckers,
     totalCount: superCheckers.length,
-    pageCount: Math.ceil(superCheckers.length / (config.pagination?.pageSize || 10)),
+    pageCount: 1, // Assuming all data is loaded at once
     currentPage: 1,
   };
 
@@ -93,10 +57,7 @@ const SuperCheckerTable = () => {
   // Dynamic table actions
   const tableActions = {
     onPaginationChange: (pagination: { pageIndex: number; pageSize: number }) => {
-      setLoading(true);
-      setTimeout(() => {
-        setLoading(false);
-      }, 1000);
+      // Pagination change handled by hook
     },
  
     onSortingChange: (sorting: { id: string; desc: boolean }[]) => {

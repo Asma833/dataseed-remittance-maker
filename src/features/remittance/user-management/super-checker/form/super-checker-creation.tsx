@@ -32,10 +32,10 @@ export const CreateSuperChecker = () => {
       email: "",
       phoneNumber: "",
       productType: { card: true }, // your default
-      // status: "active",
       agents: [],
       password: "",
       confirmPassword: "",
+      transactionTypeMap: {},
     },
   },
 });
@@ -98,26 +98,28 @@ export const CreateSuperChecker = () => {
         email: '',
         phoneNumber: '',
         productType: { card: true },
-        status: 'active',
         agents: [],
         password: '',
         confirmPassword: '',
       }
     };
     // Map incoming data fields to form field names
-    const productTypeValue = data.productType?.toLowerCase();
+    const productType: Record<string, boolean> = {};
+    if (data.product_types) {
+      data.product_types.forEach((pt: string) => {
+        const [prod] = pt.split('-');
+        const key = prod.toLowerCase();
+        productType[key] = true;
+      });
+    } else {
+      productType.card = true; // default
+    }
     const mappedData = {
       checkerDetails: {
-        fullName: data.fullName || '',
-        email: data.emailId || '',
-        phoneNumber: data.phoneNo || '',
-        location: data.location || '',
-        productType: productTypeValue === 'remittance' ? { remittance: true } :
-                    productTypeValue === 'currency' ? { currency: true } :
-                    productTypeValue === 'referral' ? { referral: true } :
-                    { card: true }, // default to card
-        // transactionType removed - using transactionTypeMap instead
-        status: data.status?.toLowerCase() || 'active',
+        fullName: data.full_name || '',
+        email: data.email || '',
+        phoneNumber: data.phone_number || '',
+        productType,
         agents: data.agents || [],
         password: data.password || '',
         confirmPassword: data.confirmPassword || '',
@@ -134,19 +136,23 @@ export const CreateSuperChecker = () => {
       setValue('checkerDetails.fullName', mappedData.checkerDetails.fullName);
       setValue('checkerDetails.email', mappedData.checkerDetails.email);
       setValue('checkerDetails.phoneNumber', mappedData.checkerDetails.phoneNumber);
-      setValue(
-        'checkerDetails.productType',
-        {
-          card: Boolean((mappedData.checkerDetails.productType as any).card),
-          currency: Boolean((mappedData.checkerDetails.productType as any).currency),
-          remittance: Boolean((mappedData.checkerDetails.productType as any).remittance),
-          referral: Boolean((mappedData.checkerDetails.productType as any).referral),
-        }
-      );
-      // setValue('checkerDetails.status', mappedData.checkerDetails.status as 'active' | 'inactive');
+      setValue('checkerDetails.productType', mappedData.checkerDetails.productType);
       setValue('checkerDetails.agents', mappedData.checkerDetails.agents || []);
       setValue('checkerDetails.password', mappedData.checkerDetails.password);
       setValue('checkerDetails.confirmPassword', mappedData.checkerDetails.confirmPassword);
+
+      // Set transactionTypeMap based on product_types
+      const transactionTypeMap: Record<'card' | 'currency', 'buy' | 'sell'> = {} as any;
+      if (superChecker.product_types) {
+        superChecker.product_types.forEach((pt: string) => {
+          const [prod, trans] = pt.split('-');
+          const key = prod.toLowerCase();
+          if (key === 'card' || key === 'currency') {
+            transactionTypeMap[key as 'card' | 'currency'] = trans.toLowerCase() as 'buy' | 'sell';
+          }
+        });
+      }
+      setValue('checkerDetails.transactionTypeMap', transactionTypeMap);
 
       // Trigger form validation and re-rendering
       setTimeout(() => {
