@@ -2,13 +2,17 @@ import { Control, FieldErrors, useWatch } from "react-hook-form";
 import FieldWrapper from "@/components/form/wrapper/field-wrapper";
 import { getController } from "@/components/form/utils/get-controller";
 import { FieldType } from "@/types/enums";
+import { cn } from "@/utils/cn";
 
 interface ProductTransactionSelectorProps {
   control: Control<any>;
   errors: FieldErrors<any>;
-  productFieldName: string;      // e.g. "productPurpose.chooseProductType"
-  transactionFieldName: string;  // e.g. "productPurpose.transactionType"
+  /** e.g. "productPurpose.chooseProductType" (object of booleans) */
+  productFieldName: string;
+  /** e.g. "productPurpose.transactionType" (object with keys card|currency -> "buy"|"sell") */
+  transactionFieldName: string;
   productOptions?: Record<string, { label: string; checked?: boolean }>;
+  /** which products should show a Transaction Type bubble (in this order) */
   showTransactionFor?: ("card" | "currency")[];
 }
 
@@ -25,26 +29,37 @@ export const ProductTransactionSelector = ({
   },
   showTransactionFor = ["card", "currency"],
 }: ProductTransactionSelectorProps) => {
+  // watch selected product types (object of booleans)
   const productTypeObj =
-    (useWatch({ control, name: productFieldName }) as Record<string, boolean>) || {};
+    (useWatch({ control, name: productFieldName }) as Record<string, boolean>) ||
+    {};
 
-  // list of selected products we care about (in provided order)
+  // selected products (preserve provided order)
   const selected = showTransactionFor.filter((p) => !!productTypeObj?.[p]);
-  const bothSelected =
-    selected.includes("card") && selected.includes("currency");
+  const bothSelected = selected.includes("card") && selected.includes("currency");
 
-  // margin-top rule per your requirements
-  const getMtClass = (p: "card" | "currency", idx: number) => {
-    if (bothSelected) {
-      return idx === 0 ? "mt-2" : "mt-[-35px]";
-    }
-    if (p === "currency") return "mt-10"; // only currency selected
-    return "mt-3"; // only card selected
+  /** spacing rule applied to BOTH the middle bubble AND the right-column error */
+  const getRowMt = (p: "card" | "currency", idx: number) => {
+    if (bothSelected) return idx === 0 ? "mt-3" : "mt-[-35px]";
+    return p === "currency" ? "mt-10" : "mt-3";
+  };
+    /** spacing rule applied to BOTH the middle bubble AND the right-column error */
+  const getRowError = (p: "card" | "currency", idx: number) => {
+    if (bothSelected) return idx === 0 ? "mt-3" : "mt-[-20px]";
+    return p === "currency" ? "mt-10" : "mt-3";
+  };
+
+  /** read nested error object for a product key */
+  const getTxnError = (prodKey: string) => {
+    const parts = transactionFieldName.split(".");
+    const node = parts.reduce((acc: any, part) => acc?.[part], errors);
+    return node?.[prodKey];
   };
 
   return (
-    <div className="grid md:grid-cols-[30%_65%] lg:grid-cols-[15%_35%_auto] md:gap-6 relative">
-      {/* LEFT: Product Type */}
+    // 3 columns: LEFT product type | MIDDLE bubbles | RIGHT external errors
+    <div className="grid md:grid-cols-[30%_55%_auto] lg:grid-cols-[15%_35%_auto] md:gap-6">
+      {/* LEFT: Product Type (multi-select) */}
       <FieldWrapper>
         {getController({
           name: productFieldName,
@@ -59,76 +74,85 @@ export const ProductTransactionSelector = ({
         })}
       </FieldWrapper>
 
-      {/* MIDDLE: Transaction Type for selected products */}
+      {/* MIDDLE: per-selected product "bubble" (internal errors are hidden) */}
       <div className="grid items-start">
-        {selected.map((p, idx) => (
-          <FieldWrapper
-            key={`txn-${p}`}
-            className={[
-              "relative overflow-visible self-start [height:fit-content]",
-              "rounded-lg bg-gray-100/70 px-3 py-2",
-              // left notch
-              "before:absolute before:top-1/2 before:-translate-y-1/2 before:-left-4",
-              "before:content-[''] before:border-solid",
-              "before:[border-right-width:16px] before:[border-top-width:6.5px] before:[border-bottom-width:6.5px]",
-              "before:border-y-transparent before:[border-right-color:#D8D8D8]",
-              "after:absolute after:top-1/2 after:-translate-y-1/2 after:left-[-17px]",
-              "after:content-[''] after:border-solid",
-              "after:[border-right-width:17px] after:[border-top-width:7.5px] after:[border-bottom-width:7.5px]",
-              "after:border-y-transparent after:[border-right-color:#D1D5DB]",
-              getMtClass(p, idx),
-            ].join(" ")}
-          >
-            {/* single-row alignment */}
-            <div
-              className={[
-                "grid grid-cols-[auto_1fr] items-center gap-3",
-                "[&_[data-slot='form-item']]:m-0",
-                "[&_[data-slot='form-item']]:grid",
-                "[&_[data-slot='form-item']]:grid-cols-[auto_auto]",
-                "[&_[data-slot='form-item']]:items-center",
-                "[&_[data-slot='form-item']>label]:m-0",
-                "[&_[data-slot='form-item']>div]:m-0",
-                "[&_.flex]:flex-row [&_.flex]:items-center",
-                "[&_[data-slot='form-item']>p]:hidden",
-              ].join(" ")}
+        {selected.map((p, idx) => {
+          const rowMt = getRowMt(p, idx);
+          return (
+            <FieldWrapper
+              key={`txn-${p}`}
+              className={cn(
+                "relative overflow-visible self-start [height:fit-content]",
+                "rounded-lg bg-gray-100/70 px-3 py-2",
+                // left notch
+                "before:absolute before:top-1/2 before:-translate-y-1/2 before:-left-4",
+                "before:content-[''] before:border-solid",
+                "before:[border-right-width:16px] before:[border-top-width:6.5px] before:[border-bottom-width:6.5px]",
+                "before:border-y-transparent before:[border-right-color:#D8D8D8]",
+                "after:absolute after:top-1/2 after:-translate-y-1/2 after:left-[-17px]",
+                "after:content-[''] after:border-solid",
+                "after:[border-right-width:17px] after:[border-top-width:7.5px] after:[border-bottom-width:7.5px]",
+                "after:border-y-transparent after:[border-right-color:#D1D5DB]",
+                rowMt
+              )}
             >
-              <div className="text-sm mx-2 leading-[12px]">
-                Choose Transaction Type <span className="text-destructive">*</span>
+              {/* single-row layout; hide any internal error <p> from getController */}
+              <div
+                className={cn(
+                  "grid grid-cols-[auto_1fr] items-center gap-3",
+                  // zero the inner form-item paddings/margins
+                  "[&_[data-slot='form-item']]:m-0",
+                  "[&_[data-slot='form-item']>label]:m-0",
+                  "[&_[data-slot='form-item']>div]:m-0",
+                  "[&_.flex]:flex-row [&_.flex]:items-center",
+                  // HIDE internal error paragraphs no matter how primitives render them
+                  "[&_[data-slot='form-item']_p]:hidden",
+                  "[&_.text-destructive]:hidden",
+                  "[&>p]:hidden"
+                )}
+              >
+                <div className="text-sm mx-2 leading-[12px]">
+                  Choose Transaction Type <span className="text-destructive">*</span>
+                </div>
+                <div className="flex items-center leading-none">
+                  {getController({
+                    type: FieldType.Checkbox,
+                    variant: "circle_check_filled",
+                    options: { buy: { label: "Buy" }, sell: { label: "Sell" } },
+                    required: true,
+                    isMulti: false,
+                    name: `${transactionFieldName}.${p}`,
+                    control,
+                    errors,
+                    // if your getController supports classNames, also hide via API:
+                    classNames: {
+                      error: "hidden", // optional: if supported, silences internal error slot
+                    } as any,
+                  })}
+                </div>
               </div>
-              <div className="flex items-center leading-none">
-                {getController({
-                  type: FieldType.Checkbox,
-                  variant: "circle_check_filled",
-                  options: {
-                    buy: { label: "Buy" },
-                    sell: { label: "Sell" },
-                  },
-                  required: true,
-                  isMulti: false,
-                  name: `${transactionFieldName}.${p}`,
-                  control,
-                  errors,
-                })}
-              </div>
-            </div>
-          </FieldWrapper>
-        ))}
+            </FieldWrapper>
+          );
+        })}
       </div>
 
-      {/* RIGHT: Error messages */}
-      <div className="flex flex-col">
+      {/* RIGHT: external errors aligned with bubbles (mirrors the same row margin) */}
+      <div className="grid items-start">
         {selected.map((p, idx) => {
-          const parts = transactionFieldName.split(".");
-          const fieldError = parts.reduce((acc: any, part) => acc?.[part], errors)?.[p];
-          return fieldError ? (
+          const err = getTxnError(p);
+          const rowMt = getRowError(p, idx);
+
+          return err ? (
             <p
               key={`error-${p}`}
-              className={`text-sm font-medium text-destructive ${getMtClass(p, idx)}`}
+              className={cn("text-sm font-medium text-destructive", rowMt)}
             >
-              {String(fieldError.message || "")}
+              {String(err.message || "")}
             </p>
-          ) : null;
+          ) : (
+            // spacer ensures rows keep same vertical rhythm when an error is absent
+            <span key={`spacer-${p}`} className={rowMt} aria-hidden />
+          );
         })}
       </div>
     </div>
