@@ -83,10 +83,10 @@ export const branchAgentCreationConfig = () => {
           isMulti:true,
           variant:"circle_check_filled",
           options: {
-            maker: { label: "Maker" },
-            checker: { label: "Checker", checked: true },
-            both: { label: "Both" },
-            admin: { label: "Admin" },
+            branch_agent_maker: { label: "Maker" },
+            branch_agent_checker: { label: "Checker", checked: true },
+            branch_agent_both: { label: "Both" },
+            branch_agent_admin: { label: "Admin" },
           },
         },
         checkerList: {

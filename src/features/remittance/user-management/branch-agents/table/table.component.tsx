@@ -6,50 +6,11 @@ import { Button } from '@/components/ui/button';
 import { DataTable, TableData, staticConfig } from '@/components/table';
 import { PlusCircle, UploadIcon } from 'lucide-react';
 import { TableTitle } from '@/features/auth/components/table-title';
-
-const sampleBranchAgents: BranchAgentData[] = [
-  {
-    id: '1',
-    agentVendorCode: 'AVC001',
-    agentEntityName: 'ABC Financial Services',
-    fullName: 'John Doe',
-    emailId: 'john.doe@abc.com',
-    role: 'Branch Manager',
-    phoneNo: '9876543210',
-    checker: 'Jane Smith',
-    branch: 'Mumbai Central',
-    status: 'Active',
-  },
-  {
-    id: '2',
-    agentVendorCode: 'AVC002',
-    agentEntityName: 'XYZ Money Transfer',
-    fullName: 'Mike Johnson',
-    emailId: 'mike.johnson@xyz.com',
-    role: 'Agent',
-    phoneNo: '9876543211',
-    checker: 'Bob Wilson',
-    branch: 'Delhi North',
-    status: 'Active',
-  },
-  {
-    id: '3',
-    agentVendorCode: 'AVC003',
-    agentEntityName: 'Global Remittance Ltd',
-    fullName: 'Sarah Davis',
-    emailId: 'sarah.davis@global.com',
-    role: 'Senior Agent',
-    phoneNo: '9876543212',
-    checker: 'Alice Brown',
-    branch: 'Bangalore South',
-    status: 'Inactive',
-  },
-];
+import { useGetBranchAgents } from '../../hooks/useGetBranchAgents';
 
 const BranchAgentTable = () => {
   const navigate = useNavigate();
-  const [branchAgents, setBranchAgents] = useState<BranchAgentData[]>(sampleBranchAgents);
-  const [loading, setLoading] = useState(false);
+  const { data: branchAgents = [], isLoading } = useGetBranchAgents();
 
   // Table configuration
   const config = {
@@ -75,7 +36,7 @@ const BranchAgentTable = () => {
         columnId: 'status',
       },
     },
-    loading,
+    loading: isLoading,
   };
 
   // Table data
@@ -93,10 +54,7 @@ const BranchAgentTable = () => {
   // Dynamic table actions
   const tableActions = {
     onPaginationChange: (pagination: { pageIndex: number; pageSize: number }) => {
-      setLoading(true);
-      setTimeout(() => {
-        setLoading(false);
-      }, 1000);
+      // Pagination handled by static config
     },
 
     onSortingChange: (sorting: { id: string; desc: boolean }[]) => {

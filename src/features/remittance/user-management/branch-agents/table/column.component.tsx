@@ -8,9 +8,9 @@ const GetBranchAgentTableColumns = ({
 }): TableColumn<BranchAgentData>[] => {
   return [
     {
-      id: 'agentVendorCode',
+      id: 'agent_vendor_code',
       header: 'Agent Vendor Code',
-      accessorKey: 'agentVendorCode',
+      accessorKey: 'agent_vendor_code',
       sortable: true,
       filterable: true,
       meta: {
@@ -19,9 +19,9 @@ const GetBranchAgentTableColumns = ({
       },
     },
     {
-      id: 'agentEntityName',
+      id: 'agent_entity_name',
       header: 'Agent Entity Name',
-      accessorKey: 'agentEntityName',
+      accessorKey: 'agent_entity_name',
       sortable: true,
       filterable: true,
       meta: {
@@ -30,9 +30,9 @@ const GetBranchAgentTableColumns = ({
       },
     },
     {
-      id: 'fullName',
+      id: 'full_name',
       header: 'Full Name',
-      accessorKey: 'fullName',
+      accessorKey: 'full_name',
       sortable: true,
       filterable: true,
       meta: {
@@ -41,9 +41,9 @@ const GetBranchAgentTableColumns = ({
       },
     },
     {
-      id: 'emailId',
-      header: 'Email ID',
-      accessorKey: 'emailId',
+      id: 'email',
+      header: 'Email',
+      accessorKey: 'email',
       sortable: true,
       filterable: true,
       meta: {
@@ -63,48 +63,14 @@ const GetBranchAgentTableColumns = ({
       },
     },
     {
-      id: 'phoneNo',
-      header: 'Phone No',
-      accessorKey: 'phoneNo',
+      id: 'type',
+      header: 'Type',
+      accessorKey: 'type',
       sortable: true,
       filterable: true,
       meta: {
         headerAlign: 'left',
         cellAlign: 'left',
-      },
-    },
-    {
-      id: 'checker',
-      header: 'Checker',
-      accessorKey: 'checker',
-      sortable: true,
-      filterable: true,
-      meta: {
-        headerAlign: 'left',
-        cellAlign: 'left',
-      },
-    },
-    {
-      id: 'branch',
-      header: 'Branch',
-      accessorKey: 'branch',
-      sortable: true,
-      filterable: true,
-      meta: {
-        headerAlign: 'left',
-        cellAlign: 'left',
-      },
-    },
-    {
-      id: 'status',
-      header: 'Status',
-      accessorKey: 'status',
-      sortable: true,
-      filterable: true,
-      cell: ({ value }) => <StatusBadge status={value} />,
-      meta: {
-        headerAlign: 'center',
-        cellAlign: 'center',
       },
     },
     {

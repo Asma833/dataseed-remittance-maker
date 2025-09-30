@@ -15,6 +15,8 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { BranchAgentForm, branchAgentSchema } from "./branch-agent-creation.schema";
 import { FormTitle } from "@/features/auth/components/form-title";
 import { TableTitle } from "@/features/auth/components/table-title";
+import { useCreateBranchAgent } from "../../hooks/useCreateBranchAgent";
+import { useUpdateBranchAgent } from "../../hooks/useUpdateBranchAgent";
 
 
 export const CreateBranchAgent = () => {
@@ -66,9 +68,40 @@ export const CreateBranchAgent = () => {
     navigate("/admin/user-management/branch-agents");
   };
 
+  const { mutate: createBranchAgent, isLoading: isCreating } = useCreateBranchAgent({
+    onBranchAgentCreateSuccess: () => {
+      navigate("/admin/user-management/branch-agents");
+    },
+  });
+
+  const { mutate: updateBranchAgent, isLoading: isUpdating } = useUpdateBranchAgent({
+    onBranchAgentUpdateSuccess: () => {
+      navigate("/admin/user-management/branch-agents");
+    },
+  });
+
   const onSubmit = async (data: BranchAgentForm) => {
-    console.log("Form submitted with data:", data);
-    // TODO: Add actual submission logic
+    const payload = {
+      full_name: data.agentDetails.basicDetails.fullName,
+      email: data.agentDetails.basicDetails.emailId,
+      password: data.agentDetails.security.password,
+      address_city: data.agentDetails.address.city,
+      address_state: data.agentDetails.address.state,
+      address_branch: data.agentDetails.address.branch,
+      phone_number: data.agentDetails.basicDetails.mobileNo,
+      role: data.agentDetails.roleStatus.role,
+      agent_ids: data.agentDetails.roleStatus.checkerList ? [data.agentDetails.roleStatus.checkerList] : [],
+    };
+
+    if (branchAgent) {
+      updateBranchAgent({
+        ...payload,
+        id: branchAgent.id,
+        password: data.agentDetails.security.password || undefined,
+      });
+    } else {
+      createBranchAgent(payload);
+    }
   };
 
   const handleFormSubmit = handleSubmit(onSubmit);
@@ -76,18 +109,18 @@ export const CreateBranchAgent = () => {
   /** Optional: map backend -> frontend values */
   useEffect(() => {
     if (branchAgent) {
-      setValue("agentDetails.vendorDetails.vendorName", branchAgent.vendorName || "");
-      setValue("agentDetails.vendorDetails.vendorCode", branchAgent.vendorCode || "");
-      setValue("agentDetails.vendorDetails.systemCode", branchAgent.systemCode || "");
-      setValue("agentDetails.basicDetails.fullName", branchAgent.fullName || "");
-      setValue("agentDetails.basicDetails.emailId", branchAgent.emailId || "");
-      setValue("agentDetails.basicDetails.mobileNo", branchAgent.mobileNo || "");
-      setValue("agentDetails.address.state", branchAgent.state || "");
-      setValue("agentDetails.address.city", branchAgent.city || "");
-      setValue("agentDetails.address.branch", branchAgent.branch || "");
+      setValue("agentDetails.vendorDetails.vendorName", branchAgent.agent_entity_name || "");
+      setValue("agentDetails.vendorDetails.vendorCode", branchAgent.agent_vendor_code || "");
+      setValue("agentDetails.vendorDetails.systemCode", "");
+      setValue("agentDetails.basicDetails.fullName", branchAgent.full_name || "");
+      setValue("agentDetails.basicDetails.emailId", branchAgent.email || "");
+      setValue("agentDetails.basicDetails.mobileNo", "");
+      setValue("agentDetails.address.state", "");
+      setValue("agentDetails.address.city", "");
+      setValue("agentDetails.address.branch", "");
       setValue("agentDetails.roleStatus.role", branchAgent.role || "maker");
-      setValue("agentDetails.roleStatus.checkerList", branchAgent.checkerList || "");
-      setValue("agentDetails.roleStatus.status", branchAgent.status || "active");
+      setValue("agentDetails.roleStatus.checkerList", "");
+      setValue("agentDetails.roleStatus.status", "active");
       setValue("agentDetails.security.password", "");
       setValue("agentDetails.security.confirmPassword", "");
       setTimeout(() => trigger(), 100);
@@ -242,8 +275,14 @@ export const CreateBranchAgent = () => {
               <Button variant="outline" className="w-28" onClick={handleBack}>
                 Back
               </Button>
-              <Button variant="secondary" type="submit" className="w-28" onClick={handleFormSubmit}>
-                {branchAgent ? "Update" : "Create"}
+              <Button
+                variant="secondary"
+                type="submit"
+                className="w-28"
+                onClick={handleFormSubmit}
+                disabled={isCreating || isUpdating}
+              >
+                {isCreating || isUpdating ? "Processing..." : branchAgent ? "Update" : "Create"}
               </Button>
             </div>
           </Spacer>

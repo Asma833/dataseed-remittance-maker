@@ -1,12 +1,26 @@
 export interface BranchAgentData {
-  id: string;
-  agentVendorCode: string;
-  agentEntityName: string;
-  fullName: string;
-  emailId: string;
+  id?: string;
+  agent_vendor_code: string;
+  agent_entity_name: string;
+  full_name: string;
+  email: string;
   role: string;
-  phoneNo: string;
-  checker: string;
-  branch: string;
-  status: 'Active' | 'Inactive';
+  type: string;
+}
+
+export interface CreateBranchAgentRequest {
+  full_name: string;
+  email: string;
+  password: string;
+  address_city: string;
+  address_state: string;
+  address_branch: string;
+  phone_number: string;
+  role: string;
+  agent_ids: string[];
+}
+
+export interface UpdateBranchAgentRequest extends Omit<CreateBranchAgentRequest, 'password'> {
+  id: string;
+  password?: string | undefined;
 }
