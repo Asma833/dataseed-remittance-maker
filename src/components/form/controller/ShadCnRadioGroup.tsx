@@ -53,7 +53,7 @@ export const ShadCnRadioGroup = <T extends FieldValues>({
               (isBooleanGroup ? String(field.value) : String(field.value ?? ""));
 
             const horizontal =
-              (orientation ?? (optionKeys.length <= 3 ? "horizontal" : "vertical")) ===
+              (orientation ?? (optionKeys.length <= 10 ? "horizontal" : "vertical")) ===
               "horizontal";
 
             return (

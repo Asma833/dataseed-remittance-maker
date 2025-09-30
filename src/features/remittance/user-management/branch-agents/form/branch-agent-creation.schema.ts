@@ -41,8 +41,16 @@ export const addressSchema = z.object({
 
 export const roleStatusSchema = z.object({
   role: z
-    .enum(["maker", "checker", "both", "admin"], {
-      message: "Role is required",
+    .any()
+    .refine((val) => {
+      if (typeof val === 'string' && val.length > 0) return true;
+      if (Array.isArray(val) && val.length > 0) return true;
+      if (typeof val === 'object' && val !== null) {
+        return Object.values(val).some(v => v === true);
+      }
+      return false;
+    }, {
+      message: "Role is required"
     })
     .describe("Choose Role"),
   checkerList: z

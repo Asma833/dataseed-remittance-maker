@@ -17,6 +17,7 @@ import { FormTitle } from "@/features/auth/components/form-title";
 import { TableTitle } from "@/features/auth/components/table-title";
 import { useCreateBranchAgent } from "../../hooks/useCreateBranchAgent";
 import { useUpdateBranchAgent } from "../../hooks/useUpdateBranchAgent";
+import { NotificationBanner } from "@/components/ui/notification-banner";
 
 
 export const CreateBranchAgent = () => {
@@ -40,7 +41,7 @@ export const CreateBranchAgent = () => {
           branch: "",
         },
         roleStatus: {
-          role: "maker",
+          role: "branch_agent_checker",
           checkerList: "",
           status: "active",
         },
@@ -90,9 +91,10 @@ export const CreateBranchAgent = () => {
       address_branch: data.agentDetails.address.branch,
       phone_number: data.agentDetails.basicDetails.mobileNo,
       role: data.agentDetails.roleStatus.role,
-      agent_ids: data.agentDetails.roleStatus.checkerList ? [data.agentDetails.roleStatus.checkerList] : [],
+      agent_ids: [
+    "691ee70a-1a34-4012-83e8-e67883c2b772"
+    ]
     };
-
     if (branchAgent) {
       updateBranchAgent({
         ...payload,
@@ -204,7 +206,7 @@ export const CreateBranchAgent = () => {
               </FormFieldRow>
 
             {/* Role / Checker / Status */}
-              <FormFieldRow rowCols={2}>
+              <FormFieldRow rowCols={3}>
                 {(["role"] as const).map((fieldName) => {
                   const field = config.fields.agentDetails[fieldName];
                   return (
@@ -234,7 +236,7 @@ export const CreateBranchAgent = () => {
                   );
                 })}
               </FormFieldRow>
-              <FormFieldRow rowCols={1}>
+              <FormFieldRow rowCols={5}>
                 {(["status"] as const).map((fieldName) => {
                   const field = config.fields.agentDetails[fieldName];
                   return (
@@ -244,12 +246,21 @@ export const CreateBranchAgent = () => {
                         name: field.name,
                         control,
                         errors,
+                        className:"justify-start"
                       })}
                     </FieldWrapper>
                   );
                 })}
               </FormFieldRow>
-
+ {
+              !branchAgent && (
+                <NotificationBanner
+                  message="Newly created branch agents active by default"
+                  variant="warning"
+                  size="sm"
+                />
+              )
+            }
             {/* Security */}
               <div className="relative p-1">
               <label className="text-sm font-medium absolute">Create Password</label>

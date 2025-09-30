@@ -78,9 +78,9 @@ export const branchAgentCreationConfig = () => {
         role: {
           name: "agentDetails.roleStatus.role",
           label:"Choose Role",
-          type: FieldType.Checkbox,
+          type: FieldType.Radio,
           required: true,
-          isMulti:true,
+          isMulti:false,
           variant:"circle_check_filled",
           options: {
             branch_agent_maker: { label: "Maker" },

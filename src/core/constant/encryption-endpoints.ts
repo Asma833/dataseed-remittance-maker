@@ -97,6 +97,21 @@ export const ENDPOINT_MATCHING_RULES: EndpointRulesConfig = {
     endpoint: API.USER_MANAGEMENT.SUPER_CHECKER.LIST,
     matchType: 'standard' as const,
     description: 'Get super checker endpoint',
+  },
+  'create-branch-agent':{
+    endpoint: API.USER_MANAGEMENT.AGENT_BRANCH_USER.CREATE,
+    matchType: 'standard' as const,
+    description: 'Create super checker endpoint',
+  },
+  'update-branch-agent':{
+    endpoint: API.USER_MANAGEMENT.AGENT_BRANCH_USER.UPDATE,
+    matchType: 'standard' as const,
+    description: 'Update super checker endpoint',
+  },
+  'get-branch-agent':{
+    endpoint: API.USER_MANAGEMENT.AGENT_BRANCH_USER.LIST,
+    matchType: 'standard' as const,
+    description: 'Get super checker endpoint',
   }
 } as const;
 
