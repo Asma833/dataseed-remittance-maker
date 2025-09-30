@@ -14,10 +14,12 @@ export const useUpdateSuperChecker = ({ onSuperCheckerUpdateSuccess }: UpdateSup
   const { mutate, isPending, error } = useMutation<SuperCheckerData, Error, UpdateSuperCheckerRequest>({
     mutationFn: superCheckerApi.updateSuperChecker,
     onSuccess: (data) => {
+      toast.success('Super Checker updated successfully');
       invalidateMultipleQueries([['getSuperCheckers']]);
       onSuperCheckerUpdateSuccess?.();
     },
     onError: (error: Error) => {
+      toast.error('Failed to update Super Checker');
       console.error('Failed to update Super Checker:', error);
     },
   });
