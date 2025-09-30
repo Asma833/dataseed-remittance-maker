@@ -19,8 +19,7 @@ export const useUpdateSuperChecker = ({ onSuperCheckerUpdateSuccess }: UpdateSup
       onSuperCheckerUpdateSuccess?.();
     },
     onError: (error: Error) => {
-      toast.error('Failed to update Super Checker');
-      console.error('Failed to update Super Checker:', error);
+      toast.error('Failed to update super checker');
     },
   });
 
