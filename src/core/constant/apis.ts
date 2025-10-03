@@ -73,6 +73,9 @@ export const API = {
       LIST:'/rem-users/getAllSuperCheckers',
       CREATE:'/rem-users/create-super-checker',
       UPDATE: (id: string) => `/rem-users/update-super-checker/${id}`,
+    },
+    AGENTS: {
+      LIST: `/agents`,
     }
   },
   NUSERS: {

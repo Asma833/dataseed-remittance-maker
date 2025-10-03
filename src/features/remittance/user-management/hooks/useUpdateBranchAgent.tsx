@@ -19,7 +19,7 @@ export const useUpdateBranchAgent = ({ onBranchAgentUpdateSuccess }: UpdateBranc
       onBranchAgentUpdateSuccess?.();
     },
     onError: (error: Error) => {
-      toast.error('Failed to update Branch Agent');
+      toast.error(error.message || 'Failed to update Branch Agent');
       console.error('Failed to update Branch Agent:', error);
     },
   });

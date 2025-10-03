@@ -1,6 +1,14 @@
 import { FieldType } from '@/types/enums';
+import { Agent } from '../../api/agents';
 
-export const superCheckerCreationConfig = () => {
+export const superCheckerCreationConfig = (agents: Agent[] = []) => {
+    // Transform agents data to select options format
+    // value = agent_code (sent to backend as ID), label = agent_name (displayed in UI)
+    const agentOptions = agents.map(agent => ({
+      value: agent.agent_code,  // This is the ID that will be sent to backend
+      label: agent.agent_name,  // This is what user sees in the dropdown
+    }));
+
     return {
     sectionTitle: 'Super Checker Creation',
     description: 'Fill in the details to create a new super checker',
@@ -63,12 +71,8 @@ export const superCheckerCreationConfig = () => {
           label: 'Agents',
           type: FieldType.Select,
           required: true,
-          options: [
-            { value: 'agent1', label: 'Agent 1' },
-            { value: 'agent2', label: 'Agent 2' },
-            { value: 'agent3', label: 'Agent 3' }
-          ],
-          placeholder: 'Select agents',
+          options: agentOptions,
+          placeholder: agentOptions.length > 0 ? 'Select agents' : 'Loading agents...',
           isMulti: true
         },
         password:{

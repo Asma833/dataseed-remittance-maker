@@ -19,7 +19,7 @@ export const useCreateSuperChecker = ({ onSuperCheckerCreateSuccess }: CreateSup
       onSuperCheckerCreateSuccess?.();
     },
     onError: (error: Error) => {
-      toast.error('Failed to create Super Checker');
+      toast.error(error.message || 'Failed to create Super Checker');
       console.error('Failed to create Super Checker:', error);
     },
   });

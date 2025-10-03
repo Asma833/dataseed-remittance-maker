@@ -17,6 +17,7 @@ import { TableTitle } from '@/features/auth/components/table-title';
 import { FormTitle } from '@/features/auth/components/form-title';
 import { useCreateSuperChecker } from '../../hooks/useCreateSuperChecker';
 import { useUpdateSuperChecker } from '../../hooks/useUpdateSuperChecker';
+import { useGetAgents } from '../../hooks/useGetAgents';
 import { ProductTransactionSelector } from '@/components/form/product-transaction-selector';
 
 export const CreateSuperChecker = () => {
@@ -49,16 +50,13 @@ export const CreateSuperChecker = () => {
     handleSubmit,
   } = methods;
 
-  // Debug: Log form state changes
-  useEffect(() => {
-    console.log('=== FORM STATE DEBUG ===');
-    console.log('Form errors:', errors);
-    console.log('Form is valid:', isValid);
-    console.log('Current values:', getValues());
-  }, [errors, isValid, getValues]);
+
   const navigate = useNavigate();
   const location = useLocation();
   const superChecker = location.state?.superChecker;
+
+  // Fetch agents for the dropdown
+  const { agents, isLoading: isLoadingAgents } = useGetAgents();
 
   const { mutate: createSuperChecker, isLoading: isCreating } = useCreateSuperChecker({
     onSuperCheckerCreateSuccess: () => navigate(-1),
@@ -76,11 +74,6 @@ export const CreateSuperChecker = () => {
   
   //  const handleFormSubmit = handleSubmit(onSubmit);
      const handleFormSubmit = handleSubmit((formdata: SuperCheckerFormType) => {
-      console.log('=== FORM SUBMISSION ===');
-      console.log('Full form data:', formdata);
-      console.log('Product Type:', formdata.checkerDetails.productType);
-      console.log('Transaction Type Map:', formdata.checkerDetails.transactionTypeMap);
-      
       const product_types = Object.keys(formdata.checkerDetails.productType)
         .filter((key) => formdata.checkerDetails.productType[key as keyof typeof formdata.checkerDetails.productType])
         .map((product) => {
@@ -96,9 +89,7 @@ export const CreateSuperChecker = () => {
       const baseRequestData: any = {
         full_name: formdata.checkerDetails.fullName,
         phone_number: formdata.checkerDetails.phoneNumber,
-        agent_ids: formdata.checkerDetails.agents && formdata.checkerDetails.agents.length > 0
-          ? formdata.checkerDetails.agents
-          : ["691ee70a-1a34-4012-83e8-e67883c2b772"],
+        agent_ids:["691ee70a-1a34-4012-83e8-e67883c2b772"],
         product_types,
         email: formdata.checkerDetails.email,
       };
@@ -267,7 +258,7 @@ export const CreateSuperChecker = () => {
             </div>
             <FormFieldRow rowCols={4}>
               {(['fullName', 'email', 'phoneNumber'] as const).map((fieldName) => {
-                const field = superCheckerCreationConfig().fields.checkerDetails[fieldName];
+                const field = superCheckerCreationConfig(agents).fields.checkerDetails[fieldName];
                 return (
                   <FieldWrapper key={fieldName}>
                     {getController({
@@ -288,12 +279,12 @@ export const CreateSuperChecker = () => {
             errors={errors}
             productFieldName="checkerDetails.productType"
             transactionFieldName="checkerDetails.transactionTypeMap"
-            productOptions={superCheckerCreationConfig().fields.checkerDetails.productType.options}
+            productOptions={superCheckerCreationConfig(agents).fields.checkerDetails.productType.options}
             showTransactionFor={['card', 'currency']}
           />
             <FormFieldRow rowCols={4}>
               {(['agents'] as const).map((fieldName) => {
-                const field = superCheckerCreationConfig().fields.checkerDetails[fieldName];
+                const field = superCheckerCreationConfig(agents).fields.checkerDetails[fieldName];
                 return (
                   <FieldWrapper key={fieldName}>
                     {getController({
@@ -301,7 +292,8 @@ export const CreateSuperChecker = () => {
                       name: `checkerDetails.${fieldName}`,
                       control,
                       errors,
-                      isMulti:true
+                      isMulti:true,
+                      disabled: isLoadingAgents
                     })}
                   </FieldWrapper>
                 );
@@ -339,7 +331,7 @@ export const CreateSuperChecker = () => {
 
             <FormFieldRow rowCols={4}>
               {(['password', 'confirmPassword'] as const).map((fieldName) => {
-                const field = superCheckerCreationConfig().fields.checkerDetails[fieldName];
+                const field = superCheckerCreationConfig(agents).fields.checkerDetails[fieldName];
                 return (
                   <FieldWrapper key={fieldName}>
                     {getController({

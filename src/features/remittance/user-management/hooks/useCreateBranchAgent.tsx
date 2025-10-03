@@ -19,7 +19,7 @@ export const useCreateBranchAgent = ({ onBranchAgentCreateSuccess }: CreateBranc
       onBranchAgentCreateSuccess?.();
     },
     onError: (error: Error) => {
-      toast.error('Failed to create Branch Agent');
+      toast.error(error.message || 'Failed to create Branch Agent');
       console.error('Failed to create Branch Agent:', error);
     },
   });
