@@ -72,7 +72,7 @@ export const API = {
     SUPER_CHECKER:{
       LIST:'/rem-users/getAllSuperCheckers',
       CREATE:'/rem-users/create-super-checker',
-      UPDATE:'/rem-users/update-super-checker',
+      UPDATE: (id: string) => `/rem-users/update-super-checker/${id}`,
     }
   },
   NUSERS: {

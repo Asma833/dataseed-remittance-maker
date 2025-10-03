@@ -12,7 +12,8 @@ export const superCheckerApi = {
     return data;
   },
   updateSuperChecker: async (request: UpdateSuperCheckerRequest): Promise<SuperCheckerData> => {
-    const { data } = await axiosInstance.put<SuperCheckerData>(API.USER_MANAGEMENT.SUPER_CHECKER.UPDATE, request);
+    const { id, ...updateData } = request;
+    const { data } = await axiosInstance.patch<SuperCheckerData>(API.USER_MANAGEMENT.SUPER_CHECKER.UPDATE(id), updateData);
     return data;
   },
 };

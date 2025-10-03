@@ -9,7 +9,7 @@ export const superCheckerSchema = z
         .min(1, 'Full name is required')
         .min(2, 'Full name must be at least 2 characters')
         .max(100, 'Full name must be less than 100 characters')
-        .regex(/^[a-zA-Z\s]+$/, 'Full name can only contain letters and spaces'),
+        .regex(/^[a-zA-Z0-9]([a-zA-Z0-9\s-]*[a-zA-Z0-9])?$/, 'Full name must start with a letter or number'),
 
       email: z
         .string()
@@ -42,9 +42,13 @@ export const superCheckerSchema = z
         .string()
         .min(8, 'Password must be at least 8 characters')
         .max(50, 'Password must be less than 50 characters')
+        .regex(/^[^\s-]/, 'Password cannot start with a space or hyphen')
         .optional(),
 
-      confirmPassword: z.string().optional(),
+      confirmPassword: z
+        .string()
+        .regex(/^[^\s-]/, 'Confirm password cannot start with a space or hyphen')
+        .optional(),
 
       transactionTypeMap: z
         .record(z.enum(['card', 'currency']), z.enum(['buy', 'sell']))

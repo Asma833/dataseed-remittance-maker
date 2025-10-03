@@ -69,9 +69,8 @@ export const CreateSuperChecker = () => {
   //  const handleFormSubmit = handleSubmit(onSubmit);
      const handleFormSubmit = handleSubmit((formdata: SuperCheckerFormType) => {
       console.log(formdata, "formdata");
-      const requestData = {
+      const baseRequestData = {
       full_name: formdata.checkerDetails.fullName,
-      email: formdata.checkerDetails.email,
       password: formdata.checkerDetails.password,
       phone_number: formdata.checkerDetails.phoneNumber,
       agent_ids: [
@@ -90,9 +89,11 @@ export const CreateSuperChecker = () => {
       }),
       }
     if (superChecker) {
-      updateSuperChecker({ ...requestData, id: superChecker.id });
+      // For update, include email from form data
+      updateSuperChecker({ ...baseRequestData, email: formdata.checkerDetails.email, id: superChecker.id });
     } else {
-      createSuperChecker({ ...requestData, password: requestData.password as string });
+      // For create, include email
+      createSuperChecker({ ...baseRequestData, email: formdata.checkerDetails.email, password: baseRequestData.password as string });
     }
   });
   const mapSuperCheckerData = (data: any) => {
@@ -192,6 +193,7 @@ export const CreateSuperChecker = () => {
                       name: `checkerDetails.${fieldName}`,
                       control,
                       errors,
+                      disabled: fieldName === 'email' && !!superChecker, // Disable email field in update mode
                     })}
                   </FieldWrapper>
                 );
