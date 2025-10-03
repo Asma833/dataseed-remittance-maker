@@ -37,6 +37,7 @@ import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
+import { TooltipButton } from '@/components/common/tooltip-button';
 import { cn } from '@/utils/cn';
 import { TableConfig, TableColumn, TableData, TableActions } from './types';
 import { defaultTableConfig } from './config';
@@ -350,26 +351,26 @@ export function DataTable<T>({
                   </div>
 
                   {/* Arrow Right Button for Filter Submission */}
-                  <Button
+                  <TooltipButton
                     variant="outline"
                     size="sm"
                     onClick={applyFilters}
                     className="h-9 w-9 p-0 bg-[var(--color-background-icon)] hover:bg-[var(--color-background-icon)]/80"
-                    title="Apply Filters"
+                    tooltip="Apply Filters"
                   >
                     <ArrowRightIcon className="h-4 w-4 text-[var(--color-title)]" />
-                  </Button>
+                  </TooltipButton>
 
                   {/* Refresh Button to Clear Filters */}
-                  <Button
+                  <TooltipButton
                     variant="outline"
                     size="sm"
                     onClick={clearAllFilters}
                     className="h-9 w-9 p-0 bg-[var(--color-background-icon)] hover:bg-[var(--color-background-icon)]/80"
-                    title="Clear All Filters"
+                    tooltip="Clear All Filters"
                   >
                     <RefreshCwIcon className="h-4 w-4 text-[var(--color-title)]" />
-                  </Button>
+                  </TooltipButton>
                 </>
               )}
             </div>
@@ -388,15 +389,15 @@ export function DataTable<T>({
                   <SearchIcon className="absolute right-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-[var(--color-title)]" />
                 </div>
               )}
-              <Button
+              <TooltipButton
                 variant="outline"
                 size="sm"
                 onClick={clearAllFilters}
-                className="h-9 w-9 p-0 text-[var(--color-white)] bg-[var(--color-title)] hover:bg-[var(--color-title)]/80"
-                title="Clear All Filters"
+                className="h-9 w-9 p-0 text-[var(--color-white)] bg-[var(--color-title)] hover:bg-[var(--color-title)] hover:opacity-90 hover:text-[var(--color-white)] transition-opacity"
+                tooltip="Download"
               >
-                <DownloadIcon className="h-4 w-4 text-" />
-              </Button>
+                <DownloadIcon className="h-4 w-4 text-[var(--color-white)]" />
+              </TooltipButton>
             </div>
           </div>
         )}
@@ -551,22 +552,29 @@ export function DataTable<T>({
               </div>
               <div className="flex items-center gap-2">
                
-                <Button
+                <TooltipButton
                   variant="outline"
                   size="sm"
                   onClick={() => table.previousPage()}
                   disabled={!table.getCanPreviousPage()}
+                  tooltip="Previous Page"
                 >
                   <ChevronLeftIcon className="h-4 w-4" />
-                </Button>
+                </TooltipButton>
                 <div className="flex items-center gap-1">
                   <span className="text-sm font-medium">
                     Page {table.getState().pagination.pageIndex + 1} of {Math.max(table.getPageCount(), 1)}
                   </span>
                 </div>
-                <Button variant="outline" size="sm" onClick={() => table.nextPage()} disabled={!table.getCanNextPage()}>
+                <TooltipButton
+                  variant="outline"
+                  size="sm"
+                  onClick={() => table.nextPage()}
+                  disabled={!table.getCanNextPage()}
+                  tooltip="Next Page"
+                >
                   <ChevronRightIcon className="h-4 w-4" />
-                </Button>
+                </TooltipButton>
                
               </div>
             </div>
