@@ -312,7 +312,7 @@ export function DataTable<T>({
               const columnId = config.filters.statusFilter?.columnId ;
               const filterLabel = columnId;
               return (
-                <p className="text-[13px] font-semibold text-gray-800 px-1 mb-0">
+                <p className="text-sm  text-gray-800 px-1 mb-0">
                   Select {filterLabel}
                 </p>
               );

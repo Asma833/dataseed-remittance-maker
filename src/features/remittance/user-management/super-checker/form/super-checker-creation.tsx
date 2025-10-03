@@ -244,7 +244,7 @@ export const CreateSuperChecker = () => {
 
       <FormProvider methods={methods}>
         <form onSubmit={handleFormSubmit}>
-          <FormContentWrapper className="p-4 rounded-lg mr-auto w-full shadow-top">
+          <FormContentWrapper className="p-4 mr-auto w-full shadow-md">
           <TableTitle title={superChecker ? 'Update Superchecker' : 'Create New Superchecker'} titleClassName="text-black"/>
           <Spacer>
             <div className="relative p-1">

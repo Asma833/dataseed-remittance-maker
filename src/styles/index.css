@@ -40,7 +40,7 @@
   --radius: 0.625rem;
 
   /* dashboard */
-  --color-dashboard-bg: rgb(245 245 245);
+  --color-dashboard-bg: #f9f9f9;
   --color-dashboard-bg-2: #00cc66;
   --dashboard-border: #e0e0e0;
   --dashboard-title: #333333;

@@ -27,7 +27,7 @@ const SidebarLayout = ({ children }: CheckerLayoutProps) => {
 
       <Header collapsed={collapsed} setCollapsed={setCollapsed} className="fixed top-0 w-full bg-white" />
       <main
-        className={`flex-1 h-[calc(100vh-50px)] mt-[50px] overflow-y-auto transition-all ${
+        className={`flex-1 h-[calc(98vh-50px)] mt-[50px] pb-[5px] overflow-y-auto transition-all ${
           collapsed ? 'ml-20' : 'ml-[210px]'
         }`}
       >
