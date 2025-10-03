@@ -32,6 +32,7 @@ import {
   RefreshCwIcon,
   SearchIcon,
   DownloadIcon,
+  Loader2,
 } from 'lucide-react';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
@@ -299,24 +300,6 @@ export function DataTable<T>({
     }
   }, [columnFilters, config.filters.filterMode, actions]);
 
-  // Render loading state
-  if (config.loading) {
-    return (
-      <div className="flex items-center justify-center p-8">
-        <div className="text-sm text-muted-foreground">Loading...</div>
-      </div>
-    );
-  }
-
-  // Render error state
-  if (config.error) {
-    return (
-      <div className="flex items-center justify-center p-8">
-        <div className="text-sm text-destructive">{config.error}</div>
-      </div>
-    );
-  }
-
   // Wrap the entire table rendering in error boundary
   try {
     return (
@@ -461,7 +444,22 @@ export function DataTable<T>({
               ))}
             </TableHeader>
             <TableBody>
-              {table.getRowModel().rows?.length ? (
+              {config.loading ? (
+                <TableRow>
+                  <TableCell colSpan={columns.length} className="h-64">
+                    <div className="flex flex-col items-center justify-center space-y-4">
+                      <Loader2 className="h-8 w-8 animate-spin text-[var(--color-title)]" />
+                      <div className="text-sm font-medium text-[var(--color-title)]">Loading data...</div>
+                    </div>
+                  </TableCell>
+                </TableRow>
+              ) : config.error ? (
+                <TableRow>
+                  <TableCell colSpan={columns.length} className="h-24 text-center">
+                    <div className="text-sm text-destructive">{config.error}</div>
+                  </TableCell>
+                </TableRow>
+              ) : table.getRowModel().rows?.length ? (
                 table.getRowModel().rows.map((row, index) => {
                   // Add error handling for individual row rendering
                   try {
