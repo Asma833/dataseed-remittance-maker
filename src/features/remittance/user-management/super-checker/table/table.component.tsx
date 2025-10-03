@@ -98,7 +98,7 @@ const SuperCheckerTable = () => {
         data={tableData}
         config={{
           ...config,
-          // export: { enabled: true, fileName: 'super-checkers.csv', includeHeaders: true },
+          export: { enabled: true, fileName: 'super-checkers.csv', includeHeaders: true },
         }}
         actions={tableActions}
         className="rounded-lg"

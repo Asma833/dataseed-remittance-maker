@@ -11,6 +11,7 @@ import {
   ColumnFiltersState,
   PaginationState,
   RowData,
+  Row,
 } from '@tanstack/react-table';
 
 // Extend ColumnMeta to include custom properties
@@ -43,6 +44,7 @@ import { TooltipButton } from '@/components/common/tooltip-button';
 import { cn } from '@/utils/cn';
 import { TableConfig, TableColumn, TableData, TableActions } from './types';
 import { defaultTableConfig } from './config';
+import { exportTableToCSV } from './csv-export.utils';
 
 interface DataTableProps<T> {
   columns: TableColumn<T>[];
@@ -192,6 +194,17 @@ export function DataTable<T>({
     }
     return filteredData;
   }, [safeData.data, config.paginationMode, appliedStatusFilter, config.filters.statusFilter]);
+
+  // Helper function to export data to CSV
+  const exportToCSV = () => {
+    // Get the currently visible/filtered rows from the table
+    const rows = table.getFilteredRowModel().rows as Row<T>[];
+    
+    exportTableToCSV(rows, columns, {
+      fileName: config.export?.fileName || 'export.csv',
+      includeHeaders: config.export?.includeHeaders ?? true,
+    });
+  };
 
   // Helper function to clear all filters
   const clearAllFilters = () => {
@@ -395,15 +408,17 @@ export function DataTable<T>({
                   )}
                 </div>
               )}
-              <TooltipButton
-                variant="outline"
-                size="sm"
-                onClick={clearAllFilters}
-                className="h-9 w-9 p-0 text-[var(--color-white)] bg-[var(--color-title)] hover:bg-[var(--color-title)] hover:opacity-90 hover:text-[var(--color-white)] transition-opacity"
-                tooltip="Download"
-              >
-                <DownloadIcon className="h-4 w-4 text-[var(--color-white)]" />
-              </TooltipButton>
+              {config.export?.enabled && (
+                <TooltipButton
+                  variant="outline"
+                  size="sm"
+                  onClick={exportToCSV}
+                  className="h-9 w-9 p-0 text-[var(--color-white)] bg-[var(--color-title)] hover:bg-[var(--color-title)] hover:opacity-90 hover:text-[var(--color-white)] transition-opacity"
+                  tooltip="Download CSV"
+                >
+                  <DownloadIcon className="h-4 w-4 text-[var(--color-white)]" />
+                </TooltipButton>
+              )}
               </div>
             </div>
           </div>
@@ -546,7 +561,7 @@ export function DataTable<T>({
         {/* Pagination */}
         {config.pagination.enabled && (
           <div className="flex items-center justify-between px-2">
-            <div>{config?.export?.enabled && <Button>Export <DownloadIcon className="h-4 w-4 ml-1" /></Button>}</div>
+            <div></div>
             <div className="flex flex-1 items-center justify-end gap-5">
               <div className="flex items-center">
                 {config.pagination.enabled && config.pagination.showPageSizeSelector && (
