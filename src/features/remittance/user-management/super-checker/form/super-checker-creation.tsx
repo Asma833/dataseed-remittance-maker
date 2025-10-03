@@ -1,5 +1,5 @@
-import { useEffect } from 'react';
-import { useForm } from 'react-hook-form';
+import { useEffect, useRef } from 'react';
+import { useForm, useWatch } from 'react-hook-form';
 import { NotificationBanner } from '@/components/ui/notification-banner';
 import type { z } from 'zod';
 import { FormContentWrapper } from '@/components/form/wrapper/form-content-wrapper';
@@ -34,7 +34,7 @@ export const CreateSuperChecker = () => {
       agents: [],
       password: "",
       confirmPassword: "",
-      transactionTypeMap: { card: 'buy', currency: 'buy' }, // default transaction type
+      transactionTypeMap: { card: 'buy' }, // default transaction type only for selected products
     },
   },
 });
@@ -45,9 +45,17 @@ export const CreateSuperChecker = () => {
     reset,
     setValue,
     trigger,
-    formState: { errors },
+    formState: { errors, isValid },
     handleSubmit,
   } = methods;
+
+  // Debug: Log form state changes
+  useEffect(() => {
+    console.log('=== FORM STATE DEBUG ===');
+    console.log('Form errors:', errors);
+    console.log('Form is valid:', isValid);
+    console.log('Current values:', getValues());
+  }, [errors, isValid, getValues]);
   const navigate = useNavigate();
   const location = useLocation();
   const superChecker = location.state?.superChecker;
@@ -68,33 +76,47 @@ export const CreateSuperChecker = () => {
   
   //  const handleFormSubmit = handleSubmit(onSubmit);
      const handleFormSubmit = handleSubmit((formdata: SuperCheckerFormType) => {
-      console.log(formdata, "formdata");
-      const baseRequestData = {
-      full_name: formdata.checkerDetails.fullName,
-      password: formdata.checkerDetails.password,
-      phone_number: formdata.checkerDetails.phoneNumber,
-      agent_ids: [
-    "691ee70a-1a34-4012-83e8-e67883c2b772"
-  ],
-    product_types: Object.keys(formdata.checkerDetails.productType)
-      .filter((key) => formdata.checkerDetails.productType[key as keyof typeof formdata.checkerDetails.productType])
-      .map((product) => {
-        if (product === 'card' || product === 'currency') {
-          const transaction = formdata.checkerDetails.transactionTypeMap?.[product as 'card' | 'currency'];
-          const trans = transaction ? transaction.charAt(0).toUpperCase() + transaction.slice(1) : 'Buy';
-          return `${product.charAt(0).toUpperCase() + product.slice(1)}-${trans}`;
-        } else {
-          return product.charAt(0).toUpperCase() + product.slice(1);
-        }
-      }),
+      console.log('=== FORM SUBMISSION ===');
+      console.log('Full form data:', formdata);
+      console.log('Product Type:', formdata.checkerDetails.productType);
+      console.log('Transaction Type Map:', formdata.checkerDetails.transactionTypeMap);
+      
+      const product_types = Object.keys(formdata.checkerDetails.productType)
+        .filter((key) => formdata.checkerDetails.productType[key as keyof typeof formdata.checkerDetails.productType])
+        .map((product) => {
+          if (product === 'card' || product === 'currency') {
+            const transaction = formdata.checkerDetails.transactionTypeMap?.[product as 'card' | 'currency'];
+            const trans = transaction ? transaction.charAt(0).toUpperCase() + transaction.slice(1) : 'Buy';
+            return `${product.charAt(0).toUpperCase() + product.slice(1)}-${trans}`;
+          } else {
+            return product.charAt(0).toUpperCase() + product.slice(1);
+          }
+        });
+
+      const baseRequestData: any = {
+        full_name: formdata.checkerDetails.fullName,
+        phone_number: formdata.checkerDetails.phoneNumber,
+        agent_ids: formdata.checkerDetails.agents && formdata.checkerDetails.agents.length > 0
+          ? formdata.checkerDetails.agents
+          : ["691ee70a-1a34-4012-83e8-e67883c2b772"],
+        product_types,
+        email: formdata.checkerDetails.email,
+      };
+
+      // Only include password if it's provided (for both create and update)
+      if (formdata.checkerDetails.password) {
+        baseRequestData.password = formdata.checkerDetails.password;
       }
-    if (superChecker) {
-      // For update, include email from form data
-      updateSuperChecker({ ...baseRequestData, email: formdata.checkerDetails.email, id: superChecker.id });
-    } else {
-      // For create, include email
-      createSuperChecker({ ...baseRequestData, email: formdata.checkerDetails.email, password: baseRequestData.password as string });
-    }
+
+      console.log(baseRequestData,"baseRequestData")
+      
+      if (superChecker) {
+        // For update, include id
+        updateSuperChecker({ ...baseRequestData, id: superChecker.id });
+      } else {
+        // For create, password is required
+        createSuperChecker(baseRequestData);
+      }
   });
   const mapSuperCheckerData = (data: any) => {
     if (!data) return {
@@ -133,39 +155,99 @@ export const CreateSuperChecker = () => {
     return mappedData;
   };
 
+  // Flag to track if initial data has been loaded
+  const isInitialLoadRef = useRef(true);
+
   useEffect(() => {
     const superChecker = location.state?.superChecker;
     if (superChecker) {
       const mappedData = mapSuperCheckerData(superChecker);
-      // Patch values one by one to handle different field names
-      setValue('checkerDetails.fullName', mappedData.checkerDetails.fullName);
-      setValue('checkerDetails.email', mappedData.checkerDetails.email);
-      setValue('checkerDetails.phoneNumber', mappedData.checkerDetails.phoneNumber);
-      setValue('checkerDetails.productType', mappedData.checkerDetails.productType);
-      setValue('checkerDetails.agents', mappedData.checkerDetails.agents || []);
-      setValue('checkerDetails.password', mappedData.checkerDetails.password);
-      setValue('checkerDetails.confirmPassword', mappedData.checkerDetails.confirmPassword);
-
+      
       // Set transactionTypeMap based on product_types
-      const transactionTypeMap: Record<'card' | 'currency', 'buy' | 'sell'> = {} as any;
+      const transactionTypeMap: Partial<Record<'card' | 'currency', 'buy' | 'sell'>> = {};
+      
+      // First, populate from existing product_types
       if (superChecker.product_types) {
         superChecker.product_types.forEach((pt: string) => {
           const [prod, trans] = pt.split('-');
           const key = prod.toLowerCase();
           if (key === 'card' || key === 'currency') {
-            transactionTypeMap[key as 'card' | 'currency'] = trans.toLowerCase() as 'buy' | 'sell';
+            transactionTypeMap[key as 'card' | 'currency'] = trans?.toLowerCase() as 'buy' | 'sell' || 'buy';
           }
         });
       }
-      setValue('checkerDetails.transactionTypeMap', transactionTypeMap);
+      
+      // Ensure all selected card/currency products have a transaction type
+      if (mappedData.checkerDetails.productType.card && !transactionTypeMap.card) {
+        transactionTypeMap.card = 'buy';
+      }
+      if (mappedData.checkerDetails.productType.currency && !transactionTypeMap.currency) {
+        transactionTypeMap.currency = 'buy';
+      }
 
-      // Trigger form validation and re-rendering
+      // Use reset to set all values at once - this is more reliable than individual setValue calls
+      reset({
+        checkerDetails: {
+          ...mappedData.checkerDetails,
+          transactionTypeMap: Object.keys(transactionTypeMap).length > 0 ? transactionTypeMap : undefined,
+        }
+      });
+
+      // Mark that initial load is complete after a short delay
       setTimeout(() => {
+        isInitialLoadRef.current = false;
         trigger();
         console.log('Form values after patching:', getValues());
-      }, 100);
+      }, 150);
+    } else {
+      // Mark initial load complete for create mode
+      isInitialLoadRef.current = false;
     }
-  }, [setValue, location.state, getValues]);
+  }, [reset, location.state, getValues, trigger]);
+
+  // Watch productType changes and clean up transactionTypeMap
+  const productType = useWatch({ control, name: 'checkerDetails.productType' }) as Record<string, boolean> | undefined;
+  
+  useEffect(() => {
+    // Skip this effect during initial load to prevent overwriting patched values
+    if (isInitialLoadRef.current || !productType) {
+      console.log('Skipping productType effect - initial load or no productType');
+      return;
+    }
+    
+    console.log('=== PRODUCT TYPE CHANGE EFFECT ===');
+    console.log('Product Type:', productType);
+    
+    const currentTransactionMap = (getValues('checkerDetails.transactionTypeMap') || {}) as Partial<Record<'card' | 'currency', 'buy' | 'sell'>>;
+    console.log('Current Transaction Map:', currentTransactionMap);
+    
+    const newTransactionMap: Partial<Record<'card' | 'currency', 'buy' | 'sell'>> = {};
+    
+    // Only keep transaction types for selected card/currency products
+    if (productType['card']) {
+      // If card is selected, preserve existing value or set default
+      newTransactionMap.card = currentTransactionMap?.card || 'buy';
+      console.log('Card is selected, setting transaction type:', newTransactionMap.card);
+    }
+    
+    if (productType['currency']) {
+      // If currency is selected, preserve existing value or set default
+      newTransactionMap.currency = currentTransactionMap?.currency || 'buy';
+      console.log('Currency is selected, setting transaction type:', newTransactionMap.currency);
+    }
+    
+    console.log('New Transaction Map to be set:', newTransactionMap);
+    
+    // Always update the transactionTypeMap to match selected products
+    // This ensures validation works correctly - only selected products need transaction types
+    setValue('checkerDetails.transactionTypeMap', newTransactionMap as any, { shouldValidate: true });
+    
+    // Verify it was set
+    setTimeout(() => {
+      const verifyMap = getValues('checkerDetails.transactionTypeMap');
+      console.log('Verified Transaction Map after setValue:', verifyMap);
+    }, 50);
+  }, [productType, setValue, getValues]);
 
   return (
     <div className="space-y-1 w-full">

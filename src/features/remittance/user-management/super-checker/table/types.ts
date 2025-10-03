@@ -1,7 +1,7 @@
 export interface SuperCheckerData {
   id: string;
   full_name: string | null;
-  email: string;
+  email?: string;
   phone_number: string | null;
   product_types: string[] | null;
   is_active: boolean;
@@ -10,7 +10,7 @@ export interface SuperCheckerData {
 
 export interface CreateSuperCheckerRequest {
   full_name: string;
-  email: string;
+  email?: string;
   password: string;
   product_types: string[];
   phone_number: string;

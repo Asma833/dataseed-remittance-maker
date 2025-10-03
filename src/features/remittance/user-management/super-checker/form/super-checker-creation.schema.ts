@@ -51,20 +51,40 @@ export const superCheckerSchema = z
         .optional(),
 
       transactionTypeMap: z
-        .record(z.enum(['card', 'currency']), z.enum(['buy', 'sell']))
-        .optional(),
+        .record(z.string(), z.enum(['buy', 'sell']))
+        .optional()
+        .refine((val) => {
+          if (!val) return true;
+          // Ensure only 'card' or 'currency' keys exist
+          const validKeys = ['card', 'currency'];
+          return Object.keys(val).every(k => validKeys.includes(k));
+        }, { message: 'Invalid product key in transaction type map' }),
 
     }),
   })
   .refine((data) => {
-    const selectedProducts = (Object.keys(data.checkerDetails.productType) as (keyof typeof data.checkerDetails.productType)[]).filter(key => data.checkerDetails.productType[key]);
+    const selectedProducts = (Object.keys(data.checkerDetails.productType || {}) as (keyof typeof data.checkerDetails.productType)[]).filter(key => data.checkerDetails.productType[key]);
     const needsTransaction = selectedProducts.filter(p => p === 'card' || p === 'currency');
-    if (needsTransaction.length > 0) {
-      if (!data.checkerDetails.transactionTypeMap) return false;
-      for (const product of needsTransaction) {
-        if (!data.checkerDetails.transactionTypeMap[product as 'card' | 'currency']) return false;
+    
+    // If no card/currency products are selected, validation passes
+    if (needsTransaction.length === 0) return true;
+    
+    // If card/currency products are selected, check transactionTypeMap
+    if (!data.checkerDetails.transactionTypeMap) {
+      console.log('Validation failed: transactionTypeMap is missing');
+      return false;
+    }
+    
+    // Check each selected card/currency product has a transaction type
+    for (const product of needsTransaction) {
+      const txnType = data.checkerDetails.transactionTypeMap[product as 'card' | 'currency'];
+      if (!txnType) {
+        console.log(`Validation failed: ${product} is selected but has no transaction type`);
+        return false;
       }
     }
+    
+    console.log('Validation passed for transaction types');
     return true;
   }, {
     message: 'Transaction type is required for selected card or currency products',
