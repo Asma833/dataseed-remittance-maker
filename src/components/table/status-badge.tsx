@@ -6,7 +6,7 @@ export function StatusBadge({ status }: StatusBadgeProps) {
   const isActive = status === 'Active';
   
   return (
-    <div className="flex items-center gap-2">
+    <div className="flex items-center justify-center gap-2 w-full">
       <div
         className={cn(
           'h-2 w-2 rounded-full',
