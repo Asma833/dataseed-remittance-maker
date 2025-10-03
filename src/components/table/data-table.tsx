@@ -323,32 +323,44 @@ export function DataTable<T>({
       <div className={cn('space-y-4 mb-20', className)}>
         {/* Search and Filters Header */}
         {(config.search.enabled || config.filters.enabled) && (
-          <div className="flex items-center justify-between gap-4">
-            {/* Left side - Filters */}
-            <div className="flex items-center gap-2">
-              {/* Status Filter */}
-              {config.filters.statusFilter?.enabled && (
-                <>
-                  <div className="relative">
-                    <Select
-                      value={selectedStatusFilter}
-                      onValueChange={(value) => {
-                        setSelectedStatusFilter(value);
-                      }}
-                    >
-                      <SelectTrigger className="w-32 bg-[var(--color-table-header-bg)]">
-                        <SelectValue placeholder="Status" />
-                      </SelectTrigger>
-                      <SelectContent>
-                        <SelectItem value="all">All Status</SelectItem>
-                        {config.filters.statusFilter.options.map((option) => (
-                          <SelectItem key={option.value} value={option.value}>
-                            {option.label}
-                          </SelectItem>
-                        ))}
-                      </SelectContent>
-                    </Select>
-                  </div>
+          <div className="space-y-2">
+            {/* Filters Label */}
+            {config.filters.statusFilter?.enabled && (() => {
+              const columnId = config.filters.statusFilter?.columnId ;
+              const filterLabel = columnId;
+              return (
+                <p className="text-[13px] font-semibold text-gray-800 px-1 mb-0">
+                  Select {filterLabel}
+                </p>
+              );
+            })()}
+            
+            <div className="flex items-center justify-between gap-4">
+              {/* Left side - Filters */}
+              <div className="flex items-center gap-2">
+                {/* Status Filter */}
+                {config.filters.statusFilter?.enabled && (
+                  <>
+                    <div className="relative">
+                      <Select
+                        value={selectedStatusFilter}
+                        onValueChange={(value) => {
+                          setSelectedStatusFilter(value);
+                        }}
+                      >
+                        <SelectTrigger className="w-32 bg-[var(--color-table-header-bg)]">
+                          <SelectValue placeholder="Status" />
+                        </SelectTrigger>
+                        <SelectContent>
+                          <SelectItem value="all">All Status</SelectItem>
+                          {config.filters.statusFilter.options.map((option) => (
+                            <SelectItem key={option.value} value={option.value}>
+                              {option.label}
+                            </SelectItem>
+                          ))}
+                        </SelectContent>
+                      </Select>
+                    </div>
 
                   {/* Arrow Right Button for Filter Submission */}
                   <TooltipButton
@@ -372,11 +384,11 @@ export function DataTable<T>({
                     <RefreshCwIcon className="h-4 w-4 text-[var(--color-title)]" />
                   </TooltipButton>
                 </>
-              )}
-            </div>
+                  )}
+              </div>
 
-            {/* Right side - Search */}
-            <div className="flex items-center gap-2">
+              {/* Right side - Search */}
+              <div className="flex items-center gap-2">
               {/* Global Search */}
               {config.search.enabled && (
                 <div className="relative max-w-sm">
@@ -398,6 +410,7 @@ export function DataTable<T>({
               >
                 <DownloadIcon className="h-4 w-4 text-[var(--color-white)]" />
               </TooltipButton>
+              </div>
             </div>
           </div>
         )}

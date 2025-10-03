@@ -35,7 +35,7 @@ const SuperCheckerTable = () => {
           { value: 'Active', label: 'Active' },
           { value: 'Inactive', label: 'Inactive' },
         ],
-        columnId: 'status',
+        columnId: 'Status',
       },
     },
     loading,
