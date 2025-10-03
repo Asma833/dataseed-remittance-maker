@@ -124,12 +124,35 @@ export function DataTable<T>({
     [configOverride]
   );
 
+  // Get filter configurations (support both nested and direct properties)
+  const statusFilterConfig = config.filters.filter?.statusFilter || config.filters.statusFilter;
+  const roleFilterConfig = config.filters.filter?.roleFilter || config.filters.roleFilter;
+
   // Table state
   const [sorting, setSorting] = useState<SortingState>([]);
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
   const [globalFilter, setGlobalFilter] = useState('');
   const [selectedStatusFilter, setSelectedStatusFilter] = useState<string>('all');
   const [appliedStatusFilter, setAppliedStatusFilter] = useState<string>('all');
+  const [selectedRoleFilter, setSelectedRoleFilter] = useState<string>('all');
+  const [appliedRoleFilter, setAppliedRoleFilter] = useState<string>('all');
+
+  // State for custom filters
+  const [selectedCustomFilters, setSelectedCustomFilters] = useState<Record<string, string>>(() => {
+    const initialFilters: Record<string, string> = {};
+    config.filters.customFilters?.forEach((filter) => {
+      initialFilters[filter.columnId] = 'all';
+    });
+    return initialFilters;
+  });
+  const [appliedCustomFilters, setAppliedCustomFilters] = useState<Record<string, string>>(() => {
+    const initialFilters: Record<string, string> = {};
+    config.filters.customFilters?.forEach((filter) => {
+      initialFilters[filter.columnId] = 'all';
+    });
+    return initialFilters;
+  });
+
   const [pagination, setPagination] = useState<PaginationState>({
     pageIndex: safeData.currentPage ? safeData.currentPage - 1 : 0,
     pageSize: config.pagination.pageSize,
@@ -175,31 +198,89 @@ export function DataTable<T>({
     [columns, config.sorting.enabled, config.filters.columnFilters]
   );
 
-  // Calculate total data for static pagination with manual status filtering
+  // Calculate total data for static pagination with manual filtering
   const tableData = useMemo(() => {
     let filteredData = safeData.data || [];
 
     // Apply manual status filtering if a specific status is applied
-    if (appliedStatusFilter !== 'all' && config.filters.statusFilter?.enabled) {
-      const columnId = config.filters.statusFilter?.columnId || 'status';
+    if (appliedStatusFilter !== 'all' && statusFilterConfig?.enabled) {
+      const columnId = statusFilterConfig?.columnId || 'status';
       filteredData = filteredData.filter((item: any) => {
         const itemValue = item[columnId];
+
+        // Handle boolean values (e.g., is_active field)
+        if (typeof itemValue === 'boolean') {
+          // Convert boolean to 'Active'/'Inactive' string for comparison
+          const statusString = itemValue ? 'Active' : 'Inactive';
+          return statusString === appliedStatusFilter;
+        }
+
+        // Handle string values directly
         return itemValue === appliedStatusFilter;
       });
-      console.log(`Applied filter for ${appliedStatusFilter}:`, filteredData.length, 'records');
+      console.log(`Applied filter for ${columnId} = ${appliedStatusFilter}:`, filteredData.length, 'records');
+    }
+
+    // Apply manual role filtering if a specific role is applied
+    if (appliedRoleFilter !== 'all' && roleFilterConfig?.enabled) {
+      const columnId = roleFilterConfig?.columnId || 'role';
+      filteredData = filteredData.filter((item: any) => {
+        const itemValue = item[columnId];
+
+        // Handle boolean values
+        if (typeof itemValue === 'boolean') {
+          const statusString = itemValue ? 'Active' : 'Inactive';
+          return statusString === appliedRoleFilter;
+        }
+
+        // Handle string values directly
+        return itemValue === appliedRoleFilter;
+      });
+      console.log(`Applied filter for ${columnId} = ${appliedRoleFilter}:`, filteredData.length, 'records');
+    }
+
+    // Apply custom filters
+    if (config.filters.customFilters) {
+      config.filters.customFilters.forEach((filter) => {
+        const appliedValue = appliedCustomFilters[filter.columnId];
+        if (appliedValue && appliedValue !== 'all' && filter.enabled) {
+          filteredData = filteredData.filter((item: any) => {
+            const itemValue = item[filter.columnId];
+
+            // Handle boolean values
+            if (typeof itemValue === 'boolean') {
+              const statusString = itemValue ? 'Active' : 'Inactive';
+              return statusString === appliedValue;
+            }
+
+            // Handle string values directly
+            return itemValue === appliedValue;
+          });
+          console.log(`Applied filter for ${filter.columnId} = ${appliedValue}:`, filteredData.length, 'records');
+        }
+      });
     }
 
     if (config.paginationMode === 'static') {
       return filteredData;
     }
     return filteredData;
-  }, [safeData.data, config.paginationMode, appliedStatusFilter, config.filters.statusFilter]);
+  }, [
+    safeData.data,
+    config.paginationMode,
+    appliedStatusFilter,
+    appliedRoleFilter,
+    appliedCustomFilters,
+    statusFilterConfig,
+    roleFilterConfig,
+    config.filters.customFilters,
+  ]);
 
   // Helper function to export data to CSV
   const exportToCSV = () => {
     // Get the currently visible/filtered rows from the table
     const rows = table.getFilteredRowModel().rows as Row<T>[];
-    
+
     exportTableToCSV(rows, columns, {
       fileName: config.export?.fileName || 'export.csv',
       includeHeaders: config.export?.includeHeaders ?? true,
@@ -212,6 +293,16 @@ export function DataTable<T>({
     setColumnFilters([]);
     setSelectedStatusFilter('all');
     setAppliedStatusFilter('all');
+    setSelectedRoleFilter('all');
+    setAppliedRoleFilter('all');
+
+    // Clear custom filters
+    const clearedFilters: Record<string, string> = {};
+    config.filters.customFilters?.forEach((filter) => {
+      clearedFilters[filter.columnId] = 'all';
+    });
+    setSelectedCustomFilters(clearedFilters);
+    setAppliedCustomFilters(clearedFilters);
   };
 
   // Helper function to apply filters (for manual submission)
@@ -219,18 +310,21 @@ export function DataTable<T>({
     // Apply the selected status filter
     setAppliedStatusFilter(selectedStatusFilter);
 
-    if (selectedStatusFilter === 'all') {
-      // Clear all filters to show all data
-      setGlobalFilter('');
-      setColumnFilters([]);
-      console.log('Applied "All Status" filter - showing all data');
-    } else {
-      // Clear global filter and apply status filter
-      setGlobalFilter('');
-      setColumnFilters([]);
+    // Apply the selected role filter
+    setAppliedRoleFilter(selectedRoleFilter);
 
-      console.log('Applied status filter:', selectedStatusFilter);
-    }
+    // Apply custom filters
+    setAppliedCustomFilters(selectedCustomFilters);
+
+    // Clear global filter when applying column filters
+    setGlobalFilter('');
+    setColumnFilters([]);
+
+    console.log('Applied filters:', {
+      status: selectedStatusFilter,
+      role: selectedRoleFilter,
+      custom: selectedCustomFilters,
+    });
   };
 
   // Table instance with error handling
@@ -321,104 +415,148 @@ export function DataTable<T>({
         {/* Search and Filters Header */}
         {(config.search.enabled || config.filters.enabled) && (
           <div className="space-y-2">
-            {/* Filters Label */}
-            {config.filters.statusFilter?.enabled && (() => {
-              const columnId = config.filters.statusFilter?.columnId ;
-              const filterLabel = columnId;
-              return (
-                <p className="text-sm  text-gray-800 px-1 mb-0">
-                  Select {filterLabel}
-                </p>
-              );
-            })()}
-            
             <div className="flex items-center justify-between gap-4">
               {/* Left side - Filters */}
-              <div className="flex items-center gap-2">
+              <div className="flex items-end gap-3">
+                {/* Role Filter */}
+                {roleFilterConfig?.enabled && (
+                  <div className="flex flex-col gap-1">
+                    <p className="text-sm text-gray-600 px-1 h-5 flex items-center">
+                      Select {roleFilterConfig.columnName || 'Role'}
+                    </p>
+                    <Select value={selectedRoleFilter} onValueChange={(value) => setSelectedRoleFilter(value)}>
+                      <SelectTrigger className="w-40 bg-[var(--color-table-header-bg)]">
+                        <SelectValue placeholder={roleFilterConfig.columnName || 'Role'} />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="all">All {roleFilterConfig.columnName || 'Role'}</SelectItem>
+                        {roleFilterConfig.options.map((option) => (
+                          <SelectItem key={option.value} value={option.value}>
+                            {option.label}
+                          </SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
+                  </div>
+                )}
+
                 {/* Status Filter */}
-                {config.filters.statusFilter?.enabled && (
-                  <>
-                    <div className="relative">
-                      <Select
-                        value={selectedStatusFilter}
-                        onValueChange={(value) => {
-                          setSelectedStatusFilter(value);
-                        }}
+                {statusFilterConfig?.enabled && (
+                  <div className="flex flex-col gap-1">
+                    <p className="text-sm text-gray-600 px-1 h-5 flex items-center">
+                     Select {statusFilterConfig.columnName || 'Status'}
+                    </p>
+                    <Select value={selectedStatusFilter} onValueChange={(value) => setSelectedStatusFilter(value)}>
+                      <SelectTrigger className="w-40 bg-[var(--color-table-header-bg)]">
+                        <SelectValue placeholder={statusFilterConfig.columnName || 'Status'} />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="all">All {statusFilterConfig.columnName || 'Status'}</SelectItem>
+                        {statusFilterConfig.options.map((option) => (
+                          <SelectItem key={option.value} value={option.value}>
+                            {option.label}
+                          </SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
+                  </div>
+                )}
+
+                {/* Custom Filters */}
+                {config.filters.customFilters?.map(
+                  (filter) =>
+                    filter.enabled && (
+                      <div key={filter.columnId} className="flex flex-col gap-1">
+                        <p className="text-xs text-gray-600 px-1 h-5 flex items-center">{filter.columnName}</p>
+                        <Select
+                          value={selectedCustomFilters[filter.columnId] || 'all'}
+                          onValueChange={(value) =>
+                            setSelectedCustomFilters((prev) => ({ ...prev, [filter.columnId]: value }))
+                          }
+                        >
+                          <SelectTrigger className="w-40 bg-[var(--color-table-header-bg)]">
+                            <SelectValue placeholder={filter.columnName} />
+                          </SelectTrigger>
+                          <SelectContent>
+                            <SelectItem value="all">All {filter.columnName}</SelectItem>
+                            {filter.options.map((option) => (
+                              <SelectItem key={option.value} value={option.value}>
+                                {option.label}
+                              </SelectItem>
+                            ))}
+                          </SelectContent>
+                        </Select>
+                      </div>
+                    )
+                )}
+
+                {/* Actions */}
+                {(statusFilterConfig?.enabled ||
+                  roleFilterConfig?.enabled ||
+                  (config.filters.customFilters && config.filters.customFilters.some((f) => f.enabled))) && (
+                  <div className="flex flex-col gap-1">
+                    {/* invisible label spacer to match the selects’ label row */}
+                    <div className="h-5" />
+                    <div className="flex gap-2">
+                      <TooltipButton
+                        variant="outline"
+                        size="sm"
+                        onClick={applyFilters}
+                        className="h-9 w-10 p-0 bg-[var(--color-background-icon)] hover:bg-[var(--color-background-icon)]/80"
+                        tooltip="Apply Filters"
                       >
-                        <SelectTrigger className="w-32 bg-[var(--color-table-header-bg)]">
-                          <SelectValue placeholder="Status" />
-                        </SelectTrigger>
-                        <SelectContent>
-                          <SelectItem value="all">All Status</SelectItem>
-                          {config.filters.statusFilter.options.map((option) => (
-                            <SelectItem key={option.value} value={option.value}>
-                              {option.label}
-                            </SelectItem>
-                          ))}
-                        </SelectContent>
-                      </Select>
+                        <ArrowRightIcon className="h-4 w-4 text-[var(--color-title)]" />
+                      </TooltipButton>
+
+                      <TooltipButton
+                        variant="outline"
+                        size="sm"
+                        onClick={clearAllFilters}
+                        className="h-9 w-10 p-0 bg-[var(--color-background-icon)] hover:bg-[var(--color-background-icon)]/80"
+                        tooltip="Clear All Filters"
+                      >
+                        <RefreshCwIcon className="h-4 w-4 text-[var(--color-title)]" />
+                      </TooltipButton>
                     </div>
-
-                  {/* Arrow Right Button for Filter Submission */}
-                  <TooltipButton
-                    variant="outline"
-                    size="sm"
-                    onClick={applyFilters}
-                    className="h-9 w-9 p-0 bg-[var(--color-background-icon)] hover:bg-[var(--color-background-icon)]/80"
-                    tooltip="Apply Filters"
-                  >
-                    <ArrowRightIcon className="h-4 w-4 text-[var(--color-title)]" />
-                  </TooltipButton>
-
-                  {/* Refresh Button to Clear Filters */}
-                  <TooltipButton
-                    variant="outline"
-                    size="sm"
-                    onClick={clearAllFilters}
-                    className="h-9 w-9 p-0 bg-[var(--color-background-icon)] hover:bg-[var(--color-background-icon)]/80"
-                    tooltip="Clear All Filters"
-                  >
-                    <RefreshCwIcon className="h-4 w-4 text-[var(--color-title)]" />
-                  </TooltipButton>
-                </>
-                  )}
+                  </div>
+                )}
               </div>
 
               {/* Right side - Search */}
-              <div className="flex items-center gap-2">
-              {/* Global Search */}
-              {config.search.enabled && (
-                <div className="relative max-w-sm">
-                  <Input
-                    placeholder={config.search.placeholder}
-                    value={globalFilter}
-                    onChange={(e) => setGlobalFilter(e.target.value)}
-                    className="pl-3 pr-10 bg-[var(--color-table-header-bg)]"
-                  />
-                  {globalFilter ? (
-                    <button
-                      onClick={() => setGlobalFilter('')}
-                      className="absolute right-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-[var(--color-title)] hover:text-[var(--color-title)]/70 transition-colors cursor-pointer"
-                      aria-label="Clear search"
-                    >
-                      <X className="h-4 w-4" />
-                    </button>
-                  ) : (
-                    <SearchIcon className="absolute right-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-[var(--color-title)] pointer-events-none" />
-                  )}
-                </div>
-              )}
-              {config.export?.enabled && (
-                <TooltipButton
-                  variant="outline"
-                  size="sm"
-                  onClick={exportToCSV}
-                  className="h-9 w-9 p-0 text-[var(--color-white)] bg-[var(--color-title)] hover:bg-[var(--color-title)] hover:opacity-90 hover:text-[var(--color-white)] transition-opacity"
-                  tooltip="Download CSV"
-                >
-                  <DownloadIcon className="h-4 w-4 text-[var(--color-white)]" />
-                </TooltipButton>
-              )}
+              <div className="flex items-center pt-4 gap-2">
+                {/* Global Search */}
+                {config.search.enabled && (
+                  <div className="relative max-w-sm">
+                    <Input
+                      placeholder={config.search.placeholder}
+                      value={globalFilter}
+                      onChange={(e) => setGlobalFilter(e.target.value)}
+                      className="pl-3 pr-10 bg-[var(--color-table-header-bg)]"
+                    />
+                    {globalFilter ? (
+                      <button
+                        onClick={() => setGlobalFilter('')}
+                        className="absolute right-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-[var(--color-title)] hover:text-[var(--color-title)]/70 transition-colors cursor-pointer"
+                        aria-label="Clear search"
+                      >
+                        <X className="h-4 w-4" />
+                      </button>
+                    ) : (
+                      <SearchIcon className="absolute right-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-[var(--color-title)] pointer-events-none" />
+                    )}
+                  </div>
+                )}
+                {config.export?.enabled && (
+                  <TooltipButton
+                    variant="outline"
+                    size="sm"
+                    onClick={exportToCSV}
+                    className="h-9 w-10 p-0 text-[var(--color-white)] bg-[var(--color-title)] hover:bg-[var(--color-title)] hover:opacity-90 hover:text-[var(--color-white)] transition-opacity"
+                    tooltip="Download CSV"
+                  >
+                    <DownloadIcon className="h-4 w-4 text-[var(--color-white)]" />
+                  </TooltipButton>
+                )}
               </div>
             </div>
           </div>
@@ -588,7 +726,6 @@ export function DataTable<T>({
                 )}
               </div>
               <div className="flex items-center gap-2">
-               
                 <TooltipButton
                   variant="outline"
                   size="sm"
@@ -612,7 +749,6 @@ export function DataTable<T>({
                 >
                   <ChevronRightIcon className="h-4 w-4" />
                 </TooltipButton>
-               
               </div>
             </div>
           </div>

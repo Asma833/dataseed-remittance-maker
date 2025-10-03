@@ -40,11 +40,39 @@ export interface TableConfig {
     filterMode: 'static' | 'dynamic';
     columnFilters: boolean;
     globalFilter: boolean;
+    filter?: {
+      statusFilter?: {
+        enabled: boolean;
+        options: { value: string; label: string }[];
+        columnId?: string;
+        columnName?: string;
+      };
+      roleFilter?: {
+        enabled: boolean;
+        options: { value: string; label: string }[];
+        columnId?: string;
+        columnName?: string;
+      };
+    };
+    // Legacy support - keep these for backward compatibility
     statusFilter?: {
       enabled: boolean;
       options: { value: string; label: string }[];
       columnId?: string;
+      columnName?: string;
     };
+    roleFilter?: {
+      enabled: boolean;
+      options: { value: string; label: string }[];
+      columnId?: string;
+      columnName?: string;
+    };
+    customFilters?: Array<{
+      enabled: boolean;
+      options: { value: string; label: string }[];
+      columnId: string;
+      columnName: string;
+    }>;
   };
   
   // Sorting settings

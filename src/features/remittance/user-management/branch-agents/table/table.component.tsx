@@ -27,15 +27,28 @@ const BranchAgentTable = () => {
       filterMode: 'static' as const,
       columnFilters: true,
       globalFilter: true,
-      statusFilter: {
+      filter:{
+      roleFilter: {
+        enabled: true,
+        options: [
+          { value: 'branch_agent_maker', label: 'Maker' },
+          { value: 'branch_agent_checker', label: 'Checker' },
+          { value: 'branch_agent_admin', label: 'Admin' },
+        ],
+       columnId: 'role',
+       columnName:'Role'
+      },
+        statusFilter: {
         enabled: true,
         options: [
           { value: 'Active', label: 'Active' },
           { value: 'Inactive', label: 'Inactive' },
         ],
-        columnId: 'status',
+        columnId: 'is_active',
+        columnName:'Status'
       },
     },
+  },
     loading: isLoading,
   };
 
