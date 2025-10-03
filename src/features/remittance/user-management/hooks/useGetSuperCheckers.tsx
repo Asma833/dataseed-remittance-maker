@@ -1,6 +1,6 @@
 import { useQuery } from '@tanstack/react-query';
-import { superCheckerApi } from '../user-management/api/superChecker';
-import { SuperCheckerData } from '../user-management/super-checker/table/types';
+import { SuperCheckerData } from '../super-checker/table/types';
+import { superCheckerApi } from '../api/superChecker';
 
 export const useGetSuperCheckers = () => {
   const { data, isLoading, error, refetch } = useQuery<SuperCheckerData[]>({
