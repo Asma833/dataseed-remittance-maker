@@ -33,6 +33,7 @@ import {
   SearchIcon,
   DownloadIcon,
   Loader2,
+  X,
 } from 'lucide-react';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
@@ -381,7 +382,17 @@ export function DataTable<T>({
                     onChange={(e) => setGlobalFilter(e.target.value)}
                     className="pl-3 pr-10 bg-[var(--color-table-header-bg)]"
                   />
-                  <SearchIcon className="absolute right-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-[var(--color-title)]" />
+                  {globalFilter ? (
+                    <button
+                      onClick={() => setGlobalFilter('')}
+                      className="absolute right-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-[var(--color-title)] hover:text-[var(--color-title)]/70 transition-colors cursor-pointer"
+                      aria-label="Clear search"
+                    >
+                      <X className="h-4 w-4" />
+                    </button>
+                  ) : (
+                    <SearchIcon className="absolute right-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-[var(--color-title)] pointer-events-none" />
+                  )}
                 </div>
               )}
               <TooltipButton
