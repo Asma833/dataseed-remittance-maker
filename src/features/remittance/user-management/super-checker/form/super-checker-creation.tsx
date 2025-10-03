@@ -19,6 +19,7 @@ import { useCreateSuperChecker } from '../../hooks/useCreateSuperChecker';
 import { useUpdateSuperChecker } from '../../hooks/useUpdateSuperChecker';
 import { useGetAgents } from '../../hooks/useGetAgents';
 import { ProductTransactionSelector } from '@/components/form/product-transaction-selector';
+import type { CreateSuperCheckerRequest, UpdateSuperCheckerRequest } from '../table/types';
 
 export const CreateSuperChecker = () => {
   type SuperCheckerFormType = z.infer<typeof superCheckerSchema>;
@@ -86,27 +87,28 @@ export const CreateSuperChecker = () => {
           }
         });
 
-      const baseRequestData: any = {
-        full_name: formdata.checkerDetails.fullName,
-        phone_number: formdata.checkerDetails.phoneNumber,
-        agent_ids:["691ee70a-1a34-4012-83e8-e67883c2b772"],
-        product_types,
-        email: formdata.checkerDetails.email,
-      };
-
-      // Only include password if it's provided (for both create and update)
-      if (formdata.checkerDetails.password) {
-        baseRequestData.password = formdata.checkerDetails.password;
-      }
-
-      console.log(baseRequestData,"baseRequestData")
-      
       if (superChecker) {
-        // For update, include id
-        updateSuperChecker({ ...baseRequestData, id: superChecker.id });
+        // For update operation - password is optional
+        const updateRequestData: UpdateSuperCheckerRequest = {
+          full_name: formdata.checkerDetails.fullName,
+          phone_number: formdata.checkerDetails.phoneNumber,
+          agent_ids: ["691ee70a-1a34-4012-83e8-e67883c2b772"],
+          product_types,
+          password: formdata.checkerDetails.password,
+          id: superChecker.id
+        };
+        updateSuperChecker(updateRequestData);
       } else {
-        // For create, password is required
-        createSuperChecker(baseRequestData);
+        // For create operation - password is required
+        const createRequestData: CreateSuperCheckerRequest = {
+          full_name: formdata.checkerDetails.fullName,
+          email: formdata.checkerDetails.email,
+          phone_number: formdata.checkerDetails.phoneNumber,
+          agent_ids: ["691ee70a-1a34-4012-83e8-e67883c2b772"],
+          product_types,
+          password: formdata.checkerDetails.password || '' // Ensure password is always a string for create
+        };
+        createSuperChecker(createRequestData);
       }
   });
   const mapSuperCheckerData = (data: any) => {
@@ -206,12 +208,7 @@ export const CreateSuperChecker = () => {
       return;
     }
     
-    console.log('=== PRODUCT TYPE CHANGE EFFECT ===');
-    console.log('Product Type:', productType);
-    
     const currentTransactionMap = (getValues('checkerDetails.transactionTypeMap') || {}) as Partial<Record<'card' | 'currency', 'buy' | 'sell'>>;
-    console.log('Current Transaction Map:', currentTransactionMap);
-    
     const newTransactionMap: Partial<Record<'card' | 'currency', 'buy' | 'sell'>> = {};
     
     // Only keep transaction types for selected card/currency products
@@ -224,11 +221,8 @@ export const CreateSuperChecker = () => {
     if (productType['currency']) {
       // If currency is selected, preserve existing value or set default
       newTransactionMap.currency = currentTransactionMap?.currency || 'buy';
-      console.log('Currency is selected, setting transaction type:', newTransactionMap.currency);
     }
-    
-    console.log('New Transaction Map to be set:', newTransactionMap);
-    
+      
     // Always update the transactionTypeMap to match selected products
     // This ensures validation works correctly - only selected products need transaction types
     setValue('checkerDetails.transactionTypeMap', newTransactionMap as any, { shouldValidate: true });
