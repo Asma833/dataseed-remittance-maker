@@ -6,13 +6,11 @@ import { Button } from '@/components/ui/button';
 import { DataTable, TableData, staticConfig } from '@/components/table';
 import { PlusCircle } from 'lucide-react';
 import { TableTitle } from '@/features/auth/components/table-title';
-import { useGetSuperCheckers } from '../../../hooks/useGetSuperCheckers';
+import { useGetSuperCheckers } from '../../hooks/useGetSuperCheckers';
 
 const SuperCheckerTable = () => {
   const navigate = useNavigate();
   const { data: superCheckers = [], isLoading: loading, error } = useGetSuperCheckers();
-
-  
 
   // Table configuration
   const config = {
