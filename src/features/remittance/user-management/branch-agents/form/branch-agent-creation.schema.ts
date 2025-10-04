@@ -6,10 +6,16 @@ export const vendorDetailsSchema = z.object({
   vendorName: z
     .string()
     .min(1, "Vendor name is required")
+    .refine((val) => val.trim().length > 0, "Vendor name cannot be only spaces")
+    .refine((val) => !/^[\s-]+$/.test(val), "Vendor name cannot contain only spaces or hyphens")
+    .refine((val) => !/^[\s-]/.test(val), "Vendor name cannot start with space or hyphen")
     .describe("Agent Vendor Name"),
   vendorCode: z
     .string()
     .min(1, "Vendor code is required")
+    .refine((val) => val.trim().length > 0, "Vendor code cannot be only spaces")
+    .refine((val) => !/^[\s-]+$/.test(val), "Vendor code cannot contain only spaces or hyphens")
+    .refine((val) => !/^[\s-]/.test(val), "Vendor code cannot start with space or hyphen")
     .describe("Agent Vendor Code"),
   // systemCode: z
   //   .string()
@@ -21,6 +27,9 @@ export const basicDetailsSchema = z.object({
   fullName: z
     .string()
     .min(1, "Full name is required")
+    .refine((val) => val.trim().length > 0, "Full name cannot be only spaces")
+    .refine((val) => !/^[\s-]+$/.test(val), "Full name cannot contain only spaces or hyphens")
+    .refine((val) => !/^[\s-]/.test(val), "Full name cannot start with space or hyphen")
     .describe("Full Name"),
   emailId: z
     .string()
@@ -34,9 +43,27 @@ export const basicDetailsSchema = z.object({
 });
 
 export const addressSchema = z.object({
-  state: z.string().min(1, "State is required").describe("State"),
-  city: z.string().min(1, "City is required").describe("City"),
-  branch: z.string().min(1, "Branch is required").describe("Branch"),
+  state: z
+    .string()
+    .min(1, "State is required")
+    .refine((val) => val.trim().length > 0, "State cannot be only spaces")
+    .refine((val) => !/^[\s-]+$/.test(val), "State cannot contain only spaces or hyphens")
+    .refine((val) => !/^[\s-]/.test(val), "State cannot start with space or hyphen")
+    .describe("State"),
+  city: z
+    .string()
+    .min(1, "City is required")
+    .refine((val) => val.trim().length > 0, "City cannot be only spaces")
+    .refine((val) => !/^[\s-]+$/.test(val), "City cannot contain only spaces or hyphens")
+    .refine((val) => !/^[\s-]/.test(val), "City cannot start with space or hyphen")
+    .describe("City"),
+  branch: z
+    .string()
+    .min(1, "Branch is required")
+    .refine((val) => val.trim().length > 0, "Branch cannot be only spaces")
+    .refine((val) => !/^[\s-]+$/.test(val), "Branch cannot contain only spaces or hyphens")
+    .refine((val) => !/^[\s-]/.test(val), "Branch cannot start with space or hyphen")
+    .describe("Branch"),
 });
 
 export const roleStatusSchema = z.object({
@@ -69,10 +96,16 @@ export const securitySchema = z
     password: z
       .string()
       .min(8, "Password must be at least 8 characters long")
+      .refine((val) => val.trim().length >= 8, "Password cannot be only spaces")
+      .refine((val) => !/^[\s-]+$/.test(val), "Password cannot contain only spaces or hyphens")
+      .refine((val) => !/^[\s-]/.test(val), "Password cannot start with space or hyphen")
       .describe("Password"),
     confirmPassword: z
       .string()
       .min(8, "Confirm password must be at least 8 characters long")
+      .refine((val) => val.trim().length >= 8, "Confirm password cannot be only spaces")
+      .refine((val) => !/^[\s-]+$/.test(val), "Confirm password cannot contain only spaces or hyphens")
+      .refine((val) => !/^[\s-]/.test(val), "Confirm password cannot start with space or hyphen")
       .describe("Confirm Password"),
   })
   .superRefine(({ password, confirmPassword }, ctx) => {

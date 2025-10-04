@@ -1,7 +1,5 @@
 import { useEffect } from "react";
-import { useForm } from "react-hook-form";
-import { ArrowLeft } from "lucide-react";
-import type { z } from "zod";
+import { useForm, useWatch } from "react-hook-form";
 import { FormContentWrapper } from "@/components/form/wrapper/form-content-wrapper";
 import FormFieldRow from "@/components/form/wrapper/form-field-row";
 import Spacer from "@/components/form/wrapper/spacer";
@@ -18,6 +16,7 @@ import { TableTitle } from "@/features/auth/components/table-title";
 import { useCreateBranchAgent } from "../../hooks/useCreateBranchAgent";
 import { useUpdateBranchAgent } from "../../hooks/useUpdateBranchAgent";
 import { NotificationBanner } from "@/components/ui/notification-banner";
+import { useGetAgents } from "../../hooks/useGetAgents";
 
 
 export const CreateBranchAgent = () => {
@@ -65,6 +64,24 @@ export const CreateBranchAgent = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const branchAgent = location.state?.branchAgent;
+  const { agents } = useGetAgents();
+
+  // Watch vendor name changes to auto-populate vendor code
+  const selectedVendorName = useWatch({
+    control,
+    name: "agentDetails.vendorDetails.vendorName",
+  });
+
+  // Auto-populate vendor code when vendor name is selected
+  useEffect(() => {
+    if (selectedVendorName && !branchAgent && agents) {
+      // Find the selected agent and get its agent_code
+      const selectedAgent = agents.find(agent => agent.agent_name === selectedVendorName);
+      if (selectedAgent) {
+        setValue("agentDetails.vendorDetails.vendorCode", selectedAgent.agent_code);
+      }
+    }
+  }, [selectedVendorName, setValue, branchAgent, agents]);
 
   const handleBack = () => {
     navigate("/admin/user-management/branch-agents");
@@ -88,7 +105,7 @@ export const CreateBranchAgent = () => {
       const updatePayload = {
         id: branchAgent.id,
         full_name: data.agentDetails.basicDetails.fullName,
-        password: data.agentDetails.security.password || undefined,
+        // password: data.agentDetails.security.password,
         address_city: data.agentDetails.address.city,
         address_state: data.agentDetails.address.state,
         address_branch: data.agentDetails.address.branch,
@@ -145,7 +162,7 @@ export const CreateBranchAgent = () => {
     }
   }, [branchAgent, setValue, trigger, clearErrors]);
 
-  const config = branchAgentCreationConfig();
+  const config = branchAgentCreationConfig(agents);
 
   return (
     <div className="space-y-1 w-full">
@@ -319,3 +336,4 @@ export const CreateBranchAgent = () => {
     </div>
   );
 };
+

@@ -1,6 +1,14 @@
 import { FieldType } from "@/types/enums";
+import { Agent } from "../../api/agents";
 
-export const branchAgentCreationConfig = () => {
+export const branchAgentCreationConfig = (agents: Agent[] = []) => {
+  const agentOptions = agents.map(agent => ({
+    id:agent.id,
+    agent_code:agent.agent_code,
+    value: agent.agent_name,
+    label: agent.agent_name,
+  }));
+
   return {
     sectionTitle: "Branch Agent Creation",
     fields: {
@@ -9,16 +17,18 @@ export const branchAgentCreationConfig = () => {
         vendorName: {
           name: "agentDetails.vendorDetails.vendorName",
           label: "Vendor Name",
-          type: FieldType.Text,
+          type: FieldType.Select,
           required: true,
-          placeholder: "Enter Vendor Name",
+          placeholder: "Select Vendor Name",
+          options: agentOptions,
         },
         vendorCode: {
           name: "agentDetails.vendorDetails.vendorCode",
           label:"Vendor Code",
           type: FieldType.Text,
           required: true,
-          placeholder: "Enter Vendor Code",
+          placeholder: "Vendor Code",
+          disabled: true,
         },
         // systemCode: {
         //   name: "agentDetails.vendorDetails.systemCode",
