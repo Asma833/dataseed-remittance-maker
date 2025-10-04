@@ -15,6 +15,7 @@ export interface CreateSuperCheckerRequest {
   product_types: string[];
   phone_number: string;
   agent_ids: string[];
+  is_active?: boolean;
 }
 
 export interface UpdateSuperCheckerRequest extends Omit<CreateSuperCheckerRequest, 'password'> {

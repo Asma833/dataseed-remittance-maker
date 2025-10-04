@@ -37,6 +37,7 @@ export const CreateSuperChecker = () => {
       password: "",
       confirmPassword: "",
       transactionTypeMap: { card: 'buy' }, // default transaction type only for selected products
+      status: 'active' as 'active' | 'inactive', // default status
     },
   },
 });
@@ -95,7 +96,8 @@ export const CreateSuperChecker = () => {
           agent_ids: ["691ee70a-1a34-4012-83e8-e67883c2b772"],
           product_types,
           password: formdata.checkerDetails.password,
-          id: superChecker.id
+          id: superChecker.id,
+          is_active: formdata.checkerDetails.status === 'active'
         };
         updateSuperChecker(updateRequestData);
       } else {
@@ -106,7 +108,8 @@ export const CreateSuperChecker = () => {
           phone_number: formdata.checkerDetails.phoneNumber,
           agent_ids: ["691ee70a-1a34-4012-83e8-e67883c2b772"],
           product_types,
-          password: formdata.checkerDetails.password || '' // Ensure password is always a string for create
+          password: formdata.checkerDetails.password || '', // Ensure password is always a string for create
+          is_active: formdata.checkerDetails.status === 'active'
         };
         createSuperChecker(createRequestData);
       }
@@ -121,6 +124,7 @@ export const CreateSuperChecker = () => {
         agents: [],
         password: '',
         confirmPassword: '',
+        status: 'active' as 'active' | 'inactive',
       }
     };
     // Map incoming data fields to form field names
@@ -143,6 +147,7 @@ export const CreateSuperChecker = () => {
         agents: data.agents || [],
         password: data.password || '',
         confirmPassword: data.confirmPassword || '',
+        status: (data.is_active ? 'active' : 'inactive') as 'active' | 'inactive',
       },
     };
     return mappedData;
@@ -293,7 +298,7 @@ export const CreateSuperChecker = () => {
                 );
               })}
             </FormFieldRow>
-            {/* <FormFieldRow>
+            <FormFieldRow>
               {(['status'] as const).map((fieldName) => {
                 const field = superCheckerCreationConfig().fields.checkerDetails[fieldName];
                 return (
@@ -304,11 +309,12 @@ export const CreateSuperChecker = () => {
                       control,
                       errors,
                       disabled: fieldName === 'status' ? !superChecker : false, // Disable status field in create mode
+                      className:"justify-start"
                     })}
                   </FieldWrapper>
                 );
               })}
-            </FormFieldRow> */}
+            </FormFieldRow>
             {
               !superChecker && (
                 <NotificationBanner

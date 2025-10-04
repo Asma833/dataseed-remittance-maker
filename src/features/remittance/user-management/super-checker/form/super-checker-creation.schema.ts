@@ -34,7 +34,7 @@ export const superCheckerSchema = z
             });
           }
         }),
-      // status: z.enum(['active', 'inactive'], { message: 'Please select a status' }),
+       status: z.enum(['active', 'inactive'], { message: 'Please select a status' }),
 
       agents: z.array(z.string()).optional(),
 

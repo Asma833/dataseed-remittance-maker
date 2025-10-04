@@ -55,16 +55,16 @@ export const superCheckerCreationConfig = (agents: Agent[] = []) => {
           variant: 'circle_check_filled',
           isMulti: true
         },
-        // status: {
-        //   name: 'checkerDetails.status',
-        //   label: 'Status',
-        //   type: FieldType.Radio,
-        //   required: true,
-        //   options: {
-        //     'active': { label: 'Active', checked: true },
-        //     'inactive': { label: 'Inactive' }
-        //   }
-        // },
+        status: {
+          name: 'checkerDetails.status',
+          label: 'Status',
+          type: FieldType.Radio,
+          required: true,
+          options: {
+            'active': { label: 'Active', checked: true },
+            'inactive': { label: 'Inactive' }
+          }
+        },
         agents:{
           id:'checkerDetails.agents',
           name: 'checkerDetails.agents',
