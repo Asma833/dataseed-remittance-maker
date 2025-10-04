@@ -11,10 +11,10 @@ export const vendorDetailsSchema = z.object({
     .string()
     .min(1, "Vendor code is required")
     .describe("Agent Vendor Code"),
-  systemCode: z
-    .string()
-    .min(1, "System code is required")
-    .describe("System Code"),
+  // systemCode: z
+  //   .string()
+  //   .min(1, "System code is required")
+  //   .describe("System Code"),
 });
 
 export const basicDetailsSchema = z.object({

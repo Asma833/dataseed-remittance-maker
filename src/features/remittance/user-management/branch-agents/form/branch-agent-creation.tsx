@@ -27,8 +27,7 @@ export const CreateBranchAgent = () => {
       agentDetails: {
         vendorDetails: {
           vendorName: "",
-          vendorCode: "",
-          systemCode: "",
+          vendorCode: ""
         },
         basicDetails: {
           fullName: "",
@@ -57,6 +56,7 @@ export const CreateBranchAgent = () => {
     control,
     setValue,
     trigger,
+    clearErrors,
     formState: { errors },
     handleSubmit,
   } = methods;
@@ -82,27 +82,38 @@ export const CreateBranchAgent = () => {
   });
 
   const onSubmit = async (data: BranchAgentForm) => {
-    const payload = {
-      full_name: data.agentDetails.basicDetails.fullName,
-      email: data.agentDetails.basicDetails.emailId,
-      password: data.agentDetails.security.password,
-      address_city: data.agentDetails.address.city,
-      address_state: data.agentDetails.address.state,
-      address_branch: data.agentDetails.address.branch,
-      phone_number: data.agentDetails.basicDetails.mobileNo,
-      role: data.agentDetails.roleStatus.role,
-      agent_ids: [
-    "691ee70a-1a34-4012-83e8-e67883c2b772"
-    ]
-    };
     if (branchAgent) {
-      updateBranchAgent({
-        ...payload,
+      // Update mode - exclude email from payload
+      const updatePayload = {
         id: branchAgent.id,
+        full_name: data.agentDetails.basicDetails.fullName,
         password: data.agentDetails.security.password || undefined,
-      });
+        address_city: data.agentDetails.address.city,
+        address_state: data.agentDetails.address.state,
+        address_branch: data.agentDetails.address.branch,
+        phone_number: data.agentDetails.basicDetails.mobileNo,
+        role: data.agentDetails.roleStatus.role,
+        agent_ids: [
+          "691ee70a-1a34-4012-83e8-e67883c2b772"
+        ]
+      };
+      updateBranchAgent(updatePayload);
     } else {
-      createBranchAgent(payload);
+      // Create mode - include email in payload
+      const createPayload = {
+        full_name: data.agentDetails.basicDetails.fullName,
+        email: data.agentDetails.basicDetails.emailId,
+        password: data.agentDetails.security.password,
+        address_city: data.agentDetails.address.city,
+        address_state: data.agentDetails.address.state,
+        address_branch: data.agentDetails.address.branch,
+        phone_number: data.agentDetails.basicDetails.mobileNo,
+        role: data.agentDetails.roleStatus.role,
+        agent_ids: [
+          "691ee70a-1a34-4012-83e8-e67883c2b772"
+        ]
+      };
+      createBranchAgent(createPayload);
     }
   };
 
@@ -113,7 +124,6 @@ export const CreateBranchAgent = () => {
     if (branchAgent) {
       setValue("agentDetails.vendorDetails.vendorName", branchAgent.agent_entity_name || "");
       setValue("agentDetails.vendorDetails.vendorCode", branchAgent.agent_vendor_code || "");
-      setValue("agentDetails.vendorDetails.systemCode", "");
       setValue("agentDetails.basicDetails.fullName", branchAgent.full_name || "");
       setValue("agentDetails.basicDetails.emailId", branchAgent.email || "");
       setValue("agentDetails.basicDetails.mobileNo", "");
@@ -125,9 +135,14 @@ export const CreateBranchAgent = () => {
       setValue("agentDetails.roleStatus.status", "active");
       setValue("agentDetails.security.password", "");
       setValue("agentDetails.security.confirmPassword", "");
-      setTimeout(() => trigger(), 100);
+      
+      // Clear email error since it's disabled in update mode
+      setTimeout(() => {
+        clearErrors("agentDetails.basicDetails.emailId");
+        trigger();
+      }, 100);
     }
-  }, [branchAgent, setValue, trigger]);
+  }, [branchAgent, setValue, trigger, clearErrors]);
 
   const config = branchAgentCreationConfig();
 
@@ -150,7 +165,7 @@ export const CreateBranchAgent = () => {
               <label className="text-sm font-medium absolute">Vendor Details</label>
             </div>
               <FormFieldRow rowCols={4}>
-                {(["vendorName", "vendorCode", "systemCode"] as const).map((fieldName) => {
+                {(["vendorName", "vendorCode"] as const).map((fieldName) => {
                   const field = config.fields.agentDetails[fieldName];
                   return (
                     <FieldWrapper key={fieldName}>
@@ -179,6 +194,7 @@ export const CreateBranchAgent = () => {
                         name: field.name,
                         control,
                         errors,
+                        disabled: branchAgent && fieldName === "emailId",
                       })}
                     </FieldWrapper>
                   );

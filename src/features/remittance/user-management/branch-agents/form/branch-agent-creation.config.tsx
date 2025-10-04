@@ -20,13 +20,13 @@ export const branchAgentCreationConfig = () => {
           required: true,
           placeholder: "Enter Vendor Code",
         },
-        systemCode: {
-          name: "agentDetails.vendorDetails.systemCode",
-          label: "System Code",
-          type: FieldType.Text,
-          required: true,
-          placeholder: "Enter System Code",
-        },
+        // systemCode: {
+        //   name: "agentDetails.vendorDetails.systemCode",
+        //   label: "System Code",
+        //   type: FieldType.Text,
+        //   required: true,
+        //   placeholder: "Enter System Code",
+        // },
 
         // Basic
         fullName: {

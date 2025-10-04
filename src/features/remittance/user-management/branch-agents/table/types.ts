@@ -20,7 +20,8 @@ export interface CreateBranchAgentRequest {
   agent_ids: string[];
 }
 
-export interface UpdateBranchAgentRequest extends Omit<CreateBranchAgentRequest, 'password'> {
+export interface UpdateBranchAgentRequest extends Omit<CreateBranchAgentRequest, 'password' | 'email'> {
   id: string;
+  email?: string;
   password?: string | undefined;
 }

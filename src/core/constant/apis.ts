@@ -67,7 +67,7 @@ export const API = {
     AGENT_BRANCH_USER: {
       LIST: `/rem-users/getAllBranchAgents`,
       CREATE: `/rem-users/create-branch-agent`,
-      UPDATE: `/rem-users/update-branch-agent`,
+      UPDATE: (id: string) => `/rem-users/update-branch-agent/${id}`,
     },
     SUPER_CHECKER:{
       LIST:'/rem-users/getAllSuperCheckers',

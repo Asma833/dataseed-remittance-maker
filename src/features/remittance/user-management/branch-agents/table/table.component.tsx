@@ -38,15 +38,15 @@ const BranchAgentTable = () => {
        columnId: 'role',
        columnName:'Role'
       },
-        statusFilter: {
-        enabled: true,
-        options: [
-          { value: 'Active', label: 'Active' },
-          { value: 'Inactive', label: 'Inactive' },
-        ],
-        columnId: 'is_active',
-        columnName:'Status'
-      },
+      //   statusFilter: {
+      //   enabled: true,
+      //   options: [
+      //     { value: 'Active', label: 'Active' },
+      //     { value: 'Inactive', label: 'Inactive' },
+      //   ],
+      //   columnId: 'is_active',
+      //   columnName:'Status'
+      // },
     },
   },
     loading: isLoading,

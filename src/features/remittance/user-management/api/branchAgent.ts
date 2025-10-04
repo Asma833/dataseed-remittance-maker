@@ -12,7 +12,11 @@ export const branchAgentApi = {
     return data;
   },
   updateBranchAgent: async (request: UpdateBranchAgentRequest): Promise<BranchAgentData> => {
-    const { data } = await axiosInstance.put<BranchAgentData>(API.USER_MANAGEMENT.AGENT_BRANCH_USER.UPDATE, request);
+    const { id, ...payload } = request;
+    const { data } = await axiosInstance.patch<BranchAgentData>(
+      API.USER_MANAGEMENT.AGENT_BRANCH_USER.UPDATE(id),
+      payload
+    );
     return data;
   },
 };
