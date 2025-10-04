@@ -23,6 +23,7 @@ import { NotificationBanner } from "@/components/ui/notification-banner";
 export const CreateBranchAgent = () => {
   const methods = useForm<BranchAgentForm>({
     resolver: zodResolver(branchAgentSchema),
+    mode: "onChange",
     defaultValues: {
       agentDetails: {
         vendorDetails: {
