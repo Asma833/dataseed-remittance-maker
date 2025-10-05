@@ -32,7 +32,7 @@ export const AppRoutes = () => {
           </ProtectedRoute>
         }
       />
-      <Route path="/" element={<Navigate to={getDefaultRoute(user?.role.name)} replace />} />
+      <Route path="/" element={<Navigate to={getDefaultRoute(user?.role?.name)} replace />} />
       <Route path="/unauthorized" element={<UnauthorizedPage />} />
       <Route path="*" element={<NotFoundPage />} />
     </Routes>
