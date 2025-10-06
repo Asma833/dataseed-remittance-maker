@@ -95,6 +95,7 @@ export const BasicInformationStep: React.FC<BasicInformationStepProps> = () => {
                   ...(typeof field === 'object' && field !== null ? field : {}),
                   name: fieldName,
                   control,
+                  className:"justify-start",
                   errors,
                 })}
               </FieldWrapper>
