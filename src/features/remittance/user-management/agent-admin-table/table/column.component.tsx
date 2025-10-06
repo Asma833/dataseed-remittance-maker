@@ -12,9 +12,75 @@ const GetAgentListTableColumns = ({
 }): TableColumn<AgentAdminData>[] => {
   return [
     {
-      id: 'agentVendorCode',
-      header: 'Agent Vendor Code',
-      accessorKey: 'agentVendorCode',
+      id: 'vendorCode',
+      header: 'Vendor Code',
+      accessorKey: 'vendorCode',
+      sortable: true,
+      filterable: true,
+      meta: {
+        headerAlign: 'left',
+        cellAlign: 'left',
+      },
+    },
+    {
+      id: 'fullName',
+      header: 'Full Name',
+      accessorKey: 'fullName',
+      sortable: true,
+      filterable: true,
+      meta: {
+        headerAlign: 'left',
+        cellAlign: 'left',
+      },
+    },
+    {
+      id: 'emailId',
+      header: 'Email',
+      accessorKey: 'emailId',
+      sortable: true,
+      filterable: true,
+      meta: {
+        headerAlign: 'left',
+        cellAlign: 'left',
+      },
+    },
+    {
+      id: 'phoneNo',
+      header: 'Phone',
+      accessorKey: 'phoneNo',
+      sortable: true,
+      filterable: true,
+      meta: {
+        headerAlign: 'left',
+        cellAlign: 'left',
+      },
+    },
+    {
+      id: 'agentType',
+      header: 'Agent Type',
+      accessorKey: 'agentType',
+      sortable: true,
+      filterable: true,
+      meta: {
+        headerAlign: 'left',
+        cellAlign: 'left',
+      },
+    },
+    {
+      id: 'agentBranchCity',
+      header: 'Branch City',
+      accessorKey: 'agentBranchCity',
+      sortable: true,
+      filterable: true,
+      meta: {
+        headerAlign: 'left',
+        cellAlign: 'left',
+      },
+    },
+    {
+      id: 'ebixRMName',
+      header: 'RM Name',
+      accessorKey: 'ebixRMName',
       sortable: true,
       filterable: true,
       meta: {
@@ -34,44 +100,24 @@ const GetAgentListTableColumns = ({
       },
     },
     {
-      id: 'agentEntityName',
-      header: 'Agent Entity Name',
-      accessorKey: 'agentEntityName',
+      id: 'agreementValid',
+      header: 'Agreement Valid',
+      accessorKey: 'agreementValid',
       sortable: true,
       filterable: true,
+      cell: ({ value }) => value ? new Date(value).toLocaleDateString() : '-',
       meta: {
         headerAlign: 'left',
         cellAlign: 'left',
       },
     },
     {
-      id: 'rm',
-      header: 'RM',
-      accessorKey: 'rm',
+      id: 'rbiLicenseValidity',
+      header: 'RBI License Validity',
+      accessorKey: 'rbiLicenseValidity',
       sortable: true,
       filterable: true,
-      meta: {
-        headerAlign: 'left',
-        cellAlign: 'left',
-      },
-    },
-    {
-      id: 'agentExpiryDate',
-      header: 'Agent Expiry Date',
-      accessorKey: 'agentExpiryDate',
-      sortable: true,
-      filterable: true,
-      meta: {
-        headerAlign: 'left',
-        cellAlign: 'left',
-      },
-    },
-    {
-      id: 'rbiLicenseExpiryDate',
-      header: 'RBI License Expiry Date',
-      accessorKey: 'rbiLicenseExpiryDate',
-      sortable: true,
-      filterable: true,
+      cell: ({ value }) => value ? new Date(value).toLocaleDateString() : '-',
       meta: {
         headerAlign: 'left',
         cellAlign: 'left',

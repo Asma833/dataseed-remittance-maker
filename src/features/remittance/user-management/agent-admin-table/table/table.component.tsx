@@ -4,11 +4,8 @@ import GetAgentListTableColumns from './column.component';
 import { AgentAdminData } from './types';
 import { Button } from '@/components/ui/button';
 import { DataTable, dynamicConfig, staticConfig, TableConfig, tableConfigPresets, TableData } from '@/components/table';
-import { useGetData } from '@/hooks/useGetData';
-import { API } from '@/core/constant/apis';
-import { queryKeys } from '@/core/constant/query-keys';
+import { useGetAgentAdmins } from '../../hooks/useGetAgentAdmins';
 import { ROUTES } from '@/core/constant/route-paths';
-import { User } from '@/features/auth/types/auth.types';
 import { TableTitle } from '@/features/auth/components/table-title';
 import { PlusCircle } from 'lucide-react';
 
@@ -25,11 +22,7 @@ const AgentAdminTable = () => {
     data,
     isLoading: userLoading,
     error: userError,
-  } = useGetData<AgentAdminData[]>({
-    endpoint: API.NUSERS.USER.LIST, // TODO: Update to agent admin endpoint if different
-    queryKey: queryKeys.user.allUsers, // TODO: Update query key if needed
-    dataPath: '',
-  });
+  } = useGetAgentAdmins();
 
   // Define columns matching your design
   const columns = GetAgentListTableColumns({
@@ -52,17 +45,17 @@ const AgentAdminTable = () => {
   // Action handlers
   function handleView(user: AgentAdminData) {
     //console.log('View user:', user);
-    alert(`Viewing agent: ${user.agentEntityName}`);
+    alert(`Viewing agent: ${user.fullName}`);
   }
 
   function handleEdit(user: AgentAdminData) {
     //console.log('Edit user:', user);
-    alert(`Editing agent: ${user.agentEntityName}`);
+    alert(`Editing agent: ${user.fullName}`);
   }
 
   function handleDelete(user: AgentAdminData) {
     //console.log('Delete user:', user);
-    if (confirm(`Are you sure you want to delete ${user.agentEntityName}?`)) {
+    if (confirm(`Are you sure you want to delete ${user.fullName}?`)) {
     }
   }
 

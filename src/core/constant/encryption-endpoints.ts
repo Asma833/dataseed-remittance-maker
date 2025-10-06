@@ -89,7 +89,7 @@ export const ENDPOINT_MATCHING_RULES: EndpointRulesConfig = {
     description: 'Create super checker endpoint',
   },
   'update-super-checker':{
-    endpoint: API.USER_MANAGEMENT.SUPER_CHECKER.UPDATE,
+    endpoint: '/rem-users/update-super-checker',
     matchType: 'standard' as const,
     description: 'Update super checker endpoint',
   },
@@ -104,15 +104,21 @@ export const ENDPOINT_MATCHING_RULES: EndpointRulesConfig = {
     description: 'Create super checker endpoint',
   },
   'update-branch-agent':{
-    endpoint: API.USER_MANAGEMENT.AGENT_BRANCH_USER.UPDATE,
+    endpoint: '/rem-users/update-branch-agent',
     matchType: 'standard' as const,
-    description: 'Update super checker endpoint',
+    description: 'Update branch agent endpoint',
   },
   'get-branch-agent':{
     endpoint: API.USER_MANAGEMENT.AGENT_BRANCH_USER.LIST,
     matchType: 'standard' as const,
     description: 'Get super checker endpoint',
-  }
+  },
+   'login':{
+    endpoint: API.AUTH.LOGIN,
+    matchType: 'standard' as const,
+    description: 'Get Login',
+  },
+  
 } as const;
 
 
