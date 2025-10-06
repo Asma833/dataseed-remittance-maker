@@ -93,7 +93,7 @@ export const CreateSuperChecker = () => {
         const updateRequestData: UpdateSuperCheckerRequest = {
           full_name: formdata.checkerDetails.fullName,
           phone_number: formdata.checkerDetails.phoneNumber,
-          agent_ids: ["691ee70a-1a34-4012-83e8-e67883c2b772"],
+          agent_ids: formdata.checkerDetails.agents || [],
           product_types,
           password: formdata.checkerDetails.password,
           id: superChecker.id,
@@ -106,7 +106,7 @@ export const CreateSuperChecker = () => {
           full_name: formdata.checkerDetails.fullName,
           email: formdata.checkerDetails.email,
           phone_number: formdata.checkerDetails.phoneNumber,
-          agent_ids: ["691ee70a-1a34-4012-83e8-e67883c2b772"],
+          agent_ids: formdata.checkerDetails.agents || [],
           product_types,
           password: formdata.checkerDetails.password || '', // Ensure password is always a string for create
           is_active: formdata.checkerDetails.status === 'active'

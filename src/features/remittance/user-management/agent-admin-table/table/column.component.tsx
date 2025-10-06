@@ -12,9 +12,9 @@ const GetAgentListTableColumns = ({
 }): TableColumn<AgentAdminData>[] => {
   return [
     {
-      id: 'vendorCode',
-      header: 'Vendor Code',
-      accessorKey: 'vendorCode',
+      id: 'agent_code',
+      header: 'Agent Code',
+      accessorKey: 'agent_code',
       sortable: true,
       filterable: true,
       meta: {
@@ -23,9 +23,9 @@ const GetAgentListTableColumns = ({
       },
     },
     {
-      id: 'fullName',
-      header: 'Full Name',
-      accessorKey: 'fullName',
+      id: 'agent_name',
+      header: 'Agent Name',
+      accessorKey: 'agent_name',
       sortable: true,
       filterable: true,
       meta: {
@@ -34,9 +34,9 @@ const GetAgentListTableColumns = ({
       },
     },
     {
-      id: 'emailId',
+      id: 'email',
       header: 'Email',
-      accessorKey: 'emailId',
+      accessorKey: 'email',
       sortable: true,
       filterable: true,
       meta: {
@@ -45,9 +45,9 @@ const GetAgentListTableColumns = ({
       },
     },
     {
-      id: 'phoneNo',
-      header: 'Phone',
-      accessorKey: 'phoneNo',
+      id: 'phone_number',
+      header: 'Phone Number',
+      accessorKey: 'phone_number',
       sortable: true,
       filterable: true,
       meta: {
@@ -56,9 +56,9 @@ const GetAgentListTableColumns = ({
       },
     },
     {
-      id: 'agentType',
+      id: 'agent_type',
       header: 'Agent Type',
-      accessorKey: 'agentType',
+      accessorKey: 'agent_type',
       sortable: true,
       filterable: true,
       meta: {
@@ -67,9 +67,9 @@ const GetAgentListTableColumns = ({
       },
     },
     {
-      id: 'agentBranchCity',
+      id: 'agent_branch_city',
       header: 'Branch City',
-      accessorKey: 'agentBranchCity',
+      accessorKey: 'agent_branch_city',
       sortable: true,
       filterable: true,
       meta: {
@@ -78,9 +78,9 @@ const GetAgentListTableColumns = ({
       },
     },
     {
-      id: 'ebixRMName',
+      id: 'rm_name',
       header: 'RM Name',
-      accessorKey: 'ebixRMName',
+      accessorKey: 'rm_name',
       sortable: true,
       filterable: true,
       meta: {
@@ -89,9 +89,9 @@ const GetAgentListTableColumns = ({
       },
     },
     {
-      id: 'systemCode',
+      id: 'system_code',
       header: 'System Code',
-      accessorKey: 'systemCode',
+      accessorKey: 'system_code',
       sortable: true,
       filterable: true,
       meta: {
@@ -100,24 +100,30 @@ const GetAgentListTableColumns = ({
       },
     },
     {
-      id: 'agreementValid',
+      id: 'documents.agreementValid',
       header: 'Agreement Valid',
-      accessorKey: 'agreementValid',
-      sortable: true,
-      filterable: true,
-      cell: ({ value }) => value ? new Date(value).toLocaleDateString() : '-',
+      accessorKey: 'documents',
+      sortable: false,
+      filterable: false,
+      cell: ({ value }: { value: any }) => {
+        const agreementValid = value?.agreementValid;
+        return agreementValid ? new Date(agreementValid).toLocaleDateString() : '-';
+      },
       meta: {
         headerAlign: 'left',
         cellAlign: 'left',
       },
     },
     {
-      id: 'rbiLicenseValidity',
+      id: 'documents.rbiLicenseValidity',
       header: 'RBI License Validity',
-      accessorKey: 'rbiLicenseValidity',
-      sortable: true,
-      filterable: true,
-      cell: ({ value }) => value ? new Date(value).toLocaleDateString() : '-',
+      accessorKey: 'documents',
+      sortable: false,
+      filterable: false,
+      cell: ({ value }: { value: any }) => {
+        const rbiLicenseValidity = value?.rbiLicenseValidity;
+        return rbiLicenseValidity ? new Date(rbiLicenseValidity).toLocaleDateString() : '-';
+      },
       meta: {
         headerAlign: 'left',
         cellAlign: 'left',
@@ -133,17 +139,6 @@ const GetAgentListTableColumns = ({
       meta: {
         headerAlign: 'center',
         cellAlign: 'center',
-      },
-    },
-    {
-      id: 'reasonForInactive',
-      header: 'Reason for Inactive',
-      accessorKey: 'reasonForInactive',
-      sortable: true,
-      filterable: true,
-      meta: {
-        headerAlign: 'left',
-        cellAlign: 'left',
       },
     },
     {

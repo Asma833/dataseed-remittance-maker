@@ -4,7 +4,11 @@ import { API } from '@/core/constant/apis';
 
 export const agentAdminApi = {
   getAgentAdmins: async (): Promise<AgentAdminData[]> => {
-    const { data } = await axiosInstance.get<AgentAdminData[]>(API.USER_MANAGEMENT.AGENT_ADMINS.LIST);
+    const { data } = await axiosInstance.get<AgentAdminData[]>(API.USER_MANAGEMENT.AGENTS.LIST);
+    return data;
+  },
+  createAgent: async (request: any): Promise<any> => {
+    const { data } = await axiosInstance.post<any>(API.USER_MANAGEMENT.AGENTS.CREATE, request);
     return data;
   },
   createAgentAdmin: async (request: CreateAgentAdminRequest): Promise<AgentAdminData> => {

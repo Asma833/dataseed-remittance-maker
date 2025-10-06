@@ -64,6 +64,18 @@ export const agentAdminCreationSchema = z.object({
   })).max(3, 'Maximum 3 bank accounts allowed'),
 
   // Documents
+  agreementValid: z.string().optional(),
+  rbiLicenseCategory: z.string().optional(),
+  rbiLicenseValidity: z.string().optional(),
+  noOfBranches: z.union([z.string(), z.number()]).transform((val) => {
+    const str = typeof val === 'string' ? val : val.toString();
+    if (str.trim() === '') return 0;
+    const num = parseInt(str);
+    return isNaN(num) ? 0 : num;
+  }).optional(),
+  extensionMonth: z.string().optional(),
+  agreementCopy: z.any().optional(),
+  rbiLicenseCopy: z.any().optional(),
   documents: z.object({}).optional(),
 
   // Product Purpose
@@ -105,9 +117,58 @@ export const agentAdminCreationSchema = z.object({
           }
         }),
     }),
-  rateMargin: z.object({}).optional(),
-  commission: z.object({}).optional(),
-  corporateOnboarding: z.object({}).optional(),
+  rateMargin: z.object({
+    currency: z.record(z.string(), z.object({
+      buy: z.number().min(0),
+      sell: z.number().min(0),
+    })).optional(),
+    card: z.object({
+      markupFlat: z.number().min(0),
+      markupPercent: z.number().min(0),
+    }).optional(),
+    remittance: z.object({
+      slabs: z.array(z.object({
+        min: z.number().min(0),
+        max: z.number().min(0),
+        margin: z.number().min(0),
+      })).optional(),
+    }).optional(),
+  }).optional(),
+  commission_details: z.object({
+    commission_product_type: z.enum(["Remittance", "Card", "Currency"]),
+    commission_type: z.enum(["FIXED", "PERCENTAGE", "HYBRID"]),
+    product_margin: z.object({
+      agent_fixed_margin: z.enum(["FIXED", "PERCENTAGE"]),
+      all_currency: z.enum(["ALL_CURRENCY", "SPECIFIC"]),
+      all_currency_margin: z.number().min(0),
+      currency_list: z.record(z.string(), z.number().min(0)),
+    }),
+    nostro_charges: z.object({
+      type: z.enum(["FX", "PERCENTAGE"]),
+      all_currency: z.enum(["ALL_CURRENCY", "SPECIFIC"]),
+      all_currency_margin: z.number().min(0),
+      currency_list: z.record(z.string(), z.number().min(0)),
+    }),
+    tt_charges: z.object({
+      rate: z.number().min(0),
+    }),
+    other_charges: z.object({
+      rate: z.number().min(0),
+    }),
+  }).optional(),
+  corporateOnboarding: z.object({
+    enabled: z.boolean(),
+    kyc: z.object({
+      pan: z.boolean(),
+      gst: z.boolean(),
+      cin: z.boolean(),
+    }),
+    limits: z.object({
+      maxTransaction: z.number(),
+      dailyLimit: z.number(),
+    }),
+    allowedIndustries: z.array(z.string()),
+  }).optional(),
 });
 
 export const defaultValues = {
@@ -153,5 +214,91 @@ export const defaultValues = {
     chooseProductType: { card: false, currency: false, remittance: true, referral: false },
     creditType: { CNC: true, linecredit: false },
     purposeTypesForCard: { personaltravel: true, businesstravel: false, education: false, immigration: false, employment: false, medical: false },
+  },
+  rateMargin: {
+    currency: {
+      EUR: { buy: 0.12, sell: 0.2 },
+      GBP: { buy: 0.13, sell: 0.22 },
+      USD: { buy: 0.1, sell: 0.18 },
+    },
+    card: {
+      markupFlat: 0.25,
+      markupPercent: 1.1,
+    },
+    remittance: {
+      slabs: [
+        { min: 0, max: 1000, margin: 0.2 },
+        { min: 1000, max: 5000, margin: 0.15 },
+        { min: 5000, max: 10000, margin: 0.12 },
+      ],
+    },
+  },
+  commission_details: {
+    commission_product_type: 'Remittance',
+    commission_type: 'HYBRID',
+    product_margin: {
+      agent_fixed_margin: 'PERCENTAGE',
+      all_currency: 'ALL_CURRENCY',
+      all_currency_margin: 0.75,
+      currency_list: {
+        USD: 0.8,
+        EUR: 0.7,
+        GBP: 0.65,
+        CAD: 0.6,
+        AUD: 0.55,
+        JPY: 0.5,
+        SGD: 0.45,
+        CHF: 0.4,
+        AED: 0.35,
+        THB: 0.3,
+        NZD: 0.25,
+        SAR: 0.2,
+        ZAR: 0.15,
+      },
+    },
+    nostro_charges: {
+      type: 'FX',
+      all_currency: 'ALL_CURRENCY',
+      all_currency_margin: 150,
+      currency_list: {
+        USD: 175,
+        EUR: 160,
+        GBP: 155,
+        CAD: 150,
+        AUD: 145,
+        JPY: 140,
+        SGD: 135,
+        CHF: 130,
+        AED: 125,
+        THB: 120,
+        NZD: 115,
+        SAR: 110,
+        ZAR: 100,
+      },
+    },
+    tt_charges: {
+      rate: 99.5,
+    },
+    other_charges: {
+      rate: 49,
+    },
+  },
+  agreementValid: '',
+  rbiLicenseCategory: '',
+  rbiLicenseValidity: '',
+  noOfBranches: '',
+  extensionMonth: '',
+  corporateOnboarding: {
+    enabled: true,
+    kyc: {
+      pan: true,
+      gst: true,
+      cin: false,
+    },
+    limits: {
+      maxTransaction: 10000,
+      dailyLimit: 5000,
+    },
+    allowedIndustries: ['Finance', 'Technology'],
   },
 };

@@ -5,6 +5,7 @@ import { FormProvider, useForm, FieldPath } from 'react-hook-form';
 import { z } from 'zod';
 import { agentAdminCreationSchema } from './agent-admin-creation.schema';
 import { agentAdminCreationConfig } from './agent-admin-creation.config';
+import { agentAdminCreationDefaults } from './agent-admin-creation.defaults';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 
@@ -19,8 +20,9 @@ import { CorporateOnboardingStep } from './steps/CorporateOnboardingStep';
 
 import { Stepper } from './stepper';
 import { FormTitle } from '@/features/auth/components/form-title';
+import { useCreateAgent } from '../../hooks/useCreateAgent';
 
-type AgentAdminFormType = z.infer<typeof agentAdminCreationSchema>;
+type AgentAdminFormType = z.input<typeof agentAdminCreationSchema>;
 
 const AgentAdminCreation: React.FC = () => {
   const navigate = useNavigate();
@@ -33,53 +35,13 @@ const AgentAdminCreation: React.FC = () => {
   // Example: you likely get this from API/route state
   const agentCode = 'VPC0345';
   console.log(currentStep,"currentStep")
+
+  const { mutate: createAgent, isLoading: isCreating } = useCreateAgent({
+    onAgentCreateSuccess: () => navigate('/admin/agent-admin'),
+  });
   const methods = useForm({
     resolver: zodResolver(agentAdminCreationSchema),
-    defaultValues: {
-      vendorCode: 'V001',
-      fullName: 'John Doe',
-      emailId: 'john.doe@example.com',
-      phoneNo: '1234567890',
-      agentType: 'Type A',
-      agentBranchCity: 'Mumbai',
-      agentHOBranchState: 'Maharashtra',
-      ebixRMName: 'RM Name',
-      ebixRMBranchName: 'Branch Name',
-      systemCode: 'SYS001',
-      status: 'Active',
-      monthlyCreditLimit: '10000',
-      totalCreditDays: '30',
-      gstClassification: 'Regular',
-      gstNumber: '22AAAAA0000A1Z5',
-      gstPhoneNo: '9876543210',
-      flatDoorNumber: '123',
-      roadStreet: 'Main Street',
-      areaLocality: 'Locality',
-      gstCity: 'Mumbai',
-      gstState: 'Maharashtra',
-      pinCode: '400001',
-      gstBranch: 'Main Branch',
-      financeSpocName: 'Finance SPOC',
-      financeSpocEmail: 'finance@example.com',
-      financeSpocPhoneNo: '1234567890',
-      bankAccounts: [
-        {
-          bankName: 'Bank of Example',
-          branchName: 'Main Branch',
-          accountHolder: 'John Doe',
-          accountNumber: '123456789012',
-          ifscCode: 'EXAM0001234',
-        },
-      ],
-      productPurpose: {
-        addOnMargin: 'No',
-        esignDocumentDownload: 'No',
-        vkycDocumentDownload: 'No',
-        chooseProductType: { card: false, currency: false, remittance: true, referral: false },
-        creditType: { CNC: true, linecredit: false },
-        purposeTypesForCard: { personaltravel: true, businesstravel: false, education: false, immigration: false, employment: false, medical: false },
-      },
-    },
+    defaultValues: agentAdminCreationDefaults,
     mode: 'onChange',
   });
 
@@ -93,8 +55,34 @@ const AgentAdminCreation: React.FC = () => {
   const goToStep = (n: number) => setCurrentStep(clampStep(n));
 
   const getStepFields = (step: number): FieldPath<AgentAdminFormType>[] => {
-    // Temporarily disable validation for all steps to allow progression to Corporate Onboarding
-    return [];
+    const stepFieldGroups = [
+      'basicInformation',
+      'companyDetails',
+      'financeDetails',
+      'documents',
+      'productPurpose',
+      'rateMargin',
+      'commission',
+      'corporateOnboarding',
+    ];
+    const group = stepFieldGroups[step];
+    if (!group) return [];
+    const fields = (config.fields as Record<string, any>)[group];
+    if (!fields) return [];
+    const fieldNames: FieldPath<AgentAdminFormType>[] = [];
+    const collectNames = (obj: any): void => {
+      if (typeof obj === 'object' && obj !== null && !Array.isArray(obj)) {
+        if (obj.name && typeof obj.name === 'string') {
+          fieldNames.push(obj.name as FieldPath<AgentAdminFormType>);
+        } else {
+          for (const key in obj) {
+            collectNames(obj[key]);
+          }
+        }
+      }
+    };
+    collectNames(fields);
+    return fieldNames;
   };
 
   const handleNext = async () => {
@@ -119,8 +107,7 @@ const AgentAdminCreation: React.FC = () => {
   };
 
   const onSubmit = handleSubmit(async (data) => {
-    console.log('Form data:', data);
-    // navigate('/admin/agent-admin');
+    createAgent(data);
   });
 
   const renderStepContent = () => {
@@ -197,8 +184,8 @@ const AgentAdminCreation: React.FC = () => {
               </Button>
               {currentStep === 6 &&(
                 <>
-                  <Button type="submit" form="agent-admin-create-form" disabled={isSubmitting} className="w-24">
-                    {isSubmitting ? 'Submitting...' : 'Submit'}
+                  <Button type="submit" form="agent-admin-create-form" disabled={isCreating} className="w-24">
+                    {isCreating ? 'Submitting...' : 'Submit'}
                   </Button>
                 </>
               )}

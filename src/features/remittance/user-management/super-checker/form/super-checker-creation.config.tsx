@@ -5,7 +5,7 @@ export const superCheckerCreationConfig = (agents: Agent[] = []) => {
     // Transform agents data to select options format
     // value = agent_code (sent to backend as ID), label = agent_name (displayed in UI)
     const agentOptions = agents.map(agent => ({
-      value: agent.agent_code,  // This is the ID that will be sent to backend
+      value: agent.id,  // This is the ID that will be sent to backend
       label: agent.agent_name,  // This is what user sees in the dropdown
     }));
 

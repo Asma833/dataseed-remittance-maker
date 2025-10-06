@@ -118,7 +118,11 @@ export const ENDPOINT_MATCHING_RULES: EndpointRulesConfig = {
     matchType: 'standard' as const,
     description: 'Get Login',
   },
-  
+  'create-agent-admin':{
+    endpoint: API.USER_MANAGEMENT.AGENTS.CREATE,
+    matchType: 'standard' as const,
+    description: 'Create Agent Admin',
+  }
 } as const;
 
 

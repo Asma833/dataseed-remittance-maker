@@ -18,6 +18,8 @@ const AgentAdminTable = () => {
     navigate(`/admin${ROUTES.ADMIN.AGENT_ADMIN_CREATION}`);
   };
 
+  
+
   const {
     data,
     isLoading: userLoading,
@@ -45,23 +47,21 @@ const AgentAdminTable = () => {
   // Action handlers
   function handleView(user: AgentAdminData) {
     //console.log('View user:', user);
-    alert(`Viewing agent: ${user.fullName}`);
+    alert(`Viewing agent: ${user.agent_name}`);
   }
 
   function handleEdit(user: AgentAdminData) {
     //console.log('Edit user:', user);
-    alert(`Editing agent: ${user.fullName}`);
+    alert(`Editing agent: ${user.agent_name}`);
   }
 
   function handleDelete(user: AgentAdminData) {
     //console.log('Delete user:', user);
-    if (confirm(`Are you sure you want to delete ${user.fullName}?`)) {
+    if (confirm(`Are you sure you want to delete ${user.agent_name}?`)) {
     }
   }
 
-  function handleRowClick(user: AgentAdminData) {
-    //console.log('Row clicked:', user);
-  }
+  
 
   // Dynamic table actions (when using dynamic mode)
   const tableActions = {
@@ -73,19 +73,6 @@ const AgentAdminTable = () => {
         setLoading(false);
       }, 1000);
     },
-    onSortingChange: (sorting: { id: string; desc: boolean }[]) => {
-      //console.log('Sorting changed:', sorting);
-      // Here you would typically make an API call
-    },
-    onGlobalFilterChange: (filter: string) => {
-      //console.log('Global filter changed:', filter);
-      // Here you would typically make an API call
-    },
-    onColumnFiltersChange: (filters: { id: string; value: any }[]) => {
-      //console.log('Column filters changed:', filters);
-      // Here you would typically make an API call
-    },
-    onRowClick: handleRowClick,
   };
 
   //console.log('Fetched agents:', data, userLoading, userError);

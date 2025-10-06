@@ -3,141 +3,320 @@ import { Agent } from "../../api/agents";
 
 export const branchAgentCreationConfig = (agents: Agent[] = []) => {
   const agentOptions = agents.map(agent => ({
-    id:agent.id,
-    agent_code:agent.agent_code,
+    id: agent.id,
+    agent_code: agent.agent_code,
     value: agent.agent_name,
     label: agent.agent_name,
   }));
 
   return {
-    sectionTitle: "Branch Agent Creation",
+    sectionTitle: "Admin Agent Creation",
     fields: {
-      agentDetails: {
-        // Vendor
-        vendorName: {
-          name: "agentDetails.vendorDetails.vendorName",
-          label: "Vendor Name",
-          type: FieldType.Select,
-          required: true,
-          placeholder: "Select Vendor Name",
-          options: agentOptions,
-        },
-        vendorCode: {
-          name: "agentDetails.vendorDetails.vendorCode",
-          label:"Vendor Code",
-          type: FieldType.Text,
-          required: true,
-          placeholder: "Vendor Code",
-          disabled: true,
-        },
-        // systemCode: {
-        //   name: "agentDetails.vendorDetails.systemCode",
-        //   label: "System Code",
-        //   type: FieldType.Text,
-        //   required: true,
-        //   placeholder: "Enter System Code",
-        // },
-
-        // Basic
-        fullName: {
-          name: "agentDetails.basicDetails.fullName",
-          label:"Full Name",
-          type: FieldType.Text,
-          required: true,
-          placeholder: "Enter Full Name",
-        },
-        emailId: {
-          name: "agentDetails.basicDetails.emailId",
-          label: "Email Id",
-          type: FieldType.Email,
-          required: true,
-          placeholder: "Enter Email Id",
-        },
-        mobileNo: {
-          name: "agentDetails.basicDetails.mobileNo",
-          label:"Mobile No",
-          type: FieldType.Phone,
-          required: true,
-          placeholder: "Enter Phone No.",
-        },
-
-        // Address
-        state: {
-          name: "agentDetails.address.state",
-          label:"State",
-          type: FieldType.Text,
-          required: true,
-          placeholder: "Enter State",
-        },
-        city: {
-          name: "agentDetails.address.city",
-          label:"City",
-          type: FieldType.Text,
-          required: true,
-          placeholder: "Enter City",
-        },
-        branch: {
-          name: "agentDetails.address.branch",
-          label:"Branch",
-          type: FieldType.Text,
-          required: true,
-          placeholder: "Enter Branch",
-        },
-
-        // Role / Checker / Status
-        role: {
-          name: "agentDetails.roleStatus.role",
-          label:"Choose Role",
-          type: FieldType.Radio,
-          required: true,
-          isMulti:false,
-          variant:"circle_check_filled",
-          options: {
-            branch_agent_maker: { label: "Maker" },
-            branch_agent_checker: { label: "Checker", checked: true },
-            branch_agent_both: { label: "Both" },
-            branch_agent_admin: { label: "Admin" },
-          },
-        },
-        checkerList: {
-          name: "agentDetails.roleStatus.checkerList",
-          label: "Checker List",
-          type: FieldType.Select,
-          required: true,
-          placeholder: "Select Checker",
-          options: [
-            { value: "checker1", label: "Sham Shetty" },
-            { value: "checker2", label: "Checker 2" },
-            { value: "checker3", label: "Checker 3" },
-          ],
-        },
-        status: {
-          name: "agentDetails.roleStatus.status",
-          label: "Status",
-          type: FieldType.Radio,
-          required: true,
-          options: {
-            active: { label: "Active", checked: true },
-            inactive: { label: "Inactive" },
-          },
-        },
-
-        // Security
-        password: {
-          name: "agentDetails.security.password",
-          label:"Password",
-          type: FieldType.Password,
-          required: true,
-          placeholder: "Enter Password",
-        },
-        confirmPassword: {
-          name: "agentDetails.security.confirmPassword",
-          label: "Confirm Password",
-          type: FieldType.Password,
-          required: true,
-          placeholder: "Enter Password",
+      // Basic Information
+      agent_code: {
+        name: "basicInformation.agent_code",
+        label: "Agent Code",
+        type: FieldType.Text,
+        required: true,
+        placeholder: "Enter Agent Code",
+      },
+      agent_name: {
+        name: "basicInformation.agent_name",
+        label: "Agent Name",
+        type: FieldType.Text,
+        required: true,
+        placeholder: "Enter Agent Name",
+      },
+      emailId: {
+        name: "basicInformation.emailId",
+        label: "Email ID",
+        type: FieldType.Email,
+        required: true,
+        placeholder: "Enter Email ID",
+      },
+      phoneNo: {
+        name: "basicInformation.phoneNo",
+        label: "Phone No",
+        type: FieldType.Phone,
+        required: true,
+        placeholder: "Enter Phone No",
+      },
+      agentType: {
+        name: "basicInformation.agentType",
+        label: "Agent Type",
+        type: FieldType.Select,
+        required: true,
+        placeholder: "Select Agent Type",
+        options: [
+          { value: "type1", label: "Type 1" },
+          { value: "type2", label: "Type 2" },
+        ],
+      },
+      agentBranchCity: {
+        name: "basicInformation.agentBranchCity",
+        label: "Agent Branch City",
+        type: FieldType.Text,
+        required: true,
+        placeholder: "Enter Agent Branch City",
+      },
+      agentHOBranchState: {
+        name: "basicInformation.agentHOBranchState",
+        label: "Agent HO Branch State",
+        type: FieldType.Text,
+        required: true,
+        placeholder: "Enter Agent HO Branch State",
+      },
+      ebixRMName: {
+        name: "basicInformation.ebixRMName",
+        label: "Ebix RM Name",
+        type: FieldType.Text,
+        required: true,
+        placeholder: "Enter Ebix RM Name",
+      },
+      ebixRMBranchName: {
+        name: "basicInformation.ebixRMBranchName",
+        label: "Ebix RM Branch Name",
+        type: FieldType.Text,
+        required: true,
+        placeholder: "Enter Ebix RM Branch Name",
+      },
+      systemCode: {
+        name: "basicInformation.systemCode",
+        label: "System Code",
+        type: FieldType.Text,
+        required: true,
+        placeholder: "Enter System Code",
+      },
+      status: {
+        name: "basicInformation.status",
+        label: "Status",
+        type: FieldType.Radio,
+        required: true,
+        options: {
+          ACTIVE: { label: "Active", checked: true },
+          INACTIVE: { label: "Inactive" },
         },
       },
+      monthlyCreditLimit: {
+        name: "basicInformation.monthlyCreditLimit",
+        label: "Monthly Credit Limit",
+        type: FieldType.Number,
+        required: true,
+        placeholder: "Enter Monthly Credit Limit",
+      },
+      totalCreditDays: {
+        name: "basicInformation.totalCreditDays",
+        label: "Total Credit Days",
+        type: FieldType.Number,
+        required: true,
+        placeholder: "Enter Total Credit Days",
+      },
+      password: {
+        name: "basicInformation.password",
+        label: "Password",
+        type: FieldType.Password,
+        required: true,
+        placeholder: "Enter Password",
+      },
+
+      // Company Details
+      gstClassification: {
+        name: "companyDetails.gstClassification",
+        label: "GST Classification",
+        type: FieldType.Select,
+        required: true,
+        placeholder: "Select GST Classification",
+        options: [
+          { value: "regular", label: "Regular" },
+          { value: "composition", label: "Composition" },
+          { value: "exempt", label: "Exempt" },
+        ],
+      },
+      gstNumber: {
+        name: "companyDetails.gstNumber",
+        label: "GST Number",
+        type: FieldType.Text,
+        required: true,
+        placeholder: "Enter GST Number",
+      },
+      gstPhoneNo: {
+        name: "companyDetails.gstPhoneNo",
+        label: "GST Phone No",
+        type: FieldType.Phone,
+        required: true,
+        placeholder: "Enter GST Phone No",
+      },
+      flatDoorNumber: {
+        name: "companyDetails.flatDoorNumber",
+        label: "Flat/Door Number",
+        type: FieldType.Text,
+        required: true,
+        placeholder: "Enter Flat/Door Number",
+      },
+      roadStreet: {
+        name: "companyDetails.roadStreet",
+        label: "Road/Street",
+        type: FieldType.Text,
+        required: true,
+        placeholder: "Enter Road/Street",
+      },
+      areaLocality: {
+        name: "companyDetails.areaLocality",
+        label: "Area/Locality",
+        type: FieldType.Text,
+        required: true,
+        placeholder: "Enter Area/Locality",
+      },
+      gstCity: {
+        name: "companyDetails.gstCity",
+        label: "GST City",
+        type: FieldType.Text,
+        required: true,
+        placeholder: "Enter GST City",
+      },
+      gstState: {
+        name: "companyDetails.gstState",
+        label: "GST State",
+        type: FieldType.Text,
+        required: true,
+        placeholder: "Enter GST State",
+      },
+      pinCode: {
+        name: "companyDetails.pinCode",
+        label: "Pin Code",
+        type: FieldType.Text,
+        required: true,
+        placeholder: "Enter Pin Code",
+      },
+      gstBranch: {
+        name: "companyDetails.gstBranch",
+        label: "GST Branch",
+        type: FieldType.Text,
+        required: true,
+        placeholder: "Enter GST Branch",
+      },
+
+      // Finance Details
+      financeSpocName: {
+        name: "financeDetails.financeSpocName",
+        label: "Finance SPOC Name",
+        type: FieldType.Text,
+        required: true,
+        placeholder: "Enter Finance SPOC Name",
+      },
+      financeSpocEmail: {
+        name: "financeDetails.financeSpocEmail",
+        label: "Finance SPOC Email",
+        type: FieldType.Email,
+        required: true,
+        placeholder: "Enter Finance SPOC Email",
+      },
+      financeSpocPhoneNo: {
+        name: "financeDetails.financeSpocPhoneNo",
+        label: "Finance SPOC Phone No",
+        type: FieldType.Phone,
+        required: true,
+        placeholder: "Enter Finance SPOC Phone No",
+      },
+
+      // Documents
+      agreementValid: {
+        name: "documents.agreementValid",
+        label: "Agreement Valid",
+        type: FieldType.Date,
+        required: true,
+        placeholder: "Select Agreement Validity Date",
+      },
+      rbiLicenseCategory: {
+        name: "documents.rbiLicenseCategory",
+        label: "RBI License Category",
+        type: FieldType.Text,
+        required: true,
+        placeholder: "Enter RBI License Category",
+      },
+      rbiLicenseValidity: {
+        name: "documents.rbiLicenseValidity",
+        label: "RBI License Validity",
+        type: FieldType.Date,
+        required: true,
+        placeholder: "Select RBI License Validity Date",
+      },
+      noOfBranches: {
+        name: "documents.noOfBranches",
+        label: "No. of Branches",
+        type: FieldType.Number,
+        required: true,
+        placeholder: "Enter Number of Branches",
+      },
+      extensionMonth: {
+        name: "documents.extensionMonth",
+        label: "Extension Month",
+        type: FieldType.Text,
+        required: true,
+        placeholder: "Enter Extension Month",
+      },
+
+      // Product Purpose
+      addOnMargin: {
+        name: "productPurpose.addOnMargin",
+        label: "Add On Margin",
+        type: FieldType.Checkbox,
+        required: false,
+      },
+      esignDocumentDownload: {
+        name: "productPurpose.esignDocumentDownload",
+        label: "eSign Document Download",
+        type: FieldType.Checkbox,
+        required: false,
+      },
+      vkycDocumentDownload: {
+        name: "productPurpose.vkycDocumentDownload",
+        label: "VKYC Document Download",
+        type: FieldType.Checkbox,
+        required: false,
+      },
+      chooseProductType: {
+        name: "productPurpose.chooseProductType",
+        label: "Choose Product Type",
+        type: FieldType.Checkbox,
+        required: true,
+        isMulti: true,
+        options: [
+          { value: "card", label: "Card" },
+          { value: "currency", label: "Currency" },
+          { value: "remittance", label: "Remittance" },
+          { value: "referral", label: "Referral" },
+        ],
+      },
+      creditType: {
+        name: "productPurpose.creditType",
+        label: "Credit Type",
+        type: FieldType.Checkbox,
+        required: true,
+        isMulti: true,
+        options: [
+          { value: "CNC", label: "CNC" },
+          { value: "linecredit", label: "Line Credit" },
+        ],
+      },
+      purposeTypesForCard: {
+        name: "productPurpose.purposeTypesForCard",
+        label: "Purpose Types for Card",
+        type: FieldType.Checkbox,
+        required: true,
+        isMulti: true,
+        options: [
+          { value: "personaltravel", label: "Personal Travel" },
+          { value: "businesstravel", label: "Business Travel" },
+          { value: "education", label: "Education" },
+          { value: "immigration", label: "Immigration" },
+          { value: "employment", label: "Employment" },
+          { value: "medical", label: "Medical" },
+        ],
+      },
+
+      // Rate Margin - This will need custom handling for nested objects
+      // Commission - This will need custom handling for nested objects
     },
   };
 };

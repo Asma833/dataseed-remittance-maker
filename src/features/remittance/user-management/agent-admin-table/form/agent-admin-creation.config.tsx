@@ -255,10 +255,22 @@ export const agentAdminCreationConfig = () => {
           ],
           placeholder: 'Select Extension Month',
         },
+        agreementCopy: {
+          name: 'agreementCopy',
+          label: 'Agreement Copy',
+          type: FieldType.FileUpload,
+          placeholder: 'Upload Agreement Copy',
+        },
+        rbiLicenseCopy: {
+          name: 'rbiLicenseCopy',
+          label: 'RBI License Copy',
+          type: FieldType.FileUpload,
+          placeholder: 'Upload RBI License Copy',
+        },
       },
       productPurpose: {
         addOnMargin: {
-          name: 'addOnMargin',
+          name: 'productPurpose.addOnMargin',
           label: 'Add on Margin',
           type: FieldType.Radio,
           required: true,
@@ -268,7 +280,7 @@ export const agentAdminCreationConfig = () => {
           }
         },
         esignDocumentDownload: {
-          name: 'esignDocumentDownload',
+          name: 'productPurpose.esignDocumentDownload',
           label: 'Esign Document Download',
           type: FieldType.Radio,
           required: true,
@@ -278,7 +290,7 @@ export const agentAdminCreationConfig = () => {
           }
         },
         vkycDocumentDownload: {
-          name: 'vkycDocumentDownload',
+          name: 'productPurpose.vkycDocumentDownload',
           label: 'VKYC Document Download',
           type: FieldType.Radio,
           required: true,
@@ -288,7 +300,7 @@ export const agentAdminCreationConfig = () => {
           }
         },
         chooseProductType: {
-          name: 'chooseProductType',
+          name: 'productPurpose.chooseProductType',
           label: 'Choose Product Type',
           type: FieldType.Checkbox,
           options: {
@@ -300,7 +312,7 @@ export const agentAdminCreationConfig = () => {
           isMulti: true,
         },
         creditType: {
-          name: 'creditType',
+          name: 'productPurpose.creditType',
           label: 'Credit Type',
           type: FieldType.Checkbox,
           required: true,
@@ -311,7 +323,7 @@ export const agentAdminCreationConfig = () => {
           isMulti: true,
         },
         purposeTypesForCard: {
-          name: 'purposeTypesForCard',
+          name: 'productPurpose.purposeTypesForCard',
           label: 'Please Select Purpose Types for Card',
           type: FieldType.Checkbox,
           required: true,
