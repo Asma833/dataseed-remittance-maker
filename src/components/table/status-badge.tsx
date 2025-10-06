@@ -3,8 +3,12 @@ import { cn } from '@/utils/cn';
 import { StatusBadgeProps } from './types';
 
 export function StatusBadge({ status }: StatusBadgeProps) {
-  const isActive = status === 'Active';
-  
+  if (!status) {
+    return <span>-</span>;
+  }
+
+  const isActive = status === 'Active' || status === 'ACTIVE';
+
   return (
     <div className="flex items-center justify-center gap-2 w-full">
       <div
@@ -19,7 +23,7 @@ export function StatusBadge({ status }: StatusBadgeProps) {
           isActive ? 'text-green-700' : 'text-red-700'
         )}
       >
-        {status}
+        {status === 'ACTIVE' ? 'Active' : status === 'INACTIVE' ? 'Inactive' : status}
       </span>
     </div>
   );

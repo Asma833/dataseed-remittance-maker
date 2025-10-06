@@ -17,6 +17,7 @@ const GetAgentListTableColumns = ({
       accessorKey: 'agent_code',
       sortable: true,
       filterable: true,
+      cell: ({ value }) => value || '-',
       meta: {
         headerAlign: 'left',
         cellAlign: 'left',
@@ -28,6 +29,7 @@ const GetAgentListTableColumns = ({
       accessorKey: 'agent_name',
       sortable: true,
       filterable: true,
+      cell: ({ value }) => value || '-',
       meta: {
         headerAlign: 'left',
         cellAlign: 'left',
@@ -39,6 +41,7 @@ const GetAgentListTableColumns = ({
       accessorKey: 'email',
       sortable: true,
       filterable: true,
+      cell: ({ value }) => value || '-',
       meta: {
         headerAlign: 'left',
         cellAlign: 'left',
@@ -50,6 +53,7 @@ const GetAgentListTableColumns = ({
       accessorKey: 'phone_number',
       sortable: true,
       filterable: true,
+      cell: ({ value }) => value || '-',
       meta: {
         headerAlign: 'left',
         cellAlign: 'left',
@@ -61,6 +65,7 @@ const GetAgentListTableColumns = ({
       accessorKey: 'agent_type',
       sortable: true,
       filterable: true,
+      cell: ({ value }) => value || '-',
       meta: {
         headerAlign: 'left',
         cellAlign: 'left',
@@ -72,6 +77,7 @@ const GetAgentListTableColumns = ({
       accessorKey: 'agent_branch_city',
       sortable: true,
       filterable: true,
+      cell: ({ value }) => value || '-',
       meta: {
         headerAlign: 'left',
         cellAlign: 'left',
@@ -83,6 +89,7 @@ const GetAgentListTableColumns = ({
       accessorKey: 'rm_name',
       sortable: true,
       filterable: true,
+      cell: ({ value }) => value || '-',
       meta: {
         headerAlign: 'left',
         cellAlign: 'left',
@@ -94,6 +101,7 @@ const GetAgentListTableColumns = ({
       accessorKey: 'system_code',
       sortable: true,
       filterable: true,
+      cell: ({ value }) => value || '-',
       meta: {
         headerAlign: 'left',
         cellAlign: 'left',
@@ -144,7 +152,7 @@ const GetAgentListTableColumns = ({
     {
       id: 'action',
       header: 'Action',
-      cell: ({ row }) => <ActionButtons row={row} onView={handleView} onEdit={handleEdit} onDelete={handleDelete} />,
+      cell: ({ row }) => <ActionButtons row={row} onEdit={handleEdit} />,
       sortable: false,
       filterable: false,
       meta: {

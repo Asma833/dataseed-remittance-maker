@@ -122,7 +122,7 @@ export interface TableActions<T = any> {
 }
 
 export interface StatusBadgeProps {
-  status: 'Active' | 'Inactive';
+  status: string | null;
 }
 
 export interface ActionButtonsProps<T = any> {
