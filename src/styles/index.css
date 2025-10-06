@@ -55,8 +55,15 @@
   --color-gray-200: #e5e7eb;
   --color-icon-primary: #2C81E8;
   --form-background:#f1f3ff7a;
+  --color-steps-secondary:linear-gradient(87.15deg, #8E2DE2 2.58%, #4A00E0 97.85%);
+  --color-steps-primary:linear-gradient(87.15deg, #00CD07 2.58%, #00811C 97.85%);
 }
-
+.setps-primary{
+  background:var(--color-steps-secondary);
+}
+.setps-secondary{
+  background:var(--color-steps-primary);
+}
 .dark {
   --background: oklch(0.145 0 0);
   --foreground: oklch(0.985 0 0);

@@ -8,7 +8,6 @@ import { agentAdminCreationConfig } from './agent-admin-creation.config';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 
-import { CorporateOnboardingStep } from './steps/CorporateOnboardingStep';
 import { BasicInformationStep } from './steps/BasicInformationStep';
 import { CommissionStep } from './steps/CommissionStep';
 import { CompanyDetailsStep } from './steps/CompanyDetailsStep';
@@ -16,6 +15,7 @@ import { DocumentsStep } from './steps/DocumentsStep';
 import { FinanceDetailsStep } from './steps/FinanceDetailsStep';
 import { ProductPurposeStep } from './steps/ProductPurposeStep';
 import { RateMarginStep } from './steps/RateMarginStep';
+import { CorporateOnboardingStep } from './steps/CorporateOnboardingStep';
 
 import { Stepper } from './stepper';
 import { FormTitle } from '@/features/auth/components/form-title';
@@ -189,21 +189,26 @@ const AgentAdminCreation: React.FC = () => {
               <span className="font-semibold text-destructive">{agentCode}</span>
             </div>
 
-            <div className="flex items-center justify-end gap-2">
-                <Button type="button" variant="outline" disabled={currentStep === 0} onClick={handlePrevious} 
+         
+              <div className="flex items-center justify-end gap-2">
+                <Button type="button" variant="outline" disabled={currentStep === 0} onClick={handlePrevious}
                  className="w-24">
                 Back
               </Button>
-              {currentStep < steps.length - 1 ? (
-                <Button variant="secondary" type="button" onClick={handleNext}  className="w-24">
+              {currentStep === 6 &&(
+                <>
+                  <Button type="submit" form="agent-admin-create-form" disabled={isSubmitting} className="w-24">
+                    {isSubmitting ? 'Submitting...' : 'Submit'}
+                  </Button>
+                </>
+              )}
+               {currentStep !== 7 &&(
+                <Button variant="secondary" type="button" onClick={handleNext} className="w-24">
                   Next
                 </Button>
-              ) : (
-                <Button type="submit" form="agent-admin-create-form" disabled={isSubmitting}>
-                  {isSubmitting ? 'Creating...' : 'Create'}
-                </Button>
-              )}
-            </div>
+               )}
+              
+            </div> 
           </div>
           <hr className="border-gray-300 mb-2"/>
           <FormProvider {...methods}>

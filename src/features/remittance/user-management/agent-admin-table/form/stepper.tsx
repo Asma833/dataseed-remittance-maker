@@ -35,7 +35,7 @@ export function Stepper({
                 <div
                   className={cn(
                     "absolute top-5 left-1/2 w-full h-[2px] -translate-x-0 pointer-events-none",
-                    isCompleted ? "bg-green-500" : "bg-muted"
+                    isCompleted ? "setps-secondary" : "bg-muted"
                   )}
                   style={{ width: "100%" }}
                 />
@@ -60,9 +60,9 @@ export function Stepper({
                   className={cn(
                     "z-10 w-10 h-10 rounded-full flex items-center justify-center text-sm font-semibold border-2 shadow-sm",
                     isCompleted
-                      ? "bg-green-500 text-white border-green-500"
+                      ? "setps-secondary text-white border-[setps-secondary]"
                       : isCurrent
-                      ? "bg-primary text-primary-foreground border-primary"
+                      ? "setps-primary text-primary-foreground border-[setps-primary]"
                       : "bg-muted text-muted-foreground border-muted"
                   )}
                 >
