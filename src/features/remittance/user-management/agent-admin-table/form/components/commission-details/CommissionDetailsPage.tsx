@@ -3,7 +3,7 @@ import { useEffect, useMemo, useState } from "react";
 import { useFormContext } from "react-hook-form";
 
 // configuration & utils
-import { commissionDetailsConfig } from "./commission-details.config";
+import { agentAdminCreationConfig } from '../../agent-admin-creation.config';
 import { FieldType } from "@/types/enums";
 import { getController } from "@/components/form/utils/get-controller";
 import { cn } from "@/utils/cn";
@@ -41,8 +41,8 @@ export default function CommissionDetailsPage() {
   // }, [isAllCurrencyChecked__nostro]);
 
   // currency lists from config
-  const pmCurrencies = commissionDetailsConfig.fields.product_margin.currency_list.currencies;
-  const nsCurrencies = commissionDetailsConfig.fields.nostro_charges.currency_list.currencies;
+  const pmCurrencies = agentAdminCreationConfig().fields.commission.product_margin.currency_list.currencies;
+  const nsCurrencies = agentAdminCreationConfig().fields.commission.nostro_charges.currency_list.currencies;
 
   // split into two columns evenly
   const splitCurrencies = (arr: { currency_code: string }[]) => {
@@ -105,8 +105,8 @@ export default function CommissionDetailsPage() {
               <p className="text-sm text-muted-foreground">Product Type</p>
               <div className={row}>
                 {getController({
-                  ...commissionDetailsConfig.fields.commission_product_type,
-                  name: commissionDetailsConfig.fields.commission_product_type.name,
+                  ...agentAdminCreationConfig().fields.commission.commission_product_type,
+                  name: agentAdminCreationConfig().fields.commission.commission_product_type.name,
                   control,
                   errors,
                   className: `min-w-[280px] ${inputH}`,
@@ -119,8 +119,8 @@ export default function CommissionDetailsPage() {
               <p className="text-sm text-muted-foreground mb-2">Selection Commission Type</p>
               <div className={inlineRow}>
                 {getController({
-                  ...commissionDetailsConfig.fields.commission_type,
-                  name: commissionDetailsConfig.fields.commission_type.name,
+                  ...agentAdminCreationConfig().fields.commission.commission_type,
+                  name: agentAdminCreationConfig().fields.commission.commission_type.name,
                   control,
                   errors,
                   classNames: {
@@ -145,8 +145,8 @@ export default function CommissionDetailsPage() {
               {/* <p className="text-sm text-muted-foreground mb-2">Agent Fixed Markup</p> */}
               <div className={inlineRow}>
                 {getController({
-                  ...commissionDetailsConfig.fields.product_margin.agent_fixed_margin,
-                  name: commissionDetailsConfig.fields.product_margin.agent_fixed_margin.name,
+                  ...agentAdminCreationConfig().fields.commission.product_margin.agent_fixed_margin,
+                  name: agentAdminCreationConfig().fields.commission.product_margin.agent_fixed_margin.name,
                   control,
                   errors,
                   classNames: { formGroup: "flex !flex-row gap-5 items-center" },
@@ -158,8 +158,8 @@ export default function CommissionDetailsPage() {
             <div className="mb-5 grid grid-cols-[auto_1fr] gap-3 items-center">
               <div>
                 {getController({
-                  ...commissionDetailsConfig.fields.product_margin.all_currency_checkbox,
-                  name: commissionDetailsConfig.fields.product_margin.all_currency_checkbox.name,
+                  ...agentAdminCreationConfig().fields.commission.product_margin.all_currency_checkbox,
+                  name: agentAdminCreationConfig().fields.commission.product_margin.all_currency_checkbox.name,
                   control,
                   errors,
                 })}
@@ -191,7 +191,7 @@ export default function CommissionDetailsPage() {
                         {currency_code}
                       </label>
                       {getController({
-                        ...commissionDetailsConfig.fields.product_margin.currency_list,
+                        ...agentAdminCreationConfig().fields.commission.product_margin.currency_list,
                         name: `commission_details.product_margin.currency_list.${currency_code}`,
                         control,
                         errors,
@@ -215,8 +215,8 @@ export default function CommissionDetailsPage() {
               {/* <p className="text-sm text-muted-foreground mb-2">Type</p> */}
               <div className={inlineRow}>
                 {getController({
-                  ...commissionDetailsConfig.fields.nostro_charges.type,
-                  name: commissionDetailsConfig.fields.nostro_charges.type.name,
+                  ...agentAdminCreationConfig().fields.commission.nostro_charges.type,
+                  name: agentAdminCreationConfig().fields.commission.nostro_charges.type.name,
                   control,
                   errors,
                   classNames: { formGroup: "flex !flex-row gap-5 items-center" },
@@ -228,8 +228,8 @@ export default function CommissionDetailsPage() {
             <div className="mb-5 grid grid-cols-[auto_1fr] gap-3 items-center">
               <div>
                 {getController({
-                  ...commissionDetailsConfig.fields.nostro_charges.all_currency_checkbox,
-                  name: commissionDetailsConfig.fields.nostro_charges.all_currency_checkbox.name,
+                  ...agentAdminCreationConfig().fields.commission.nostro_charges.all_currency_checkbox,
+                  name: agentAdminCreationConfig().fields.commission.nostro_charges.all_currency_checkbox.name,
                   control,
                   errors,
                 })}
@@ -261,7 +261,7 @@ export default function CommissionDetailsPage() {
                         {currency_code}
                       </label>
                       {getController({
-                        ...commissionDetailsConfig.fields.nostro_charges.currency_list,
+                        ...agentAdminCreationConfig().fields.commission.nostro_charges.currency_list,
                         name: `commission_details.nostro_charges.currency_list.${currency_code}`,
                         control,
                         errors,
@@ -285,9 +285,9 @@ export default function CommissionDetailsPage() {
               <div className="max-w-[260px]">
                 {getController({
                   // ensure these exist in config; fall back to plain number field if not
-                  ...(commissionDetailsConfig.fields.tt_charges?.rate ?? {}),
+                  ...(agentAdminCreationConfig().fields.commission.tt_charges?.rate ?? {}),
                   name: "commission_details.tt_charges.rate",
-                  type: (commissionDetailsConfig.fields.tt_charges?.rate?.type as FieldType) ?? FieldType.Number,
+                  type: (agentAdminCreationConfig().fields.commission.tt_charges?.rate?.type as FieldType) ?? FieldType.Number,
                   control,
                   errors,
                   placeholder: "Enter Value",
@@ -303,9 +303,9 @@ export default function CommissionDetailsPage() {
             <div className={cardBody}>
               <div className="max-w-[260px]">
                 {getController({
-                  ...(commissionDetailsConfig.fields.other_charges?.rate ?? {}),
+                  ...(agentAdminCreationConfig().fields.commission.other_charges?.rate ?? {}),
                   name: "commission_details.other_charges.rate",
-                  type: (commissionDetailsConfig.fields.other_charges?.rate?.type as FieldType) ?? FieldType.Number,
+                  type: (agentAdminCreationConfig().fields.commission.other_charges?.rate?.type as FieldType) ?? FieldType.Number,
                   control,
                   errors,
                   placeholder: "Enter Value",

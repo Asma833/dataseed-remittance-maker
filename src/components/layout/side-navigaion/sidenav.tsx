@@ -95,7 +95,7 @@ const Sidebar: React.FC<SidebarProps> = ({ navItems, collapsed, setCollapsed }) 
                   item.disabled && 'opacity-50 cursor-not-allowed'
                 )}
               >
-                <div className={cn('flex items-center', collapsed ? 'gap-0' : 'gap-3')}>
+                <div className={cn('flex items-center', collapsed ? 'gap-0' : 'gap-2')}>
                   {item.icon && <img src={item.icon} className="h-5 w-5 flex-shrink-0"/>}
                   {!collapsed && <span className="truncate text-[13px]">{item.title}</span>}
                 </div>

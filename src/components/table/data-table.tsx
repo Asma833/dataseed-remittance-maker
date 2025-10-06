@@ -45,6 +45,7 @@ import { cn } from '@/utils/cn';
 import { TableConfig, TableColumn, TableData, TableActions } from './types';
 import { defaultTableConfig } from './config';
 import { exportTableToCSV } from './csv-export.utils';
+import { Pagination } from './pagination';
 
 interface DataTableProps<T> {
   columns: TableColumn<T>[];
@@ -696,63 +697,16 @@ export function DataTable<T>({
           </Table>
         </div>
 
-        {/* Pagination */}
+        
         {config.pagination.enabled && (
-          <div className="flex items-center justify-between px-2">
-            <div></div>
-            <div className="flex flex-1 items-center justify-end gap-5">
-              <div className="flex items-center">
-                {config.pagination.enabled && config.pagination.showPageSizeSelector && (
-                  <div className="flex items-center gap-2 bg-[var(--color-table-header-bg)] pl-3 rounded-sm font-bold">
-                    <p className="text-sm">Rows per page:</p>
-                    <Select
-                      value={table.getState().pagination.pageSize.toString()}
-                      onValueChange={(value) => {
-                        table.setPageSize(Number(value));
-                      }}
-                    >
-                      <SelectTrigger className="h-8 w-16 border-0 shadow-none">
-                        <SelectValue placeholder={table.getState().pagination.pageSize} />
-                      </SelectTrigger>
-                      <SelectContent side="top">
-                        {config.pagination.pageSizeOptions.map((pageSize) => (
-                          <SelectItem key={pageSize} value={pageSize.toString()}>
-                            {pageSize}
-                          </SelectItem>
-                        ))}
-                      </SelectContent>
-                    </Select>
-                  </div>
-                )}
-              </div>
-              <div className="flex items-center gap-2">
-                <TooltipButton
-                  variant="outline"
-                  size="sm"
-                  onClick={() => table.previousPage()}
-                  disabled={!table.getCanPreviousPage()}
-                  tooltip="Previous Page"
-                >
-                  <ChevronLeftIcon className="h-4 w-4" />
-                </TooltipButton>
-                <div className="flex items-center gap-1">
-                  <span className="text-sm font-medium">
-                    Page {table.getState().pagination.pageIndex + 1} of {Math.max(table.getPageCount(), 1)}
-                  </span>
-                </div>
-                <TooltipButton
-                  variant="outline"
-                  size="sm"
-                  onClick={() => table.nextPage()}
-                  disabled={!table.getCanNextPage()}
-                  tooltip="Next Page"
-                >
-                  <ChevronRightIcon className="h-4 w-4" />
-                </TooltipButton>
-              </div>
-            </div>
-          </div>
-        )}
+        <Pagination
+          table={table}
+          showPageSizeSelector={config.pagination.showPageSizeSelector}
+          pageSizeOptions={config.pagination.pageSizeOptions}
+          rowsLabel="Rows per Page:"
+        />
+      )}
+
       </div>
     );
   } catch (error) {
