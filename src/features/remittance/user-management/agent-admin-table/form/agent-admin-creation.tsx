@@ -102,7 +102,32 @@ const AgentAdminCreation: React.FC = () => {
           purposeTypesForCard: editData.product_purpose?.purposeTypesForCard?.reduce((acc: Record<string, boolean>, type: string) => ({ ...acc, [type]: true }), {}) || {},
         },
         rateMargin: editData.rate_margin,
-        commission_details: editData.commission,
+        commission_details: {
+          commission_product_type: editData.commission?.commission_product_type || 'Remittance',
+          commission_type: editData.commission?.commission_type || 'HYBRID',
+          product_margin: {
+            agent_fixed_margin: editData.commission?.product_margin?.agent_fixed_margin || 'PERCENTAGE',
+            all_currency: editData.commission?.product_margin?.all_currency || 'ALL_CURRENCY',
+            all_currency_margin: editData.commission?.product_margin?.all_currency_value || editData.commission?.product_margin?.all_currency_margin || 0,
+            currency_list: Array.isArray(editData.commission?.product_margin?.currency_list)
+              ? editData.commission.product_margin.currency_list.reduce((acc: Record<string, number>, item: { currency_code: string; margin: number }) => ({ ...acc, [item.currency_code]: item.margin }), {})
+              : editData.commission?.product_margin?.currency_list || {},
+          },
+          nostro_charges: {
+            type: editData.commission?.nostro_charges?.type || 'FX',
+            all_currency: editData.commission?.nostro_charges?.all_currency || 'ALL_CURRENCY',
+            all_currency_margin: editData.commission?.nostro_charges?.all_currency_value || editData.commission?.nostro_charges?.all_currency_margin || 0,
+            currency_list: Array.isArray(editData.commission?.nostro_charges?.currency_list)
+              ? editData.commission.nostro_charges.currency_list.reduce((acc: Record<string, number>, item: { currency_code: string; margin: number }) => ({ ...acc, [item.currency_code]: item.margin }), {})
+              : editData.commission?.nostro_charges?.currency_list || {},
+          },
+          tt_charges: {
+            rate: editData.commission?.tt_charges?.rate || 0,
+          },
+          other_charges: {
+            rate: editData.commission?.other_charges?.rate || 0,
+          },
+        },
         corporateOnboarding: editData.corporate_onboarding,
       };
       methods.reset(formData);

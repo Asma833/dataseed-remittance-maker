@@ -59,6 +59,7 @@ export const DocumentsStep: React.FC = () => {
                 name: 'agreementCopy',
                 control,
                 errors,
+                className:"gap-0"
               })}
             </div>
           </FieldWrapper>
@@ -100,6 +101,7 @@ export const DocumentsStep: React.FC = () => {
                 name: 'rbiLicenseCopy',
                 control,
                 errors,
+                className:"gap-0"
               })}
             </div>
           </FieldWrapper>
