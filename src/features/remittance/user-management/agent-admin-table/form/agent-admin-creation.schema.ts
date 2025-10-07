@@ -65,15 +65,20 @@ export const agentAdminCreationSchema = z.object({
 
   // Documents
   agreementValid: z.string().optional(),
-  rbiLicenseCategory: z.string().optional(),
+  rbiLicenseCategory: z.string().regex(/^(?!\s)(?!-)/, 'Cannot start with space or hyphen').optional(),
   rbiLicenseValidity: z.string().optional(),
   noOfBranches: z.union([z.string(), z.number()]).transform((val) => {
     const str = typeof val === 'string' ? val : val.toString();
     if (str.trim() === '') return 0;
     const num = parseInt(str);
     return isNaN(num) ? 0 : num;
-  }).optional(),
-  extensionMonth: z.string().optional(),
+  }).refine((val) => val >= 0, 'Number of branches cannot be negative').optional(),
+  extensionMonth: z.union([z.string(), z.number()]).transform((val) => {
+    const str = typeof val === 'string' ? val : val.toString();
+    if (str.trim() === '') return undefined;
+    const num = parseInt(str);
+    return isNaN(num) ? undefined : num;
+  }).refine((val) => val === undefined || val >= 0, 'Extension month cannot be negative').optional(),
   agreementCopy: z.any().optional(),
   rbiLicenseCopy: z.any().optional(),
   documents: z.object({}).optional(),
