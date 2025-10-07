@@ -1,23 +1,52 @@
 import { useEffect } from "react";
 import { useForm, useWatch } from "react-hook-form";
+import { useNavigate, useLocation } from "react-router-dom";
+import { zodResolver } from "@hookform/resolvers/zod";
+
+import { FormProvider } from "@/components/form/providers/form-provider";
 import { FormContentWrapper } from "@/components/form/wrapper/form-content-wrapper";
 import FormFieldRow from "@/components/form/wrapper/form-field-row";
-import Spacer from "@/components/form/wrapper/spacer";
-import { useNavigate, useLocation } from "react-router-dom";
-import { branchAgentCreationConfig } from "./branch-agent-creation.config";
 import FieldWrapper from "@/components/form/wrapper/field-wrapper";
-import { FormProvider } from "@/components/form/providers/form-provider";
-import { getController } from "@/components/form/utils/get-controller";
+import Spacer from "@/components/form/wrapper/spacer";
 import { Button } from "@/components/ui/button";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { BranchAgentForm, branchAgentSchema } from "./branch-agent-creation.schema";
+import { NotificationBanner } from "@/components/ui/notification-banner";
 import { FormTitle } from "@/features/auth/components/form-title";
 import { TableTitle } from "@/features/auth/components/table-title";
+import { getController } from "@/components/form/utils/get-controller";
+
+import { branchAgentCreationConfig } from "./branch-agent-creation.config";
+import { BranchAgentForm, branchAgentSchema } from "./branch-agent-creation.schema";
 import { useCreateBranchAgent } from "../../hooks/useCreateBranchAgent";
 import { useUpdateBranchAgent } from "../../hooks/useUpdateBranchAgent";
-import { NotificationBanner } from "@/components/ui/notification-banner";
 import { useGetAgents } from "../../hooks/useGetAgents";
 
+// Helper to normalize any vendor value to an agent object
+const resolveAgentFromValue = (
+  val: unknown,
+  agents?: Array<{ agent_code: string; agent_name: string }>
+) => {
+  if (!agents || !val) return undefined;
+
+  if (typeof val === "string") {
+    return (
+      agents.find(a => a.agent_code === val) ||
+      agents.find(a => a.agent_name === val)
+    );
+  }
+
+  if (typeof val === "object") {
+    const anyVal = val as any;
+    const byCode =
+      anyVal?.agent_code ?? anyVal?.value ?? anyVal?.code ?? anyVal?.id;
+    const byName =
+      anyVal?.agent_name ?? anyVal?.label ?? anyVal?.name ?? anyVal?.text;
+    return (
+      (byCode && agents.find(a => a.agent_code === String(byCode))) ||
+      (byName && agents.find(a => a.agent_name === String(byName)))
+    );
+  }
+  return undefined;
+};
 
 export const CreateBranchAgent = () => {
   const methods = useForm<BranchAgentForm>({
@@ -27,26 +56,12 @@ export const CreateBranchAgent = () => {
       agentDetails: {
         vendorDetails: {
           vendorName: "",
-          vendorCode: ""
+          vendorCode: "",
         },
-        basicDetails: {
-          fullName: "",
-          emailId: "",
-          mobileNo: "",
-        },
-        address: {
-          state: "",
-          city: "",
-          branch: "",
-        },
-        roleStatus: {
-          role: "branch_agent_checker",
-          status: "active",
-        },
-        security: {
-          password: "",
-          confirmPassword: "",
-        },
+        basicDetails: { fullName: "", emailId: "", mobileNo: "" },
+        address: { state: "", city: "", branch: "" },
+        roleStatus: { role: "branch_agent_checker", status: "active" },
+        security: { password: "", confirmPassword: "" },
       },
     },
   });
@@ -57,8 +72,10 @@ export const CreateBranchAgent = () => {
     reset,
     trigger,
     clearErrors,
-    formState: { errors },
     handleSubmit,
+    getValues,
+    watch,
+    formState: { errors },
   } = methods;
 
   const navigate = useNavigate();
@@ -66,60 +83,108 @@ export const CreateBranchAgent = () => {
   const branchAgent = location.state?.branchAgent;
   const { agents } = useGetAgents();
 
-  // Watch vendor name changes to auto-populate vendor code
-  const selectedVendorName = useWatch({
+  const config = branchAgentCreationConfig(agents);
+
+  // Watch the vendor select field (holds agent_code)
+  const selectedVendorValue = useWatch({
     control,
     name: "agentDetails.vendorDetails.vendorName",
   });
 
-  // Auto-populate vendor code when vendor name is selected
+  /** --- EDIT MODE PREFILL --- */
   useEffect(() => {
-    if (selectedVendorName && !branchAgent && agents) {
-      // Find the selected agent and get its agent_code
-      const selectedAgent = agents.find(agent => agent.agent_name === selectedVendorName);
-      if (selectedAgent) {
-        setValue("agentDetails.vendorDetails.vendorCode", selectedAgent.agent_code);
-      }
-    }
-  }, [selectedVendorName, setValue, branchAgent, agents]);
+    if (!branchAgent) return;
 
-  const handleBack = () => {
-    navigate("/admin/user-management/branch-agents");
-  };
+    const vendorCode = branchAgent.agent_vendor_code || "";
+    reset({
+      agentDetails: {
+        vendorDetails: {
+          vendorName: vendorCode, // select value = code
+          vendorCode: vendorCode, // mirror code
+        },
+        basicDetails: {
+          fullName: branchAgent.full_name || "",
+          emailId: branchAgent.email || "",
+          mobileNo: branchAgent.mobile_no || "",
+        },
+        address: {
+          state: branchAgent.address_state || "",
+          city: branchAgent.address_city || "",
+          branch: branchAgent.address_branch || "",
+        },
+        roleStatus: {
+          role: branchAgent.role || "branch_agent_checker",
+          status: "active",
+        },
+        security: { password: "", confirmPassword: "" },
+      },
+    });
 
-  const { mutate: createBranchAgent, isLoading: isCreating } = useCreateBranchAgent({
-    onBranchAgentCreateSuccess: () => {
-      navigate("/admin/user-management/branch-agents");
-    },
-  });
+    // Clear disabled email error
+    setTimeout(() => {
+      clearErrors("agentDetails.basicDetails.emailId");
+      trigger();
+    }, 0);
+  }, [branchAgent, reset, trigger, clearErrors]);
 
-  const { mutate: updateBranchAgent, isLoading: isUpdating } = useUpdateBranchAgent({
-    onBranchAgentUpdateSuccess: () => {
-      navigate("/admin/user-management/branch-agents");
-    },
-  });
+  /** --- WHEN SELECT CHANGES: update vendorCode --- */
+  useEffect(() => {
+    if (!agents) return;
+    const found = resolveAgentFromValue(selectedVendorValue, agents);
+    setValue("agentDetails.vendorDetails.vendorCode", found?.agent_code ?? "", {
+      shouldDirty: true,
+      shouldValidate: true,
+    });
+  }, [selectedVendorValue, agents, setValue]);
 
-  const onSubmit = async (data: BranchAgentForm) => {
+  /** --- SYNC WHEN AGENTS LOAD (update mode consistency) --- */
+  useEffect(() => {
+    if (!agents) return;
+    const raw = getValues("agentDetails.vendorDetails.vendorName");
+    const found = resolveAgentFromValue(raw, agents);
+    setValue("agentDetails.vendorDetails.vendorCode", found?.agent_code ?? "", {
+      shouldDirty: true,
+      shouldValidate: true,
+    });
+  }, [agents, getValues, setValue]);
+
+  const handleBack = () => navigate("/admin/user-management/branch-agents");
+
+  const { mutate: createBranchAgent, isLoading: isCreating } =
+    useCreateBranchAgent({
+      onBranchAgentCreateSuccess: () => navigate("/admin/user-management/branch-agents"),
+    });
+
+  const { mutate: updateBranchAgent, isLoading: isUpdating } =
+    useUpdateBranchAgent({
+      onBranchAgentUpdateSuccess: () => navigate("/admin/user-management/branch-agents"),
+    });
+
+  const onSubmit = (data: BranchAgentForm) => {
+    const resolved = resolveAgentFromValue(
+      data.agentDetails.vendorDetails.vendorName,
+      agents
+    );
+    const agentCode =
+      resolved?.agent_code ?? String(data.agentDetails.vendorDetails.vendorName ?? "");
+
     if (branchAgent) {
-      // Update mode - exclude email from payload
-      const updatePayload = {
+      // UPDATE
+      const payload = {
         id: branchAgent.id,
         full_name: data.agentDetails.basicDetails.fullName,
-        // password: data.agentDetails.security.password,
         address_city: data.agentDetails.address.city,
         address_state: data.agentDetails.address.state,
         address_branch: data.agentDetails.address.branch,
         phone_number: data.agentDetails.basicDetails.mobileNo,
         role: data.agentDetails.roleStatus.role,
-        status:data.agentDetails.roleStatus.status,
-        agent_ids: [
-          "691ee70a-1a34-4012-83e8-e67883c2b772"
-        ]
+        status: data.agentDetails.roleStatus.status,
+        agent_ids: [agentCode],
       };
-      updateBranchAgent(updatePayload);
+      updateBranchAgent(payload);
     } else {
-      // Create mode - include email in payload
-      const createPayload = {
+      // CREATE
+      const payload = {
         full_name: data.agentDetails.basicDetails.fullName,
         email: data.agentDetails.basicDetails.emailId,
         password: data.agentDetails.security.password,
@@ -128,193 +193,153 @@ export const CreateBranchAgent = () => {
         address_branch: data.agentDetails.address.branch,
         phone_number: data.agentDetails.basicDetails.mobileNo,
         role: data.agentDetails.roleStatus.role,
-        agent_ids: [
-          "691ee70a-1a34-4012-83e8-e67883c2b772"
-        ]
+        agent_ids: [agentCode],
       };
-      createBranchAgent(createPayload);
+      createBranchAgent(payload);
     }
   };
 
-  const handleFormSubmit = handleSubmit(onSubmit);
-
-  /** Optional: map backend -> frontend values */
-  useEffect(() => {
-    if (branchAgent) {
-      reset({
-        agentDetails: {
-          vendorDetails: {
-            vendorName: branchAgent.agent_entity_name || "",
-            vendorCode: branchAgent.agent_vendor_code || "",
-          },
-          basicDetails: {
-            fullName: branchAgent.full_name || "",
-            emailId: branchAgent.email || "",
-            mobileNo: branchAgent.mobile_no || "",
-          },
-          address: {
-            state: branchAgent.address_state,
-            city: branchAgent.address_city,
-            branch: branchAgent.address_branch,
-          },
-          roleStatus: {
-            role: branchAgent.role || "maker",
-            status: "active",
-          },
-          security: {
-            password: "",
-            confirmPassword: "",
-          },
-        },
-      });
-
-      // Clear email error since it's disabled in update mode
-      setTimeout(() => {
-        clearErrors("agentDetails.basicDetails.emailId");
-        trigger();
-      }, 100);
-    }
-  }, [branchAgent, reset, trigger, clearErrors]);
-
-  const config = branchAgentCreationConfig(agents);
-
   return (
     <div className="space-y-1 w-full">
-      {/* Header */}
+      {/* HEADER */}
       <div className="flex items-center space-x-2">
-       <FormTitle tableName="Super Checker List Table"
-        actionName={branchAgent ? "Update Branch Agent" : "Create New Branch Agent"}
+        <FormTitle
+          tableName="Super Checker List Table"
+          actionName={branchAgent ? "Update Branch Agent" : "Create New Branch Agent"}
         />
       </div>
 
-      {/* Form */}
+      {/* FORM */}
       <FormProvider methods={methods}>
         <FormContentWrapper className="p-4 rounded-lg mr-auto w-full shadow-top">
-          <TableTitle title={branchAgent ? "Update Branch Agent" : "Create New Branch Agent"} titleClassName="text-black"/>
+          <TableTitle
+            title={branchAgent ? "Update Branch Agent" : "Create New Branch Agent"}
+            titleClassName="text-black"
+          />
           <Spacer>
-            {/* Vendor Details */}
+            {/* --- Vendor Details --- */}
             <div className="relative p-1">
               <label className="text-sm font-medium absolute">Vendor Details</label>
             </div>
-              <FormFieldRow rowCols={4}>
-                {(["vendorName", "vendorCode"] as const).map((fieldName) => {
-                  const field = config.fields.agentDetails[fieldName];
-                  return (
-                    <FieldWrapper key={fieldName}>
-                      {getController({
-                        ...(field ?? {}),
-                        name: field.name,
-                        control,
-                        errors,
-                      })}
-                    </FieldWrapper>
-                  );
-                })}
-              </FormFieldRow>
+            <FormFieldRow rowCols={4}>
+              {(["vendorName", "vendorCode"] as const).map(fieldName => {
+                const field = config.fields.agentDetails[fieldName];
+                return (
+                  <FieldWrapper key={fieldName}>
+                    {getController({
+                      ...(field ?? {}),
+                      name: field.name,
+                      control,
+                      errors,
+                    })}
+                  </FieldWrapper>
+                );
+              })}
+            </FormFieldRow>
 
-            {/* Basic Details */}
+            {/* --- Basic Details --- */}
             <div className="relative p-1">
               <label className="text-sm font-medium absolute">Basic Details</label>
             </div>
-              <FormFieldRow rowCols={4}>
-                {(["fullName", "emailId", "mobileNo"] as const).map((fieldName) => {
-                  const field = config.fields.agentDetails[fieldName];
-                  return (
-                    <FieldWrapper key={fieldName}>
-                      {getController({
-                        ...(field ?? {}),
-                        name: field.name,
-                        control,
-                        errors,
-                        disabled: branchAgent && fieldName === "emailId",
-                      })}
-                    </FieldWrapper>
-                  );
-                })}
-              </FormFieldRow>
+            <FormFieldRow rowCols={4}>
+              {(["fullName", "emailId", "mobileNo"] as const).map(fieldName => {
+                const field = config.fields.agentDetails[fieldName];
+                return (
+                  <FieldWrapper key={fieldName}>
+                    {getController({
+                      ...(field ?? {}),
+                      name: field.name,
+                      control,
+                      errors,
+                      disabled: !!branchAgent && fieldName === "emailId",
+                    })}
+                  </FieldWrapper>
+                );
+              })}
+            </FormFieldRow>
 
-            {/* Address */}
+            {/* --- Address --- */}
             <div className="relative p-1">
               <label className="text-sm font-medium absolute">Address</label>
             </div>
-              <FormFieldRow rowCols={4}>
-                {(["state", "city", "branch"] as const).map((fieldName) => {
-                  const field = config.fields.agentDetails[fieldName];
-                  return (
-                    <FieldWrapper key={fieldName}>
-                      {getController({
-                        ...(field ?? {}),
-                        name: field.name,
-                        control,
-                        errors,
-                      })}
-                    </FieldWrapper>
-                  );
-                })}
-              </FormFieldRow>
+            <FormFieldRow rowCols={4}>
+              {(["state", "city", "branch"] as const).map(fieldName => {
+                const field = config.fields.agentDetails[fieldName];
+                return (
+                  <FieldWrapper key={fieldName}>
+                    {getController({
+                      ...(field ?? {}),
+                      name: field.name,
+                      control,
+                      errors,
+                    })}
+                  </FieldWrapper>
+                );
+              })}
+            </FormFieldRow>
 
-            {/* Role / Checker / Status */}
-              <FormFieldRow rowCols={3}>
-                {(["role"] as const).map((fieldName) => {
-                  const field = config.fields.agentDetails[fieldName];
-                  return (
-                    <FieldWrapper key={fieldName}>
-                      {getController({
-                        ...(field ?? {}),
-                        name: field.name,
-                        control,
-                        errors,
-                      })}
-                    </FieldWrapper>
-                  );
-                })}
-              </FormFieldRow>
-              <FormFieldRow rowCols={5}>
-                {(["status"] as const).map((fieldName) => {
-                  const field = config.fields.agentDetails[fieldName];
-                  return (
-                    <FieldWrapper key={fieldName}>
-                      {getController({
-                        ...(field ?? {}),
-                        name: field.name,
-                        control,
-                        errors,
-                        className:"justify-start"
-                      })}
-                    </FieldWrapper>
-                  );
-                })}
-              </FormFieldRow>
-              {
-              !branchAgent && (
-                <NotificationBanner
-                  message="Newly created branch agents active by default"
-                  variant="warning"
-                  size="sm"
-                />
-              )
-            }
-            {/* Security */}
-              <div className="relative p-1">
+            {/* --- Role & Status --- */}
+            <FormFieldRow rowCols={3}>
+              {(["role"] as const).map(fieldName => {
+                const field = config.fields.agentDetails[fieldName];
+                return (
+                  <FieldWrapper key={fieldName}>
+                    {getController({
+                      ...(field ?? {}),
+                      name: field.name,
+                      control,
+                      errors,
+                    })}
+                  </FieldWrapper>
+                );
+              })}
+            </FormFieldRow>
+            <FormFieldRow rowCols={5}>
+              {(["status"] as const).map(fieldName => {
+                const field = config.fields.agentDetails[fieldName];
+                return (
+                  <FieldWrapper key={fieldName}>
+                    {getController({
+                      ...(field ?? {}),
+                      name: field.name,
+                      control,
+                      errors,
+                      className: "justify-start",
+                    })}
+                  </FieldWrapper>
+                );
+              })}
+            </FormFieldRow>
+
+            {!branchAgent && (
+              <NotificationBanner
+                message="Newly created branch agents active by default"
+                variant="warning"
+                size="sm"
+              />
+            )}
+
+            {/* --- Security --- */}
+            <div className="relative p-1">
               <label className="text-sm font-medium absolute">Create Password</label>
             </div>
-              <FormFieldRow rowCols={4}>
-                {(["password", "confirmPassword"] as const).map((fieldName) => {
-                  const field = config.fields.agentDetails[fieldName];
-                  return (
-                    <FieldWrapper key={fieldName}>
-                      {getController({
-                        ...(field ?? {}),
-                        name: field.name,
-                        control,
-                        errors,
-                      })}
-                    </FieldWrapper>
-                  );
-                })}
-              </FormFieldRow>
+            <FormFieldRow rowCols={4}>
+              {(["password", "confirmPassword"] as const).map(fieldName => {
+                const field = config.fields.agentDetails[fieldName];
+                return (
+                  <FieldWrapper key={fieldName}>
+                    {getController({
+                      ...(field ?? {}),
+                      name: field.name,
+                      control,
+                      errors,
+                    })}
+                  </FieldWrapper>
+                );
+              })}
+            </FormFieldRow>
 
-            {/* Actions */}
+            {/* --- Actions --- */}
             <div className="flex justify-start space-x-2 px-1">
               <Button variant="outline" className="w-28" onClick={handleBack}>
                 Back
@@ -323,7 +348,7 @@ export const CreateBranchAgent = () => {
                 variant="secondary"
                 type="submit"
                 className="w-28"
-                onClick={handleFormSubmit}
+                onClick={handleSubmit(onSubmit)}
                 disabled={isCreating || isUpdating}
               >
                 {isCreating || isUpdating ? "Processing..." : branchAgent ? "Update" : "Create"}
@@ -335,4 +360,3 @@ export const CreateBranchAgent = () => {
     </div>
   );
 };
-

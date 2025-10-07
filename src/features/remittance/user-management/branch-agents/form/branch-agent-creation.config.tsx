@@ -5,7 +5,7 @@ export const branchAgentCreationConfig = (agents: Agent[] = []) => {
   const agentOptions = agents.map(agent => ({
     id:agent.id,
     agent_code:agent.agent_code,
-    value: agent.agent_name,
+    value: agent.agent_code,
     label: agent.agent_name,
   }));
 
