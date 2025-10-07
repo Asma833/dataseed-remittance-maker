@@ -42,18 +42,18 @@ export const ShadCnDatePicker = ({
                 <Button
                   variant="outline"
                   className={cn(
-                    "w-full justify-start text-left font-normal form-input shadow-none",
+                    "w-full justify-between text-left font-normal form-input shadow-none",
                     !field.value && "text-muted-foreground",
                     fieldState.error && "border-destructive focus:ring-destructive"
                   )}
                   disabled={disabled}
                 >
-                  <CalendarIcon className="mr-2 h-4 w-4" />
                   {field.value ? (
                     format(new Date(field.value), "PPP")
                   ) : (
                     <span>{placeholder}</span>
                   )}
+                  <CalendarIcon className="h-4 w-4" />
                 </Button>
               </PopoverTrigger>
               <PopoverContent className="w-auto p-0" align="start">
@@ -66,8 +66,8 @@ export const ShadCnDatePicker = ({
                       clearErrors(name);
                     }
                   }}
-                  disabled={(date) =>
-                    date > new Date() || date < new Date("1900-01-01")
+                   disabled={(date) =>
+                    date < new Date() || date < new Date("1900-01-01")
                   }
                   initialFocus
                 />

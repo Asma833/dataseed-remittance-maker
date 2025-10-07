@@ -181,7 +181,7 @@ export const DocumentsStep: React.FC = () => {
 
       {/* Company Documents */}
 
-      <div>
+      {/* <div>
        <div className="flex items-center justify-between">
           <SubTitle title="Company Documents" className="" />
         </div>
@@ -189,7 +189,7 @@ export const DocumentsStep: React.FC = () => {
           data={companyDocuments}
           columns={documentColumns}
         />
-      </div>
+      </div> */}
     </div>
   );
 };
