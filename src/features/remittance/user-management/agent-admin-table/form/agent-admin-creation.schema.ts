@@ -124,18 +124,53 @@ export const agentAdminCreationSchema = z.object({
     }),
   rateMargin: z.object({
     currency: z.record(z.string(), z.object({
-      buy: z.number().min(0),
-      sell: z.number().min(0),
+      buy: z.union([z.string(), z.number()]).transform((val) => {
+        const str = typeof val === 'string' ? val : val.toString();
+        if (str.trim() === '') return 0;
+        const num = parseFloat(str);
+        return isNaN(num) ? 0 : num;
+      }).refine((val) => val >= 0, 'Buy rate must be non-negative'),
+      sell: z.union([z.string(), z.number()]).transform((val) => {
+        const str = typeof val === 'string' ? val : val.toString();
+        if (str.trim() === '') return 0;
+        const num = parseFloat(str);
+        return isNaN(num) ? 0 : num;
+      }).refine((val) => val >= 0, 'Sell rate must be non-negative'),
     })).optional(),
     card: z.object({
-      markupFlat: z.number().min(0),
-      markupPercent: z.number().min(0),
+      markupFlat: z.union([z.string(), z.number()]).transform((val) => {
+        const str = typeof val === 'string' ? val : val.toString();
+        if (str.trim() === '') return 0;
+        const num = parseFloat(str);
+        return isNaN(num) ? 0 : num;
+      }).refine((val) => val >= 0, 'Markup flat must be non-negative'),
+      markupPercent: z.union([z.string(), z.number()]).transform((val) => {
+        const str = typeof val === 'string' ? val : val.toString();
+        if (str.trim() === '') return 0;
+        const num = parseFloat(str);
+        return isNaN(num) ? 0 : num;
+      }).refine((val) => val >= 0, 'Markup percent must be non-negative'),
     }).optional(),
     remittance: z.object({
       slabs: z.array(z.object({
-        min: z.number().min(0),
-        max: z.number().min(0),
-        margin: z.number().min(0),
+        min: z.union([z.string(), z.number()]).transform((val) => {
+          const str = typeof val === 'string' ? val : val.toString();
+          if (str.trim() === '') return 0;
+          const num = parseFloat(str);
+          return isNaN(num) ? 0 : num;
+        }).refine((val) => val >= 0, 'Min must be non-negative'),
+        max: z.union([z.string(), z.number()]).transform((val) => {
+          const str = typeof val === 'string' ? val : val.toString();
+          if (str.trim() === '') return 0;
+          const num = parseFloat(str);
+          return isNaN(num) ? 0 : num;
+        }).refine((val) => val >= 0, 'Max must be non-negative'),
+        margin: z.union([z.string(), z.number()]).transform((val) => {
+          const str = typeof val === 'string' ? val : val.toString();
+          if (str.trim() === '') return 0;
+          const num = parseFloat(str);
+          return isNaN(num) ? 0 : num;
+        }).refine((val) => val >= 0, 'Margin must be non-negative'),
       })).optional(),
     }).optional(),
   }).optional(),
@@ -145,20 +180,50 @@ export const agentAdminCreationSchema = z.object({
     product_margin: z.object({
       agent_fixed_margin: z.enum(["FIXED", "PERCENTAGE"]),
       all_currency: z.enum(["ALL_CURRENCY", "SPECIFIC"]),
-      all_currency_margin: z.number().min(0),
-      currency_list: z.record(z.string(), z.number().min(0)),
+      all_currency_margin: z.union([z.string(), z.number()]).transform((val) => {
+        const str = typeof val === 'string' ? val : val.toString();
+        if (str.trim() === '') return 0;
+        const num = parseFloat(str);
+        return isNaN(num) ? 0 : num;
+      }).refine((val) => val >= 0, 'All currency margin must be non-negative'),
+      currency_list: z.record(z.string(), z.union([z.string(), z.number()]).transform((val) => {
+        const str = typeof val === 'string' ? val : val.toString();
+        if (str.trim() === '') return 0;
+        const num = parseFloat(str);
+        return isNaN(num) ? 0 : num;
+      }).refine((val) => val >= 0, 'Currency margin must be non-negative')),
     }),
     nostro_charges: z.object({
       type: z.enum(["FX", "PERCENTAGE"]),
       all_currency: z.enum(["ALL_CURRENCY", "SPECIFIC"]),
-      all_currency_margin: z.number().min(0),
-      currency_list: z.record(z.string(), z.number().min(0)),
+      all_currency_margin: z.union([z.string(), z.number()]).transform((val) => {
+        const str = typeof val === 'string' ? val : val.toString();
+        if (str.trim() === '') return 0;
+        const num = parseFloat(str);
+        return isNaN(num) ? 0 : num;
+      }).refine((val) => val >= 0, 'All currency margin must be non-negative'),
+      currency_list: z.record(z.string(), z.union([z.string(), z.number()]).transform((val) => {
+        const str = typeof val === 'string' ? val : val.toString();
+        if (str.trim() === '') return 0;
+        const num = parseFloat(str);
+        return isNaN(num) ? 0 : num;
+      }).refine((val) => val >= 0, 'Currency margin must be non-negative')),
     }),
     tt_charges: z.object({
-      rate: z.number().min(0),
+      rate: z.union([z.string(), z.number()]).transform((val) => {
+        const str = typeof val === 'string' ? val : val.toString();
+        if (str.trim() === '') return 0;
+        const num = parseFloat(str);
+        return isNaN(num) ? 0 : num;
+      }).refine((val) => val >= 0, 'Rate must be non-negative'),
     }),
     other_charges: z.object({
-      rate: z.number().min(0),
+      rate: z.union([z.string(), z.number()]).transform((val) => {
+        const str = typeof val === 'string' ? val : val.toString();
+        if (str.trim() === '') return 0;
+        const num = parseFloat(str);
+        return isNaN(num) ? 0 : num;
+      }).refine((val) => val >= 0, 'Rate must be non-negative'),
     }),
   }).optional(),
   corporateOnboarding: z.object({
@@ -169,8 +234,18 @@ export const agentAdminCreationSchema = z.object({
       cin: z.boolean(),
     }),
     limits: z.object({
-      maxTransaction: z.number(),
-      dailyLimit: z.number(),
+      maxTransaction: z.union([z.string(), z.number()]).transform((val) => {
+        const str = typeof val === 'string' ? val : val.toString();
+        if (str.trim() === '') return 0;
+        const num = parseInt(str);
+        return isNaN(num) ? 0 : num;
+      }).refine((val) => val >= 0, 'Max transaction must be non-negative'),
+      dailyLimit: z.union([z.string(), z.number()]).transform((val) => {
+        const str = typeof val === 'string' ? val : val.toString();
+        if (str.trim() === '') return 0;
+        const num = parseInt(str);
+        return isNaN(num) ? 0 : num;
+      }).refine((val) => val >= 0, 'Daily limit must be non-negative'),
     }),
     allowedIndustries: z.array(z.string()),
   }).optional(),

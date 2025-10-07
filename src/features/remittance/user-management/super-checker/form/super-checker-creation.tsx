@@ -144,7 +144,7 @@ export const CreateSuperChecker = () => {
         email: data.email || '',
         phoneNumber: data.phone_number || '',
         productType,
-        agents: data.agents || [],
+        agents: data.agent_ids || [],
         password: data.password || '',
         confirmPassword: data.confirmPassword || '',
         status: (data.is_active ? 'active' : 'inactive') as 'active' | 'inactive',

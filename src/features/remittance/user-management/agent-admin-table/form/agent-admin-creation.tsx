@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import React, { useState, useEffect } from 'react';
+import { useNavigate, useLocation } from 'react-router-dom';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { FormProvider, useForm, FieldPath } from 'react-hook-form';
 import { z } from 'zod';
@@ -21,29 +21,53 @@ import { CorporateOnboardingStep } from './steps/CorporateOnboardingStep';
 import { Stepper } from './stepper';
 import { FormTitle } from '@/features/auth/components/form-title';
 import { useCreateAgent } from '../../hooks/useCreateAgent';
+import { useUpdateAgentAdmin } from '../../hooks/useUpdateAgentAdmin';
 
 type AgentAdminFormType = z.input<typeof agentAdminCreationSchema>;
 
 const AgentAdminCreation: React.FC = () => {
   const navigate = useNavigate();
+  const location = useLocation();
   const [currentStep, setCurrentStep] = useState(0);
   const [completedSteps, setCompletedSteps] = useState<Set<number>>(new Set());
 
   const config = agentAdminCreationConfig();
   const steps = config.steps;
 
+  const editData = location.state?.editData;
+  const isEditMode = !!editData;
+
   // Example: you likely get this from API/route state
-  const agentCode = 'VPC0345';
+  const agentCode = editData?.agent_code || 'VPC0345';
   console.log(currentStep,"currentStep")
 
   const { mutate: createAgent, isLoading: isCreating } = useCreateAgent({
     onAgentCreateSuccess: () => navigate('/admin/agent-admin'),
   });
+  const { mutate: updateAgent, isLoading: isUpdating } = useUpdateAgentAdmin({
+    onAgentAdminUpdateSuccess: () => navigate('/admin/agent-admin'),
+  });
+
   const methods = useForm({
     resolver: zodResolver(agentAdminCreationSchema),
     defaultValues: agentAdminCreationDefaults,
     mode: 'onChange',
   });
+
+  useEffect(() => {
+    if (isEditMode && editData) {
+      // Transform editData to match form structure
+      const formData = {
+        ...editData,
+        // Map nested fields if needed
+        productPurpose: editData.productPurpose || {},
+        rateMargin: editData.rateMargin || {},
+        commission_details: editData.commission || {},
+        corporateOnboarding: editData.corporate_onboarding || {},
+      };
+      methods.reset(formData);
+    }
+  }, [isEditMode, editData, methods]);
 
   const {
     handleSubmit,
@@ -107,7 +131,11 @@ const AgentAdminCreation: React.FC = () => {
   };
 
   const onSubmit = handleSubmit(async (data) => {
-    createAgent(data);
+    if (isEditMode) {
+      updateAgent({ id: editData.id, formData: data });
+    } else {
+      createAgent(data);
+    }
   });
 
   const renderStepContent = () => {
@@ -136,7 +164,7 @@ const AgentAdminCreation: React.FC = () => {
 
   return (
     <div className="w-full">
-      <FormTitle tableName="Agent Admin List Table" actionName={config.sectionTitle} className="pb-3 px-2"/>
+      <FormTitle tableName="Agent Admin List Table" actionName={isEditMode ? 'Edit Agent Admin' : config.sectionTitle} className="pb-3 px-2"/>
       <Card className="border-none space-y-0 p-2">
         <CardContent>
           {/* TOP BAR: Stepper + Agent Code + Nav */}
@@ -184,8 +212,8 @@ const AgentAdminCreation: React.FC = () => {
               </Button>
               {currentStep === 6 &&(
                 <>
-                  <Button type="submit" form="agent-admin-create-form" disabled={isCreating} className="w-24">
-                    {isCreating ? 'Submitting...' : 'Submit'}
+                  <Button type="submit" form="agent-admin-create-form" disabled={isCreating || isUpdating} className="w-24">
+                    {(isCreating || isUpdating) ? 'Submitting...' : isEditMode ? 'Update' : 'Submit'}
                   </Button>
                 </>
               )}
