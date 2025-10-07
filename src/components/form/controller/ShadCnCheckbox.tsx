@@ -58,6 +58,11 @@ export const ShadCnCheckbox = ({
   requiredMessage = "Please select at least one option",
   orientation,
 }: ShadCnCheckboxProps) => {
+  // Guard against null/undefined options
+  if (!options) {
+    return null;
+  }
+
   const {
     control,
     setValue,
@@ -183,7 +188,7 @@ export const ShadCnCheckbox = ({
         string,
         boolean
       >;
-      Object.keys(defaultSelected || {}).forEach((k) => {
+      Object?.keys(defaultSelected || {}).forEach((k) => {
         if (k in base) base[k] = !!defaultSelected[k];
       });
       return base;
@@ -209,7 +214,7 @@ export const ShadCnCheckbox = ({
           control={control}
           defaultValue={getDefaultValues()}
           render={({ field }) => {
-            const numOptions = Object.keys(options).length;
+            const numOptions = Object?.keys(options).length;
             const effectiveOrientation = orientation || (numOptions <= 10 ? "horizontal" : "vertical");
             const containerClassName =
               effectiveOrientation === "horizontal" ? "flex flex-wrap gap-x-4 gap-y-2" : "flex flex-col gap-4";
