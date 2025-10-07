@@ -7,7 +7,7 @@ import { agentAdminCreationSchema } from './agent-admin-creation.schema';
 import { agentAdminCreationConfig } from './agent-admin-creation.config';
 import { agentAdminCreationDefaults } from './agent-admin-creation.defaults';
 import { Button } from '@/components/ui/button';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Card, CardContent } from '@/components/ui/card';
 
 import { BasicInformationStep } from './steps/BasicInformationStep';
 import { CommissionStep } from './steps/CommissionStep';
@@ -57,12 +57,53 @@ const AgentAdminCreation: React.FC = () => {
     if (isEditMode && editData) {
       // Transform editData to match form structure
       const formData = {
-        ...editData,
-        // Map nested fields if needed
-        productPurpose: editData.productPurpose || {},
-        rateMargin: editData.rateMargin || {},
-        commission_details: editData.commission || {},
-        corporateOnboarding: editData.corporate_onboarding || {},
+        vendorCode: editData.agent_code,
+        fullName: editData.agent_name,
+        emailId: editData.email,
+        phoneNo: editData.phone_number,
+        agentType: editData.agent_type,
+        agentBranchCity: editData.agent_branch_city,
+        agentHOBranchState: editData.agent_ho_branch_state,
+        ebixRMName: editData.rm_name,
+        ebixRMBranchName: editData.rm_branch_name,
+        systemCode: editData.system_code,
+        status: (editData.status === "ACTIVE" ? "Active" : "Inactive") as "Active" | "Inactive",
+        monthlyCreditLimit: editData.monthly_credit_limit,
+        totalCreditDays: editData.total_credit_days,
+        // Company Details
+        gstClassification: editData.company_details?.gstClassification || '',
+        gstNumber: editData.company_details?.gstNumber || '',
+        gstPhoneNo: editData.company_details?.gstPhoneNo || '',
+        flatDoorNumber: editData.company_details?.flatDoorNumber || '',
+        roadStreet: editData.company_details?.roadStreet || '',
+        areaLocality: editData.company_details?.areaLocality || '',
+        gstCity: editData.company_details?.gstCity || '',
+        gstState: editData.company_details?.gstState || '',
+        pinCode: editData.company_details?.pinCode || '',
+        gstBranch: editData.company_details?.gstBranch || '',
+        // Finance Details
+        financeSpocName: editData.finance_details?.financeSpocName || '',
+        financeSpocEmail: editData.finance_details?.financeSpocEmail || '',
+        financeSpocPhoneNo: editData.finance_details?.financeSpocPhoneNo || '',
+        bankAccounts: editData.finance_details?.bankAccounts || [],
+        // Documents
+        agreementValid: editData.documents?.agreementValid || '',
+        rbiLicenseCategory: editData.documents?.rbiLicenseCategory || '',
+        rbiLicenseValidity: editData.documents?.rbiLicenseValidity || '',
+        noOfBranches: editData.documents?.noOfBranches || '',
+        extensionMonth: editData.documents?.extensionMonth || '',
+        agreementCopy: editData.documents?.agreementCopy || '',
+        rbiLicenseCopy: editData.documents?.rbiLicenseCopy || '',
+        productPurpose: {
+          ...editData.product_purpose,
+          // Convert arrays to objects if needed
+          creditType: editData.product_purpose?.creditType?.reduce((acc: Record<string, boolean>, type: string) => ({ ...acc, [type.toLowerCase()]: true }), {}) || {},
+          chooseProductType: editData.product_purpose?.chooseProductType?.reduce((acc: Record<string, boolean>, type: string) => ({ ...acc, [type]: true }), {}) || {},
+          purposeTypesForCard: editData.product_purpose?.purposeTypesForCard?.reduce((acc: Record<string, boolean>, type: string) => ({ ...acc, [type]: true }), {}) || {},
+        },
+        rateMargin: editData.rate_margin,
+        commission_details: editData.commission,
+        corporateOnboarding: editData.corporate_onboarding,
       };
       methods.reset(formData);
     }
