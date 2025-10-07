@@ -129,6 +129,8 @@ export interface CreateAgentAdminRequest {
     rbiLicenseValidity: string;
     noOfBranches: number;
     extensionMonth: number;
+    agreementCopy: File;
+    rbiLicenseCopy: File;
   };
   productPurpose: {
     addOnMargin: boolean;
@@ -153,10 +155,33 @@ export interface CreateAgentAdminRequest {
     };
   };
   commission: {
-    productType: Record<string, { type: string; value: number; fixed?: number; percent?: number }>;
-    payoutFrequency: string;
-    tcsApplies: boolean;
-  };
+    commission_product_type: string;
+    commission_type: string;
+    product_margin: {
+      agent_fixed_margin: string;
+      all_currency: string;
+      all_currency_margin: number;
+      currency_list: Array<{
+        margin: number;
+        currency_code: string;
+      }>;
+    };
+    nostro_charges: {
+      type: string;
+      all_currency: string;
+      all_currency_margin: number;
+      currency_list: Array<{
+        margin: number;
+        currency_code: string;
+      }>;
+    };
+    tt_charges: {
+      rate: number;
+    };
+    other_charges: {
+      rate: number;
+    };
+  } | undefined;
   corporateOnboarding: {
     enabled: boolean;
     kyc: {

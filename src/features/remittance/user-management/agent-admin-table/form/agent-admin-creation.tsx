@@ -15,7 +15,6 @@ import { CompanyDetailsStep } from './steps/CompanyDetailsStep';
 import { DocumentsStep } from './steps/DocumentsStep';
 import { FinanceDetailsStep } from './steps/FinanceDetailsStep';
 import { ProductPurposeStep } from './steps/ProductPurposeStep';
-import { RateMarginStep } from './steps/RateMarginStep';
 import { CorporateOnboardingStep } from './steps/CorporateOnboardingStep';
 
 import { Stepper } from './stepper';
@@ -85,7 +84,6 @@ const AgentAdminCreation: React.FC = () => {
       'financeDetails',
       'documents',
       'productPurpose',
-      'rateMargin',
       'commission',
       'corporateOnboarding',
     ];
@@ -152,10 +150,8 @@ const AgentAdminCreation: React.FC = () => {
       case 4:
         return <ProductPurposeStep />;
       case 5:
-        return <RateMarginStep />;
-      case 6:
         return <CommissionStep />;
-      case 7:
+      case 6:
         return <CorporateOnboardingStep />;
       default:
         return null;
@@ -210,14 +206,14 @@ const AgentAdminCreation: React.FC = () => {
                  className="w-24">
                 Back
               </Button>
-              {currentStep === 6 &&(
+              {currentStep === 5 &&(
                 <>
                   <Button type="submit" form="agent-admin-create-form" disabled={isCreating || isUpdating} className="w-24">
                     {(isCreating || isUpdating) ? 'Submitting...' : isEditMode ? 'Update' : 'Submit'}
                   </Button>
                 </>
               )}
-               {currentStep !== 7 &&(
+               {currentStep !== 6 &&(
                 <Button variant="secondary" type="button" onClick={handleNext} className="w-24">
                   Next
                 </Button>

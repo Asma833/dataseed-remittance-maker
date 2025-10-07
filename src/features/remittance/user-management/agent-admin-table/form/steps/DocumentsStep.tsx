@@ -5,9 +5,8 @@ import { getController } from '@/components/form/utils/get-controller';
 import FieldWrapper from '@/components/form/wrapper/field-wrapper';
 import FormFieldRow from '@/components/form/wrapper/form-field-row';
 import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import { Eye, Upload } from 'lucide-react';
+import { Eye } from 'lucide-react';
 import { GenericTable }  from '../components/generic-table';
 import SubTitle from '../components/sub-title';
 
@@ -21,20 +20,12 @@ export const DocumentsStep: React.FC = () => {
   const { control, formState: { errors }, watch, setValue } = useFormContext();
   const config = agentAdminCreationConfig();
 
-  const [companyDocuments, setCompanyDocuments] = useState<CompanyDocument[]>([
-    { id: '1', documentType: 'GST Certificate' },
-    { id: '2', documentType: 'PAN Card' },
-    { id: '3', documentType: 'Incorporation Certificate' },
-  ]);
 
-  const agreementCopyRef = useRef<HTMLInputElement>(null);
-  const rbiLicenseCopyRef = useRef<HTMLInputElement>(null);
-
-  const agreementCopy = watch('agreementCopy');
-  const rbiLicenseCopy = watch('rbiLicenseCopy');
+  const agreementCopy = watch('documents.agreementCopy');
+  const rbiLicenseCopy = watch('documents.rbiLicenseCopy');
 
   const handleFileUpload = (fieldName: string, file: File) => {
-    setValue(fieldName, file);
+    setValue(`documents.${fieldName}`, file);
   };
 
   const handleViewFile = (file: File | undefined) => {
@@ -43,37 +34,6 @@ export const DocumentsStep: React.FC = () => {
       console.log('Viewing file:', file.name);
     }
   };
-
-  const handleAddDocument = () => {
-    const newDoc: CompanyDocument = {
-      id: Date.now().toString(),
-      documentType: '',
-    };
-    setCompanyDocuments([...companyDocuments, newDoc]);
-  };
-
-  const handleDeleteDocument = (id: string) => {
-    setCompanyDocuments(companyDocuments.filter(doc => doc.id !== id));
-  };
-
-  const documentColumns = [
-    {
-      id: 'documentType',
-      header: 'Document Type',
-      accessorKey: 'documentType'
-    },
-    {
-      id: 'actions',
-      header: 'Actions',
-      cell: ({ row }: { row: CompanyDocument }) => (
-        <div className="flex gap-2 justify-center">
-          <Button variant="secondary" size="sm" onClick={() => handleViewFile(row.file)} >
-            <Eye className="h-4 w-4" />
-          </Button>
-        </div>
-      ),
-    },
-  ];
 
   return (
     <div className="space-y-6">
@@ -87,28 +47,19 @@ export const DocumentsStep: React.FC = () => {
               <Button
                 type="button"
                 variant="light"
-                className="w-28 ml-10"
+                className="w-28"
                 onClick={() => handleViewFile(agreementCopy)}
                 // disabled={!agreementCopy}
               >
                 <Eye className="h-4 w-4" />
                 View
               </Button>
-              <Button
-                type="button"
-                variant="default"
-                className="w-28"
-                onClick={() => agreementCopyRef.current?.click()}
-              >
-                <Upload className="h-4 w-4" />
-                Replace
-              </Button>
-              <Input
-                ref={agreementCopyRef}
-                type="file"
-                className="hidden"
-                onChange={(e) => e.target.files && handleFileUpload('agreementCopy', e.target.files[0])}
-              />
+              {getController({
+                ...(config.fields.documents?.agreementCopy || {}),
+                name: 'agreementCopy',
+                control,
+                errors,
+              })}
             </div>
           </FieldWrapper>
          
@@ -137,28 +88,19 @@ export const DocumentsStep: React.FC = () => {
               <Button
                 type="button"
                 variant="light"
-                className="w-28 ml-10"
+                className="w-28"
                 onClick={() => handleViewFile(rbiLicenseCopy)}
                 // disabled={!rbiLicenseCopy}
               >
                 <Eye className="h-4 w-4" />
                 View
               </Button>
-              <Button
-                type="button"
-                variant="default"
-                className="w-28"
-                onClick={() => rbiLicenseCopyRef.current?.click()}
-              >
-                <Upload className="h-4 w-4" />
-                Replace
-              </Button>
-              <Input
-                ref={rbiLicenseCopyRef}
-                type="file"
-                className="hidden"
-                onChange={(e) => e.target.files && handleFileUpload('rbiLicenseCopy', e.target.files[0])}
-              />
+              {getController({
+                ...(config.fields.documents?.rbiLicenseCopy || {}),
+                name: 'rbiLicenseCopy',
+                control,
+                errors,
+              })}
             </div>
           </FieldWrapper>
         </FormFieldRow>
@@ -179,17 +121,6 @@ export const DocumentsStep: React.FC = () => {
         </FormFieldRow>
       </div>
 
-      {/* Company Documents */}
-
-      {/* <div>
-       <div className="flex items-center justify-between">
-          <SubTitle title="Company Documents" className="" />
-        </div>
-        <GenericTable
-          data={companyDocuments}
-          columns={documentColumns}
-        />
-      </div> */}
     </div>
   );
 };

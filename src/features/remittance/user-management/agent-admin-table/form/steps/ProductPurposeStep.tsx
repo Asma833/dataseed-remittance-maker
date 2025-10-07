@@ -13,9 +13,25 @@ export const ProductPurposeStep: React.FC = () => {
   return (
     <div className="space-y-6">
       <div>
-        <SubTitle title="Document Downloads" />
-        <FormFieldRow className="mb-4" rowCols={3}>
-          {(['addOnMargin', 'esignDocumentDownload', 'vkycDocumentDownload'] as const).map((fieldName) => {
+        <SubTitle title="Document Downloads" />   
+        <FormFieldRow className="mb-4" rowCols={4}>
+          {(['addOnForexMargin', 'addOnNostroMargin', 'addOnTTMargin','addOnOtherChargersMargin'] as const).map((fieldName) => {
+            const field = config.fields.productPurpose[fieldName];
+            return (
+              <FieldWrapper key={fieldName} className="bg-gray-100 p-2 pt-3 mb-2 rounded-lg">
+                {getController({
+                  ...(typeof field === 'object' && field !== null ? field : {}),
+                  name: `productPurpose.${fieldName}`,
+                  control,
+                  errors,
+                  className:"justify-center"
+                })}
+              </FieldWrapper>
+            );
+          })}
+        </FormFieldRow>
+         <FormFieldRow className="mb-4 justify-center" rowCols={4}>
+          {(['esignDocumentDownload', 'vkycDocumentDownload'] as const).map((fieldName) => {
             const field = config.fields.productPurpose[fieldName];
             return (
               <FieldWrapper key={fieldName} className="bg-gray-100 p-2 pt-3 mb-2 rounded-lg">

@@ -110,6 +110,7 @@ export const CreateBranchAgent = () => {
         address_branch: data.agentDetails.address.branch,
         phone_number: data.agentDetails.basicDetails.mobileNo,
         role: data.agentDetails.roleStatus.role,
+        status:data.agentDetails.roleStatus.status,
         agent_ids: [
           "691ee70a-1a34-4012-83e8-e67883c2b772"
         ]
@@ -143,10 +144,10 @@ export const CreateBranchAgent = () => {
       setValue("agentDetails.vendorDetails.vendorCode", branchAgent.agent_vendor_code || "");
       setValue("agentDetails.basicDetails.fullName", branchAgent.full_name || "");
       setValue("agentDetails.basicDetails.emailId", branchAgent.email || "");
-      setValue("agentDetails.basicDetails.mobileNo", "");
-      setValue("agentDetails.address.state", "");
-      setValue("agentDetails.address.city", "");
-      setValue("agentDetails.address.branch", "");
+      setValue("agentDetails.basicDetails.mobileNo", branchAgent.mobile_no || "");
+      setValue("agentDetails.address.state", branchAgent.address_state);
+      setValue("agentDetails.address.city", branchAgent.address_city);
+      setValue("agentDetails.address.branch", branchAgent.address_branch);
       setValue("agentDetails.roleStatus.role", branchAgent.role || "maker");
       setValue("agentDetails.roleStatus.status", "active");
       setValue("agentDetails.security.password", "");

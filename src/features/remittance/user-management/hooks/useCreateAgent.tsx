@@ -13,6 +13,7 @@ type CreateAgentOptions = {
 
 const transformFormData = (data: AgentAdminFormType) => {
   const commissionDetails = data.commission_details;
+  console.log(data,"Payload")
   return {
     basicInformation: {
       agent_code: data.vendorCode,
@@ -52,20 +53,18 @@ const transformFormData = (data: AgentAdminFormType) => {
       rbiLicenseValidity: data.rbiLicenseValidity,
       noOfBranches: Number(data.noOfBranches),
       extensionMonth: data.extensionMonth,
+      agreementCopy: data.agreementCopy,
+      rbiLicenseCopy: data.rbiLicenseCopy
     },
     productPurpose: {
-      addOnMargin: data.productPurpose?.addOnMargin === 'Yes',
+      addOnMargin: data.productPurpose?.addOnForexMargin === 'Yes',
       esignDocumentDownload: data.productPurpose?.esignDocumentDownload === 'Yes',
       vkycDocumentDownload: data.productPurpose?.vkycDocumentDownload === 'Yes',
       chooseProductType: data.productPurpose?.chooseProductType ? Object.keys(data.productPurpose.chooseProductType).filter(key => data.productPurpose.chooseProductType[key as keyof typeof data.productPurpose.chooseProductType]) : [],
       creditType: data.productPurpose?.creditType ? Object.keys(data.productPurpose.creditType).filter(key => data.productPurpose.creditType[key as keyof typeof data.productPurpose.creditType]) : [],
       purposeTypesForCard: data.productPurpose?.purposeTypesForCard ? Object.keys(data.productPurpose.purposeTypesForCard).filter(key => data.productPurpose.purposeTypesForCard[key as keyof typeof data.productPurpose.purposeTypesForCard]) : [],
     },
-    rateMargin: {
-      currency: data.rateMargin?.currency || {},
-      card: data.rateMargin?.card || { markupFlat: 0, markupPercent: 0 },
-      remittance: data.rateMargin?.remittance || { slabs: [] },
-    },
+   
     commission: commissionDetails ? {
       commission_product_type: commissionDetails.commission_product_type,
       commission_type: commissionDetails.commission_type,

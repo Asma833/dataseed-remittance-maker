@@ -85,7 +85,10 @@ export const agentAdminCreationSchema = z.object({
 
   // Product Purpose
   productPurpose: z.object({
-    addOnMargin: z.enum(['Yes', 'No'], { message: 'Please select an option for Add on Margin' }).optional(),
+    addOnForexMargin: z.enum(['Yes', 'No'], { message: 'Please select an option for Add on Margin' }).optional(),
+    addOnNostroMargin: z.enum(['Yes', 'No'], { message: 'Please select an option for Add on Nostro Margin' }).optional(),
+    addOnTTMargin: z.enum(['Yes', 'No'], { message: 'Please select an option for Add on TT Margin' }).optional(),
+    addOnOtherChargersMargin: z.enum(['Yes', 'No'], { message: 'Please select an option for Add on Other Chargers Margin' }).optional(),
     esignDocumentDownload: z.enum(['Yes', 'No'], { message: 'Please select an option for Esign Document Download' }).optional(),
     vkycDocumentDownload: z.enum(['Yes', 'No'], { message: 'Please select an option for VKYC Document Download' }).optional(),
     chooseProductType: z

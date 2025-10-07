@@ -10,7 +10,6 @@ export const agentAdminCreationConfig = () => {
       'Finance Details',
       'Documents',
       'Product Purpose',
-      'Rate Margin',
       'Commission',
       'Corporate Onboarding',
     ],
@@ -244,21 +243,21 @@ export const agentAdminCreationConfig = () => {
         },
         agreementCopy: {
           name: 'agreementCopy',
-          label: 'Agreement Copy',
+          label: '',
           type: FieldType.FileUpload,
           placeholder: 'Upload Agreement Copy',
         },
         rbiLicenseCopy: {
           name: 'rbiLicenseCopy',
-          label: 'RBI License Copy',
+          label: '',
           type: FieldType.FileUpload,
           placeholder: 'Upload RBI License Copy',
         },
       },
       productPurpose: {
-        addOnMargin: {
-          name: 'productPurpose.addOnMargin',
-          label: 'Add on Margin',
+        addOnForexMargin: {
+          name: 'productPurpose.addOnForexMargin',
+          label: 'Add on Forex Margin',
           type: FieldType.Radio,
           required: true,
           options: {
@@ -266,6 +265,37 @@ export const agentAdminCreationConfig = () => {
             'No': { label: 'No', checked: true }
           }
         },
+          addOnNostroMargin: {
+          name: 'productPurpose.addOnNostroMargin',
+          label: 'Add on Nostro Margin',
+          type: FieldType.Radio,
+          required: true,
+          options: {
+            'Yes': { label: 'Yes' },
+            'No': { label: 'No', checked: true }
+          }
+        },
+          addOnTTMargin: {
+          name: 'productPurpose.addOnTTMargin',
+          label: 'Add on TT Margin',
+          type: FieldType.Radio,
+          required: true,
+          options: {
+            'Yes': { label: 'Yes' },
+            'No': { label: 'No', checked: true }
+          }
+        },
+         addOnOtherChargersMargin: {
+          name: 'productPurpose.addOnOtherChargersMargin',
+          label: 'Add on Other Chargers Margin',
+          type: FieldType.Radio,
+          required: true,
+          options: {
+            'Yes': { label: 'Yes' },
+            'No': { label: 'No', checked: true }
+          }
+        },
+        
         esignDocumentDownload: {
           name: 'productPurpose.esignDocumentDownload',
           label: 'Esign Document Download',

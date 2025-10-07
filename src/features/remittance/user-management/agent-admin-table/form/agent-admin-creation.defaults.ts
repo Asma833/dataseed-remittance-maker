@@ -38,7 +38,10 @@ export const agentAdminCreationDefaults: z.input<typeof agentAdminCreationSchema
     },
   ],
   productPurpose: {
-    addOnMargin: 'No',
+    addOnForexMargin: "No",
+    addOnNostroMargin: "No",
+    addOnTTMargin: "No",
+    addOnOtherChargersMargin: "No",
     esignDocumentDownload: 'No',
     vkycDocumentDownload: 'No',
     chooseProductType: { card: false, currency: false, remittance: true, referral: false },
@@ -118,6 +121,8 @@ export const agentAdminCreationDefaults: z.input<typeof agentAdminCreationSchema
   rbiLicenseValidity: '2025-10-03T18:30:00.000Z',
   noOfBranches: '10',
   extensionMonth: "1",
+  agreementCopy:"",
+  rbiLicenseCopy:"",
   corporateOnboarding: {
     enabled: true,
     kyc: {

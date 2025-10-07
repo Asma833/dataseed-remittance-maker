@@ -49,9 +49,11 @@ const transformFormData = (data: AgentAdminFormType) => {
       rbiLicenseValidity: data.rbiLicenseValidity || '',
       noOfBranches: Number(data.noOfBranches) || 0,
       extensionMonth: Number(data.extensionMonth) || 0,
+      agreementCopy: data.agreementCopy,
+      rbiLicenseCopy: data.rbiLicenseCopy,
     },
     productPurpose: {
-      addOnMargin: data.productPurpose?.addOnMargin === 'Yes',
+      addOnMargin: data.productPurpose?.addOnForexMargin === 'Yes',
       esignDocumentDownload: data.productPurpose?.esignDocumentDownload === 'Yes',
       vkycDocumentDownload: data.productPurpose?.vkycDocumentDownload === 'Yes',
       chooseProductType: data.productPurpose?.chooseProductType ? Object.keys(data.productPurpose.chooseProductType).filter(key => data.productPurpose.chooseProductType[key as keyof typeof data.productPurpose.chooseProductType]) : [],
@@ -101,8 +103,7 @@ export const useUpdateAgentAdmin = ({ onAgentAdminUpdateSuccess }: UpdateAgentAd
     // mutationFn: ({ id, formData }) => {
     //   const transformedData = transformFormData(formData);
     //   console.log('Transformed data for update API:', transformedData);
-    //   // return agentAdminApi.updateAgentAdmin({ id, ...transformedData });
-    //   return ""
+    //   return agentAdminApi.updateAgentAdmin({ id, ...transformedData });
     // },
     onSuccess: (data) => {
       toast.success('Agent Admin updated successfully');
