@@ -2,13 +2,9 @@ import { ActionButtons, StatusBadge, TableColumn } from '@/components/table';
 import { AgentAdminData } from './types';
 
 const GetAgentListTableColumns = ({
-  handleView,
   handleEdit,
-  handleDelete,
 }: {
-  handleView: (user: AgentAdminData) => void;
   handleEdit: (user: AgentAdminData) => void;
-  handleDelete: (user: AgentAdminData) => void;
 }): TableColumn<AgentAdminData>[] => {
   return [
     {

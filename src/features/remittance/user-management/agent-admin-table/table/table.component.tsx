@@ -18,19 +18,19 @@ const AgentAdminTable = () => {
     navigate(`/admin${ROUTES.ADMIN.AGENT_ADMIN_CREATION}`);
   };
 
-  
-
   const {
     data,
     isLoading: userLoading,
     error: userError,
   } = useGetAgentAdmins();
 
+  const handleEdit = (user: AgentAdminData) => {
+    navigate(`/admin${ROUTES.ADMIN.AGENT_ADMIN_CREATION}`, { state: { editData: user } });
+  };
+
   // Define columns matching your design
   const columns = GetAgentListTableColumns({
-    handleView,
     handleEdit,
-    handleDelete,
   });
 
   // Current mode selector
@@ -44,22 +44,10 @@ const AgentAdminTable = () => {
   //   currentPage: 1,
   // };
 
-  // Action handlers
-  function handleView(user: AgentAdminData) {
-    //console.log('View user:', user);
-    alert(`Viewing agent: ${user.agent_name}`);
-  }
+ 
 
-  function handleEdit(user: AgentAdminData) {
-    //console.log('Edit user:', user);
-    alert(`Editing agent: ${user.agent_name}`);
-  }
-
-  function handleDelete(user: AgentAdminData) {
-    //console.log('Delete user:', user);
-    if (confirm(`Are you sure you want to delete ${user.agent_name}?`)) {
-    }
-  }
+  
+ 
 
   
 
