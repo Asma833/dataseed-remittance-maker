@@ -54,6 +54,7 @@ export const CreateBranchAgent = () => {
   const {
     control,
     setValue,
+    reset,
     trigger,
     clearErrors,
     formState: { errors },
@@ -140,26 +141,40 @@ export const CreateBranchAgent = () => {
   /** Optional: map backend -> frontend values */
   useEffect(() => {
     if (branchAgent) {
-      setValue("agentDetails.vendorDetails.vendorName", branchAgent.agent_entity_name || "");
-      setValue("agentDetails.vendorDetails.vendorCode", branchAgent.agent_vendor_code || "");
-      setValue("agentDetails.basicDetails.fullName", branchAgent.full_name || "");
-      setValue("agentDetails.basicDetails.emailId", branchAgent.email || "");
-      setValue("agentDetails.basicDetails.mobileNo", branchAgent.mobile_no || "");
-      setValue("agentDetails.address.state", branchAgent.address_state);
-      setValue("agentDetails.address.city", branchAgent.address_city);
-      setValue("agentDetails.address.branch", branchAgent.address_branch);
-      setValue("agentDetails.roleStatus.role", branchAgent.role || "maker");
-      setValue("agentDetails.roleStatus.status", "active");
-      setValue("agentDetails.security.password", "");
-      setValue("agentDetails.security.confirmPassword", "");
-      
+      reset({
+        agentDetails: {
+          vendorDetails: {
+            vendorName: branchAgent.agent_entity_name || "",
+            vendorCode: branchAgent.agent_vendor_code || "",
+          },
+          basicDetails: {
+            fullName: branchAgent.full_name || "",
+            emailId: branchAgent.email || "",
+            mobileNo: branchAgent.mobile_no || "",
+          },
+          address: {
+            state: branchAgent.address_state,
+            city: branchAgent.address_city,
+            branch: branchAgent.address_branch,
+          },
+          roleStatus: {
+            role: branchAgent.role || "maker",
+            status: "active",
+          },
+          security: {
+            password: "",
+            confirmPassword: "",
+          },
+        },
+      });
+
       // Clear email error since it's disabled in update mode
       setTimeout(() => {
         clearErrors("agentDetails.basicDetails.emailId");
         trigger();
       }, 100);
     }
-  }, [branchAgent, setValue, trigger, clearErrors]);
+  }, [branchAgent, reset, trigger, clearErrors]);
 
   const config = branchAgentCreationConfig(agents);
 
