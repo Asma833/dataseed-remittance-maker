@@ -14,7 +14,7 @@ export const agentAdminApi = {
   
   updateAgentAdmin: async (request: UpdateAgentAdminRequest): Promise<AgentAdminData> => {
     const { id, ...payload } = request;
-    const { data } = await axiosInstance.patch<AgentAdminData>(
+    const { data } = await axiosInstance.put<AgentAdminData>(
       API.USER_MANAGEMENT.AGENTS.UPDATE(id),
       payload
     );

@@ -198,7 +198,7 @@ const AgentAdminCreation: React.FC = () => {
      console.log("isEditMode",isEditMode)
     if (isEditMode) {
       console.log("isEditMode",isEditMode)
-      // updateAgent({ id: editData.id, formData: data });
+      updateAgent({ id: editData.id, formData: data });
     } else {
       createAgent(data);
     }
