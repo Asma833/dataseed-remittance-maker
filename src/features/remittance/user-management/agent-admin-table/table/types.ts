@@ -128,7 +128,7 @@ export interface CreateAgentAdminRequest {
     rbiLicenseCategory: string;
     rbiLicenseValidity: string;
     noOfBranches: number;
-    extensionMonth: number;
+    extensionMonth: string;
     agreementCopy: File;
     rbiLicenseCopy: File;
   };

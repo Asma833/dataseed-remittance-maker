@@ -53,7 +53,7 @@ const transformFormData = (data: AgentAdminFormType): CreateAgentAdminRequest =>
       rbiLicenseCategory: data.rbiLicenseCategory || '',
       rbiLicenseValidity: data.rbiLicenseValidity || '',
       noOfBranches: Number(data.noOfBranches) || 0,
-      extensionMonth: data.extensionMonth || 0,
+      extensionMonth: String(data.extensionMonth || ''),
       agreementCopy: data.agreementCopy,
       rbiLicenseCopy: data.rbiLicenseCopy,
     },
