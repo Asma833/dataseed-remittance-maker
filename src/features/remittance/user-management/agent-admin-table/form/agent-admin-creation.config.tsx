@@ -15,18 +15,18 @@ export const agentAdminCreationConfig = () => {
     ],
     fields: {
       basicInformation: {
-        vendorCode: {
-          name: 'vendorCode',
-          label: 'Vendor Code',
+        agent_code: {
+          name: 'agent_code',
+          label: 'Agent Code',
           type: FieldType.Text,
-          placeholder: 'Enter Vendor Code',
+          placeholder: 'Enter Agent Code',
         },
-        fullName: {
-          name: 'fullName',
-          label: 'Full Name',
+        agent_name: {
+          name: 'agent_name',
+          label: 'Agent Name',
           type: FieldType.Text,
           required: true,
-          placeholder: 'Enter Full Name',
+          placeholder: 'Enter Agent Name',
         },
         emailId: {
           name: 'emailId',

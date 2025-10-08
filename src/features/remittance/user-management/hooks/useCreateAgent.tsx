@@ -4,6 +4,7 @@ import { z } from 'zod';
 import { agentAdminApi } from '../api/agentAdmin';
 import { useQueryInvalidator } from '../../../../hooks/useQueryInvalidator';
 import { agentAdminCreationSchema } from '../agent-admin-table/form/agent-admin-creation.schema';
+import { CreateAgentAdminRequest } from '../agent-admin-table/table/types';
 
 type AgentAdminFormType = z.infer<typeof agentAdminCreationSchema>;
 
@@ -11,21 +12,21 @@ type CreateAgentOptions = {
   onAgentCreateSuccess?: () => void;
 };
 
-const transformFormData = (data: AgentAdminFormType) => {
+const transformFormData = (data: AgentAdminFormType): CreateAgentAdminRequest => {
   const commissionDetails = data.commission_details;
   console.log(data,"Payload")
   return {
     basicInformation: {
-      agent_code: data.vendorCode,
-      agent_name: data.fullName,
+      agent_code: data.agent_code || '',
+      agent_name: data.agent_name,
       emailId: data.emailId,
-      phoneNo: data.phoneNo,
-      agentType: data.agentType,
-      agentBranchCity: data.agentBranchCity,
-      agentHOBranchState: data.agentHOBranchState,
-      ebixRMName: data.ebixRMName,
-      ebixRMBranchName: data.ebixRMBranchName,
-      systemCode: data.systemCode,
+      phoneNo: data.phoneNo || '',
+      agentType: data.agentType || '',
+      agentBranchCity: data.agentBranchCity || '',
+      agentHOBranchState: data.agentHOBranchState || '',
+      ebixRMName: data.ebixRMName || '',
+      ebixRMBranchName: data.ebixRMBranchName || '',
+      systemCode: data.systemCode || '',
       status: data.status === 'Active' ? 'ACTIVE' : 'INACTIVE',
       monthlyCreditLimit: Number(data.monthlyCreditLimit),
       totalCreditDays: Number(data.totalCreditDays),
@@ -33,11 +34,11 @@ const transformFormData = (data: AgentAdminFormType) => {
     companyDetails: {
       gstClassification: data.gstClassification,
       gstNumber: data.gstNumber,
-      gstPhoneNo: data.gstPhoneNo,
-      flatDoorNumber: data.flatDoorNumber,
-      roadStreet: data.roadStreet,
-      areaLocality: data.areaLocality,
-      gstCity: data.gstCity,
+      gstPhoneNo: data.gstPhoneNo || '',
+      flatDoorNumber: data.flatDoorNumber || '',
+      roadStreet: data.roadStreet || '',
+      areaLocality: data.areaLocality || '',
+      gstCity: data.gstCity || '',
       gstState: data.gstState,
       pinCode: data.pinCode,
       gstBranch: data.gstBranch,
@@ -48,26 +49,30 @@ const transformFormData = (data: AgentAdminFormType) => {
       financeSpocPhoneNo: data.financeSpocPhoneNo,
     },
     documents: {
-      agreementValid: data.agreementValid,
-      rbiLicenseCategory: data.rbiLicenseCategory,
-      rbiLicenseValidity: data.rbiLicenseValidity,
-      noOfBranches: Number(data.noOfBranches),
-      extensionMonth: data.extensionMonth,
+      agreementValid: data.agreementValid || '',
+      rbiLicenseCategory: data.rbiLicenseCategory || '',
+      rbiLicenseValidity: data.rbiLicenseValidity || '',
+      noOfBranches: Number(data.noOfBranches) || 0,
+      extensionMonth: data.extensionMonth || 0,
       agreementCopy: data.agreementCopy,
-      rbiLicenseCopy: data.rbiLicenseCopy
+      rbiLicenseCopy: data.rbiLicenseCopy,
     },
     productPurpose: {
       addOnForexMargin: data.productPurpose?.addOnForexMargin === 'Yes',
       addOnNostroMargin: data.productPurpose?.addOnNostroMargin === 'Yes',
       addOnTTMargin: data.productPurpose?.addOnTTMargin === 'Yes',
-      addOnOtherChargersMargin:data.productPurpose?.addOnOtherChargersMargin === 'Yes',
+      addOnOtherChargersMargin: data.productPurpose?.addOnOtherChargersMargin === 'Yes',
       esignDocumentDownload: data.productPurpose?.esignDocumentDownload === 'Yes',
       vkycDocumentDownload: data.productPurpose?.vkycDocumentDownload === 'Yes',
       chooseProductType: data.productPurpose?.chooseProductType ? Object.keys(data.productPurpose.chooseProductType).filter(key => data.productPurpose.chooseProductType[key as keyof typeof data.productPurpose.chooseProductType]) : [],
       creditType: data.productPurpose?.creditType ? Object.keys(data.productPurpose.creditType).filter(key => data.productPurpose.creditType[key as keyof typeof data.productPurpose.creditType]) : [],
       purposeTypesForCard: data.productPurpose?.purposeTypesForCard ? Object.keys(data.productPurpose.purposeTypesForCard).filter(key => data.productPurpose.purposeTypesForCard[key as keyof typeof data.productPurpose.purposeTypesForCard]) : [],
     },
-   
+    rateMargin: {
+      currency: {},
+      card: { markupFlat: 0, markupPercent: 0 },
+      remittance: { slabs: [] },
+    },
     commission: commissionDetails ? {
       commission_product_type: commissionDetails.commission_product_type,
       commission_type: commissionDetails.commission_type,

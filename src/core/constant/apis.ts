@@ -77,11 +77,7 @@ export const API = {
     AGENTS: {
       LIST: `/agents`,
       CREATE: `/agents`,
-    },
-    AGENT_ADMINS: {
-      LIST: `/agent-admins`,
-      CREATE: `/agent-admins`,
-      UPDATE: (id: string) => `/agent-admins/${id}`,
+      UPDATE: (id: string) => `/agents/${id}`,
     }
   },
   NUSERS: {

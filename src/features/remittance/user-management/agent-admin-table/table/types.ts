@@ -92,8 +92,8 @@ export interface AgentAdminData {
 
 export interface CreateAgentAdminRequest {
   basicInformation: {
-    vendorCode: string;
-    fullName: string;
+    agent_code: string;
+    agent_name: string;
     emailId: string;
     phoneNo: string;
     agentType: string;
@@ -133,7 +133,10 @@ export interface CreateAgentAdminRequest {
     rbiLicenseCopy: File;
   };
   productPurpose: {
-    addOnMargin: boolean;
+    addOnForexMargin: boolean;
+    addOnNostroMargin: boolean;
+    addOnTTMargin: boolean;
+    addOnOtherChargersMargin: boolean;
     esignDocumentDownload: boolean;
     vkycDocumentDownload: boolean;
     chooseProductType: string[];
@@ -182,19 +185,6 @@ export interface CreateAgentAdminRequest {
       rate: number;
     };
   } | undefined;
-  corporateOnboarding: {
-    enabled: boolean;
-    kyc: {
-      pan: boolean;
-      gst: boolean;
-      cin: boolean;
-    };
-    limits: {
-      maxTransaction: number;
-      dailyLimit: number;
-    };
-    allowedIndustries: string[];
-  };
 }
 
 export interface UpdateAgentAdminRequest extends CreateAgentAdminRequest {

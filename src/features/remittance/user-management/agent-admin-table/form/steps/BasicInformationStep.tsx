@@ -19,7 +19,7 @@ export const BasicInformationStep: React.FC<BasicInformationStepProps> = () => {
       <div>
         <SubTitle title="Basic Details" />
         <FormFieldRow className="mb-4" rowCols={3}>
-          {(['vendorCode', 'fullName', 'emailId'] as const).map((fieldName) => {
+          {(['agent_name', 'agent_code', 'emailId'] as const).map((fieldName) => {
             const field = config.fields.basicInformation[fieldName];
             return (
               <FieldWrapper key={fieldName}>

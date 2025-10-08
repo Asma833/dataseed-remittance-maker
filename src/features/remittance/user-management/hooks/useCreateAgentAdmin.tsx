@@ -12,7 +12,7 @@ export const useCreateAgentAdmin = ({ onAgentAdminCreateSuccess }: CreateAgentAd
   const { invalidateMultipleQueries } = useQueryInvalidator();
 
   const { mutate, isPending, error } = useMutation<AgentAdminData, Error, CreateAgentAdminRequest>({
-    mutationFn: agentAdminApi.createAgentAdmin,
+    mutationFn: agentAdminApi.createAgent,
     onSuccess: (data) => {
       toast.success('Agent Admin created successfully');
       invalidateMultipleQueries([['getAgentAdmins']]);

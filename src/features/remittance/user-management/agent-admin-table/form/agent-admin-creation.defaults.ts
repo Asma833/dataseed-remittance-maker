@@ -2,8 +2,8 @@ import { z } from 'zod';
 import { agentAdminCreationSchema } from './agent-admin-creation.schema';
 
 export const agentAdminCreationDefaults: z.input<typeof agentAdminCreationSchema> = {
-  vendorCode: 'V001',
-  fullName: 'John Doe',
+  agent_code: 'V001',
+  agent_name: 'John Doe',
   emailId: 'john.doe@example.com',
   phoneNo: '1234567890',
   agentType: 'Type A',
@@ -47,24 +47,6 @@ export const agentAdminCreationDefaults: z.input<typeof agentAdminCreationSchema
     chooseProductType: { card: false, currency: false, remittance: true, referral: false },
     creditType: { CNC: true, linecredit: false },
     purposeTypesForCard: { personaltravel: true, businesstravel: false, education: false, immigration: false, employment: false, medical: false },
-  },
-  rateMargin: {
-    currency: {
-      EUR: { buy: 0.12, sell: 0.2 },
-      GBP: { buy: 0.13, sell: 0.22 },
-      USD: { buy: 0.1, sell: 0.18 },
-    },
-    card: {
-      markupFlat: 0.25,
-      markupPercent: 1.1,
-    },
-    remittance: {
-      slabs: [
-        { min: 0, max: 1000, margin: 0.2 },
-        { min: 1000, max: 5000, margin: 0.15 },
-        { min: 5000, max: 10000, margin: 0.12 },
-      ],
-    },
   },
   commission_details: {
     commission_product_type: 'Remittance',
@@ -123,17 +105,4 @@ export const agentAdminCreationDefaults: z.input<typeof agentAdminCreationSchema
   extensionMonth: "1",
   agreementCopy:"",
   rbiLicenseCopy:"",
-  corporateOnboarding: {
-    enabled: true,
-    kyc: {
-      pan: true,
-      gst: true,
-      cin: false,
-    },
-    limits: {
-      maxTransaction: 10000,
-      dailyLimit: 5000,
-    },
-    allowedIndustries: ['Finance', 'Technology'],
-  },
 };

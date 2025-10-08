@@ -195,8 +195,10 @@ const AgentAdminCreation: React.FC = () => {
   };
 
   const onSubmit = handleSubmit(async (data) => {
+     console.log("isEditMode",isEditMode)
     if (isEditMode) {
-      updateAgent({ id: editData.id, formData: data });
+      console.log("isEditMode",isEditMode)
+      // updateAgent({ id: editData.id, formData: data });
     } else {
       createAgent(data);
     }
@@ -272,9 +274,9 @@ const AgentAdminCreation: React.FC = () => {
                  className="w-24">
                 Back
               </Button>
-              {currentStep === 5 &&(
+              {(currentStep === 5 || currentStep === 6) &&(
                 <>
-                  <Button type="submit" form="agent-admin-create-form" disabled={isCreating || isUpdating} className="w-24">
+                  <Button type="submit"  form="agent-admin-create-form" disabled={isCreating || isUpdating} className="w-24">
                     {(isCreating || isUpdating) ? 'Submitting...' : isEditMode ? 'Update' : 'Submit'}
                   </Button>
                 </>

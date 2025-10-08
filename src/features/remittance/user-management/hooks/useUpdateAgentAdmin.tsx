@@ -12,8 +12,8 @@ const transformFormData = (data: AgentAdminFormType) => {
   const commissionDetails = data.commission_details;
   return {
     basicInformation: {
-      vendorCode: data.vendorCode || '',
-      fullName: data.fullName,
+      agent_code: data.agent_code || '',
+      agent_name: data.agent_name,
       emailId: data.emailId,
       phoneNo: data.phoneNo || '',
       agentType: data.agentType || '',
@@ -48,7 +48,7 @@ const transformFormData = (data: AgentAdminFormType) => {
       rbiLicenseCategory: data.rbiLicenseCategory || '',
       rbiLicenseValidity: data.rbiLicenseValidity || '',
       noOfBranches: Number(data.noOfBranches) || 0,
-      extensionMonth: Number(data.extensionMonth) || 0,
+      extensionMonth: data.extensionMonth || 0,
       agreementCopy: data.agreementCopy,
       rbiLicenseCopy: data.rbiLicenseCopy,
     },
@@ -56,7 +56,7 @@ const transformFormData = (data: AgentAdminFormType) => {
       addOnForexMargin: data.productPurpose?.addOnForexMargin === 'Yes',
       addOnNostroMargin: data.productPurpose?.addOnNostroMargin === 'Yes',
       addOnTTMargin: data.productPurpose?.addOnTTMargin === 'Yes',
-      addOnOtherChargersMargin:data.productPurpose?.addOnOtherChargersMargin === 'Yes',
+      addOnOtherChargersMargin: data.productPurpose?.addOnOtherChargersMargin === 'Yes',
       esignDocumentDownload: data.productPurpose?.esignDocumentDownload === 'Yes',
       vkycDocumentDownload: data.productPurpose?.vkycDocumentDownload === 'Yes',
       chooseProductType: data.productPurpose?.chooseProductType ? Object.keys(data.productPurpose.chooseProductType).filter(key => data.productPurpose.chooseProductType[key as keyof typeof data.productPurpose.chooseProductType]) : [],
@@ -64,9 +64,9 @@ const transformFormData = (data: AgentAdminFormType) => {
       purposeTypesForCard: data.productPurpose?.purposeTypesForCard ? Object.keys(data.productPurpose.purposeTypesForCard).filter(key => data.productPurpose.purposeTypesForCard[key as keyof typeof data.productPurpose.purposeTypesForCard]) : [],
     },
     rateMargin: {
-      currency: data.rateMargin?.currency || {},
-      card: data.rateMargin?.card || { markupFlat: 0, markupPercent: 0 },
-      remittance: { slabs: data.rateMargin?.remittance?.slabs || [] },
+      currency: {},
+      card: { markupFlat: 0, markupPercent: 0 },
+      remittance: { slabs: [] },
     },
     commission: commissionDetails ? {
       commission_product_type: commissionDetails.commission_product_type,
@@ -86,12 +86,6 @@ const transformFormData = (data: AgentAdminFormType) => {
       tt_charges: commissionDetails.tt_charges,
       other_charges: commissionDetails.other_charges,
     } : undefined,
-    corporateOnboarding: data.corporateOnboarding || {
-      enabled: false,
-      kyc: { pan: false, gst: false, cin: false },
-      limits: { maxTransaction: 0, dailyLimit: 0 },
-      allowedIndustries: [],
-    },
   };
 };
 
@@ -103,11 +97,11 @@ export const useUpdateAgentAdmin = ({ onAgentAdminUpdateSuccess }: UpdateAgentAd
   const { invalidateMultipleQueries } = useQueryInvalidator();
 
   const { mutate, isPending, error } = useMutation<AgentAdminData, Error, { id: string; formData: AgentAdminFormType }>({
-    // mutationFn: ({ id, formData }) => {
-    //   const transformedData = transformFormData(formData);
-    //   console.log('Transformed data for update API:', transformedData);
-    //   return agentAdminApi.updateAgentAdmin({ id, ...transformedData });
-    // },
+    mutationFn: ({ id, formData }) => {
+      const transformedData = transformFormData(formData);
+      console.log('Transformed data for update API:', transformedData);
+      return agentAdminApi.updateAgentAdmin({ id, ...transformedData });
+    },
     onSuccess: (data) => {
       toast.success('Agent Admin updated successfully');
       invalidateMultipleQueries([['getAgentAdmins']]);

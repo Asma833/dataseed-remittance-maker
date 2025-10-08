@@ -15,8 +15,8 @@ export const onboardCorporateSchema = z.object({
 export type OnboardCorporateFormData = z.infer<typeof onboardCorporateSchema>;
 export const agentAdminCreationSchema = z.object({
   // Basic Information
-  vendorCode: z.string().regex(/^(?!\s)(?!.*\s$)/, 'Cannot start or end with spaces').optional().or(z.literal('')),
-  fullName: z.string().min(1, 'Full name is required').regex(/^(?!\s)(?!.*\s$)/, 'Cannot start or end with spaces'),
+  agent_code: z.string().regex(/^(?!\s)(?!.*\s$)/, 'Cannot start or end with spaces').optional().or(z.literal('')),
+  agent_name: z.string().min(1, 'Full name is required').regex(/^(?!\s)(?!.*\s$)/, 'Cannot start or end with spaces'),
   emailId: z.string().min(1, 'Email is required').email('Please enter a valid email address'),
   phoneNo: z.string().regex(/^(?!\s)(?!.*\s$)/, 'Cannot start or end with spaces').optional().or(z.literal('')),
   agentType: z.string().regex(/^(?!\s)(?!.*\s$)/, 'Cannot start or end with spaces').optional().or(z.literal('')),
@@ -124,58 +124,7 @@ export const agentAdminCreationSchema = z.object({
           }
         }),
     }),
-  rateMargin: z.object({
-    currency: z.record(z.string(), z.object({
-      buy: z.union([z.string(), z.number()]).transform((val) => {
-        const str = typeof val === 'string' ? val : val.toString();
-        if (str.trim() === '') return 0;
-        const num = parseFloat(str);
-        return isNaN(num) ? 0 : num;
-      }).refine((val) => val >= 0, 'Buy rate must be non-negative'),
-      sell: z.union([z.string(), z.number()]).transform((val) => {
-        const str = typeof val === 'string' ? val : val.toString();
-        if (str.trim() === '') return 0;
-        const num = parseFloat(str);
-        return isNaN(num) ? 0 : num;
-      }).refine((val) => val >= 0, 'Sell rate must be non-negative'),
-    })).optional(),
-    card: z.object({
-      markupFlat: z.union([z.string(), z.number()]).transform((val) => {
-        const str = typeof val === 'string' ? val : val.toString();
-        if (str.trim() === '') return 0;
-        const num = parseFloat(str);
-        return isNaN(num) ? 0 : num;
-      }).refine((val) => val >= 0, 'Markup flat must be non-negative'),
-      markupPercent: z.union([z.string(), z.number()]).transform((val) => {
-        const str = typeof val === 'string' ? val : val.toString();
-        if (str.trim() === '') return 0;
-        const num = parseFloat(str);
-        return isNaN(num) ? 0 : num;
-      }).refine((val) => val >= 0, 'Markup percent must be non-negative'),
-    }).optional(),
-    remittance: z.object({
-      slabs: z.array(z.object({
-        min: z.union([z.string(), z.number()]).transform((val) => {
-          const str = typeof val === 'string' ? val : val.toString();
-          if (str.trim() === '') return 0;
-          const num = parseFloat(str);
-          return isNaN(num) ? 0 : num;
-        }).refine((val) => val >= 0, 'Min must be non-negative'),
-        max: z.union([z.string(), z.number()]).transform((val) => {
-          const str = typeof val === 'string' ? val : val.toString();
-          if (str.trim() === '') return 0;
-          const num = parseFloat(str);
-          return isNaN(num) ? 0 : num;
-        }).refine((val) => val >= 0, 'Max must be non-negative'),
-        margin: z.union([z.string(), z.number()]).transform((val) => {
-          const str = typeof val === 'string' ? val : val.toString();
-          if (str.trim() === '') return 0;
-          const num = parseFloat(str);
-          return isNaN(num) ? 0 : num;
-        }).refine((val) => val >= 0, 'Margin must be non-negative'),
-      })).optional(),
-    }).optional(),
-  }).optional(),
+ 
   commission_details: z.object({
     commission_product_type: z.enum(["Remittance", "Card", "Currency"]),
     commission_type: z.enum(["FIXED", "PERCENTAGE", "HYBRID"]),
@@ -227,29 +176,6 @@ export const agentAdminCreationSchema = z.object({
         return isNaN(num) ? 0 : num;
       }).refine((val) => val >= 0, 'Rate must be non-negative'),
     }),
-  }).optional(),
-  corporateOnboarding: z.object({
-    enabled: z.boolean(),
-    kyc: z.object({
-      pan: z.boolean(),
-      gst: z.boolean(),
-      cin: z.boolean(),
-    }),
-    limits: z.object({
-      maxTransaction: z.union([z.string(), z.number()]).transform((val) => {
-        const str = typeof val === 'string' ? val : val.toString();
-        if (str.trim() === '') return 0;
-        const num = parseInt(str);
-        return isNaN(num) ? 0 : num;
-      }).refine((val) => val >= 0, 'Max transaction must be non-negative'),
-      dailyLimit: z.union([z.string(), z.number()]).transform((val) => {
-        const str = typeof val === 'string' ? val : val.toString();
-        if (str.trim() === '') return 0;
-        const num = parseInt(str);
-        return isNaN(num) ? 0 : num;
-      }).refine((val) => val >= 0, 'Daily limit must be non-negative'),
-    }),
-    allowedIndustries: z.array(z.string()),
   }).optional(),
 });
 
@@ -369,18 +295,5 @@ export const defaultValues = {
   rbiLicenseCategory: '',
   rbiLicenseValidity: '',
   noOfBranches: '',
-  extensionMonth: '',
-  corporateOnboarding: {
-    enabled: true,
-    kyc: {
-      pan: true,
-      gst: true,
-      cin: false,
-    },
-    limits: {
-      maxTransaction: 10000,
-      dailyLimit: 5000,
-    },
-    allowedIndustries: ['Finance', 'Technology'],
-  },
+  extensionMonth: ''
 };
