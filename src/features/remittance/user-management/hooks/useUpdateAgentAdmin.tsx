@@ -53,7 +53,10 @@ const transformFormData = (data: AgentAdminFormType) => {
       rbiLicenseCopy: data.rbiLicenseCopy,
     },
     productPurpose: {
-      addOnMargin: data.productPurpose?.addOnForexMargin === 'Yes',
+      addOnForexMargin: data.productPurpose?.addOnForexMargin === 'Yes',
+      addOnNostroMargin: data.productPurpose?.addOnNostroMargin === 'Yes',
+      addOnTTMargin: data.productPurpose?.addOnTTMargin === 'Yes',
+      addOnOtherChargersMargin:data.productPurpose?.addOnOtherChargersMargin === 'Yes',
       esignDocumentDownload: data.productPurpose?.esignDocumentDownload === 'Yes',
       vkycDocumentDownload: data.productPurpose?.vkycDocumentDownload === 'Yes',
       chooseProductType: data.productPurpose?.chooseProductType ? Object.keys(data.productPurpose.chooseProductType).filter(key => data.productPurpose.chooseProductType[key as keyof typeof data.productPurpose.chooseProductType]) : [],

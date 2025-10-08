@@ -82,7 +82,6 @@ export const agentAdminCreationSchema = z.object({
   agreementCopy: z.any().optional(),
   rbiLicenseCopy: z.any().optional(),
   documents: z.object({}).optional(),
-
   // Product Purpose
   productPurpose: z.object({
     addOnForexMargin: z.enum(['Yes', 'No'], { message: 'Please select an option for Add on Margin' }).optional(),
