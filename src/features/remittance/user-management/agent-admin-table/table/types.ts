@@ -129,8 +129,8 @@ export interface CreateAgentAdminRequest {
     rbiLicenseValidity: string;
     noOfBranches: number;
     extensionMonth: string;
-    agreementCopy: File;
-    rbiLicenseCopy: File;
+    agreementCopy: string;
+    rbiLicenseCopy: string;
   };
   productPurpose: {
     addOnForexMargin: boolean;
