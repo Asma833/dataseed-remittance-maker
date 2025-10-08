@@ -109,7 +109,7 @@
     background-color: var(--color-background);
     color: var(--color-foreground);
     overflow: hidden;
-    font-family: 'Hellix', 'Inter', sans-serif;
+    font-family: 'Roboto' 'Inter', sans-serif;
   }
 }
 
@@ -440,9 +440,7 @@ label.MuiFormLabel-root.MuiInputLabel-root:not(.MuiInputLabel-shrink) {
     flex-direction: column;
   }
 }
-* {
- font-family:system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif
-}
+
 html[class='dark'] .MuiDateCalendar-root {
   color: white;
 }

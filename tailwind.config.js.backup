@@ -50,8 +50,8 @@ export default {
         sm: 'calc(var(--radius) - 4px)',
       },
       fontFamily: {
-        sans: ['Hellix', 'Inter', 'sans-serif'],
-        hellix: ['Hellix', 'sans-serif'],
+        sans: ['Roboto', 'Inter', 'sans-serif'],
+        Roboto: ['Roboto', 'sans-serif'],
       },
       fontWeight: {
         thin: '100',

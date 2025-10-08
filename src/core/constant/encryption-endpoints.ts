@@ -113,11 +113,11 @@ export const ENDPOINT_MATCHING_RULES: EndpointRulesConfig = {
     matchType: 'standard' as const,
     description: 'Get super checker endpoint',
   },
-   'login':{
-    endpoint: API.AUTH.LOGIN,
-    matchType: 'standard' as const,
-    description: 'Get Login',
-  },
+  //  'login':{
+  //   endpoint: API.AUTH.LOGIN,
+  //   matchType: 'standard' as const,
+  //   description: 'Get Login',
+  // },
   'create-agent-admin':{
     endpoint: API.USER_MANAGEMENT.AGENTS.CREATE,
     matchType: 'standard' as const,
