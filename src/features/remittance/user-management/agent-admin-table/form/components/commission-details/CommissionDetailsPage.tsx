@@ -195,7 +195,6 @@ export default function CommissionDetailsPage() {
                         name: `commission_details.product_margin.currency_list.${currency_code}`,
                         control,
                         errors,
-                        placeholder: `Enter ${currency_code} value`,
                         className: inputH,
                       })}
                     </div>
@@ -265,7 +264,6 @@ export default function CommissionDetailsPage() {
                         name: `commission_details.nostro_charges.currency_list.${currency_code}`,
                         control,
                         errors,
-                        placeholder: `Enter ${currency_code} value`,
                         className: inputH,
                       })}
                     </div>

@@ -128,12 +128,12 @@ export const agentAdminCreationSchema = z.object({
   documents: z.object({}).optional(),
   // Product Purpose
   productPurpose: z.object({
-    addOnForexMargin: z.enum(['Yes', 'No'], { message: 'Please select an option for Add on Margin' }).optional(),
-    addOnNostroMargin: z.enum(['Yes', 'No'], { message: 'Please select an option for Add on Nostro Margin' }).optional(),
-    addOnTTMargin: z.enum(['Yes', 'No'], { message: 'Please select an option for Add on TT Margin' }).optional(),
-    addOnOtherChargersMargin: z.enum(['Yes', 'No'], { message: 'Please select an option for Add on Other Chargers Margin' }).optional(),
-    esignDocumentDownload: z.enum(['Yes', 'No'], { message: 'Please select an option for Esign Document Download' }).optional(),
-    vkycDocumentDownload: z.enum(['Yes', 'No'], { message: 'Please select an option for VKYC Document Download' }).optional(),
+    addOnForexMargin: z.enum(['Yes', 'No'], { message: 'Please select an option for Add on Forex Margin' }),
+    addOnNostroMargin: z.enum(['Yes', 'No'], { message: 'Please select an option for Add on Nostro Margin' }),
+    addOnTTMargin: z.enum(['Yes', 'No'], { message: 'Please select an option for Add on TT Margin' }),
+    addOnOtherChargersMargin: z.enum(['Yes', 'No'], { message: 'Please select an option for Add on Other Chargers Margin' }),
+    esignDocumentDownload: z.enum(['Yes', 'No'], { message: 'Please select an option for Esign Document Download' }),
+    vkycDocumentDownload: z.enum(['Yes', 'No'], { message: 'Please select an option for VKYC Document Download' }),
     chooseProductType: z
         .record(z.enum(['card', 'currency', 'remittance', 'referral']), z.boolean())
         .superRefine((val, ctx) => {

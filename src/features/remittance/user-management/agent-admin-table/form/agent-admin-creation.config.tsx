@@ -267,7 +267,7 @@ export const agentAdminCreationConfig = () => {
           required: true,
           options: {
             'Yes': { label: 'Yes' },
-            'No': { label: 'No', checked: true }
+            'No': { label: 'No' }
           }
         },
           addOnNostroMargin: {
@@ -277,7 +277,7 @@ export const agentAdminCreationConfig = () => {
           required: true,
           options: {
             'Yes': { label: 'Yes' },
-            'No': { label: 'No', checked: true }
+            'No': { label: 'No' }
           }
         },
           addOnTTMargin: {
@@ -287,7 +287,7 @@ export const agentAdminCreationConfig = () => {
           required: true,
           options: {
             'Yes': { label: 'Yes' },
-            'No': { label: 'No', checked: true }
+            'No': { label: 'No' }
           }
         },
          addOnOtherChargersMargin: {
@@ -297,7 +297,7 @@ export const agentAdminCreationConfig = () => {
           required: true,
           options: {
             'Yes': { label: 'Yes' },
-            'No': { label: 'No', checked: true }
+            'No': { label: 'No' }
           }
         },
         
@@ -308,7 +308,7 @@ export const agentAdminCreationConfig = () => {
           required: true,
           options: {
             'Yes': { label: 'Yes' },
-            'No': { label: 'No', checked: true }
+            'No': { label: 'No' }
           }
         },
         vkycDocumentDownload: {
@@ -318,7 +318,7 @@ export const agentAdminCreationConfig = () => {
           required: true,
           options: {
             'Yes': { label: 'Yes' },
-            'No': { label: 'No', checked: true }
+            'No': { label: 'No' }
           }
         },
         chooseProductType: {
