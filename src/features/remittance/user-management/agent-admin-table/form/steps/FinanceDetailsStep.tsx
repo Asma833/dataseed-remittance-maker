@@ -7,7 +7,8 @@ import FormFieldRow from '@/components/form/wrapper/form-field-row';
 import GetBankTableColumns from '../components/bank-table-coulumn';
 import { GenericTable } from '../components/generic-table';
 import SubTitle from '../components/sub-title';
-import { useGetBankAccounts, useCreateBankAccount } from '../../../hooks/useBankAccounts';
+import { useGetBankAccounts, useCreateBankAccount, useUpdateBankAccount, useDeleteBankAccount } from '../../../hooks/useBankAccounts';
+import { BankAccount } from '../../../api/bankAccounts';
 import { Button } from '@/components/ui/button';
 import { PlusCircle } from 'lucide-react';
 import { AddBankDialog } from '../components/AddBankDialog';
@@ -18,21 +19,46 @@ export const FinanceDetailsStep: React.FC<{ agentId?: string }> = ({ agentId }) 
 
   // State for add bank dialog
   const [isAddBankOpen, setIsAddBankOpen] = useState(false);
+  const [editData, setEditData] = useState<BankAccount | undefined>(undefined);
 
   // Fetch bank accounts if agentId is provided
   const { data: fetchedBankAccounts = [] } = useGetBankAccounts(agentId || '');
 
-  // Hook for creating bank account
+  // Hooks for bank account operations
   const createBankAccountMutation = useCreateBankAccount();
+  const updateBankAccountMutation = useUpdateBankAccount();
+  const deleteBankAccountMutation = useDeleteBankAccount();
+
+  const handleEditBank = (bank: BankAccount) => {
+    setEditData(bank);
+    setIsAddBankOpen(true);
+  };
+
+  const handleDeleteBank = (id: string) => {
+    if (agentId) {
+      deleteBankAccountMutation.mutate({ id, ownerId: agentId });
+    }
+  };
 
   const columns = GetBankTableColumns({
-    handleEdit: () => {},
-    handleDelete: () => {},
+    handleEdit: handleEditBank,
+    handleDelete: handleDeleteBank,
   });
 
   const handleAddBank = (bankData: any) => {
     if (agentId) {
       createBankAccountMutation.mutate({
+        ...bankData,
+        owner_id: agentId,
+        owner_type: 'agent_admin',
+      });
+    }
+  };
+
+  const handleEditBankSubmit = (bankData: any) => {
+    if (editData && agentId) {
+      updateBankAccountMutation.mutate({
+        id: editData.id,
         ...bankData,
         owner_id: agentId,
         owner_type: 'agent_admin',
@@ -87,8 +113,12 @@ export const FinanceDetailsStep: React.FC<{ agentId?: string }> = ({ agentId }) 
       {/* Add Bank Dialog */}
       <AddBankDialog
         isOpen={isAddBankOpen}
-        onClose={() => setIsAddBankOpen(false)}
+        onClose={() => {
+          setIsAddBankOpen(false);
+          setEditData(undefined);
+        }}
         onAdd={handleAddBank}
+        {...(editData && { editData, onEdit: handleEditBankSubmit })}
       />
     </div>
  );
