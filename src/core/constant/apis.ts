@@ -78,6 +78,12 @@ export const API = {
       LIST: `/agents`,
       CREATE: `/agents`,
       UPDATE: (id: string) => `/agents/${id}`,
+    },
+    BANK_ACCOUNTS: {
+      LIST: (ownerId: string) => `/bank-accounts/findBankAccounts/${ownerId}`,
+      CREATE: `/bank-accounts`,
+      UPDATE: (id: string) => `/bank-accounts/${id}`,
+      DELETE: (id: string) => `/bank-accounts/${id}`,
     }
   },
   NUSERS: {

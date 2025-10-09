@@ -1,5 +1,5 @@
 import { ActionButtons, TableColumn } from '@/components/table';
-import { BankAccount } from '../steps/FinanceDetailsStep';
+import { BankAccount } from '../../../api/bankAccounts';
 
 const GetBankTableColumns = ({
   handleEdit,
@@ -12,7 +12,7 @@ const GetBankTableColumns = ({
     {
       id: 'bankName',
       header: 'Bank Name',
-      accessorKey: 'bankName',
+      accessorKey: 'bank_name',
       sortable: true,
       filterable: true,
       meta: {
@@ -23,7 +23,7 @@ const GetBankTableColumns = ({
     {
       id: 'branchName',
       header: 'Branch Name',
-      accessorKey: 'branchName',
+      accessorKey: 'bank_branch',
       sortable: true,
       filterable: true,
       meta: {
@@ -34,7 +34,7 @@ const GetBankTableColumns = ({
     {
       id: 'accountHolder',
       header: 'Account Holder',
-      accessorKey: 'accountHolder',
+      accessorKey: 'account_holder_name',
       sortable: true,
       filterable: true,
       meta: {
@@ -45,7 +45,7 @@ const GetBankTableColumns = ({
     {
       id: 'accountNumber',
       header: 'Account Number',
-      accessorKey: 'accountNumber',
+      accessorKey: 'account_number',
       sortable: true,
       filterable: true,
       meta: {
@@ -56,7 +56,7 @@ const GetBankTableColumns = ({
     {
       id: 'ifscCode',
       header: 'IFSC Code',
-      accessorKey: 'ifscCode',
+      accessorKey: 'ifsc_code',
       sortable: true,
       filterable: true,
       meta: {

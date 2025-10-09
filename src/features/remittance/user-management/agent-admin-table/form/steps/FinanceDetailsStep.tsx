@@ -4,65 +4,41 @@ import { agentAdminCreationConfig } from '../agent-admin-creation.config';
 import { getController } from '@/components/form/utils/get-controller';
 import FieldWrapper from '@/components/form/wrapper/field-wrapper';
 import FormFieldRow from '@/components/form/wrapper/form-field-row';
-import { Button } from '@/components/ui/button';
-import { PlusCircle } from 'lucide-react';
-import { AddBankDialog } from '../components/AddBankDialog';
 import GetBankTableColumns from '../components/bank-table-coulumn';
 import { GenericTable } from '../components/generic-table';
 import SubTitle from '../components/sub-title';
+import { useGetBankAccounts, useCreateBankAccount } from '../../../hooks/useBankAccounts';
+import { Button } from '@/components/ui/button';
+import { PlusCircle } from 'lucide-react';
+import { AddBankDialog } from '../components/AddBankDialog';
 
-
-export interface BankAccount {
-  id: string;
-  bankName: string;
-  branchName: string;
-  accountHolder: string;
-  accountNumber: string;
-  ifscCode: string;
-}
-
-export const FinanceDetailsStep: React.FC = () => {
-  const { control, formState: { errors }, watch, setValue } = useFormContext();
+export const FinanceDetailsStep: React.FC<{ agentId?: string }> = ({ agentId }) => {
+  const { control, formState: { errors } } = useFormContext();
   const config = agentAdminCreationConfig();
+
+  // State for add bank dialog
   const [isAddBankOpen, setIsAddBankOpen] = useState(false);
-  const [editingBank, setEditingBank] = useState<BankAccount | null>(null);
 
-  const bankAccounts = watch('bankAccounts') || [];
+  // Fetch bank accounts if agentId is provided
+  const { data: fetchedBankAccounts = [] } = useGetBankAccounts(agentId || '');
 
-  const handleAddBank = (bankData: Omit<BankAccount, 'id'>) => {
-    const newBank = {
-      ...bankData,
-      id: Date.now().toString(),
-    };
-    const updatedBanks = [...bankAccounts, newBank];
-    setValue('bankAccounts', updatedBanks);
-    setIsAddBankOpen(false);
+  // Hook for creating bank account
+  const createBankAccountMutation = useCreateBankAccount();
+
+  const columns = GetBankTableColumns({
+    handleEdit: () => {},
+    handleDelete: () => {},
+  });
+
+  const handleAddBank = (bankData: any) => {
+    if (agentId) {
+      createBankAccountMutation.mutate({
+        ...bankData,
+        owner_id: agentId,
+        owner_type: 'agent_admin',
+      });
+    }
   };
-
-  const handleEditBank = (id: string, bankData: Omit<BankAccount, 'id'>) => {
-    const updatedBanks = bankAccounts.map((bank: BankAccount) =>
-      bank.id === id ? { ...bankData, id } : bank
-    );
-    setValue('bankAccounts', updatedBanks);
-    setEditingBank(null);
-  };
-
-  const handleDeleteBank = (id: string) => {
-    const updatedBanks = bankAccounts.filter((bank: BankAccount) => bank.id !== id);
-    setValue('bankAccounts', updatedBanks);
-  };
-
-  const openEditDialog = (bank: BankAccount) => {
-    setEditingBank(bank);
-  };
-
-  const closeEditDialog = () => {
-    setEditingBank(null);
-  };
-const columns = GetBankTableColumns({
-          handleEdit: openEditDialog,
-          handleDelete: handleDeleteBank,
-        })
   return (
     <div className="space-y-6">
       {/* Financial SPOC Details */}
@@ -86,24 +62,26 @@ const columns = GetBankTableColumns({
       </div>
 
       {/* Bank Accounts Section */}
-      <div>
+     <div>
         <div className="flex items-center justify-between mb-4">
           <p className="text-sm text-muted-foreground">You can add up to 3 accounts</p>
           <Button
             type="button"
             onClick={() => setIsAddBankOpen(true)}
-            disabled={bankAccounts.length >= 3}
+            disabled={fetchedBankAccounts.length >= 3}
             className="flex items-center gap-2"
           >
             <PlusCircle className="h-4 w-4" />
             Add Bank
           </Button>
         </div>
-
-        <GenericTable
-          columns={columns}
-          data={bankAccounts}
-        />
+        <div>
+          <SubTitle title="Bank Accounts" />
+          <GenericTable
+            columns={columns}
+            data={fetchedBankAccounts}
+          />
+        </div>
       </div>
 
       {/* Add Bank Dialog */}
@@ -112,16 +90,6 @@ const columns = GetBankTableColumns({
         onClose={() => setIsAddBankOpen(false)}
         onAdd={handleAddBank}
       />
-
-      {/* Edit Bank Dialog */}
-      {editingBank && (
-        <AddBankDialog
-          isOpen={!!editingBank}
-          onClose={closeEditDialog}
-          editData={editingBank}
-          onEdit={(bankData: Omit<BankAccount, 'id'>) => handleEditBank(editingBank.id, bankData)}
-        />
-      )}
     </div>
-  );
+ );
 };

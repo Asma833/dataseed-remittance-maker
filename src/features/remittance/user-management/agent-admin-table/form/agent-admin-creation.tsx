@@ -259,7 +259,7 @@ const AgentAdminCreation: React.FC = () => {
       case 1:
         return <CompanyDetailsStep />;
       case 2:
-        return <FinanceDetailsStep />;
+        return <FinanceDetailsStep agentId={isEditMode ? editData?.id : undefined} />;
       case 3:
         return <DocumentsStep />;
       case 4:

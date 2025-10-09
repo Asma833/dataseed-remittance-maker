@@ -3,14 +3,22 @@ import { Button } from '@/components/ui/button';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from '@/components/ui/dialog';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import { BankAccount } from '../steps/FinanceDetailsStep';
+import { BankAccount } from '../../../api/bankAccounts';
+
+interface BankFormData {
+  bank_name: string;
+  bank_branch: string;
+  account_holder_name: string;
+  account_number: string;
+  ifsc_code: string;
+}
 
 interface AddBankDialogProps {
   isOpen: boolean;
   onClose: () => void;
-  onAdd?: (bankData: Omit<BankAccount, 'id'>) => void;
+  onAdd?: (bankData: BankFormData) => void;
   editData?: BankAccount;
-  onEdit?: (bankData: Omit<BankAccount, 'id'>) => void;
+  onEdit?: (bankData: BankFormData & { id: string }) => void;
 }
 
 export const AddBankDialog: React.FC<AddBankDialogProps> = ({
@@ -33,11 +41,11 @@ export const AddBankDialog: React.FC<AddBankDialogProps> = ({
   useEffect(() => {
     if (editData) {
       setFormData({
-        bankName: editData.bankName,
-        branchName: editData.branchName,
-        accountHolder: editData.accountHolder,
-        accountNumber: editData.accountNumber,
-        ifscCode: editData.ifscCode,
+        bankName: editData.bank_name || '',
+        branchName: editData.bank_branch || '',
+        accountHolder: editData.account_holder_name || '',
+        accountNumber: editData.account_number || '',
+        ifscCode: editData.ifsc_code || '',
       });
     } else {
       setFormData({
@@ -69,10 +77,17 @@ export const AddBankDialog: React.FC<AddBankDialogProps> = ({
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (validateForm()) {
+      const bankData = {
+        bank_name: formData.bankName,
+        bank_branch: formData.branchName,
+        account_holder_name: formData.accountHolder,
+        account_number: formData.accountNumber,
+        ifsc_code: formData.ifscCode,
+      };
       if (editData && onEdit) {
-        onEdit(formData);
+        onEdit({ ...bankData, id: editData.id });
       } else if (onAdd) {
-        onAdd(formData);
+        onAdd(bankData);
       }
       handleClose();
     }

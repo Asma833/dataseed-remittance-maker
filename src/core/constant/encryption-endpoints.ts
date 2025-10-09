@@ -122,6 +122,16 @@ export const ENDPOINT_MATCHING_RULES: EndpointRulesConfig = {
     endpoint: API.DOCUMENTS.UPLOAD_REMITTANCE_IMAGE,
     matchType: 'standard' as const,
     description: 'Upload remittance image',
+  },
+  'bank-details':{
+    endpoint: '/bank-accounts/findBankAccounts',
+    matchType: 'standard' as const,
+    description: 'Upload remittance image',
+  },
+  'create-bank-details':{
+    endpoint: '/bank-accounts',
+    matchType: 'standard' as const,
+    description: 'Upload remittance image',
   }
 } as const;
 
