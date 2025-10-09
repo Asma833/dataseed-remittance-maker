@@ -1,4 +1,4 @@
-import React, { useState, useRef } from 'react';
+import React, { useState } from 'react';
 import { useFormContext } from 'react-hook-form';
 import { agentAdminCreationConfig } from '../agent-admin-creation.config';
 import { getController } from '@/components/form/utils/get-controller';
@@ -7,7 +7,6 @@ import FormFieldRow from '@/components/form/wrapper/form-field-row';
 import { Button } from '@/components/ui/button';
 import { Label } from '@/components/ui/label';
 import { Eye } from 'lucide-react';
-import { GenericTable }  from '../components/generic-table';
 import SubTitle from '../components/sub-title';
 import { ImageViewModal } from '@/components/common/image-view-modal';
 
@@ -27,10 +26,6 @@ export const DocumentsStep: React.FC = () => {
 
   const agreementCopy = watch('agreementCopy');
   const rbiLicenseCopy = watch('rbiLicenseCopy');
-
-  const handleFileUpload = (fieldName: string, file: File) => {
-    setValue(fieldName, file);
-  };
 
   const handleViewFile = (fileData: any, title: string) => {
     let file: File | undefined;
@@ -67,10 +62,10 @@ export const DocumentsStep: React.FC = () => {
               <Label>Agreement Copy</Label>
               <Button
                 type="button"
-                variant="light"
+                variant={!agreementCopy ? "light" : "default"}
                 className="w-28"
                 onClick={() => handleViewFile(agreementCopy, 'Agreement Copy')}
-                // disabled={!agreementCopy}
+                disabled={!agreementCopy}
               >
                 <Eye className="h-4 w-4" />
                 View
@@ -109,10 +104,10 @@ export const DocumentsStep: React.FC = () => {
               <Label>RBI License Copy</Label>
               <Button
                 type="button"
-                variant="light"
+                variant={!rbiLicenseCopy ? "light" : "default"}
                 className="w-28"
                 onClick={() => handleViewFile(rbiLicenseCopy, 'RBI License Copy')}
-                // disabled={!rbiLicenseCopy}
+                disabled={!rbiLicenseCopy}
               >
                 <Eye className="h-4 w-4" />
                 View
