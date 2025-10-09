@@ -109,7 +109,7 @@
     background-color: var(--color-background);
     color: var(--color-foreground);
     overflow: hidden;
-    font-family: 'Roboto' 'Inter', sans-serif;
+    font-family: 'Roboto', 'Inter', sans-serif !important;
   }
 }
 
@@ -546,4 +546,5 @@ body{
 .border-destructive{
   border: 0;
   box-shadow: 0px 0px 4px 1px #dc2626 ;
+/* Global table font size */
 }
