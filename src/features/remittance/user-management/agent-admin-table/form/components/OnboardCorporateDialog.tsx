@@ -4,21 +4,21 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { GenericDialog } from '@/components/common/generic-dialog';
 import { onboardCorporateSchema, OnboardCorporateFormData } from '../onboard-corporate.schema';
 import { onboardCorporateConfig } from '../onboard-corporate.config';
+import { useCreateAgentCorporate } from '../../../hooks/useCreateAgentCorporate';
+import { useUpdateAgentCorporate } from '../../../hooks/useUpdateAgentCorporate';
 
 interface OnboardCorporateDialogProps {
   isOpen: boolean;
   onClose: () => void;
-  onCreate: (data: OnboardCorporateFormData) => void;
+  agentId: string;
   editData?: Record<string, any>;
-  onEdit?: (data: Record<string, any>) => void;
 }
 
 export const OnboardCorporateDialog: React.FC<OnboardCorporateDialogProps> = ({
   isOpen,
   onClose,
-  onCreate,
+  agentId,
   editData,
-  onEdit,
 }) => {
   const form = useForm<OnboardCorporateFormData>({
     resolver: zodResolver(onboardCorporateSchema),
@@ -27,6 +27,10 @@ export const OnboardCorporateDialog: React.FC<OnboardCorporateDialogProps> = ({
   });
 
   const { reset } = form;
+
+  // Hooks for API operations
+  const createCorporateMutation = useCreateAgentCorporate();
+  const updateCorporateMutation = useUpdateAgentCorporate();
 
   // Reset form when editData changes
   useEffect(() => {
@@ -37,6 +41,34 @@ export const OnboardCorporateDialog: React.FC<OnboardCorporateDialogProps> = ({
     }
   }, [editData, reset]);
 
+  const handleFormSubmit = (data: OnboardCorporateFormData) => {
+    const payload = {
+      entity_name: data.entityName,
+      pan_number: data.panNumber,
+      date_of_incorporation: data.dateOfIncorporation,
+      entity_type: data.entityType,
+      owner_id: agentId,
+      owner_type: 'Agent',
+      ...(data.cin && { cin: data.cin }),
+      ...(data.address && { address: data.address }),
+    };
+
+    if (editData?.id) {
+      // Update existing corporate
+      updateCorporateMutation.mutate({
+        id: editData.id,
+        ...payload,
+      }, {
+        onSuccess: () => onClose(),
+      });
+    } else {
+      // Create new corporate
+      createCorporateMutation.mutate(payload, {
+        onSuccess: () => onClose(),
+      });
+    }
+  };
+
   return (
     <GenericDialog
       isOpen={isOpen}
@@ -45,10 +77,8 @@ export const OnboardCorporateDialog: React.FC<OnboardCorporateDialogProps> = ({
       subtitle="Please fill all the required fields"
       form={form}
       config={onboardCorporateConfig()}
-      onSubmit={onCreate}
-      submitButtonText="Create"
-      editData={editData}
-      onEdit={onEdit}
+      onSubmit={handleFormSubmit}
+      submitButtonText={editData ? "Update" : "Create"}
     />
   );
 };

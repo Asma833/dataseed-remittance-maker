@@ -131,8 +131,14 @@ export const ENDPOINT_MATCHING_RULES: EndpointRulesConfig = {
   'create-bank-details':{
     endpoint: '/bank-accounts',
     matchType: 'standard' as const,
-    description: 'Upload remittance image',
-  }
+    description: 'Bank details',
+  },
+  'create-corporates':{
+    endpoint: '/agent-corporates',
+    matchType: 'standard' as const,
+    description: 'Create corporates',
+ },
+  
 } as const;
 
 

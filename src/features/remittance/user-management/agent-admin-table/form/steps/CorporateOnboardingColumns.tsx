@@ -1,5 +1,5 @@
 import { ActionButtons, TableColumn } from '@/components/table';
-import { AgentCorporate } from '../../../api/agentCorporates';
+import { AgentCorporate } from '../../../types/agentCorporate.types';
 
 export type CorporateData = AgentCorporate;
 

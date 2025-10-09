@@ -267,7 +267,7 @@ const AgentAdminCreation: React.FC = () => {
       case 5:
         return <CommissionStep />;
       case 6:
-        return <CorporateOnboardingStep />;
+        return <CorporateOnboardingStep agentId={isEditMode ? editData?.id : ""}/>;
       default:
         return null;
     }
