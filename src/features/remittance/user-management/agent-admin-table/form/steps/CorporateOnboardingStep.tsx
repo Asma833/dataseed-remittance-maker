@@ -6,32 +6,14 @@ import { PlusCircle } from 'lucide-react';
 import GetCorporateOnboardingColumns, { CorporateData } from './CorporateOnboardingColumns';
 import { OnboardCorporateDialog } from '../components/OnboardCorporateDialog';
 import { OnboardCorporateFormData } from '../agent-admin-creation.schema';
-
-const sampleCorporateData: CorporateData[] = [
-  {
-    id: '1',
-    entityName: 'ABC Corp',
-    panNumber: 'AAACA1234A',
-    dateOfIncorporation: '2020-01-15',
-    entityType: 'Private Limited',
-    cin: 'U12345MH2020PTC123456',
-    address: '123 Business Street, Mumbai, Maharashtra',
-  },
-  {
-    id: '2',
-    entityName: 'XYZ Ltd',
-    panNumber: 'BBBAB5678B',
-    dateOfIncorporation: '2019-05-20',
-    entityType: 'Public Limited',
-    cin: 'U67890DL2019PLC123456',
-    address: '456 Corporate Avenue, Delhi',
-  },
-];
+import { useGetAgentCorporates } from '../../../hooks/useAgentCorporates';
 
 export const CorporateOnboardingStep: React.FC = () => {
   console.log("CorporateOnboardingStep")
-  const [corporates, setCorporates] = useState<CorporateData[]>(sampleCorporateData);
   const [isOnboardDialogOpen, setIsOnboardDialogOpen] = useState(false);
+
+  // Fetch agent corporates from API
+  const { data: corporates = [], isLoading } = useGetAgentCorporates();
 
   const handleEdit = (corporate: CorporateData) => {
     // TODO: Implement edit functionality
@@ -39,13 +21,18 @@ export const CorporateOnboardingStep: React.FC = () => {
   };
 
   const handleCreateCorporate = (data: OnboardCorporateFormData) => {
-    const newCorporate: CorporateData = {
-      ...data,
-      id: Date.now().toString(),
+    // Transform camelCase to snake_case for API
+    const newCorporate: Omit<CorporateData, 'id' | 'created_by' | 'updated_by' | 'created_at' | 'updated_at' | 'owner_id' | 'owner_type'> = {
+      entity_name: data.entityName,
+      pan_number: data.panNumber,
+      date_of_incorporation: data.dateOfIncorporation,
+      entity_type: data.entityType,
       cin: data.cin || '',
       address: data.address || '',
     };
-    setCorporates([...corporates, newCorporate]);
+    // Note: In a real implementation, you would call a create API here
+    // For now, we'll just close the dialog
+    console.log('Create corporate:', newCorporate);
   };
 
   const columns = GetCorporateOnboardingColumns({ handleEdit });

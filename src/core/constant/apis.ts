@@ -84,6 +84,9 @@ export const API = {
       CREATE: `/bank-accounts`,
       UPDATE: (id: string) => `/bank-accounts/${id}`,
       DELETE: (id: string) => `/bank-accounts/${id}`,
+    },
+    AGENT_CORPORATES: {
+      LIST: `/agent-corporates`,
     }
   },
   NUSERS: {

@@ -1,14 +1,7 @@
 import { ActionButtons, TableColumn } from '@/components/table';
+import { AgentCorporate } from '../../../api/agentCorporates';
 
-export interface CorporateData {
-  id: string;
-  entityName: string;
-  panNumber: string;
-  dateOfIncorporation: string;
-  entityType: string;
-  cin: string;
-  address: string;
-}
+export type CorporateData = AgentCorporate;
 
 const GetCorporateOnboardingColumns = ({
   handleEdit
@@ -17,8 +10,8 @@ const GetCorporateOnboardingColumns = ({
 }): TableColumn<CorporateData>[] => {
   return [
     {
-      id: 'entityName',
-      accessorKey: 'entityName',
+      id: 'entity_name',
+      accessorKey: 'entity_name',
       header: 'Entity Name',
       sortable: true,
       filterable: true,
@@ -28,8 +21,8 @@ const GetCorporateOnboardingColumns = ({
       },
     },
     {
-      id: 'panNumber',
-      accessorKey: 'panNumber',
+      id: 'pan_number',
+      accessorKey: 'pan_number',
       header: 'Pan Number',
       sortable: true,
       filterable: true,
@@ -39,8 +32,8 @@ const GetCorporateOnboardingColumns = ({
       },
     },
     {
-      id: 'dateOfIncorporation',
-      accessorKey: 'dateOfIncorporation',
+      id: 'date_of_incorporation',
+      accessorKey: 'date_of_incorporation',
       header: 'Date of Incorporation',
       sortable: true,
       filterable: true,
