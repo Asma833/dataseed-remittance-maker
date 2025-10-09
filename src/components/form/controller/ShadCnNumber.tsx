@@ -12,6 +12,7 @@ interface ShadCnNumberProps {
   forcedValue?: string | number;
   min?: number;
   step?: number | string;
+  placeholder?: string;
 }
 
 export const ShadCnNumber = ({
@@ -23,6 +24,7 @@ export const ShadCnNumber = ({
   forcedValue,
   min = 0,
   step = 'any',
+  placeholder,
 }: ShadCnNumberProps) => {
   const { control } = useFormContext();
 
@@ -42,6 +44,7 @@ export const ShadCnNumber = ({
             <ShadCnFormInput
               {...field}
               type="number"
+              placeholder={placeholder}
               className={cn("form-input shadow-none focus-visible:ring-0", error && "border-destructive focus:ring-destructive")}
               value={(forcedValue !== undefined ? forcedValue : value) || ''}
               onChange={(e) => {

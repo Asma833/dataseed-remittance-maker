@@ -436,7 +436,7 @@ export const agentAdminCreationConfig = () => {
         label: "",
         type: FieldType.Number,              // each currency field will be numeric
         required: false,
-        placeholder: "Enter Value",
+        placeholder: "",
         min: 0,
         step: 0.01,
         currencies: [
@@ -499,7 +499,7 @@ export const agentAdminCreationConfig = () => {
         label: "",
         type: FieldType.Number,              // each currency field will be numeric
         required: false,
-        placeholder: "Enter Value",
+        placeholder: "",
         min: 0,
         step: 0.01,
         currencies: [
