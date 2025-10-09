@@ -105,10 +105,10 @@ const BranchAgentTable = () => {
           <TableTitle title="Branch Agents"/>
         </div>
         <div className="flex items-center gap-2">
-          <Button onClick={handleBulkUpload} variant="outline" size="sm" className="btn-light">
+          {/* <Button onClick={handleBulkUpload} variant="outline" size="sm" className="btn-light">
             Bulk Upload
             <UploadIcon className="h-4 w-4 mr-2 btn-icon-primary" />
-          </Button>
+          </Button> */}
           <Button onClick={handleCreateBranchAgent} size="sm">
             <PlusCircle className="h-4 w-4" />
             Create Branch Agent
