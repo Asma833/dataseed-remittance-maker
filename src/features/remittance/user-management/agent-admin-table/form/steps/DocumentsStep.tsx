@@ -9,6 +9,7 @@ import { Label } from '@/components/ui/label';
 import { Eye } from 'lucide-react';
 import { GenericTable }  from '../components/generic-table';
 import SubTitle from '../components/sub-title';
+import { ImageViewModal } from '@/components/common/image-view-modal';
 
 export interface CompanyDocument {
   id: string;
@@ -20,18 +21,38 @@ export const DocumentsStep: React.FC = () => {
   const { control, formState: { errors }, watch, setValue } = useFormContext();
   const config = agentAdminCreationConfig();
 
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [modalImageSrc, setModalImageSrc] = useState('');
+  const [modalTitle, setModalTitle] = useState('');
 
-  const agreementCopy = watch('documents.agreementCopy');
-  const rbiLicenseCopy = watch('documents.rbiLicenseCopy');
+  const agreementCopy = watch('agreementCopy');
+  const rbiLicenseCopy = watch('rbiLicenseCopy');
 
   const handleFileUpload = (fieldName: string, file: File) => {
-    setValue(`documents.${fieldName}`, file);
+    setValue(fieldName, file);
   };
 
-  const handleViewFile = (file: File | undefined) => {
+  const handleViewFile = (fileData: any, title: string) => {
+    let file: File | undefined;
+    if (Array.isArray(fileData) && fileData.length > 0 && fileData[0]?.file instanceof File) {
+      file = fileData[0].file;
+    } else if (fileData instanceof File) {
+      file = fileData;
+    }
     if (file) {
-      // Implement file viewing logic, e.g., open in new tab or modal
-      console.log('Viewing file:', file.name);
+      const objectUrl = URL.createObjectURL(file);
+      setModalImageSrc(objectUrl);
+      setModalTitle(title);
+      setIsModalOpen(true);
+    }
+  };
+
+  const handleCloseModal = () => {
+    setIsModalOpen(false);
+    // Clean up object URL to prevent memory leaks
+    if (modalImageSrc) {
+      URL.revokeObjectURL(modalImageSrc);
+      setModalImageSrc('');
     }
   };
 
@@ -48,7 +69,7 @@ export const DocumentsStep: React.FC = () => {
                 type="button"
                 variant="light"
                 className="w-28"
-                onClick={() => handleViewFile(agreementCopy)}
+                onClick={() => handleViewFile(agreementCopy, 'Agreement Copy')}
                 // disabled={!agreementCopy}
               >
                 <Eye className="h-4 w-4" />
@@ -90,7 +111,7 @@ export const DocumentsStep: React.FC = () => {
                 type="button"
                 variant="light"
                 className="w-28"
-                onClick={() => handleViewFile(rbiLicenseCopy)}
+                onClick={() => handleViewFile(rbiLicenseCopy, 'RBI License Copy')}
                 // disabled={!rbiLicenseCopy}
               >
                 <Eye className="h-4 w-4" />
@@ -123,6 +144,12 @@ export const DocumentsStep: React.FC = () => {
         </FormFieldRow>
       </div>
 
+      <ImageViewModal
+        isOpen={isModalOpen}
+        onClose={handleCloseModal}
+        imageSrc={modalImageSrc}
+        title={modalTitle}
+      />
     </div>
   );
 };
