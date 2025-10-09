@@ -21,14 +21,53 @@ import { Stepper } from './stepper';
 import { FormTitle } from '@/features/auth/components/form-title';
 import { useCreateAgent } from '../../hooks/useCreateAgent';
 import { useUpdateAgentAdmin } from '../../hooks/useUpdateAgentAdmin';
+import { uploadRemittanceImage } from '../../api/documents';
 
 type AgentAdminFormType = z.input<typeof agentAdminCreationSchema>;
+
+const uploadFiles = async (data: AgentAdminFormType) => {
+  const uploadPromises = [];
+
+  // Helper to get File from data
+  const getFile = (fileData: any): File | null => {
+    if (fileData instanceof File) return fileData;
+    if (Array.isArray(fileData) && fileData.length > 0 && fileData[0]?.file instanceof File) {
+      return fileData[0].file;
+    }
+    return null;
+  };
+
+  const agreementFile = getFile(data.agreementCopy);
+  console.log('agreementFile:', agreementFile);
+  if (agreementFile) {
+    uploadPromises.push(uploadRemittanceImage(agreementFile));
+  }
+
+  const rbiFile = getFile(data.rbiLicenseCopy);
+  console.log('rbiFile:', rbiFile);
+  if (rbiFile) {
+    uploadPromises.push(uploadRemittanceImage(rbiFile));
+  }
+
+  console.log('uploadPromises length:', uploadPromises.length);
+
+  if (uploadPromises.length > 0) {
+    try {
+      await Promise.all(uploadPromises);
+      console.log('Document uploads completed');
+    } catch (error) {
+      console.error('Failed to upload some documents:', error);
+      // Don't throw, as the agent was created/updated successfully
+    }
+  }
+};
 
 const AgentAdminCreation: React.FC = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const [currentStep, setCurrentStep] = useState(0);
   const [completedSteps, setCompletedSteps] = useState<Set<number>>(new Set());
+  const [submittedData, setSubmittedData] = useState<AgentAdminFormType | null>(null);
 
   const config = agentAdminCreationConfig();
   const steps = config.steps;
@@ -41,10 +80,20 @@ const AgentAdminCreation: React.FC = () => {
   console.log(currentStep,"currentStep")
 
   const { mutate: createAgent, isLoading: isCreating } = useCreateAgent({
-    onAgentCreateSuccess: () => navigate('/admin/agent-admin'),
+    onAgentCreateSuccess: async () => {
+      if (submittedData) {
+        await uploadFiles(submittedData);
+      }
+      navigate('/admin/agent-admin');
+    },
   });
   const { mutate: updateAgent, isLoading: isUpdating } = useUpdateAgentAdmin({
-    onAgentAdminUpdateSuccess: () => navigate('/admin/agent-admin'),
+    onAgentAdminUpdateSuccess: async () => {
+      if (submittedData) {
+        await uploadFiles(submittedData);
+      }
+      navigate('/admin/agent-admin');
+    },
   });
 
   const methods = useForm({
@@ -196,6 +245,7 @@ const AgentAdminCreation: React.FC = () => {
 
   const onSubmit = handleSubmit(async (data) => {
      console.log("isEditMode",isEditMode)
+     setSubmittedData(data);
     if (isEditMode) {
       console.log("isEditMode",isEditMode)
       updateAgent({ id: editData.id, formData: data });

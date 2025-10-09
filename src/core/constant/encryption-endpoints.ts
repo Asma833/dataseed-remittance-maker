@@ -113,15 +113,15 @@ export const ENDPOINT_MATCHING_RULES: EndpointRulesConfig = {
     matchType: 'standard' as const,
     description: 'Get super checker endpoint',
   },
-  //  'login':{
-  //   endpoint: API.AUTH.LOGIN,
-  //   matchType: 'standard' as const,
-  //   description: 'Get Login',
-  // },
   'create-agent-admin':{
     endpoint: API.USER_MANAGEMENT.AGENTS.CREATE,
     matchType: 'standard' as const,
     description: 'Create Agent Admin',
+  },
+  'upload-agreement':{
+    endpoint: API.DOCUMENTS.UPLOAD_REMITTANCE_IMAGE,
+    matchType: 'standard' as const,
+    description: 'Upload remittance image',
   }
 } as const;
 

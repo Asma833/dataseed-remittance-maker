@@ -12,13 +12,16 @@ export interface UploadRemittanceImageResponse {
  * Upload remittance image
  */
 export const uploadRemittanceImage = async (file: File): Promise<UploadRemittanceImageResponse> => {
+  console.log('Uploading file:', file);
   const formData = new FormData();
   formData.append('file', file);
+  console.log('FormData has file:', formData.has('file'));
 
   const response = await axiosInstance.post(API.DOCUMENTS.UPLOAD_REMITTANCE_IMAGE, formData, {
     headers: {
       'Content-Type': 'multipart/form-data',
     },
-  });
+    skipEncryption: true,
+  } as any);
   return response.data;
 };

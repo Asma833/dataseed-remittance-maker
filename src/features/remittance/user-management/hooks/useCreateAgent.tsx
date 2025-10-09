@@ -5,6 +5,7 @@ import { agentAdminApi } from '../api/agentAdmin';
 import { useQueryInvalidator } from '../../../../hooks/useQueryInvalidator';
 import { agentAdminCreationSchema } from '../agent-admin-table/form/agent-admin-creation.schema';
 import { CreateAgentAdminRequest } from '../agent-admin-table/table/types';
+import { uploadRemittanceImage } from '../api/documents';
 
 type AgentAdminFormType = z.infer<typeof agentAdminCreationSchema>;
 
@@ -54,8 +55,8 @@ const transformFormData = (data: AgentAdminFormType): CreateAgentAdminRequest =>
       rbiLicenseValidity: data.rbiLicenseValidity || '',
       noOfBranches: Number(data.noOfBranches) || 0,
       extensionMonth: String(data.extensionMonth || ''),
-      agreementCopy: data.agreementCopy,
-      rbiLicenseCopy: data.rbiLicenseCopy,
+      agreementCopy: '',
+      rbiLicenseCopy: '',
     },
     productPurpose: {
       addOnForexMargin: data.productPurpose?.addOnForexMargin === 'Yes',
