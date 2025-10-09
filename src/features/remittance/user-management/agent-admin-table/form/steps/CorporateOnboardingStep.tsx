@@ -22,6 +22,11 @@ export const CorporateOnboardingStep: React.FC<{ agentId?: string }> = ({ agentI
     setIsOnboardDialogOpen(true);
   };
 
+  const handleCloseDialog = () => {
+    setIsOnboardDialogOpen(false);
+    setEditData(null);
+  };
+
 
   const columns = GetCorporateOnboardingColumns({ handleEdit });
 
@@ -55,10 +60,11 @@ export const CorporateOnboardingStep: React.FC<{ agentId?: string }> = ({ agentI
       />
       <OnboardCorporateDialog
         isOpen={isOnboardDialogOpen}
-        onClose={() => setIsOnboardDialogOpen(false)}
+        onClose={handleCloseDialog}
         agentId={agentId!}
         {...(editData && {
           editData: {
+            id: editData.id,
             entityName: editData.entity_name,
             panNumber: editData.pan_number,
             dateOfIncorporation: editData.date_of_incorporation,

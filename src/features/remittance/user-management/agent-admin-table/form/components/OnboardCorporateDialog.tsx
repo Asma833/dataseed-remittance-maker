@@ -22,7 +22,7 @@ export const OnboardCorporateDialog: React.FC<OnboardCorporateDialogProps> = ({
 }) => {
   const form = useForm<OnboardCorporateFormData>({
     resolver: zodResolver(onboardCorporateSchema),
-    defaultValues: editData || {},
+    defaultValues: {},
     mode: 'onSubmit',
   });
 
@@ -32,14 +32,23 @@ export const OnboardCorporateDialog: React.FC<OnboardCorporateDialogProps> = ({
   const createCorporateMutation = useCreateAgentCorporate();
   const updateCorporateMutation = useUpdateAgentCorporate();
 
-  // Reset form when editData changes
+  // Reset form when dialog opens
   useEffect(() => {
-    if (editData) {
-      reset(editData);
-    } else {
-      reset();
+    if (isOpen) {
+      if (editData) {
+        reset(editData);
+      } else {
+        reset({
+          entityName: '',
+          panNumber: '',
+          dateOfIncorporation: '',
+          entityType: '',
+          cin: '',
+          address: '',
+        });
+      }
     }
-  }, [editData, reset]);
+  }, [isOpen, editData, reset]);
 
   const handleFormSubmit = (data: OnboardCorporateFormData) => {
     const payload = {
@@ -64,7 +73,7 @@ export const OnboardCorporateDialog: React.FC<OnboardCorporateDialogProps> = ({
     } else {
       // Create new corporate
       createCorporateMutation.mutate(payload, {
-        onSuccess: () => onClose(),
+        onSuccess: () => reset(),
       });
     }
   };
@@ -73,7 +82,7 @@ export const OnboardCorporateDialog: React.FC<OnboardCorporateDialogProps> = ({
     <GenericDialog
       isOpen={isOpen}
       onClose={onClose}
-      title="Corporate"
+      title={editData ? "Update Corporate" : "Create Corporate"}
       subtitle="Please fill all the required fields"
       form={form}
       config={onboardCorporateConfig()}
