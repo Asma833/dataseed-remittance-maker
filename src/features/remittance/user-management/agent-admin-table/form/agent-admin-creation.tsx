@@ -259,7 +259,7 @@ const AgentAdminCreation: React.FC = () => {
       case 1:
         return <CompanyDetailsStep />;
       case 2:
-        return <FinanceDetailsStep agentId={isEditMode ? editData?.id : undefined} />;
+        return <FinanceDetailsStep agentId={isEditMode ? editData?.id : ""} />;
       case 3:
         return <DocumentsStep />;
       case 4:
@@ -321,7 +321,7 @@ const AgentAdminCreation: React.FC = () => {
                  className="w-24">
                 Back
               </Button>
-              {(currentStep === 5 || currentStep === 6) &&(
+              {(currentStep === 5) &&(
                 <>
                   <Button type="submit"  form="agent-admin-create-form" disabled={isCreating || isUpdating} className="w-24">
                     {(isCreating || isUpdating) ? 'Submitting...' : isEditMode ? 'Update' : 'Submit'}

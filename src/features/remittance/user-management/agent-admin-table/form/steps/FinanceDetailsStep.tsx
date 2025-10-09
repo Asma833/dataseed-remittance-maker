@@ -88,7 +88,8 @@ export const FinanceDetailsStep: React.FC<{ agentId?: string }> = ({ agentId }) 
       </div>
 
       {/* Bank Accounts Section */}
-     <div>
+      {agentId &&(
+      <div>
         <div className="flex items-center justify-between mb-4">
           <p className="text-sm text-muted-foreground">You can add up to 3 accounts</p>
           <Button
@@ -109,7 +110,8 @@ export const FinanceDetailsStep: React.FC<{ agentId?: string }> = ({ agentId }) 
           />
         </div>
       </div>
-
+      )}
+     
       {/* Add Bank Dialog */}
       <AddBankDialog
         isOpen={isAddBankOpen}
