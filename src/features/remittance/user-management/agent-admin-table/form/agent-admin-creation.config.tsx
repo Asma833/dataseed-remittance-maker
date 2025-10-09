@@ -46,8 +46,10 @@ export const agentAdminCreationConfig = () => {
           label: 'Agent Type',
           type: FieldType.Select,
           options: [
-            { value: 'type1', label: 'Type 1' },
-            { value: 'type2', label: 'Type 2' },
+            { value: 'ADI', label: 'ADI' },
+            { value: 'ADII', label: 'ADII' },
+            { value: 'FFMC', label: 'FFMC' },
+            { value: 'Referral', label: 'Referral' },
           ],
           placeholder: 'Select Agent Type',
         },
