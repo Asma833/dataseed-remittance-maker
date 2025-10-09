@@ -38,13 +38,11 @@ const uploadFiles = async (data: AgentAdminFormType) => {
   };
 
   const agreementFile = getFile(data.agreementCopy);
-  console.log('agreementFile:', agreementFile);
   if (agreementFile) {
     uploadPromises.push(uploadRemittanceImage(agreementFile));
   }
 
   const rbiFile = getFile(data.rbiLicenseCopy);
-  console.log('rbiFile:', rbiFile);
   if (rbiFile) {
     uploadPromises.push(uploadRemittanceImage(rbiFile));
   }
@@ -54,7 +52,6 @@ const uploadFiles = async (data: AgentAdminFormType) => {
   if (uploadPromises.length > 0) {
     try {
       await Promise.all(uploadPromises);
-      console.log('Document uploads completed');
     } catch (error) {
       console.error('Failed to upload some documents:', error);
       // Don't throw, as the agent was created/updated successfully

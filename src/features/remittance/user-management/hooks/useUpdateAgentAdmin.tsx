@@ -2,10 +2,9 @@ import { toast } from 'sonner';
 import { useMutation } from '@tanstack/react-query';
 import { z } from 'zod';
 import { agentAdminApi } from '../api/agentAdmin';
-import { UpdateAgentAdminRequest, AgentAdminData } from '../agent-admin-table/table/types';
+import { AgentAdminData } from '../agent-admin-table/table/types';
 import { useQueryInvalidator } from '../../../../hooks/useQueryInvalidator';
 import { agentAdminCreationSchema } from '../agent-admin-table/form/agent-admin-creation.schema';
-import { uploadRemittanceImage } from '../api/documents';
 
 type AgentAdminFormType = z.infer<typeof agentAdminCreationSchema>;
 
@@ -100,7 +99,6 @@ export const useUpdateAgentAdmin = ({ onAgentAdminUpdateSuccess }: UpdateAgentAd
   const { mutate, isPending, error } = useMutation<AgentAdminData, Error, { id: string; formData: AgentAdminFormType }>({
     mutationFn: ({ id, formData }) => {
       const transformedData = transformFormData(formData);
-      console.log('Transformed data for update API:', transformedData);
       return agentAdminApi.updateAgentAdmin({ id, ...transformedData });
     },
     onSuccess: (data) => {
