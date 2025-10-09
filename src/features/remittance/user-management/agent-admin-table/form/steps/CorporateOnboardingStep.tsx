@@ -20,7 +20,7 @@ export const CorporateOnboardingStep: React.FC = () => {
     console.log('Edit corporate:', corporate);
   };
 
-  const handleCreateCorporate = (data: OnboardCorporateFormData) => {
+  const handleCreateCorporate = (data: Record<string, any>) => {
     // Transform camelCase to snake_case for API
     const newCorporate: Omit<CorporateData, 'id' | 'created_by' | 'updated_by' | 'created_at' | 'updated_at' | 'owner_id' | 'owner_type'> = {
       entity_name: data.entityName,
