@@ -64,21 +64,65 @@ export const agentAdminCreationSchema = z.object({
   })).max(3, 'Maximum 3 bank accounts allowed'),
 
   // Documents
-  agreementValid: z.string().optional(),
-  rbiLicenseCategory: z.string().regex(/^(?!\s)(?!-)/, 'Cannot start with space or hyphen').optional(),
-  rbiLicenseValidity: z.string().optional(),
-  noOfBranches: z.union([z.string(), z.number()]).transform((val) => {
+  agreementValid: z.string().min(1, 'Agreement valid date is required'),
+  rbiLicenseCategory: z.string().min(1, 'RBI License Category is required').regex(/^(?!\s)(?!-)/, 'Cannot start with space or hyphen'),
+  rbiLicenseValidity: z.string().min(1, 'RBI License Validity is required'),
+  noOfBranches: z.union([z.string(), z.number()]).superRefine((val, ctx) => {
     const str = typeof val === 'string' ? val : val.toString();
-    if (str.trim() === '') return 0;
+    if (str.trim() === '') {
+      ctx.addIssue({
+        code: z.ZodIssueCode.custom,
+        message: 'Number of branches is required',
+      });
+      return;
+    }
     const num = parseInt(str);
-    return isNaN(num) ? 0 : num;
-  }).refine((val) => val >= 0, 'Number of branches cannot be negative').optional(),
-  extensionMonth: z.union([z.string(), z.number()]).transform((val) => {
+    if (isNaN(num)) {
+      ctx.addIssue({
+        code: z.ZodIssueCode.custom,
+        message: 'Number of branches must be a valid number',
+      });
+      return;
+    }
+    if (num < 0) {
+      ctx.addIssue({
+        code: z.ZodIssueCode.custom,
+        message: 'Number of branches cannot be negative',
+      });
+    }
+  }).transform((val) => {
     const str = typeof val === 'string' ? val : val.toString();
-    if (str.trim() === '') return undefined;
     const num = parseInt(str);
-    return isNaN(num) ? undefined : num;
-  }).refine((val) => val === undefined || val >= 0, 'Extension month cannot be negative').optional(),
+    return num;
+  }),
+  extensionMonth: z.union([z.string(), z.number()]).superRefine((val, ctx) => {
+    const str = typeof val === 'string' ? val : val.toString();
+    if (str.trim() === '') {
+      ctx.addIssue({
+        code: z.ZodIssueCode.custom,
+        message: 'Extension Month is required',
+      });
+      return;
+    }
+    const num = parseInt(str);
+    if (isNaN(num)) {
+      ctx.addIssue({
+        code: z.ZodIssueCode.custom,
+        message: 'Extension Month must be a valid number',
+      });
+      return;
+    }
+    if (num < 0) {
+      ctx.addIssue({
+        code: z.ZodIssueCode.custom,
+        message: 'Extension month cannot be negative',
+      });
+    }
+  }).transform((val) => {
+    const str = typeof val === 'string' ? val : val.toString();
+    const num = parseInt(str);
+    return num;
+  }),
   agreementCopy: z.any().optional(),
   rbiLicenseCopy: z.any().optional(),
   documents: z.object({}).optional(),
