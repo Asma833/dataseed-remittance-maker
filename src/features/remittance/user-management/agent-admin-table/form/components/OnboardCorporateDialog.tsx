@@ -23,6 +23,7 @@ export const OnboardCorporateDialog: React.FC<OnboardCorporateDialogProps> = ({
   const form = useForm<OnboardCorporateFormData>({
     resolver: zodResolver(onboardCorporateSchema),
     defaultValues: editData || {},
+    mode: 'onSubmit',
   });
 
   const { reset } = form;

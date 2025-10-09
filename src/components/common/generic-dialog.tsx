@@ -9,6 +9,7 @@ import {
 import { Button } from '@/components/ui/button';
 import { getController } from '@/components/form/utils/get-controller';
 import FieldWrapper from '@/components/form/wrapper/field-wrapper';
+import { FormProvider } from '@/components/form/providers/form-provider';
 
 export interface GenericDialogProps {
   isOpen: boolean;
@@ -44,12 +45,32 @@ export function GenericDialog({
   const { handleSubmit } = form;
 
   const handleFormSubmit = (data: any) => {
-    if (editData?.id && onEdit) {
-      onEdit({ ...data, id: editData.id });
-    } else {
-      onSubmit(data);
+    try {
+      if (editData?.id && onEdit) {
+        onEdit({ ...data, id: editData.id });
+      } else {
+        onSubmit(data);
+      }
+      onClose();
+    } catch (error) {
+      // If there's an error in the submit handler, don't close the dialog
+      console.error('Form submission error:', error);
     }
-    onClose();
+  };
+
+  const handleFormSubmitWithEvent = async (event: React.FormEvent) => {
+    // Prevent event propagation to parent forms
+    event.preventDefault();
+    event.stopPropagation();
+
+    // Trigger form validation manually
+    const isValid = await form.trigger();
+
+    if (isValid) {
+      const formData = form.getValues();
+      handleFormSubmit(formData);
+    }
+    // If invalid, errors will be displayed automatically
   };
 
   const handleClose = () => {
@@ -79,32 +100,33 @@ export function GenericDialog({
           {subtitle && <p className="text-muted-foreground">{subtitle}</p>}
         </DialogHeader>
 
-        <form onSubmit={handleSubmit(handleFormSubmit)} className="space-y-4">
-          {fieldRows.map((row, rowIndex) => (
-            <div key={rowIndex} className="grid grid-cols-2 gap-4">
-              {row.map(fieldName => {
-                const field = config.fields[fieldName];
-                return (
-                  <FieldWrapper key={fieldName}>
-                    {getController({
-                      ...(typeof field === 'object' && field !== null ? field : {}),
-                      name: fieldName,
-                      errors: form.formState.errors,
-                    })}
-                  </FieldWrapper>
-                );
-              })}
+        <FormProvider methods={form}>
+          <form onSubmit={handleFormSubmitWithEvent} className="space-y-4">
+            {fieldRows.map((row, rowIndex) => (
+              <div key={rowIndex} className="grid grid-cols-2 gap-4">
+                {row.map(fieldName => {
+                  const field = config.fields[fieldName];
+                  return (
+                    <FieldWrapper key={fieldName}>
+                      {getController({
+                        ...(typeof field === 'object' && field !== null ? field : {}),
+                        name: fieldName,
+                      })}
+                    </FieldWrapper>
+                  );
+                })}
+              </div>
+            ))}
+            <div className="flex justify-end space-x-2">
+              <Button type="button" variant="outline" onClick={handleClose}>
+                {cancelButtonText}
+              </Button>
+              <Button type="submit">
+                {editData ? 'Update' : submitButtonText}
+              </Button>
             </div>
-          ))}
-          <div className="flex justify-end space-x-2">
-            <Button type="button" variant="outline" onClick={handleClose}>
-              {cancelButtonText}
-            </Button>
-            <Button type="submit">
-              {editData ? 'Update' : submitButtonText}
-            </Button>
-          </div>
-        </form>
+          </form>
+        </FormProvider>
       </DialogContent>
     </Dialog>
   );

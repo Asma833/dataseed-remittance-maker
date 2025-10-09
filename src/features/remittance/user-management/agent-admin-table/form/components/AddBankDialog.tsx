@@ -23,6 +23,7 @@ export const AddBankDialog: React.FC<AddBankDialogProps> = ({
   const form = useForm<AddBankFormData>({
     resolver: zodResolver(addBankSchema),
     defaultValues: editData || {},
+    mode: 'onSubmit',
   });
 
   const { reset } = form;
