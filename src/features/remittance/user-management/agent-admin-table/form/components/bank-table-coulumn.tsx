@@ -67,7 +67,7 @@ const GetBankTableColumns = ({
     {
       id: 'action',
       header: 'Action',
-      cell: ({ row }) => <ActionButtons row={row} onEdit={handleEdit} onDelete={() => handleDelete(row.id)} />,
+      cell: ({ row }) => <ActionButtons row={row} onEdit={handleEdit} />,
       sortable: false,
       filterable: false,
       meta: {
