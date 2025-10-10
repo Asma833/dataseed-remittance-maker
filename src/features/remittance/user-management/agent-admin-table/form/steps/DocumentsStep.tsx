@@ -11,19 +11,6 @@ import { getController } from "@/components/form/utils/get-controller";
 import { agentAdminCreationConfig } from "../agent-admin-creation.config";
 import { uploadRemittanceImage } from "../../../api/documents";
 
-/**
- * Form shape used here (only relevant pieces):
- * documents: {
- *   agreement: { file?: File, s3Key?: string }
- *   rbi:       { file?: File, s3Key?: string }
- *   agreementValid: string
- *   rbiLicenseCategory: string
- *   rbiLicenseValidity: string
- *   noOfBranches: string | number
- *   extensionMonth: string
- * }
- */
-
 type DocKind = "agreement" | "rbi";
 
 export const DocumentsStep: React.FC = () => {
@@ -31,16 +18,16 @@ export const DocumentsStep: React.FC = () => {
   const { control, setValue, formState: { errors } } = useFormContext();
 
   // Watch just what we need
-  const agreement = useWatch({ control, name: "documents.agreement" }) as { file?: File; s3Key?: string } | undefined;
-  const rbi       = useWatch({ control, name: "documents.rbi" }) as { file?: File; s3Key?: string } | undefined;
+  const agreement = useWatch({ control, name: "agreementCopy" }) as File | string | undefined;
+  const rbi       = useWatch({ control, name: "rbiLicenseCopy" }) as File | string | undefined;
 
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [modalImageSrc, setModalImageSrc] = useState("");
   const [modalTitle, setModalTitle] = useState("");
   const [isUploading, setIsUploading] = useState<DocKind | null>(null);
 
-  const canViewAgreement = !!agreement?.file;
-  const canViewRbi       = !!rbi?.file;
+  const canViewAgreement = !!agreement && agreement instanceof File;
+  const canViewRbi       = !!rbi && rbi instanceof File;
 
   const handleBrowse = (kind: DocKind) => {
     // we’ll rely on a hidden file input rendered via getController
@@ -52,18 +39,16 @@ export const DocumentsStep: React.FC = () => {
 
   const onFileChange = (kind: DocKind, fileList: FileList | null) => {
     const file = fileList && fileList.length > 0 ? fileList[0] : undefined;
-    // write ONLY the File into the file slot; don’t touch the s3Key here
-    setValue(`documents.${kind}.file`, file, { shouldDirty: true, shouldValidate: true });
+    // write ONLY the File into the field
+    setValue(kind === "agreement" ? "agreementCopy" : "rbiLicenseCopy", file, { shouldDirty: true, shouldValidate: true });
   };
 
   const handleUpload = async (kind: DocKind) => {
-    const currentFile = kind === "agreement" ? agreement?.file : rbi?.file;
+    const currentFile = kind === "agreement" ? (agreement instanceof File ? agreement : undefined) : (rbi instanceof File ? rbi : undefined);
     if (!currentFile) return;
 
     // Optional validations
     if (currentFile.size > 10 * 1024 * 1024) {
-      // 10MB guard
-      alert("File too large (max 10MB).");
       return;
     }
 
@@ -71,11 +56,8 @@ export const DocumentsStep: React.FC = () => {
     try {
       const res = await uploadRemittanceImage(currentFile); // returns { success, s3_key }
       if (res?.s3_key) {
-        // store the remote key — separate field
-        setValue(`documents.${kind}.s3Key`, res.s3_key, { shouldDirty: true, shouldValidate: true });
-
-        // Optionally clear the local file if you don’t need preview anymore:
-        // setValue(`documents.${kind}.file`, undefined, { shouldDirty: true, shouldValidate: true });
+        // store the remote key in the field
+        setValue(kind === "agreement" ? "agreementCopy" : "rbiLicenseCopy", res.s3_key, { shouldDirty: true, shouldValidate: true });
       }
     } catch (e) {
       console.error("Upload failed:", e);
@@ -102,8 +84,8 @@ export const DocumentsStep: React.FC = () => {
   };
 
   // convenience flags for button states
-  const isAgreementUploaded = !!agreement?.s3Key;
-  const isRbiUploaded       = !!rbi?.s3Key;
+  const isAgreementUploaded = typeof agreement === 'string';
+  const isRbiUploaded       = typeof rbi === 'string';
 
   // agreement + rbi small helpers for labels
   const uploadBtnText = useMemo(
@@ -145,7 +127,7 @@ export const DocumentsStep: React.FC = () => {
                 variant={canViewAgreement ? "default" : "ghost"}
                 className="w-24"
                 disabled={!canViewAgreement}
-                onClick={() => handleView(agreement?.file, "Agreement Copy")}
+                onClick={() => handleView(agreement as File, "Agreement Copy")}
               >
                 <Eye className="h-4 w-4 mr-2" />
                 View
@@ -155,7 +137,7 @@ export const DocumentsStep: React.FC = () => {
               <Button
                 type="button"
                 onClick={() => handleUpload("agreement")}
-                disabled={!agreement?.file || !!agreement?.s3Key || isUploading === "agreement"}
+                disabled={!canViewAgreement || isAgreementUploaded || isUploading === "agreement"}
                 className="w-32"
               >
                 <Upload className="h-4 w-4 mr-2" />
@@ -206,7 +188,7 @@ export const DocumentsStep: React.FC = () => {
                 variant={canViewRbi ? "default" : "ghost"}
                 className="w-24"
                 disabled={!canViewRbi}
-                onClick={() => handleView(rbi?.file, "RBI License Copy")}
+                onClick={() => handleView(rbi as File, "RBI License Copy")}
               >
                 <Eye className="h-4 w-4 mr-2" />
                 View
@@ -216,7 +198,7 @@ export const DocumentsStep: React.FC = () => {
               <Button
                 type="button"
                 onClick={() => handleUpload("rbi")}
-                disabled={!rbi?.file || !!rbi?.s3Key || isUploading === "rbi"}
+                disabled={!canViewRbi || isRbiUploaded || isUploading === "rbi"}
                 className="w-32"
               >
                 <Upload className="h-4 w-4 mr-2" />

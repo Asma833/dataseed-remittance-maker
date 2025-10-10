@@ -49,8 +49,8 @@ const transformFormData = (data: AgentAdminFormType) => {
       rbiLicenseValidity: data.rbiLicenseValidity || '',
       noOfBranches: Number(data.noOfBranches) || 0,
       extensionMonth: String(data.extensionMonth || ''),
-      agreementCopy: '',
-      rbiLicenseCopy: '',
+      agreementCopy:data.agreementCopy,
+      rbiLicenseCopy:data.rbiLicenseCopy,
     },
     productPurpose: {
       addOnForexMargin: data.productPurpose?.addOnForexMargin === 'Yes',
