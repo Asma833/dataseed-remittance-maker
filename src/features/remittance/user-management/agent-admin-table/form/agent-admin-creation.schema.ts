@@ -170,7 +170,7 @@ export const agentAdminCreationSchema = z.object({
     }),
  
   commission_details: z.object({
-    commission_product_type: z.enum(["Remittance", "Card", "Currency"]),
+    commission_product_type: z.enum(["Remittance", "Card", "Currency","ADI-Referral"]),
     commission_type: z.enum(["FIXED", "PERCENTAGE", "HYBRID"]),
     product_margin: z.object({
       agent_fixed_margin: z.enum(["FIXED", "PERCENTAGE"]),
