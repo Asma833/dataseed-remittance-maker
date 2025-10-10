@@ -15,11 +15,11 @@ export const onboardCorporateSchema = z.object({
 export type OnboardCorporateFormData = z.infer<typeof onboardCorporateSchema>;
 export const agentAdminCreationSchema = z.object({
   // Basic Information
-  agent_code: z.string().regex(/^(?!\s)(?!.*\s$)/, 'Cannot start or end with spaces').optional().or(z.literal('')),
+  agent_code: z.string().min(1, 'Agent code is required').regex(/^(?!\s)(?!-)/, 'Cannot start with space or hyphen'),
   agent_name: z.string().min(1, 'Full name is required').regex(/^(?!\s)(?!.*\s$)/, 'Cannot start or end with spaces'),
   emailId: z.string().min(1, 'Email is required').email('Please enter a valid email address'),
   phoneNo: z.string().regex(/^(?!\s)(?!.*\s$)/, 'Cannot start or end with spaces').optional().or(z.literal('')),
-  agentType: z.string().regex(/^(?!\s)(?!.*\s$)/, 'Cannot start or end with spaces').optional().or(z.literal('')),
+  agentType: z.string().min(1, 'Agent type is required'),
   agentBranchCity: z.string().regex(/^(?!\s)(?!.*\s$)/, 'Cannot start or end with spaces').optional().or(z.literal('')),
   agentHOBranchState: z.string().regex(/^(?!\s)(?!.*\s$)/, 'Cannot start or end with spaces').optional().or(z.literal('')),
   ebixRMName: z.string().regex(/^(?!\s)(?!.*\s$)/, 'Cannot start or end with spaces').optional().or(z.literal('')),

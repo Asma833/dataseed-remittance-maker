@@ -102,9 +102,10 @@ const AgentAdminCreation: React.FC = () => {
   useEffect(() => {
     if (isEditMode && editData) {
       // Transform editData to match form structure
+      console.log(editData.agent_type)
       const formData = {
-        vendorCode: editData.agent_code,
-        fullName: editData.agent_name,
+        agent_code: editData.agent_code,
+        agent_name: editData.agent_name,
         emailId: editData.email,
         phoneNo: editData.phone_number,
         agentType: editData.agent_type,

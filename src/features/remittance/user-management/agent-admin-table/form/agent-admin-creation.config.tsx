@@ -18,6 +18,7 @@ export const agentAdminCreationConfig = () => {
         agent_code: {
           name: 'agent_code',
           label: 'Agent Code',
+          required: true,
           type: FieldType.Text,
           placeholder: 'Enter Agent Code',
         },
@@ -44,6 +45,7 @@ export const agentAdminCreationConfig = () => {
         agentType: {
           name: 'agentType',
           label: 'Agent Type',
+          required: true,
           type: FieldType.Select,
           options: [
             { value: 'ADI', label: 'ADI' },
