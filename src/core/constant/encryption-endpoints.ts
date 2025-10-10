@@ -138,6 +138,11 @@ export const ENDPOINT_MATCHING_RULES: EndpointRulesConfig = {
     matchType: 'standard' as const,
     description: 'Create corporates',
  },
+ 'document':{
+    endpoint: '/documents/presigned-urls',
+    matchType: 'standard' as const,
+    description: 'Get documents',
+ },
   
 } as const;
 

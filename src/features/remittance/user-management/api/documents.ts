@@ -21,9 +21,7 @@ export const uploadRemittanceImage = async (file: File): Promise<UploadRemittanc
   return response.data;
 };
 
-export interface GetPresignedUrlsResponse {
-  urls: string[];
-}
+import { GetPresignedUrlsResponse } from '../types/presignedUrls.types';
 
 export const getPresignedUrls = async (s3Keys: string[]): Promise<GetPresignedUrlsResponse> => {
   const response = await axiosInstance.post(API.DOCUMENTS.PRESIGNED_URLS, {

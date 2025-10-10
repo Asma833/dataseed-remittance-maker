@@ -10,6 +10,7 @@ import FormFieldRow from "@/components/form/wrapper/form-field-row";
 import { getController } from "@/components/form/utils/get-controller";
 import { agentAdminCreationConfig } from "../agent-admin-creation.config";
 import { uploadRemittanceImage } from "../../../api/documents";
+import { useGetPresignedUrls } from "../../../hooks/useGetPresignedUrls";
 
 type DocKind = "agreement" | "rbi";
 
@@ -26,8 +27,10 @@ export const DocumentsStep: React.FC = () => {
   const [modalTitle, setModalTitle] = useState("");
   const [isUploading, setIsUploading] = useState<DocKind | null>(null);
 
-  const canViewAgreement = !!agreement && agreement instanceof File;
-  const canViewRbi       = !!rbi && rbi instanceof File;
+  const { mutate: getPresignedUrls } = useGetPresignedUrls();
+
+  const canViewAgreement = !!agreement && (agreement instanceof File || typeof agreement === 'string');
+  const canViewRbi       = !!rbi && (rbi instanceof File || typeof rbi === 'string');
 
   const handleBrowse = (kind: DocKind) => {
     // we’ll rely on a hidden file input rendered via getController
@@ -67,12 +70,28 @@ export const DocumentsStep: React.FC = () => {
     }
   };
 
-  const handleView = (file: File | undefined, title: string) => {
+  const handleView = (file: File | string | undefined, title: string) => {
     if (!file) return;
-    const url = URL.createObjectURL(file);
-    setModalTitle(title);
-    setModalImageSrc(url);
-    setIsModalOpen(true);
+    if (file instanceof File) {
+      const url = URL.createObjectURL(file);
+      setModalTitle(title);
+      setModalImageSrc(url);
+      setIsModalOpen(true);
+    } else if (typeof file === 'string') {
+      // It's an s3_key, get presigned URL
+      getPresignedUrls([file], {
+        onSuccess: (data) => {
+          if (data.urls && data.urls.length > 0) {
+            setModalTitle(title);
+            setModalImageSrc(data.urls[0].presigned_url);
+            setIsModalOpen(true);
+          }
+        },
+        onError: (error) => {
+          console.error('Failed to get presigned URL:', error);
+        },
+      });
+    }
   };
 
   const closeModal = () => {
@@ -127,7 +146,7 @@ export const DocumentsStep: React.FC = () => {
                 variant={canViewAgreement ? "default" : "ghost"}
                 className="w-24"
                 disabled={!canViewAgreement}
-                onClick={() => handleView(agreement as File, "Agreement Copy")}
+                onClick={() => handleView(agreement, "Agreement Copy")}
               >
                 <Eye className="h-4 w-4 mr-2" />
                 View
@@ -188,7 +207,7 @@ export const DocumentsStep: React.FC = () => {
                 variant={canViewRbi ? "default" : "ghost"}
                 className="w-24"
                 disabled={!canViewRbi}
-                onClick={() => handleView(rbi as File, "RBI License Copy")}
+                onClick={() => handleView(rbi, "RBI License Copy")}
               >
                 <Eye className="h-4 w-4 mr-2" />
                 View

@@ -117,6 +117,7 @@ export const API = {
     UPDATE: `/documents/update`,
     MERGE_PDF: `/documents/merge-pdf`,
     UPLOAD_REMITTANCE_IMAGE: `/documents/uploadRemittanceImage`,
+    PRESIGNED_URLS: `/documents/presigned-urls`,
   },
   PRODUCTS: {
     GET_PRODUCTS: '/products',
