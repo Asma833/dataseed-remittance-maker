@@ -48,8 +48,6 @@ const uploadFiles = async (data: AgentAdminFormType) => {
     uploadPromises.push(uploadRemittanceImage(rbiFile));
   }
 
-  console.log('uploadPromises length:', uploadPromises.length);
-
   if (uploadPromises.length > 0) {
     try {
       await Promise.all(uploadPromises);
@@ -75,7 +73,6 @@ const AgentAdminCreation: React.FC = () => {
 
   // Example: you likely get this from API/route state
   const agentCode = editData?.agent_code || '[ ]';
-  console.log(currentStep,"currentStep")
 
   const { mutate: createAgent, isLoading: isCreating } = useCreateAgent({
     onAgentCreateSuccess: async () => {
@@ -167,10 +164,8 @@ const AgentAdminCreation: React.FC = () => {
   };
 
   const onSubmit = handleSubmit(async (data) => {
-     console.log("isEditMode",isEditMode)
      setSubmittedData(data);
     if (isEditMode) {
-      console.log("isEditMode",isEditMode)
       updateAgent({ id: editData.id, formData: data });
     } else {
       createAgent(data);
@@ -214,13 +209,9 @@ const AgentAdminCreation: React.FC = () => {
                   currentStep={currentStep}
                   completedSteps={completedSteps}
                   onStepClick={(i) => {
-                    console.log('onStepClick called with i:', i, 'currentStep:', currentStep);
                     // allow jumping back or staying on current step
                     if (i <= currentStep) {
-                      console.log('Setting currentStep to:', i,currentStep);
                       setCurrentStep(i);
-                    } else {
-                      console.log('Not allowing jump forward to:', i);
                     }
                   }}
 

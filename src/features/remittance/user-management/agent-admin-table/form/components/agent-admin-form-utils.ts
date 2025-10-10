@@ -101,7 +101,6 @@ export const resetAgentAdminForm = (
   methods: UseFormReturn<any>,
   editData: any
 ) => {
-  console.log(editData.agent_type);
   const formData = transformEditDataToFormData(editData);
   methods.reset(formData);
 

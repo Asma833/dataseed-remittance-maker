@@ -71,7 +71,6 @@ export const superCheckerSchema = z
     
     // If card/currency products are selected, check transactionTypeMap
     if (!data.checkerDetails.transactionTypeMap) {
-      console.log('Validation failed: transactionTypeMap is missing');
       return false;
     }
     
@@ -79,12 +78,10 @@ export const superCheckerSchema = z
     for (const product of needsTransaction) {
       const txnType = data.checkerDetails.transactionTypeMap[product as 'card' | 'currency'];
       if (!txnType) {
-        console.log(`Validation failed: ${product} is selected but has no transaction type`);
         return false;
       }
     }
     
-    console.log('Validation passed for transaction types');
     return true;
   }, {
     message: 'Transaction type is required for selected card or currency products',

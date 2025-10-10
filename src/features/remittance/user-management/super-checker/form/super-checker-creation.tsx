@@ -195,7 +195,6 @@ export const CreateSuperChecker = () => {
       setTimeout(() => {
         isInitialLoadRef.current = false;
         trigger();
-        console.log('Form values after patching:', getValues());
       }, 150);
     } else {
       // Mark initial load complete for create mode
@@ -209,7 +208,6 @@ export const CreateSuperChecker = () => {
   useEffect(() => {
     // Skip this effect during initial load to prevent overwriting patched values
     if (isInitialLoadRef.current || !productType) {
-      console.log('Skipping productType effect - initial load or no productType');
       return;
     }
     
@@ -220,7 +218,6 @@ export const CreateSuperChecker = () => {
     if (productType['card']) {
       // If card is selected, preserve existing value or set default
       newTransactionMap.card = currentTransactionMap?.card || 'buy';
-      console.log('Card is selected, setting transaction type:', newTransactionMap.card);
     }
     
     if (productType['currency']) {
@@ -235,7 +232,6 @@ export const CreateSuperChecker = () => {
     // Verify it was set
     setTimeout(() => {
       const verifyMap = getValues('checkerDetails.transactionTypeMap');
-      console.log('Verified Transaction Map after setValue:', verifyMap);
     }, 50);
   }, [productType, setValue, getValues]);
 

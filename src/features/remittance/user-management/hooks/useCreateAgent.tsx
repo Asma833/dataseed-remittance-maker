@@ -15,7 +15,6 @@ type CreateAgentOptions = {
 
 const transformFormData = (data: AgentAdminFormType): CreateAgentAdminRequest => {
   const commissionDetails = data.commission_details;
-  console.log(data,"Payload")
   return {
     basicInformation: {
       agent_code: data.agent_code || '',
@@ -101,7 +100,6 @@ export const useCreateAgent = ({ onAgentCreateSuccess }: CreateAgentOptions = {}
   const { mutate, isPending, error } = useMutation<any, Error, AgentAdminFormType>({
     mutationFn: (data) => {
       const transformedData = transformFormData(data);
-      console.log('Transformed data for API:', transformedData);
       return agentAdminApi.createAgent(transformedData);
     },
     onSuccess: (data) => {

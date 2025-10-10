@@ -60,13 +60,10 @@ const SuperCheckerTable = () => {
     },
  
     onSortingChange: (sorting: { id: string; desc: boolean }[]) => {
-      //console.log('Sorting changed:', sorting);
     },
     onGlobalFilterChange: (filter: string) => {
-      //console.log('Global filter changed:', filter);
     },
     onColumnFiltersChange: (filters: { id: string; value: any }[]) => {
-      //console.log('Column filters changed:', filters);
     },
   };
 

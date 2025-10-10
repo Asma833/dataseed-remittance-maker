@@ -37,7 +37,6 @@ export const CreateHoliday = () => {
   };
 
   const onSubmit = async (data: any) => {
-    console.log('Form submitted with data:', data);
     // Add actual submission logic here
   };
 

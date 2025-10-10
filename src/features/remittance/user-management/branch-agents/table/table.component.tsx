@@ -71,13 +71,10 @@ const BranchAgentTable = () => {
     },
 
     onSortingChange: (sorting: { id: string; desc: boolean }[]) => {
-      //console.log('Sorting changed:', sorting);
     },
     onGlobalFilterChange: (filter: string) => {
-      //console.log('Global filter changed:', filter);
     },
     onColumnFiltersChange: (filters: { id: string; value: any }[]) => {
-      //console.log('Column filters changed:', filters);
     },
   };
 
@@ -89,7 +86,6 @@ const BranchAgentTable = () => {
   // Handle bulk upload
   const handleBulkUpload = () => {
     // TODO: Implement bulk upload functionality
-    console.log('Bulk upload clicked');
   };
 
   // Define columns matching the requirements

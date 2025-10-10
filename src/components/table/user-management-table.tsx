@@ -166,13 +166,11 @@ export function UserManagementTable() {
   }
 
   function handleRowClick(user: UserData) {
-    //console.log('Row clicked:', user);
   }
 
   // Dynamic table actions (when using dynamic mode)
   const tableActions = {
     onPaginationChange: (pagination: { pageIndex: number; pageSize: number }) => {
-      //console.log('Pagination changed:', pagination);
       // Here you would typically make an API call
       setLoading(true);
       setTimeout(() => {
@@ -180,15 +178,12 @@ export function UserManagementTable() {
       }, 1000);
     },
     onSortingChange: (sorting: { id: string; desc: boolean }[]) => {
-      //console.log('Sorting changed:', sorting);
       // Here you would typically make an API call
     },
     onGlobalFilterChange: (filter: string) => {
-      //console.log('Global filter changed:', filter);
       // Here you would typically make an API call
     },
     onColumnFiltersChange: (filters: { id: string; value: any }[]) => {
-      //console.log('Column filters changed:', filters);
       // Here you would typically make an API call
     },
     onRowClick: handleRowClick,
@@ -208,7 +203,6 @@ export function UserManagementTable() {
 
   // Export function
   const handleExport = () => {
-    //console.log('Exporting data...');
     alert('Export functionality would be implemented here');
   };
 

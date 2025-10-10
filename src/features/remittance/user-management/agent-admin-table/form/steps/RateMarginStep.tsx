@@ -37,7 +37,6 @@ export const RateMarginStep: React.FC = () => {
 
   const handleEdit = (row: MarginData) => {
     // Placeholder for edit functionality
-    console.log('Edit margin for', row.currency);
     // TODO: Implement edit dialog or inline editing
   };
 

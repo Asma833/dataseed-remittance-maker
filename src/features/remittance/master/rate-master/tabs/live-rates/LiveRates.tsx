@@ -36,13 +36,10 @@ const LiveRates = () => {
     },
  
     onSortingChange: (sorting: { id: string; desc: boolean }[]) => {
-      //console.log('Sorting changed:', sorting);
     },
     onGlobalFilterChange: (filter: string) => {
-      //console.log('Global filter changed:', filter);
     },
     onColumnFiltersChange: (filters: { id: string; value: any }[]) => {
-      //console.log('Column filters changed:', filters);
     },
   };
 
@@ -111,7 +108,6 @@ const LiveRates = () => {
 
   // Table columns
   const tableColumns = LiveRateTableColumnConfig();
- console.log(tableData,"tableData")
   return (
     <div className="dynamic-table-wrap">
      

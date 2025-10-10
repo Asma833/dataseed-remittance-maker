@@ -219,7 +219,6 @@ export function DataTable<T>({
         // Handle string values directly
         return itemValue === appliedStatusFilter;
       });
-      console.log(`Applied filter for ${columnId} = ${appliedStatusFilter}:`, filteredData.length, 'records');
     }
 
     // Apply manual role filtering if a specific role is applied
@@ -237,7 +236,6 @@ export function DataTable<T>({
         // Handle string values directly
         return itemValue === appliedRoleFilter;
       });
-      console.log(`Applied filter for ${columnId} = ${appliedRoleFilter}:`, filteredData.length, 'records');
     }
 
     // Apply custom filters
@@ -257,7 +255,6 @@ export function DataTable<T>({
             // Handle string values directly
             return itemValue === appliedValue;
           });
-          console.log(`Applied filter for ${filter.columnId} = ${appliedValue}:`, filteredData.length, 'records');
         }
       });
     }
@@ -321,11 +318,6 @@ export function DataTable<T>({
     setGlobalFilter('');
     setColumnFilters([]);
 
-    console.log('Applied filters:', {
-      status: selectedStatusFilter,
-      role: selectedRoleFilter,
-      custom: selectedCustomFilters,
-    });
   };
 
   // Table instance with error handling
@@ -371,7 +363,6 @@ export function DataTable<T>({
         actions.onPaginationChange(pagination);
       }
     } catch (error) {
-      console.error('Error in pagination change handler:', error);
     }
   }, [pagination, config.paginationMode, actions]);
 
@@ -381,7 +372,6 @@ export function DataTable<T>({
         actions.onSortingChange(sorting);
       }
     } catch (error) {
-      console.error('Error in sorting change handler:', error);
     }
   }, [sorting, config.sorting.sortMode, actions]);
 
@@ -394,7 +384,6 @@ export function DataTable<T>({
         return () => clearTimeout(timeoutId);
       }
     } catch (error) {
-      console.error('Error in global filter change handler:', error);
     }
     return undefined;
   }, [globalFilter, config.search.searchMode, config.search.debounceMs, actions]);
@@ -405,7 +394,6 @@ export function DataTable<T>({
         actions.onColumnFiltersChange(columnFilters);
       }
     } catch (error) {
-      console.error('Error in column filters change handler:', error);
     }
   }, [columnFilters, config.filters.filterMode, actions]);
 
@@ -657,7 +645,6 @@ export function DataTable<T>({
                               </TableCell>
                             );
                           } catch (cellError) {
-                            console.error('Error rendering cell:', cellError, cell);
                             return (
                               <TableCell
                                 key={cell.id}
@@ -676,7 +663,6 @@ export function DataTable<T>({
                       </TableRow>
                     );
                   } catch (rowError) {
-                    console.error('Error rendering row:', rowError, row);
                     return (
                       <TableRow key={`error-${index}`}>
                         <TableCell colSpan={columns.length} className="text-center text-destructive text-xs">
@@ -710,7 +696,6 @@ export function DataTable<T>({
       </div>
     );
   } catch (error) {
-    console.error('Error rendering DataTable:', error);
     return (
       <div className="flex items-center justify-center p-8">
         <div className="text-sm text-destructive">

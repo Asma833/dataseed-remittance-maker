@@ -22,7 +22,6 @@ const TransactionPage = () => {
   // Default component to render on base path when no sub-route is selected
   const DefaultComponent = isAdminContext ? Remittance : LiveRates;
 
-  console.log(isBasePath, "DefaultComponent");
   return (
     <div className="w-full">
       <div className="flex justify-center items-center px-10">

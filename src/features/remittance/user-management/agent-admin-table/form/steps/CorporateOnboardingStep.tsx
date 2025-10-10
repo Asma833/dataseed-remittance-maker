@@ -10,7 +10,6 @@ import { CreateAgentCorporateRequest } from '../../../types/agentCorporate.types
 import { useGetAgentCorporates } from '../../../hooks/useAgentCorporates';
 
 export const CorporateOnboardingStep: React.FC<{ agentId?: string }> = ({ agentId }) => {
-  console.log("CorporateOnboardingStep")
   const [isOnboardDialogOpen, setIsOnboardDialogOpen] = useState(false);
   const [editData, setEditData] = useState<CorporateData | null>(null);
 
@@ -36,7 +35,6 @@ export const CorporateOnboardingStep: React.FC<{ agentId?: string }> = ({ agentI
     currentPage: 1,
   };
 
-  console.log("CorporateOnboardingStep rendering");
   return (
     <div className="space-y-6">
       <div className="flex items-center justify-between mt-2">

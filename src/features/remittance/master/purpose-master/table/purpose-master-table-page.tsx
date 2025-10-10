@@ -71,7 +71,6 @@ const PurposeMasterTablePage = () => {
 
   const handleDelete = (purpose: PurposeData) => {
     // Implement delete functionality
-    console.log('Delete purpose:', purpose);
   };
 
   const handleCreatePurpose = () => {

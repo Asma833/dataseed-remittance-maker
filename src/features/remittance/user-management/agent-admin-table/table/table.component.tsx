@@ -63,7 +63,6 @@ const AgentAdminTable = () => {
     },
   };
 
-  //console.log('Fetched agents:', data, userLoading, userError);
 
   return (
     <div className="space-y-4 w-full">

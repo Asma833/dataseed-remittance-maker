@@ -51,7 +51,6 @@ export const exportTableToCSV = <T>(
     // Download the CSV file
     downloadCSV(csvContent, options.fileName || 'export.csv');
     
-    console.log(`Exported ${rows.length} rows to CSV`);
   } catch (error) {
     console.error('Error exporting to CSV:', error);
     throw error;
