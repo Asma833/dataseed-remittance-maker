@@ -18,6 +18,12 @@ const inputH = "h-10"; // unify height
 export default function CommissionDetailsPage() {
   const { control, formState: { errors }, watch, setValue } = useFormContext();
 
+  // Watch product purpose add-on margin fields
+  const addOnForexMargin = watch('productPurpose.addOnForexMargin');
+  const addOnNostroMargin = watch('productPurpose.addOnNostroMargin');
+  const addOnTTMargin = watch('productPurpose.addOnTTMargin');
+  const addOnOtherChargersMargin = watch('productPurpose.addOnOtherChargersMargin');
+
   // --- product margin state & effects ---
   // const isAllCurrencyChecked__product =
   //   watch("commission_details.product_margin.all_currency")?.ALL_CURRENCY;
@@ -137,6 +143,7 @@ export default function CommissionDetailsPage() {
       {/* MAIN GRID */}
       <div className="grid gap-4 lg:grid-cols-[1fr_1fr_0.7fr]">
         {/* ================= LEFT BIG CARD ================= */}
+        {addOnForexMargin === 'Yes' && (
         <section className={hCard}>
             <SubTitle title="Rate Margin" className="px-4 pt-4" />
           <div className={cardBody}>
@@ -204,8 +211,10 @@ export default function CommissionDetailsPage() {
             </div>
           </div>
         </section>
+        )}
 
         {/* ================= MIDDLE BIG CARD ================= */}
+        {addOnNostroMargin === 'Yes' && (
         <section className={hCard}>
             <SubTitle title="Nostro Charges" className="px-4 pt-4" />
           <div className={cardBody}>
@@ -273,10 +282,12 @@ export default function CommissionDetailsPage() {
             </div>
           </div>
         </section>
+        )}
 
         {/* ================= RIGHT SIDEBAR CARDS ================= */}
         <div className="grid gap-4 self-start">
           {/* TT Charges */}
+          {addOnTTMargin === 'Yes' && (
           <section className={cn("pb-5",hCard)}>
               <SubTitle title="TT Charges" className="px-4 pt-4" />
             <div className={cardBody}>
@@ -294,8 +305,10 @@ export default function CommissionDetailsPage() {
               </div>
             </div>
           </section>
+          )}
 
           {/* Other Charges */}
+          {addOnOtherChargersMargin === 'Yes' && (
           <section className={cn("pb-5",hCard)}>
               <SubTitle title="Other Charges" className="px-4 pt-4"  />
             <div className={cardBody}>
@@ -312,6 +325,7 @@ export default function CommissionDetailsPage() {
               </div>
             </div>
           </section>
+          )}
         </div>
       </div>
     </div>
