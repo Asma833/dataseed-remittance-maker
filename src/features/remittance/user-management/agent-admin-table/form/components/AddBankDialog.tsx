@@ -32,9 +32,25 @@ export const AddBankDialog: React.FC<AddBankDialogProps> = ({
   // Reset form when editData changes
   useEffect(() => {
     if (editData) {
-      reset(editData);
+      // Transform snake_case to camelCase
+      const transformedData = {
+        bankName: editData.bank_name || editData.bankName,
+        branchName: editData.bank_branch || editData.branchName,
+        accountHolder: editData.account_holder_name || editData.accountHolder,
+        accountNumber: editData.account_number || editData.accountNumber,
+        ifscCode: editData.ifsc_code || editData.ifscCode,
+        id: editData.id,
+      };
+      reset(transformedData);
     } else {
-      reset();
+      // Default values for add mode
+      reset({
+        bankName: '',
+        branchName: '',
+        accountHolder: '',
+        accountNumber: '',
+        ifscCode: '',
+      });
     }
   }, [editData, reset]);
 
@@ -50,7 +66,7 @@ export const AddBankDialog: React.FC<AddBankDialogProps> = ({
 
     if (onAdd) {
       onAdd(bankData);
-      toast("Bank account added successfully");
+      toast.success("Bank account added successfully");
     }
   };
 
@@ -66,7 +82,7 @@ export const AddBankDialog: React.FC<AddBankDialogProps> = ({
 
     if (onEdit) {
       onEdit({ ...bankData, id: data.id });
-      toast("Bank account updated successfully");
+      toast.success("Bank account updated successfully");
     }
   };
 
