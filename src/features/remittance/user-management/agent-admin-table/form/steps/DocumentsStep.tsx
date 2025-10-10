@@ -171,7 +171,7 @@ export const DocumentsStep: React.FC = () => {
           <FieldWrapper>
             {getController({
               ...(config.fields.documents?.agreementValid || {}),
-              name: "documents.agreementValid",
+              name: "agreementValid",
               control,
               errors,
             })}
@@ -235,7 +235,7 @@ export const DocumentsStep: React.FC = () => {
               <FieldWrapper key={fieldName}>
                 {getController({
                   ...(typeof field === "object" && field !== null ? field : {}),
-                  name: `documents.${fieldName}`,
+                  name: fieldName,
                   control,
                   errors,
                 })}

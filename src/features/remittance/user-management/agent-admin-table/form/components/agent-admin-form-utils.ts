@@ -104,12 +104,37 @@ export const resetAgentAdminForm = (
   const formData = transformEditDataToFormData(editData);
   methods.reset(formData);
 
-  // Explicitly set agentType to ensure it patches correctly
+  // Explicitly set some fields to ensure they patch correctly
   setTimeout(() => {
     methods.setValue('agentType', editData.agent_type, {
-      shouldValidate: true,
-      shouldDirty: true,
-      shouldTouch: true
+      shouldValidate: false,
+      shouldDirty: false,
+      shouldTouch: false
     });
-  }, 100);
+    methods.setValue('agreementValid', editData.documents?.agreementValid || editData.agreementValid, {
+      shouldValidate: false,
+      shouldDirty: false,
+      shouldTouch: false
+    });
+    methods.setValue('rbiLicenseValidity', editData.documents?.rbiLicenseValidity || editData.rbiLicenseValidity, {
+      shouldValidate: false,
+      shouldDirty: false,
+      shouldTouch: false
+    });
+    methods.setValue('rbiLicenseCategory', editData.documents?.rbiLicenseCategory || editData.rbiLicenseCategory, {
+      shouldValidate: false,
+      shouldDirty: false,
+      shouldTouch: false
+    });
+    methods.setValue('noOfBranches', editData.documents?.noOfBranches || editData.noOfBranches, {
+      shouldValidate: false,
+      shouldDirty: false,
+      shouldTouch: false
+    });
+    methods.setValue('extensionMonth', editData.documents?.extensionMonth || editData.extensionMonth, {
+      shouldValidate: false,
+      shouldDirty: false,
+      shouldTouch: false
+    });
+  }, 0);
 };
