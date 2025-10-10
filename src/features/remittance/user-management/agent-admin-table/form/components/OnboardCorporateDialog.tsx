@@ -6,6 +6,7 @@ import { onboardCorporateSchema, OnboardCorporateFormData } from './onboard-corp
 import { onboardCorporateConfig } from './onboard-corporate.config';
 import { useCreateAgentCorporate } from '../../../hooks/useCreateAgentCorporate';
 import { useUpdateAgentCorporate } from '../../../hooks/useUpdateAgentCorporate';
+import { toast } from 'sonner';
 
 interface OnboardCorporateDialogProps {
   isOpen: boolean;
@@ -23,7 +24,7 @@ export const OnboardCorporateDialog: React.FC<OnboardCorporateDialogProps> = ({
   const form = useForm<OnboardCorporateFormData>({
     resolver: zodResolver(onboardCorporateSchema),
     defaultValues: {},
-    mode: 'onSubmit',
+    mode: 'onChange',
   });
 
   const { reset } = form;
@@ -68,12 +69,18 @@ export const OnboardCorporateDialog: React.FC<OnboardCorporateDialogProps> = ({
         id: editData.id,
         ...payload,
       }, {
-        onSuccess: () => onClose(),
+        onSuccess: () => {
+          toast("Corporate updated successfully");
+          onClose();
+        },
       });
     } else {
       // Create new corporate
       createCorporateMutation.mutate(payload, {
-        onSuccess: () => reset(),
+        onSuccess: () => {
+          toast("Corporate created successfully");
+          reset();
+        },
       });
     }
   };
