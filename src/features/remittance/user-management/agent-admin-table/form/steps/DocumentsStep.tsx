@@ -1,135 +1,240 @@
-import React, { useState } from 'react';
-import { useFormContext } from 'react-hook-form';
-import { agentAdminCreationConfig } from '../agent-admin-creation.config';
-import { getController } from '@/components/form/utils/get-controller';
-import FieldWrapper from '@/components/form/wrapper/field-wrapper';
-import FormFieldRow from '@/components/form/wrapper/form-field-row';
-import { Button } from '@/components/ui/button';
-import { Label } from '@/components/ui/label';
-import { Eye } from 'lucide-react';
-import SubTitle from '../components/sub-title';
-import { ImageViewModal } from '@/components/common/image-view-modal';
+import React, { useMemo, useState } from "react";
+import { useFormContext, useWatch } from "react-hook-form";
+import { Button } from "@/components/ui/button";
+import { Label } from "@/components/ui/label";
+import { Eye, Upload } from "lucide-react";
+import { ImageViewModal } from "@/components/common/image-view-modal";
+import SubTitle from "../components/sub-title";
+import FieldWrapper from "@/components/form/wrapper/field-wrapper";
+import FormFieldRow from "@/components/form/wrapper/form-field-row";
+import { getController } from "@/components/form/utils/get-controller";
+import { agentAdminCreationConfig } from "../agent-admin-creation.config";
+import { uploadRemittanceImage } from "../../../api/documents";
 
-export interface CompanyDocument {
-  id: string;
-  documentType: string;
-  file?: File;
-}
+/**
+ * Form shape used here (only relevant pieces):
+ * documents: {
+ *   agreement: { file?: File, s3Key?: string }
+ *   rbi:       { file?: File, s3Key?: string }
+ *   agreementValid: string
+ *   rbiLicenseCategory: string
+ *   rbiLicenseValidity: string
+ *   noOfBranches: string | number
+ *   extensionMonth: string
+ * }
+ */
+
+type DocKind = "agreement" | "rbi";
 
 export const DocumentsStep: React.FC = () => {
-  const { control, formState: { errors }, watch, setValue } = useFormContext();
   const config = agentAdminCreationConfig();
+  const { control, setValue, formState: { errors } } = useFormContext();
+
+  // Watch just what we need
+  const agreement = useWatch({ control, name: "documents.agreement" }) as { file?: File; s3Key?: string } | undefined;
+  const rbi       = useWatch({ control, name: "documents.rbi" }) as { file?: File; s3Key?: string } | undefined;
 
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [modalImageSrc, setModalImageSrc] = useState('');
-  const [modalTitle, setModalTitle] = useState('');
+  const [modalImageSrc, setModalImageSrc] = useState("");
+  const [modalTitle, setModalTitle] = useState("");
+  const [isUploading, setIsUploading] = useState<DocKind | null>(null);
 
-  const agreementCopy = watch('agreementCopy');
-  const rbiLicenseCopy = watch('rbiLicenseCopy');
+  const canViewAgreement = !!agreement?.file;
+  const canViewRbi       = !!rbi?.file;
 
-  const handleViewFile = (fileData: any, title: string) => {
-    let file: File | undefined;
-    if (Array.isArray(fileData) && fileData.length > 0 && fileData[0]?.file instanceof File) {
-      file = fileData[0].file;
-    } else if (fileData instanceof File) {
-      file = fileData;
+  const handleBrowse = (kind: DocKind) => {
+    // we’ll rely on a hidden file input rendered via getController
+    // The file input itself triggers setValue below via onChange
+    const inputId = kind === "agreement" ? "doc__agreement_file" : "doc__rbi_file";
+    const el = document.getElementById(inputId) as HTMLInputElement | null;
+    el?.click();
+  };
+
+  const onFileChange = (kind: DocKind, fileList: FileList | null) => {
+    const file = fileList && fileList.length > 0 ? fileList[0] : undefined;
+    // write ONLY the File into the file slot; don’t touch the s3Key here
+    setValue(`documents.${kind}.file`, file, { shouldDirty: true, shouldValidate: true });
+  };
+
+  const handleUpload = async (kind: DocKind) => {
+    const currentFile = kind === "agreement" ? agreement?.file : rbi?.file;
+    if (!currentFile) return;
+
+    // Optional validations
+    if (currentFile.size > 10 * 1024 * 1024) {
+      // 10MB guard
+      alert("File too large (max 10MB).");
+      return;
     }
-    if (file) {
-      const objectUrl = URL.createObjectURL(file);
-      setModalImageSrc(objectUrl);
-      setModalTitle(title);
-      setIsModalOpen(true);
+
+    setIsUploading(kind);
+    try {
+      const res = await uploadRemittanceImage(currentFile); // returns { success, s3_key }
+      if (res?.s3_key) {
+        // store the remote key — separate field
+        setValue(`documents.${kind}.s3Key`, res.s3_key, { shouldDirty: true, shouldValidate: true });
+
+        // Optionally clear the local file if you don’t need preview anymore:
+        // setValue(`documents.${kind}.file`, undefined, { shouldDirty: true, shouldValidate: true });
+      }
+    } catch (e) {
+      console.error("Upload failed:", e);
+      alert("Upload failed. Please try again.");
+    } finally {
+      setIsUploading(null);
     }
   };
 
-  const handleCloseModal = () => {
-    setIsModalOpen(false);
-    // Clean up object URL to prevent memory leaks
+  const handleView = (file: File | undefined, title: string) => {
+    if (!file) return;
+    const url = URL.createObjectURL(file);
+    setModalTitle(title);
+    setModalImageSrc(url);
+    setIsModalOpen(true);
+  };
+
+  const closeModal = () => {
     if (modalImageSrc) {
       URL.revokeObjectURL(modalImageSrc);
-      setModalImageSrc('');
     }
+    setModalImageSrc("");
+    setIsModalOpen(false);
   };
+
+  // convenience flags for button states
+  const isAgreementUploaded = !!agreement?.s3Key;
+  const isRbiUploaded       = !!rbi?.s3Key;
+
+  // agreement + rbi small helpers for labels
+  const uploadBtnText = useMemo(
+    () => (kind: DocKind) =>
+      isUploading === kind
+        ? "Uploading..."
+        : (kind === "agreement" ? (isAgreementUploaded ? "Uploaded" : "Upload") : (isRbiUploaded ? "Uploaded" : "Upload")),
+    [isUploading, isAgreementUploaded, isRbiUploaded]
+  );
 
   return (
     <div className="space-y-6">
-      {/* Agreement Details */}
+      {/* ================= Agreement Details ================= */}
       <SubTitle title="Agreement Details" />
       <div className="bg-gray-100 p-2 pt-5 mb-2 rounded-lg">
+        {/* Hidden file input controlled by RHF (uncontrolled value) */}
+        <input
+          id="doc__agreement_file"
+          type="file"
+          accept="image/*,.pdf"
+          className="hidden"
+          // do NOT give a value prop to file inputs
+          onChange={(e) => onFileChange("agreement", e.target.files)}
+        />
+
         <FormFieldRow className="mb-4" rowCols={1}>
           <FieldWrapper>
-            <div className="flex items-center gap-2">
-              <Label>Agreement Copy</Label>
+            <div className="flex flex-wrap items-center gap-3">
+              <Label className="min-w-[120px]">Agreement Copy</Label>
+
+              {/* Browse */}
+              <Button type="button" variant="outline" className="w-28" onClick={() => handleBrowse("agreement")}>
+                Choose
+              </Button>
+
+              {/* View (local file) */}
               <Button
                 type="button"
-                variant={!agreementCopy ? "light" : "default"}
-                className="w-28"
-                onClick={() => handleViewFile(agreementCopy, 'Agreement Copy')}
-                disabled={!agreementCopy}
+                variant={canViewAgreement ? "default" : "ghost"}
+                className="w-24"
+                disabled={!canViewAgreement}
+                onClick={() => handleView(agreement?.file, "Agreement Copy")}
               >
-                <Eye className="h-4 w-4" />
+                <Eye className="h-4 w-4 mr-2" />
                 View
               </Button>
-              {getController({
-                ...(config.fields.documents?.agreementCopy || {}),
-                name: 'agreementCopy',
-                control,
-                errors,
-                className:"gap-0"
-              })}
+
+              {/* Upload */}
+              <Button
+                type="button"
+                onClick={() => handleUpload("agreement")}
+                disabled={!agreement?.file || !!agreement?.s3Key || isUploading === "agreement"}
+                className="w-32"
+              >
+                <Upload className="h-4 w-4 mr-2" />
+                {uploadBtnText("agreement")}
+              </Button>
             </div>
           </FieldWrapper>
-         
-          
         </FormFieldRow>
-         <FormFieldRow className="mb-4">
-            <FieldWrapper>
+
+        {/* Agreement Valid (date) – using your existing config field */}
+        <FormFieldRow className="mb-4">
+          <FieldWrapper>
             {getController({
               ...(config.fields.documents?.agreementValid || {}),
-              name: 'agreementValid',
+              name: "documents.agreementValid",
               control,
               errors,
             })}
           </FieldWrapper>
-          </FormFieldRow>
+        </FormFieldRow>
       </div>
 
-      {/* RBI Details */}
+      {/* ================= RBI Details ================= */}
       <SubTitle title="RBI Details" />
-       <div className="bg-gray-100 p-2 pt-5 mb-2 rounded-lg">
-        
+      <div className="bg-gray-100 p-2 pt-5 mb-2 rounded-lg">
+        {/* Hidden file input for RBI */}
+        <input
+          id="doc__rbi_file"
+          type="file"
+          accept="image/*,.pdf"
+          className="hidden"
+          onChange={(e) => onFileChange("rbi", e.target.files)}
+        />
+
         <FormFieldRow className="mb-4" rowCols={1}>
           <FieldWrapper>
-            <div className="flex items-center gap-2">
-              <Label>RBI License Copy</Label>
+            <div className="flex flex-wrap items-center gap-3">
+              <Label className="min-w-[120px]">RBI License Copy</Label>
+
+              {/* Browse */}
+              <Button type="button" variant="outline" className="w-28" onClick={() => handleBrowse("rbi")}>
+                Choose
+              </Button>
+
+              {/* View (local file) */}
               <Button
                 type="button"
-                variant={!rbiLicenseCopy ? "light" : "default"}
-                className="w-28"
-                onClick={() => handleViewFile(rbiLicenseCopy, 'RBI License Copy')}
-                disabled={!rbiLicenseCopy}
+                variant={canViewRbi ? "default" : "ghost"}
+                className="w-24"
+                disabled={!canViewRbi}
+                onClick={() => handleView(rbi?.file, "RBI License Copy")}
               >
-                <Eye className="h-4 w-4" />
+                <Eye className="h-4 w-4 mr-2" />
                 View
               </Button>
-              {getController({
-                ...(config.fields.documents?.rbiLicenseCopy || {}),
-                name: 'rbiLicenseCopy',
-                control,
-                errors,
-                className:"gap-0"
-              })}
+
+              {/* Upload */}
+              <Button
+                type="button"
+                onClick={() => handleUpload("rbi")}
+                disabled={!rbi?.file || !!rbi?.s3Key || isUploading === "rbi"}
+                className="w-32"
+              >
+                <Upload className="h-4 w-4 mr-2" />
+                {uploadBtnText("rbi")}
+              </Button>
             </div>
           </FieldWrapper>
         </FormFieldRow>
+
+        {/* RBI meta fields */}
         <FormFieldRow className="mb-4">
-          {(['rbiLicenseCategory', 'rbiLicenseValidity', 'noOfBranches', 'extensionMonth'] as const).map((fieldName) => {
+          {(["rbiLicenseCategory", "rbiLicenseValidity", "noOfBranches", "extensionMonth"] as const).map((fieldName) => {
             const field = config.fields.documents?.[fieldName];
             return (
               <FieldWrapper key={fieldName}>
                 {getController({
-                  ...(typeof field === 'object' && field !== null ? field : {}),
-                  name: fieldName,
+                  ...(typeof field === "object" && field !== null ? field : {}),
+                  name: `documents.${fieldName}`,
                   control,
                   errors,
                 })}
@@ -139,12 +244,8 @@ export const DocumentsStep: React.FC = () => {
         </FormFieldRow>
       </div>
 
-      <ImageViewModal
-        isOpen={isModalOpen}
-        onClose={handleCloseModal}
-        imageSrc={modalImageSrc}
-        title={modalTitle}
-      />
+      {/* Preview modal (image/pdf shown by browser) */}
+      <ImageViewModal isOpen={isModalOpen} onClose={closeModal} imageSrc={modalImageSrc} title={modalTitle} />
     </div>
   );
 };

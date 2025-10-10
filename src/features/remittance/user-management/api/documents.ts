@@ -3,9 +3,7 @@ import { API } from '@/core/constant/apis';
 
 export interface UploadRemittanceImageResponse {
   success: boolean;
-  message: string;
-  url?: string;
-  // Add other fields based on actual response
+  s3_key: string;
 }
 
 /**

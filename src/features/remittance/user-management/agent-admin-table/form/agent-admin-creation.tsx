@@ -22,41 +22,9 @@ import { Stepper } from './stepper';
 import { FormTitle } from '@/features/auth/components/form-title';
 import { useCreateAgent } from '../../hooks/useCreateAgent';
 import { useUpdateAgentAdmin } from '../../hooks/useUpdateAgentAdmin';
-import { uploadRemittanceImage } from '../../api/documents';
 
 type AgentAdminFormType = z.input<typeof agentAdminCreationSchema>;
 
-const uploadFiles = async (data: AgentAdminFormType) => {
-  const uploadPromises = [];
-
-  // Helper to get File from data
-  const getFile = (fileData: any): File | null => {
-    if (fileData instanceof File) return fileData;
-    if (Array.isArray(fileData) && fileData.length > 0 && fileData[0]?.file instanceof File) {
-      return fileData[0].file;
-    }
-    return null;
-  };
-
-  const agreementFile = getFile(data.agreementCopy);
-  if (agreementFile) {
-    uploadPromises.push(uploadRemittanceImage(agreementFile));
-  }
-
-  const rbiFile = getFile(data.rbiLicenseCopy);
-  if (rbiFile) {
-    uploadPromises.push(uploadRemittanceImage(rbiFile));
-  }
-
-  if (uploadPromises.length > 0) {
-    try {
-      await Promise.all(uploadPromises);
-    } catch (error) {
-      console.error('Failed to upload some documents:', error);
-      // Don't throw, as the agent was created/updated successfully
-    }
-  }
-};
 
 const AgentAdminCreation: React.FC = () => {
   const navigate = useNavigate();
@@ -75,18 +43,12 @@ const AgentAdminCreation: React.FC = () => {
   const agentCode = editData?.agent_code || '[ ]';
 
   const { mutate: createAgent, isLoading: isCreating } = useCreateAgent({
-    onAgentCreateSuccess: async () => {
-      if (submittedData) {
-        await uploadFiles(submittedData);
-      }
+    onAgentCreateSuccess: () => {
       navigate('/admin/agent-admin');
     },
   });
   const { mutate: updateAgent, isLoading: isUpdating } = useUpdateAgentAdmin({
-    onAgentAdminUpdateSuccess: async () => {
-      if (submittedData) {
-        await uploadFiles(submittedData);
-      }
+    onAgentAdminUpdateSuccess: () => {
       navigate('/admin/agent-admin');
     },
   });
@@ -164,7 +126,7 @@ const AgentAdminCreation: React.FC = () => {
   };
 
   const onSubmit = handleSubmit(async (data) => {
-     setSubmittedData(data);
+    setSubmittedData(data);
     if (isEditMode) {
       updateAgent({ id: editData.id, formData: data });
     } else {
