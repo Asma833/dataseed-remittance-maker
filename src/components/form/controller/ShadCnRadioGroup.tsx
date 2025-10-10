@@ -1,4 +1,4 @@
-import { Controller, FieldValues, Path, FieldPathValue } from 'react-hook-form';
+import { Controller, FieldValues, Path, FieldPathValue, useFormContext } from 'react-hook-form';
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
 import { FormItem, FormLabel, FormControl, FormMessage } from '@/components/ui/form';
 import { cn } from '@/utils/cn';
@@ -32,6 +32,7 @@ export const ShadCnRadioGroup = <T extends FieldValues>({
   primaryColorClass = 'violet-600',
   focusRingClass = 'violet-300',
 }: ShadCnRadioGroupProps<T>) => {
+  const { control } = useFormContext<T>();
   const optionKeys = Object.keys(options);
   const isBooleanGroup = optionKeys.every((k) => k === 'true' || k === 'false');
 
@@ -43,8 +44,9 @@ export const ShadCnRadioGroup = <T extends FieldValues>({
       </FormLabel>
 
       <FormControl>
-        <Controller
+        <Controller<T>
           name={name}
+          control={control}
           {...(defaultValue !== undefined ? { defaultValue } : {})}
           render={({ field }) => {
             // Keep the value as string unless this group is truly boolean

@@ -1,5 +1,3 @@
-'use client';
-
 import { useToast } from '@/hooks/originUI/useToast';
 import { Toast, ToastClose, ToastDescription, ToastProvider, ToastTitle, ToastViewport } from './toast';
 

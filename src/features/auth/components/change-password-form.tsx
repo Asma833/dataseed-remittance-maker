@@ -17,34 +17,25 @@ interface ChangePasswordFormProps {
   isResetPassword?: boolean;
 }
 
-const formSchema = (isResetPassword: boolean) =>
-  z
-    .object({
-      ...(isResetPassword
-        ? {}
-        : {
-            currentPassword: z.string().min(1, 'Current password is required'),
-          }),
-      password: z.string().min(8, 'Password must be at least 8 characters'),
-      confirmPassword: z.string().min(1, 'Please confirm your password'),
-    })
-    .refine((data) => data.password === data.confirmPassword, {
-      message: "Passwords don't match",
-      path: ['confirmPassword'],
-    });
+const formSchema = z
+  .object({
+    currentPassword: z.string().optional(),
+    password: z.string().min(8, 'Password must be at least 8 characters'),
+    confirmPassword: z.string().min(1, 'Please confirm your password'),
+  })
+  .refine((data) => data.password === data.confirmPassword, {
+    message: "Passwords don't match",
+    path: ['confirmPassword'],
+  });
 
 const ChangePasswordForm: React.FC<ChangePasswordFormProps> = ({ token, isResetPassword = false }) => {
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
 
-  type FormValues = {
-    currentPassword?: string;
-    password: string;
-    confirmPassword: string;
-  };
+  type FormValues = z.infer<typeof formSchema>;
 
   const form = useForm<FormValues>({
-    resolver: zodResolver(formSchema(isResetPassword)),
+    resolver: zodResolver(formSchema),
     defaultValues: {
       ...(isResetPassword ? {} : { currentPassword: '' }),
       password: '',
@@ -55,6 +46,11 @@ const ChangePasswordForm: React.FC<ChangePasswordFormProps> = ({ token, isResetP
   const onSubmit = async (values: FormValues) => {
     try {
       setLoading(true);
+
+      if (!isResetPassword && !values.currentPassword) {
+        toast.error('Current password is required');
+        return;
+      }
 
       if (isResetPassword && token) {
         // Prepare payload for reset password
@@ -70,6 +66,16 @@ const ChangePasswordForm: React.FC<ChangePasswordFormProps> = ({ token, isResetP
         toast.success('Password has been reset successfully!');
         navigate(ROUTES.AUTH.LOGIN);
       } else {
+        // Prepare payload for change password
+        const changePayload = {
+          currentPassword: values.currentPassword,
+          newPassword: values.password,
+          confirmPassword: values.confirmPassword,
+        };
+
+        // Make API call to change password
+        await axiosInstance.post(`${API.AUTH.CHANGE_PASSWORD}`, changePayload);
+
         toast.success('Password changed successfully!');
       }
     } catch (error) {

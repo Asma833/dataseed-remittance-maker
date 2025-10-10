@@ -1,4 +1,5 @@
 import { Order } from '@/types/common/updateIncident.types';
+import { JSX } from 'react';
 
 export type CommonProps = {
   className?: string;
