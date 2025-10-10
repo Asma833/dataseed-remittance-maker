@@ -53,7 +53,13 @@ export const transformEditDataToFormData = (editData: any) => {
     agreementCopy: editData.documents?.agreementCopy || '',
     rbiLicenseCopy: editData.documents?.rbiLicenseCopy || '',
     productPurpose: {
-      ...editData.product_purpose,
+      // Convert boolean values to 'Yes'/'No' strings for radio button fields
+      addOnForexMargin: editData.product_purpose?.addOnForexMargin ? 'Yes' : 'No',
+      addOnNostroMargin: editData.product_purpose?.addOnNostroMargin ? 'Yes' : 'No',
+      addOnTTMargin: editData.product_purpose?.addOnTTMargin ? 'Yes' : 'No',
+      addOnOtherChargersMargin: editData.product_purpose?.addOnOtherChargersMargin ? 'Yes' : 'No',
+      esignDocumentDownload: editData.product_purpose?.esignDocumentDownload ? 'Yes' : 'No',
+      vkycDocumentDownload: editData.product_purpose?.vkycDocumentDownload ? 'Yes' : 'No',
       // Convert arrays to objects if needed
       creditType: editData.product_purpose?.creditType?.reduce((acc: Record<string, boolean>, type: string) => ({ ...acc, [type.toLowerCase()]: true }), {}) || {},
       chooseProductType: editData.product_purpose?.chooseProductType?.reduce((acc: Record<string, boolean>, type: string) => ({ ...acc, [type]: true }), {}) || {},
