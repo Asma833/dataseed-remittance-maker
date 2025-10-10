@@ -23,7 +23,7 @@ export default function CommissionDetailsPage() {
   const addOnNostroMargin = watch('productPurpose.addOnNostroMargin');
   const addOnTTMargin = watch('productPurpose.addOnTTMargin');
   const addOnOtherChargersMargin = watch('productPurpose.addOnOtherChargersMargin');
-
+  console.log(addOnForexMargin,"addOnForexMargin")
   // Watch commission product type
   const commissionProductType = watch('commission_details.commission_product_type');
 
@@ -83,7 +83,7 @@ export default function CommissionDetailsPage() {
       {/* MAIN GRID */}
       <div className="grid gap-4 lg:grid-cols-[1fr_1fr_0.7fr]">
         {/* ================= LEFT BIG CARD ================= */}
-        {(addOnForexMargin === 'Yes' || commissionProductType === 'Remittance') && (
+        {(addOnForexMargin === 'Yes' && commissionProductType === 'Remittance') && (
         <section className={hCard}>
             <SubTitle title="Rate Margin" className="px-4 pt-4" />
           <div className={cardBody}>
@@ -152,7 +152,7 @@ export default function CommissionDetailsPage() {
         )}
 
         {/* ================= MIDDLE BIG CARD ================= */}
-        {(addOnNostroMargin === 'Yes' || commissionProductType === 'Remittance') && (
+        {(addOnNostroMargin === 'Yes' && commissionProductType === 'Remittance') && (
         <section className={hCard}>
             <SubTitle title="Nostro Charges" className="px-4 pt-4" />
           <div className={cardBody}>
@@ -224,7 +224,7 @@ export default function CommissionDetailsPage() {
         {/* ================= RIGHT SIDEBAR CARDS ================= */}
         <div className="grid gap-4 self-start">
           {/* TT Charges */}
-          {(addOnTTMargin === 'Yes' || commissionProductType === 'Remittance') && (
+          {(addOnTTMargin === 'Yes' && commissionProductType === 'Remittance') && (
           <section className={cn("pb-5",hCard)}>
               <SubTitle title="TT Charges" className="px-4 pt-4" />
             <div className={cardBody}>
@@ -245,7 +245,7 @@ export default function CommissionDetailsPage() {
           )}
 
           {/* Other Charges */}
-          {(addOnOtherChargersMargin === 'Yes' || commissionProductType === 'Remittance') && (
+          {(addOnOtherChargersMargin === 'Yes' && commissionProductType === 'Remittance') && (
           <section className={cn("pb-5",hCard)}>
               <SubTitle title="Other Charges" className="px-4 pt-4"  />
             <div className={cardBody}>
