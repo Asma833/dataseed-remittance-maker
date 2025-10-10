@@ -53,7 +53,7 @@ export const agentAdminCreationDefaults: z.input<typeof agentAdminCreationSchema
     commission_type: 'HYBRID',
     product_margin: {
       agent_fixed_margin: 'PERCENTAGE',
-      all_currency: 'ALL_CURRENCY',
+      all_currency: 'SPECIFIC',
       all_currency_margin: 0,
       currency_list: {
         USD: "",
@@ -73,7 +73,7 @@ export const agentAdminCreationDefaults: z.input<typeof agentAdminCreationSchema
     },
     nostro_charges: {
       type: 'FX',
-      all_currency: 'ALL_CURRENCY',
+      all_currency: 'SPECIFIC',
       all_currency_margin: 0,
       currency_list: {
         USD: "",

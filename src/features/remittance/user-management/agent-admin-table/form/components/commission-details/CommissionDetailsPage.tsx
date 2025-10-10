@@ -23,9 +23,58 @@ export default function CommissionDetailsPage() {
   const addOnNostroMargin = watch('productPurpose.addOnNostroMargin');
   const addOnTTMargin = watch('productPurpose.addOnTTMargin');
   const addOnOtherChargersMargin = watch('productPurpose.addOnOtherChargersMargin');
-  console.log(addOnForexMargin,"addOnForexMargin")
   // Watch commission product type
   const commissionProductType = watch('commission_details.commission_product_type');
+
+// Watch all_currency checkboxes
+  const productMarginAllCurrency = watch('commission_details.product_margin.all_currency');
+  const nostroChargesAllCurrency = watch('commission_details.nostro_charges.all_currency');
+
+  // Watch all_currency_margin
+  const productMarginAllCurrencyMargin = watch('commission_details.product_margin.all_currency_margin');
+  const nostroChargesAllCurrencyMargin = watch('commission_details.nostro_charges.all_currency_margin');
+
+  // Set all_currency to SPECIFIC if not checked, reset margin and currency list
+  useEffect(() => {
+    if (productMarginAllCurrency !== 'ALL_CURRENCY') {
+      setValue('commission_details.product_margin.all_currency', 'SPECIFIC');
+      setValue('commission_details.product_margin.all_currency_margin', '');
+      const currencies = agentAdminCreationConfig().fields.commission.product_margin.currency_list.currencies;
+      currencies.forEach(({ currency_code }) => {
+        setValue(`commission_details.product_margin.currency_list.${currency_code}`, '');
+      });
+    }
+  }, [productMarginAllCurrency, setValue]);
+
+  useEffect(() => {
+    if (nostroChargesAllCurrency !== 'ALL_CURRENCY') {
+      setValue('commission_details.nostro_charges.all_currency', 'SPECIFIC');
+      setValue('commission_details.nostro_charges.all_currency_margin', '');
+      const currencies = agentAdminCreationConfig().fields.commission.nostro_charges.currency_list.currencies;
+      currencies.forEach(({ currency_code }) => {
+        setValue(`commission_details.nostro_charges.currency_list.${currency_code}`, '');
+      });
+    }
+  }, [nostroChargesAllCurrency, setValue]);
+
+  // When all_currency is ALL_CURRENCY, set all currency_list values to all_currency_margin
+  useEffect(() => {
+    if (productMarginAllCurrency === 'ALL_CURRENCY' && productMarginAllCurrencyMargin !== undefined) {
+      const currencies = agentAdminCreationConfig().fields.commission.product_margin.currency_list.currencies;
+      currencies.forEach(({ currency_code }) => {
+        setValue(`commission_details.product_margin.currency_list.${currency_code}`, productMarginAllCurrencyMargin);
+      });
+    }
+  }, [productMarginAllCurrency, productMarginAllCurrencyMargin, setValue]);
+
+  useEffect(() => {
+    if (nostroChargesAllCurrency === 'ALL_CURRENCY' && nostroChargesAllCurrencyMargin !== undefined) {
+      const currencies = agentAdminCreationConfig().fields.commission.nostro_charges.currency_list.currencies;
+      currencies.forEach(({ currency_code }) => {
+        setValue(`commission_details.nostro_charges.currency_list.${currency_code}`, nostroChargesAllCurrencyMargin);
+      });
+    }
+  }, [nostroChargesAllCurrency, nostroChargesAllCurrencyMargin, setValue]);
 
 
   // currency lists from config
@@ -105,8 +154,8 @@ export default function CommissionDetailsPage() {
             <div className="mb-5 grid grid-cols-[auto_1fr] gap-3 items-center">
               <div>
                 {getController({
-                  ...agentAdminCreationConfig().fields.commission.product_margin.all_currency_checkbox,
-                  name: agentAdminCreationConfig().fields.commission.product_margin.all_currency_checkbox.name,
+                  ...agentAdminCreationConfig().fields.commission.product_margin.all_currency,
+                  name: agentAdminCreationConfig().fields.commission.product_margin.all_currency.name,
                   control,
                   errors,
                 })}
@@ -115,7 +164,7 @@ export default function CommissionDetailsPage() {
                 {getController({
                   name: "commission_details.product_margin.all_currency_margin",
                   type: FieldType.Number,
-                  // disabled: isAllCurrencyDisabled_product,
+                  disabled: productMarginAllCurrency !== 'ALL_CURRENCY',
                   control,
                   errors,
                   className: inputH,
@@ -141,6 +190,7 @@ export default function CommissionDetailsPage() {
                         control,
                         errors,
                         className: inputH,
+                        disabled: productMarginAllCurrency === 'ALL_CURRENCY',
                       })}
                     </div>
                   ))}
@@ -174,8 +224,8 @@ export default function CommissionDetailsPage() {
             <div className="mb-5 grid grid-cols-[auto_1fr] gap-3 items-center">
               <div>
                 {getController({
-                  ...agentAdminCreationConfig().fields.commission.nostro_charges.all_currency_checkbox,
-                  name: agentAdminCreationConfig().fields.commission.nostro_charges.all_currency_checkbox.name,
+                  ...agentAdminCreationConfig().fields.commission.nostro_charges.all_currency,
+                  name: agentAdminCreationConfig().fields.commission.nostro_charges.all_currency.name,
                   control,
                   errors,
                 })}
@@ -184,7 +234,7 @@ export default function CommissionDetailsPage() {
                 {getController({
                   name: "commission_details.nostro_charges.all_currency_margin",
                   type: FieldType.Number,
-                  // disabled: isAllCurrencyDisabled_nostro,
+                  disabled: nostroChargesAllCurrency !== 'ALL_CURRENCY',
                   control,
                   errors,
                   className: inputH,
@@ -211,6 +261,7 @@ export default function CommissionDetailsPage() {
                         control,
                         errors,
                         className: inputH,
+                        disabled: nostroChargesAllCurrency === 'ALL_CURRENCY',
                       })}
                     </div>
                   ))}

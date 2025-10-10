@@ -34,6 +34,48 @@ export const adminRoutes: RouteConfig[] = [
     permission: 'admin',
   },
   {
+    path: ROUTES.ADMIN.AGENT_ADMIN_CREATION_STEPS.BASIC_INFO,
+    element: AgentAdminCreation,
+    roles: [baseRole],
+    permission: 'admin',
+  },
+  {
+    path: ROUTES.ADMIN.AGENT_ADMIN_CREATION_STEPS.COMPANY_DETAILS,
+    element: AgentAdminCreation,
+    roles: [baseRole],
+    permission: 'admin',
+  },
+  {
+    path: ROUTES.ADMIN.AGENT_ADMIN_CREATION_STEPS.FINANCE_DETAILS,
+    element: AgentAdminCreation,
+    roles: [baseRole],
+    permission: 'admin',
+  },
+  {
+    path: ROUTES.ADMIN.AGENT_ADMIN_CREATION_STEPS.DOCUMENTS,
+    element: AgentAdminCreation,
+    roles: [baseRole],
+    permission: 'admin',
+  },
+  {
+    path: ROUTES.ADMIN.AGENT_ADMIN_CREATION_STEPS.PRODUCT_PURPOSE,
+    element: AgentAdminCreation,
+    roles: [baseRole],
+    permission: 'admin',
+  },
+  {
+    path: ROUTES.ADMIN.AGENT_ADMIN_CREATION_STEPS.COMMISSION,
+    element: AgentAdminCreation,
+    roles: [baseRole],
+    permission: 'admin',
+  },
+  {
+    path: ROUTES.ADMIN.AGENT_ADMIN_CREATION_STEPS.CORPORATE_ONBOARDING,
+    element: AgentAdminCreation,
+    roles: [baseRole],
+    permission: 'admin',
+  },
+  {
     path: ROUTES.ADMIN.SUPER_CHECKER_TABLE,
     element: SuperCheckerTablePage,
     roles: [baseRole],

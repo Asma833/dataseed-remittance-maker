@@ -422,15 +422,14 @@ export const agentAdminCreationConfig = () => {
         step: 0.01,
       },
 
-      all_currency_checkbox: {
+      all_currency: {
         name: "commission_details.product_margin.all_currency",
         label: "All Currency",
-        type: FieldType.Radio,
+        type: FieldType.Checkbox,
         required: false,
         options: {
           ALL_CURRENCY: { label: "All Currency" },
         },
-        size: "medium",
         isMulti: false,
       },
 
@@ -486,16 +485,15 @@ export const agentAdminCreationConfig = () => {
         step: 0.01,
       },
 
-      all_currency_checkbox: {
+      all_currency: {
         name: "commission_details.nostro_charges.all_currency",
         label: "All Currency",
-        type: FieldType.Radio,
+        type: FieldType.Checkbox,
         required: false,
         options: {
           ALL_CURRENCY: { label: "All Currency" },
         },
         isMulti: false,
-        size: "medium",
       },
 
       currency_list: {

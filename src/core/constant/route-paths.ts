@@ -10,6 +10,15 @@ export const ROUTES = {
     DASHBOARD: '/dashboard',
     AGENT_ADMIN: '/agent-admin',
     AGENT_ADMIN_CREATION: '/users/agent-admin-creation',
+    AGENT_ADMIN_CREATION_STEPS: {
+      BASIC_INFO: '/users/agent-admin-creation/basic-info',
+      COMPANY_DETAILS: '/users/agent-admin-creation/company-details',
+      FINANCE_DETAILS: '/users/agent-admin-creation/finance-details',
+      DOCUMENTS: '/users/agent-admin-creation/documents',
+      PRODUCT_PURPOSE: '/users/agent-admin-creation/product-purpose',
+      COMMISSION: '/users/agent-admin-creation/commission',
+      CORPORATE_ONBOARDING: '/users/agent-admin-creation/corporate-onboarding',
+    },
     USER_MANAGEMENT: {
       N_USER: '/user-management/n-user',
       BRANCH_AGENTS: '/user-management/branch-agents',
