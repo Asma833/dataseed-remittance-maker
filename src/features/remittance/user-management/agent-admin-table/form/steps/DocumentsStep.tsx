@@ -166,7 +166,7 @@ export const DocumentsStep: React.FC = () => {
               {/* View (local file) */}
               <Button
                 type="button"
-                variant={canViewAgreement ? 'default' : 'ghost'}
+                variant={canViewAgreement ? 'default' : 'outline'}
                 className="w-24"
                 disabled={!canViewAgreement}
                 onClick={() => handleView(agreement, 'Agreement Copy')}
@@ -227,7 +227,7 @@ export const DocumentsStep: React.FC = () => {
               {/* View (local file) */}
               <Button
                 type="button"
-                variant={canViewRbi ? 'default' : 'ghost'}
+                variant={canViewRbi ? 'default' : 'outline'}
                 className="w-24"
                 disabled={!canViewRbi}
                 onClick={() => handleView(rbi, 'RBI License Copy')}
