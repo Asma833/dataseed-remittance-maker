@@ -38,9 +38,9 @@ export const DocumentsStep: React.FC = () => {
   };
 
   const onFileChange = (kind: DocKind, fileList: FileList | null) => {
-    const file = fileList && fileList.length > 0 ? fileList[0] : undefined;
-    // write ONLY the File into the field
-    setValue(kind === "agreement" ? "agreementCopy" : "rbiLicenseCopy", file, { shouldDirty: true, shouldValidate: true });
+    const file = fileList && fileList.length > 0 ? fileList[0] : null;
+    // write the File if selected, else empty string
+    setValue(kind === "agreement" ? "agreementCopy" : "rbiLicenseCopy", file || "", { shouldDirty: true, shouldValidate: true });
   };
 
   const handleUpload = async (kind: DocKind) => {
