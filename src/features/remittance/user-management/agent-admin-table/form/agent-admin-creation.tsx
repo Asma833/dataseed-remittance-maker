@@ -178,6 +178,11 @@ const AgentAdminCreation: React.FC = () => {
         corporateOnboarding: editData.corporate_onboarding,
       };
       methods.reset(formData);
+
+      // Explicitly set agentType to ensure it patches correctly
+      setTimeout(() => {
+        methods.setValue('agentType', editData.agent_type, { shouldValidate: true, shouldDirty: true, shouldTouch: true });
+      }, 100);
     }
   }, [isEditMode, editData, methods]);
 
