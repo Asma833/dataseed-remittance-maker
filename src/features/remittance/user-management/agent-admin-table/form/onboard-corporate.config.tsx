@@ -27,15 +27,19 @@ export const onboardCorporateConfig = () => {
       entityType: {
         name: 'entityType',
         label: 'Entity Type',
-        type: FieldType.Text,
+        type: FieldType.Select,
+          options: [
+            { value: 'Corporate', label: 'Corporate' },
+            { value: 'Proprietor', label: 'Proprietor' }
+          ],
         required: true,
-        placeholder: 'Enter Entity Type (e.g., Private Limited)',
+        placeholder: 'Select Entity Type',
       },
       cin: {
         name: 'cin',
         label: 'CIN',
         type: FieldType.Text,
-        placeholder: 'Enter CIN (e.g., U12345MH2020PTC123456)',
+        placeholder: 'Enter CIN (e.g., U12345MH2020PTC126)',
       },
       address: {
         name: 'address',
