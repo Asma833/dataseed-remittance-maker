@@ -131,9 +131,7 @@ export default function CommissionDetailsPage() {
                 <div key={i} className="space-y-3">
                   {col.map(({ currency_code }) => (
                     <div key={currency_code} className="grid grid-cols-[48px_1fr] items-center gap-2">
-                      <label
-                        htmlFor={`commission_details.product_margin.currency_list.${currency_code}`}
-                        className="text-sm text-muted-foreground"
+                      <label className="text-sm text-muted-foreground m-0 text-center pt-3"
                       >
                         {currency_code}
                       </label>
@@ -203,8 +201,7 @@ export default function CommissionDetailsPage() {
                   {col.map(({ currency_code }) => (
                     <div key={currency_code} className="grid grid-cols-[48px_1fr] items-center gap-2">
                       <label
-                        htmlFor={`commission_details.nostro_charges.currency_list.${currency_code}`}
-                        className="text-sm text-muted-foreground"
+                        className="text-sm text-muted-foreground m-0 text-center pt-3"
                       >
                         {currency_code}
                       </label>
