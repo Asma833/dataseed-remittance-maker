@@ -73,7 +73,7 @@ const AgentAdminCreation: React.FC = () => {
   const isEditMode = !!editData;
 
   // Example: you likely get this from API/route state
-  const agentCode = editData?.agent_code || 'VPC0345';
+  const agentCode = editData?.agent_code || '[ ]';
   console.log(currentStep,"currentStep")
 
   const { mutate: createAgent, isLoading: isCreating } = useCreateAgent({
