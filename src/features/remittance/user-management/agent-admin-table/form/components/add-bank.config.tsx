@@ -8,7 +8,7 @@ export const addBankConfig = () => {
         label: 'Bank Name',
         type: FieldType.Text,
         required: true,
-        placeholder: 'Enter Bank Name (e.g., State Bank of India)',
+        placeholder: 'Enter Bank Name',
       },
       branchName: {
         name: 'branchName',
@@ -22,14 +22,14 @@ export const addBankConfig = () => {
         label: 'Account Holder Name',
         type: FieldType.Text,
         required: true,
-        placeholder: 'Enter Account Holder Name (e.g., John Doe)',
+        placeholder: 'Enter Account Holder Name',
       },
       accountNumber: {
         name: 'accountNumber',
         label: 'Account Number',
         type: FieldType.Text,
         required: true,
-        placeholder: 'Enter Account Number (e.g., 123456789012)',
+        placeholder: 'Enter Account Number',
       },
       ifscCode: {
         name: 'ifscCode',

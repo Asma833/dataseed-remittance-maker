@@ -20,8 +20,7 @@ export const addBankSchema = z.object({
   accountNumber: z.string()
     .min(1, 'Account Number is required')
     .regex(/^(?!\s)(?!.*\s$)/, 'Cannot start or end with spaces')
-    .regex(/^\d+$/, 'Account Number must contain only digits')
-    .regex(/^[^0]/, 'Account Number cannot start with zero'),
+    .regex(/^[a-zA-Z0-9]+$/, 'Account Number must contain only letters and digits'),
 
   ifscCode: z.string()
     .min(1, 'IFSC Code is required')

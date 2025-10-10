@@ -4,6 +4,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { GenericDialog } from '@/components/common/generic-dialog';
 import { addBankSchema, AddBankFormData } from './add-bank.schema';
 import { addBankConfig } from './add-bank.config';
+import { toast } from 'sonner';
 
 interface AddBankDialogProps {
   isOpen: boolean;
@@ -23,7 +24,7 @@ export const AddBankDialog: React.FC<AddBankDialogProps> = ({
   const form = useForm<AddBankFormData>({
     resolver: zodResolver(addBankSchema),
     defaultValues: editData || {},
-    mode: 'onSubmit',
+    mode: 'onChange',
   });
 
   const { reset } = form;
@@ -49,6 +50,7 @@ export const AddBankDialog: React.FC<AddBankDialogProps> = ({
 
     if (onAdd) {
       onAdd(bankData);
+      toast("Bank account added successfully");
     }
   };
 
@@ -64,6 +66,7 @@ export const AddBankDialog: React.FC<AddBankDialogProps> = ({
 
     if (onEdit) {
       onEdit({ ...bankData, id: data.id });
+      toast("Bank account updated successfully");
     }
   };
 
