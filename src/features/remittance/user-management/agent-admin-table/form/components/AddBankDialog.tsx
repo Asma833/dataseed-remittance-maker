@@ -2,8 +2,8 @@ import React, { useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { GenericDialog } from '@/components/common/generic-dialog';
-import { addBankSchema, AddBankFormData } from '../add-bank.schema';
-import { addBankConfig } from '../add-bank.config';
+import { addBankSchema, AddBankFormData } from './add-bank.schema';
+import { addBankConfig } from './add-bank.config';
 
 interface AddBankDialogProps {
   isOpen: boolean;

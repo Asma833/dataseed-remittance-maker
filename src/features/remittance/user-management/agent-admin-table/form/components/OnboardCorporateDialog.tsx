@@ -2,8 +2,8 @@ import React, { useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { GenericDialog } from '@/components/common/generic-dialog';
-import { onboardCorporateSchema, OnboardCorporateFormData } from '../onboard-corporate.schema';
-import { onboardCorporateConfig } from '../onboard-corporate.config';
+import { onboardCorporateSchema, OnboardCorporateFormData } from './onboard-corporate.schema';
+import { onboardCorporateConfig } from './onboard-corporate.config';
 import { useCreateAgentCorporate } from '../../../hooks/useCreateAgentCorporate';
 import { useUpdateAgentCorporate } from '../../../hooks/useUpdateAgentCorporate';
 
