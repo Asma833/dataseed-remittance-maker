@@ -1,4 +1,4 @@
-import React, { useState, useMemo, useEffect } from 'react';
+ import React, { useState, useMemo, useEffect } from 'react';
 import {
   useReactTable,
   getCoreRowModel,
@@ -574,7 +574,7 @@ export function DataTable<T>({
                     >
                       <div className="flex items-center justify-center gap-2">
                         {header.isPlaceholder ? null : flexRender(header.column.columnDef.header, header.getContext())}
-                        {/* {header.column.getCanSort() && (
+                         {header.column.getCanSort() && (
                           <div className="flex flex-col">
                             <ChevronUpIcon
                               className={cn(
@@ -589,7 +589,7 @@ export function DataTable<T>({
                               )}
                             />
                           </div>
-                        )} */}
+                        )} 
                       </div>
                     </TableHead>
                   ))}
