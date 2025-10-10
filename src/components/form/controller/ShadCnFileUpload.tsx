@@ -86,8 +86,8 @@ export const ShadCnFileUpload = ({
                     type="button"
                     variant="outline"
                     className={cn(
-                      "w-full flex items-center justify-center gap-2 form-input shadow-none",
-                      error && "border-destructive"
+                      'w-full flex items-center justify-center gap-2 form-input shadow-none',
+                      error && 'border-destructive'
                     )}
                     disabled={disabled}
                   >

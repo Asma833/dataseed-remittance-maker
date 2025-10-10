@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import CreatePurposeDocumentPage from '../form/create-purpose-document-page';
 import { PurposeDocumentTableConfig } from './purpose-document-table.config';
@@ -93,7 +92,6 @@ export const PurposeDocumentsTable = () => {
   //  }, [error]);
 
   const isPaginationDynamic = false;
-
 
   const tableColumns = PurposeDocumentTableConfig();
 

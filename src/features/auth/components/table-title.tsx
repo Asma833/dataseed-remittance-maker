@@ -10,17 +10,15 @@ interface TableTitleProps {
 
 export const TableTitle: React.FC<TableTitleProps> = ({
   title,
-  className = "mr-auto w-full",
+  className = 'mr-auto w-full',
   titleClassName,
-  children
+  children,
 }) => {
-  const defaultTitleClass = "text-lg font-semibold tracking-tight text-[var(--color-title)]";
+  const defaultTitleClass = 'text-lg font-semibold tracking-tight text-[var(--color-title)]';
 
   return (
     <div className={className}>
-      <h2 className={cn(defaultTitleClass, titleClassName)}>
-        {title}
-      </h2>
+      <h2 className={cn(defaultTitleClass, titleClassName)}>{title}</h2>
       {children}
     </div>
   );

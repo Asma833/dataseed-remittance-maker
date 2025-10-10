@@ -1,4 +1,4 @@
-import { RouteConfig, SubRoute } from "@/types/route.types";
+import { RouteConfig, SubRoute } from '@/types/route.types';
 
 /**
  * Utility functions for route matching and navigation

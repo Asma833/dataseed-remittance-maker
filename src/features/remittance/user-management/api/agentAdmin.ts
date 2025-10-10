@@ -11,13 +11,10 @@ export const agentAdminApi = {
     const { data } = await axiosInstance.post<AgentAdminData>(API.USER_MANAGEMENT.AGENTS.CREATE, request);
     return data;
   },
-  
+
   updateAgentAdmin: async (request: UpdateAgentAdminRequest): Promise<AgentAdminData> => {
     const { id, ...payload } = request;
-    const { data } = await axiosInstance.put<AgentAdminData>(
-      API.USER_MANAGEMENT.AGENTS.UPDATE(id),
-      payload
-    );
+    const { data } = await axiosInstance.put<AgentAdminData>(API.USER_MANAGEMENT.AGENTS.UPDATE(id), payload);
     return data;
   },
 };

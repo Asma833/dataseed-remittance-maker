@@ -7,7 +7,10 @@ import FormFieldRow from '@/components/form/wrapper/form-field-row';
 import SubTitle from '../components/sub-title';
 
 export const CompanyDetailsStep: React.FC = () => {
-  const { control, formState: { errors } } = useFormContext();
+  const {
+    control,
+    formState: { errors },
+  } = useFormContext();
   const config = agentAdminCreationConfig();
 
   return (

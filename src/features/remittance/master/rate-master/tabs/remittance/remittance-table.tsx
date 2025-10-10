@@ -33,13 +33,10 @@ const Remittance = () => {
         setLoading(false);
       }, 1000);
     },
- 
-    onSortingChange: (sorting: { id: string; desc: boolean }[]) => {
-    },
-    onGlobalFilterChange: (filter: string) => {
-    },
-    onColumnFiltersChange: (filters: { id: string; value: any }[]) => {
-    },
+
+    onSortingChange: (sorting: { id: string; desc: boolean }[]) => {},
+    onGlobalFilterChange: (filter: string) => {},
+    onColumnFiltersChange: (filters: { id: string; value: any }[]) => {},
   };
 
   const dummyKYCData: RemittanceData[] = [
@@ -50,8 +47,8 @@ const Remittance = () => {
       'ttMargin12-02': 1.15,
       'ttMargin02-3-30': 1.1,
       'ttMargin03-30end': 1.3,
-      'ttHolidayMargin': 1.4,
-      'ttWeekendMargin': 1.5,
+      ttHolidayMargin: 1.4,
+      ttWeekendMargin: 1.5,
     },
     {
       id: 2,
@@ -60,8 +57,8 @@ const Remittance = () => {
       'ttMargin12-02': 1.25,
       'ttMargin02-3-30': 1.2,
       'ttMargin03-30end': 1.3,
-      'ttHolidayMargin': 1.45,
-      'ttWeekendMargin': 1.55,
+      ttHolidayMargin: 1.45,
+      ttWeekendMargin: 1.55,
     },
     {
       id: 3,
@@ -70,15 +67,15 @@ const Remittance = () => {
       'ttMargin12-02': 1.3,
       'ttMargin02-3-30': 1.25,
       'ttMargin03-30end': 1.35,
-      'ttHolidayMargin': 1.5,
-      'ttWeekendMargin': 1.6,
+      ttHolidayMargin: 1.5,
+      ttWeekendMargin: 1.6,
     },
   ];
   // Table data in the same shape used by Super Checker table
   const tableData: TableData<RemittanceData> = {
     data: dummyKYCData,
     totalCount: dummyKYCData.length,
-    pageCount: Math.ceil(dummyKYCData.length / (((config.pagination?.pageSize as number) || 10))),
+    pageCount: Math.ceil(dummyKYCData.length / ((config.pagination?.pageSize as number) || 10)),
     currentPage: 1,
   };
   //  const tableData = useMemo(() => {
@@ -136,7 +133,6 @@ const Remittance = () => {
   const tableColumns = RemittanceTableColumnConfig();
   return (
     <div className="dynamic-table-wrap">
-     
       <DataTable
         columns={tableColumns}
         data={tableData}

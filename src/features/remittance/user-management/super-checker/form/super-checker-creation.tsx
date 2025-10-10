@@ -24,23 +24,23 @@ import type { CreateSuperCheckerRequest, UpdateSuperCheckerRequest } from '../ta
 export const CreateSuperChecker = () => {
   type SuperCheckerFormType = z.infer<typeof superCheckerSchema>;
   const methods = useForm<SuperCheckerFormType>({
-  resolver: zodResolver(superCheckerSchema),
-  mode: "onChange",           
-  reValidateMode: "onChange", 
-  defaultValues: {
-    checkerDetails: {
-      fullName: "",
-      email: "",
-      phoneNumber: "",
-      productType: { card: true }, // your default
-      agents: [],
-      password: "",
-      confirmPassword: "",
-      transactionTypeMap: { card: 'buy' }, // default transaction type only for selected products
-      status: 'active' as 'active' | 'inactive', // default status
+    resolver: zodResolver(superCheckerSchema),
+    mode: 'onChange',
+    reValidateMode: 'onChange',
+    defaultValues: {
+      checkerDetails: {
+        fullName: '',
+        email: '',
+        phoneNumber: '',
+        productType: { card: true }, // your default
+        agents: [],
+        password: '',
+        confirmPassword: '',
+        transactionTypeMap: { card: 'buy' }, // default transaction type only for selected products
+        status: 'active' as 'active' | 'inactive', // default status
+      },
     },
-  },
-});
+  });
 
   const {
     control,
@@ -51,7 +51,6 @@ export const CreateSuperChecker = () => {
     formState: { errors, isValid },
     handleSubmit,
   } = methods;
-
 
   const navigate = useNavigate();
   const location = useLocation();
@@ -71,62 +70,60 @@ export const CreateSuperChecker = () => {
     navigate(-1);
   };
 
-  
-
-  
   //  const handleFormSubmit = handleSubmit(onSubmit);
-     const handleFormSubmit = handleSubmit((formdata: SuperCheckerFormType) => {
-      const product_types = Object.keys(formdata.checkerDetails.productType)
-        .filter((key) => formdata.checkerDetails.productType[key as keyof typeof formdata.checkerDetails.productType])
-        .map((product) => {
-          if (product === 'card' || product === 'currency') {
-            const transaction = formdata.checkerDetails.transactionTypeMap?.[product as 'card' | 'currency'];
-            const trans = transaction ? transaction.charAt(0).toUpperCase() + transaction.slice(1) : 'Buy';
-            return `${product.charAt(0).toUpperCase() + product.slice(1)}-${trans}`;
-          } else {
-            return product.charAt(0).toUpperCase() + product.slice(1);
-          }
-        });
+  const handleFormSubmit = handleSubmit((formdata: SuperCheckerFormType) => {
+    const product_types = Object.keys(formdata.checkerDetails.productType)
+      .filter((key) => formdata.checkerDetails.productType[key as keyof typeof formdata.checkerDetails.productType])
+      .map((product) => {
+        if (product === 'card' || product === 'currency') {
+          const transaction = formdata.checkerDetails.transactionTypeMap?.[product as 'card' | 'currency'];
+          const trans = transaction ? transaction.charAt(0).toUpperCase() + transaction.slice(1) : 'Buy';
+          return `${product.charAt(0).toUpperCase() + product.slice(1)}-${trans}`;
+        } else {
+          return product.charAt(0).toUpperCase() + product.slice(1);
+        }
+      });
 
-      if (superChecker) {
-        // For update operation - password is optional
-        const updateRequestData: UpdateSuperCheckerRequest = {
-          full_name: formdata.checkerDetails.fullName,
-          phone_number: formdata.checkerDetails.phoneNumber,
-          agent_ids: formdata.checkerDetails.agents || [],
-          product_types,
-          password: formdata.checkerDetails.password,
-          id: superChecker.id,
-          is_active: formdata.checkerDetails.status === 'active'
-        };
-        updateSuperChecker(updateRequestData);
-      } else {
-        // For create operation - password is required
-        const createRequestData: CreateSuperCheckerRequest = {
-          full_name: formdata.checkerDetails.fullName,
-          email: formdata.checkerDetails.email,
-          phone_number: formdata.checkerDetails.phoneNumber,
-          agent_ids: formdata.checkerDetails.agents || [],
-          product_types,
-          password: formdata.checkerDetails.password || '', // Ensure password is always a string for create
-          is_active: formdata.checkerDetails.status === 'active'
-        };
-        createSuperChecker(createRequestData);
-      }
+    if (superChecker) {
+      // For update operation - password is optional
+      const updateRequestData: UpdateSuperCheckerRequest = {
+        full_name: formdata.checkerDetails.fullName,
+        phone_number: formdata.checkerDetails.phoneNumber,
+        agent_ids: formdata.checkerDetails.agents || [],
+        product_types,
+        password: formdata.checkerDetails.password,
+        id: superChecker.id,
+        is_active: formdata.checkerDetails.status === 'active',
+      };
+      updateSuperChecker(updateRequestData);
+    } else {
+      // For create operation - password is required
+      const createRequestData: CreateSuperCheckerRequest = {
+        full_name: formdata.checkerDetails.fullName,
+        email: formdata.checkerDetails.email,
+        phone_number: formdata.checkerDetails.phoneNumber,
+        agent_ids: formdata.checkerDetails.agents || [],
+        product_types,
+        password: formdata.checkerDetails.password || '', // Ensure password is always a string for create
+        is_active: formdata.checkerDetails.status === 'active',
+      };
+      createSuperChecker(createRequestData);
+    }
   });
   const mapSuperCheckerData = (data: any) => {
-    if (!data) return {
-      checkerDetails: {
-        fullName: '',
-        email: '',
-        phoneNumber: '',
-        productType: { card: true },
-        agents: [],
-        password: '',
-        confirmPassword: '',
-        status: 'active' as 'active' | 'inactive',
-      }
-    };
+    if (!data)
+      return {
+        checkerDetails: {
+          fullName: '',
+          email: '',
+          phoneNumber: '',
+          productType: { card: true },
+          agents: [],
+          password: '',
+          confirmPassword: '',
+          status: 'active' as 'active' | 'inactive',
+        },
+      };
     // Map incoming data fields to form field names
     const productType: Record<string, boolean> = {};
     if (data.product_types) {
@@ -160,21 +157,21 @@ export const CreateSuperChecker = () => {
     const superChecker = location.state?.superChecker;
     if (superChecker) {
       const mappedData = mapSuperCheckerData(superChecker);
-      
+
       // Set transactionTypeMap based on product_types
       const transactionTypeMap: Partial<Record<'card' | 'currency', 'buy' | 'sell'>> = {};
-      
+
       // First, populate from existing product_types
       if (superChecker.product_types) {
         superChecker.product_types.forEach((pt: string) => {
           const [prod, trans] = pt.split('-');
           const key = prod.toLowerCase();
           if (key === 'card' || key === 'currency') {
-            transactionTypeMap[key as 'card' | 'currency'] = trans?.toLowerCase() as 'buy' | 'sell' || 'buy';
+            transactionTypeMap[key as 'card' | 'currency'] = (trans?.toLowerCase() as 'buy' | 'sell') || 'buy';
           }
         });
       }
-      
+
       // Ensure all selected card/currency products have a transaction type
       if (mappedData.checkerDetails.productType.card && !transactionTypeMap.card) {
         transactionTypeMap.card = 'buy';
@@ -188,7 +185,7 @@ export const CreateSuperChecker = () => {
         checkerDetails: {
           ...mappedData.checkerDetails,
           transactionTypeMap: Object.keys(transactionTypeMap).length > 0 ? transactionTypeMap : undefined,
-        }
+        },
       });
 
       // Mark that initial load is complete after a short delay
@@ -204,31 +201,33 @@ export const CreateSuperChecker = () => {
 
   // Watch productType changes and clean up transactionTypeMap
   const productType = useWatch({ control, name: 'checkerDetails.productType' }) as Record<string, boolean> | undefined;
-  
+
   useEffect(() => {
     // Skip this effect during initial load to prevent overwriting patched values
     if (isInitialLoadRef.current || !productType) {
       return;
     }
-    
-    const currentTransactionMap = (getValues('checkerDetails.transactionTypeMap') || {}) as Partial<Record<'card' | 'currency', 'buy' | 'sell'>>;
+
+    const currentTransactionMap = (getValues('checkerDetails.transactionTypeMap') || {}) as Partial<
+      Record<'card' | 'currency', 'buy' | 'sell'>
+    >;
     const newTransactionMap: Partial<Record<'card' | 'currency', 'buy' | 'sell'>> = {};
-    
+
     // Only keep transaction types for selected card/currency products
     if (productType['card']) {
       // If card is selected, preserve existing value or set default
       newTransactionMap.card = currentTransactionMap?.card || 'buy';
     }
-    
+
     if (productType['currency']) {
       // If currency is selected, preserve existing value or set default
       newTransactionMap.currency = currentTransactionMap?.currency || 'buy';
     }
-      
+
     // Always update the transactionTypeMap to match selected products
     // This ensures validation works correctly - only selected products need transaction types
     setValue('checkerDetails.transactionTypeMap', newTransactionMap as any, { shouldValidate: true });
-    
+
     // Verify it was set
     setTimeout(() => {
       const verifyMap = getValues('checkerDetails.transactionTypeMap');
@@ -238,117 +237,115 @@ export const CreateSuperChecker = () => {
   return (
     <div className="space-y-1 w-full">
       <div className="flex items-center space-x-2">
-      <FormTitle tableName="Super Checker List Table"
-        actionName={superChecker ? 'Update Superchecker' : 'Create New Superchecker'}
+        <FormTitle
+          tableName="Super Checker List Table"
+          actionName={superChecker ? 'Update Superchecker' : 'Create New Superchecker'}
         />
       </div>
 
       <FormProvider methods={methods}>
         <form onSubmit={handleFormSubmit}>
           <FormContentWrapper className="p-4 mr-auto w-full shadow-md">
-          <TableTitle title={superChecker ? 'Update Superchecker' : 'Create New Superchecker'} titleClassName="text-black"/>
-          <Spacer>
-            <div className="relative p-1">
-              <label className="text-sm font-medium absolute">Basic Details</label>
-            </div>
-            <FormFieldRow rowCols={4}>
-              {(['fullName', 'email', 'phoneNumber'] as const).map((fieldName) => {
-                const field = superCheckerCreationConfig(agents).fields.checkerDetails[fieldName];
-                return (
-                  <FieldWrapper key={fieldName}>
-                    {getController({
-                      ...(typeof field === 'object' && field !== null ? field : {}),
-                      name: `checkerDetails.${fieldName}`,
-                      control,
-                      errors,
-                      disabled: fieldName === 'email' && !!superChecker, // Disable email field in update mode
-                    })}
-                  </FieldWrapper>
-                );
-              })}
-            </FormFieldRow>
+            <TableTitle
+              title={superChecker ? 'Update Superchecker' : 'Create New Superchecker'}
+              titleClassName="text-black"
+            />
+            <Spacer>
+              <div className="relative p-1">
+                <label className="text-sm font-medium absolute">Basic Details</label>
+              </div>
+              <FormFieldRow rowCols={4}>
+                {(['fullName', 'email', 'phoneNumber'] as const).map((fieldName) => {
+                  const field = superCheckerCreationConfig(agents).fields.checkerDetails[fieldName];
+                  return (
+                    <FieldWrapper key={fieldName}>
+                      {getController({
+                        ...(typeof field === 'object' && field !== null ? field : {}),
+                        name: `checkerDetails.${fieldName}`,
+                        control,
+                        errors,
+                        disabled: fieldName === 'email' && !!superChecker, // Disable email field in update mode
+                      })}
+                    </FieldWrapper>
+                  );
+                })}
+              </FormFieldRow>
 
-          {/* Product and Transaction Type - Using Reusable Component */}
-          <ProductTransactionSelector
-            control={control}
-            errors={errors}
-            productFieldName="checkerDetails.productType"
-            transactionFieldName="checkerDetails.transactionTypeMap"
-            productOptions={superCheckerCreationConfig(agents).fields.checkerDetails.productType.options}
-            showTransactionFor={['card', 'currency']}
-          />
-            <FormFieldRow rowCols={4}>
-              {(['agents'] as const).map((fieldName) => {
-                const field = superCheckerCreationConfig(agents).fields.checkerDetails[fieldName];
-                return (
-                  <FieldWrapper key={fieldName}>
-                    {getController({
-                      ...(typeof field === 'object' && field !== null ? field : {}),
-                      name: `checkerDetails.${fieldName}`,
-                      control,
-                      errors,
-                      isMulti:true,
-                      disabled: isLoadingAgents
-                    })}
-                  </FieldWrapper>
-                );
-              })}
-            </FormFieldRow>
-            <FormFieldRow>
-              {(['status'] as const).map((fieldName) => {
-                const field = superCheckerCreationConfig().fields.checkerDetails[fieldName];
-                return (
-                  <FieldWrapper key={fieldName}>
-                    {getController({
-                      ...(typeof field === 'object' && field !== null ? field : {}),
-                      name: `checkerDetails.${fieldName}`,
-                      control,
-                      errors,
-                      disabled: fieldName === 'status' ? !superChecker : false, // Disable status field in create mode
-                      className:"justify-start"
-                    })}
-                  </FieldWrapper>
-                );
-              })}
-            </FormFieldRow>
-            {
-              !superChecker && (
-                <NotificationBanner
-                  message="Newly created checkers active by default"
-                  variant="warning"
-                  size="sm"
-                />
-              )
-            }
-          
-            <div className="relative p-1">
-              <label className="text-sm font-semibold absolute">Create Password</label>
-            </div>
+              {/* Product and Transaction Type - Using Reusable Component */}
+              <ProductTransactionSelector
+                control={control}
+                errors={errors}
+                productFieldName="checkerDetails.productType"
+                transactionFieldName="checkerDetails.transactionTypeMap"
+                productOptions={superCheckerCreationConfig(agents).fields.checkerDetails.productType.options}
+                showTransactionFor={['card', 'currency']}
+              />
+              <FormFieldRow rowCols={4}>
+                {(['agents'] as const).map((fieldName) => {
+                  const field = superCheckerCreationConfig(agents).fields.checkerDetails[fieldName];
+                  return (
+                    <FieldWrapper key={fieldName}>
+                      {getController({
+                        ...(typeof field === 'object' && field !== null ? field : {}),
+                        name: `checkerDetails.${fieldName}`,
+                        control,
+                        errors,
+                        isMulti: true,
+                        disabled: isLoadingAgents,
+                      })}
+                    </FieldWrapper>
+                  );
+                })}
+              </FormFieldRow>
+              <FormFieldRow>
+                {(['status'] as const).map((fieldName) => {
+                  const field = superCheckerCreationConfig().fields.checkerDetails[fieldName];
+                  return (
+                    <FieldWrapper key={fieldName}>
+                      {getController({
+                        ...(typeof field === 'object' && field !== null ? field : {}),
+                        name: `checkerDetails.${fieldName}`,
+                        control,
+                        errors,
+                        disabled: fieldName === 'status' ? !superChecker : false, // Disable status field in create mode
+                        className: 'justify-start',
+                      })}
+                    </FieldWrapper>
+                  );
+                })}
+              </FormFieldRow>
+              {!superChecker && (
+                <NotificationBanner message="Newly created checkers active by default" variant="warning" size="sm" />
+              )}
 
-            <FormFieldRow rowCols={4}>
-              {(['password', 'confirmPassword'] as const).map((fieldName) => {
-                const field = superCheckerCreationConfig(agents).fields.checkerDetails[fieldName];
-                return (
-                  <FieldWrapper key={fieldName}>
-                    {getController({
-                      ...(typeof field === 'object' && field !== null ? field : {}),
-                      name: `checkerDetails.${fieldName}`,
-                      control,
-                      errors,
-                    })}
-                  </FieldWrapper>
-                );
-              })}
-            </FormFieldRow>
-            <div className="flex justify-items-start space-x-2 mt-4 px-1">
-              <Button variant="outline" className="w-28" onClick={handleBack}>
-                Back
-              </Button>
-              <Button type="submit" variant="secondary" className="w-28" disabled={isCreating || isUpdating}>
-                {isCreating || isUpdating ? 'Submitting...' : (superChecker ? 'Update' : 'Create')}
-              </Button>
-            </div>
-          </Spacer>
+              <div className="relative p-1">
+                <label className="text-sm font-semibold absolute">Create Password</label>
+              </div>
+
+              <FormFieldRow rowCols={4}>
+                {(['password', 'confirmPassword'] as const).map((fieldName) => {
+                  const field = superCheckerCreationConfig(agents).fields.checkerDetails[fieldName];
+                  return (
+                    <FieldWrapper key={fieldName}>
+                      {getController({
+                        ...(typeof field === 'object' && field !== null ? field : {}),
+                        name: `checkerDetails.${fieldName}`,
+                        control,
+                        errors,
+                      })}
+                    </FieldWrapper>
+                  );
+                })}
+              </FormFieldRow>
+              <div className="flex justify-items-start space-x-2 mt-4 px-1">
+                <Button variant="outline" className="w-28" onClick={handleBack}>
+                  Back
+                </Button>
+                <Button type="submit" variant="secondary" className="w-28" disabled={isCreating || isUpdating}>
+                  {isCreating || isUpdating ? 'Submitting...' : superChecker ? 'Update' : 'Create'}
+                </Button>
+              </div>
+            </Spacer>
           </FormContentWrapper>
         </form>
       </FormProvider>

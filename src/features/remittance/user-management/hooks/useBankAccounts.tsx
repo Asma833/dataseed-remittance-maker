@@ -6,7 +6,7 @@ import {
   deleteBankAccount,
   BankAccount,
   CreateBankAccountRequest,
-  UpdateBankAccountRequest
+  UpdateBankAccountRequest,
 } from '../api/bankAccounts';
 
 /**

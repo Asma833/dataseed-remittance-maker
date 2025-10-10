@@ -18,11 +18,7 @@ const AgentAdminTable = () => {
     navigate(`/admin${ROUTES.ADMIN.AGENT_ADMIN_CREATION}`);
   };
 
-  const {
-    data,
-    isLoading: userLoading,
-    error: userError,
-  } = useGetAgentAdmins();
+  const { data, isLoading: userLoading, error: userError } = useGetAgentAdmins();
 
   const handleEdit = (user: AgentAdminData) => {
     navigate(`/admin${ROUTES.ADMIN.AGENT_ADMIN_CREATION}`, { state: { editData: user } });
@@ -44,13 +40,6 @@ const AgentAdminTable = () => {
   //   currentPage: 1,
   // };
 
- 
-
-  
- 
-
-  
-
   // Dynamic table actions (when using dynamic mode)
   const tableActions = {
     onPaginationChange: (pagination: { pageIndex: number; pageSize: number }) => {
@@ -63,13 +52,12 @@ const AgentAdminTable = () => {
     },
   };
 
-
   return (
     <div className="space-y-4 w-full">
       {/* Header with controls */}
       <div className="flex items-center justify-between">
         <div className="space-y-1">
-         <TableTitle title="Admin Agent List"/>
+          <TableTitle title="Admin Agent List" />
         </div>
         <div className="flex items-center gap-2">
           <Button onClick={handleAddAdminAgents} size="sm">
@@ -84,7 +72,7 @@ const AgentAdminTable = () => {
         columns={columns}
         data={data ?? []}
         config={{
-          ...staticConfig
+          ...staticConfig,
         }}
         actions={tableActions}
       />

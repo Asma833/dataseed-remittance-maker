@@ -1,7 +1,7 @@
 import { Button } from '@/components/ui/button';
 import { ActionButtonsProps } from './types';
 import { AiOutlineEye, AiOutlineEdit, AiOutlineDelete } from 'react-icons/ai';
-import edit from '@/assets/icons/edit.svg'
+import edit from '@/assets/icons/edit.svg';
 
 export function ActionButtons<T>({ row, onEdit, onDelete, onView }: ActionButtonsProps<T>) {
   return (

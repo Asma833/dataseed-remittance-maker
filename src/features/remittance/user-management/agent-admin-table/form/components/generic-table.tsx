@@ -34,7 +34,11 @@ export function GenericTable<T>({ data, columns, emptyMessage = 'No data availab
             <TableRow key={index}>
               {columns.map((col) => (
                 <TableCell key={col.id} className="text-center">
-                  {col.cell ? col.cell({ row: item, value: col.accessorKey ? (item as any)[col.accessorKey] : undefined }) : (col.accessorKey ? (item as any)[col.accessorKey] : '')}
+                  {col.cell
+                    ? col.cell({ row: item, value: col.accessorKey ? (item as any)[col.accessorKey] : undefined })
+                    : col.accessorKey
+                      ? (item as any)[col.accessorKey]
+                      : ''}
                 </TableCell>
               ))}
             </TableRow>
@@ -44,4 +48,3 @@ export function GenericTable<T>({ data, columns, emptyMessage = 'No data availab
     </div>
   );
 }
-

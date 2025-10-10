@@ -33,21 +33,20 @@ export const ShadCnEmail = ({
           name={name}
           control={control}
           defaultValue=""
-         render={({ field, fieldState: { error } }) => (
-          <div>
-            <ShadCnFormInput
-              {...field}
-              type="email"
-              disabled={disabled}
-              className={cn("form-input shadow-none focus-visible:ring-0", error && "border-destructive focus:ring-destructive")}
-              forcedValue={forcedValue}
-              placeholder="Enter Email Address"
-            />
-            {error && (
-                <p className="text-sm text-destructive mt-1">
-                  {error.message}
-                </p>
-              )}
+          render={({ field, fieldState: { error } }) => (
+            <div>
+              <ShadCnFormInput
+                {...field}
+                type="email"
+                disabled={disabled}
+                className={cn(
+                  'form-input shadow-none focus-visible:ring-0',
+                  error && 'border-destructive focus:ring-destructive'
+                )}
+                forcedValue={forcedValue}
+                placeholder="Enter Email Address"
+              />
+              {error && <p className="text-sm text-destructive mt-1">{error.message}</p>}
             </div>
           )}
         />

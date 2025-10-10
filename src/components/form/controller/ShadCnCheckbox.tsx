@@ -1,31 +1,23 @@
-import { Controller, useFormContext } from "react-hook-form";
+import { Controller, useFormContext } from 'react-hook-form';
 import {
   FormItem,
   FormLabel,
   FormControl,
   // FormMessage,  // we will render error via getFieldState for reliability
-} from "@/components/ui/form";
-import { cn } from "@/utils/cn";
-import {
-  Circle,
-  CircleCheck,
-  Square,
-  CheckSquare,
-  CircleDot,
-  SquareCheck,
-  CheckCircle,
-} from "lucide-react";
-import React, { useEffect } from "react";
+} from '@/components/ui/form';
+import { cn } from '@/utils/cn';
+import { Circle, CircleCheck, Square, CheckSquare, CircleDot, SquareCheck, CheckCircle } from 'lucide-react';
+import React, { useEffect } from 'react';
 
 type CheckboxVariant =
-  | "square_check"
-  | "circle_check"
-  | "radio_style"
-  | "circle_check_filled"
-  | "square_check_filled"
-  | "pill";
+  | 'square_check'
+  | 'circle_check'
+  | 'radio_style'
+  | 'circle_check_filled'
+  | 'square_check_filled'
+  | 'pill';
 
-type CheckboxSize = "small" | "medium" | "large";
+type CheckboxSize = 'small' | 'medium' | 'large';
 
 interface ShadCnCheckboxProps {
   name: string; // e.g. "checkerDetails.productType"
@@ -40,7 +32,7 @@ interface ShadCnCheckboxProps {
   disabled?: boolean;
   required?: boolean;
   requiredMessage?: string;
-  orientation?: "horizontal" | "vertical";
+  orientation?: 'horizontal' | 'vertical';
 }
 
 export const ShadCnCheckbox = ({
@@ -50,12 +42,12 @@ export const ShadCnCheckbox = ({
   handleCheckboxChange,
   isMulti,
   defaultSelected = {},
-  variant = "circle_check",
-  size = "medium",
-  classNames = { wrapper: "", formGroup: "" },
+  variant = 'circle_check',
+  size = 'medium',
+  classNames = { wrapper: '', formGroup: '' },
   disabled = false,
   required = false,
-  requiredMessage = "Please select at least one option",
+  requiredMessage = 'Please select at least one option',
   orientation,
 }: ShadCnCheckboxProps) => {
   // Guard against null/undefined options
@@ -63,25 +55,14 @@ export const ShadCnCheckbox = ({
     return null;
   }
 
-  const {
-    control,
-    setValue,
-    setError,
-    clearErrors,
-    getValues,
-    getFieldState,
-    formState,
-  } = useFormContext();
+  const { control, setValue, setError, clearErrors, getValues, getFieldState, formState } = useFormContext();
 
   // ---------- sizing ----------
-  const iconPx = size === "small" ? 18 : size === "large" ? 24 : 20;
+  const iconPx = size === 'small' ? 18 : size === 'large' ? 24 : 20;
 
   // ---------- normalize ----------
   const normalizeMulti = (val?: Record<string, boolean>) => {
-    const base = Object.fromEntries(Object.keys(options).map((k) => [k, false])) as Record<
-      string,
-      boolean
-    >;
+    const base = Object.fromEntries(Object.keys(options).map((k) => [k, false])) as Record<string, boolean>;
     if (!val) return base;
     const out = { ...base };
     for (const k of Object.keys(base)) out[k] = !!val[k];
@@ -94,7 +75,7 @@ export const ShadCnCheckbox = ({
     const current = getValues(name) as Record<string, boolean> | undefined;
     const normalized = normalizeMulti(current);
     // Only set if shape actually changed (avoid needless re-renders)
-    const changed = !current || Object.keys(options).some((k) => typeof current[k] === "undefined");
+    const changed = !current || Object.keys(options).some((k) => typeof current[k] === 'undefined');
     if (changed) {
       setValue(name, normalized, {
         shouldDirty: false,
@@ -106,8 +87,7 @@ export const ShadCnCheckbox = ({
   }, [name, isMulti, options]);
 
   // ---------- required checker ----------
-  const isEmptySelection = (val: any) =>
-    isMulti ? !Object.values<boolean>(val || {}).some(Boolean) : !val;
+  const isEmptySelection = (val: any) => (isMulti ? !Object.values<boolean>(val || {}).some(Boolean) : !val);
 
   const applyRequiredError = (val: any) => {
     if (!required) {
@@ -115,7 +95,7 @@ export const ShadCnCheckbox = ({
       return;
     }
     if (isEmptySelection(val)) {
-      setError(name, { type: "manual", message: requiredMessage });
+      setError(name, { type: 'manual', message: requiredMessage });
     } else {
       clearErrors(name);
     }
@@ -148,27 +128,27 @@ export const ShadCnCheckbox = ({
 
   const getIcons = (checked: boolean) => {
     switch (variant) {
-      case "square_check":
+      case 'square_check':
         return {
           unchecked: <Square size={iconPx} color="var(--fill-primary)" stroke="var(--fill-primary)" />,
           checked: <CheckSquare className="text-primary" size={iconPx} />,
         };
-      case "circle_check":
+      case 'circle_check':
         return {
           unchecked: <Circle size={iconPx} className="text-gray-400" />,
           checked: <CircleCheck className="text-primary" size={iconPx} />,
         };
-      case "circle_check_filled":
+      case 'circle_check_filled':
         return {
           unchecked: <EmptyCircle size={iconPx} />,
           checked: <FilledCircleCheck size={iconPx} />,
         };
-      case "square_check_filled":
+      case 'square_check_filled':
         return {
           unchecked: <SquareCheck className="text-primary-foreground rounded-sm bg-primary" size={iconPx} />,
           checked: <SquareCheck className="text-primary-foreground rounded-sm bg-primary" size={iconPx} />,
         };
-      case "radio_style":
+      case 'radio_style':
         return {
           unchecked: <CircleDot size={iconPx} className="text-gray-400" />,
           checked: <CircleDot size={iconPx} className="text-primary" />,
@@ -184,17 +164,14 @@ export const ShadCnCheckbox = ({
   // ---------- defaults ----------
   const getDefaultValues = () => {
     if (isMulti) {
-      const base = Object.fromEntries(Object.keys(options).map((k) => [k, false])) as Record<
-        string,
-        boolean
-      >;
+      const base = Object.fromEntries(Object.keys(options).map((k) => [k, false])) as Record<string, boolean>;
       Object?.keys(defaultSelected || {}).forEach((k) => {
         if (k in base) base[k] = !!defaultSelected[k];
       });
       return base;
     }
     const defaultKey = Object.keys(defaultSelected || {}).find((k) => defaultSelected![k]);
-    return defaultKey || "";
+    return defaultKey || '';
   };
 
   // For reliable error rendering even without <FormField />
@@ -215,22 +192,22 @@ export const ShadCnCheckbox = ({
           defaultValue={getDefaultValues()}
           render={({ field }) => {
             const numOptions = Object?.keys(options).length;
-            const effectiveOrientation = orientation || (numOptions <= 10 ? "horizontal" : "vertical");
+            const effectiveOrientation = orientation || (numOptions <= 10 ? 'horizontal' : 'vertical');
             const containerClassName =
-              effectiveOrientation === "horizontal" ? "flex flex-wrap gap-x-4 gap-y-2" : "flex flex-col gap-4";
+              effectiveOrientation === 'horizontal' ? 'flex flex-wrap gap-x-4 gap-y-2' : 'flex flex-col gap-4';
 
             const currentValue = isMulti ? normalizeMulti(field.value) : field.value;
 
             return (
               <>
-                <div className={cn(containerClassName, classNames?.formGroup ?? "")}>
+                <div className={cn(containerClassName, classNames?.formGroup ?? '')}>
                   {Object.entries(options).map(([key, option]) => {
                     const isChecked = isMulti ? !!currentValue?.[key] : currentValue === key;
                     const icons = getIcons(isChecked);
 
-                    if (variant === "pill") {
+                    if (variant === 'pill') {
                       return (
-                        <label key={key} className={cn("cursor-pointer select-none", disabled && "cursor-not-allowed")}>
+                        <label key={key} className={cn('cursor-pointer select-none', disabled && 'cursor-not-allowed')}>
                           <input
                             type="checkbox"
                             className="sr-only peer"
@@ -239,7 +216,9 @@ export const ShadCnCheckbox = ({
                             onChange={() => {
                               const nextValue = isMulti
                                 ? normalizeMulti({ ...(currentValue || {}), [key]: !isChecked })
-                                : !isChecked ? key : "";
+                                : !isChecked
+                                  ? key
+                                  : '';
                               field.onChange(nextValue);
                               applyRequiredError(nextValue);
                               handleCheckboxChange?.(key, !isChecked);
@@ -248,16 +227,16 @@ export const ShadCnCheckbox = ({
                           />
                           <span
                             className={[
-                              "inline-flex items-center gap-2 rounded-md px-3 py-1.5 text-sm",
-                              "ring-1 ring-gray-300 bg-white text-gray-700",
-                              "peer-focus-visible:outline-none peer-focus-visible:ring-2 peer-focus-visible:ring-purple-500/40",
-                              "transition",
-                              isChecked ? "bg-purple-50 ring-purple-600" : "hover:bg-gray-50",
-                              disabled && "cursor-not-allowed opacity-50",
-                            ].join(" ")}
+                              'inline-flex items-center gap-2 rounded-md px-3 py-1.5 text-sm',
+                              'ring-1 ring-gray-300 bg-white text-gray-700',
+                              'peer-focus-visible:outline-none peer-focus-visible:ring-2 peer-focus-visible:ring-purple-500/40',
+                              'transition',
+                              isChecked ? 'bg-purple-50 ring-purple-600' : 'hover:bg-gray-50',
+                              disabled && 'cursor-not-allowed opacity-50',
+                            ].join(' ')}
                           >
                             <CheckCircle
-                              className={isChecked ? "h-4 w-4 text-purple-600" : "h-4 w-4 text-gray-300"}
+                              className={isChecked ? 'h-4 w-4 text-purple-600' : 'h-4 w-4 text-gray-300'}
                               aria-hidden="true"
                             />
                             {option.label}
@@ -277,16 +256,16 @@ export const ShadCnCheckbox = ({
                               const nextValue = isMulti
                                 ? normalizeMulti({ ...(currentValue || {}), [key]: !isChecked })
                                 : !isChecked
-                                ? key
-                                : "";
+                                  ? key
+                                  : '';
                               field.onChange(nextValue);
                               applyRequiredError(nextValue);
                               handleCheckboxChange?.(key, !isChecked);
                             }}
                             className={cn(
-                              "grid place-items-center rounded-full cursor-pointer",
-                              "focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-violet-500",
-                              disabled && "cursor-not-allowed opacity-50"
+                              'grid place-items-center rounded-full cursor-pointer',
+                              'focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-violet-500',
+                              disabled && 'cursor-not-allowed opacity-50'
                             )}
                             style={{ width: iconPx, height: iconPx }}
                           >
@@ -306,9 +285,7 @@ export const ShadCnCheckbox = ({
                 </div>
 
                 {/* Robust error rendering even without <FormField/> wrapper */}
-                {extError?.message ? (
-                  <p className="mt-1 text-sm text-destructive">{extError.message}</p>
-                ) : null}
+                {extError?.message ? <p className="mt-1 text-sm text-destructive">{extError.message}</p> : null}
 
                 {/*
                   If you wrap this with shadcn's <FormField name={name}>, you can instead use:

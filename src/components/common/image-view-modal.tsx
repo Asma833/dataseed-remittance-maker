@@ -1,10 +1,5 @@
 import React from 'react';
-import {
-  Dialog,
-  DialogContent,
-  DialogHeader,
-  DialogTitle,
-} from '@/components/ui/dialog';
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 import { Button } from '@/components/ui/button';
 import { ExternalLink, X } from 'lucide-react';
 
@@ -40,13 +35,7 @@ export const ImageViewModal: React.FC<ImageViewModalProps> = ({
                 <ExternalLink className="h-1 w-1" />
               </Button>
             </div>
-            <Button
-              variant="ghost"
-              size="sm"
-              onClick={onClose}
-              className="h-6 w-6 p-0"
-              title="Close"
-            >
+            <Button variant="ghost" size="sm" onClick={onClose} className="h-6 w-6 p-0" title="Close">
               <X className="h-4 w-4" />
             </Button>
           </div>

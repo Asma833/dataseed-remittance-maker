@@ -13,7 +13,10 @@ export const superCheckerApi = {
   },
   updateSuperChecker: async (request: UpdateSuperCheckerRequest): Promise<SuperCheckerData> => {
     const { id, ...updateData } = request;
-    const { data } = await axiosInstance.patch<SuperCheckerData>(API.USER_MANAGEMENT.SUPER_CHECKER.UPDATE(id), updateData);
+    const { data } = await axiosInstance.patch<SuperCheckerData>(
+      API.USER_MANAGEMENT.SUPER_CHECKER.UPDATE(id),
+      updateData
+    );
     return data;
   },
 };

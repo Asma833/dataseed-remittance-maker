@@ -12,13 +12,7 @@ interface ShadCnFileProps {
   required?: boolean;
 }
 
-export const ShadCnFile = ({
-  name,
-  label,
-  className,
-  disabled = false,
-  required = false,
-}: ShadCnFileProps) => {
+export const ShadCnFile = ({ name, label, className, disabled = false, required = false }: ShadCnFileProps) => {
   const { control } = useFormContext();
 
   return (
@@ -37,10 +31,7 @@ export const ShadCnFile = ({
               <label>
                 <Button
                   variant="outline"
-                  className={cn(
-                    "w-full cursor-pointer form-input shadow-none",
-                    error && "border-destructive"
-                  )}
+                  className={cn('w-full cursor-pointer form-input shadow-none', error && 'border-destructive')}
                   disabled={disabled}
                   asChild
                 >

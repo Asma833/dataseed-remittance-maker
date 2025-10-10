@@ -1,11 +1,6 @@
 import React from 'react';
 import { UseFormReturn } from 'react-hook-form';
-import {
-  Dialog,
-  DialogContent,
-  DialogHeader,
-  DialogTitle,
-} from '@/components/ui/dialog';
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 import { Button } from '@/components/ui/button';
 import { getController } from '@/components/form/utils/get-controller';
 import FieldWrapper from '@/components/form/wrapper/field-wrapper';
@@ -94,9 +89,7 @@ export function GenericDialog({
     <Dialog open={isOpen} onOpenChange={handleClose}>
       <DialogContent className={maxWidth}>
         <DialogHeader>
-          <DialogTitle style={{ color: 'var(--color-title)' }}>
-            {editData ? `Edit ${title}` : title}
-          </DialogTitle>
+          <DialogTitle style={{ color: 'var(--color-title)' }}>{editData ? `Edit ${title}` : title}</DialogTitle>
           {subtitle && <p className="text-muted-foreground">{subtitle}</p>}
         </DialogHeader>
 
@@ -104,7 +97,7 @@ export function GenericDialog({
           <form onSubmit={handleFormSubmitWithEvent} className="space-y-4">
             {fieldRows.map((row, rowIndex) => (
               <div key={rowIndex} className="grid grid-cols-2 gap-4">
-                {row.map(fieldName => {
+                {row.map((fieldName) => {
                   const field = config.fields[fieldName];
                   return (
                     <FieldWrapper key={fieldName}>
@@ -121,9 +114,7 @@ export function GenericDialog({
               <Button type="button" variant="outline" onClick={handleClose}>
                 {cancelButtonText}
               </Button>
-              <Button type="submit">
-                {editData ? 'Update' : submitButtonText}
-              </Button>
+              <Button type="submit">{editData ? 'Update' : submitButtonText}</Button>
             </div>
           </form>
         </FormProvider>

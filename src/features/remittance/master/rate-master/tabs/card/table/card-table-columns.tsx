@@ -1,11 +1,7 @@
 import { ActionButtons, TableColumn } from '@/components/table';
 import { CardData } from './types';
 
-const GetCardTableColumns = ({
-  handleEdit
-}: {
-  handleEdit: (card: CardData) => void;
-}): TableColumn<CardData>[] => {
+const GetCardTableColumns = ({ handleEdit }: { handleEdit: (card: CardData) => void }): TableColumn<CardData>[] => {
   return [
     {
       id: 'sno',

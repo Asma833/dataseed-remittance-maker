@@ -11,7 +11,10 @@ interface BasicInformationStepProps {
 }
 
 export const BasicInformationStep: React.FC<BasicInformationStepProps> = () => {
-  const { control, formState: { errors } } = useFormContext();
+  const {
+    control,
+    formState: { errors },
+  } = useFormContext();
   const config = agentAdminCreationConfig();
 
   return (
@@ -95,7 +98,7 @@ export const BasicInformationStep: React.FC<BasicInformationStepProps> = () => {
                   ...(typeof field === 'object' && field !== null ? field : {}),
                   name: fieldName,
                   control,
-                  className:"justify-start",
+                  className: 'justify-start',
                   errors,
                 })}
               </FieldWrapper>
@@ -105,7 +108,7 @@ export const BasicInformationStep: React.FC<BasicInformationStepProps> = () => {
       </div>
 
       <div>
-        <SubTitle title="Credit Information" titleClassName="mb-0"/>
+        <SubTitle title="Credit Information" titleClassName="mb-0" />
         <p className="text-[12px] text-gray-500 pl-1 mb-2">
           Please input the desired line credit limit and credit days.
         </p>
@@ -128,4 +131,3 @@ export const BasicInformationStep: React.FC<BasicInformationStepProps> = () => {
     </div>
   );
 };
-

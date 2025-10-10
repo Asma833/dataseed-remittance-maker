@@ -102,7 +102,7 @@ export function validateTableColumns<T>(columns: any): columns is import('./type
   // Check each column for required properties
   for (let i = 0; i < columns.length; i++) {
     const column = columns[i];
-    
+
     if (!column || typeof column !== 'object') {
       console.error(`DataTable: column at index ${i} must be an object`);
       return false;
@@ -136,7 +136,7 @@ export function formatTableError(error: any): string {
     if (error.message) {
       return `Table Error: ${error.message}`;
     }
-    
+
     if (error.toString && typeof error.toString === 'function') {
       return `Table Error: ${error.toString()}`;
     }

@@ -85,14 +85,7 @@ export function UserManagementTable() {
     {
       id: 'action',
       header: 'Action',
-      cell: ({ row }) => (
-        <ActionButtons
-          row={row}
-          onView={handleView}
-          onEdit={handleEdit}
-          onDelete={handleDelete}
-        />
-      ),
+      cell: ({ row }) => <ActionButtons row={row} onView={handleView} onEdit={handleEdit} onDelete={handleDelete} />,
       sortable: false,
       filterable: false,
       meta: {
@@ -161,12 +154,11 @@ export function UserManagementTable() {
 
   function handleDelete(user: UserData) {
     if (confirm(`Are you sure you want to delete ${user.fullName}?`)) {
-      setUsers(prev => prev.filter(u => u.id !== user.id));
+      setUsers((prev) => prev.filter((u) => u.id !== user.id));
     }
   }
 
-  function handleRowClick(user: UserData) {
-  }
+  function handleRowClick(user: UserData) {}
 
   // Dynamic table actions (when using dynamic mode)
   const tableActions = {
@@ -198,7 +190,7 @@ export function UserManagementTable() {
       phoneNo: `99999${users.length + 1}`,
       status: Math.random() > 0.5 ? 'Active' : 'Inactive',
     };
-    setUsers(prev => [...prev, newUser]);
+    setUsers((prev) => [...prev, newUser]);
   };
 
   // Export function
@@ -218,22 +210,14 @@ export function UserManagementTable() {
           {/* Mode Toggle */}
           <div className="flex items-center gap-2">
             <span className="text-sm font-medium">Mode:</span>
-            <Button
-              variant={mode === 'static' ? 'default' : 'outline'}
-              size="sm"
-              onClick={() => setMode('static')}
-            >
+            <Button variant={mode === 'static' ? 'default' : 'outline'} size="sm" onClick={() => setMode('static')}>
               Static
             </Button>
-            <Button
-              variant={mode === 'dynamic' ? 'default' : 'outline'}
-              size="sm"
-              onClick={() => setMode('dynamic')}
-            >
+            <Button variant={mode === 'dynamic' ? 'default' : 'outline'} size="sm" onClick={() => setMode('dynamic')}>
               Dynamic
             </Button>
           </div>
-          
+
           {/* Action buttons */}
           <Button onClick={addSampleUser} size="sm">
             Add User

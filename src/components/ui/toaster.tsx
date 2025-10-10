@@ -1,17 +1,10 @@
-"use client"
+'use client';
 
-import { useToast } from "@/hooks/originUI/useToast"
-import {
-  Toast,
-  ToastClose,
-  ToastDescription,
-  ToastProvider,
-  ToastTitle,
-  ToastViewport,
-} from "./toast"
+import { useToast } from '@/hooks/originUI/useToast';
+import { Toast, ToastClose, ToastDescription, ToastProvider, ToastTitle, ToastViewport } from './toast';
 
 export function Toaster() {
-  const { toasts } = useToast()
+  const { toasts } = useToast();
 
   return (
     <ToastProvider>
@@ -22,9 +15,7 @@ export function Toaster() {
               <div className="flex flex-col gap-3">
                 <div className="space-y-1">
                   {title && <ToastTitle>{title}</ToastTitle>}
-                  {description && (
-                    <ToastDescription>{description}</ToastDescription>
-                  )}
+                  {description && <ToastDescription>{description}</ToastDescription>}
                 </div>
                 <div>{action}</div>
               </div>
@@ -33,9 +24,9 @@ export function Toaster() {
               </div>
             </div>
           </Toast>
-        )
+        );
       })}
       <ToastViewport />
     </ToastProvider>
-  )
+  );
 }

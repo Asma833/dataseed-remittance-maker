@@ -37,7 +37,7 @@ const ShadCnPassword = ({
           name={name}
           control={control}
           defaultValue=""
-          render={({ field, fieldState:{error} }) => (
+          render={({ field, fieldState: { error } }) => (
             <div>
               <ShadCnFormInput
                 {...field}
@@ -47,14 +47,10 @@ const ShadCnPassword = ({
                 required={required}
                 forcedValue={forcedValue}
                 placeholder={placeholder}
-                className={cn("form-input", error && "border-destructive focus-visible:ring-destructive")}
+                className={cn('form-input', error && 'border-destructive focus-visible:ring-destructive')}
                 autoComplete="new-password"
               />
-              {error && (
-                <p className="text-sm text-destructive mt-1">
-                  {error.message}
-                </p>
-              )}
+              {error && <p className="text-sm text-destructive mt-1">{error.message}</p>}
             </div>
           )}
         />

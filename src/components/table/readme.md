@@ -75,13 +75,7 @@ function MyTable() {
 import { DataTable, tableConfigPresets } from '@/components/table';
 
 function AdvancedTable() {
-  return (
-    <DataTable
-      columns={columns}
-      data={data}
-      config={tableConfigPresets.userManagement}
-    />
-  );
+  return <DataTable columns={columns} data={data} config={tableConfigPresets.userManagement} />;
 }
 ```
 
@@ -99,7 +93,7 @@ interface TableConfig {
     pageSizeOptions: number[];
     showPageSizeSelector: boolean;
   };
-  
+
   // Search settings
   search: {
     enabled: boolean;
@@ -107,22 +101,22 @@ interface TableConfig {
     searchMode: 'static' | 'dynamic';
     debounceMs?: number;
   };
-  
-  // Filter settings  
+
+  // Filter settings
   filters: {
     enabled: boolean;
     filterMode: 'static' | 'dynamic';
     columnFilters: boolean;
     globalFilter: boolean;
   };
-  
+
   // Sorting settings
   sorting: {
     enabled: boolean;
     multiSort: boolean;
     sortMode: 'static' | 'dynamic';
   };
-  
+
   // Additional settings
   loading?: boolean;
   error?: string | null;
@@ -144,6 +138,7 @@ interface TableConfig {
 ## Static vs Dynamic Modes
 
 ### Static Mode
+
 - All data is loaded at once
 - Filtering, sorting, and pagination happen client-side
 - Good for smaller datasets (< 1000 records)
@@ -159,6 +154,7 @@ const config = {
 ```
 
 ### Dynamic Mode
+
 - Data is loaded on-demand from server
 - Operations trigger API calls
 - Good for large datasets
@@ -191,16 +187,16 @@ const actions = {
 
 ```typescript
 interface TableColumn<T> {
-  id: string;                          // Unique identifier
-  header: string;                      // Display name
-  accessorKey?: keyof T | string;      // Data key
-  cell?: (props) => React.ReactNode;   // Custom cell renderer
-  sortable?: boolean;                  // Enable sorting
-  filterable?: boolean;                // Enable filtering
-  width?: number | string;             // Fixed width
-  minWidth?: number;                   // Minimum width
-  maxWidth?: number;                   // Maximum width
-  enableHiding?: boolean;              // Allow column hiding
+  id: string; // Unique identifier
+  header: string; // Display name
+  accessorKey?: keyof T | string; // Data key
+  cell?: (props) => React.ReactNode; // Custom cell renderer
+  sortable?: boolean; // Enable sorting
+  filterable?: boolean; // Enable filtering
+  width?: number | string; // Fixed width
+  minWidth?: number; // Minimum width
+  maxWidth?: number; // Maximum width
+  enableHiding?: boolean; // Allow column hiding
   meta?: {
     headerAlign?: 'left' | 'center' | 'right';
     cellAlign?: 'left' | 'center' | 'right';
@@ -212,6 +208,7 @@ interface TableColumn<T> {
 ## Custom Cells
 
 ### Status Badge
+
 ```tsx
 {
   id: 'status',
@@ -222,6 +219,7 @@ interface TableColumn<T> {
 ```
 
 ### Action Buttons
+
 ```tsx
 {
   id: 'actions',
@@ -238,14 +236,15 @@ interface TableColumn<T> {
 ```
 
 ### Custom Cell
+
 ```tsx
 {
   id: 'avatar',
   header: 'Avatar',
   cell: ({ row }) => (
     <div className="flex items-center gap-2">
-      <img 
-        src={row.avatarUrl} 
+      <img
+        src={row.avatarUrl}
         alt={row.name}
         className="h-8 w-8 rounded-full"
       />
@@ -273,6 +272,7 @@ interface TableActions<T> {
 ### User Management Table (Complete Example)
 
 See `UserManagementTable.tsx` for a complete implementation that includes:
+
 - Static and dynamic mode switching
 - Custom status badges
 - Action buttons
@@ -294,9 +294,9 @@ interface Product {
 
 const columns: TableColumn<Product>[] = [
   { id: 'name', header: 'Product Name', accessorKey: 'name', sortable: true },
-  { 
-    id: 'price', 
-    header: 'Price', 
+  {
+    id: 'price',
+    header: 'Price',
     accessorKey: 'price',
     cell: ({ value }) => `$${value.toFixed(2)}`,
     sortable: true,
@@ -305,13 +305,7 @@ const columns: TableColumn<Product>[] = [
 ];
 
 function ProductList({ products }: { products: Product[] }) {
-  return (
-    <DataTable
-      columns={columns}
-      data={{ data: products }}
-      config={tableConfigPresets.basic}
-    />
-  );
+  return <DataTable columns={columns} data={{ data: products }} config={tableConfigPresets.basic} />;
 }
 ```
 
@@ -370,7 +364,7 @@ function UserTable() {
     <DataTable
       columns={columns}
       data={data}
-      config={{ 
+      config={{
         ...tableConfigPresets.dynamic,
         loading,
       }}

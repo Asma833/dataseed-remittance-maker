@@ -47,20 +47,20 @@ export const NotificationBanner = ({
   showIcon = true,
   icon,
   className,
-  size = 'sm'
+  size = 'sm',
 }: NotificationBannerProps) => {
   const variantStyles = {
     default: 'bg-gray-100 text-gray-800',
     warning: 'bg-[#FFF2E3] text-amber-600',
     info: 'bg-blue-100 text-blue-800',
     success: 'bg-green-100 text-green-800',
-    error: 'bg-red-100 text-red-800'
+    error: 'bg-red-100 text-red-800',
   };
 
   const sizeStyles = {
     sm: 'text-sm p-2',
     md: 'text-base p-3',
-    lg: 'text-lg p-4'
+    lg: 'text-lg p-4',
   };
 
   const defaultIcon = <AlertCircle className="h-5 w-5" />;

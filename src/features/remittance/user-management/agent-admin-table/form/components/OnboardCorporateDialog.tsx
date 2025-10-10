@@ -65,20 +65,23 @@ export const OnboardCorporateDialog: React.FC<OnboardCorporateDialogProps> = ({
 
     if (editData?.id) {
       // Update existing corporate
-      updateCorporateMutation.mutate({
-        id: editData.id,
-        ...payload,
-      }, {
-        onSuccess: () => {
-          toast("Corporate updated successfully");
-          onClose();
+      updateCorporateMutation.mutate(
+        {
+          id: editData.id,
+          ...payload,
         },
-      });
+        {
+          onSuccess: () => {
+            toast('Corporate updated successfully');
+            onClose();
+          },
+        }
+      );
     } else {
       // Create new corporate
       createCorporateMutation.mutate(payload, {
         onSuccess: () => {
-          toast("Corporate created successfully");
+          toast('Corporate created successfully');
           reset();
         },
       });
@@ -89,12 +92,12 @@ export const OnboardCorporateDialog: React.FC<OnboardCorporateDialogProps> = ({
     <GenericDialog
       isOpen={isOpen}
       onClose={onClose}
-      title={editData ? "Update Corporate" : "Create Corporate"}
+      title={editData ? 'Update Corporate' : 'Create Corporate'}
       subtitle=""
       form={form}
       config={onboardCorporateConfig()}
       onSubmit={handleFormSubmit}
-      submitButtonText={editData ? "Update" : "Create"}
+      submitButtonText={editData ? 'Update' : 'Create'}
     />
   );
 };

@@ -22,35 +22,27 @@ export const exportTableToCSV = <T>(
     }
 
     // Get column headers (exclude action columns and non-filterable columns)
-    const exportableColumns = columns.filter(
-      col => col.id !== 'action' && col.filterable !== false
-    );
+    const exportableColumns = columns.filter((col) => col.id !== 'action' && col.filterable !== false);
 
-    const headers = exportableColumns.map(col => col.header);
+    const headers = exportableColumns.map((col) => col.header);
 
     // Get row data
-    const csvRows = rows.map(row => {
+    const csvRows = rows.map((row) => {
       return exportableColumns
-        .map(col => {
+        .map((col) => {
           const rowData = row.original as any;
           const value = rowData[col.accessorKey as string];
-          
+
           return formatCellValue(value);
         })
         .join(',');
     });
 
     // Combine headers and rows
-    const csvContent = [
-      options.includeHeaders ? headers.join(',') : null,
-      ...csvRows
-    ]
-      .filter(Boolean)
-      .join('\n');
+    const csvContent = [options.includeHeaders ? headers.join(',') : null, ...csvRows].filter(Boolean).join('\n');
 
     // Download the CSV file
     downloadCSV(csvContent, options.fileName || 'export.csv');
-    
   } catch (error) {
     console.error('Error exporting to CSV:', error);
     throw error;
@@ -67,17 +59,17 @@ const formatCellValue = (value: any): string => {
   if (value === null || value === undefined) {
     return '';
   }
-  
+
   // Handle arrays
   if (Array.isArray(value)) {
     return `"${value.join(', ')}"`;
   }
-  
+
   // Handle booleans
   if (typeof value === 'boolean') {
     return value ? 'Active' : 'Inactive';
   }
-  
+
   // Handle strings with commas or quotes
   if (typeof value === 'string') {
     if (value.includes(',') || value.includes('"') || value.includes('\n')) {
@@ -86,7 +78,7 @@ const formatCellValue = (value: any): string => {
     }
     return value;
   }
-  
+
   // Handle numbers and other types
   return String(value);
 };
@@ -100,14 +92,14 @@ const downloadCSV = (content: string, fileName: string): void => {
   const blob = new Blob([content], { type: 'text/csv;charset=utf-8;' });
   const link = document.createElement('a');
   const url = URL.createObjectURL(blob);
-  
+
   link.setAttribute('href', url);
   link.setAttribute('download', fileName);
   link.style.visibility = 'hidden';
   document.body.appendChild(link);
   link.click();
   document.body.removeChild(link);
-  
+
   // Clean up the URL object
   URL.revokeObjectURL(url);
 };

@@ -19,7 +19,7 @@ export const SideNavOptions = {
       path: getNavPath('ADMIN', ROUTES.ADMIN.NUSER),
       icon: profile,
       subMenus: [
-         {
+        {
           title: 'Superchecker',
           path: getNavPath('ADMIN', ROUTES.ADMIN.SUPER_CHECKER_TABLE),
         },
@@ -27,7 +27,7 @@ export const SideNavOptions = {
           title: 'Agent Admin',
           path: getNavPath('ADMIN', ROUTES.ADMIN.AGENT_ADMIN),
         },
-         {
+        {
           title: 'Branch Agents',
           path: getNavPath('ADMIN', ROUTES.ADMIN.USER_MANAGEMENT.BRANCH_AGENTS),
         },

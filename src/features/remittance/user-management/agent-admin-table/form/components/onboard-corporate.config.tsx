@@ -28,10 +28,10 @@ export const onboardCorporateConfig = () => {
         name: 'entityType',
         label: 'Entity Type',
         type: FieldType.Select,
-          options: [
-            { value: 'Corporate', label: 'Corporate' },
-            { value: 'Proprietor', label: 'Proprietor' }
-          ],
+        options: [
+          { value: 'Corporate', label: 'Corporate' },
+          { value: 'Proprietor', label: 'Proprietor' },
+        ],
         required: true,
         placeholder: 'Select Entity Type',
       },

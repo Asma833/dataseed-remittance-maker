@@ -1,11 +1,5 @@
 import { Controller, useFormContext } from 'react-hook-form';
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from '@/components/ui/select';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { FormItem, FormLabel, FormControl, FormMessage } from '@/components/ui/form';
 import { cn } from '@/utils/cn';
 import { toTitleCase } from '@/utils/textFormater';
@@ -34,7 +28,7 @@ export const ShadCnSelect = ({
   label,
   options,
   className,
-  placeholder = "Select an option",
+  placeholder = 'Select an option',
   disabled = false,
   required = false,
   forcedValue,
@@ -48,7 +42,7 @@ export const ShadCnSelect = ({
   const multiSelectOptions: Option[] = useMemo(() => {
     if (!isMulti) return [];
     if (isArrayOptions) {
-      return (options as Array<{ value: string; label: string; selected?: boolean }>).map(opt => ({
+      return (options as Array<{ value: string; label: string; selected?: boolean }>).map((opt) => ({
         value: opt.value,
         label: opt.label,
       }));
@@ -104,7 +98,7 @@ export const ShadCnSelect = ({
     }
 
     if (isArrayOptions) {
-      const selectedOption = processedArrayOptions.find(option => option.value === selected);
+      const selectedOption = processedArrayOptions.find((option) => option.value === selected);
       return selectedOption ? selectedOption.label : selected;
     } else {
       const selectedEntry = Object.entries(options).find(([value]) => value === selected);
@@ -129,7 +123,7 @@ export const ShadCnSelect = ({
               const dropdownRef = useRef<HTMLDivElement>(null);
               const selectedValues: string[] = value || [];
               const selectedOptions = selectedValues.map((v: string) => {
-                const option = multiSelectOptions.find(opt => opt.value === v);
+                const option = multiSelectOptions.find((opt) => opt.value === v);
                 return option ? option : { value: v, label: v };
               });
 
@@ -167,16 +161,16 @@ export const ShadCnSelect = ({
                   {/* Select Trigger */}
                   <div
                     className={cn(
-                      "flex h-10 w-full items-center justify-between rounded-lg border border-input bg-background px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 hover:border-primary/50 transition-colors disabled:cursor-not-allowed disabled:opacity-50 form-input",
-                      disabled && "cursor-not-allowed opacity-50",error && "border-destructive"
+                      'flex h-10 w-full items-center justify-between rounded-lg border border-input bg-background px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 hover:border-primary/50 transition-colors disabled:cursor-not-allowed disabled:opacity-50 form-input',
+                      disabled && 'cursor-not-allowed opacity-50',
+                      error && 'border-destructive'
                     )}
                     onClick={() => !disabled && setIsOpen(!isOpen)}
                   >
                     <span className="text-muted-foreground">
                       {selectedValues.length > 0
                         ? `${selectedValues.length} item${selectedValues.length > 1 ? 's' : ''} selected`
-                        : placeholder || 'Select options'
-                      }
+                        : placeholder || 'Select options'}
                     </span>
                     <ChevronDownIcon size={16} className="ml-2 text-muted-foreground" />
                   </div>
@@ -220,18 +214,14 @@ export const ShadCnSelect = ({
                             onClick={() => handleRemoveChip(option.value)}
                             className="hover:[var(--color-title)]/20 rounded-full  transition-colors"
                           >
-                             <CircleXIcon size={14} className='text-[var(--color-title)] cursor-pointer'/>
+                            <CircleXIcon size={14} className="text-[var(--color-title)] cursor-pointer" />
                           </button>
                         </div>
                       ))}
                     </div>
                   )}
 
-                  {error && (
-                    <p className="text-sm text-destructive mt-1">
-                      {error.message}
-                    </p>
-                  )}
+                  {error && <p className="text-sm text-destructive mt-1">{error.message}</p>}
                 </div>
               );
             }}
@@ -243,12 +233,13 @@ export const ShadCnSelect = ({
             defaultValue={defaultValue}
             render={({ field: { value, onChange }, fieldState: { error } }) => (
               <div>
-                <Select
-                  value={(forcedValue ? forcedValue : value) || ''}
-                  onValueChange={onChange}
-                  disabled={disabled}
-                >
-                  <SelectTrigger className={cn("form-input shadow-none focus-visible:ring-0", "aria-invalid:focus-visible:ring-destructive/20 dark:aria-invalid:focus-visible:ring-destructive/40 aria-invalid:focus-visible:border-destructive")}>
+                <Select value={(forcedValue ? forcedValue : value) || ''} onValueChange={onChange} disabled={disabled}>
+                  <SelectTrigger
+                    className={cn(
+                      'form-input shadow-none focus-visible:ring-0',
+                      'aria-invalid:focus-visible:ring-destructive/20 dark:aria-invalid:focus-visible:ring-destructive/40 aria-invalid:focus-visible:border-destructive'
+                    )}
+                  >
                     <SelectValue placeholder={placeholder}>
                       {getDisplayValue((forcedValue ? forcedValue : value) || '') || undefined}
                     </SelectValue>
@@ -260,21 +251,16 @@ export const ShadCnSelect = ({
                             {option.label}
                           </SelectItem>
                         ))
-                      : options ? Object.entries(options).map(([value, { label }]) => (
-                          <SelectItem
-                            key={value}
-                            value={value}
-                          >
-                            {label}
-                          </SelectItem>
-                        )) : null}
+                      : options
+                        ? Object.entries(options).map(([value, { label }]) => (
+                            <SelectItem key={value} value={value}>
+                              {label}
+                            </SelectItem>
+                          ))
+                        : null}
                   </SelectContent>
                 </Select>
-                {error && (
-                  <p className="text-sm text-destructive mt-1">
-                    {error.message}
-                  </p>
-                )}
+                {error && <p className="text-sm text-destructive mt-1">{error.message}</p>}
               </div>
             )}
           />

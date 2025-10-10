@@ -4,12 +4,12 @@
 @custom-variant dark (&:where(.dark, .dark *));
 
 @theme {
-  --color-primary:#8E2DE2;
+  --color-primary: #8e2de2;
   --color-primary-foreground: #fafafa;
   --color-secondary: #f1f3ff;
-  --color-white:#FFFFFF;
-  --color-title:#D71C57;
-  --color-background-icon:#FFD8E4;
+  --color-white: #ffffff;
+  --color-title: #d71c57;
+  --color-background-icon: #ffd8e4;
   --color-secondary-foreground: #35354a;
   --color-destructive: #dc2626;
   --color-destructive-foreground: #dc2626;
@@ -22,11 +22,11 @@
   --color-card-foreground: #242434;
   --color-border: #ffffff;
   --color-input: #dcdcde;
-  --color-ring:  #7D22E24A;
+  --color-ring: #7d22e24a;
   --color-background: #ffffff;
   --color-foreground: #242434;
   --color-primary-gradient-1: var(--color-primary);
-  --color-primary-gradient-2: #4A00E0;
+  --color-primary-gradient-2: #4a00e0;
   --color-form-label: #585858;
 
   /* Custom badge colors */
@@ -49,20 +49,20 @@
   /* Additional global colors */
   --color-white: #ffffff;
   --color-black: #000000;
-  --color-table-header-bg: #E9E9E9;
+  --color-table-header-bg: #e9e9e9;
   --color-table-striped: #f1f1f19c;
   --color-sidebar-toggle: #3d81db;
   --color-gray-200: #e5e7eb;
-  --color-icon-primary: #2C81E8;
-  --form-background:#f1f3ff7a;
-  --color-steps-secondary:linear-gradient(87.15deg, #8E2DE2 2.58%, #4A00E0 97.85%);
-  --color-steps-primary:linear-gradient(87.15deg, #00CD07 2.58%, #00811C 97.85%);
+  --color-icon-primary: #2c81e8;
+  --form-background: #f1f3ff7a;
+  --color-steps-secondary: linear-gradient(87.15deg, #8e2de2 2.58%, #4a00e0 97.85%);
+  --color-steps-primary: linear-gradient(87.15deg, #00cd07 2.58%, #00811c 97.85%);
 }
-.setps-primary{
-  background:var(--color-steps-secondary);
+.setps-primary {
+  background: var(--color-steps-secondary);
 }
-.setps-secondary{
-  background:var(--color-steps-primary);
+.setps-secondary {
+  background: var(--color-steps-primary);
 }
 .dark {
   --background: oklch(0.145 0 0);
@@ -117,7 +117,8 @@
   background-image: linear-gradient(to right, var(--color-primary-gradient-1), var(--color-primary-gradient-2));
   color: var(--color-white);
 }
-.sidemenu-active-menu,.submenu-item.active {
+.sidemenu-active-menu,
+.submenu-item.active {
   background-color: #06060642;
   color: var(--color-primary-foreground);
   border-radius: 20px;
@@ -447,8 +448,8 @@ html[class='dark'] .MuiDateCalendar-root {
 html[class='dark'] .MuiDateCalendar-root.MuiButtonBase-root.MuiPickersDay-root.MuiPickersDay-dayWithMargin {
   color: white;
 }
-body{
-  background-color: #EDEDED !important;
+body {
+  background-color: #ededed !important;
 }
 /* Dark mode styles for MUI components */
 .dark .MuiDateCalendar-root {
@@ -516,35 +517,47 @@ body{
 }
 .form-input {
   border-radius: 10px;
-  box-shadow: 0px 0px 4px 0px #0000006E;
+  box-shadow: 0px 0px 4px 0px #0000006e;
 }
-.form-input:focus-visible{
-  box-shadow: 0px 0px 4px 1px #7D22E24A;
+.form-input:focus-visible {
+  box-shadow: 0px 0px 4px 1px #7d22e24a;
 }
 .btn-light {
   background-color: var(--color-secondary);
   color: var(--color-secondary-foreground);
   border: none;
 }
-.btn-icon-primary{
+.btn-icon-primary {
   color: var(--color-icon-primary);
 }
-.form-bg{
+.form-bg {
   background-color: var(--form-background);
 }
-.bg-danger{
+.bg-danger {
   background-color: var(--color-title);
 }
-.bg-gradient{
-  background: linear-gradient(50.74deg, #6E3494 0%, #B11F82 10.44%, #DB1A57 20.4%, #F26922 29.48%, #F3EC26 38.31%, #FCB921 45.75%, #E775AE 53.26%, #EE478E 61.47%, #427BBF 66.35%, #5AC5C4 71.69%);
+.bg-gradient {
+  background: linear-gradient(
+    50.74deg,
+    #6e3494 0%,
+    #b11f82 10.44%,
+    #db1a57 20.4%,
+    #f26922 29.48%,
+    #f3ec26 38.31%,
+    #fcb921 45.75%,
+    #e775ae 53.26%,
+    #ee478e 61.47%,
+    #427bbf 66.35%,
+    #5ac5c4 71.69%
+  );
 }
-.login-form{
-  background-color: #EDEDED;
+.login-form {
+  background-color: #ededed;
   width: 70%;
   margin: auto;
 }
-.border-destructive{
+.border-destructive {
   border: 0;
-  box-shadow: 0px 0px 4px 1px #dc2626 ;
-/* Global table font size */
+  box-shadow: 0px 0px 4px 1px #dc2626;
+  /* Global table font size */
 }

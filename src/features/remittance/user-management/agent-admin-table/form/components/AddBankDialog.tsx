@@ -14,13 +14,7 @@ interface AddBankDialogProps {
   onEdit?: (bankData: Record<string, any>) => void;
 }
 
-export const AddBankDialog: React.FC<AddBankDialogProps> = ({
-  isOpen,
-  onClose,
-  onAdd,
-  editData,
-  onEdit,
-}) => {
+export const AddBankDialog: React.FC<AddBankDialogProps> = ({ isOpen, onClose, onAdd, editData, onEdit }) => {
   const form = useForm<AddBankFormData>({
     resolver: zodResolver(addBankSchema),
     defaultValues: editData || {},
@@ -66,7 +60,7 @@ export const AddBankDialog: React.FC<AddBankDialogProps> = ({
 
     if (onAdd) {
       onAdd(bankData);
-      toast.success("Bank account added successfully");
+      toast.success('Bank account added successfully');
     }
   };
 
@@ -82,7 +76,7 @@ export const AddBankDialog: React.FC<AddBankDialogProps> = ({
 
     if (onEdit) {
       onEdit({ ...bankData, id: data.id });
-      toast.success("Bank account updated successfully");
+      toast.success('Bank account updated successfully');
     }
   };
 

@@ -34,7 +34,7 @@ const SuperCheckerTable = () => {
           { value: 'Inactive', label: 'Inactive' },
         ],
         columnId: 'is_active',
-        columnName:'Status'
+        columnName: 'Status',
       },
     },
     loading,
@@ -48,7 +48,6 @@ const SuperCheckerTable = () => {
     currentPage: 1,
   };
 
-
   const handleEdit = (superChecker: SuperCheckerData) => {
     navigate('/admin/users/super-checker-creation', { state: { superChecker } });
   };
@@ -58,20 +57,17 @@ const SuperCheckerTable = () => {
     onPaginationChange: (pagination: { pageIndex: number; pageSize: number }) => {
       // Pagination change handled by hook
     },
- 
-    onSortingChange: (sorting: { id: string; desc: boolean }[]) => {
-    },
-    onGlobalFilterChange: (filter: string) => {
-    },
-    onColumnFiltersChange: (filters: { id: string; value: any }[]) => {
-    },
+
+    onSortingChange: (sorting: { id: string; desc: boolean }[]) => {},
+    onGlobalFilterChange: (filter: string) => {},
+    onColumnFiltersChange: (filters: { id: string; value: any }[]) => {},
   };
 
   // Navigate to super checker creation page
   const handleAddSuperChecker = () => {
     navigate('/admin/users/super-checker-creation');
   };
-   // Define columns matching the screenshot
+  // Define columns matching the screenshot
   const columns = GetSuperCheckerTableColumns({
     handleEdit,
   });
@@ -80,7 +76,7 @@ const SuperCheckerTable = () => {
       {/* Header with controls */}
       <div className="flex items-center justify-between">
         <div className="space-y-1">
-         <TableTitle title="Super Checker List"/>
+          <TableTitle title="Super Checker List" />
         </div>
         <div className="flex items-center gap-2">
           <Button onClick={handleAddSuperChecker} size="sm">

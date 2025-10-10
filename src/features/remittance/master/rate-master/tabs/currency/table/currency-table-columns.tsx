@@ -2,7 +2,7 @@ import { ActionButtons, TableColumn } from '@/components/table';
 import { CurrencyData } from './types';
 
 const GetCurrencyTableColumns = ({
-  handleEdit
+  handleEdit,
 }: {
   handleEdit: (currency: CurrencyData) => void;
 }): TableColumn<CurrencyData>[] => {

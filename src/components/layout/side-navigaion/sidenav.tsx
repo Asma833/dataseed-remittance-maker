@@ -25,16 +25,16 @@ const Sidebar: React.FC<SidebarProps> = ({ navItems, collapsed, setCollapsed }) 
       // Check if current path matches main item or any submenu
       if (item.path === location.pathname) return true;
       if (item.subMenus) {
-        return item.subMenus.some(submenu => submenu.path === location.pathname);
+        return item.subMenus.some((submenu) => submenu.path === location.pathname);
       }
       return false;
     });
-    
+
     if (currentItem) {
       setActiveItem(currentItem.title);
       // If current path is in a submenu, keep that dropdown open
-      if (currentItem.subMenus?.some(submenu => submenu.path === location.pathname)) {
-        setOpenDropdowns(prev => new Set(prev).add(currentItem.title));
+      if (currentItem.subMenus?.some((submenu) => submenu.path === location.pathname)) {
+        setOpenDropdowns((prev) => new Set(prev).add(currentItem.title));
       }
     }
   }, [location.pathname, navItems]);
@@ -46,8 +46,8 @@ const Sidebar: React.FC<SidebarProps> = ({ navItems, collapsed, setCollapsed }) 
 
   const toggleDropdown = (itemTitle: string, hasSubmenus: boolean) => {
     if (!hasSubmenus) return;
-    
-    setOpenDropdowns(prev => {
+
+    setOpenDropdowns((prev) => {
       const newSet = new Set(prev);
       if (newSet.has(itemTitle)) {
         newSet.delete(itemTitle);
@@ -73,7 +73,7 @@ const Sidebar: React.FC<SidebarProps> = ({ navItems, collapsed, setCollapsed }) 
       {/* Navigation List */}
       <nav className="px-3 mt-8">
         <ul className="space-y-1">
-          <li className='list-none relative'>
+          <li className="list-none relative">
             {' '}
             <SidebarToggle collapsed={collapsed} setCollapsed={setCollapsed} />
           </li>
@@ -96,7 +96,7 @@ const Sidebar: React.FC<SidebarProps> = ({ navItems, collapsed, setCollapsed }) 
                 )}
               >
                 <div className={cn('flex items-center', collapsed ? 'gap-0' : 'gap-2')}>
-                  {item.icon && <img src={item.icon} className="h-5 w-5 flex-shrink-0"/>}
+                  {item.icon && <img src={item.icon} className="h-5 w-5 flex-shrink-0" />}
                   {!collapsed && <span className="truncate text-[13px]">{item.title}</span>}
                 </div>
                 {/* Dropdown Arrow - only show if not collapsed and has submenus */}
@@ -120,9 +120,7 @@ const Sidebar: React.FC<SidebarProps> = ({ navItems, collapsed, setCollapsed }) 
                         onClick={() => submenu.path && handleNavigation(submenu.path, submenu.title)}
                         className={cn(
                           'submenu-item',
-                          isSubmenuActive(submenu)
-                            ? 'active'
-                            : 'hover:bg-muted/20 text-muted-foreground rounded-3xl',
+                          isSubmenuActive(submenu) ? 'active' : 'hover:bg-muted/20 text-muted-foreground rounded-3xl',
                           submenu.disabled && 'opacity-50 cursor-not-allowed'
                         )}
                       >
@@ -138,31 +136,19 @@ const Sidebar: React.FC<SidebarProps> = ({ navItems, collapsed, setCollapsed }) 
         </ul>
       </nav>
       <div className="mt-auto w-full px-3 pb-4">
-        <div
-          className={cn(
-            "w-full flex items-center justify-center",
-            "flex-col gap-1"
-          )}
-        >
+        <div className={cn('w-full flex items-center justify-center', 'flex-col gap-1')}>
           <img
             src={PoweredBy}
             alt="Powered by"
-            className={cn(
-              "pointer-events-none select-none opacity-90",
-              collapsed ? "h-3" : "h-3" 
-            )}
+            className={cn('pointer-events-none select-none opacity-90', collapsed ? 'h-3' : 'h-3')}
           />
           <img
             src={DataSeedLogo}
             alt="DataSeed"
-            className={cn(
-              "pointer-events-none select-none opacity-95",
-              collapsed ? "h-6" : "h-8"
-            )}
+            className={cn('pointer-events-none select-none opacity-95', collapsed ? 'h-6' : 'h-8')}
           />
         </div>
       </div>
-
     </aside>
   );
 };

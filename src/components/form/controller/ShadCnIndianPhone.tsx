@@ -33,24 +33,23 @@ export const ShadCnIndianPhone = ({
           name={name}
           control={control}
           defaultValue=""
-           render={({ field, fieldState: { error } }) => (
+          render={({ field, fieldState: { error } }) => (
             <div>
-            <ShadCnFormInput
-              {...field}
-              type="tel"
-              isIndianPhone={true}
-              className={cn("form-input shadow-none focus-visible:ring-0", error && "border-destructive focus:ring-destructive")}
-              disabled={disabled}
-              forcedValue={forcedValue}
-              placeholder="+91 98765 43210"
-              maxLength={17}
-            />
-            {error && (
-                <p className="text-sm text-destructive mt-1">
-                  {error.message}
-                </p>
-              )}
-          </div>
+              <ShadCnFormInput
+                {...field}
+                type="tel"
+                isIndianPhone={true}
+                className={cn(
+                  'form-input shadow-none focus-visible:ring-0',
+                  error && 'border-destructive focus:ring-destructive'
+                )}
+                disabled={disabled}
+                forcedValue={forcedValue}
+                placeholder="+91 98765 43210"
+                maxLength={17}
+              />
+              {error && <p className="text-sm text-destructive mt-1">{error.message}</p>}
+            </div>
           )}
         />
       </FormControl>

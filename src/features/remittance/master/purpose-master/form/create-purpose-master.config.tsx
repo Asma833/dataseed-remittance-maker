@@ -1,10 +1,10 @@
-import { FieldType } from "@/types/enums";
+import { FieldType } from '@/types/enums';
 
 export const PurposeMasterConfig = {
   title: 'Purpose Master',
   description: 'Manage the purposes for the application',
   fields: {
-    purpose_name:{
+    purpose_name: {
       name: 'purpose_name',
       label: 'Purpose Name',
       type: FieldType.Text,

@@ -38,16 +38,11 @@ export const ShadCnFileUploadWithButton = ({
               <label>
                 <Button
                   variant="outline"
-                  className={cn(
-                    "cursor-pointer form-input shadow-none",
-                    error && "border-destructive"
-                  )}
+                  className={cn('cursor-pointer form-input shadow-none', error && 'border-destructive')}
                   disabled={disabled}
                   asChild
                 >
-                  <span>
-                    {value ? value.name : 'Choose File'}
-                  </span>
+                  <span>{value ? value.name : 'Choose File'}</span>
                 </Button>
                 <input
                   type="file"

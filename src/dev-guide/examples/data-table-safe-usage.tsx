@@ -1,6 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import { DataTable } from '../../components/table/data-table';
-import { validateTableData, validateTableColumns, formatTableError, createEmptyTableData } from '../../components/table/utils';
+import {
+  validateTableData,
+  validateTableColumns,
+  formatTableError,
+  createEmptyTableData,
+} from '../../components/table/utils';
 import type { TableColumn, TableData } from '../../components/table/types';
 
 // Example data interface
@@ -45,9 +50,11 @@ export function SafeDataTableExample() {
       accessorKey: 'status',
       sortable: true,
       cell: ({ value }) => (
-        <span className={`px-2 py-1 rounded-full text-xs ${
-          value === 'active' ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800'
-        }`}>
+        <span
+          className={`px-2 py-1 rounded-full text-xs ${
+            value === 'active' ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800'
+          }`}
+        >
           {value}
         </span>
       ),
@@ -90,9 +97,7 @@ export function SafeDataTableExample() {
               pageCount: 2,
             },
             // Response as direct array (legacy format)
-            [
-              { id: '3', name: 'Bob Johnson', email: 'bob@example.com', status: 'active' },
-            ],
+            [{ id: '3', name: 'Bob Johnson', email: 'bob@example.com', status: 'active' }],
           ];
 
           // Randomly pick one of the responses to simulate various error conditions
@@ -104,7 +109,6 @@ export function SafeDataTableExample() {
       // Use the validation utility to ensure safe data
       const validatedData = validateTableData<User>(apiResponse);
       setData(validatedData);
-
     } catch (err) {
       console.error('Error fetching data:', err);
       setError(formatTableError(err));
@@ -172,13 +176,14 @@ export function SafeDataTableExample() {
           hover: true,
         }}
         actions={{
-          onRowClick: (user) => {
-          },
+          onRowClick: (user) => {},
         }}
       />
 
       <div className="text-sm text-gray-600 space-y-1">
-        <p><strong>Note:</strong> This example demonstrates error-safe DataTable usage.</p>
+        <p>
+          <strong>Note:</strong> This example demonstrates error-safe DataTable usage.
+        </p>
         <p>The table handles various error conditions:</p>
         <ul className="list-disc list-inside ml-4">
           <li>Undefined or null data</li>
@@ -197,19 +202,18 @@ export function SafeDataTableExample() {
 export async function fetchUsersWithErrorHandling(): Promise<TableData<User>> {
   try {
     const response = await fetch('/api/users');
-    
+
     if (!response.ok) {
       throw new Error(`HTTP error! status: ${response.status}`);
     }
-    
+
     const apiData = await response.json();
-    
+
     // Always validate the response data
     return validateTableData<User>(apiData);
-    
   } catch (error) {
     console.error('Failed to fetch users:', error);
-    
+
     // Return empty data instead of throwing
     return createEmptyTableData<User>();
   }
@@ -218,18 +222,18 @@ export async function fetchUsersWithErrorHandling(): Promise<TableData<User>> {
 // Example of handling different data formats
 export function handleVariousDataFormats(apiResponse: any): TableData<User> {
   // The validateTableData function handles all these cases safely:
-  
+
   // Case 1: Normal API response
   // { data: [...], totalCount: 10, pageCount: 2, currentPage: 1 }
-  
+
   // Case 2: Direct array (legacy)
   // [{ id: '1', name: 'John' }, ...]
-  
+
   // Case 3: Null/undefined
   // null, undefined
-  
+
   // Case 4: Malformed response
   // { data: 'not an array' } or { someOtherProperty: ... }
-  
+
   return validateTableData<User>(apiResponse);
 }

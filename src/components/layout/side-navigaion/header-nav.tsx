@@ -1,5 +1,5 @@
 import React from 'react';
-import { Power} from 'lucide-react';
+import { Power } from 'lucide-react';
 import LogoutWrapper from '@/features/auth/components/logout-wrapper';
 // import { ThemeToggle } from '@/components/common/theme-toggle';
 import { cn } from '@/utils/cn';

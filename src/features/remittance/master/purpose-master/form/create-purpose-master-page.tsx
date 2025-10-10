@@ -24,7 +24,7 @@ const CreatePurposeMasterPage = ({ setDialogTitle }: { setDialogTitle: (title: s
     resolver: zodResolver(PurposeMasterSchema),
     defaultValues: {
       purpose_name: '',
-      purpose_code: ''
+      purpose_code: '',
     },
   });
   const {
@@ -35,28 +35,26 @@ const CreatePurposeMasterPage = ({ setDialogTitle }: { setDialogTitle: (title: s
     formState: { errors, isSubmitting },
     handleSubmit,
   } = methods;
- 
-const { mutate: createUser, isLoading } = useCreatePurposeMaster(
-    {
-      onPurposeCreateSuccess: () => {
-        reset({});
-      },
-    }
-  );
+
+  const { mutate: createUser, isLoading } = useCreatePurposeMaster({
+    onPurposeCreateSuccess: () => {
+      reset({});
+    },
+  });
 
   const handleBack = () => {
     navigate(-1);
   };
 
   const handleAddPurpose = handleSubmit(async (formdata: PurposeApiPayload) => {
-      // if (isEditMode) {
-      //   await updateUser({ data: formdata, productOptions, id });
-      // } else {
-        createUser({
-          ...formdata
-        });
-      //}
+    // if (isEditMode) {
+    //   await updateUser({ data: formdata, productOptions, id });
+    // } else {
+    createUser({
+      ...formdata,
     });
+    //}
+  });
 
   useEffect(() => {
     const purpose = location.state?.purpose;
@@ -84,9 +82,7 @@ const { mutate: createUser, isLoading } = useCreatePurposeMaster(
 
       <FormProvider {...methods}>
         <form onSubmit={handleAddPurpose}>
-          <TableTitle
-            title={isEditMode ? 'Update Purpose Master' : 'Create New Purpose Master'}
-          >
+          <TableTitle title={isEditMode ? 'Update Purpose Master' : 'Create New Purpose Master'}>
             <FormFieldRow className="mb-4 mt-1" rowCols={3}>
               {Object.entries(PurposeMasterConfig.fields)
                 .slice(0, 2)

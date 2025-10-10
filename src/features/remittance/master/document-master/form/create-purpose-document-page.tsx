@@ -55,50 +55,50 @@ const CreatePurposeDocumentPage = ({ setDialogTitle }: { setDialogTitle: (title:
           <Spacer>
             <FormFieldRow className="mt-1" rowCols={1}>
               {Object.entries(PurposeDocumentFormConfig.fields)
-              .slice(0, 1)
-              .map(([name, field]) => (
-                <FieldWrapper key={name}>
-                  {getController({
-                    ...(typeof field === 'object' && field !== null ? field : {}),
-                    name,
-                    control,
-                    errors,
-                  })}
-                </FieldWrapper>
-              ))}
-            </FormFieldRow>
-         
-           <FormFieldRow className="mb-4 mt-2" rowCols={1} >
-            {Object.entries(PurposeDocumentFormConfig.fields)
-              .slice(1, 2)
-              .map(([name, field]) => (
-                <FieldWrapper key={name} className="justify-center">
-                  <CheckboxWrapper className="flex space-x-4 items-center justify-center">
+                .slice(0, 1)
+                .map(([name, field]) => (
+                  <FieldWrapper key={name}>
                     {getController({
-                      ...PurposeDocumentFormConfig.fields.documentStatus,
-                      name: 'documentStatus',
+                      ...(typeof field === 'object' && field !== null ? field : {}),
+                      name,
                       control,
                       errors,
-                      isMulti: true,
                     })}
-                  </CheckboxWrapper>
-                </FieldWrapper>
-              ))}
-          </FormFieldRow>
-        </Spacer>
+                  </FieldWrapper>
+                ))}
+            </FormFieldRow>
 
-        <div className="flex justify-center space-x-2 mt-4">
-          <button
-            type="submit"
-            className="bg-primary text-white px-4 py-2 mt-3 rounded-md min-w-[150px]"
-            disabled={isSubmitting}
-            onClick={handleFormSubmit}
-          >
-            {isSubmitting ? (isEditMode ? 'Updating...' : 'Submitting...') : isEditMode ? 'Update' : 'Submit'}
-          </button>
-        </div>
-      </FormContentWrapper>
-    </FormProvider>
+            <FormFieldRow className="mb-4 mt-2" rowCols={1}>
+              {Object.entries(PurposeDocumentFormConfig.fields)
+                .slice(1, 2)
+                .map(([name, field]) => (
+                  <FieldWrapper key={name} className="justify-center">
+                    <CheckboxWrapper className="flex space-x-4 items-center justify-center">
+                      {getController({
+                        ...PurposeDocumentFormConfig.fields.documentStatus,
+                        name: 'documentStatus',
+                        control,
+                        errors,
+                        isMulti: true,
+                      })}
+                    </CheckboxWrapper>
+                  </FieldWrapper>
+                ))}
+            </FormFieldRow>
+          </Spacer>
+
+          <div className="flex justify-center space-x-2 mt-4">
+            <button
+              type="submit"
+              className="bg-primary text-white px-4 py-2 mt-3 rounded-md min-w-[150px]"
+              disabled={isSubmitting}
+              onClick={handleFormSubmit}
+            >
+              {isSubmitting ? (isEditMode ? 'Updating...' : 'Submitting...') : isEditMode ? 'Update' : 'Submit'}
+            </button>
+          </div>
+        </FormContentWrapper>
+      </FormProvider>
     </div>
   );
 };

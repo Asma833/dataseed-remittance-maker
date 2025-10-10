@@ -1,14 +1,13 @@
-import React, { forwardRef, useState } from "react";
-import { useFormField } from "@/components/ui/form";
-import { Input } from "@/components/ui/input";
-import { cn } from "@/utils/cn";
-import { formatIndianMobileNumber } from "@/utils/textFormater";
-import { Eye, EyeOff } from "lucide-react";
-import { Button } from "@/components/ui/button";
+import React, { forwardRef, useState } from 'react';
+import { useFormField } from '@/components/ui/form';
+import { Input } from '@/components/ui/input';
+import { cn } from '@/utils/cn';
+import { formatIndianMobileNumber } from '@/utils/textFormater';
+import { Eye, EyeOff } from 'lucide-react';
+import { Button } from '@/components/ui/button';
 
-export interface ShadCnFormInputProps
-  extends React.InputHTMLAttributes<HTMLInputElement> {
-  type?: "text" | "email" | "number" | "tel" | "password";
+export interface ShadCnFormInputProps extends React.InputHTMLAttributes<HTMLInputElement> {
+  type?: 'text' | 'email' | 'number' | 'tel' | 'password';
   forcedValue?: string | undefined;
   uppercase?: boolean | undefined;
   onInputChange?: (value: string) => void;
@@ -16,15 +15,7 @@ export interface ShadCnFormInputProps
 }
 
 const ShadCnFormInput = forwardRef<HTMLInputElement, ShadCnFormInputProps>(
-  ({
-    className,
-    type = "text",
-    forcedValue,
-    uppercase,
-    onInputChange,
-    isIndianPhone,
-    ...props
-  }, ref) => {
+  ({ className, type = 'text', forcedValue, uppercase, onInputChange, isIndianPhone, ...props }, ref) => {
     const { error, formItemId, formDescriptionId, formMessageId } = useFormField();
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -36,7 +27,7 @@ const ShadCnFormInput = forwardRef<HTMLInputElement, ShadCnFormInputProps>(
       }
 
       // Handle phone number formatting
-      if (type === "tel") {
+      if (type === 'tel') {
         if (isIndianPhone) {
           // Remove all non-numeric characters
           let numericValue = value.replace(/\D/g, '');
@@ -68,7 +59,7 @@ const ShadCnFormInput = forwardRef<HTMLInputElement, ShadCnFormInputProps>(
       if (props.onChange) {
         const syntheticEvent = {
           ...e,
-          target: { ...e.target, value }
+          target: { ...e.target, value },
         } as React.ChangeEvent<HTMLInputElement>;
         props.onChange(syntheticEvent);
       }
@@ -76,23 +67,21 @@ const ShadCnFormInput = forwardRef<HTMLInputElement, ShadCnFormInputProps>(
 
     const inputProps = {
       ...props,
-      type: type || "text",
+      type: type || 'text',
       value: forcedValue ?? props.value,
       onChange: handleChange,
       className: cn(
-         "form-input flex h-9 w-full border border-input bg-transparent px-3 py-1 text-sm transition-colors file:border-0 file:bg-transparent file:text-sm file:font-medium file:text-foreground placeholder:text-muted-foreground focus-visible:outline-none disabled:cursor-not-allowed disabled:opacity-50",
-         "aria-invalid:focus-visible:border-destructive",
-         className
-       ),
+        'form-input flex h-9 w-full border border-input bg-transparent px-3 py-1 text-sm transition-colors file:border-0 file:bg-transparent file:text-sm file:font-medium file:text-foreground placeholder:text-muted-foreground focus-visible:outline-none disabled:cursor-not-allowed disabled:opacity-50',
+        'aria-invalid:focus-visible:border-destructive',
+        className
+      ),
       ref,
       id: formItemId,
-      "aria-describedby": !error
-        ? `${formDescriptionId}`
-        : `${formDescriptionId} ${formMessageId}`,
-      "aria-invalid": !!error,
+      'aria-describedby': !error ? `${formDescriptionId}` : `${formDescriptionId} ${formMessageId}`,
+      'aria-invalid': !!error,
     };
 
-    if (type === "password") {
+    if (type === 'password') {
       return <PasswordInput {...(inputProps as any)} />;
     }
 
@@ -109,48 +98,41 @@ const ShadCnFormInput = forwardRef<HTMLInputElement, ShadCnFormInputProps>(
   }
 );
 
-ShadCnFormInput.displayName = "ShadCnFormInput";
+ShadCnFormInput.displayName = 'ShadCnFormInput';
 
 // Password input with show/hide toggle
-const PasswordInput = forwardRef<HTMLInputElement, ShadCnFormInputProps>(
-  ({ className, ...props }, ref) => {
-    const [showPassword, setShowPassword] = useState(false);
-    const { error, formMessageId } = useFormField();
+const PasswordInput = forwardRef<HTMLInputElement, ShadCnFormInputProps>(({ className, ...props }, ref) => {
+  const [showPassword, setShowPassword] = useState(false);
+  const { error, formMessageId } = useFormField();
 
-    return (
-      <div>
-        <div className="relative">
-          <Input
-            {...props}
-            ref={ref}
-            type={showPassword ? "text" : "password"}
-            className={cn("pr-10", className)}
-          />
-          <Button
-            type="button"
-            variant="ghost"
-            size="sm"
-            className="absolute right-0 top-0 h-full px-3 py-2 hover:bg-transparent"
-            onClick={() => setShowPassword(!showPassword)}
-            tabIndex={-1}
-          >
-            {showPassword ? (
-              <EyeOff className="h-4 w-4 text-muted-foreground" />
-            ) : (
-              <Eye className="h-4 w-4 text-muted-foreground" />
-            )}
-          </Button>
-        </div>
-        {error && (
-          <p className="text-sm text-destructive mt-1" id={formMessageId}>
-            {error.message}
-          </p>
-        )}
+  return (
+    <div>
+      <div className="relative">
+        <Input {...props} ref={ref} type={showPassword ? 'text' : 'password'} className={cn('pr-10', className)} />
+        <Button
+          type="button"
+          variant="ghost"
+          size="sm"
+          className="absolute right-0 top-0 h-full px-3 py-2 hover:bg-transparent"
+          onClick={() => setShowPassword(!showPassword)}
+          tabIndex={-1}
+        >
+          {showPassword ? (
+            <EyeOff className="h-4 w-4 text-muted-foreground" />
+          ) : (
+            <Eye className="h-4 w-4 text-muted-foreground" />
+          )}
+        </Button>
       </div>
-    );
-  }
-);
+      {error && (
+        <p className="text-sm text-destructive mt-1" id={formMessageId}>
+          {error.message}
+        </p>
+      )}
+    </div>
+  );
+});
 
-PasswordInput.displayName = "PasswordInput";
+PasswordInput.displayName = 'PasswordInput';
 
 export { ShadCnFormInput };

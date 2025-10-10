@@ -3,7 +3,6 @@ import { DataTable, staticConfig, TableData } from '@/components/table';
 import type { LiveRateData } from './types';
 import { LiveRateTableColumnConfig } from './live-rate-table.config';
 
-
 const LiveRates = () => {
   //  const { data, loading: isLoading, error, fetchData: refreshData } = useGetAllOrders();
   const [loading, setLoading] = useState(false);
@@ -34,13 +33,10 @@ const LiveRates = () => {
         setLoading(false);
       }, 1000);
     },
- 
-    onSortingChange: (sorting: { id: string; desc: boolean }[]) => {
-    },
-    onGlobalFilterChange: (filter: string) => {
-    },
-    onColumnFiltersChange: (filters: { id: string; value: any }[]) => {
-    },
+
+    onSortingChange: (sorting: { id: string; desc: boolean }[]) => {},
+    onGlobalFilterChange: (filter: string) => {},
+    onColumnFiltersChange: (filters: { id: string; value: any }[]) => {},
   };
 
   const dummyKYCData: LiveRateData[] = [
@@ -52,7 +48,7 @@ const LiveRates = () => {
   const tableData: TableData<LiveRateData> = {
     data: dummyKYCData,
     totalCount: dummyKYCData.length,
-    pageCount: Math.ceil(dummyKYCData.length / (((config.pagination?.pageSize as number) || 10))),
+    pageCount: Math.ceil(dummyKYCData.length / ((config.pagination?.pageSize as number) || 10)),
     currentPage: 1,
   };
   //  const tableData = useMemo(() => {
@@ -110,7 +106,6 @@ const LiveRates = () => {
   const tableColumns = LiveRateTableColumnConfig();
   return (
     <div className="dynamic-table-wrap">
-     
       <DataTable
         columns={tableColumns}
         data={tableData}

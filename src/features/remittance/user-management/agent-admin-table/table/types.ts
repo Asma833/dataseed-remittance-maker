@@ -157,34 +157,36 @@ export interface CreateAgentAdminRequest {
       }>;
     };
   };
-  commission: {
-    commission_product_type: string;
-    commission_type: string;
-    product_margin: {
-      agent_fixed_margin: string;
-      all_currency: string;
-      all_currency_margin: number;
-      currency_list: Array<{
-        margin: number;
-        currency_code: string;
-      }>;
-    };
-    nostro_charges: {
-      type: string;
-      all_currency: string;
-      all_currency_margin: number;
-      currency_list: Array<{
-        margin: number;
-        currency_code: string;
-      }>;
-    };
-    tt_charges: {
-      rate: number;
-    };
-    other_charges: {
-      rate: number;
-    };
-  } | undefined;
+  commission:
+    | {
+        commission_product_type: string;
+        commission_type: string;
+        product_margin: {
+          agent_fixed_margin: string;
+          all_currency: string;
+          all_currency_margin: number;
+          currency_list: Array<{
+            margin: number;
+            currency_code: string;
+          }>;
+        };
+        nostro_charges: {
+          type: string;
+          all_currency: string;
+          all_currency_margin: number;
+          currency_list: Array<{
+            margin: number;
+            currency_code: string;
+          }>;
+        };
+        tt_charges: {
+          rate: number;
+        };
+        other_charges: {
+          rate: number;
+        };
+      }
+    | undefined;
 }
 
 export interface UpdateAgentAdminRequest extends CreateAgentAdminRequest {

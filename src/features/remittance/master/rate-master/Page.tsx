@@ -33,7 +33,9 @@ const TransactionPage = () => {
               className={({ isActive }) =>
                 cn(
                   'px-4 py-2 rounded text-sm no-underline transition-colors flex justify-center items-center w-38',
-                  isActive ? 'bg-gray-500 text-white font-bold hover:bg-gray-600' : 'bg-primary text-primary-foreground bg-linear-to-r from-primary-gradient-1 to-primary-gradient-2 shadow-sm hover:bg-primary/150'
+                  isActive
+                    ? 'bg-gray-500 text-white font-bold hover:bg-gray-600'
+                    : 'bg-primary text-primary-foreground bg-linear-to-r from-primary-gradient-1 to-primary-gradient-2 shadow-sm hover:bg-primary/150'
                 )
               }
             >
@@ -42,8 +44,10 @@ const TransactionPage = () => {
           ))}
         </div>
       </div>
-    
-      <div className="min-h-[calc(100vh-4rem)] py-4 px-0 rounded-lg">{isBasePath ? <DefaultComponent /> : <Outlet />}</div>
+
+      <div className="min-h-[calc(100vh-4rem)] py-4 px-0 rounded-lg">
+        {isBasePath ? <DefaultComponent /> : <Outlet />}
+      </div>
     </div>
   );
 };

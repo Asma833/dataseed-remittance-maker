@@ -26,7 +26,6 @@ export const CorporateOnboardingStep: React.FC<{ agentId?: string }> = ({ agentI
     setEditData(null);
   };
 
-
   const columns = GetCorporateOnboardingColumns({ handleEdit });
 
   const tableData: TableData<CorporateData> = {
@@ -38,7 +37,7 @@ export const CorporateOnboardingStep: React.FC<{ agentId?: string }> = ({ agentI
   return (
     <div className="space-y-6">
       <div className="flex items-center justify-between mt-2">
-        <TableTitle title="Corporate List" /> 
+        <TableTitle title="Corporate List" />
         <Button
           type="button"
           onClick={() => {
@@ -51,11 +50,7 @@ export const CorporateOnboardingStep: React.FC<{ agentId?: string }> = ({ agentI
           Onboard New Corporate
         </Button>
       </div>
-      <DataTable
-        columns={columns}
-        data={tableData}
-        {...staticConfig}
-      />
+      <DataTable columns={columns} data={tableData} {...staticConfig} />
       <OnboardCorporateDialog
         isOpen={isOnboardDialogOpen}
         onClose={handleCloseDialog}
@@ -69,7 +64,7 @@ export const CorporateOnboardingStep: React.FC<{ agentId?: string }> = ({ agentI
             entityType: editData.entity_type,
             cin: editData.cin,
             address: editData.address,
-          }
+          },
         })}
       />
     </div>

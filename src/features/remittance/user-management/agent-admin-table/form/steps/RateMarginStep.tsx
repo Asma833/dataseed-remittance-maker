@@ -72,15 +72,15 @@ export const RateMarginStep: React.FC = () => {
       header: 'TT Margin',
     },
     {
-        id: 'action',
-        header: 'Action',
-        cell: ({ row }) => <ActionButtons row={row}  onEdit={handleEdit} />,
-        sortable: false,
-        filterable: false,
-        meta: {
-          headerAlign: 'center',
-          cellAlign: 'center',
-        },
+      id: 'action',
+      header: 'Action',
+      cell: ({ row }) => <ActionButtons row={row} onEdit={handleEdit} />,
+      sortable: false,
+      filterable: false,
+      meta: {
+        headerAlign: 'center',
+        cellAlign: 'center',
+      },
     },
   ];
 
@@ -93,11 +93,7 @@ export const RateMarginStep: React.FC = () => {
   return (
     <div className="space-y-6">
       <TableTitle title="Margin Details" />
-      <DataTable
-        columns={columns}
-        data={tableData}
-        {...staticConfig}
-      />
+      <DataTable columns={columns} data={tableData} {...staticConfig} />
     </div>
   );
 };

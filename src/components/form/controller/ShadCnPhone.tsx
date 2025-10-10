@@ -35,27 +35,26 @@ export const ShadCnPhone = ({
           defaultValue=""
           render={({ field: { value, onChange, ...field }, fieldState: { error } }) => (
             <div>
-            <ShadCnFormInput
-              {...field}
-              type="tel"
-              value={(forcedValue ? forcedValue : value) || ''}
-              className={cn("form-input shadow-none focus-visible:ring-0", error && "border-destructive focus:ring-destructive")}
-              onChange={(e) => {
-                // Remove all non-numeric characters and limit to 10 digits
-                const numericValue = e.target.value.replace(/\D/g, '');
-                const limitedValue = numericValue.slice(0, 10);
-                onChange(limitedValue);
-              }}
-              disabled={disabled}
-              placeholder="Enter phone number"
-              maxLength={10}
-            />
-            {error && (
-                <p className="text-sm text-destructive mt-1">
-                  {error.message}
-                </p>
-              )}
-              </div>
+              <ShadCnFormInput
+                {...field}
+                type="tel"
+                value={(forcedValue ? forcedValue : value) || ''}
+                className={cn(
+                  'form-input shadow-none focus-visible:ring-0',
+                  error && 'border-destructive focus:ring-destructive'
+                )}
+                onChange={(e) => {
+                  // Remove all non-numeric characters and limit to 10 digits
+                  const numericValue = e.target.value.replace(/\D/g, '');
+                  const limitedValue = numericValue.slice(0, 10);
+                  onChange(limitedValue);
+                }}
+                disabled={disabled}
+                placeholder="Enter phone number"
+                maxLength={10}
+              />
+              {error && <p className="text-sm text-destructive mt-1">{error.message}</p>}
+            </div>
           )}
         />
       </FormControl>

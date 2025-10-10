@@ -91,9 +91,9 @@ export const agentAdminCreationConfig = () => {
           type: FieldType.Radio,
           required: true,
           options: {
-            'Active': { label: 'Active', checked: true },
-            'Inactive': { label: 'Inactive' }
-          }
+            Active: { label: 'Active', checked: true },
+            Inactive: { label: 'Inactive' },
+          },
         },
         monthlyCreditLimit: {
           name: 'monthlyCreditLimit',
@@ -270,50 +270,50 @@ export const agentAdminCreationConfig = () => {
           type: FieldType.Radio,
           required: true,
           options: {
-            'Yes': { label: 'Yes' },
-            'No': { label: 'No' }
-          }
+            Yes: { label: 'Yes' },
+            No: { label: 'No' },
+          },
         },
-          addOnNostroMargin: {
+        addOnNostroMargin: {
           name: 'productPurpose.addOnNostroMargin',
           label: 'Add on Nostro Margin',
           type: FieldType.Radio,
           required: true,
           options: {
-            'Yes': { label: 'Yes' },
-            'No': { label: 'No' }
-          }
+            Yes: { label: 'Yes' },
+            No: { label: 'No' },
+          },
         },
-          addOnTTMargin: {
+        addOnTTMargin: {
           name: 'productPurpose.addOnTTMargin',
           label: 'Add on TT Margin',
           type: FieldType.Radio,
           required: true,
           options: {
-            'Yes': { label: 'Yes' },
-            'No': { label: 'No' }
-          }
+            Yes: { label: 'Yes' },
+            No: { label: 'No' },
+          },
         },
-         addOnOtherChargersMargin: {
+        addOnOtherChargersMargin: {
           name: 'productPurpose.addOnOtherChargersMargin',
           label: 'Add on Other Chargers Margin',
           type: FieldType.Radio,
           required: true,
           options: {
-            'Yes': { label: 'Yes' },
-            'No': { label: 'No' }
-          }
+            Yes: { label: 'Yes' },
+            No: { label: 'No' },
+          },
         },
-        
+
         esignDocumentDownload: {
           name: 'productPurpose.esignDocumentDownload',
           label: 'Esign Document Download',
           type: FieldType.Radio,
           required: true,
           options: {
-            'Yes': { label: 'Yes' },
-            'No': { label: 'No' }
-          }
+            Yes: { label: 'Yes' },
+            No: { label: 'No' },
+          },
         },
         vkycDocumentDownload: {
           name: 'productPurpose.vkycDocumentDownload',
@@ -321,19 +321,19 @@ export const agentAdminCreationConfig = () => {
           type: FieldType.Radio,
           required: true,
           options: {
-            'Yes': { label: 'Yes' },
-            'No': { label: 'No' }
-          }
+            Yes: { label: 'Yes' },
+            No: { label: 'No' },
+          },
         },
         chooseProductType: {
           name: 'productPurpose.chooseProductType',
           label: 'Choose Product Type',
           type: FieldType.Checkbox,
           options: {
-            'card': { label: 'Card' },
-            'currency': { label: 'Currency' },
-            'remittance': { label: 'Remittance' },
-            'referral': { label: 'Referral' },
+            card: { label: 'Card' },
+            currency: { label: 'Currency' },
+            remittance: { label: 'Remittance' },
+            referral: { label: 'Referral' },
           },
           isMulti: true,
         },
@@ -343,8 +343,8 @@ export const agentAdminCreationConfig = () => {
           type: FieldType.Checkbox,
           required: true,
           options: {
-            'CNC': { label: 'CNC' },
-            'linecredit': { label: 'Line Credit' },
+            CNC: { label: 'CNC' },
+            linecredit: { label: 'Line Credit' },
           },
           isMulti: true,
         },
@@ -354,199 +354,199 @@ export const agentAdminCreationConfig = () => {
           type: FieldType.Checkbox,
           required: true,
           options: {
-            'personaltravel': { label: 'Personal Travel' },
-            'businesstravel': { label: 'Business Travel' },
-            'education': { label: 'Education' },
-            'immigration': { label: 'Immigration' },
-            'employment': { label: 'Employment' },
-            'medical': { label: 'Medical' },
+            personaltravel: { label: 'Personal Travel' },
+            businesstravel: { label: 'Business Travel' },
+            education: { label: 'Education' },
+            immigration: { label: 'Immigration' },
+            employment: { label: 'Employment' },
+            medical: { label: 'Medical' },
           },
           isMulti: true,
         },
       },
       rateMargin: {},
       commission: {
-         commission_product_type: {
-      name: "commission_details.commission_product_type",
-      label: "",
-      type: FieldType.Select,
-      // required: true,
-      placeholder: "Select Product Type",
-      options: [
-        { label: "Remittance", value: "Remittance" },
-        { label: "Currency", value: "Currency" },
-        { label: "Card", value: "Card" },
-        { label: "ADI-Referral", value: "ADI-Referral" },
-      ],
-    },
-
-    commission_type: {
-      name: "commission_details.commission_type",
-      label: "",
-      type: FieldType.Radio,
-      // required: true,
-      // single-select checkbox group (radio-like)
-      options: {
-        FIXED: { label: "Fixed" },
-        PERCENTAGE: { label: "Percentage" },
-        HYBRID: { label: "Hybrid" },
-      },
-      isMulti: false,
-      variant: "circle_check",
-      size: "small",
-    },
-
-    /* ===== LEFT CARD: RATE MARGIN ===== */
-    product_margin: {
-      agent_fixed_margin: {
-        name: "commission_details.product_margin.agent_fixed_margin",
-        label: "Agent Fixed Margin",
-        type: FieldType.Radio,
-        required: true,
-        // single-select (INR or Percentage)
-        options: {
-          INR: { label: "INR" },
-          PERCENTAGE: { label: "Percentage" },
+        commission_product_type: {
+          name: 'commission_details.commission_product_type',
+          label: '',
+          type: FieldType.Select,
+          // required: true,
+          placeholder: 'Select Product Type',
+          options: [
+            { label: 'Remittance', value: 'Remittance' },
+            { label: 'Currency', value: 'Currency' },
+            { label: 'Card', value: 'Card' },
+            { label: 'ADI-Referral', value: 'ADI-Referral' },
+          ],
         },
-        isMulti: false,
-      },
 
-      // NEW: single value that applies to all currencies when 'All Currency' checked
-      all_currency_margin: {
-        name: "commission_details.product_margin.all_currency_margin",
-        label: "Enter Value",
-        type: FieldType.Number,
-        required: false,
-        placeholder: "Enter Value",
-        min: 0,
-        step: 0.01,
-      },
-
-      all_currency: {
-        name: "commission_details.product_margin.all_currency",
-        label: "All Currency",
-        type: FieldType.Checkbox,
-        required: false,
-        options: {
-          ALL_CURRENCY: { label: "All Currency" },
+        commission_type: {
+          name: 'commission_details.commission_type',
+          label: '',
+          type: FieldType.Radio,
+          // required: true,
+          // single-select checkbox group (radio-like)
+          options: {
+            FIXED: { label: 'Fixed' },
+            PERCENTAGE: { label: 'Percentage' },
+            HYBRID: { label: 'Hybrid' },
+          },
+          isMulti: false,
+          variant: 'circle_check',
+          size: 'small',
         },
-        isMulti: false,
-      },
 
-      // Base config for each currency input + list of currencies
-      currency_list: {
-        name: "commission_details.product_margin.currency_list",
-        label: "",
-        type: FieldType.Number,              // each currency field will be numeric
-        required: false,
-        placeholder: "",
-        min: 0,
-        step: 0.01,
-        currencies: [
-          { currency_code: "USD", margin: 0 },
-          { currency_code: "EUR", margin: 0 },
-          { currency_code: "GBP", margin: 0 },
-          { currency_code: "CAD", margin: 0 },
-          { currency_code: "AUD", margin: 0 },
-          { currency_code: "JPY", margin: 0 },
-          { currency_code: "SGD", margin: 0 },
-          { currency_code: "CHF", margin: 0 },
-          { currency_code: "AED", margin: 0 },
-          { currency_code: "THB", margin: 0 },
-          { currency_code: "NZD", margin: 0 },
-          { currency_code: "SAR", margin: 0 },
-          { currency_code: "ZAR", margin: 0 },
-        ],
-      },
-    },
+        /* ===== LEFT CARD: RATE MARGIN ===== */
+        product_margin: {
+          agent_fixed_margin: {
+            name: 'commission_details.product_margin.agent_fixed_margin',
+            label: 'Agent Fixed Margin',
+            type: FieldType.Radio,
+            required: true,
+            // single-select (INR or Percentage)
+            options: {
+              INR: { label: 'INR' },
+              PERCENTAGE: { label: 'Percentage' },
+            },
+            isMulti: false,
+          },
 
-    /* ===== MIDDLE CARD: NOSTRO CHARGES ===== */
-    nostro_charges: {
-      type: {
-        name: "commission_details.nostro_charges.type",
-        label: "Type",
-        type: FieldType.Radio,
-        required: true,
-        options: {
-          FX: { label: "FX" },
-          INR: { label: "INR" },
+          // NEW: single value that applies to all currencies when 'All Currency' checked
+          all_currency_margin: {
+            name: 'commission_details.product_margin.all_currency_margin',
+            label: 'Enter Value',
+            type: FieldType.Number,
+            required: false,
+            placeholder: 'Enter Value',
+            min: 0,
+            step: 0.01,
+          },
+
+          all_currency: {
+            name: 'commission_details.product_margin.all_currency',
+            label: 'All Currency',
+            type: FieldType.Checkbox,
+            required: false,
+            options: {
+              ALL_CURRENCY: { label: 'All Currency' },
+            },
+            isMulti: false,
+          },
+
+          // Base config for each currency input + list of currencies
+          currency_list: {
+            name: 'commission_details.product_margin.currency_list',
+            label: '',
+            type: FieldType.Number, // each currency field will be numeric
+            required: false,
+            placeholder: '',
+            min: 0,
+            step: 0.01,
+            currencies: [
+              { currency_code: 'USD', margin: 0 },
+              { currency_code: 'EUR', margin: 0 },
+              { currency_code: 'GBP', margin: 0 },
+              { currency_code: 'CAD', margin: 0 },
+              { currency_code: 'AUD', margin: 0 },
+              { currency_code: 'JPY', margin: 0 },
+              { currency_code: 'SGD', margin: 0 },
+              { currency_code: 'CHF', margin: 0 },
+              { currency_code: 'AED', margin: 0 },
+              { currency_code: 'THB', margin: 0 },
+              { currency_code: 'NZD', margin: 0 },
+              { currency_code: 'SAR', margin: 0 },
+              { currency_code: 'ZAR', margin: 0 },
+            ],
+          },
         },
-        isMulti: false,
-      },
 
-      // NEW: single value that applies to all currencies when 'All Currency' checked
-      all_currency_margin: {
-        name: "commission_details.nostro_charges.all_currency_margin",
-        label: "Enter Value",
-        type: FieldType.Number,
-        required: false,
-        placeholder: "Enter Value",
-        min: 0,
-        step: 0.01,
-      },
+        /* ===== MIDDLE CARD: NOSTRO CHARGES ===== */
+        nostro_charges: {
+          type: {
+            name: 'commission_details.nostro_charges.type',
+            label: 'Type',
+            type: FieldType.Radio,
+            required: true,
+            options: {
+              FX: { label: 'FX' },
+              INR: { label: 'INR' },
+            },
+            isMulti: false,
+          },
 
-      all_currency: {
-        name: "commission_details.nostro_charges.all_currency",
-        label: "All Currency",
-        type: FieldType.Checkbox,
-        required: false,
-        options: {
-          ALL_CURRENCY: { label: "All Currency" },
+          // NEW: single value that applies to all currencies when 'All Currency' checked
+          all_currency_margin: {
+            name: 'commission_details.nostro_charges.all_currency_margin',
+            label: 'Enter Value',
+            type: FieldType.Number,
+            required: false,
+            placeholder: 'Enter Value',
+            min: 0,
+            step: 0.01,
+          },
+
+          all_currency: {
+            name: 'commission_details.nostro_charges.all_currency',
+            label: 'All Currency',
+            type: FieldType.Checkbox,
+            required: false,
+            options: {
+              ALL_CURRENCY: { label: 'All Currency' },
+            },
+            isMulti: false,
+          },
+
+          currency_list: {
+            name: 'commission_details.nostro_charges.currency_list',
+            label: '',
+            type: FieldType.Number, // each currency field will be numeric
+            required: false,
+            placeholder: '',
+            min: 0,
+            step: 0.01,
+            currencies: [
+              { currency_code: 'USD', margin: 0 },
+              { currency_code: 'EUR', margin: 0 },
+              { currency_code: 'GBP', margin: 0 },
+              { currency_code: 'CAD', margin: 0 },
+              { currency_code: 'AUD', margin: 0 },
+              { currency_code: 'JPY', margin: 0 },
+              { currency_code: 'SGD', margin: 0 },
+              { currency_code: 'CHF', margin: 0 },
+              { currency_code: 'AED', margin: 0 },
+              { currency_code: 'THB', margin: 0 },
+              { currency_code: 'NZD', margin: 0 },
+              { currency_code: 'SAR', margin: 0 },
+              { currency_code: 'ZAR', margin: 0 },
+            ],
+          },
         },
-        isMulti: false,
-      },
 
-      currency_list: {
-        name: "commission_details.nostro_charges.currency_list",
-        label: "",
-        type: FieldType.Number,              // each currency field will be numeric
-        required: false,
-        placeholder: "",
-        min: 0,
-        step: 0.01,
-        currencies: [
-          { currency_code: "USD", margin: 0 },
-          { currency_code: "EUR", margin: 0 },
-          { currency_code: "GBP", margin: 0 },
-          { currency_code: "CAD", margin: 0 },
-          { currency_code: "AUD", margin: 0 },
-          { currency_code: "JPY", margin: 0 },
-          { currency_code: "SGD", margin: 0 },
-          { currency_code: "CHF", margin: 0 },
-          { currency_code: "AED", margin: 0 },
-          { currency_code: "THB", margin: 0 },
-          { currency_code: "NZD", margin: 0 },
-          { currency_code: "SAR", margin: 0 },
-          { currency_code: "ZAR", margin: 0 },
-        ],
-      },
-    },
+        /* ===== RIGHT CARD: TT CHARGES ===== */
+        tt_charges: {
+          rate: {
+            name: 'commission_details.tt_charges.rate',
+            label: 'Add Rate (INR)',
+            type: FieldType.Number,
+            required: false,
+            placeholder: 'Enter Value',
+            min: 0,
+            step: 0.01,
+          },
+        },
 
-    /* ===== RIGHT CARD: TT CHARGES ===== */
-    tt_charges: {
-      rate: {
-        name: "commission_details.tt_charges.rate",
-        label: "Add Rate (INR)",
-        type: FieldType.Number,
-        required: false,
-        placeholder: "Enter Value",
-        min: 0,
-        step: 0.01,
-      },
-    },
-
-    /* ===== RIGHT CARD: OTHER CHARGES ===== */
-    other_charges: {
-      rate: {
-        name: "commission_details.other_charges.rate",
-        label: "Add Rate (INR)",
-        type: FieldType.Number,
-        required: false,
-        placeholder: "Enter Value",
-        min: 0,
-        step: 0.01,
-      },
-    },
+        /* ===== RIGHT CARD: OTHER CHARGES ===== */
+        other_charges: {
+          rate: {
+            name: 'commission_details.other_charges.rate',
+            label: 'Add Rate (INR)',
+            type: FieldType.Number,
+            required: false,
+            placeholder: 'Enter Value',
+            min: 0,
+            step: 0.01,
+          },
+        },
       },
       corporateOnboarding: {},
     },

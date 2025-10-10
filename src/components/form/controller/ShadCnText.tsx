@@ -40,23 +40,19 @@ export const ShadCnText = ({
           name={name}
           control={control}
           defaultValue=""
-           render={({ field, fieldState: { error } }) => (
+          render={({ field, fieldState: { error } }) => (
             <div>
-            <ShadCnFormInput
-              {...field}
-              type="text"
-              placeholder={placeholder}
-              uppercase={uppercase}
-              disabled={disabled}
-              className={cn("form-input", error && "border-destructive focus:ring-destructive")}
-              forcedValue={forcedValue}
-              {...(onInputChange && { onInputChange })}
-            />
-              {error && (
-                <p className="text-sm text-destructive mt-1">
-                  {error.message}
-                </p>
-              )}
+              <ShadCnFormInput
+                {...field}
+                type="text"
+                placeholder={placeholder}
+                uppercase={uppercase}
+                disabled={disabled}
+                className={cn('form-input', error && 'border-destructive focus:ring-destructive')}
+                forcedValue={forcedValue}
+                {...(onInputChange && { onInputChange })}
+              />
+              {error && <p className="text-sm text-destructive mt-1">{error.message}</p>}
             </div>
           )}
         />

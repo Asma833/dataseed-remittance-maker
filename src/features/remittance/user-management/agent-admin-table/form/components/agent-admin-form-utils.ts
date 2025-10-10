@@ -25,7 +25,7 @@ export const transformEditDataToFormData = (editData: any) => {
     ebixRMName: normalizeValue(editData.rm_name),
     ebixRMBranchName: normalizeValue(editData.rm_branch_name),
     systemCode: normalizeValue(editData.system_code),
-    status: (editData.status === "ACTIVE" ? "Active" : "Inactive") as "Active" | "Inactive",
+    status: (editData.status === 'ACTIVE' ? 'Active' : 'Inactive') as 'Active' | 'Inactive',
     monthlyCreditLimit: editData.monthly_credit_limit || 0,
     totalCreditDays: editData.total_credit_days || 0,
     // Company Details
@@ -61,9 +61,21 @@ export const transformEditDataToFormData = (editData: any) => {
       esignDocumentDownload: editData.product_purpose?.esignDocumentDownload ? 'Yes' : 'No',
       vkycDocumentDownload: editData.product_purpose?.vkycDocumentDownload ? 'Yes' : 'No',
       // Convert arrays to objects if needed
-      creditType: editData.product_purpose?.creditType?.reduce((acc: Record<string, boolean>, type: string) => ({ ...acc, [type.toLowerCase()]: true }), {}) || {},
-      chooseProductType: editData.product_purpose?.chooseProductType?.reduce((acc: Record<string, boolean>, type: string) => ({ ...acc, [type]: true }), {}) || {},
-      purposeTypesForCard: editData.product_purpose?.purposeTypesForCard?.reduce((acc: Record<string, boolean>, type: string) => ({ ...acc, [type]: true }), {}) || {},
+      creditType:
+        editData.product_purpose?.creditType?.reduce(
+          (acc: Record<string, boolean>, type: string) => ({ ...acc, [type.toLowerCase()]: true }),
+          {}
+        ) || {},
+      chooseProductType:
+        editData.product_purpose?.chooseProductType?.reduce(
+          (acc: Record<string, boolean>, type: string) => ({ ...acc, [type]: true }),
+          {}
+        ) || {},
+      purposeTypesForCard:
+        editData.product_purpose?.purposeTypesForCard?.reduce(
+          (acc: Record<string, boolean>, type: string) => ({ ...acc, [type]: true }),
+          {}
+        ) || {},
     },
     rateMargin: editData.rate_margin,
     commission_details: {
@@ -72,17 +84,35 @@ export const transformEditDataToFormData = (editData: any) => {
       product_margin: {
         agent_fixed_margin: editData.commission?.product_margin?.agent_fixed_margin || 'PERCENTAGE',
         all_currency: editData.commission?.product_margin?.all_currency || 'ALL_CURRENCY',
-        all_currency_margin: editData.commission?.product_margin?.all_currency_value || editData.commission?.product_margin?.all_currency_margin || 0,
+        all_currency_margin:
+          editData.commission?.product_margin?.all_currency_value ||
+          editData.commission?.product_margin?.all_currency_margin ||
+          0,
         currency_list: Array.isArray(editData.commission?.product_margin?.currency_list)
-          ? editData.commission.product_margin.currency_list.reduce((acc: Record<string, number>, item: { currency_code: string; margin: number }) => ({ ...acc, [item.currency_code]: item.margin }), {})
+          ? editData.commission.product_margin.currency_list.reduce(
+              (acc: Record<string, number>, item: { currency_code: string; margin: number }) => ({
+                ...acc,
+                [item.currency_code]: item.margin,
+              }),
+              {}
+            )
           : editData.commission?.product_margin?.currency_list || {},
       },
       nostro_charges: {
         type: editData.commission?.nostro_charges?.type || 'FX',
         all_currency: editData.commission?.nostro_charges?.all_currency || 'ALL_CURRENCY',
-        all_currency_margin: editData.commission?.nostro_charges?.all_currency_value || editData.commission?.nostro_charges?.all_currency_margin || 0,
+        all_currency_margin:
+          editData.commission?.nostro_charges?.all_currency_value ||
+          editData.commission?.nostro_charges?.all_currency_margin ||
+          0,
         currency_list: Array.isArray(editData.commission?.nostro_charges?.currency_list)
-          ? editData.commission.nostro_charges.currency_list.reduce((acc: Record<string, number>, item: { currency_code: string; margin: number }) => ({ ...acc, [item.currency_code]: item.margin }), {})
+          ? editData.commission.nostro_charges.currency_list.reduce(
+              (acc: Record<string, number>, item: { currency_code: string; margin: number }) => ({
+                ...acc,
+                [item.currency_code]: item.margin,
+              }),
+              {}
+            )
           : editData.commission?.nostro_charges?.currency_list || {},
       },
       tt_charges: {
@@ -97,10 +127,7 @@ export const transformEditDataToFormData = (editData: any) => {
 };
 
 // Function to reset the form with edit data
-export const resetAgentAdminForm = (
-  methods: UseFormReturn<any>,
-  editData: any
-) => {
+export const resetAgentAdminForm = (methods: UseFormReturn<any>, editData: any) => {
   const formData = transformEditDataToFormData(editData);
   methods.reset(formData);
 
@@ -109,32 +136,32 @@ export const resetAgentAdminForm = (
     methods.setValue('agentType', editData.agent_type.toUpperCase().replace(/-/g, ''), {
       shouldValidate: true,
       shouldDirty: false,
-      shouldTouch: false
+      shouldTouch: false,
     });
     methods.setValue('agreementValid', editData.documents?.agreementValid || editData.agreementValid, {
       shouldValidate: false,
       shouldDirty: false,
-      shouldTouch: false
+      shouldTouch: false,
     });
     methods.setValue('rbiLicenseValidity', editData.documents?.rbiLicenseValidity || editData.rbiLicenseValidity, {
       shouldValidate: false,
       shouldDirty: false,
-      shouldTouch: false
+      shouldTouch: false,
     });
     methods.setValue('rbiLicenseCategory', editData.documents?.rbiLicenseCategory || editData.rbiLicenseCategory, {
       shouldValidate: false,
       shouldDirty: false,
-      shouldTouch: false
+      shouldTouch: false,
     });
     methods.setValue('noOfBranches', editData.documents?.noOfBranches || editData.noOfBranches, {
       shouldValidate: false,
       shouldDirty: false,
-      shouldTouch: false
+      shouldTouch: false,
     });
     methods.setValue('extensionMonth', editData.documents?.extensionMonth || editData.extensionMonth, {
       shouldValidate: false,
       shouldDirty: false,
-      shouldTouch: false
+      shouldTouch: false,
     });
   }, 0);
 };

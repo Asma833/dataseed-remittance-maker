@@ -1,4 +1,4 @@
- import React, { useState, useMemo, useEffect } from 'react';
+import React, { useState, useMemo, useEffect } from 'react';
 import {
   useReactTable,
   getCoreRowModel,
@@ -317,7 +317,6 @@ export function DataTable<T>({
     // Clear global filter when applying column filters
     setGlobalFilter('');
     setColumnFilters([]);
-
   };
 
   // Table instance with error handling
@@ -362,8 +361,7 @@ export function DataTable<T>({
       if (config.paginationMode === 'dynamic' && actions.onPaginationChange) {
         actions.onPaginationChange(pagination);
       }
-    } catch (error) {
-    }
+    } catch (error) {}
   }, [pagination, config.paginationMode, actions]);
 
   useEffect(() => {
@@ -371,8 +369,7 @@ export function DataTable<T>({
       if (config.sorting.sortMode === 'dynamic' && actions.onSortingChange) {
         actions.onSortingChange(sorting);
       }
-    } catch (error) {
-    }
+    } catch (error) {}
   }, [sorting, config.sorting.sortMode, actions]);
 
   useEffect(() => {
@@ -383,8 +380,7 @@ export function DataTable<T>({
         }, config.search.debounceMs);
         return () => clearTimeout(timeoutId);
       }
-    } catch (error) {
-    }
+    } catch (error) {}
     return undefined;
   }, [globalFilter, config.search.searchMode, config.search.debounceMs, actions]);
 
@@ -393,8 +389,7 @@ export function DataTable<T>({
       if (config.filters.filterMode === 'dynamic' && actions.onColumnFiltersChange) {
         actions.onColumnFiltersChange(columnFilters);
       }
-    } catch (error) {
-    }
+    } catch (error) {}
   }, [columnFilters, config.filters.filterMode, actions]);
 
   // Wrap the entire table rendering in error boundary
@@ -433,7 +428,7 @@ export function DataTable<T>({
                 {statusFilterConfig?.enabled && (
                   <div className="flex flex-col gap-1">
                     <p className="text-sm text-gray-600 px-1 h-5 flex items-center">
-                     Select {statusFilterConfig.columnName || 'Status'}
+                      Select {statusFilterConfig.columnName || 'Status'}
                     </p>
                     <Select value={selectedStatusFilter} onValueChange={(value) => setSelectedStatusFilter(value)}>
                       <SelectTrigger className="w-40 bg-[var(--color-table-header-bg)]">
@@ -574,7 +569,7 @@ export function DataTable<T>({
                     >
                       <div className="flex items-center justify-center gap-2">
                         {header.isPlaceholder ? null : flexRender(header.column.columnDef.header, header.getContext())}
-                         {header.column.getCanSort() && (
+                        {header.column.getCanSort() && (
                           <div className="flex flex-col">
                             <ChevronUpIcon
                               className={cn(
@@ -589,7 +584,7 @@ export function DataTable<T>({
                               )}
                             />
                           </div>
-                        )} 
+                        )}
                       </div>
                     </TableHead>
                   ))}
@@ -683,16 +678,14 @@ export function DataTable<T>({
           </Table>
         </div>
 
-        
         {config.pagination.enabled && (
-        <Pagination
-          table={table}
-          showPageSizeSelector={config.pagination.showPageSizeSelector}
-          pageSizeOptions={config.pagination.pageSizeOptions}
-          rowsLabel="Rows per Page:"
-        />
-      )}
-
+          <Pagination
+            table={table}
+            showPageSizeSelector={config.pagination.showPageSizeSelector}
+            pageSizeOptions={config.pagination.pageSizeOptions}
+            rowsLabel="Rows per Page:"
+          />
+        )}
       </div>
     );
   } catch (error) {

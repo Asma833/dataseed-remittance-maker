@@ -1,5 +1,4 @@
-import { FieldType } from "@/types/enums";
-
+import { FieldType } from '@/types/enums';
 
 export const PurposeDocumentFormConfig = {
   sectionTitle: 'Create Document',

@@ -3,7 +3,7 @@ import { BankAccount } from '../../../api/bankAccounts';
 
 const GetBankTableColumns = ({
   handleEdit,
-  handleDelete
+  handleDelete,
 }: {
   handleEdit: (bank: BankAccount) => void;
   handleDelete: (id: string) => void;

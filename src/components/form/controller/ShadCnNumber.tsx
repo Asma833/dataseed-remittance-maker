@@ -41,25 +41,24 @@ export const ShadCnNumber = ({
           defaultValue=""
           render={({ field: { value, onChange, ...field }, fieldState: { error } }) => (
             <div>
-            <ShadCnFormInput
-              {...field}
-              type="number"
-              placeholder={placeholder}
-              className={cn("form-input shadow-none focus-visible:ring-0", error && "border-destructive focus:ring-destructive")}
-              value={(forcedValue !== undefined ? forcedValue : value) || ''}
-              onChange={(e) => {
-                const val = e.target.value;
-                onChange(val === '' ? '' : val);
-              }}
-              disabled={disabled}
-              min={min}
-              step={step}
-            />
-            {error && (
-                <p className="text-sm text-destructive mt-1">
-                  {error.message}
-                </p>
-              )}
+              <ShadCnFormInput
+                {...field}
+                type="number"
+                placeholder={placeholder}
+                className={cn(
+                  'form-input shadow-none focus-visible:ring-0',
+                  error && 'border-destructive focus:ring-destructive'
+                )}
+                value={(forcedValue !== undefined ? forcedValue : value) || ''}
+                onChange={(e) => {
+                  const val = e.target.value;
+                  onChange(val === '' ? '' : val);
+                }}
+                disabled={disabled}
+                min={min}
+                step={step}
+              />
+              {error && <p className="text-sm text-destructive mt-1">{error.message}</p>}
             </div>
           )}
         />

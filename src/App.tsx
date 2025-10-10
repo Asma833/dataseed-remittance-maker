@@ -30,25 +30,25 @@ const App = () => {
   }, []);
 
   return (
-      <ThemeProvider>
-        <Provider store={store}>
-          <PersistGate loading={<LoadingFallback />} persistor={persistor}>
-            <QueryClientProvider client={queryClient}>
-              <BrowserRouter>
-                <Toaster />
-                <ErrorBoundary>
-                  <Suspense fallback={<LoadingFallback />}>
-                    <TooltipProvider>
-                      <AppRoutes />
-                    </TooltipProvider>
-                    <ReactQueryDevtools initialIsOpen={false} />
-                  </Suspense>
-                </ErrorBoundary>
-              </BrowserRouter>
-            </QueryClientProvider>
-          </PersistGate>
-        </Provider>
-      </ThemeProvider>
+    <ThemeProvider>
+      <Provider store={store}>
+        <PersistGate loading={<LoadingFallback />} persistor={persistor}>
+          <QueryClientProvider client={queryClient}>
+            <BrowserRouter>
+              <Toaster />
+              <ErrorBoundary>
+                <Suspense fallback={<LoadingFallback />}>
+                  <TooltipProvider>
+                    <AppRoutes />
+                  </TooltipProvider>
+                  <ReactQueryDevtools initialIsOpen={false} />
+                </Suspense>
+              </ErrorBoundary>
+            </BrowserRouter>
+          </QueryClientProvider>
+        </PersistGate>
+      </Provider>
+    </ThemeProvider>
   );
 };
 

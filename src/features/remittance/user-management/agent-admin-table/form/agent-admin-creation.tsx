@@ -25,7 +25,6 @@ import { useUpdateAgentAdmin } from '../../hooks/useUpdateAgentAdmin';
 
 type AgentAdminFormType = z.input<typeof agentAdminCreationSchema>;
 
-
 const AgentAdminCreation: React.FC = () => {
   const navigate = useNavigate();
   const location = useLocation();
@@ -142,7 +141,7 @@ const AgentAdminCreation: React.FC = () => {
       case 1:
         return <CompanyDetailsStep />;
       case 2:
-        return <FinanceDetailsStep agentId={isEditMode ? editData?.id : ""} />;
+        return <FinanceDetailsStep agentId={isEditMode ? editData?.id : ''} />;
       case 3:
         return <DocumentsStep />;
       case 4:
@@ -150,7 +149,7 @@ const AgentAdminCreation: React.FC = () => {
       case 5:
         return <CommissionStep />;
       case 6:
-        return <CorporateOnboardingStep agentId={isEditMode ? editData?.id : ""}/>;
+        return <CorporateOnboardingStep agentId={isEditMode ? editData?.id : ''} />;
       default:
         return null;
     }
@@ -158,7 +157,11 @@ const AgentAdminCreation: React.FC = () => {
 
   return (
     <div className="w-full">
-      <FormTitle tableName="Agent Admin List Table" actionName={isEditMode ? 'Edit Agent Admin' : config.sectionTitle} className="pb-3 px-2"/>
+      <FormTitle
+        tableName="Agent Admin List Table"
+        actionName={isEditMode ? 'Edit Agent Admin' : config.sectionTitle}
+        className="pb-3 px-2"
+      />
       <Card className="border-none space-y-0 p-2">
         <CardContent>
           {/* TOP BAR: Stepper + Agent Code + Nav */}
@@ -176,46 +179,51 @@ const AgentAdminCreation: React.FC = () => {
                       setCurrentStep(i);
                     }
                   }}
-
-
                 />
               </div>
             </div>
           </div>
-      
         </CardContent>
       </Card>
       <Card className="border-none space-y-0 px-4 mt-2">
-       <CardContent> 
-            {/* Agent Code + Buttons (aligned center with stepper row) */}
+        <CardContent>
+          {/* Agent Code + Buttons (aligned center with stepper row) */}
           <div className="w-full flex items-center justify-between gap-6 py-2">
             <div className="text-sm whitespace-nowrap ">
               <span className="text-muted-foreground font-semibold">Agent Code:&nbsp;</span>
               <span className="font-semibold text-destructive">{agentCode}</span>
             </div>
 
-         
-              <div className="flex items-center justify-end gap-2">
-                <Button type="button" variant="outline" disabled={currentStep === 0} onClick={handlePrevious}
-                 className="w-24">
+            <div className="flex items-center justify-end gap-2">
+              <Button
+                type="button"
+                variant="outline"
+                disabled={currentStep === 0}
+                onClick={handlePrevious}
+                className="w-24"
+              >
                 Back
               </Button>
-              {(currentStep === 5) &&(
+              {currentStep === 5 && (
                 <>
-                  <Button type="submit"  form="agent-admin-create-form" disabled={isCreating || isUpdating} className="w-24">
-                    {(isCreating || isUpdating) ? 'Submitting...' : isEditMode ? 'Update' : 'Submit'}
+                  <Button
+                    type="submit"
+                    form="agent-admin-create-form"
+                    disabled={isCreating || isUpdating}
+                    className="w-24"
+                  >
+                    {isCreating || isUpdating ? 'Submitting...' : isEditMode ? 'Update' : 'Submit'}
                   </Button>
                 </>
               )}
-               {currentStep !== 6 &&(
+              {currentStep !== 6 && (
                 <Button variant="secondary" type="button" onClick={handleNext} className="w-24">
                   Next
                 </Button>
-               )}
-              
-            </div> 
+              )}
+            </div>
           </div>
-          <hr className="border-gray-300 mb-2"/>
+          <hr className="border-gray-300 mb-2" />
           <FormProvider {...methods}>
             <form id="agent-admin-create-form" onSubmit={onSubmit}>
               {renderStepContent()}
@@ -228,4 +236,3 @@ const AgentAdminCreation: React.FC = () => {
 };
 
 export default AgentAdminCreation;
-

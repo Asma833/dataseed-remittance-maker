@@ -114,7 +114,6 @@ const HolidayTable = () => {
     <div className="space-y-4 w-full">
       {/* Header with controls */}
       <div className="flex items-center justify-end">
-   
         <div className="flex items-center gap-2">
           <Button onClick={handleAddHoliday} size="sm">
             <PlusCircle className="h-4 w-4" />

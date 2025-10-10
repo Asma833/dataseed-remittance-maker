@@ -86,8 +86,8 @@ export default function UserMenu() {
             </DropdownMenuItem>
           </DropdownMenuGroup>
           <DropdownMenuSeparator />
-          <DropdownMenuItem 
-            className="cursor-pointer" 
+          <DropdownMenuItem
+            className="cursor-pointer"
             onClick={(e) => {
               e.preventDefault();
               setIsLogoutDialogOpen(true);

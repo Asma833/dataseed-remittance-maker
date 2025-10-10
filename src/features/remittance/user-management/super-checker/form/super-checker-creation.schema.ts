@@ -34,7 +34,7 @@ export const superCheckerSchema = z
             });
           }
         }),
-       status: z.enum(['active', 'inactive'], { message: 'Please select a status' }),
+      status: z.enum(['active', 'inactive'], { message: 'Please select a status' }),
 
       agents: z.array(z.string()).optional(),
 
@@ -53,47 +53,57 @@ export const superCheckerSchema = z
       transactionTypeMap: z
         .record(z.string(), z.enum(['buy', 'sell']))
         .optional()
-        .refine((val) => {
-          if (!val) return true;
-          // Ensure only 'card' or 'currency' keys exist
-          const validKeys = ['card', 'currency'];
-          return Object.keys(val).every(k => validKeys.includes(k));
-        }, { message: 'Invalid product key in transaction type map' }),
-
+        .refine(
+          (val) => {
+            if (!val) return true;
+            // Ensure only 'card' or 'currency' keys exist
+            const validKeys = ['card', 'currency'];
+            return Object.keys(val).every((k) => validKeys.includes(k));
+          },
+          { message: 'Invalid product key in transaction type map' }
+        ),
     }),
   })
-  .refine((data) => {
-    const selectedProducts = (Object.keys(data.checkerDetails.productType || {}) as (keyof typeof data.checkerDetails.productType)[]).filter(key => data.checkerDetails.productType[key]);
-    const needsTransaction = selectedProducts.filter(p => p === 'card' || p === 'currency');
-    
-    // If no card/currency products are selected, validation passes
-    if (needsTransaction.length === 0) return true;
-    
-    // If card/currency products are selected, check transactionTypeMap
-    if (!data.checkerDetails.transactionTypeMap) {
-      return false;
-    }
-    
-    // Check each selected card/currency product has a transaction type
-    for (const product of needsTransaction) {
-      const txnType = data.checkerDetails.transactionTypeMap[product as 'card' | 'currency'];
-      if (!txnType) {
+  .refine(
+    (data) => {
+      const selectedProducts = (
+        Object.keys(data.checkerDetails.productType || {}) as (keyof typeof data.checkerDetails.productType)[]
+      ).filter((key) => data.checkerDetails.productType[key]);
+      const needsTransaction = selectedProducts.filter((p) => p === 'card' || p === 'currency');
+
+      // If no card/currency products are selected, validation passes
+      if (needsTransaction.length === 0) return true;
+
+      // If card/currency products are selected, check transactionTypeMap
+      if (!data.checkerDetails.transactionTypeMap) {
         return false;
       }
+
+      // Check each selected card/currency product has a transaction type
+      for (const product of needsTransaction) {
+        const txnType = data.checkerDetails.transactionTypeMap[product as 'card' | 'currency'];
+        if (!txnType) {
+          return false;
+        }
+      }
+
+      return true;
+    },
+    {
+      message: 'Transaction type is required for selected card or currency products',
+      path: ['checkerDetails', 'transactionTypeMap'],
     }
-    
-    return true;
-  }, {
-    message: 'Transaction type is required for selected card or currency products',
-    path: ['checkerDetails', 'transactionTypeMap'],
-  })
-  .refine((data) => {
-    const p = data.checkerDetails.password;
-    const cp = data.checkerDetails.confirmPassword;
-    if (p && cp) return p === cp;
-    if (p || cp) return false;
-    return true;
-  }, {
-    message: 'Passwords do not match',
-    path: ['checkerDetails', 'confirmPassword'],
-  });
+  )
+  .refine(
+    (data) => {
+      const p = data.checkerDetails.password;
+      const cp = data.checkerDetails.confirmPassword;
+      if (p && cp) return p === cp;
+      if (p || cp) return false;
+      return true;
+    },
+    {
+      message: 'Passwords do not match',
+      path: ['checkerDetails', 'confirmPassword'],
+    }
+  );

@@ -7,30 +7,35 @@ import FormFieldRow from '@/components/form/wrapper/form-field-row';
 import SubTitle from '../components/sub-title';
 
 export const ProductPurposeStep: React.FC = () => {
-  const { control, formState: { errors } } = useFormContext();
+  const {
+    control,
+    formState: { errors },
+  } = useFormContext();
   const config = agentAdminCreationConfig();
 
   return (
     <div className="space-y-6">
       <div>
-        <SubTitle title="Document Downloads" />   
+        <SubTitle title="Document Downloads" />
         <FormFieldRow className="mb-4" rowCols={4}>
-          {(['addOnForexMargin', 'addOnNostroMargin', 'addOnTTMargin','addOnOtherChargersMargin'] as const).map((fieldName) => {
-            const field = config.fields.productPurpose[fieldName];
-            return (
-              <FieldWrapper key={fieldName} className="bg-gray-100 p-2 pt-3 mb-2 rounded-lg">
-                {getController({
-                  ...(typeof field === 'object' && field !== null ? field : {}),
-                  name: `productPurpose.${fieldName}`,
-                  control,
-                  errors,
-                  className:"justify-center"
-                })}
-              </FieldWrapper>
-            );
-          })}
+          {(['addOnForexMargin', 'addOnNostroMargin', 'addOnTTMargin', 'addOnOtherChargersMargin'] as const).map(
+            (fieldName) => {
+              const field = config.fields.productPurpose[fieldName];
+              return (
+                <FieldWrapper key={fieldName} className="bg-gray-100 p-2 pt-3 mb-2 rounded-lg">
+                  {getController({
+                    ...(typeof field === 'object' && field !== null ? field : {}),
+                    name: `productPurpose.${fieldName}`,
+                    control,
+                    errors,
+                    className: 'justify-center',
+                  })}
+                </FieldWrapper>
+              );
+            }
+          )}
         </FormFieldRow>
-         <FormFieldRow className="mb-4 justify-center" rowCols={4}>
+        <FormFieldRow className="mb-4 justify-center" rowCols={4}>
           {(['esignDocumentDownload', 'vkycDocumentDownload'] as const).map((fieldName) => {
             const field = config.fields.productPurpose[fieldName];
             return (
@@ -40,7 +45,7 @@ export const ProductPurposeStep: React.FC = () => {
                   name: `productPurpose.${fieldName}`,
                   control,
                   errors,
-                  className:"justify-center"
+                  className: 'justify-center',
                 })}
               </FieldWrapper>
             );
@@ -76,12 +81,11 @@ export const ProductPurposeStep: React.FC = () => {
               ...config.fields.productPurpose.purposeTypesForCard,
               name: 'productPurpose.purposeTypesForCard',
               control,
-              variant:"pill",
-              errors
+              variant: 'pill',
+              errors,
             })}
           </FieldWrapper>
         </FormFieldRow>
-       
       </div>
     </div>
   );

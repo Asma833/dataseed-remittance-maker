@@ -16,7 +16,7 @@ export const uploadRemittanceImage = async (file: File): Promise<UploadRemittanc
   const response = await axiosInstance.post(API.DOCUMENTS.UPLOAD_REMITTANCE_IMAGE, formData, {
     headers: {
       'Content-Type': 'multipart/form-data',
-    }
+    },
   } as any);
   return response.data;
 };

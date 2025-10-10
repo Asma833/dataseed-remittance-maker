@@ -7,14 +7,22 @@ import FormFieldRow from '@/components/form/wrapper/form-field-row';
 import GetBankTableColumns from '../components/bank-table-coulumn';
 import { GenericTable } from '../components/generic-table';
 import SubTitle from '../components/sub-title';
-import { useGetBankAccounts, useCreateBankAccount, useUpdateBankAccount, useDeleteBankAccount } from '../../../hooks/useBankAccounts';
+import {
+  useGetBankAccounts,
+  useCreateBankAccount,
+  useUpdateBankAccount,
+  useDeleteBankAccount,
+} from '../../../hooks/useBankAccounts';
 import { BankAccount } from '../../../api/bankAccounts';
 import { Button } from '@/components/ui/button';
 import { PlusCircle } from 'lucide-react';
 import { AddBankDialog } from '../components/AddBankDialog';
 
 export const FinanceDetailsStep: React.FC<{ agentId?: string }> = ({ agentId }) => {
-  const { control, formState: { errors } } = useFormContext();
+  const {
+    control,
+    formState: { errors },
+  } = useFormContext();
   const config = agentAdminCreationConfig();
 
   // State for add bank dialog
@@ -88,30 +96,27 @@ export const FinanceDetailsStep: React.FC<{ agentId?: string }> = ({ agentId }) 
       </div>
 
       {/* Bank Accounts Section */}
-      {agentId &&(
-      <div>
-        <div className="flex items-center justify-between mb-4">
-          <p className="text-sm text-muted-foreground">You can add up to 3 accounts</p>
-          <Button
-            type="button"
-            onClick={() => setIsAddBankOpen(true)}
-            disabled={fetchedBankAccounts.length >= 3}
-            className="flex items-center gap-2"
-          >
-            <PlusCircle className="h-4 w-4" />
-            Add Bank
-          </Button>
-        </div>
+      {agentId && (
         <div>
-          <SubTitle title="Bank Accounts" />
-          <GenericTable
-            columns={columns}
-            data={fetchedBankAccounts}
-          />
+          <div className="flex items-center justify-between mb-4">
+            <p className="text-sm text-muted-foreground">You can add up to 3 accounts</p>
+            <Button
+              type="button"
+              onClick={() => setIsAddBankOpen(true)}
+              disabled={fetchedBankAccounts.length >= 3}
+              className="flex items-center gap-2"
+            >
+              <PlusCircle className="h-4 w-4" />
+              Add Bank
+            </Button>
+          </div>
+          <div>
+            <SubTitle title="Bank Accounts" />
+            <GenericTable columns={columns} data={fetchedBankAccounts} />
+          </div>
         </div>
-      </div>
       )}
-     
+
       {/* Add Bank Dialog */}
       <AddBankDialog
         isOpen={isAddBankOpen}
@@ -123,5 +128,5 @@ export const FinanceDetailsStep: React.FC<{ agentId?: string }> = ({ agentId }) 
         {...(editData && { editData, onEdit: handleEditBankSubmit })}
       />
     </div>
- );
+  );
 };

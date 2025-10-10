@@ -6,11 +6,7 @@ interface FormTitleProps {
   className?: string;
 }
 
-export const FormTitle: React.FC<FormTitleProps> = ({
-  tableName,
-  actionName,
-  className = "space-y-1 w-full"
-}) => {
+export const FormTitle: React.FC<FormTitleProps> = ({ tableName, actionName, className = 'space-y-1 w-full' }) => {
   return (
     <div className={className}>
       <div className="flex items-center space-x-2">

@@ -56,7 +56,9 @@ export const CreateHoliday = () => {
   return (
     <div className="space-y-1 w-full">
       <div className="flex items-center space-x-2">
-        <h2 className="text-sm font-semibold tracking-tight">Holiday List Table / <span className="text-[var(--color-title)]">Create Holiday</span></h2>
+        <h2 className="text-sm font-semibold tracking-tight">
+          Holiday List Table / <span className="text-[var(--color-title)]">Create Holiday</span>
+        </h2>
       </div>
 
       <FormProvider methods={methods}>
@@ -66,24 +68,29 @@ export const CreateHoliday = () => {
           </h2>
           <Spacer>
             <FormFieldRow className="mb-4" rowCols={3}>
-              {Object.entries(holidayFormConfig.fields)
-                .map(([name, field]) => (
-                  <FieldWrapper key={name}>
-                    {getController({
-                      ...(typeof field === 'object' && field !== null ? field : {}),
-                      name,
-                      control,
-                      errors,
-                    })}
-                  </FieldWrapper>
-                ))}
+              {Object.entries(holidayFormConfig.fields).map(([name, field]) => (
+                <FieldWrapper key={name}>
+                  {getController({
+                    ...(typeof field === 'object' && field !== null ? field : {}),
+                    name,
+                    control,
+                    errors,
+                  })}
+                </FieldWrapper>
+              ))}
             </FormFieldRow>
             <div className="flex justify-items-start space-x-2 mt-4 px-1">
               <Button variant="outline" className="w-28" onClick={handleBack}>
                 Back
               </Button>
-              <Button type="submit" variant="secondary" className="w-28" onClick={handleFormSubmit} disabled={isSubmitting}>
-                {isSubmitting ? (holiday ? 'Updating...' : 'Creating...') : (holiday ? 'Update' : 'Create')}
+              <Button
+                type="submit"
+                variant="secondary"
+                className="w-28"
+                onClick={handleFormSubmit}
+                disabled={isSubmitting}
+              >
+                {isSubmitting ? (holiday ? 'Updating...' : 'Creating...') : holiday ? 'Update' : 'Create'}
               </Button>
             </div>
           </Spacer>

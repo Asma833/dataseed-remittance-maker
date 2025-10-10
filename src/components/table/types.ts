@@ -25,7 +25,7 @@ export interface TableConfig {
     pageSizeOptions: number[];
     showPageSizeSelector: boolean;
   };
-  
+
   // Search settings
   search: {
     enabled: boolean;
@@ -33,7 +33,7 @@ export interface TableConfig {
     searchMode: 'static' | 'dynamic';
     debounceMs?: number;
   };
-  
+
   // Filter settings
   filters: {
     enabled: boolean;
@@ -74,30 +74,30 @@ export interface TableConfig {
       columnName: string;
     }>;
   };
-  
+
   // Sorting settings
   sorting: {
     enabled: boolean;
     multiSort: boolean;
     sortMode: 'static' | 'dynamic';
   };
-  
+
   // Row selection settings
   rowSelection: {
     enabled: boolean;
     multiple: boolean;
   };
-  
+
   export: {
     enabled: boolean;
     fileName?: string;
     includeHeaders?: boolean;
   };
-  
+
   // Loading and error states
   loading?: boolean;
   error?: string | null;
-  
+
   // Additional settings
   striped?: boolean;
   hover?: boolean;

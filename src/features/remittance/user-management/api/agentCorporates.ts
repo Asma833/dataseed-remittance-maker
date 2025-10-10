@@ -1,6 +1,10 @@
 import axiosInstance from '@/core/services/axios/axios-instance';
 import { API } from '@/core/constant/apis';
-import { AgentCorporate, CreateAgentCorporateRequest, UpdateAgentCorporateRequest } from '../types/agentCorporate.types';
+import {
+  AgentCorporate,
+  CreateAgentCorporateRequest,
+  UpdateAgentCorporateRequest,
+} from '../types/agentCorporate.types';
 
 export type { AgentCorporate, CreateAgentCorporateRequest, UpdateAgentCorporateRequest };
 
@@ -25,6 +29,9 @@ export const createAgentCorporate = async (request: CreateAgentCorporateRequest)
  */
 export const updateAgentCorporate = async (request: UpdateAgentCorporateRequest): Promise<AgentCorporate> => {
   const { id, ...payload } = request;
-  const { data } = await axiosInstance.put<AgentCorporate>(`${API.USER_MANAGEMENT.AGENT_CORPORATES.LIST}/${id}`, payload);
+  const { data } = await axiosInstance.put<AgentCorporate>(
+    `${API.USER_MANAGEMENT.AGENT_CORPORATES.LIST}/${id}`,
+    payload
+  );
   return data;
 };

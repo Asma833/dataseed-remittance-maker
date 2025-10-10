@@ -4,7 +4,7 @@ import { AgentCorporate } from '../../../types/agentCorporate.types';
 export type CorporateData = AgentCorporate;
 
 const GetCorporateOnboardingColumns = ({
-  handleEdit
+  handleEdit,
 }: {
   handleEdit: (corporate: CorporateData) => void;
 }): TableColumn<CorporateData>[] => {

@@ -2,7 +2,7 @@ import { ActionButtons, TableColumn } from '@/components/table';
 import { HolidayData } from './types';
 
 const GetHolidayTableColumns = ({
-  handleEdit
+  handleEdit,
 }: {
   handleEdit: (holiday: HolidayData) => void;
 }): TableColumn<HolidayData>[] => {

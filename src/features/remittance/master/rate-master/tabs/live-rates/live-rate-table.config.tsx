@@ -1,4 +1,3 @@
-
 import { TableColumn } from '@/components/table';
 import type { LiveRateData } from './types';
 

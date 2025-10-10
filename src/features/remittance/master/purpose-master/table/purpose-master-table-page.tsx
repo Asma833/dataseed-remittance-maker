@@ -103,7 +103,7 @@ const PurposeMasterTablePage = () => {
     <div className="space-y-4 w-full">
       {/* Header with Create Button */}
       <div className="flex justify-between items-center">
-        <TableTitle title="Purpose Master"/>
+        <TableTitle title="Purpose Master" />
         <Button onClick={handleCreatePurpose} className="bg-primary text-white hover:bg-primary">
           <Plus className="w-4 h-4 mr-2" />
           Add Purpose

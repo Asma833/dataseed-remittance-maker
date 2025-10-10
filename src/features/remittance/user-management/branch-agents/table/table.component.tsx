@@ -27,28 +27,28 @@ const BranchAgentTable = () => {
       filterMode: 'static' as const,
       columnFilters: true,
       globalFilter: true,
-      filter:{
-      roleFilter: {
-        enabled: true,
-        options: [
-          { value: 'branch_agent_maker', label: 'Maker' },
-          { value: 'branch_agent_checker', label: 'Checker' },
-          { value: 'branch_agent_admin', label: 'Admin' },
-        ],
-       columnId: 'role',
-       columnName:'Role'
+      filter: {
+        roleFilter: {
+          enabled: true,
+          options: [
+            { value: 'branch_agent_maker', label: 'Maker' },
+            { value: 'branch_agent_checker', label: 'Checker' },
+            { value: 'branch_agent_admin', label: 'Admin' },
+          ],
+          columnId: 'role',
+          columnName: 'Role',
+        },
+        //   statusFilter: {
+        //   enabled: true,
+        //   options: [
+        //     { value: 'Active', label: 'Active' },
+        //     { value: 'Inactive', label: 'Inactive' },
+        //   ],
+        //   columnId: 'is_active',
+        //   columnName:'Status'
+        // },
       },
-      //   statusFilter: {
-      //   enabled: true,
-      //   options: [
-      //     { value: 'Active', label: 'Active' },
-      //     { value: 'Inactive', label: 'Inactive' },
-      //   ],
-      //   columnId: 'is_active',
-      //   columnName:'Status'
-      // },
     },
-  },
     loading: isLoading,
   };
 
@@ -70,12 +70,9 @@ const BranchAgentTable = () => {
       // Pagination handled by static config
     },
 
-    onSortingChange: (sorting: { id: string; desc: boolean }[]) => {
-    },
-    onGlobalFilterChange: (filter: string) => {
-    },
-    onColumnFiltersChange: (filters: { id: string; value: any }[]) => {
-    },
+    onSortingChange: (sorting: { id: string; desc: boolean }[]) => {},
+    onGlobalFilterChange: (filter: string) => {},
+    onColumnFiltersChange: (filters: { id: string; value: any }[]) => {},
   };
 
   // Navigate to branch agent creation page
@@ -98,7 +95,7 @@ const BranchAgentTable = () => {
       {/* Header with controls */}
       <div className="flex items-center justify-between">
         <div className="space-y-1">
-          <TableTitle title="Branch Agents"/>
+          <TableTitle title="Branch Agents" />
         </div>
         <div className="flex items-center gap-2">
           {/* <Button onClick={handleBulkUpload} variant="outline" size="sm" className="btn-light">
@@ -117,7 +114,7 @@ const BranchAgentTable = () => {
         columns={columns}
         data={tableData}
         config={{
-          ...config
+          ...config,
         }}
         actions={tableActions}
         className="rounded-lg"

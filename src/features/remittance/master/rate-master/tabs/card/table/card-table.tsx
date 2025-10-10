@@ -107,7 +107,6 @@ const CardTable = () => {
 
   return (
     <div className="space-y-4 w-full">
-
       {/* Data Table */}
       <DataTable
         columns={columns}

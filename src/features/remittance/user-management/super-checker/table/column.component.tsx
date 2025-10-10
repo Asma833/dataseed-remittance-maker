@@ -2,7 +2,7 @@ import { ActionButtons, StatusBadge, TableColumn } from '@/components/table';
 import { SuperCheckerData } from './types';
 
 const GetSuperCheckerTableColumns = ({
-  handleEdit
+  handleEdit,
 }: {
   handleEdit: (user: SuperCheckerData) => void;
 }): TableColumn<SuperCheckerData>[] => {
@@ -13,7 +13,7 @@ const GetSuperCheckerTableColumns = ({
       accessorKey: 'full_name',
       sortable: true,
       filterable: true,
-      cell: ({ value }) => value == null || value === '' ? '-' : value,
+      cell: ({ value }) => (value == null || value === '' ? '-' : value),
       meta: {
         headerAlign: 'left',
         cellAlign: 'left',
@@ -25,7 +25,7 @@ const GetSuperCheckerTableColumns = ({
       accessorKey: 'email',
       sortable: true,
       filterable: true,
-      cell: ({ value }) => value == null || value === '' ? '-' : value,
+      cell: ({ value }) => (value == null || value === '' ? '-' : value),
       meta: {
         headerAlign: 'left',
         cellAlign: 'left',
@@ -37,7 +37,7 @@ const GetSuperCheckerTableColumns = ({
       accessorKey: 'phone_number',
       sortable: true,
       filterable: true,
-      cell: ({ value }) => value == null || value === '' ? '-' : value,
+      cell: ({ value }) => (value == null || value === '' ? '-' : value),
       meta: {
         headerAlign: 'left',
         cellAlign: 'left',
@@ -49,7 +49,7 @@ const GetSuperCheckerTableColumns = ({
       accessorKey: 'product_types',
       sortable: true,
       filterable: true,
-      cell: ({ value }) => value && value.length > 0 ? value.join(', ') : '-',
+      cell: ({ value }) => (value && value.length > 0 ? value.join(', ') : '-'),
       meta: {
         headerAlign: 'left',
         cellAlign: 'left',
@@ -70,7 +70,7 @@ const GetSuperCheckerTableColumns = ({
     {
       id: 'action',
       header: 'Action',
-      cell: ({ row }) => <ActionButtons row={row}  onEdit={handleEdit} />,
+      cell: ({ row }) => <ActionButtons row={row} onEdit={handleEdit} />,
       sortable: false,
       filterable: false,
       meta: {

@@ -2,7 +2,7 @@ import { ActionButtons, StatusBadge, TableColumn } from '@/components/table';
 import { BranchAgentData } from './types';
 
 const GetBranchAgentTableColumns = ({
-  handleEdit
+  handleEdit,
 }: {
   handleEdit: (user: BranchAgentData) => void;
 }): TableColumn<BranchAgentData>[] => {

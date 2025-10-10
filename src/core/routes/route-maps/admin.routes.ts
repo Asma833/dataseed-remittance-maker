@@ -134,7 +134,7 @@ export const adminRoutes: RouteConfig[] = [
         label: 'Holiday List',
         element: HolidayList,
         permission: '',
-      }
+      },
     ],
   },
   {
