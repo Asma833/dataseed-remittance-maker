@@ -26,7 +26,6 @@ export const branchAgentCreationConfig = (agents: Agent[] = []) => {
           name: "agentDetails.vendorDetails.vendorCode",
           label:"Vendor Code",
           type: FieldType.Text,
-          required: true,
           placeholder: "Vendor Code",
           disabled: true,
         },

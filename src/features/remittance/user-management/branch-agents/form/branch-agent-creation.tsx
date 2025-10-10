@@ -105,7 +105,7 @@ export const CreateBranchAgent = () => {
         basicDetails: {
           fullName: branchAgent.full_name || "",
           emailId: branchAgent.email || "",
-          mobileNo: branchAgent.mobile_no || "",
+          mobileNo: branchAgent.phone_number || "",
         },
         address: {
           state: branchAgent.address_state || "",
@@ -166,7 +166,7 @@ export const CreateBranchAgent = () => {
       agents
     );
     const agentCode =
-      resolved?.agent_code ?? String(data.agentDetails.vendorDetails.vendorName ?? "");
+      resolved?.id ?? String(data.agentDetails.vendorDetails.vendorName ?? "");
 
     if (branchAgent) {
       // UPDATE
@@ -178,7 +178,7 @@ export const CreateBranchAgent = () => {
         address_branch: data.agentDetails.address.branch,
         phone_number: data.agentDetails.basicDetails.mobileNo,
         role: data.agentDetails.roleStatus.role,
-        status: data.agentDetails.roleStatus.status,
+        is_active: data.agentDetails.roleStatus.status ? true : false,
         agent_ids: [agentCode],
       };
       updateBranchAgent(payload);
@@ -193,6 +193,7 @@ export const CreateBranchAgent = () => {
         address_branch: data.agentDetails.address.branch,
         phone_number: data.agentDetails.basicDetails.mobileNo,
         role: data.agentDetails.roleStatus.role,
+        is_active: data.agentDetails.roleStatus.status ? true : false,
         agent_ids: [agentCode],
       };
       createBranchAgent(payload);
@@ -288,6 +289,7 @@ export const CreateBranchAgent = () => {
                       ...(field ?? {}),
                       name: field.name,
                       control,
+                      className: "justify-start",
                       errors,
                     })}
                   </FieldWrapper>
@@ -303,6 +305,7 @@ export const CreateBranchAgent = () => {
                       ...(field ?? {}),
                       name: field.name,
                       control,
+                      disabled:!branchAgent,
                       errors,
                       className: "justify-start",
                     })}

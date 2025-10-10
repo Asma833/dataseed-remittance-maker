@@ -11,12 +11,12 @@ export const vendorDetailsSchema = z.object({
     .refine((val) => !/^[\s-]/.test(val), "Vendor name cannot start with space or hyphen")
     .describe("Agent Vendor Name"),
   vendorCode: z
-    .string()
-    .min(1, "Vendor code is required")
-    .refine((val) => val.trim().length > 0, "Vendor code cannot be only spaces")
-    .refine((val) => !/^[\s-]+$/.test(val), "Vendor code cannot contain only spaces or hyphens")
-    .refine((val) => !/^[\s-]/.test(val), "Vendor code cannot start with space or hyphen")
-    .describe("Agent Vendor Code"),
+    .string().optional()
+    // .min(1, "Vendor code is required")
+    // .refine((val) => val.trim().length > 0, "Vendor code cannot be only spaces")
+    // .refine((val) => !/^[\s-]+$/.test(val), "Vendor code cannot contain only spaces or hyphens")
+    // .refine((val) => !/^[\s-]/.test(val), "Vendor code cannot start with space or hyphen")
+    // .describe("Agent Vendor Code"),
   // systemCode: z
   //   .string()
   //   .min(1, "System code is required")

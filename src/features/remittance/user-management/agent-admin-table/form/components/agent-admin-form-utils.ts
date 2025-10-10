@@ -19,7 +19,7 @@ export const transformEditDataToFormData = (editData: any) => {
     agent_name: normalizeValue(editData.agent_name),
     emailId: normalizeValue(editData.email),
     phoneNo: normalizeValue(editData.phone_number),
-    agentType: normalizeValue(editData.agent_type),
+    agentType: normalizeValue(editData.agent_type).toUpperCase().replace(/-/g, ''),
     agentBranchCity: normalizeValue(editData.agent_branch_city),
     agentHOBranchState: normalizeValue(editData.agent_ho_branch_state),
     ebixRMName: normalizeValue(editData.rm_name),
@@ -106,8 +106,8 @@ export const resetAgentAdminForm = (
 
   // Explicitly set some fields to ensure they patch correctly
   setTimeout(() => {
-    methods.setValue('agentType', editData.agent_type, {
-      shouldValidate: false,
+    methods.setValue('agentType', editData.agent_type.toUpperCase().replace(/-/g, ''), {
+      shouldValidate: true,
       shouldDirty: false,
       shouldTouch: false
     });
