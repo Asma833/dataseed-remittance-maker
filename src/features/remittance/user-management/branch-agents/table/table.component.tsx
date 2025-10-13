@@ -7,14 +7,12 @@ import { DataTable, TableData, staticConfig } from '@/components/table';
 import { PlusCircle, UploadIcon } from 'lucide-react';
 import { TableTitle } from '@/features/auth/components/table-title';
 import { useGetBranchAgents } from '../../hooks/useGetBranchAgents';
-import { useDeleteUser } from '../../hooks/useDeleteUser';
-import { useAlert } from '@/hooks/useAlert';
+import { useInactiveUser } from '../../hooks/useInactiveUser';
 
 const BranchAgentTable = () => {
   const navigate = useNavigate();
   const { data: branchAgents = [], isLoading } = useGetBranchAgents();
-  const { deleteUser, isPending: deletePending } = useDeleteUser();
-  const { showAlert } = useAlert();
+  const { inactiveUser, isPending: deletePending } = useInactiveUser();
 
   // Table configuration
   const config = {
@@ -68,20 +66,9 @@ const BranchAgentTable = () => {
     navigate('/admin/user-management/branch-agent-creation', { state: { branchAgent } });
   };
 
-  const handleDelete = async (branchAgent: BranchAgentData) => {
-    if (window.confirm(`Are you sure you want to delete ${branchAgent.full_name}?`)) {
-      try {
-        await deleteUser(branchAgent.id!);
-        showAlert({
-          title: 'Branch Agent deleted successfully',
-          description: 'The branch agent has been removed from the system.',
-        });
-      } catch (error) {
-        showAlert({
-          title: 'Failed to delete Branch Agent',
-          description: 'An error occurred while deleting the branch agent.',
-        });
-      }
+  const handleInactivate = async (branchAgent: BranchAgentData) => {
+    if (`${branchAgent.full_name}?`) {
+     await inactiveUser(branchAgent.id!);
     }
   };
 
@@ -109,7 +96,7 @@ const BranchAgentTable = () => {
   // Define columns matching the requirements
   const columns = GetBranchAgentTableColumns({
     handleEdit,
-    handleDelete,
+    handleInactivate,
   });
 
   return (

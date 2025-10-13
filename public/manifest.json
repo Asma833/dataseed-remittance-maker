@@ -1,7 +1,7 @@
 {
-  "name": "NIUM Web Agent Portal",
-  "short_name": "NIUM Portal",
-  "description": "NIUM Web Agent Portal - Modern Money Movement Platform for Enterprise Solutions",
+  "name": "EBIX Web Agent Portal",
+  "short_name": "EBIX Portal",
+  "description": "EBIX Web Agent Portal - Modern Money Movement Platform for Enterprise Solutions",
   "start_url": "/",
   "display": "standalone",
   "background_color": "#ffffff",

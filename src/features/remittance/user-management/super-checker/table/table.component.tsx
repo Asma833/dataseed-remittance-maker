@@ -7,14 +7,12 @@ import { DataTable, TableData, staticConfig } from '@/components/table';
 import { PlusCircle } from 'lucide-react';
 import { TableTitle } from '@/features/auth/components/table-title';
 import { useGetSuperCheckers } from '../../hooks/useGetSuperCheckers';
-import { useDeleteUser } from '../../hooks/useDeleteUser';
-import { useAlert } from '@/hooks/useAlert';
+import { useInactiveUser } from '../../hooks/useInactiveUser';
 
 const SuperCheckerTable = () => {
   const navigate = useNavigate();
   const { data: superCheckers = [], isLoading: loading, error } = useGetSuperCheckers();
-  const { deleteUser, isPending: deletePending } = useDeleteUser();
-  const { showAlert } = useAlert();
+  const { inactiveUser, isPending: deletePending } = useInactiveUser();
 
   // Table configuration
   const config = {
@@ -59,7 +57,7 @@ const SuperCheckerTable = () => {
   const handleInacivate = async (superChecker: SuperCheckerData) => {
     if (`${superChecker.full_name}?`) {
       try {
-        await deleteUser(superChecker.id);
+        await inactiveUser(superChecker.id);
       } catch (error) {
       }
     }

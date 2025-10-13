@@ -1,7 +1,7 @@
 import { TooltipButton } from '@/components/common/tooltip-button';
 import { ActionButtonsProps } from './types';
-import { AiOutlineEye, AiOutlineEdit, AiOutlineDelete, AiOutlineStop } from 'react-icons/ai';
-import { MdEdit } from 'react-icons/md';
+import { AiOutlineEye, AiOutlineDelete, AiOutlineStop } from 'react-icons/ai';
+import { FilePenLine } from 'lucide-react';
 
 export function ActionButtons<T>({ row, onEdit, onDelete, onView,onInactivate }: ActionButtonsProps<T>) {
   return (
@@ -15,7 +15,7 @@ export function ActionButtons<T>({ row, onEdit, onDelete, onView,onInactivate }:
             e.stopPropagation();
             onView(row);
           }}
-          className="h-8 w-8 p-0 text-blue-600 hover:text-blue-800 hover:bg-blue-50"
+          className="h-6 w-6 p-0 text-blue-600 hover:text-blue-800 hover:bg-blue-50"
           tooltip="View"
         >
           <AiOutlineEye className="h-4 w-4" />
@@ -30,12 +30,13 @@ export function ActionButtons<T>({ row, onEdit, onDelete, onView,onInactivate }:
             e.stopPropagation();
             onEdit(row);
           }}
-          className="h-8 w-8 p-0 bg-blue-100 text-blue-600 hover:bg-blue-200 hover:text-blue-800"
+          className="h-6 w-6 p-0 bg-blue-100 text-blue-600 hover:bg-blue-200 hover:text-blue-800"
           tooltip="Edit"
         >
-          <MdEdit className="h-4 w-4" />
+         <FilePenLine />
         </TooltipButton>
       )}
+     
       {onDelete && (
         <TooltipButton
           type="button"
@@ -45,7 +46,7 @@ export function ActionButtons<T>({ row, onEdit, onDelete, onView,onInactivate }:
             e.stopPropagation();
             onDelete(row);
           }}
-          className="h-8 w-8 p-0 text-red-600 hover:text-red-800 hover:bg-red-50"
+          className="h-6 w-6 p-0 text-red-600 hover:text-red-800 hover:bg-red-50"
           tooltip="Delete"
         >
           <AiOutlineDelete className="h-4 w-4" />
@@ -60,8 +61,8 @@ export function ActionButtons<T>({ row, onEdit, onDelete, onView,onInactivate }:
             e.stopPropagation();
             onInactivate(row);
           }}
-          className="h-8 w-8 p-0 bg-orange-100 text-orange-600 hover:bg-orange-200 hover:text-orange-800"
-          tooltip="Inactivate"
+          className="h-6 w-6 p-0 bg-blue-100 text-blue-600 hover:bg-blue-200 hover:text-blue-800"
+          tooltip="Active/Inactivate"
         >
           <AiOutlineStop className="h-4 w-4" />
         </TooltipButton>
