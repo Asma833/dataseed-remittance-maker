@@ -3,8 +3,10 @@ import { BranchAgentData } from './types';
 
 const GetBranchAgentTableColumns = ({
   handleEdit,
+  handleDelete,
 }: {
   handleEdit: (user: BranchAgentData) => void;
+  handleDelete: (user: BranchAgentData) => void;
 }): TableColumn<BranchAgentData>[] => {
   return [
     {
@@ -76,7 +78,7 @@ const GetBranchAgentTableColumns = ({
     {
       id: 'action',
       header: 'Action',
-      cell: ({ row }) => <ActionButtons row={row} onEdit={handleEdit} />,
+      cell: ({ row }) => <ActionButtons row={row} onEdit={handleEdit} onDelete={handleDelete} />,
       sortable: false,
       filterable: false,
       meta: {

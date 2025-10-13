@@ -16,19 +16,34 @@ export const branchAgentCreationConfig = (agents: Agent[] = []) => {
         // Vendor
         vendorName: {
           name: 'agentDetails.vendorDetails.vendorName',
-          label: 'Vendor Name',
+          label: 'Primary Agent Name',
           type: FieldType.Select,
           required: true,
-          placeholder: 'Select Vendor Name',
+          placeholder: 'Select Primary Agent Name',
           options: agentOptions,
         },
-        vendorCode: {
-          name: 'agentDetails.vendorDetails.vendorCode',
-          label: 'Vendor Code',
+        agentEonCode:{
+          name: 'agentDetails.basicDetails.agentEonCode',
+          label: 'EON Code',
           type: FieldType.Text,
-          placeholder: 'Vendor Code',
-          disabled: true,
+          required: true,
+          placeholder: 'Enter EON Code',
         },
+         systemCode:{
+          name: 'agentDetails.basicDetails.systemCode',
+          label: 'System Code',
+          type: FieldType.Text,
+          required: true,
+          placeholder: 'Enter System Code',
+        },
+        primaryAgentEmail:{
+          name: 'agentDetails.basicDetails.checkerList',
+          label: 'Primary Agent Email',
+          type: FieldType.Email,
+          required: true,
+          placeholder: 'Enter Primary Agent Email',
+        },
+       
         // Basic
         fullName: {
           name: 'agentDetails.basicDetails.fullName',
@@ -55,26 +70,37 @@ export const branchAgentCreationConfig = (agents: Agent[] = []) => {
         // Address
         state: {
           name: 'agentDetails.address.state',
-          label: 'State',
+          label: 'Branch State',
           type: FieldType.Text,
           required: true,
-          placeholder: 'Enter State',
+          placeholder: 'Enter Branch State',
         },
         city: {
           name: 'agentDetails.address.city',
-          label: 'City',
+          label: 'Branch City',
           type: FieldType.Text,
           required: true,
-          placeholder: 'Enter City',
+          placeholder: 'Enter Branch City',
         },
         branch: {
           name: 'agentDetails.address.branch',
-          label: 'Branch',
+          label: 'Branch Name',
           type: FieldType.Text,
           required: true,
-          placeholder: 'Enter Branch',
+          placeholder: 'Enter Branch Name',
         },
-
+        rmName: {
+          name: 'agentDetails.address.rmName',
+          label: 'RM Name',
+          type: FieldType.Text,
+          placeholder: 'Enter Branch Name',
+        },
+         rmBranch: {
+          name: 'agentDetails.address.rmBranch',
+          label: 'RM Branch Name',
+          type: FieldType.Text,
+          placeholder: 'Enter RM Branch Name',
+        },
         // Role / Checker / Status
         role: {
           name: 'agentDetails.roleStatus.role',
@@ -86,11 +112,21 @@ export const branchAgentCreationConfig = (agents: Agent[] = []) => {
           options: {
             branch_agent_maker: { label: 'Maker' },
             branch_agent_checker: { label: 'Checker', checked: true },
-            branch_agent_both: { label: 'Both' },
-            branch_agent_admin: { label: 'Admin' },
+            branch_agent_agent_maker_and_agent_checker: { label: 'Maker & Checker' },
+            branch_agent_co_admin: { label: 'Co Admin' },
           },
         },
-
+          checkerList:{
+          name: 'agentDetails.basicDetails.checkerList',
+          label: 'Checker List',
+          type: FieldType.Select,
+          required: true,
+          options:[
+            {label:"checker1",value:"checker1"}
+          ],
+          isMulti:true,
+          placeholder: 'Select Checker List',
+        },
         status: {
           name: 'agentDetails.roleStatus.status',
           label: 'Status',
@@ -99,6 +135,7 @@ export const branchAgentCreationConfig = (agents: Agent[] = []) => {
           options: {
             active: { label: 'Active', checked: true },
             inactive: { label: 'Inactive' },
+            blocked:{ label:'Blocked'}
           },
         },
 

@@ -143,6 +143,12 @@ export const ENDPOINT_MATCHING_RULES: EndpointRulesConfig = {
     matchType: 'standard' as const,
     description: 'Get documents',
   },
+  'inactive-superchecker':{
+    endpoint: '/rem-users/active-inactive',
+    matchType: 'standard' as const,
+    description: 'Inactive super checker',
+  }
+  
 } as const;
 
 /**

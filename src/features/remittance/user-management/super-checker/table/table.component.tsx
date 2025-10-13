@@ -7,10 +7,14 @@ import { DataTable, TableData, staticConfig } from '@/components/table';
 import { PlusCircle } from 'lucide-react';
 import { TableTitle } from '@/features/auth/components/table-title';
 import { useGetSuperCheckers } from '../../hooks/useGetSuperCheckers';
+import { useDeleteUser } from '../../hooks/useDeleteUser';
+import { useAlert } from '@/hooks/useAlert';
 
 const SuperCheckerTable = () => {
   const navigate = useNavigate();
   const { data: superCheckers = [], isLoading: loading, error } = useGetSuperCheckers();
+  const { deleteUser, isPending: deletePending } = useDeleteUser();
+  const { showAlert } = useAlert();
 
   // Table configuration
   const config = {
@@ -52,6 +56,17 @@ const SuperCheckerTable = () => {
     navigate('/admin/users/super-checker-creation', { state: { superChecker } });
   };
 
+  const handleDelete = async (superChecker: SuperCheckerData) => {
+    if (window.confirm(`Are you sure you want to delete ${superChecker.full_name}?`)) {
+      try {
+        await deleteUser(superChecker.id);
+        // showAlert('Super Checker deleted successfully');
+      } catch (error) {
+        // showAlert('Failed to delete Super Checker', 'error');
+      }
+    }
+  };
+
   // Dynamic table actions
   const tableActions = {
     onPaginationChange: (pagination: { pageIndex: number; pageSize: number }) => {
@@ -70,6 +85,7 @@ const SuperCheckerTable = () => {
   // Define columns matching the screenshot
   const columns = GetSuperCheckerTableColumns({
     handleEdit,
+    handleDelete,
   });
   return (
     <div className="space-y-4 w-full">

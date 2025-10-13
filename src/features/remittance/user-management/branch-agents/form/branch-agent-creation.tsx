@@ -16,6 +16,7 @@ import { getController } from '@/components/form/utils/get-controller';
 
 import { branchAgentCreationConfig } from './branch-agent-creation.config';
 import { BranchAgentForm, branchAgentSchema } from './branch-agent-creation.schema';
+import { branchAgentDefaults } from './branch-agent-creation.defaults';
 import { useCreateBranchAgent } from '../../hooks/useCreateBranchAgent';
 import { useUpdateBranchAgent } from '../../hooks/useUpdateBranchAgent';
 import { useGetAgents } from '../../hooks/useGetAgents';
@@ -44,18 +45,7 @@ export const CreateBranchAgent = () => {
   const methods = useForm<BranchAgentForm>({
     resolver: zodResolver(branchAgentSchema),
     mode: 'onChange',
-    defaultValues: {
-      agentDetails: {
-        vendorDetails: {
-          vendorName: '',
-          vendorCode: '',
-        },
-        basicDetails: { fullName: '', emailId: '', mobileNo: '' },
-        address: { state: '', city: '', branch: '' },
-        roleStatus: { role: 'branch_agent_checker', status: 'active' },
-        security: { password: '', confirmPassword: '' },
-      },
-    },
+    defaultValues: branchAgentDefaults,
   });
 
   const {
@@ -93,20 +83,26 @@ export const CreateBranchAgent = () => {
         vendorDetails: {
           vendorName: vendorCode, // select value = code
           vendorCode: vendorCode, // mirror code
+          agentEonCode: '', // Add default or from branchAgent if available
+          systemCode: '', // Add default or from branchAgent if available
+          primaryAgentEmail: '', // Add default or from branchAgent if available
         },
         basicDetails: {
           fullName: branchAgent.full_name || '',
           emailId: branchAgent.email || '',
           mobileNo: branchAgent.phone_number || '',
+          checkerList: [] as string[], // Add default or from branchAgent if available
         },
         address: {
           state: branchAgent.address_state || '',
           city: branchAgent.address_city || '',
           branch: branchAgent.address_branch || '',
+          rmName: '', // Add default or from branchAgent if available
+          rmBranch: '', // Add default or from branchAgent if available
         },
         roleStatus: {
           role: branchAgent.role || 'branch_agent_checker',
-          status: 'active',
+          status: 'active' as const,
         },
         security: { password: '', confirmPassword: '' },
       },
@@ -132,12 +128,12 @@ export const CreateBranchAgent = () => {
   /** --- SYNC WHEN AGENTS LOAD (update mode consistency) --- */
   useEffect(() => {
     if (!agents) return;
-    const raw = getValues('agentDetails.vendorDetails.vendorName');
-    const found = resolveAgentFromValue(raw, agents);
-    setValue('agentDetails.vendorDetails.vendorCode', found?.agent_code ?? '', {
-      shouldDirty: true,
-      shouldValidate: true,
-    });
+   // const raw = getValues('agentDetails.vendorDetails.vendorName');
+  //  const found = resolveAgentFromValue(raw, agents);
+    // setValue('agentDetails.vendorDetails.vendorCode', found?.agent_code ?? '', {
+    //   shouldDirty: true,
+    //   shouldValidate: true,
+    // });
   }, [agents, getValues, setValue]);
 
   const handleBack = () => navigate('/admin/user-management/branch-agents');
@@ -159,13 +155,20 @@ export const CreateBranchAgent = () => {
       const payload = {
         id: branchAgent.id,
         full_name: data.agentDetails.basicDetails.fullName,
+        email: data.agentDetails.basicDetails.emailId,
         address_city: data.agentDetails.address.city,
         address_state: data.agentDetails.address.state,
         address_branch: data.agentDetails.address.branch,
+        address_rm_name: data.agentDetails.address.rmName,
+        address_rm_branch: data.agentDetails.address.rmBranch,
         phone_number: data.agentDetails.basicDetails.mobileNo,
         role: data.agentDetails.roleStatus.role,
-        is_active: data.agentDetails.roleStatus.status ? true : false,
+        status: data.agentDetails.roleStatus.status,
         agent_ids: [agentCode],
+        agent_eon_code: data.agentDetails.vendorDetails.agentEonCode,
+        system_code: data.agentDetails.vendorDetails.systemCode,
+        primary_agent_email: data.agentDetails.vendorDetails.primaryAgentEmail,
+        checker_list: data.agentDetails.basicDetails.checkerList,
       };
       updateBranchAgent(payload);
     } else {
@@ -177,10 +180,16 @@ export const CreateBranchAgent = () => {
         address_city: data.agentDetails.address.city,
         address_state: data.agentDetails.address.state,
         address_branch: data.agentDetails.address.branch,
+        address_rm_name: data.agentDetails.address.rmName,
+        address_rm_branch: data.agentDetails.address.rmBranch,
         phone_number: data.agentDetails.basicDetails.mobileNo,
         role: data.agentDetails.roleStatus.role,
-        is_active: data.agentDetails.roleStatus.status ? true : false,
+        status: data.agentDetails.roleStatus.status,
         agent_ids: [agentCode],
+        agent_eon_code: data.agentDetails.vendorDetails.agentEonCode,
+        system_code: data.agentDetails.vendorDetails.systemCode,
+        primary_agent_email: data.agentDetails.vendorDetails.primaryAgentEmail,
+        checker_list: data.agentDetails.basicDetails.checkerList,
       };
       createBranchAgent(payload);
     }
@@ -209,7 +218,7 @@ export const CreateBranchAgent = () => {
               <label className="text-sm font-medium absolute">Vendor Details</label>
             </div>
             <FormFieldRow rowCols={4}>
-              {(['vendorName', 'vendorCode'] as const).map((fieldName) => {
+              {(['vendorName', 'agentEonCode','systemCode','primaryAgentEmail'] as const).map((fieldName) => {
                 const field = config.fields.agentDetails[fieldName];
                 return (
                   <FieldWrapper key={fieldName}>
@@ -264,9 +273,23 @@ export const CreateBranchAgent = () => {
                 );
               })}
             </FormFieldRow>
-
+            <FormFieldRow rowCols={4}>
+              {(['rmName', 'rmBranch'] as const).map((fieldName) => {
+                const field = config.fields.agentDetails[fieldName];
+                return (
+                  <FieldWrapper key={fieldName}>
+                    {getController({
+                      ...(field ?? {}),
+                      name: field.name,
+                      control,
+                      errors,
+                    })}
+                  </FieldWrapper>
+                );
+              })}
+            </FormFieldRow>
             {/* --- Role & Status --- */}
-            <FormFieldRow rowCols={3}>
+            <FormFieldRow rowCols={2}>
               {(['role'] as const).map((fieldName) => {
                 const field = config.fields.agentDetails[fieldName];
                 return (
@@ -276,6 +299,22 @@ export const CreateBranchAgent = () => {
                       name: field.name,
                       control,
                       className: 'justify-start',
+                      errors,
+                    })}
+                  </FieldWrapper>
+                );
+              })}
+            </FormFieldRow>
+              {/* --- Checker List --- */}
+              <FormFieldRow rowCols={4}>
+              {(['checkerList'] as const).map((fieldName) => {
+                const field = config.fields.agentDetails[fieldName];
+                return (
+                  <FieldWrapper key={fieldName}>
+                    {getController({
+                      ...(field ?? {}),
+                      name: field.name,
+                      control,
                       errors,
                     })}
                   </FieldWrapper>

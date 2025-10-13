@@ -11,15 +11,22 @@ export const vendorDetailsSchema = z.object({
     .refine((val) => !/^[\s-]/.test(val), 'Vendor name cannot start with space or hyphen')
     .describe('Agent Vendor Name'),
   vendorCode: z.string().optional(),
-  // .min(1, "Vendor code is required")
-  // .refine((val) => val.trim().length > 0, "Vendor code cannot be only spaces")
-  // .refine((val) => !/^[\s-]+$/.test(val), "Vendor code cannot contain only spaces or hyphens")
-  // .refine((val) => !/^[\s-]/.test(val), "Vendor code cannot start with space or hyphen")
-  // .describe("Agent Vendor Code"),
-  // systemCode: z
-  //   .string()
-  //   .min(1, "System code is required")
-  //   .describe("System Code"),
+  agentEonCode: z
+    .string()
+    .min(1, 'EON Code is required')
+    .refine((val) => val.trim().length > 0, 'EON Code cannot be only spaces')
+    .refine((val) => !/^[\s-]+$/.test(val), 'EON Code cannot contain only spaces or hyphens')
+    .refine((val) => !/^[\s-]/.test(val), 'EON Code cannot start with space or hyphen')
+    .describe('EON Code'),
+  systemCode: z
+    .string()
+    .min(1, 'System Code is required')
+    .refine((val) => val.trim().length > 0, 'System Code cannot be only spaces')
+    .refine((val) => !/^[\s-]+$/.test(val), 'System Code cannot contain only spaces or hyphens')
+    .refine((val) => !/^[\s-]/.test(val), 'System Code cannot start with space or hyphen')
+    .describe('System Code'),
+  primaryAgentEmail: z.string().min(1, 'Primary Agent Email is required').email('Please enter a valid email').describe('Primary Agent Email'),
+
 });
 
 export const basicDetailsSchema = z.object({
@@ -32,6 +39,7 @@ export const basicDetailsSchema = z.object({
     .describe('Full Name'),
   emailId: z.string().min(1, 'Email is required').email('Please enter a valid email').describe('Email Id'),
   mobileNo: z.string().min(1, 'Phone number is required').describe('Phone No.'),
+  checkerList: z.array(z.string()).min(1, 'At least one checker is required').describe('Checker List'),
 });
 
 export const addressSchema = z.object({
@@ -56,6 +64,20 @@ export const addressSchema = z.object({
     .refine((val) => !/^[\s-]+$/.test(val), 'Branch cannot contain only spaces or hyphens')
     .refine((val) => !/^[\s-]/.test(val), 'Branch cannot start with space or hyphen')
     .describe('Branch'),
+  rmName: z
+    .string()
+    .min(1, 'RM Name is required')
+    .refine((val) => val.trim().length > 0, 'RM Name cannot be only spaces')
+    .refine((val) => !/^[\s-]+$/.test(val), 'RM Name cannot contain only spaces or hyphens')
+    .refine((val) => !/^[\s-]/.test(val), 'RM Name cannot start with space or hyphen')
+    .describe('RM Name'),
+  rmBranch: z
+    .string()
+    .min(1, 'RM Branch is required')
+    .refine((val) => val.trim().length > 0, 'RM Branch cannot be only spaces')
+    .refine((val) => !/^[\s-]+$/.test(val), 'RM Branch cannot contain only spaces or hyphens')
+    .refine((val) => !/^[\s-]/.test(val), 'RM Branch cannot start with space or hyphen')
+    .describe('RM Branch'),
 });
 
 export const roleStatusSchema = z.object({
@@ -76,7 +98,7 @@ export const roleStatusSchema = z.object({
     )
     .describe('Choose Role'),
   status: z
-    .enum(['active', 'inactive'], {
+    .enum(['active', 'inactive', 'blocked'], {
       message: 'Status is required',
     })
     .describe('Status'),

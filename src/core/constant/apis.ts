@@ -74,6 +74,9 @@ export const API = {
       CREATE: '/rem-users/create-super-checker',
       UPDATE: (id: string) => `/rem-users/update-super-checker/${id}`,
     },
+    ACTIVE_INACTIVE: {
+      DELETE: (id: string) => `/rem-users/active-inactive/${id}`,
+    },
     AGENTS: {
       LIST: `/agents`,
       CREATE: `/agents`,
