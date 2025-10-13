@@ -106,14 +106,20 @@ export const BasicInformationStep: React.FC<BasicInformationStepProps> = () => {
           })}
         </FormFieldRow>
       </div>
-
+         {/* <FormFieldRow className="mb-4" rowCols={1}>
+          <FieldWrapper>
+            {getController({
+              ...config.fields.productPurpose.creditType,
+              name: 'productPurpose.creditType',
+              control,
+              errors,
+            })}
+          </FieldWrapper>
+        </FormFieldRow> */}
       <div>
-        <SubTitle title="Credit Information" titleClassName="mb-0" />
-        <p className="text-[12px] text-gray-500 pl-1 mb-2">
-          Please input the desired line credit limit and credit days.
-        </p>
-        <FormFieldRow className="mb-4" rowCols={3}>
-          {(['monthlyCreditLimit', 'totalCreditDays'] as const).map((fieldName) => {
+        <SubTitle title="Credit Type & Credit Information" />
+        <FormFieldRow className="mb-4" rowCols={4}>
+          {(['creditType','monthlyCreditLimit', 'totalCreditDays'] as const).map((fieldName) => {
             const field = config.fields.basicInformation[fieldName];
             return (
               <FieldWrapper key={fieldName}>
@@ -127,6 +133,24 @@ export const BasicInformationStep: React.FC<BasicInformationStepProps> = () => {
             );
           })}
         </FormFieldRow>
+      </div>
+      <div>
+      <SubTitle title="Create Password" />
+      <FormFieldRow rowCols={3}>
+        {(['password', 'confirmPassword'] as const).map((fieldName) => {
+          const field = config.fields.basicInformation[fieldName];
+          return (
+            <FieldWrapper key={fieldName}>
+              {getController({
+                ...(field ?? {}),
+                name: field.name,
+                control,
+                errors,
+              })}
+            </FieldWrapper>
+          );
+        })}
+      </FormFieldRow>
       </div>
     </div>
   );

@@ -3,10 +3,10 @@ import { SuperCheckerData } from './types';
 
 const GetSuperCheckerTableColumns = ({
   handleEdit,
-  handleDelete,
+  handleInacivate,
 }: {
   handleEdit: (user: SuperCheckerData) => void;
-  handleDelete: (user: SuperCheckerData) => void;
+  handleInacivate: (user: SuperCheckerData) => void;
 }): TableColumn<SuperCheckerData>[] => {
   return [
     {
@@ -72,7 +72,7 @@ const GetSuperCheckerTableColumns = ({
     {
       id: 'action',
       header: 'Action',
-      cell: ({ row }) => <ActionButtons row={row} onEdit={handleEdit} onDelete={handleDelete} />,
+      cell: ({ row }) => <ActionButtons row={row} onEdit={handleEdit} onInactivate={handleInacivate} />,
       sortable: false,
       filterable: false,
       meta: {

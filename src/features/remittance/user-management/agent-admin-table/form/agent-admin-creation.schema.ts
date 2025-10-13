@@ -56,6 +56,15 @@ export const agentAdminCreationSchema = z.object({
     .optional()
     .or(z.literal('')),
   status: z.enum(['Active', 'Inactive'], { message: 'Please select a status' }),
+  creditType: z.record(z.enum(['CNC', 'linecredit']), z.boolean()).superRefine((val, ctx) => {
+      if (!Object.values(val || {}).some(Boolean)) {
+        ctx.addIssue({
+          code: z.ZodIssueCode.custom,
+          message: 'Please select at least one category',
+          path: [], // attach to the object itself
+        });
+      }
+    }),
   monthlyCreditLimit: z
     .union([z.string(), z.number()])
     .transform((val) => {
@@ -76,6 +85,21 @@ export const agentAdminCreationSchema = z.object({
     })
     .refine((val) => val >= 1, 'Total credit days must be at least 1')
     .refine((val) => val <= 365, 'Total credit days cannot exceed 365'),
+   
+  password: z
+    .string()
+    .min(8, 'Password must be at least 8 characters long')
+    .refine((val) => val.trim().length >= 8, 'Password cannot be only spaces')
+    .refine((val) => !/^[\s-]+$/.test(val), 'Password cannot contain only spaces or hyphens')
+    .refine((val) => !/^[\s-]/.test(val), 'Password cannot start with space or hyphen')
+    .describe('Password'),
+  confirmPassword: z
+    .string()
+    .min(8, 'Confirm password must be at least 8 characters long')
+    .refine((val) => val.trim().length >= 8, 'Confirm password cannot be only spaces')
+    .refine((val) => !/^[\s-]+$/.test(val), 'Confirm password cannot contain only spaces or hyphens')
+    .refine((val) => !/^[\s-]/.test(val), 'Confirm password cannot start with space or hyphen')
+    .describe('Confirm Password'),
 
   // Company Details
   gstClassification: z
@@ -256,15 +280,7 @@ export const agentAdminCreationSchema = z.object({
           });
         }
       }),
-    creditType: z.record(z.enum(['CNC', 'linecredit']), z.boolean()).superRefine((val, ctx) => {
-      if (!Object.values(val || {}).some(Boolean)) {
-        ctx.addIssue({
-          code: z.ZodIssueCode.custom,
-          message: 'Please select at least one product type',
-          path: [], // attach to the object itself
-        });
-      }
-    }),
+    
     purposeTypesForCard: z
       .record(
         z.enum(['personaltravel', 'businesstravel', 'education', 'immigration', 'employment', 'medical']),

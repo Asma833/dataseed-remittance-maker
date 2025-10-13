@@ -95,6 +95,19 @@ export const agentAdminCreationConfig = () => {
             Inactive: { label: 'Inactive' },
           },
         },
+          creditType: {
+          name: 'creditType',
+          label: 'Agent Category',
+          type: FieldType.Checkbox,
+          required: true,
+          options: {
+            CNC: { label: 'CNC' },
+            linecredit: { label: 'Large Agent' },
+          },
+          variant:"circle_check_filled",
+          isMulti: true,
+        },
+
         monthlyCreditLimit: {
           name: 'monthlyCreditLimit',
           label: 'Monthly Credit Limit (INR)',
@@ -108,6 +121,20 @@ export const agentAdminCreationConfig = () => {
           type: FieldType.Number,
           required: true,
           placeholder: 'Enter Total Credit Days',
+        },
+         password: {
+          name: 'password',
+          label: 'Password',
+          type: FieldType.Password,
+          required: true,
+          placeholder: 'Enter Password',
+        },
+        confirmPassword: {
+          name: 'confirmPassword',
+          label: 'Confirm Password',
+          type: FieldType.Password,
+          required: true,
+          placeholder: 'Enter Password',
         },
       },
       companyDetails: {
@@ -162,14 +189,9 @@ export const agentAdminCreationConfig = () => {
         gstState: {
           name: 'gstState',
           label: 'State',
-          type: FieldType.Select,
+          type: FieldType.Text,
           required: true,
-          options: [
-            { value: 'maharashtra', label: 'Maharashtra' },
-            { value: 'karnataka', label: 'Karnataka' },
-            // Add more states as needed
-          ],
-          placeholder: 'Select State',
+          placeholder: 'Enter State Name',
         },
         pinCode: {
           name: 'pinCode',
@@ -181,13 +203,9 @@ export const agentAdminCreationConfig = () => {
         gstBranch: {
           name: 'gstBranch',
           label: 'Branch',
-          type: FieldType.Select,
+          type: FieldType.Text,
           required: true,
-          options: [
-            { value: 'branch1', label: 'Branch 1' },
-            { value: 'branch2', label: 'Branch 2' },
-          ],
-          placeholder: 'Select Branch',
+          placeholder: 'Enter Branch Name',
         },
       },
       financeDetails: {
@@ -337,17 +355,7 @@ export const agentAdminCreationConfig = () => {
           },
           isMulti: true,
         },
-        creditType: {
-          name: 'productPurpose.creditType',
-          label: 'Credit Type',
-          type: FieldType.Checkbox,
-          required: true,
-          options: {
-            CNC: { label: 'CNC' },
-            linecredit: { label: 'Line Credit' },
-          },
-          isMulti: true,
-        },
+     
         purposeTypesForCard: {
           name: 'productPurpose.purposeTypesForCard',
           label: 'Please Select Purpose Types for Card',

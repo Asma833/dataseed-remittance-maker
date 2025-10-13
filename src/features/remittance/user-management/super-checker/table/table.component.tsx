@@ -56,13 +56,11 @@ const SuperCheckerTable = () => {
     navigate('/admin/users/super-checker-creation', { state: { superChecker } });
   };
 
-  const handleDelete = async (superChecker: SuperCheckerData) => {
-    if (window.confirm(`Are you sure you want to delete ${superChecker.full_name}?`)) {
+  const handleInacivate = async (superChecker: SuperCheckerData) => {
+    if (`${superChecker.full_name}?`) {
       try {
         await deleteUser(superChecker.id);
-        // showAlert('Super Checker deleted successfully');
       } catch (error) {
-        // showAlert('Failed to delete Super Checker', 'error');
       }
     }
   };
@@ -85,7 +83,7 @@ const SuperCheckerTable = () => {
   // Define columns matching the screenshot
   const columns = GetSuperCheckerTableColumns({
     handleEdit,
-    handleDelete,
+    handleInacivate,
   });
   return (
     <div className="space-y-4 w-full">

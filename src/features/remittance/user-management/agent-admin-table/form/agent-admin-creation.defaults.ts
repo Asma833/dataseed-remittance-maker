@@ -28,6 +28,9 @@ export const agentAdminCreationDefaults: z.input<typeof agentAdminCreationSchema
   financeSpocName: '',
   financeSpocEmail: '',
   financeSpocPhoneNo: '',
+  creditType: { CNC: true, linecredit: false },
+  password:'',
+  confirmPassword:'',
   bankAccounts: [
     {
       bankName: 'Bank of Example',
@@ -45,7 +48,6 @@ export const agentAdminCreationDefaults: z.input<typeof agentAdminCreationSchema
     esignDocumentDownload: 'No',
     vkycDocumentDownload: 'No',
     chooseProductType: { card: false, currency: false, remittance: true, referral: false },
-    creditType: { CNC: true, linecredit: false },
     purposeTypesForCard: {
       personaltravel: true,
       businesstravel: false,
@@ -105,11 +107,11 @@ export const agentAdminCreationDefaults: z.input<typeof agentAdminCreationSchema
       rate: 49,
     },
   },
-  agreementValid: '2025-10-03T18:30:00.000Z',
-  rbiLicenseCategory: 'ADI-VD',
-  rbiLicenseValidity: '2025-10-03T18:30:00.000Z',
-  noOfBranches: '10',
-  extensionMonth: '1',
+  agreementValid: '',
+  rbiLicenseCategory: '',
+  rbiLicenseValidity: '',
+  noOfBranches: '',
+  extensionMonth: '',
   agreementCopy: '',
   rbiLicenseCopy: '',
 };

@@ -130,6 +130,7 @@ export interface ActionButtonsProps<T = any> {
   onEdit?: (row: T) => void;
   onDelete?: (row: T) => void;
   onView?: (row: T) => void;
+  onInactivate?:(row: T) => void;
 }
 
 // Sample data interface for the user management table

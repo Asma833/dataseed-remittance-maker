@@ -65,16 +65,7 @@ export const ProductPurposeStep: React.FC = () => {
             })}
           </FieldWrapper>
         </FormFieldRow>
-        <FormFieldRow className="mb-4" rowCols={1}>
-          <FieldWrapper>
-            {getController({
-              ...config.fields.productPurpose.creditType,
-              name: 'productPurpose.creditType',
-              control,
-              errors,
-            })}
-          </FieldWrapper>
-        </FormFieldRow>
+        
         <FormFieldRow className="bg-gray-100 p-2 mb-2 rounded-lg" rowCols={1}>
           <FieldWrapper>
             {getController({
