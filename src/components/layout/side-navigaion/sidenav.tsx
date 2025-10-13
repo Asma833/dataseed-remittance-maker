@@ -140,12 +140,12 @@ const Sidebar: React.FC<SidebarProps> = ({ navItems, collapsed, setCollapsed }) 
           <img
             src={PoweredBy}
             alt="Powered by"
-            className={cn('pointer-events-none select-none opacity-90', collapsed ? 'h-3' : 'h-3')}
+            className={cn('pointer-events-none select-none opacity-90', collapsed ? 'h-1' : 'h-2')}
           />
           <img
             src={DataSeedLogo}
             alt="DataSeed"
-            className={cn('pointer-events-none select-none opacity-95', collapsed ? 'h-6' : 'h-8')}
+            className={cn('pointer-events-none select-none opacity-95', collapsed ? 'h-4' : 'h-6')}
           />
         </div>
       </div>

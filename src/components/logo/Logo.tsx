@@ -7,7 +7,7 @@ type Props = {
   className?: string;
 };
 
-const Logo = ({ width = 80, height = 120, className }: Props) => {
+const Logo = ({ width = 120, height = 80, className }: Props) => {
   return <Image src={logoUrl} alt="Logo" width={width} height={height} loading="eager" className={className || ''} />;
 };
 
