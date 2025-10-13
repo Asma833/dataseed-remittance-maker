@@ -25,6 +25,12 @@ const transformFormData = (data: AgentAdminFormType) => {
       status: data.status === 'Active' ? 'ACTIVE' : 'INACTIVE',
       monthlyCreditLimit: Number(data.monthlyCreditLimit),
       totalCreditDays: Number(data.totalCreditDays),
+        creditType: data?.creditType
+        ? Object.keys(data.creditType).filter(
+            (key) => data.creditType[key as keyof typeof data.creditType]
+          )
+        : [],
+        password:data?.password
     },
     companyDetails: {
       gstClassification: data.gstClassification,
@@ -64,11 +70,7 @@ const transformFormData = (data: AgentAdminFormType) => {
             (key) => data.productPurpose.chooseProductType[key as keyof typeof data.productPurpose.chooseProductType]
           )
         : [],
-      creditType: data.productPurpose?.creditType
-        ? Object.keys(data.productPurpose.creditType).filter(
-            (key) => data.productPurpose.creditType[key as keyof typeof data.productPurpose.creditType]
-          )
-        : [],
+    
       purposeTypesForCard: data.productPurpose?.purposeTypesForCard
         ? Object.keys(data.productPurpose.purposeTypesForCard).filter(
             (key) =>

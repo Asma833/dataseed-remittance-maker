@@ -68,6 +68,6 @@ export function ActionButtons<T>({ row, onEdit, onDelete, onView,onInactivate }:
         </TooltipButton>
       )}
     </div>
-  );
+  )
 }
 

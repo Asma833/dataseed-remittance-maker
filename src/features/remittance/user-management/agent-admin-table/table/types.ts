@@ -13,6 +13,8 @@ export interface AgentAdminData {
   status: string | null;
   monthly_credit_limit: string | null;
   total_credit_days: number | null;
+  creditType: string[];
+  password:string | null;
   company_details: {
     gstCity: string;
     pinCode: string;
@@ -38,7 +40,6 @@ export interface AgentAdminData {
     rbiLicenseValidity: string;
   } | null;
   product_purpose: {
-    creditType: string[];
     addOnMargin: boolean;
     chooseProductType: string[];
     purposeTypesForCard: string[];
@@ -105,6 +106,8 @@ export interface CreateAgentAdminRequest {
     status: string;
     monthlyCreditLimit: number;
     totalCreditDays: number;
+    creditType:string[],
+    password:string
   };
   companyDetails: {
     gstClassification: string;
@@ -140,7 +143,6 @@ export interface CreateAgentAdminRequest {
     esignDocumentDownload: boolean;
     vkycDocumentDownload: boolean;
     chooseProductType: string[];
-    creditType: string[];
     purposeTypesForCard: string[];
   };
   rateMargin: {
