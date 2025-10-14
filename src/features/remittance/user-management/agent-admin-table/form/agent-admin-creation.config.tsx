@@ -93,6 +93,7 @@ export const agentAdminCreationConfig = () => {
           options: {
             Active: { label: 'Active', checked: true },
             Inactive: { label: 'Inactive' },
+            Blocked: { label: 'Blocked' },
           },
         },
           creditType: {

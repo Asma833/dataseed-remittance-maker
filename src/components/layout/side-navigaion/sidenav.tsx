@@ -3,10 +3,11 @@ import { useNavigate, useLocation, NavLink } from 'react-router-dom';
 import { ChevronDown, ChevronRight } from 'lucide-react';
 import { cn } from '@/utils/cn';
 import DataSeedLogo from '@/assets/images/dataseed-white-logo.svg';
-import PoweredBy from '@/assets/images/powered-by.svg';
+// import PoweredBy from '@/assets/images/powered-by.svg';
 import { NavigationItem } from '@/core/constant/manage-sidenav-options';
 import themeConfig from '@/core/configs/theme-config';
 import SidebarToggle from '@/components/common/sidebar-toggle';
+import PoweredBy from '../footer/powered-by';
 
 interface SidebarProps {
   navItems: NavigationItem[];
@@ -136,17 +137,10 @@ const Sidebar: React.FC<SidebarProps> = ({ navItems, collapsed, setCollapsed }) 
         </ul>
       </nav>
       <div className="mt-auto w-full px-3 pb-4">
-        <div className={cn('w-full flex items-center justify-center', 'flex-col gap-1')}>
-          <img
-            src={PoweredBy}
-            alt="Powered by"
-            className={cn('pointer-events-none select-none opacity-90', collapsed ? 'h-1' : 'h-2')}
-          />
-          <img
-            src={DataSeedLogo}
-            alt="DataSeed"
-            className={cn('pointer-events-none select-none opacity-95', collapsed ? 'h-4' : 'h-6')}
-          />
+        <div className={cn('w-full flex items-center justify-center', 'flex-col gap-1 scale-75')}>
+           <a href="https://dataseedtech.com/" target="_blank">
+          <PoweredBy/>
+          </a>
         </div>
       </div>
     </aside>
