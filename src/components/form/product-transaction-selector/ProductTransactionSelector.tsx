@@ -38,12 +38,12 @@ export const ProductTransactionSelector = ({
 
   /** spacing rule applied to BOTH the middle bubble AND the right-column error */
   const getRowMt = (p: 'card' | 'currency', idx: number) => {
-    if (bothSelected) return idx === 0 ? 'mt-3' : 'mt-[-35px]';
+    if (bothSelected) return idx === 0 ? 'mt-3' : 'mt-[-50px]';
     return p === 'currency' ? 'mt-10' : 'mt-3';
   };
   /** spacing rule applied to BOTH the middle bubble AND the right-column error */
   const getRowError = (p: 'card' | 'currency', idx: number) => {
-    if (bothSelected) return idx === 0 ? 'mt-3' : 'mt-[-20px]';
+    if (bothSelected) return idx === 0 ? 'mt-3' : 'mt-[-40px]';
     return p === 'currency' ? 'mt-10' : 'mt-3';
   };
 
@@ -56,7 +56,7 @@ export const ProductTransactionSelector = ({
 
   return (
     // 3 columns: LEFT product type | MIDDLE bubbles | RIGHT external errors
-    <div className="grid md:grid-cols-[30%_55%_auto] lg:grid-cols-[15%_35%_auto] md:gap-6">
+    <div className="grid md:grid-cols-[30%_55%_auto] lg:grid-cols-[15%_40%_auto] md:gap-6">
       {/* LEFT: Product Type (multi-select) */}
       <FieldWrapper>
         {getController({
@@ -65,6 +65,7 @@ export const ProductTransactionSelector = ({
           type: FieldType.Checkbox,
           required: true,
           options: productOptions,
+          orientation:"vertical",
           variant: 'circle_check_filled',
           isMulti: true,
           control,
@@ -110,7 +111,7 @@ export const ProductTransactionSelector = ({
                 )}
               >
                 <div className="text-sm mx-2 leading-[12px]">
-                  Choose Transaction Type <span className="text-destructive">*</span>
+                  Choose Transaction Type <span className="text-red-700">*</span>
                 </div>
                 <div className="flex items-center leading-none">
                   {getController({

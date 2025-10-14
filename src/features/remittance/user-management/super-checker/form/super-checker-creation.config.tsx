@@ -52,6 +52,7 @@ export const superCheckerCreationConfig = (agents: Agent[] = []) => {
             remittance: { label: 'Remittance' },
             referral: { label: 'Referral' },
           },
+          orientation:"vertical",
           variant: 'circle_check_filled',
           isMulti: true,
         },
