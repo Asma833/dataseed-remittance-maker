@@ -361,7 +361,6 @@ export const agentAdminCreationConfig = () => {
           name: 'productPurpose.purposeTypesForCard',
           label: 'Please Select Purpose Types for Card',
           type: FieldType.Checkbox,
-          required: true,
           options: {
             personaltravel: { label: 'Personal Travel' },
             businesstravel: { label: 'Business Travel' },

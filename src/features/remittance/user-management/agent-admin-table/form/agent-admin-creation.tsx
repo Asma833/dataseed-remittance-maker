@@ -204,7 +204,7 @@ const AgentAdminCreation: React.FC = () => {
               >
                 Back
               </Button>
-              {currentStep === 5 && (
+              {currentStep === 6 && (
                 <>
                   <Button
                     type="submit"

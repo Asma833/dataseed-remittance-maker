@@ -1,5 +1,5 @@
 import React from 'react';
-import { useFormContext } from 'react-hook-form';
+import { useFormContext, useWatch } from 'react-hook-form';
 import { agentAdminCreationConfig } from '../agent-admin-creation.config';
 import { getController } from '@/components/form/utils/get-controller';
 import FieldWrapper from '@/components/form/wrapper/field-wrapper';
@@ -12,6 +12,13 @@ export const ProductPurposeStep: React.FC = () => {
     formState: { errors },
   } = useFormContext();
   const config = agentAdminCreationConfig();
+
+  const chooseProductType = useWatch({
+    control,
+    name: 'productPurpose.chooseProductType',
+  });
+
+  const isCardSelected = chooseProductType?.card === true;
 
   return (
     <div className="space-y-6">
@@ -66,17 +73,20 @@ export const ProductPurposeStep: React.FC = () => {
           </FieldWrapper>
         </FormFieldRow>
         
-        <FormFieldRow className="bg-gray-100 p-2 py-4 mb-2 rounded-lg" rowCols={1}>
-          <FieldWrapper>
-            {getController({
-              ...config.fields.productPurpose.purposeTypesForCard,
-              name: 'productPurpose.purposeTypesForCard',
-              control,
-              variant: 'pill',
-              errors,
-            })}
-          </FieldWrapper>
-        </FormFieldRow>
+        {isCardSelected && (
+          <FormFieldRow className="bg-gray-100 p-2 py-4 mb-2 rounded-lg" rowCols={1}>
+            <FieldWrapper>
+              {getController({
+                ...config.fields.productPurpose.purposeTypesForCard,
+                name: 'productPurpose.purposeTypesForCard',
+                control,
+                variant: 'pill',
+                required:true,
+                errors,
+              })}
+            </FieldWrapper>
+          </FormFieldRow>
+        )}
       </div>
     </div>
   );
