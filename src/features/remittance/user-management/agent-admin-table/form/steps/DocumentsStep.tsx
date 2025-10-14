@@ -140,16 +140,14 @@ export const DocumentsStep: React.FC = () => {
 
   return (
     <div className="space-y-6">
-      {/* ================= Agreement Details ================= */}
+      {/* Agreement Details*/}
       <SubTitle title="Agreement Details" />
       <div className="bg-gray-100 p-2 pt-5 mb-2 rounded-lg">
-        {/* Hidden file input controlled by RHF (uncontrolled value) */}
         <input
           id="doc__agreement_file"
           type="file"
           accept="image/*,.pdf"
           className="hidden"
-          // do NOT give a value prop to file inputs
           onChange={(e) => onFileChange('agreement', e.target.files)}
         />
 
@@ -157,30 +155,24 @@ export const DocumentsStep: React.FC = () => {
           <FieldWrapper>
             <div className="flex flex-wrap items-center gap-3">
               <Label className="min-w-[120px]">Agreement Copy</Label>
-
-              {/* Browse */}
-              <Button type="button" variant="outline" className="w-28" onClick={() => handleBrowse('agreement')}>
+              <Button type="button" variant="outline" className="w-30" onClick={() => handleBrowse('agreement')}>
                 Choose
               </Button>
-
-              {/* View (local file) */}
               <Button
                 type="button"
                 variant={canViewAgreement ? 'default' : 'outline'}
-                className="w-24"
+                className="w-30"
                 disabled={!canViewAgreement}
                 onClick={() => handleView(agreement, 'Agreement Copy')}
               >
                 <Eye className="h-4 w-4 mr-2" />
                 View
               </Button>
-
-              {/* Upload */}
               <Button
                 type="button"
                 onClick={() => handleUpload('agreement')}
                 disabled={!canViewAgreement || isAgreementUploaded || isUploading === 'agreement'}
-                className="w-32"
+                className="w-30"
               >
                 <Upload className="h-4 w-4 mr-2" />
                 {uploadBtnText('agreement')}
@@ -202,10 +194,9 @@ export const DocumentsStep: React.FC = () => {
         </FormFieldRow>
       </div>
 
-      {/* ================= RBI Details ================= */}
+      {/* RBI Details */}
       <SubTitle title="RBI Details" />
       <div className="bg-gray-100 p-2 pt-5 mb-2 rounded-lg">
-        {/* Hidden file input for RBI */}
         <input
           id="doc__rbi_file"
           type="file"
@@ -218,30 +209,24 @@ export const DocumentsStep: React.FC = () => {
           <FieldWrapper>
             <div className="flex flex-wrap items-center gap-3">
               <Label className="min-w-[120px]">RBI License Copy</Label>
-
-              {/* Browse */}
-              <Button type="button" variant="outline" className="w-28" onClick={() => handleBrowse('rbi')}>
+              <Button type="button" variant="outline" className="w-30" onClick={() => handleBrowse('rbi')}>
                 Choose
               </Button>
-
-              {/* View (local file) */}
               <Button
                 type="button"
                 variant={canViewRbi ? 'default' : 'outline'}
-                className="w-24"
+                className="w-30"
                 disabled={!canViewRbi}
                 onClick={() => handleView(rbi, 'RBI License Copy')}
               >
                 <Eye className="h-4 w-4 mr-2" />
                 View
               </Button>
-
-              {/* Upload */}
               <Button
                 type="button"
                 onClick={() => handleUpload('rbi')}
                 disabled={!canViewRbi || isRbiUploaded || isUploading === 'rbi'}
-                className="w-32"
+                className="w-30"
               >
                 <Upload className="h-4 w-4 mr-2" />
                 {uploadBtnText('rbi')}
@@ -252,7 +237,7 @@ export const DocumentsStep: React.FC = () => {
 
         {/* RBI meta fields */}
         <FormFieldRow className="mb-4">
-          {(['rbiLicenseCategory', 'rbiLicenseValidity', 'noOfBranches', 'extensionMonth'] as const).map(
+          {(['rbiLicenseCategory', 'rbiLicenseValidity', 'noOfBranches'] as const).map(
             (fieldName) => {
               const field = config.fields.documents?.[fieldName];
               return (
@@ -268,9 +253,27 @@ export const DocumentsStep: React.FC = () => {
             }
           )}
         </FormFieldRow>
+        <FormFieldRow className="mb-4">
+          {(['extensionMonth'] as const).map(
+            (fieldName) => {
+              const field = config.fields.documents?.[fieldName];
+              return (
+                <FieldWrapper key={fieldName}>
+                  {getController({
+                    ...(typeof field === 'object' && field !== null ? field : {}),
+                    name: fieldName,
+                    control,
+                    errors,
+                  })}
+                </FieldWrapper>
+              );
+            }
+          )}
+          <div className="flex items-center pt-6">
+            <div className='justify-center bg-red-100 border border-red-500 px-3 py-1 rounded-md font-medium'>{'0/3'}</div>
+          </div>
+        </FormFieldRow>
       </div>
-
-      {/* Preview modal (image/pdf shown by browser) */}
       <ImageViewModal isOpen={isModalOpen} onClose={closeModal} imageSrc={modalImageSrc} title={modalTitle} />
     </div>
   );
