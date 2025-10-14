@@ -22,7 +22,7 @@ export const ProductPurposeStep: React.FC = () => {
             (fieldName) => {
               const field = config.fields.productPurpose[fieldName];
               return (
-                <FieldWrapper key={fieldName} className="bg-gray-100 p-2 pt-3 mb-2 rounded-lg">
+                <FieldWrapper key={fieldName} className="bg-gray-100 p-2 py-4 mb-2 rounded-lg">
                   {getController({
                     ...(typeof field === 'object' && field !== null ? field : {}),
                     name: `productPurpose.${fieldName}`,
@@ -39,7 +39,7 @@ export const ProductPurposeStep: React.FC = () => {
           {(['esignDocumentDownload', 'vkycDocumentDownload'] as const).map((fieldName) => {
             const field = config.fields.productPurpose[fieldName];
             return (
-              <FieldWrapper key={fieldName} className="bg-gray-100 p-2 pt-3 mb-2 rounded-lg">
+              <FieldWrapper key={fieldName} className="bg-gray-100 p-2 py-4 mb-2 rounded-lg">
                 {getController({
                   ...(typeof field === 'object' && field !== null ? field : {}),
                   name: `productPurpose.${fieldName}`,
@@ -66,7 +66,7 @@ export const ProductPurposeStep: React.FC = () => {
           </FieldWrapper>
         </FormFieldRow>
         
-        <FormFieldRow className="bg-gray-100 p-2 mb-2 rounded-lg" rowCols={1}>
+        <FormFieldRow className="bg-gray-100 p-2 py-4 mb-2 rounded-lg" rowCols={1}>
           <FieldWrapper>
             {getController({
               ...config.fields.productPurpose.purposeTypesForCard,

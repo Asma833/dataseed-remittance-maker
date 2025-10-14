@@ -13,12 +13,53 @@ const AgentAdminTable = () => {
   const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
 
+  
   // Navigate to agent admin creation page
   const handleAddAdminAgents = () => {
     navigate(`/admin${ROUTES.ADMIN.AGENT_ADMIN_CREATION}`);
   };
 
   const { data, isLoading: userLoading, error: userError } = useGetAgentAdmins();
+// Table configuration
+  const config = {
+    ...staticConfig,
+    search: {
+      ...staticConfig.search,
+      placeholder: 'Search...',
+      enabled: true,
+      searchMode: 'static' as const,
+    },
+    filters: {
+      ...staticConfig.filters,
+      enabled: true,
+      filterMode: 'static' as const,
+      columnFilters: true,
+      globalFilter: true,
+      filter: {
+          roleFilter: {
+          enabled: true,
+          options: [
+            { value: 'ADI', label: 'ADI' },
+            { value: 'ADII', label: 'ADII' },
+            { value: 'FFMC', label: 'FFMC' },
+            { value: 'Referral', label: 'Referral' },
+          ],
+          columnId: 'agent_type',
+          columnName: 'Agent Type',
+        },
+          statusFilter: {
+          enabled: true,
+          options: [
+            { value: 'ACTIVE', label: 'Active' },
+            { value: 'INACTIVE', label: 'Inactive' },
+          ],
+          columnId: 'status',
+          columnName:'Status'
+        },
+      },
+    },
+    loading: userLoading,
+  };
 
   const handleEdit = (user: AgentAdminData) => {
     navigate(`/admin${ROUTES.ADMIN.AGENT_ADMIN_CREATION}`, { state: { editData: user } });
@@ -72,7 +113,8 @@ const AgentAdminTable = () => {
         columns={columns}
         data={data ?? []}
         config={{
-          ...staticConfig,
+          ...config,
+          export: { enabled: true, fileName: 'admin-agent.csv', includeHeaders: true },
         }}
         actions={tableActions}
       />
