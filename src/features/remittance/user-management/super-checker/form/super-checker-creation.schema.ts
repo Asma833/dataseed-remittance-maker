@@ -51,7 +51,7 @@ export const superCheckerSchema = z
         .optional(),
 
       transactionTypeMap: z
-        .record(z.string(), z.enum(['buy', 'sell']))
+        .record(z.string(), z.enum(['buy', 'sell','both']))
         .optional()
         .refine(
           (val) => {
