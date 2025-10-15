@@ -138,9 +138,7 @@ const Sidebar: React.FC<SidebarProps> = ({ navItems, collapsed, setCollapsed }) 
       </nav>
       <div className="mt-auto w-full px-3 pb-4">
         <div className={cn('w-full flex items-center justify-center', 'flex-col gap-1 scale-75')}>
-           <a href="https://dataseedtech.com/" target="_blank">
           <PoweredBy/>
-          </a>
         </div>
       </div>
     </aside>
