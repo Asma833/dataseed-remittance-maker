@@ -19,10 +19,10 @@ export const superCheckerSchema = z
 
       phoneNumber: z
         .string()
-        .min(1, 'Phone number is required')
         .regex(/^[\+]?[1-9][\d]{0,15}$/, 'Please enter a valid phone number')
         .min(10, 'Phone number must be at least 10 digits')
-        .max(15, 'Phone number must be less than 15 digits'),
+        .max(15, 'Phone number must be less than 15 digits')
+        .optional(),
       productType: z
         .record(z.enum(['card', 'currency', 'remittance', 'referral']), z.boolean())
         .superRefine((val, ctx) => {
@@ -36,7 +36,7 @@ export const superCheckerSchema = z
         }),
       status: z.enum(['active', 'inactive'], { message: 'Please select a status' }),
 
-      agents: z.array(z.string()).optional(),
+      agents: z.array(z.string()).min(1, 'Agent is required').optional(),
 
       password: z
         .string()

@@ -65,17 +65,6 @@ const GetBranchAgentTableColumns = ({
       },
     },
     {
-      id: 'type',
-      header: 'Type',
-      accessorKey: 'type',
-      sortable: true,
-      filterable: true,
-      meta: {
-        headerAlign: 'left',
-        cellAlign: 'left',
-      },
-    },
-    {
       id: 'action',
       header: 'Action',
       cell: ({ row }) => <ActionButtons row={row} onEdit={handleEdit} onInactivate={handleInactivate} />,

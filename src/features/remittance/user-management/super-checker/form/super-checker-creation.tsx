@@ -88,7 +88,7 @@ export const CreateSuperChecker = () => {
       // For update operation - password is optional
       const updateRequestData: UpdateSuperCheckerRequest = {
         full_name: formdata.checkerDetails.fullName,
-        phone_number: formdata.checkerDetails.phoneNumber,
+        phone_number: formdata.checkerDetails.phoneNumber || '',
         agent_ids: formdata.checkerDetails.agents || [],
         product_types,
         password: formdata.checkerDetails.password,
@@ -101,7 +101,7 @@ export const CreateSuperChecker = () => {
       const createRequestData: CreateSuperCheckerRequest = {
         full_name: formdata.checkerDetails.fullName,
         email: formdata.checkerDetails.email,
-        phone_number: formdata.checkerDetails.phoneNumber,
+        phone_number: formdata.checkerDetails.phoneNumber || '',
         agent_ids: formdata.checkerDetails.agents || [],
         product_types,
         password: formdata.checkerDetails.password || '', // Ensure password is always a string for create

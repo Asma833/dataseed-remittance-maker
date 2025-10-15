@@ -13,7 +13,7 @@ export interface CreateSuperCheckerRequest {
   email?: string;
   password: string;
   product_types: string[];
-  phone_number: string;
+  phone_number?: string;
   agent_ids: string[];
   is_active?: boolean;
 }
