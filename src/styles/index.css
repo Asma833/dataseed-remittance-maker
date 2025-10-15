@@ -106,7 +106,6 @@
     border-color: var(--color-border);
   }
   body {
-    background-color: var(--color-background);
     color: var(--color-foreground);
     overflow: hidden;
     font-family: 'Roboto', 'Inter', sans-serif !important;
