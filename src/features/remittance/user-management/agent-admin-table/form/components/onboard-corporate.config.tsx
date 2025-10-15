@@ -1,6 +1,6 @@
 import { FieldType } from '@/types/enums';
 
-export const onboardCorporateConfig = () => {
+export const onboardCorporateConfig = (entityType?: string) => {
   return {
     fields: {
       entityName: {
@@ -39,12 +39,14 @@ export const onboardCorporateConfig = () => {
         name: 'cin',
         label: 'CIN',
         type: FieldType.Text,
+        required: entityType === 'Corporate',
         placeholder: 'Enter CIN (e.g., U12345MH2020PTC126)',
       },
       address: {
         name: 'address',
         label: 'Address',
         type: FieldType.TextArea,
+        required: entityType === 'Corporate',
         placeholder: 'Enter Complete Address',
       },
     },

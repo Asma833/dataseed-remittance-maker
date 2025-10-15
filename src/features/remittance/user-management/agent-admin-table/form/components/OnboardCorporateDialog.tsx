@@ -27,7 +27,16 @@ export const OnboardCorporateDialog: React.FC<OnboardCorporateDialogProps> = ({
     mode: 'onChange',
   });
 
-  const { reset } = form;
+  const { reset, watch, trigger, clearErrors } = form;
+  const entityType = watch('entityType');
+
+  // Clear errors when entityType changes
+  useEffect(() => {
+    if (entityType) {
+      clearErrors(['cin', 'address']);
+      trigger(['cin', 'address']);
+    }
+  }, [entityType, clearErrors, trigger]);
 
   // Hooks for API operations
   const createCorporateMutation = useCreateAgentCorporate();
@@ -48,8 +57,11 @@ export const OnboardCorporateDialog: React.FC<OnboardCorporateDialogProps> = ({
           address: '',
         });
       }
+      // Clear any stale errors and trigger validation
+      clearErrors();
+      setTimeout(() => trigger(), 100);
     }
-  }, [isOpen, editData, reset]);
+  }, [isOpen, editData, reset, trigger, clearErrors]);
 
   const handleFormSubmit = (data: OnboardCorporateFormData) => {
     const payload = {
@@ -72,7 +84,7 @@ export const OnboardCorporateDialog: React.FC<OnboardCorporateDialogProps> = ({
         },
         {
           onSuccess: () => {
-            toast('Corporate updated successfully');
+            toast.success('Corporate updated successfully');
             onClose();
           },
         }
@@ -81,7 +93,7 @@ export const OnboardCorporateDialog: React.FC<OnboardCorporateDialogProps> = ({
       // Create new corporate
       createCorporateMutation.mutate(payload, {
         onSuccess: () => {
-          toast('Corporate created successfully');
+          toast.success('Corporate created successfully');
           reset();
         },
       });
@@ -95,9 +107,10 @@ export const OnboardCorporateDialog: React.FC<OnboardCorporateDialogProps> = ({
       title={editData ? 'Update Corporate' : 'Create Corporate'}
       subtitle=""
       form={form}
-      config={onboardCorporateConfig()}
+      config={onboardCorporateConfig(entityType)}
       onSubmit={handleFormSubmit}
       submitButtonText={editData ? 'Update' : 'Create'}
     />
   );
 };
+

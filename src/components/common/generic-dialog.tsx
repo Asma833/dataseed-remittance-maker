@@ -33,11 +33,10 @@ export function GenericDialog({
   onSubmit,
   submitButtonText = 'Submit',
   cancelButtonText = 'Cancel',
-  maxWidth = 'sm:max-w-[600px]',
+  maxWidth = 'sm:max-w-[650px]',
   editData,
   onEdit,
 }: GenericDialogProps) {
-  const { handleSubmit } = form;
 
   const handleFormSubmit = (data: any) => {
     try {

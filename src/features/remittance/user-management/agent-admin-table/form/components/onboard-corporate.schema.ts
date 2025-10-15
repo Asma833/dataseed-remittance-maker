@@ -1,7 +1,8 @@
 import { z } from 'zod';
 
 // Zod schema for onboard corporate dialog
-export const onboardCorporateSchema = z.object({
+export const onboardCorporateSchema = z
+  .object({
   entityName: z
     .string()
     .min(1, 'Entity Name is required')
@@ -34,6 +35,25 @@ export const onboardCorporateSchema = z.object({
     .refine((val) => !val || val.trim().length === 0 || /^(?!\s)(?!.*\s$)/.test(val), {
       message: 'Cannot start or end with spaces',
     }),
-});
+  })
+  .superRefine((data, ctx) => {
+    if (data.entityType === 'Corporate') {
+      if (!data.cin || data.cin.trim().length === 0) {
+        ctx.addIssue({
+          code: z.ZodIssueCode.custom,
+          message: 'CIN is required for (Corporate entity)',
+          path: ['cin'],
+        });
+      }
+      if (!data.address || data.address.trim().length === 0) {
+        ctx.addIssue({
+          code: z.ZodIssueCode.custom,
+          message: 'Address is required for (Corporate entity)',
+          path: ['address'],
+        });
+      }
+    }
+  });
 
 export type OnboardCorporateFormData = z.infer<typeof onboardCorporateSchema>;
+
