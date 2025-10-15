@@ -168,7 +168,8 @@ export const CreateBranchAgent = () => {
         agent_eon_code: data.agentDetails.vendorDetails.agentEonCode,
         system_code: data.agentDetails.vendorDetails.systemCode,
         primary_agent_email: data.agentDetails.vendorDetails.primaryAgentEmail,
-        checker_list: data.agentDetails.basicDetails.checkerList,
+        checker_list: [""],
+        password: data.agentDetails.security.password,
       };
       updateBranchAgent(payload);
     } else {

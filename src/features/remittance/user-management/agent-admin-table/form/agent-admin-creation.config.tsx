@@ -348,6 +348,8 @@ export const agentAdminCreationConfig = () => {
           name: 'productPurpose.chooseProductType',
           label: 'Choose Product Type',
           type: FieldType.Checkbox,
+          required:true,
+          variant:'circle_check_filled',
           options: {
             card: { label: 'Card' },
             currency: { label: 'Currency' },
@@ -359,7 +361,7 @@ export const agentAdminCreationConfig = () => {
      
         purposeTypesForCard: {
           name: 'productPurpose.purposeTypesForCard',
-          label: 'Please Select Purpose Types for Card',
+          label: 'Select Purpose Types for Card',
           type: FieldType.Checkbox,
           options: {
             personaltravel: { label: 'Personal Travel' },

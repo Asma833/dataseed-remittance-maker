@@ -23,7 +23,7 @@ export const ProductPurposeStep: React.FC = () => {
   return (
     <div className="space-y-6">
       <div>
-        <SubTitle title="Document Downloads" />
+        <SubTitle title="Additional Rights" />
         <FormFieldRow className="mb-4" rowCols={4}>
           {(['addOnForexMargin', 'addOnNostroMargin', 'addOnTTMargin', 'addOnOtherChargersMargin'] as const).map(
             (fieldName) => {
@@ -61,7 +61,7 @@ export const ProductPurposeStep: React.FC = () => {
       </div>
 
       <div>
-        <SubTitle title="Product and Credit Types" />
+        <SubTitle title="Product & Purpose Type" />
         <FormFieldRow className="mb-4" rowCols={1}>
           <FieldWrapper>
             {getController({

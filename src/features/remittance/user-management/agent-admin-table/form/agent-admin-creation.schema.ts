@@ -21,7 +21,7 @@ export const agentAdminCreationSchema = z.object({
     .regex(/^(?!\s)(?!-)/, 'Cannot start with space or hyphen'),
   agent_name: z
     .string()
-    .min(1, 'Full name is required')
+    .min(1, 'Agent name is required')
     .regex(/^(?!\s)(?!.*\s$)/, 'Cannot start or end with spaces'),
   emailId: z.string().min(1, 'Email is required').email('Please enter a valid email address'),
   phoneNo: z
@@ -52,7 +52,6 @@ export const agentAdminCreationSchema = z.object({
     .or(z.literal('')),
   systemCode: z
     .string()
-    .regex(/^(?!\s)(?!.*\s$)/, 'Cannot start or end with spaces')
     .optional()
     .or(z.literal('')),
   status: z.enum(['Active', 'Inactive'], { message: 'Please select a status' }),
@@ -109,7 +108,7 @@ export const agentAdminCreationSchema = z.object({
   gstNumber: z
     .string()
     .min(1, 'GST Number is required')
-    .regex(/^(?!\s)(?!.*\s$)/, 'Cannot start or end with spaces'),
+    .regex(/^(?!\s)(?!-)/, 'Cannot start with space or hyphen'),
   gstPhoneNo: z
     .string()
     .regex(/^(?!\s)(?!.*\s$)/, 'Cannot start or end with spaces')
