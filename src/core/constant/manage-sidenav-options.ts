@@ -37,25 +37,25 @@ export const SideNavOptions = {
         // }
       ],
     },
-    // {
-    //   title: 'Master Data',
-    //   path: getNavPath('ADMIN', ROUTES.ADMIN.MASTER.PURPOSE_MASTER),
-    //   icon: master,
-    //   subMenus: [
-    //      {
-    //       title: 'Rate Master',
-    //       path: getNavPath('ADMIN', ROUTES.ADMIN.MASTER.RATE_MASTER.RATE_MARGIN),
-    //     },
-    //     {
-    //       title: 'Purpose Master',
-    //       path: getNavPath('ADMIN', ROUTES.ADMIN.MASTER.PURPOSE_MASTER),
-    //     },
-    //     // {
-    //     //   title: 'Document Master',
-    //     //   path: getNavPath('ADMIN', ROUTES.ADMIN.MASTER.DOCUMENT_MASTER),
-    //     // },
-    //   ],
-    // },
+    {
+      title: 'Master Data',
+      path: getNavPath('ADMIN', ROUTES.ADMIN.MASTER.PURPOSE_MASTER),
+      icon: master,
+      subMenus: [
+         {
+          title: 'Rate Master',
+          path: getNavPath('ADMIN', ROUTES.ADMIN.MASTER.RATE_MASTER.RATE_MARGIN),
+        },
+        {
+          title: 'Purpose Master',
+          path: getNavPath('ADMIN', ROUTES.ADMIN.MASTER.PURPOSE_MASTER),
+        },
+        // {
+        //   title: 'Document Master',
+        //   path: getNavPath('ADMIN', ROUTES.ADMIN.MASTER.DOCUMENT_MASTER),
+        // },
+      ],
+    },
   ] as NavigationItem[],
 };
 
