@@ -29,7 +29,7 @@ export const basicDetailsSchema = z.object({
     .describe('Full Name'),
   emailId: z.string().min(1, 'Email is required').email('Please enter a valid email').describe('Email Id'),
   mobileNo: z.string().optional(),
-  checkerList: z.array(z.string().optional())
+  checkerList: z.string().optional()
 });
 
 export const addressSchema = z.object({

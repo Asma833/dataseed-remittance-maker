@@ -1,14 +1,19 @@
 import { FieldType } from '@/types/enums';
 import { Agent } from '../../api/agents';
+import { BranchAgentData } from '../table/types';
 
-export const branchAgentCreationConfig = (agents: Agent[] = []) => {
+export const branchAgentCreationConfig = (agents: Agent[] = [], branchAgents: BranchAgentData[] = []) => {
   const agentOptions = agents.map((agent) => ({
     id: agent.id,
     agent_code: agent.agent_code,
     value: agent.agent_code,
     label: agent.agent_name,
   }));
-
+    const branchAgentList = branchAgents?.filter(agent => agent.role === 'branch_agent_checker').map((agent) => ({
+    id: agent.id,
+    value: agent.id,
+    label: agent.full_name,
+  }));
   return {
     sectionTitle: 'Branch Agent Creation',
     fields: {
@@ -107,28 +112,26 @@ export const branchAgentCreationConfig = (agents: Agent[] = []) => {
           options: {
             branch_agent_maker: { label: 'Maker' },
             branch_agent_checker: { label: 'Checker', checked: true },
-            branch_agent_agent_maker_and_agent_checker: { label: 'Maker & Checker' },
+            branch_agent_both: { label: 'Maker & Checker' },
             branch_agent_co_admin: { label: 'Co Admin' },
           },
         },
           checkerList:{
-          name: 'agentDetails.basicDetails.checkerList',
-          label: 'Checker List',
-          type: FieldType.Select,
-          options:[
-            {label:"checker1",value:"checker1"}
-          ],
-          isMulti:true,
-          placeholder: 'Select Checker List',
-        },
+            name: 'agentDetails.basicDetails.checkerList',
+            label: 'Checker List',
+            type: FieldType.Select,
+            isMulti: false,
+            placeholder: 'Select Checker List',
+            options: branchAgentList
+          },
         status: {
           name: 'agentDetails.roleStatus.status',
           label: 'Status',
           type: FieldType.Radio,
           required: true,
           options: {
-            active: { label: 'Active', checked: true },
-            inactive: { label: 'Inactive' },
+            true: { label: 'Active', checked: true },
+            false: { label: 'Inactive' },
             blocked:{ label:'Blocked'}
           },
         },

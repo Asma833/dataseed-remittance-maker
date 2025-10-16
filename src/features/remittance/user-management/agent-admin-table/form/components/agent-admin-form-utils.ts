@@ -61,8 +61,8 @@ export const transformEditDataToFormData = (editData: any) => {
       esignDocumentDownload: editData.product_purpose?.esignDocumentDownload ? 'Yes' : 'No',
       vkycDocumentDownload: editData.product_purpose?.vkycDocumentDownload ? 'Yes' : 'No',
       // Convert arrays to objects if needed
-      agentCategory:
-        editData.product_purpose?.agentCategory?.reduce(
+      agent_category:
+        editData.product_purpose?.agent_category?.reduce(
           (acc: Record<string, boolean>, type: string) => ({ ...acc, [type.toLowerCase()]: true }),
           {}
         ) || {},

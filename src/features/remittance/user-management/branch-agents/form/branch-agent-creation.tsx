@@ -20,6 +20,7 @@ import { branchAgentDefaults } from './branch-agent-creation.defaults';
 import { useCreateBranchAgent } from '../../hooks/useCreateBranchAgent';
 import { useUpdateBranchAgent } from '../../hooks/useUpdateBranchAgent';
 import { useGetAgents } from '../../hooks/useGetAgents';
+import { useGetBranchAgents } from '../../hooks/useGetBranchAgents';
 
 // Helper to normalize any vendor value to an agent object
 const resolveAgentFromValue = (val: unknown, agents?: Array<{ agent_code: string; agent_name: string }>) => {
@@ -64,13 +65,20 @@ export const CreateBranchAgent = () => {
   const location = useLocation();
   const branchAgent = location.state?.branchAgent;
   const { agents } = useGetAgents();
+  const { data: branchAgents } = useGetBranchAgents();
 
-  const config = branchAgentCreationConfig(agents);
+  const config = branchAgentCreationConfig(agents, branchAgents || []);
 
   // Watch the vendor select field (holds agent_code)
   const selectedVendorValue = useWatch({
     control,
     name: 'agentDetails.vendorDetails.vendorName',
+  });
+
+  // Watch the role field to conditionally show checker list
+  const selectedRole = useWatch({
+    control,
+    name: 'agentDetails.roleStatus.role',
   });
 
   /** --- EDIT MODE PREFILL --- */
@@ -91,7 +99,7 @@ export const CreateBranchAgent = () => {
           fullName: branchAgent.full_name || '',
           emailId: branchAgent.email || '',
           mobileNo: branchAgent.phone_number || '',
-          checkerList: [] as string[], // Add default or from branchAgent if available
+          checkerList: '', // Add default or from branchAgent if available
         },
         address: {
           state: branchAgent.address_state || '',
@@ -155,20 +163,15 @@ export const CreateBranchAgent = () => {
       const payload = {
         id: branchAgent.id,
         full_name: data.agentDetails.basicDetails.fullName,
-        email: data.agentDetails.basicDetails.emailId,
         address_city: data.agentDetails.address.city,
         address_state: data.agentDetails.address.state,
         address_branch: data.agentDetails.address.branch,
-        address_rm_name: data.agentDetails.address.rmName,
-        address_rm_branch: data.agentDetails.address.rmBranch,
-        phone_number: data.agentDetails.basicDetails.mobileNo,
+        phone_number: data.agentDetails.basicDetails.mobileNo || '',
         role: data.agentDetails.roleStatus.role,
-        status: data.agentDetails.roleStatus.status,
+        is_active:data.agentDetails.roleStatus.status !== 'blocked' ? data.agentDetails.roleStatus.status : false,
+        is_blocked:data.agentDetails.roleStatus.status === 'blocked' ? true : false,
         agent_ids: [agentCode],
-        agent_eon_code: data.agentDetails.vendorDetails.agentEonCode,
-        system_code: data.agentDetails.vendorDetails.systemCode,
-        primary_agent_email: data.agentDetails.vendorDetails.primaryAgentEmail,
-        checker_list: [""],
+        checker_list: data.agentDetails.basicDetails.checkerList ? [data.agentDetails.basicDetails.checkerList] : [],
         password: data.agentDetails.security.password,
       };
       updateBranchAgent(payload);
@@ -181,16 +184,12 @@ export const CreateBranchAgent = () => {
         address_city: data.agentDetails.address.city,
         address_state: data.agentDetails.address.state,
         address_branch: data.agentDetails.address.branch,
-        address_rm_name: data.agentDetails.address.rmName,
-        address_rm_branch: data.agentDetails.address.rmBranch,
-        phone_number: data.agentDetails.basicDetails.mobileNo,
+        phone_number: data.agentDetails.basicDetails.mobileNo || '',
         role: data.agentDetails.roleStatus.role,
-        status: data.agentDetails.roleStatus.status,
+        is_active:data.agentDetails.roleStatus.status !== 'blocked' ? data.agentDetails.roleStatus.status : false,
+        is_blocked:data.agentDetails.roleStatus.status === 'blocked' ? true : false,
         agent_ids: [agentCode],
-        agent_eon_code: data.agentDetails.vendorDetails.agentEonCode,
-        system_code: data.agentDetails.vendorDetails.systemCode,
-        primary_agent_email: data.agentDetails.vendorDetails.primaryAgentEmail,
-        checker_list: data.agentDetails.basicDetails.checkerList,
+        checker_list: data.agentDetails.basicDetails.checkerList ? [data.agentDetails.basicDetails.checkerList] : [],
       };
       createBranchAgent(payload);
     }
@@ -307,21 +306,23 @@ export const CreateBranchAgent = () => {
               })}
             </FormFieldRow>
               {/* --- Checker List --- */}
-              <FormFieldRow rowCols={4}>
-              {(['checkerList'] as const).map((fieldName) => {
-                const field = config.fields.agentDetails[fieldName];
-                return (
-                  <FieldWrapper key={fieldName}>
-                    {getController({
-                      ...(field ?? {}),
-                      name: field.name,
-                      control,
-                      errors,
-                    })}
-                  </FieldWrapper>
-                );
-              })}
-            </FormFieldRow>
+              {selectedRole === 'branch_agent_maker' && (
+                <FormFieldRow rowCols={4}>
+                {(['checkerList'] as const).map((fieldName) => {
+                  const field = config.fields.agentDetails[fieldName];
+                  return (
+                    <FieldWrapper key={fieldName}>
+                      {getController({
+                        ...(field ?? {}),
+                        name: field.name,
+                        control,
+                        errors,
+                      })}
+                    </FieldWrapper>
+                  );
+                })}
+                </FormFieldRow>
+              )}
             <FormFieldRow rowCols={5}>
               {(['status'] as const).map((fieldName) => {
                 const field = config.fields.agentDetails[fieldName];

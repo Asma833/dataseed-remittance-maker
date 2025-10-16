@@ -89,8 +89,8 @@ export const agentAdminCreationConfig = () => {
             Blocked: { label: 'Blocked' },
           },
         },
-          agentCategory: {
-          name: 'agentCategory',
+          agent_category: {
+          name: 'agent_category',
           label: 'Agent Category',
           type: FieldType.Radio,
           required: true,

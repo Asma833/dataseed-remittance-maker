@@ -27,7 +27,7 @@ export const agentAdminCreationDefaults: z.input<typeof agentAdminCreationSchema
   financeSpocName: '',
   financeSpocEmail: '',
   financeSpocPhoneNo: '',
-  agentCategory: "CNC",
+  agent_category: "CNC",
   password:'',
   confirmPassword:'',
   bankAccounts: [

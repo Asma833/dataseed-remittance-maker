@@ -28,7 +28,7 @@ const transformFormData = (data: AgentAdminFormType): CreateAgentAdminRequest =>
       status: data.status === 'Active' ? 'ACTIVE' : 'INACTIVE',
       monthlyCreditLimit: Number(data.monthlyCreditLimit),
       totalCreditDays: Number(data.totalCreditDays),
-      agentCategory: data?.agentCategory === 'CNC' ? 'CNC' : 'Large Agent',
+      agent_category: [data?.agent_category],
       password:data?.password
     },
     companyDetails: {

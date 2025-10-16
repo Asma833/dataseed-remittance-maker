@@ -11,7 +11,7 @@ export const branchAgentDefaults = {
       fullName: '',
       emailId: '',
       mobileNo: '',
-      checkerList: [] as string[],
+      checkerList: '',
     },
     address: {
       state: '',
@@ -22,7 +22,7 @@ export const branchAgentDefaults = {
     },
     roleStatus: {
       role: 'branch_agent_checker',
-      status: 'active' as const,
+      status: true,
     },
     security: {
       password: '',

@@ -18,10 +18,12 @@ export interface CreateBranchAgentRequest {
   phone_number: string;
   role: string;
   agent_ids: string[];
+  checker_list?: string[];
 }
 
 export interface UpdateBranchAgentRequest extends Omit<CreateBranchAgentRequest, 'password' | 'email'> {
   id: string;
   email?: string;
   password?: string | undefined;
+  checker_list?: string[];
 }

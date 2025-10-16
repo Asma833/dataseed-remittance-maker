@@ -13,7 +13,7 @@ export interface AgentAdminData {
   status: string | null;
   monthly_credit_limit: string | null;
   total_credit_days: number | null;
-  agentCategory: string;
+  agent_category: string;
   password:string | null;
   company_details: {
     gstCity: string;
@@ -105,7 +105,7 @@ export interface CreateAgentAdminRequest {
     status: string;
     monthlyCreditLimit: number;
     totalCreditDays: number;
-    agentCategory:string,
+    agent_category:string[],
     password:string
   };
   companyDetails: {

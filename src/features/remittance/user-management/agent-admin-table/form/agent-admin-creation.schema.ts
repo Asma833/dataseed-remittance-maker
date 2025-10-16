@@ -52,7 +52,7 @@ export const agentAdminCreationSchema = z.object({
     .optional()
     .or(z.literal('')),
   status: z.enum(['Active', 'Inactive'], { message: 'Please select a status' }),
-  agentCategory: z.enum(['CNC', 'Large Agent']),
+  agent_category: z.enum(['CNC', 'Large Agent']),
   monthlyCreditLimit: z
     .union([z.string(), z.number()])
     .refine((val) => {
