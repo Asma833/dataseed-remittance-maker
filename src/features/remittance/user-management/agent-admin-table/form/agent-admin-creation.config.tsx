@@ -15,13 +15,6 @@ export const agentAdminCreationConfig = () => {
     ],
     fields: {
       basicInformation: {
-        agent_code: {
-          name: 'agent_code',
-          label: 'Agent Code',
-          required: true,
-          type: FieldType.Text,
-          placeholder: 'Enter Agent Code',
-        },
         agent_name: {
           name: 'agent_name',
           label: 'Agent Name',
@@ -67,14 +60,14 @@ export const agentAdminCreationConfig = () => {
           type: FieldType.Text,
           placeholder: 'Enter Agent HO Branch State',
         },
-        ebixRMName: {
-          name: 'ebixRMName',
+        rm_name: {
+          name: 'rm_name',
           label: 'Ebix RM Name',
           type: FieldType.Text,
           placeholder: 'Enter Ebix RM Name',
         },
-        ebixRMBranchName: {
-          name: 'ebixRMBranchName',
+        rm_branch_name: {
+          name: 'rm_branch_name',
           label: 'Ebix RM Branch Name',
           type: FieldType.Text,
           placeholder: 'Enter Ebix RM Branch Name',
@@ -96,14 +89,14 @@ export const agentAdminCreationConfig = () => {
             Blocked: { label: 'Blocked' },
           },
         },
-          creditType: {
-          name: 'creditType',
+          agentCategory: {
+          name: 'agentCategory',
           label: 'Agent Category',
           type: FieldType.Checkbox,
           required: true,
           options: {
             CNC: { label: 'CNC' },
-            linecredit: { label: 'Large Agent' },
+            largeAgent: { label: 'Large Agent' },
           },
           variant:"circle_check_filled",
           isMulti: true,

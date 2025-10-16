@@ -22,7 +22,7 @@ export const BasicInformationStep: React.FC<BasicInformationStepProps> = () => {
       <div>
         <SubTitle title="Basic Details" />
         <FormFieldRow className="mb-4" rowCols={3}>
-          {(['agent_name', 'agent_code', 'emailId'] as const).map((fieldName) => {
+          {(['agent_name','emailId','systemCode'] as const).map((fieldName) => {
             const field = config.fields.basicInformation[fieldName];
             return (
               <FieldWrapper key={fieldName}>
@@ -52,7 +52,7 @@ export const BasicInformationStep: React.FC<BasicInformationStepProps> = () => {
           })}
         </FormFieldRow>
         <FormFieldRow className="mb-4" rowCols={3}>
-          {(['agentHOBranchState', 'ebixRMName', 'ebixRMBranchName'] as const).map((fieldName) => {
+          {(['agentHOBranchState', 'rm_name', 'rm_branch_name'] as const).map((fieldName) => {
             const field = config.fields.basicInformation[fieldName];
             return (
               <FieldWrapper key={fieldName}>
@@ -67,26 +67,6 @@ export const BasicInformationStep: React.FC<BasicInformationStepProps> = () => {
           })}
         </FormFieldRow>
       </div>
-
-      <div>
-        <SubTitle title="Other Details" />
-        <FormFieldRow className="mb-4" rowCols={3}>
-          {(['systemCode'] as const).map((fieldName) => {
-            const field = config.fields.basicInformation[fieldName];
-            return (
-              <FieldWrapper key={fieldName}>
-                {getController({
-                  ...(typeof field === 'object' && field !== null ? field : {}),
-                  name: fieldName,
-                  control,
-                  errors,
-                })}
-              </FieldWrapper>
-            );
-          })}
-        </FormFieldRow>
-      </div>
-
       <div>
         <SubTitle title="User Status" />
         <FormFieldRow className="mb-4" rowCols={3}>
@@ -106,20 +86,10 @@ export const BasicInformationStep: React.FC<BasicInformationStepProps> = () => {
           })}
         </FormFieldRow>
       </div>
-         {/* <FormFieldRow className="mb-4" rowCols={1}>
-          <FieldWrapper>
-            {getController({
-              ...config.fields.productPurpose.creditType,
-              name: 'productPurpose.creditType',
-              control,
-              errors,
-            })}
-          </FieldWrapper>
-        </FormFieldRow> */}
       <div>
         <SubTitle title="Credit Type & Credit Information" />
         <FormFieldRow className="mb-4" rowCols={4}>
-          {(['creditType','monthlyCreditLimit', 'totalCreditDays'] as const).map((fieldName) => {
+          {(['agentCategory','monthlyCreditLimit', 'totalCreditDays'] as const).map((fieldName) => {
             const field = config.fields.basicInformation[fieldName];
             return (
               <FieldWrapper key={fieldName}>

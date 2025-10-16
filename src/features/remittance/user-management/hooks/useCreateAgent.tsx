@@ -5,7 +5,6 @@ import { agentAdminApi } from '../api/agentAdmin';
 import { useQueryInvalidator } from '../../../../hooks/useQueryInvalidator';
 import { agentAdminCreationSchema } from '../agent-admin-table/form/agent-admin-creation.schema';
 import { CreateAgentAdminRequest } from '../agent-admin-table/table/types';
-import { uploadRemittanceImage } from '../api/documents';
 
 type AgentAdminFormType = z.infer<typeof agentAdminCreationSchema>;
 
@@ -17,22 +16,21 @@ const transformFormData = (data: AgentAdminFormType): CreateAgentAdminRequest =>
   const commissionDetails = data.commission_details;
   return {
     basicInformation: {
-      agent_code: data.agent_code || '',
       agent_name: data.agent_name,
       emailId: data.emailId,
       phoneNo: data.phoneNo || 'NA',
       agentType: data.agentType || '',
       agentBranchCity: data.agentBranchCity || 'NA',
       agentHOBranchState: data.agentHOBranchState || 'NA',
-      ebixRMName: data.ebixRMName || 'NA',
-      ebixRMBranchName: data.ebixRMBranchName || 'NA',
+      rm_name: data.rm_name || 'NA',
+      rm_branch_name: data.rm_branch_name || 'NA',
       systemCode: data.systemCode || 'NA',
       status: data.status === 'Active' ? 'ACTIVE' : 'INACTIVE',
       monthlyCreditLimit: Number(data.monthlyCreditLimit),
       totalCreditDays: Number(data.totalCreditDays),
-      creditType: data?.creditType
-        ? Object.keys(data.creditType).filter(
-            (key) => data.creditType[key as keyof typeof data.creditType]
+      agentCategory: data?.agentCategory
+        ? Object.keys(data.agentCategory).filter(
+            (key) => data.agentCategory[key as keyof typeof data.agentCategory]
           )
         : [],
       password:data?.password

@@ -15,10 +15,6 @@ export const onboardCorporateSchema = z.object({
 export type OnboardCorporateFormData = z.infer<typeof onboardCorporateSchema>;
 export const agentAdminCreationSchema = z.object({
   // Basic Information
-  agent_code: z
-    .string()
-    .min(1, 'Agent code is required')
-    .regex(/^(?!\s)(?!-)/, 'Cannot start with space or hyphen'),
   agent_name: z
     .string()
     .min(1, 'Agent name is required')
@@ -40,12 +36,12 @@ export const agentAdminCreationSchema = z.object({
     .regex(/^(?!\s)(?!.*\s$)/, 'Cannot start or end with spaces')
     .optional()
     .or(z.literal('')),
-  ebixRMName: z
+  rm_name: z
     .string()
     .regex(/^(?!\s)(?!.*\s$)/, 'Cannot start or end with spaces')
     .optional()
     .or(z.literal('')),
-  ebixRMBranchName: z
+  rm_branch_name: z
     .string()
     .regex(/^(?!\s)(?!.*\s$)/, 'Cannot start or end with spaces')
     .optional()
@@ -55,7 +51,7 @@ export const agentAdminCreationSchema = z.object({
     .optional()
     .or(z.literal('')),
   status: z.enum(['Active', 'Inactive'], { message: 'Please select a status' }),
-  creditType: z.record(z.enum(['CNC', 'linecredit']), z.boolean()).superRefine((val, ctx) => {
+  agentCategory: z.record(z.enum(['CNC', 'largeAgent']), z.boolean()).superRefine((val, ctx) => {
       if (!Object.values(val || {}).some(Boolean)) {
         ctx.addIssue({
           code: z.ZodIssueCode.custom,
@@ -384,8 +380,8 @@ export const defaultValues = {
   agentType: 'Type A',
   agentBranchCity: 'Mumbai',
   agentHOBranchState: 'Maharashtra',
-  ebixRMName: 'RM Name',
-  ebixRMBranchName: 'Branch Name',
+  rm_name: 'RM Name',
+  rm_branch_name: 'Branch Name',
   systemCode: 'SYS001',
   status: 'Active',
   monthlyCreditLimit: '10000',
@@ -417,7 +413,7 @@ export const defaultValues = {
     esignDocumentDownload: 'No',
     vkycDocumentDownload: 'No',
     chooseProductType: { card: false, currency: false, remittance: true, referral: false },
-    creditType: { CNC: true, linecredit: false },
+    agentCategory: { CNC: true, largeAgent: false },
     purposeTypesForCard: {
       personaltravel: true,
       businesstravel: false,

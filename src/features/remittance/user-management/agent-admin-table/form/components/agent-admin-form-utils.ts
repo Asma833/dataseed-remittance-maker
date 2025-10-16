@@ -22,8 +22,8 @@ export const transformEditDataToFormData = (editData: any) => {
     agentType: normalizeValue(editData.agent_type).toUpperCase().replace(/-/g, ''),
     agentBranchCity: normalizeValue(editData.agent_branch_city),
     agentHOBranchState: normalizeValue(editData.agent_ho_branch_state),
-    ebixRMName: normalizeValue(editData.rm_name),
-    ebixRMBranchName: normalizeValue(editData.rm_branch_name),
+    rm_name: normalizeValue(editData.rm_name),
+    rm_branch_name: normalizeValue(editData.rm_branch_name),
     systemCode: normalizeValue(editData.system_code),
     status: (editData.status === 'ACTIVE' ? 'Active' : 'Inactive') as 'Active' | 'Inactive',
     monthlyCreditLimit: editData.monthly_credit_limit || 0,
@@ -61,8 +61,8 @@ export const transformEditDataToFormData = (editData: any) => {
       esignDocumentDownload: editData.product_purpose?.esignDocumentDownload ? 'Yes' : 'No',
       vkycDocumentDownload: editData.product_purpose?.vkycDocumentDownload ? 'Yes' : 'No',
       // Convert arrays to objects if needed
-      creditType:
-        editData.product_purpose?.creditType?.reduce(
+      agentCategory:
+        editData.product_purpose?.agentCategory?.reduce(
           (acc: Record<string, boolean>, type: string) => ({ ...acc, [type.toLowerCase()]: true }),
           {}
         ) || {},

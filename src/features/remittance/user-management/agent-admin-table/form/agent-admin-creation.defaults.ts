@@ -2,15 +2,14 @@ import { z } from 'zod';
 import { agentAdminCreationSchema } from './agent-admin-creation.schema';
 
 export const agentAdminCreationDefaults: z.input<typeof agentAdminCreationSchema> = {
-  agent_code: '',
   agent_name: '',
   emailId: '',
   phoneNo: '',
   agentType: '',
   agentBranchCity: '',
   agentHOBranchState: '',
-  ebixRMName: '',
-  ebixRMBranchName: '',
+  rm_name: '',
+  rm_branch_name: '',
   systemCode: '',
   status: 'Active',
   monthlyCreditLimit: '',
@@ -28,7 +27,7 @@ export const agentAdminCreationDefaults: z.input<typeof agentAdminCreationSchema
   financeSpocName: '',
   financeSpocEmail: '',
   financeSpocPhoneNo: '',
-  creditType: { CNC: true, linecredit: false },
+  agentCategory: { CNC: true, largeAgent: false },
   password:'',
   confirmPassword:'',
   bankAccounts: [

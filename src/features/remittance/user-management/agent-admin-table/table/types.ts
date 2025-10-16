@@ -13,7 +13,7 @@ export interface AgentAdminData {
   status: string | null;
   monthly_credit_limit: string | null;
   total_credit_days: number | null;
-  creditType: string[];
+  agentCategory: string[];
   password:string | null;
   company_details: {
     gstCity: string;
@@ -93,20 +93,19 @@ export interface AgentAdminData {
 
 export interface CreateAgentAdminRequest {
   basicInformation: {
-    agent_code: string;
     agent_name: string;
     emailId: string;
     phoneNo: string;
     agentType: string;
     agentBranchCity: string;
     agentHOBranchState: string;
-    ebixRMName: string;
-    ebixRMBranchName: string;
+    rm_name: string;
+    rm_branch_name: string;
     systemCode: string;
     status: string;
     monthlyCreditLimit: number;
     totalCreditDays: number;
-    creditType:string[],
+    agentCategory:string[],
     password:string
   };
   companyDetails: {
