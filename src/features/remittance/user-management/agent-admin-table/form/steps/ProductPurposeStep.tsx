@@ -13,13 +13,6 @@ export const ProductPurposeStep: React.FC = () => {
   } = useFormContext();
   const config = agentAdminCreationConfig();
 
-  const chooseProductType = useWatch({
-    control,
-    name: 'productPurpose.chooseProductType',
-  });
-
-  const isCardSelected = chooseProductType?.card === true;
-
   return (
     <div className="space-y-6">
       <div>
@@ -73,7 +66,6 @@ export const ProductPurposeStep: React.FC = () => {
           </FieldWrapper>
         </FormFieldRow>
         
-        {isCardSelected && (
           <FormFieldRow className="bg-gray-100 p-2 py-4 mb-2 rounded-lg" rowCols={1}>
             <FieldWrapper>
               {getController({
@@ -86,7 +78,7 @@ export const ProductPurposeStep: React.FC = () => {
               })}
             </FieldWrapper>
           </FormFieldRow>
-        )}
+       
       </div>
     </div>
   );
