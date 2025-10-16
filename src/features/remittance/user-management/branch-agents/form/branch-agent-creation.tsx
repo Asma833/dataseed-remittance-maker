@@ -21,23 +21,23 @@ import { useCreateBranchAgent } from '../../hooks/useCreateBranchAgent';
 import { useUpdateBranchAgent } from '../../hooks/useUpdateBranchAgent';
 import { useGetAgents } from '../../hooks/useGetAgents';
 import { useGetBranchAgents } from '../../hooks/useGetBranchAgents';
+import { Agent } from '../../api/agents';
 
 // Helper to normalize any vendor value to an agent object
-const resolveAgentFromValue = (val: unknown, agents?: Array<{ agent_code: string; agent_name: string }>) => {
+const resolveAgentFromValue = (val: unknown, agents?: Array<Agent>) => {
   if (!agents || !val) return undefined;
-
   if (typeof val === 'string') {
-    return agents.find((a) => a.agent_code === val) || agents.find((a) => a.agent_name === val);
+    const found = agents.find((a) => a.agent_code === val) || agents.find((a) => a.agent_name === val);
+    return found;
   }
 
   if (typeof val === 'object') {
     const anyVal = val as any;
-    const byCode = anyVal?.agent_code ?? anyVal?.value ?? anyVal?.code ?? anyVal?.id;
+    const byCode = anyVal?.agent_code ?? anyVal?.agent_entity_email ?? anyVal?.value ?? anyVal?.code ?? anyVal?.id;
     const byName = anyVal?.agent_name ?? anyVal?.label ?? anyVal?.name ?? anyVal?.text;
-    return (
-      (byCode && agents.find((a) => a.agent_code === String(byCode))) ||
-      (byName && agents.find((a) => a.agent_name === String(byName)))
-    );
+    const found = (byCode && agents.find((a) => a.agent_code === String(byCode) || a.agent_entity_email === String(byCode))) ||
+      (byName && agents.find((a) => a.agent_name === String(byName)));
+    return found;
   }
   return undefined;
 };
@@ -74,7 +74,6 @@ export const CreateBranchAgent = () => {
     control,
     name: 'agentDetails.vendorDetails.vendorName',
   });
-
   // Watch the role field to conditionally show checker list
   const selectedRole = useWatch({
     control,
@@ -84,29 +83,26 @@ export const CreateBranchAgent = () => {
   /** --- EDIT MODE PREFILL --- */
   useEffect(() => {
     if (!branchAgent) return;
-
-    const vendorCode = branchAgent.agent_vendor_code || '';
     reset({
       agentDetails: {
         vendorDetails: {
-          vendorName: vendorCode, // select value = code
-          vendorCode: vendorCode, // mirror code
-          agentEonCode: branchAgent.agent_vendor_code, // Add default or from branchAgent if available
-          systemCode: branchAgent.system_code || '', // Add default or from branchAgent if available
-          primaryAgentEmail: branchAgent.agent_entity_email, // Add default or from branchAgent if available
+          vendorName: branchAgent.agent_vendor_code, 
+          agentEonCode: branchAgent.agent_vendor_code, 
+          systemCode: branchAgent.system_code || '-', 
+          primaryAgentEmail: branchAgent.agent_entity_email || '-',
         },
         basicDetails: {
           fullName: branchAgent.full_name || '',
           emailId: branchAgent.email || '',
           mobileNo: branchAgent.phone_number || '',
-          checkerList: branchAgent.checker_list || '', // Add default or from branchAgent if available
+          checkerList: branchAgent.checker_list || '', 
         },
         address: {
           state: branchAgent.address_state || '',
           city: branchAgent.address_city || '',
           branch: branchAgent.address_branch || '',
-          rmName:  branchAgent.rm_name, // Add default or from branchAgent if available
-          rmBranch: branchAgent.rm_branch_name, // Add default or from branchAgent if available
+          rmName:  branchAgent.rm_name, 
+          rmBranch: branchAgent.rm_branch_name, 
         },
         roleStatus: {
           role: branchAgent.role || 'branch_agent_checker',
@@ -123,26 +119,30 @@ export const CreateBranchAgent = () => {
     }, 0);
   }, [branchAgent, reset, trigger, clearErrors]);
 
-  /** --- WHEN SELECT CHANGES: update vendorCode --- */
+  /** --- WHEN SELECT CHANGES: update vendorCode and primaryAgentEmail --- */
   useEffect(() => {
-    if (!agents) return;
+    if (!agents || !selectedVendorValue) return;
     const found = resolveAgentFromValue(selectedVendorValue, agents);
-    setValue('agentDetails.vendorDetails.vendorCode', found?.agent_code ?? '', {
-      shouldDirty: true,
-      shouldValidate: true,
-    });
+    if (found) {
+      setValue('agentDetails.vendorDetails.agentEonCode', found.agent_code || '-', {
+        shouldDirty: true,
+        shouldValidate: true,
+      });
+      setValue('agentDetails.vendorDetails.primaryAgentEmail', found.agent_entity_email || '-', {
+        shouldDirty: true,
+        shouldValidate: true,
+      });
+       setValue('agentDetails.address.rmName', found.rm_name || '-', {
+        shouldDirty: true,
+        shouldValidate: true,
+      });
+        setValue('agentDetails.address.rmBranch', found.rm_branch_name || '-', {
+        shouldDirty: true,
+        shouldValidate: true,
+      });
+    } 
   }, [selectedVendorValue, agents, setValue]);
 
-  /** --- SYNC WHEN AGENTS LOAD (update mode consistency) --- */
-  useEffect(() => {
-    if (!agents) return;
-   const raw = getValues('agentDetails.vendorDetails.vendorName');
-   const found = resolveAgentFromValue(raw, agents);
-    setValue('agentDetails.vendorDetails.vendorCode', found?.agent_code ?? '', {
-      shouldDirty: true,
-      shouldValidate: true,
-    });
-  }, [agents, getValues, setValue]);
 
   const handleBack = () => navigate('/admin/user-management/branch-agents');
 

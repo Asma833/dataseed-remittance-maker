@@ -5,6 +5,7 @@ export interface Agent {
   id: string;
   agent_code: string; // The unique ID for the agent
   agent_name: string; // The display name for the agent
+  agent_entity_email?: string;
   email?: string;
   phone?: string;
   status?: string;

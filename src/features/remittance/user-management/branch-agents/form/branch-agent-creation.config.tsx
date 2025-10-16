@@ -31,18 +31,21 @@ export const branchAgentCreationConfig = (agents: Agent[] = [], branchAgents: Br
           name: 'agentDetails.vendorDetails.agentEonCode',
           label: 'Vendor Code',
           type: FieldType.Text,
+          disabled:true,
           placeholder: 'Enter Vendor Code',
         },
          systemCode:{
           name: 'agentDetails.vendorDetails.systemCode',
           label: 'System Code',
           type: FieldType.Text,
+          disabled:true,
           placeholder: 'Enter System Code',
         },
         primaryAgentEmail:{
           name: 'agentDetails.vendorDetails.primaryAgentEmail',
           label: 'Primary Agent Email',
           type: FieldType.Email,
+          disabled:true,
           placeholder: 'Enter Primary Agent Email',
         },
        
@@ -93,12 +96,14 @@ export const branchAgentCreationConfig = (agents: Agent[] = [], branchAgents: Br
           name: 'agentDetails.address.rmName',
           label: 'RM Name',
           type: FieldType.Text,
+          disabled:true,
           placeholder: 'Enter Branch Name',
         },
          rmBranch: {
           name: 'agentDetails.address.rmBranch',
           label: 'RM Branch Name',
           type: FieldType.Text,
+          disabled:true,
           placeholder: 'Enter RM Branch Name',
         },
         // Role / Checker / Status

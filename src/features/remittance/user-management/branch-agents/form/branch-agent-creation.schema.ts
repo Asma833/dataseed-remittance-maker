@@ -56,13 +56,9 @@ export const addressSchema = z.object({
     .describe('Branch'),
   rmName: z
     .string()
-    .refine((val) => !/^[\s-]/.test(val), 'RM Name cannot start with space or hyphen')
-    .describe('RM Name')
     .optional(),
   rmBranch: z
     .string()
-    .refine((val) => !/^[\s-]/.test(val), 'RM Branch cannot start with space or hyphen')
-    .describe('RM Branch')
     .optional(),
 });
 
