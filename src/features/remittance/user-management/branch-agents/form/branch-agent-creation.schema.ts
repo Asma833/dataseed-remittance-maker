@@ -56,18 +56,14 @@ export const addressSchema = z.object({
     .describe('Branch'),
   rmName: z
     .string()
-    .min(1, 'RM Name is required')
-    .refine((val) => val.trim().length > 0, 'RM Name cannot be only spaces')
-    .refine((val) => !/^[\s-]+$/.test(val), 'RM Name cannot contain only spaces or hyphens')
     .refine((val) => !/^[\s-]/.test(val), 'RM Name cannot start with space or hyphen')
-    .describe('RM Name'),
+    .describe('RM Name')
+    .optional(),
   rmBranch: z
     .string()
-    .min(1, 'RM Branch is required')
-    .refine((val) => val.trim().length > 0, 'RM Branch cannot be only spaces')
-    .refine((val) => !/^[\s-]+$/.test(val), 'RM Branch cannot contain only spaces or hyphens')
     .refine((val) => !/^[\s-]/.test(val), 'RM Branch cannot start with space or hyphen')
-    .describe('RM Branch'),
+    .describe('RM Branch')
+    .optional(),
 });
 
 export const roleStatusSchema = z.object({

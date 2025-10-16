@@ -91,22 +91,22 @@ export const CreateBranchAgent = () => {
         vendorDetails: {
           vendorName: vendorCode, // select value = code
           vendorCode: vendorCode, // mirror code
-          agentEonCode: '', // Add default or from branchAgent if available
-          systemCode: '', // Add default or from branchAgent if available
-          primaryAgentEmail: '', // Add default or from branchAgent if available
+          agentEonCode: branchAgent.agent_vendor_code, // Add default or from branchAgent if available
+          systemCode: branchAgent.system_code || '', // Add default or from branchAgent if available
+          primaryAgentEmail: branchAgent.agent_entity_email, // Add default or from branchAgent if available
         },
         basicDetails: {
           fullName: branchAgent.full_name || '',
           emailId: branchAgent.email || '',
           mobileNo: branchAgent.phone_number || '',
-          checkerList: '', // Add default or from branchAgent if available
+          checkerList: branchAgent.checker_list || '', // Add default or from branchAgent if available
         },
         address: {
           state: branchAgent.address_state || '',
           city: branchAgent.address_city || '',
           branch: branchAgent.address_branch || '',
-          rmName: '', // Add default or from branchAgent if available
-          rmBranch: '', // Add default or from branchAgent if available
+          rmName:  branchAgent.rm_name, // Add default or from branchAgent if available
+          rmBranch: branchAgent.rm_branch_name, // Add default or from branchAgent if available
         },
         roleStatus: {
           role: branchAgent.role || 'branch_agent_checker',
