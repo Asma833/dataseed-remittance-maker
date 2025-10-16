@@ -98,6 +98,7 @@ export const BasicInformationStep: React.FC<BasicInformationStepProps> = () => {
                   name: fieldName,
                   control,
                   errors,
+                  className: fieldName === 'agentCategory' ? 'justify-start' : ''
                 })}
               </FieldWrapper>
             );
@@ -105,22 +106,22 @@ export const BasicInformationStep: React.FC<BasicInformationStepProps> = () => {
         </FormFieldRow>
       </div>
       <div>
-      <SubTitle title="Create Password" />
-      <FormFieldRow rowCols={3}>
-        {(['password', 'confirmPassword'] as const).map((fieldName) => {
-          const field = config.fields.basicInformation[fieldName];
-          return (
-            <FieldWrapper key={fieldName}>
-              {getController({
-                ...(field ?? {}),
-                name: field.name,
-                control,
-                errors,
-              })}
-            </FieldWrapper>
-          );
-        })}
-      </FormFieldRow>
+        <SubTitle title="Create Password" />
+        <FormFieldRow rowCols={3}>
+          {(['password', 'confirmPassword'] as const).map((fieldName) => {
+            const field = config.fields.basicInformation[fieldName];
+            return (
+              <FieldWrapper key={fieldName}>
+                {getController({
+                  ...(field ?? {}),
+                  name: fieldName,
+                  control,
+                  errors,
+                })}
+              </FieldWrapper>
+            );
+          })}
+        </FormFieldRow>
       </div>
     </div>
   );

@@ -24,12 +24,8 @@ const transformFormData = (data: AgentAdminFormType) => {
       status: data.status === 'Active' ? 'ACTIVE' : 'INACTIVE',
       monthlyCreditLimit: Number(data.monthlyCreditLimit),
       totalCreditDays: Number(data.totalCreditDays),
-        agentCategory: data?.agentCategory
-        ? Object.keys(data.agentCategory).filter(
-            (key) => data.agentCategory[key as keyof typeof data.agentCategory]
-          )
-        : [],
-        password:data?.password
+      agentCategory: data?.agentCategory,
+      password:data?.password
     },
     companyDetails: {
       gstClassification: data.gstClassification,

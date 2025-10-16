@@ -92,14 +92,12 @@ export const agentAdminCreationConfig = () => {
           agentCategory: {
           name: 'agentCategory',
           label: 'Agent Category',
-          type: FieldType.Checkbox,
+          type: FieldType.Radio,
           required: true,
           options: {
             CNC: { label: 'CNC' },
             largeAgent: { label: 'Large Agent' },
           },
-          variant:"circle_check_filled",
-          isMulti: true,
         },
 
         monthlyCreditLimit: {
