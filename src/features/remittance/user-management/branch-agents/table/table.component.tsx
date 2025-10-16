@@ -63,7 +63,7 @@ const BranchAgentTable = () => {
   };
 
   const handleEdit = (branchAgent: BranchAgentData) => {
-    navigate('/admin/user-management/branch-agent-creation', { state: { branchAgent } });
+    navigate('/admin/user-management/branch-agents/branch-agent-creation', { state: { branchAgent } });
   };
 
   const handleInactivate = async (branchAgent: BranchAgentData) => {
@@ -85,7 +85,7 @@ const BranchAgentTable = () => {
 
   // Navigate to branch agent creation page
   const handleCreateBranchAgent = () => {
-    navigate('/admin/user-management/branch-agent-creation');
+    navigate('/admin/user-management/branch-agents/branch-agent-creation');
   };
 
   // Handle bulk upload

@@ -24,23 +24,20 @@ export const branchAgentCreationConfig = (agents: Agent[] = []) => {
         },
         agentEonCode:{
           name: 'agentDetails.vendorDetails.agentEonCode',
-          label: 'EON Code',
+          label: 'Vendor Code',
           type: FieldType.Text,
-          required: true,
-          placeholder: 'Enter EON Code',
+          placeholder: 'Enter Vendor Code',
         },
          systemCode:{
           name: 'agentDetails.vendorDetails.systemCode',
           label: 'System Code',
           type: FieldType.Text,
-          required: true,
           placeholder: 'Enter System Code',
         },
         primaryAgentEmail:{
           name: 'agentDetails.vendorDetails.primaryAgentEmail',
           label: 'Primary Agent Email',
           type: FieldType.Email,
-          required: true,
           placeholder: 'Enter Primary Agent Email',
         },
        
@@ -120,7 +117,6 @@ export const branchAgentCreationConfig = (agents: Agent[] = []) => {
           name: 'agentDetails.basicDetails.checkerList',
           label: 'Checker List',
           type: FieldType.Select,
-          required: true,
           options:[
             {label:"checker1",value:"checker1"}
           ],

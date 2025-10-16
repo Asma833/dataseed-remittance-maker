@@ -12,20 +12,10 @@ export const vendorDetailsSchema = z.object({
     .describe('Agent Vendor Name'),
   vendorCode: z.string().optional(),
   agentEonCode: z
-    .string()
-    .min(1, 'EON Code is required')
-    .refine((val) => val.trim().length > 0, 'EON Code cannot be only spaces')
-    .refine((val) => !/^[\s-]+$/.test(val), 'EON Code cannot contain only spaces or hyphens')
-    .refine((val) => !/^[\s-]/.test(val), 'EON Code cannot start with space or hyphen')
-    .describe('EON Code'),
+    .string().optional(),
   systemCode: z
-    .string()
-    .min(1, 'System Code is required')
-    .refine((val) => val.trim().length > 0, 'System Code cannot be only spaces')
-    .refine((val) => !/^[\s-]+$/.test(val), 'System Code cannot contain only spaces or hyphens')
-    .refine((val) => !/^[\s-]/.test(val), 'System Code cannot start with space or hyphen')
-    .describe('System Code'),
-  primaryAgentEmail: z.string().min(1, 'Primary Agent Email is required').email('Please enter a valid email').describe('Primary Agent Email'),
+    .string().optional(),
+  primaryAgentEmail: z.string().optional(),
 
 });
 
@@ -38,8 +28,8 @@ export const basicDetailsSchema = z.object({
     .refine((val) => !/^[\s-]/.test(val), 'Full name cannot start with space or hyphen')
     .describe('Full Name'),
   emailId: z.string().min(1, 'Email is required').email('Please enter a valid email').describe('Email Id'),
-  mobileNo: z.string().min(1, 'Phone number is required').describe('Phone No.'),
-  checkerList: z.array(z.string()).min(1, 'At least one checker is required').describe('Checker List'),
+  mobileNo: z.string().min(1, 'Phone Number is required').describe('Phone No.'),
+  checkerList: z.array(z.string().optional())
 });
 
 export const addressSchema = z.object({
@@ -103,7 +93,6 @@ export const roleStatusSchema = z.object({
     })
     .describe('Status'),
 });
-
 export const securitySchema = z
   .object({
     password: z
