@@ -18,36 +18,37 @@ export const agentAdminCreationSchema = z.object({
   agent_name: z
     .string()
     .min(1, 'Agent name is required')
-    .regex(/^(?!\s)(?!.*\s$)/, 'Cannot start or end with spaces'),
+     .regex(/^(?!\s)(?!-)/, 'Cannot start with space or hyphen'),
   emailId: z.string().min(1, 'Email is required').email('Please enter a valid email address'),
   phoneNo: z
     .string()
-    .regex(/^(?!\s)(?!.*\s$)/, 'Cannot start or end with spaces')
+    .regex(/^(?!\s)(?!-)/, 'Cannot start with space or hyphen')
     .optional()
     .or(z.literal('')),
   agentType: z.string().min(1, 'Agent type is required'),
   agentBranchCity: z
     .string()
-    .regex(/^(?!\s)(?!.*\s$)/, 'Cannot start or end with spaces')
+    .regex(/^(?!\s)(?!-)/, 'Cannot start with space or hyphen')
     .optional()
     .or(z.literal('')),
   agentHOBranchState: z
     .string()
-    .regex(/^(?!\s)(?!.*\s$)/, 'Cannot start or end with spaces')
+    .regex(/^(?!\s)(?!-)/, 'Cannot start with space or hyphen')
     .optional()
     .or(z.literal('')),
   rm_name: z
     .string()
-    .regex(/^(?!\s)(?!.*\s$)/, 'Cannot start or end with spaces')
+    .regex(/^(?!\s)(?!-)/, 'Cannot start with space or hyphen')
     .optional()
     .or(z.literal('')),
   rm_branch_name: z
     .string()
-    .regex(/^(?!\s)(?!.*\s$)/, 'Cannot start or end with spaces')
+    .regex(/^(?!\s)(?!-)/, 'Cannot start with space or hyphen')
     .optional()
     .or(z.literal('')),
   systemCode: z
     .string()
+    .regex(/^(?!\s)(?!-)/, 'Cannot start with space or hyphen')
     .optional()
     .or(z.literal('')),
   status: z.enum(['Active', 'Inactive'], { message: 'Please select a status' }),
@@ -62,23 +63,30 @@ export const agentAdminCreationSchema = z.object({
     }),
   monthlyCreditLimit: z
     .union([z.string(), z.number()])
+    .refine((val) => {
+      const str = typeof val === 'string' ? val : val.toString();
+      return !/^\s/.test(str) && !/^-/.test(str);
+    }, 'Cannot start with space or hyphen')
     .transform((val) => {
       const str = typeof val === 'string' ? val : val.toString();
       if (str.trim() === '') return 0;
       const num = parseFloat(str);
       return isNaN(num) ? 0 : num;
     })
-    .refine((val) => val >= 1, 'Monthly credit limit must be at least 1')
-    .refine((val) => val <= 999999999, 'Monthly credit limit is too large'),
+    .refine((val) => val >= 1, 'Monthly credit limit must be a number'),
   totalCreditDays: z
     .union([z.string(), z.number()])
+    .refine((val) => {
+      const str = typeof val === 'string' ? val : val.toString();
+      return !/^\s/.test(str) && !/^-/.test(str);
+    }, 'Cannot start with space or hyphen')
     .transform((val) => {
       const str = typeof val === 'string' ? val : val.toString();
       if (str.trim() === '') return 0;
       const num = parseInt(str);
       return isNaN(num) ? 0 : num;
     })
-    .refine((val) => val >= 1, 'Total credit days must be at least 1')
+    .refine((val) => val >= 1, 'Total credit days must be a number')
     .refine((val) => val <= 365, 'Total credit days cannot exceed 365'),
    
   password: z
@@ -87,6 +95,9 @@ export const agentAdminCreationSchema = z.object({
     .refine((val) => val.trim().length >= 8, 'Password cannot be only spaces')
     .refine((val) => !/^[\s-]+$/.test(val), 'Password cannot contain only spaces or hyphens')
     .refine((val) => !/^[\s-]/.test(val), 'Password cannot start with space or hyphen')
+    .refine((val) => /[A-Z]/.test(val), 'Password must contain at least one uppercase letter')
+    .refine((val) => /\d/.test(val), 'Password must contain at least one number')
+    .refine((val) => /[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]/.test(val), 'Password must contain at least one special character')
     .describe('Password'),
   confirmPassword: z
     .string()
@@ -100,83 +111,83 @@ export const agentAdminCreationSchema = z.object({
   gstClassification: z
     .string()
     .min(1, 'GST Classification is required')
-    .regex(/^(?!\s)(?!.*\s$)/, 'Cannot start or end with spaces'),
+     .regex(/^(?!\s)(?!-)/, 'Cannot start with space or hyphen'),
   gstNumber: z
     .string()
     .min(1, 'GST Number is required')
     .regex(/^(?!\s)(?!-)/, 'Cannot start with space or hyphen'),
   gstPhoneNo: z
     .string()
-    .regex(/^(?!\s)(?!.*\s$)/, 'Cannot start or end with spaces')
+    .regex(/^(?!\s)(?!-)/, 'Cannot start with space or hyphen')
     .optional()
     .or(z.literal('')),
   flatDoorNumber: z
     .string()
-    .regex(/^(?!\s)(?!.*\s$)/, 'Cannot start or end with spaces')
+    .regex(/^(?!\s)(?!-)/, 'Cannot start with space or hyphen')
     .optional()
     .or(z.literal('')),
   roadStreet: z
     .string()
-    .regex(/^(?!\s)(?!.*\s$)/, 'Cannot start or end with spaces')
+    .regex(/^(?!\s)(?!-)/, 'Cannot start with space or hyphen')
     .optional()
     .or(z.literal('')),
   areaLocality: z
     .string()
-    .regex(/^(?!\s)(?!.*\s$)/, 'Cannot start or end with spaces')
+    .regex(/^(?!\s)(?!-)/, 'Cannot start with space or hyphen')
     .optional()
     .or(z.literal('')),
   gstCity: z
     .string()
-    .regex(/^(?!\s)(?!.*\s$)/, 'Cannot start or end with spaces')
+    .regex(/^(?!\s)(?!-)/, 'Cannot start with space or hyphen')
     .optional()
     .or(z.literal('')),
   gstState: z
     .string()
     .min(1, 'State is required')
-    .regex(/^(?!\s)(?!.*\s$)/, 'Cannot start or end with spaces'),
+     .regex(/^(?!\s)(?!-)/, 'Cannot start with space or hyphen'),
   pinCode: z
     .string()
     .min(1, 'PIN Code is required')
-    .regex(/^(?!\s)(?!.*\s$)/, 'Cannot start or end with spaces')
+    .regex(/^(?!\s)(?!-)/, 'Cannot start with space or hyphen')
     .regex(/^\d{6}$/, 'PIN Code must be 6 digits'),
   gstBranch: z
     .string()
     .min(1, 'Branch is required')
-    .regex(/^(?!\s)(?!.*\s$)/, 'Cannot start or end with spaces'),
+     .regex(/^(?!\s)(?!-)/, 'Cannot start with space or hyphen'),
 
   // Finance Details
   financeSpocName: z
     .string()
     .min(1, 'Financial SPOC Name is required')
-    .regex(/^(?!\s)(?!.*\s$)/, 'Cannot start or end with spaces'),
+     .regex(/^(?!\s)(?!-)/, 'Cannot start with space or hyphen'),
   financeSpocEmail: z.string().min(1, 'Financial SPOC Email is required').email('Please enter a valid email address'),
   financeSpocPhoneNo: z
     .string()
     .min(1, 'Financial SPOC Phone No is required')
-    .regex(/^(?!\s)(?!.*\s$)/, 'Cannot start or end with spaces'),
+     .regex(/^(?!\s)(?!-)/, 'Cannot start with space or hyphen'),
   bankAccounts: z
     .array(
       z.object({
         bankName: z
           .string()
           .min(1, 'Bank Name is required')
-          .regex(/^(?!\s)(?!.*\s$)/, 'Cannot start or end with spaces'),
+           .regex(/^(?!\s)(?!-)/, 'Cannot start with space or hyphen'),
         branchName: z
           .string()
           .min(1, 'Branch Name is required')
-          .regex(/^(?!\s)(?!.*\s$)/, 'Cannot start or end with spaces'),
+           .regex(/^(?!\s)(?!-)/, 'Cannot start with space or hyphen'),
         accountHolder: z
           .string()
           .min(1, 'Account Holder is required')
-          .regex(/^(?!\s)(?!.*\s$)/, 'Cannot start or end with spaces'),
+           .regex(/^(?!\s)(?!-)/, 'Cannot start with space or hyphen'),
         accountNumber: z
           .string()
           .min(1, 'Account Number is required')
-          .regex(/^(?!\s)(?!.*\s$)/, 'Cannot start or end with spaces'),
+           .regex(/^(?!\s)(?!-)/, 'Cannot start with space or hyphen'),
         ifscCode: z
           .string()
           .min(1, 'IFSC Code is required')
-          .regex(/^(?!\s)(?!.*\s$)/, 'Cannot start or end with spaces')
+          .regex(/^(?!\s)(?!-)/, 'Cannot start with space or hyphen')
           .regex(/^[A-Z]{4}0[A-Z0-9]{6}$/, 'Invalid IFSC Code format'),
       })
     )
@@ -370,6 +381,15 @@ export const agentAdminCreationSchema = z.object({
       }),
     })
     .optional(),
+})
+.superRefine(({ password, confirmPassword }, ctx) => {
+  if (password !== confirmPassword) {
+    ctx.addIssue({
+      code: 'custom',
+      path: ['confirmPassword'],
+      message: 'Passwords do not match',
+    });
+  }
 });
 
 export const defaultValues = {
