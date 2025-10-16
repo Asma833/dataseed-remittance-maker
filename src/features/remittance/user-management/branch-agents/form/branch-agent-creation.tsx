@@ -110,7 +110,7 @@ export const CreateBranchAgent = () => {
         },
         roleStatus: {
           role: branchAgent.role || 'branch_agent_checker',
-          status: 'active' as const,
+          status: branchAgent.is_blocked ? 'blocked' : branchAgent.is_active ? true : false,
         },
         security: { password: '', confirmPassword: '' },
       },
@@ -136,12 +136,12 @@ export const CreateBranchAgent = () => {
   /** --- SYNC WHEN AGENTS LOAD (update mode consistency) --- */
   useEffect(() => {
     if (!agents) return;
-   // const raw = getValues('agentDetails.vendorDetails.vendorName');
-  //  const found = resolveAgentFromValue(raw, agents);
-    // setValue('agentDetails.vendorDetails.vendorCode', found?.agent_code ?? '', {
-    //   shouldDirty: true,
-    //   shouldValidate: true,
-    // });
+   const raw = getValues('agentDetails.vendorDetails.vendorName');
+   const found = resolveAgentFromValue(raw, agents);
+    setValue('agentDetails.vendorDetails.vendorCode', found?.agent_code ?? '', {
+      shouldDirty: true,
+      shouldValidate: true,
+    });
   }, [agents, getValues, setValue]);
 
   const handleBack = () => navigate('/admin/user-management/branch-agents');

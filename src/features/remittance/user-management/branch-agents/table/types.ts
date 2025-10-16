@@ -6,6 +6,8 @@ export interface BranchAgentData {
   email: string;
   role: string;
   type: string;
+  is_active?: boolean;
+  is_blocked?: boolean;
 }
 
 export interface CreateBranchAgentRequest {
@@ -19,6 +21,8 @@ export interface CreateBranchAgentRequest {
   role: string;
   agent_ids: string[];
   checker_list?: string[];
+  is_active?: boolean;
+  is_blocked?: boolean;
 }
 
 export interface UpdateBranchAgentRequest extends Omit<CreateBranchAgentRequest, 'password' | 'email'> {
@@ -26,4 +30,6 @@ export interface UpdateBranchAgentRequest extends Omit<CreateBranchAgentRequest,
   email?: string;
   password?: string | undefined;
   checker_list?: string[];
+  is_active?: boolean;
+  is_blocked?: boolean;
 }

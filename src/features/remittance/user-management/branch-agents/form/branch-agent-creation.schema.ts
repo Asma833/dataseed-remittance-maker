@@ -88,7 +88,8 @@ export const roleStatusSchema = z.object({
     )
     .describe('Choose Role'),
   status: z
-    .enum(['active', 'inactive', 'blocked'], {
+    .union([z.boolean(), z.literal('blocked')])
+    .refine((val) => val === true || val === false || val === 'blocked', {
       message: 'Status is required',
     })
     .describe('Status'),
