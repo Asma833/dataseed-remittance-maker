@@ -28,7 +28,7 @@ export const basicDetailsSchema = z.object({
     .refine((val) => !/^[\s-]/.test(val), 'Full name cannot start with space or hyphen')
     .describe('Full Name'),
   emailId: z.string().min(1, 'Email is required').email('Please enter a valid email').describe('Email Id'),
-  mobileNo: z.string().min(1, 'Phone Number is required').describe('Phone No.'),
+  mobileNo: z.string().optional(),
   checkerList: z.array(z.string().optional())
 });
 

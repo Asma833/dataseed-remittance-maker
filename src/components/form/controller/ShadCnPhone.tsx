@@ -10,6 +10,7 @@ interface ShadCnPhoneProps {
   disabled?: boolean;
   required?: boolean;
   forcedValue?: string;
+  placeholder:string;
 }
 
 export const ShadCnPhone = ({
@@ -19,6 +20,7 @@ export const ShadCnPhone = ({
   disabled = false,
   required = false,
   forcedValue,
+  placeholder
 }: ShadCnPhoneProps) => {
   const { control } = useFormContext();
 
@@ -50,7 +52,7 @@ export const ShadCnPhone = ({
                   onChange(limitedValue);
                 }}
                 disabled={disabled}
-                placeholder="Enter phone number"
+                placeholder={placeholder}
                 maxLength={10}
               />
               {error && <p className="text-sm text-destructive mt-1">{error.message}</p>}

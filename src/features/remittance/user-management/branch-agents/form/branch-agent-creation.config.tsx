@@ -58,12 +58,10 @@ export const branchAgentCreationConfig = (agents: Agent[] = []) => {
         },
         mobileNo: {
           name: 'agentDetails.basicDetails.mobileNo',
-          label: 'Mobile No',
+          label: 'Phone No',
           type: FieldType.Phone,
-          required: true,
-          placeholder: 'Enter Phone No.',
+          placeholder: 'Enter Phone Number',
         },
-
         // Address
         state: {
           name: 'agentDetails.address.state',
