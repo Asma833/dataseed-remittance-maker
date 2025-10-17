@@ -5,6 +5,7 @@ import { CurrencyData } from './types';
 import { Button } from '@/components/ui/button';
 import { DataTable, TableData, staticConfig } from '@/components/table';
 import { PlusCircle } from 'lucide-react';
+import SegmentedToggle from '@/components/segment/segment-toggle';
 
 const sampleCurrencies: CurrencyData[] = [
   {
@@ -49,13 +50,14 @@ const CurrencyTable = () => {
   const navigate = useNavigate();
   const [currencies, setCurrencies] = useState<CurrencyData[]>(sampleCurrencies);
   const [loading, setLoading] = useState(false);
-
+  const [txn, setTxn] = useState<"buy" | "sell">("buy");
+   
   // Table configuration
   const config = {
     ...staticConfig,
     search: {
       ...staticConfig.search,
-      placeholder: 'Search currencies...',
+      placeholder: 'Search...',
       enabled: true,
       searchMode: 'static' as const,
     },
@@ -107,7 +109,15 @@ const CurrencyTable = () => {
 
   return (
     <div className="space-y-4 w-full">
-      {/* Data Table */}
+       <div className="flex gap-6 justify-center">
+        <SegmentedToggle
+          value={txn}
+          onChange={(v) => setTxn(v as "buy" | "sell")}
+          options={[{label:'Buy', value:'buy'}, {label:'Sell', value:'sell'}]}
+          size="md"
+          segmentWidthPx={100} // make each pill wider
+        />
+        </div>
       <DataTable
         columns={columns}
         data={tableData}

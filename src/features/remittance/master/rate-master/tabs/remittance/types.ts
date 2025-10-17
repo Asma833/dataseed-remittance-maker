@@ -7,4 +7,5 @@ export interface RemittanceData {
   'ttMargin03-30end': number;
   ttHolidayMargin: number;
   ttWeekendMargin: number;
+  ttUpperCircuit:string;
 }

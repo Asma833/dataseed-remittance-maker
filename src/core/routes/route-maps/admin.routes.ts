@@ -11,7 +11,7 @@ import { getTabsFromRoute } from '@/utils/routeUtils';
 import LiveRates from '@/features/remittance/master/rate-master/tabs/live-rates/LiveRates';
 import HolidayList from '@/features/remittance/master/rate-master/tabs/holiday-list/table/holiday-list';
 import { CreateHoliday } from '@/features/remittance/master/rate-master/tabs/holiday-list/form/create-holiday';
-import Card from '@/features/remittance/master/rate-master/tabs/card/table/card-page';
+import Card from '@/features/remittance/master/rate-master/tabs/card/card-page';
 import Currency from '@/features/remittance/master/rate-master/tabs/currency/Currency';
 import PurposeMasterTablePage from '@/features/remittance/master/purpose-master/table/purpose-master-table-page';
 import CreatePurposeMasterPage from '@/features/remittance/master/purpose-master/form/create-purpose-master-page';

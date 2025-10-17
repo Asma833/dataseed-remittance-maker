@@ -55,7 +55,7 @@ const HolidayTable = () => {
     ...staticConfig,
     search: {
       ...staticConfig.search,
-      placeholder: 'Search holidays...',
+      placeholder: 'Search...',
       enabled: true,
       searchMode: 'static' as const,
     },

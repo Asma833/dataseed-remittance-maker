@@ -2,10 +2,13 @@ import { RemittanceTableColumnConfig } from './remittance-table-column.config';
 import { DataTable, staticConfig, TableData } from '@/components/table';
 import { useState } from 'react';
 import type { RemittanceData } from './types';
+import SegmentedToggle from '@/components/segment/segment-toggle';
 
 const Remittance = () => {
   //  const { data, loading: isLoading, error, fetchData: refreshData } = useGetAllOrders();
   const [loading, setLoading] = useState(false);
+  // const [txn, setTxn] = useState<"buy" | "sell">("buy");
+  const [unit, setUnit] = useState<"inr" | "percentage">("inr");
   // Table configuration
   const config = {
     ...staticConfig,
@@ -49,6 +52,7 @@ const Remittance = () => {
       'ttMargin03-30end': 1.3,
       ttHolidayMargin: 1.4,
       ttWeekendMargin: 1.5,
+      ttUpperCircuit: '4.0%',
     },
     {
       id: 2,
@@ -59,6 +63,7 @@ const Remittance = () => {
       'ttMargin03-30end': 1.3,
       ttHolidayMargin: 1.45,
       ttWeekendMargin: 1.55,
+      ttUpperCircuit: '4.0%',
     },
     {
       id: 3,
@@ -69,6 +74,7 @@ const Remittance = () => {
       'ttMargin03-30end': 1.35,
       ttHolidayMargin: 1.5,
       ttWeekendMargin: 1.6,
+      ttUpperCircuit: '4.0%',
     },
   ];
   // Table data in the same shape used by Super Checker table
@@ -78,61 +84,27 @@ const Remittance = () => {
     pageCount: Math.ceil(dummyKYCData.length / ((config.pagination?.pageSize as number) || 10)),
     currentPage: 1,
   };
-  //  const tableData = useMemo(() => {
-  //    if (!data) return [];
-
-  //    // If already an array
-  //    if (Array.isArray(data)) {
-  //      return (data as Order[]).filter(
-  //        (item): item is Order => !!item && typeof item === 'object' && 'created_at' in item
-  //      );
-  //    }
-
-  //    // If object with 'orders' property
-  //    if (typeof data === 'object' && 'orders' in data) {
-  //      const orders = (data as any).orders;
-  //      if (Array.isArray(orders)) {
-  //        return orders.filter((item: any): item is Order => !!item && typeof item === 'object' && 'created_at' in item);
-  //      }
-  //      if (orders && typeof orders === 'object') {
-  //        return Object.values(orders).filter(
-  //          (item: any): item is Order => !!item && typeof item === 'object' && 'created_at' in item
-  //        );
-  //      }
-  //      return [];
-  //    }
-
-  //    // If object of objects
-  //    if (typeof data === 'object') {
-  //      return Object.values(data).filter(
-  //        (item: any): item is Order => !!item && typeof item === 'object' && 'created_at' in item
-  //      );
-  //    }
-
-  //    return [];
-  //  }, [data]);
-
-  //  // Format error message consistently
-  //  const errorMessage = useMemo(() => {
-  //    if (!error) return '';
-
-  //    if (typeof error === 'string') {
-  //      return error;
-  //    }
-
-  //    if (error && typeof error === 'object' && 'message' in error) {
-  //      return (error as Error).message;
-  //    }
-
-  //    return 'An unexpected error occurred';
-  //  }, [error]);
-
+  
   const isPaginationDynamic = false;
 
+  const handleEdit = (remittance: RemittanceData) => {
+    // Implement edit logic here
+    console.log('Edit remittance:', remittance);
+  };
+
   // Table columns
-  const tableColumns = RemittanceTableColumnConfig();
+  const tableColumns = RemittanceTableColumnConfig({ handleEdit });
   return (
     <div className="dynamic-table-wrap">
+      <div className="flex gap-6 justify-center">
+        <SegmentedToggle
+        value={unit}
+        onChange={(v) => setUnit(v as "inr" | "percentage")}
+        options={[{label:'INR', value:'inr'}, {label:'Percentage', value:'percentage'}]}
+        size="md"
+        segmentWidthPx={100} // make each pill wider
+      />
+      </div>
       <DataTable
         columns={tableColumns}
         data={tableData}
