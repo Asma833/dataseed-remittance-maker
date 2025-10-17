@@ -3,12 +3,14 @@ import { DataTable, staticConfig, TableData } from '@/components/table';
 import { useState } from 'react';
 import type { RemittanceData } from './types';
 import SegmentedToggle from '@/components/segment/segment-toggle';
+import { RemittanceEditDialog } from './form/RemittanceEditDialog';
 
 const Remittance = () => {
   //  const { data, loading: isLoading, error, fetchData: refreshData } = useGetAllOrders();
   const [loading, setLoading] = useState(false);
-  // const [txn, setTxn] = useState<"buy" | "sell">("buy");
   const [unit, setUnit] = useState<"inr" | "percentage">("inr");
+  const [editDialogOpen, setEditDialogOpen] = useState(false);
+  const [selectedRemittance, setSelectedRemittance] = useState<RemittanceData | null>(null);
   // Table configuration
   const config = {
     ...staticConfig,
@@ -42,7 +44,7 @@ const Remittance = () => {
     onColumnFiltersChange: (filters: { id: string; value: any }[]) => {},
   };
 
-  const dummyKYCData: RemittanceData[] = [
+  const [dummyKYCData, setDummyKYCData] = useState<RemittanceData[]>([
     {
       id: 1,
       currency: 'USD',
@@ -76,7 +78,7 @@ const Remittance = () => {
       ttWeekendMargin: 1.6,
       ttUpperCircuit: '4.0%',
     },
-  ];
+  ]);
   // Table data in the same shape used by Super Checker table
   const tableData: TableData<RemittanceData> = {
     data: dummyKYCData,
@@ -88,8 +90,18 @@ const Remittance = () => {
   const isPaginationDynamic = false;
 
   const handleEdit = (remittance: RemittanceData) => {
-    // Implement edit logic here
-    console.log('Edit remittance:', remittance);
+    setSelectedRemittance(remittance);
+    setEditDialogOpen(true);
+  };
+
+  const handleEditSubmit = (updatedRemittance: RemittanceData) => {
+    setDummyKYCData(prevData =>
+      prevData.map(remittance =>
+        remittance.id === updatedRemittance.id ? updatedRemittance : remittance
+      )
+    );
+    setEditDialogOpen(false);
+    setSelectedRemittance(null);
   };
 
   // Table columns
@@ -114,6 +126,16 @@ const Remittance = () => {
         }}
         actions={tableActions}
         className="rounded-lg"
+      />
+
+      <RemittanceEditDialog
+        isOpen={editDialogOpen}
+        onClose={() => {
+          setEditDialogOpen(false);
+          setSelectedRemittance(null);
+        }}
+        editData={selectedRemittance}
+        onEdit={handleEditSubmit}
       />
     </div>
   );
