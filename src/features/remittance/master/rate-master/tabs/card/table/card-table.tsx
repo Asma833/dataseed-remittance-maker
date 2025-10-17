@@ -1,13 +1,13 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import GetCardTableColumns from './card-table-columns';
-import { CardData } from './types';
+import { CardData } from '../type/types';
 import { Button } from '@/components/ui/button';
 import { DataTable, TableData, staticConfig } from '@/components/table';
 import { PlusCircle } from 'lucide-react';
 import React from 'react';
 import SegmentedToggle from '@/components/segment/segment-toggle';
-import { CardEditDialog } from './CardEditDialog';
+import { CardEditDialog } from '../form/CardEditDialog';
 
 const sampleCards: CardData[] = [
   {

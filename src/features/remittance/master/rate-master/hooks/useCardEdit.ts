@@ -1,6 +1,6 @@
 import { useMutation, useQuery } from '@tanstack/react-query';
-import { CardEditFormData } from './card-edit-form.types';
-import { updateCardData, getCardDataById } from './card-edit.api';
+import { CardEditFormData } from '../tabs/card/form/card-edit-form.types';
+import { getCardDataById, updateCardData } from '../api/card-edit.api';
 
 // Hook to get card data by ID
 export const useGetCardData = (id: string) => {

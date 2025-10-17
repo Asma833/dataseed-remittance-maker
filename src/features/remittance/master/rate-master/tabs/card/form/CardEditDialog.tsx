@@ -4,9 +4,9 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { GenericDialog } from '@/components/common/generic-dialog';
 import { cardEditFormSchema, CardEditFormData } from './card-edit-form.schema';
 import { cardEditFormConfig } from './card-edit-form.config';
-import { useUpdateCardData, useGetCardData } from './useCardEdit';
+import { useUpdateCardData, useGetCardData } from '../../../hooks/useCardEdit';
 import { toast } from 'sonner';
-import { CardData } from './types';
+import { CardData } from '../type/types';
 
 interface CardEditDialogProps {
   isOpen: boolean;

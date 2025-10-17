@@ -1,5 +1,5 @@
 import { ActionButtons, TableColumn } from '@/components/table';
-import { CardData } from './types';
+import { CardData } from '../type/types';
 
 const GetCardTableColumns = ({ handleEdit }: { handleEdit: (card: CardData) => void }): TableColumn<CardData>[] => {
   return [
