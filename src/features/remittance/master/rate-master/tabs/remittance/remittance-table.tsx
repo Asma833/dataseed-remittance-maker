@@ -6,10 +6,13 @@ import SegmentedToggle from '@/components/segment/segment-toggle';
 import { RemittanceEditDialog } from './form/RemittanceEditDialog';
 import { useGetCurrencyRates } from '../../hooks/useCurrencyRate';
 import { CurrencyRate } from '../../types/currency-rate.types';
+import { useQueryClient } from '@tanstack/react-query';
+import { formatRemittanceValue } from '@/utils/remittanceFormatters';
 
 const Remittance = () => {
   // Fetch currency rates from API
   const { data: currencyRates, isLoading: isLoadingRates, error: ratesError } = useGetCurrencyRates();
+  const queryClient = useQueryClient();
 
   //  const { data, loading: isLoading, error, fetchData: refreshData } = useGetAllOrders();
   const [loading, setLoading] = useState(false);
@@ -53,15 +56,14 @@ const Remittance = () => {
   const remittanceData: RemittanceData[] = currencyRates ? currencyRates.map((rate: CurrencyRate) => ({
     id: rate.id,
     currency: rate.currency_code || '-',
-    'ttMargin10-12': rate.time_wise_margin?.['10-12'] ?? '-',
-    'ttMargin12-02': rate.time_wise_margin?.['12-02'] ?? '-',
-    'ttMargin02-3-30': rate.time_wise_margin?.['02-3.30'] ?? '-',
-    'ttMargin03-30end': rate.time_wise_margin?.['3.30End'] ?? '-',
-    ttHolidayMargin: rate.time_wise_margin?.holiday ?? '-',
-    ttWeekendMargin: rate.time_wise_margin?.weekend ?? '-',
-    ttUpperCircuit: rate.time_wise_margin?.upper_circuit ?? '-'
+    'ttMargin10-12': formatRemittanceValue(rate.time_wise_margin?.['10-12'], unit),
+    'ttMargin12-02': formatRemittanceValue(rate.time_wise_margin?.['12-02'], unit),
+    'ttMargin02-3-30': formatRemittanceValue(rate.time_wise_margin?.['02-3.30'], unit),
+    'ttMargin03-30end': formatRemittanceValue(rate.time_wise_margin?.['3.30End'], unit),
+    ttHolidayMargin: formatRemittanceValue(rate.time_wise_margin?.holiday, unit),
+    ttWeekendMargin: formatRemittanceValue(rate.time_wise_margin?.weekend, unit),
+    ttUpperCircuit: formatRemittanceValue(rate.time_wise_margin?.upper_circuit, unit)
   })) : [];
-
   
   // Table data in the same shape used by Super Checker table
   const tableData: TableData<RemittanceData> = {
@@ -79,11 +81,8 @@ const Remittance = () => {
   };
 
   const handleEditSubmit = (updatedRemittance: RemittanceData) => {
-    // setDummyKYCData(prevData =>
-    //   prevData.map(remittance =>
-    //     remittance.id === updatedRemittance.id ? updatedRemittance : remittance
-    //   )
-    // );
+    // Invalidate and refetch currency rates to update the table
+    queryClient.invalidateQueries({ queryKey: ['currencyRates'] });
     setEditDialogOpen(false);
     setSelectedRemittance(null);
   };
