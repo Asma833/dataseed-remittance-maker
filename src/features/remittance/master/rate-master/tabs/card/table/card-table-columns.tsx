@@ -4,17 +4,6 @@ import { CardData } from './types';
 const GetCardTableColumns = ({ handleEdit }: { handleEdit: (card: CardData) => void }): TableColumn<CardData>[] => {
   return [
     {
-      id: 'sno',
-      header: 'Sl.No',
-      accessorKey: 'sno',
-      sortable: true,
-      filterable: false,
-      meta: {
-        headerAlign: 'center',
-        cellAlign: 'center',
-      },
-    },
-    {
       id: 'currency',
       header: 'Currency',
       accessorKey: 'currency',

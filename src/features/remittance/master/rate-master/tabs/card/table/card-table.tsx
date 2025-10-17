@@ -5,6 +5,8 @@ import { CardData } from './types';
 import { Button } from '@/components/ui/button';
 import { DataTable, TableData, staticConfig } from '@/components/table';
 import { PlusCircle } from 'lucide-react';
+import React from 'react';
+import SegmentedToggle from '@/components/segment/segment-toggle';
 
 const sampleCards: CardData[] = [
   {
@@ -49,7 +51,9 @@ const CardTable = () => {
   const navigate = useNavigate();
   const [cards, setCards] = useState<CardData[]>(sampleCards);
   const [loading, setLoading] = useState(false);
-
+  const [txn, setTxn] = React.useState<"buy" | "sell">("buy");
+  const [unit, setUnit] = React.useState<"inr" | "percentage">("inr");
+ 
   // Table configuration
   const config = {
     ...staticConfig,
@@ -107,6 +111,22 @@ const CardTable = () => {
 
   return (
     <div className="space-y-4 w-full">
+       <div className="flex gap-6 justify-center">
+        <SegmentedToggle
+          value={txn}
+          onChange={(v) => setTxn(v as "buy" | "sell")}
+          options={[{label:'Buy', value:'buy'}, {label:'Sell', value:'sell'}]}
+          size="md"
+          segmentWidthPx={120} // make each pill wider
+        />
+         <SegmentedToggle
+          value={unit}
+          onChange={(v) => setUnit(v as "inr" | "percentage")}
+          options={[{label:'INR', value:'inr'}, {label:'Percentage', value:'percentage'}]}
+          size="md"
+          segmentWidthPx={120} // make each pill wider
+        />
+        </div>
       {/* Data Table */}
       <DataTable
         columns={columns}

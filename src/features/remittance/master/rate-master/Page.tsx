@@ -34,8 +34,8 @@ const TransactionPage = () => {
                 cn(
                   'px-4 py-2 rounded text-sm no-underline transition-colors flex justify-center items-center w-38',
                   isActive
-                    ? 'bg-gray-500 text-white font-bold hover:bg-gray-600'
-                    : 'bg-primary text-primary-foreground bg-linear-to-r from-primary-gradient-1 to-primary-gradient-2 shadow-sm hover:bg-primary/150'
+                    ? 'bg-primary text-primary-foreground bg-linear-to-r from-primary-gradient-1 to-primary-gradient-2 shadow-sm hover:bg-primary/150'
+                    : 'bg-gray-500 text-white font-bold hover:bg-gray-600'
                 )
               }
             >
