@@ -23,7 +23,7 @@ export const RemittanceEditDialog: React.FC<RemittanceEditDialogProps> = ({
 }) => {
   const form = useForm<RemittanceEditFormData>({
     resolver: zodResolver(remittanceEditFormSchema),
-    defaultValues: editData || {},
+    defaultValues: {},
     mode: 'onChange',
   });
 
@@ -34,14 +34,14 @@ export const RemittanceEditDialog: React.FC<RemittanceEditDialogProps> = ({
   useEffect(() => {
     if (editData) {
       reset({
-        currency: editData.currency,
-        'ttMargin10-12': editData['ttMargin10-12'],
-        'ttMargin12-02': editData['ttMargin12-02'],
-        'ttMargin02-3-30': editData['ttMargin02-3-30'],
-        'ttMargin03-30end': editData['ttMargin03-30end'],
-        ttHolidayMargin: editData.ttHolidayMargin,
-        ttWeekendMargin: editData.ttWeekendMargin,
-        ttUpperCircuit: editData.ttUpperCircuit,
+        currency: String(editData.currency),
+        'ttMargin10-12': Number(editData['ttMargin10-12']) || 0,
+        'ttMargin12-02': Number(editData['ttMargin12-02']) || 0,
+        'ttMargin02-3-30': Number(editData['ttMargin02-3-30']) || 0,
+        'ttMargin03-30end': Number(editData['ttMargin03-30end']) || 0,
+        ttHolidayMargin: Number(editData.ttHolidayMargin) || 0,
+        ttWeekendMargin: Number(editData.ttWeekendMargin) || 0,
+        ttUpperCircuit: String(editData.ttUpperCircuit),
       });
     } else {
       reset({

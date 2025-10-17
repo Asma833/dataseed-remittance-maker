@@ -5,6 +5,7 @@ import { HolidayData } from './types';
 import { Button } from '@/components/ui/button';
 import { DataTable, TableData, staticConfig } from '@/components/table';
 import { PlusCircle } from 'lucide-react';
+import { HolidayEditDialog } from '../form/HolidayEditDialog';
 
 const sampleHolidays: HolidayData[] = [
   {
@@ -49,6 +50,8 @@ const HolidayTable = () => {
   const navigate = useNavigate();
   const [holidays, setHolidays] = useState<HolidayData[]>(sampleHolidays);
   const [loading, setLoading] = useState(false);
+  const [editDialogOpen, setEditDialogOpen] = useState(false);
+  const [selectedHoliday, setSelectedHoliday] = useState<HolidayData | null>(null);
 
   // Table configuration
   const config = {
@@ -78,7 +81,18 @@ const HolidayTable = () => {
   };
 
   const handleEdit = (holiday: HolidayData) => {
-    navigate('/admin/master/holiday-creation', { state: { holiday } });
+    setSelectedHoliday(holiday);
+    setEditDialogOpen(true);
+  };
+
+  const handleEditSubmit = (updatedHoliday: HolidayData) => {
+    setHolidays(prevHolidays =>
+      prevHolidays.map(holiday =>
+        holiday.id === updatedHoliday.id ? updatedHoliday : holiday
+      )
+    );
+    setEditDialogOpen(false);
+    setSelectedHoliday(null);
   };
 
   // Table actions
@@ -131,6 +145,16 @@ const HolidayTable = () => {
         }}
         actions={tableActions}
         className="rounded-lg"
+      />
+
+      <HolidayEditDialog
+        isOpen={editDialogOpen}
+        onClose={() => {
+          setEditDialogOpen(false);
+          setSelectedHoliday(null);
+        }}
+        editData={selectedHoliday}
+        onEdit={handleEditSubmit}
       />
     </div>
   );

@@ -10,7 +10,6 @@ import Remittance from '@/features/remittance/master/rate-master/tabs/remittance
 import { getTabsFromRoute } from '@/utils/routeUtils';
 import LiveRates from '@/features/remittance/master/rate-master/tabs/live-rates/LiveRates';
 import HolidayList from '@/features/remittance/master/rate-master/tabs/holiday-list/table/holiday-list';
-import { CreateHoliday } from '@/features/remittance/master/rate-master/tabs/holiday-list/form/create-holiday';
 import Card from '@/features/remittance/master/rate-master/tabs/card/card-page';
 import Currency from '@/features/remittance/master/rate-master/tabs/currency/Currency';
 import PurposeMasterTablePage from '@/features/remittance/master/purpose-master/table/purpose-master-table-page';
@@ -105,18 +104,18 @@ export const adminRoutes: RouteConfig[] = [
     roles: [baseRole],
     permission: '',
     subRoutes: [
-      {
-        path: ROUTES.ADMIN.MASTER.RATE_MASTER.CARD,
-        label: 'Card',
-        element: Card,
-        permission: '',
-      },
-      {
-        path: ROUTES.ADMIN.MASTER.RATE_MASTER.CURRENCY,
-        label: 'Currency',
-        element: Currency,
-        permission: '',
-      },
+      // {
+      //   path: ROUTES.ADMIN.MASTER.RATE_MASTER.CARD,
+      //   label: 'Card',
+      //   element: Card,
+      //   permission: '',
+      // },
+      // {
+      //   path: ROUTES.ADMIN.MASTER.RATE_MASTER.CURRENCY,
+      //   label: 'Currency',
+      //   element: Currency,
+      //   permission: '',
+      // },
       {
         path: ROUTES.ADMIN.MASTER.RATE_MASTER.REMITTANCE,
         label: 'Remittance',
@@ -136,12 +135,6 @@ export const adminRoutes: RouteConfig[] = [
         permission: '',
       },
     ],
-  },
-  {
-    path: '/master/holiday-creation',
-    element: CreateHoliday,
-    roles: [baseRole],
-    permission: 'admin',
   },
   {
     path: ROUTES.ADMIN.MASTER.PURPOSE_MASTER,

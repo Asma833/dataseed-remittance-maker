@@ -2,8 +2,13 @@ import { useState } from 'react';
 import { DataTable, staticConfig, TableData } from '@/components/table';
 import type { LiveRateData } from './types';
 import { LiveRateTableColumnConfig } from './live-rate-table.config';
+import { useGetCurrencyRates } from '../../hooks/useCurrencyRate';
+import { CurrencyRate } from '../../types/currency-rate.types';
 
 const LiveRates = () => {
+  // Fetch currency rates from API
+  const { data: currencyRates, isLoading: isLoadingRates, error: ratesError } = useGetCurrencyRates();
+
   //  const { data, loading: isLoading, error, fetchData: refreshData } = useGetAllOrders();
   const [loading, setLoading] = useState(false);
   // Table configuration
@@ -39,67 +44,25 @@ const LiveRates = () => {
     onColumnFiltersChange: (filters: { id: string; value: any }[]) => {},
   };
 
-  const dummyKYCData: LiveRateData[] = [
-    { id: 1, currency: 'USD', remittanceRate: 83.25, currencyRate: 83.1, cardBuyRate: 82.95, cardSellRate: 83.45 },
-    { id: 2, currency: 'EUR', remittanceRate: 90.15, currencyRate: 90.05, cardBuyRate: 89.85, cardSellRate: 90.35 },
-    { id: 3, currency: 'GBP', remittanceRate: 104.4, currencyRate: 104.25, cardBuyRate: 104.1, cardSellRate: 104.6 },
-  ];
+  // Transform API data to component format
+  const liveRateData: LiveRateData[] = currencyRates ? currencyRates.map((rate: CurrencyRate) => ({
+    id: rate.id,
+    currency: rate.currency_code || '-',
+    remittanceRate:  '-', 
+    currencyRate:  '-', 
+    cardBuyRate: rate.card_buy_rate || '-',
+    cardSellRate: rate.card_sell_rate || '-',
+  })) : [];
+
+  
   // Table data in the same shape used by Super Checker table
   const tableData: TableData<LiveRateData> = {
-    data: dummyKYCData,
-    totalCount: dummyKYCData.length,
-    pageCount: Math.ceil(dummyKYCData.length / ((config.pagination?.pageSize as number) || 10)),
+    data: liveRateData,
+    totalCount: liveRateData.length,
+    pageCount: Math.ceil(liveRateData.length / ((config.pagination?.pageSize as number) || 10)),
     currentPage: 1,
   };
-  //  const tableData = useMemo(() => {
-  //    if (!data) return [];
-
-  //    // If already an array
-  //    if (Array.isArray(data)) {
-  //      return (data as Order[]).filter(
-  //        (item): item is Order => !!item && typeof item === 'object' && 'created_at' in item
-  //      );
-  //    }
-
-  //    // If object with 'orders' property
-  //    if (typeof data === 'object' && 'orders' in data) {
-  //      const orders = (data as any).orders;
-  //      if (Array.isArray(orders)) {
-  //        return orders.filter((item: any): item is Order => !!item && typeof item === 'object' && 'created_at' in item);
-  //      }
-  //      if (orders && typeof orders === 'object') {
-  //        return Object.values(orders).filter(
-  //          (item: any): item is Order => !!item && typeof item === 'object' && 'created_at' in item
-  //        );
-  //      }
-  //      return [];
-  //    }
-
-  //    // If object of objects
-  //    if (typeof data === 'object') {
-  //      return Object.values(data).filter(
-  //        (item: any): item is Order => !!item && typeof item === 'object' && 'created_at' in item
-  //      );
-  //    }
-
-  //    return [];
-  //  }, [data]);
-
-  //  // Format error message consistently
-  //  const errorMessage = useMemo(() => {
-  //    if (!error) return '';
-
-  //    if (typeof error === 'string') {
-  //      return error;
-  //    }
-
-  //    if (error && typeof error === 'object' && 'message' in error) {
-  //      return (error as Error).message;
-  //    }
-
-  //    return 'An unexpected error occurred';
-  //  }, [error]);
-
+  
   const isPaginationDynamic = false;
 
   // Table columns

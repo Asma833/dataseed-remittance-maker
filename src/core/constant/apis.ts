@@ -155,6 +155,9 @@ export const API = {
     DELETE_DOCUMENT: (id: string) => `/fx/document/${id}`,
     DOC_PURPOSE_TRANS_MAPPING: `/trans-purpose-document/map`,
   },
+  CURRENCY_RATE: {
+    GET_ALL: `/currency-rate`,
+  },
 } as const;
 
 /**

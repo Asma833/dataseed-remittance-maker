@@ -4,8 +4,13 @@ import { useState } from 'react';
 import type { RemittanceData } from './types';
 import SegmentedToggle from '@/components/segment/segment-toggle';
 import { RemittanceEditDialog } from './form/RemittanceEditDialog';
+import { useGetCurrencyRates } from '../../hooks/useCurrencyRate';
+import { CurrencyRate } from '../../types/currency-rate.types';
 
 const Remittance = () => {
+  // Fetch currency rates from API
+  const { data: currencyRates, isLoading: isLoadingRates, error: ratesError } = useGetCurrencyRates();
+
   //  const { data, loading: isLoading, error, fetchData: refreshData } = useGetAllOrders();
   const [loading, setLoading] = useState(false);
   const [unit, setUnit] = useState<"inr" | "percentage">("inr");
@@ -44,46 +49,25 @@ const Remittance = () => {
     onColumnFiltersChange: (filters: { id: string; value: any }[]) => {},
   };
 
-  const [dummyKYCData, setDummyKYCData] = useState<RemittanceData[]>([
-    {
-      id: 1,
-      currency: 'USD',
-      'ttMargin10-12': 1.25,
-      'ttMargin12-02': 1.15,
-      'ttMargin02-3-30': 1.1,
-      'ttMargin03-30end': 1.3,
-      ttHolidayMargin: 1.4,
-      ttWeekendMargin: 1.5,
-      ttUpperCircuit: '4.0%',
-    },
-    {
-      id: 2,
-      currency: 'EUR',
-      'ttMargin10-12': 1.35,
-      'ttMargin12-02': 1.25,
-      'ttMargin02-3-30': 1.2,
-      'ttMargin03-30end': 1.3,
-      ttHolidayMargin: 1.45,
-      ttWeekendMargin: 1.55,
-      ttUpperCircuit: '4.0%',
-    },
-    {
-      id: 3,
-      currency: 'GBP',
-      'ttMargin10-12': 1.4,
-      'ttMargin12-02': 1.3,
-      'ttMargin02-3-30': 1.25,
-      'ttMargin03-30end': 1.35,
-      ttHolidayMargin: 1.5,
-      ttWeekendMargin: 1.6,
-      ttUpperCircuit: '4.0%',
-    },
-  ]);
+  // Transform API data to component format
+  const remittanceData: RemittanceData[] = currencyRates ? currencyRates.map((rate: CurrencyRate) => ({
+    id: rate.id,
+    currency: rate.currency_code || '-',
+    'ttMargin10-12': rate.time_wise_margin?.['10-12'] ?? '-',
+    'ttMargin12-02': rate.time_wise_margin?.['12-02'] ?? '-',
+    'ttMargin02-3-30': rate.time_wise_margin?.['02-3.30'] ?? '-',
+    'ttMargin03-30end': rate.time_wise_margin?.['3.30End'] ?? '-',
+    ttHolidayMargin: rate.time_wise_margin?.holiday ?? '-',
+    ttWeekendMargin: rate.time_wise_margin?.weekend ?? '-',
+    ttUpperCircuit: rate.time_wise_margin?.upper_circuit ?? '-'
+  })) : [];
+
+  
   // Table data in the same shape used by Super Checker table
   const tableData: TableData<RemittanceData> = {
-    data: dummyKYCData,
-    totalCount: dummyKYCData.length,
-    pageCount: Math.ceil(dummyKYCData.length / ((config.pagination?.pageSize as number) || 10)),
+    data: remittanceData,
+    totalCount: remittanceData.length,
+    pageCount: Math.ceil(remittanceData.length / ((config.pagination?.pageSize as number) || 10)),
     currentPage: 1,
   };
   
@@ -95,11 +79,11 @@ const Remittance = () => {
   };
 
   const handleEditSubmit = (updatedRemittance: RemittanceData) => {
-    setDummyKYCData(prevData =>
-      prevData.map(remittance =>
-        remittance.id === updatedRemittance.id ? updatedRemittance : remittance
-      )
-    );
+    // setDummyKYCData(prevData =>
+    //   prevData.map(remittance =>
+    //     remittance.id === updatedRemittance.id ? updatedRemittance : remittance
+    //   )
+    // );
     setEditDialogOpen(false);
     setSelectedRemittance(null);
   };
