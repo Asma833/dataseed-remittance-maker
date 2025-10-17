@@ -4,7 +4,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { GenericDialog } from '@/components/common/generic-dialog';
 import { remittanceEditFormSchema, RemittanceEditFormData } from './remittance-edit-form.schema';
 import { remittanceEditFormConfig } from './remittance-edit-form.config';
-import { useUpdateRemittanceData } from '../hooks/useRemittanceEdit';
+import { useUpdateTimewiseMargin } from '../../../hooks/useUpdateTimewiseMargin';
 import { toast } from 'sonner';
 import { RemittanceData } from '../types';
 
@@ -30,7 +30,7 @@ export const RemittanceEditDialog: React.FC<RemittanceEditDialogProps> = ({
   });
 
   const { reset, watch } = form;
-  const updateRemittanceMutation = useUpdateRemittanceData();
+  const updateTimewiseMarginMutation = useUpdateTimewiseMargin();
 
   // Watch for currency type changes
   const watchedCurrencyType = watch('currencyType');
@@ -104,19 +104,30 @@ export const RemittanceEditDialog: React.FC<RemittanceEditDialogProps> = ({
         ttUpperCircuit: data.ttUpperCircuit,
       };
 
-      // Call the API update
-      updateRemittanceMutation.mutate(
-        { ...processedData, id: editData.id } as RemittanceEditFormData & { id: string | number },
-        {
-          onSuccess: () => {
-            onEdit(updatedRemittance);
-            toast.success('Remittance updated successfully');
-          },
-          onError: () => {
-            toast.error('Failed to update remittance');
-          },
+      // Prepare the payload for the API
+      const apiPayload = {
+        currency_code: processedData.currency,
+        time_wise_margin: {
+          "10-12": Number(processedData['ttMargin10-12']) || 0,
+          "12-02": Number(processedData['ttMargin12-02']) || 0,
+          "02-3.30": Number(processedData['ttMargin02-3-30']) || 0,
+          "3.30End": Number(processedData['ttMargin03-30end']) || 0,
+          holiday: Number(processedData.ttHolidayMargin) || 0,
+          weekend: Number(processedData.ttWeekendMargin) || 0,
+          upper_circuit: Number(processedData.ttUpperCircuit) || 0,
         }
-      );
+      };
+
+      // Call the API update
+      updateTimewiseMarginMutation.mutate(apiPayload, {
+        onSuccess: () => {
+          onEdit(updatedRemittance);
+          toast.success('Remittance updated successfully');
+        },
+        onError: () => {
+          toast.error('Failed to update remittance');
+        },
+      });
     }
   };
 

@@ -147,6 +147,11 @@ export const ENDPOINT_MATCHING_RULES: EndpointRulesConfig = {
     endpoint: '/rem-users/active-inactive',
     matchType: 'standard' as const,
     description: 'Inactive super checker',
+  },
+  'update-currency':{
+    endpoint: API.CURRENCY_RATE.UPDATE_TIMEWISE,
+    matchType: 'standard' as const,
+    description: 'Update currency value',
   }
   
 } as const;

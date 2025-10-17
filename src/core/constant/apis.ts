@@ -157,6 +157,7 @@ export const API = {
   },
   CURRENCY_RATE: {
     GET_ALL: `/currency-rate`,
+    UPDATE_TIMEWISE: `/currency-rate/update-timewise`,
   },
 } as const;
 
