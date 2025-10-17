@@ -1,11 +1,11 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import GetHolidayTableColumns from './holiday-table-columns';
 import { HolidayData } from './types';
 import { Button } from '@/components/ui/button';
 import { DataTable, TableData, staticConfig } from '@/components/table';
 import { PlusCircle } from 'lucide-react';
 import { HolidayEditDialog } from '../form/HolidayEditDialog';
+import { HolidayListTableColumnConfig } from './holiday-list-table-column.config';
 
 const sampleHolidays: HolidayData[] = [
   {
@@ -86,13 +86,32 @@ const HolidayTable = () => {
   };
 
   const handleEditSubmit = (updatedHoliday: HolidayData) => {
-    setHolidays(prevHolidays =>
-      prevHolidays.map(holiday =>
-        holiday.id === updatedHoliday.id ? updatedHoliday : holiday
-      )
-    );
+    if (selectedHoliday) {
+      // Edit mode
+      setHolidays(prevHolidays =>
+        prevHolidays.map(holiday =>
+          holiday.id === updatedHoliday.id ? updatedHoliday : holiday
+        )
+      );
+    } else {
+      // Add mode
+      const newId = Date.now().toString();
+      const maxSno = Math.max(...holidays.map(h => h.sno || 0), 0);
+      const newHoliday: HolidayData = {
+        ...updatedHoliday,
+        id: newId,
+        sno: maxSno + 1,
+      };
+      setHolidays(prevHolidays => [...prevHolidays, newHoliday]);
+    }
     setEditDialogOpen(false);
     setSelectedHoliday(null);
+  };
+
+  const handleDelete = (holiday: HolidayData) => {
+    setHolidays(prevHolidays =>
+      prevHolidays.filter(h => h.id !== holiday.id)
+    );
   };
 
   // Table actions
@@ -114,14 +133,16 @@ const HolidayTable = () => {
     },
   };
 
-  // Navigate to holiday creation page
+  // Open dialog for adding new holiday
   const handleAddHoliday = () => {
-    navigate('/admin/master/holiday-creation');
+    setSelectedHoliday(null); // Clear selection for add mode
+    setEditDialogOpen(true);
   };
 
   // Define columns
-  const columns = GetHolidayTableColumns({
+  const columns = HolidayListTableColumnConfig({
     handleEdit,
+    handleDelete
   });
 
   return (

@@ -46,7 +46,7 @@ export function ActionButtons<T>({ row, onEdit, onDelete, onView,onInactivate }:
             e.stopPropagation();
             onDelete(row);
           }}
-          className="h-6 w-6 p-0 text-red-600 hover:text-red-800 hover:bg-red-50"
+          className="h-6 w-6 p-0 bg-red-100 text-red-600 hover:bg-red-200 hover:text-red-800"
           tooltip="Delete"
         >
           <AiOutlineDelete className="h-4 w-4" />
