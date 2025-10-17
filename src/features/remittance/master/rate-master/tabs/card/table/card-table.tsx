@@ -7,6 +7,7 @@ import { DataTable, TableData, staticConfig } from '@/components/table';
 import { PlusCircle } from 'lucide-react';
 import React from 'react';
 import SegmentedToggle from '@/components/segment/segment-toggle';
+import { CardEditDialog } from './CardEditDialog';
 
 const sampleCards: CardData[] = [
   {
@@ -53,13 +54,15 @@ const CardTable = () => {
   const [loading, setLoading] = useState(false);
   const [txn, setTxn] = React.useState<"buy" | "sell">("buy");
   const [unit, setUnit] = React.useState<"inr" | "percentage">("inr");
+  const [editDialogOpen, setEditDialogOpen] = useState(false);
+  const [selectedCard, setSelectedCard] = useState<CardData | null>(null);
  
   // Table configuration
   const config = {
     ...staticConfig,
     search: {
       ...staticConfig.search,
-      placeholder: 'Search cards...',
+      placeholder: 'Search...',
       enabled: true,
       searchMode: 'static' as const,
     },
@@ -82,7 +85,18 @@ const CardTable = () => {
   };
 
   const handleEdit = (card: CardData) => {
-    navigate('/admin/master/card-creation', { state: { card } });
+    setSelectedCard(card);
+    setEditDialogOpen(true);
+  };
+
+  const handleEditSubmit = (updatedCard: CardData) => {
+    setCards(prevCards =>
+      prevCards.map(card =>
+        card.id === updatedCard.id ? updatedCard : card
+      )
+    );
+    setEditDialogOpen(false);
+    setSelectedCard(null);
   };
 
   // Table actions
@@ -136,6 +150,16 @@ const CardTable = () => {
         }}
         actions={tableActions}
         className="rounded-lg"
+      />
+
+      <CardEditDialog
+        isOpen={editDialogOpen}
+        onClose={() => {
+          setEditDialogOpen(false);
+          setSelectedCard(null);
+        }}
+        editData={selectedCard}
+        onEdit={handleEditSubmit}
       />
     </div>
   );
