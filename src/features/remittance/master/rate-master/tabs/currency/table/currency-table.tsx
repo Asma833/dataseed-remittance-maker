@@ -6,6 +6,7 @@ import { Button } from '@/components/ui/button';
 import { DataTable, TableData, staticConfig } from '@/components/table';
 import { PlusCircle } from 'lucide-react';
 import SegmentedToggle from '@/components/segment/segment-toggle';
+import { CurrencyEditDialog } from '../form/CurrencyEditDialog';
 
 const sampleCurrencies: CurrencyData[] = [
   {
@@ -51,6 +52,8 @@ const CurrencyTable = () => {
   const [currencies, setCurrencies] = useState<CurrencyData[]>(sampleCurrencies);
   const [loading, setLoading] = useState(false);
   const [txn, setTxn] = useState<"buy" | "sell">("buy");
+  const [editDialogOpen, setEditDialogOpen] = useState(false);
+  const [selectedCurrency, setSelectedCurrency] = useState<CurrencyData | null>(null);
    
   // Table configuration
   const config = {
@@ -80,7 +83,18 @@ const CurrencyTable = () => {
   };
 
   const handleEdit = (currency: CurrencyData) => {
-    navigate('/admin/master/currency-creation', { state: { currency } });
+    setSelectedCurrency(currency);
+    setEditDialogOpen(true);
+  };
+
+  const handleEditSubmit = (updatedCurrency: CurrencyData) => {
+    setCurrencies(prevCurrencies =>
+      prevCurrencies.map(currency =>
+        currency.id === updatedCurrency.id ? updatedCurrency : currency
+      )
+    );
+    setEditDialogOpen(false);
+    setSelectedCurrency(null);
   };
 
   // Table actions
@@ -126,6 +140,16 @@ const CurrencyTable = () => {
         }}
         actions={tableActions}
         className="rounded-lg"
+      />
+
+      <CurrencyEditDialog
+        isOpen={editDialogOpen}
+        onClose={() => {
+          setEditDialogOpen(false);
+          setSelectedCurrency(null);
+        }}
+        editData={selectedCurrency}
+        onEdit={handleEditSubmit}
       />
     </div>
   );
