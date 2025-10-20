@@ -133,23 +133,23 @@ export const agentAdminCreationSchema = z.object({
     .or(z.literal('')),
   gstState: z
     .string()
-    .min(1, 'State is required')
-     .regex(/^(?!\s)(?!-)/, 'Cannot start with space or hyphen'),
+     .regex(/^(?!\s)(?!-)/, 'Cannot start with space or hyphen')
+     .optional(),
   pinCode: z
     .string()
-    .min(1, 'PIN Code is required')
     .regex(/^(?!\s)(?!-)/, 'Cannot start with space or hyphen')
-    .regex(/^\d{6}$/, 'PIN Code must be 6 digits'),
+    .refine((val) => val === '' || /^\d{6}$/.test(val), 'PIN Code must be 6 digits')
+    .optional()
+    .optional(),
   gstBranch: z
     .string()
-    .min(1, 'Branch is required')
-     .regex(/^(?!\s)(?!-)/, 'Cannot start with space or hyphen'),
-
+     .regex(/^(?!\s)(?!-)/, 'Cannot start with space or hyphen')
+     .optional(),
   // Finance Details
   financeSpocName: z
     .string()
     .min(1, 'Financial SPOC Name is required')
-     .regex(/^(?!\s)(?!-)/, 'Cannot start with space or hyphen'),
+    .regex(/^(?!\s)(?!-)/, 'Cannot start with space or hyphen'),
   financeSpocEmail: z.string().min(1, 'Financial SPOC Email is required').email('Please enter a valid email address'),
   financeSpocPhoneNo: z
     .string()
