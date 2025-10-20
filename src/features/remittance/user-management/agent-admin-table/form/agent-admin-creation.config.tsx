@@ -105,12 +105,14 @@ export const agentAdminCreationConfig = () => {
           name: 'monthlyCreditLimit',
           label: 'Monthly Credit Limit (INR)',
           type: FieldType.Number,
+          required: true,
           placeholder: 'Enter Monthly Credit Limit',
         },
         totalCreditDays: {
           name: 'totalCreditDays',
           label: 'Total Credit Days',
           type: FieldType.Number,
+          required: true,
           placeholder: 'Enter Total Credit Days',
         },
          password: {
@@ -137,6 +139,7 @@ export const agentAdminCreationConfig = () => {
           options: [
             { value: 'regular', label: 'Regular' },
             { value: 'composition', label: 'Composition' },
+             { value: 'unregistered', label: 'Unregistered' },
           ],
           placeholder: 'Select GST Classification',
         },
