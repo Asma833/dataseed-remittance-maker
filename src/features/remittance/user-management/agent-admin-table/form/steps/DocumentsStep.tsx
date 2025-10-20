@@ -11,6 +11,7 @@ import { getController } from '@/components/form/utils/get-controller';
 import { agentAdminCreationConfig } from '../agent-admin-creation.config';
 import { uploadRemittanceImage } from '../../../api/documents';
 import { useGetPresignedUrls } from '../../../hooks/useGetPresignedUrls';
+import { format } from 'date-fns';
 
 type DocKind = 'agreement' | 'rbi';
 
@@ -25,6 +26,11 @@ export const DocumentsStep: React.FC = () => {
   // Watch just what we need
   const agreement = useWatch({ control, name: 'agreementCopy' }) as File | string | undefined;
   const rbi = useWatch({ control, name: 'rbiLicenseCopy' }) as File | string | undefined;
+  const rbiLicenseValidity = useWatch({ control, name: 'rbiLicenseValidity' });
+
+  // Get today's date in YYYY-MM-DD format
+  const today = format(new Date(), 'yyyy-MM-dd');
+  const shouldShowExtensionMonth = rbiLicenseValidity >= today;
 
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [modalImageSrc, setModalImageSrc] = useState('');
@@ -253,26 +259,28 @@ export const DocumentsStep: React.FC = () => {
             }
           )}
         </FormFieldRow>
-        <FormFieldRow className="mb-4">
-          {(['extensionMonth'] as const).map(
-            (fieldName) => {
-              const field = config.fields.documents?.[fieldName];
-              return (
-                <FieldWrapper key={fieldName}>
-                  {getController({
-                    ...(typeof field === 'object' && field !== null ? field : {}),
-                    name: fieldName,
-                    control,
-                    errors,
-                  })}
-                </FieldWrapper>
-              );
-            }
-          )}
-          <div className="flex items-center pt-6">
-            <div className='justify-center bg-red-100 border border-red-500 px-3 py-1 rounded-md font-medium'>{'0/3'}</div>
-          </div>
-        </FormFieldRow>
+        {shouldShowExtensionMonth && (
+          <FormFieldRow className="mb-4">
+            {(['extensionMonth'] as const).map(
+              (fieldName) => {
+                const field = config.fields.documents?.[fieldName];
+                return (
+                  <FieldWrapper key={fieldName}>
+                    {getController({
+                      ...(typeof field === 'object' && field !== null ? field : {}),
+                      name: fieldName,
+                      control,
+                      errors,
+                    })}
+                  </FieldWrapper>
+                );
+              }
+            )}
+            <div className="flex items-center pt-6">
+              <div className='justify-center bg-red-100 border border-red-500 px-3 py-1 rounded-md font-medium'>{'0/3'}</div>
+            </div>
+          </FormFieldRow>
+        )}
       </div>
       <ImageViewModal isOpen={isModalOpen} onClose={closeModal} imageSrc={modalImageSrc} title={modalTitle} />
     </div>
