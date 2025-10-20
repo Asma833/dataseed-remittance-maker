@@ -52,7 +52,7 @@ export const agentAdminCreationSchema = z.object({
     .optional()
     .or(z.literal('')),
   status: z.enum(['Active', 'Inactive'], { message: 'Please select a status' }),
-  agent_category: z.enum(['CNC', 'Large Agent']),
+  agent_category: z.enum(['CNC', 'largeAgent'], { message: 'Please select an agent category' }),
   monthlyCreditLimit: z
     .union([z.string(), z.number()])
     .refine((val) => {
@@ -65,8 +65,8 @@ export const agentAdminCreationSchema = z.object({
       const num = parseFloat(str);
       return isNaN(num) ? 0 : num;
     })
-    .refine((val) => val >= 1, 'Monthly credit limit must be a number'),
-  totalCreditDays: z
+    .optional(),
+    totalCreditDays: z
     .union([z.string(), z.number()])
     .refine((val) => {
       const str = typeof val === 'string' ? val : val.toString();
@@ -78,9 +78,7 @@ export const agentAdminCreationSchema = z.object({
       const num = parseInt(str);
       return isNaN(num) ? 0 : num;
     })
-    .refine((val) => val >= 1, 'Total credit days must be a number')
-    .refine((val) => val <= 365, 'Total credit days cannot exceed 365'),
-   
+    .optional(),
   password: z
     .string()
     .min(8, 'Password must be at least 8 characters long')
@@ -374,13 +372,31 @@ export const agentAdminCreationSchema = z.object({
     })
     .optional(),
 })
-.superRefine(({ password, confirmPassword }, ctx) => {
+.superRefine(({ password, confirmPassword, agent_category, monthlyCreditLimit, totalCreditDays }, ctx) => {
   if (password !== confirmPassword) {
     ctx.addIssue({
       code: 'custom',
       path: ['confirmPassword'],
       message: 'Passwords do not match',
     });
+  }
+
+  // Conditional validation for largeAgent
+  if (agent_category === 'largeAgent') {
+    if (!monthlyCreditLimit || monthlyCreditLimit <= 0) {
+      ctx.addIssue({
+        code: 'custom',
+        path: ['monthlyCreditLimit'],
+        message: 'Monthly credit limit is required for Large Agent',
+      });
+    }
+    if (!totalCreditDays || totalCreditDays <= 0) {
+      ctx.addIssue({
+        code: 'custom',
+        path: ['totalCreditDays'],
+        message: 'Total credit days is required for Large Agent',
+      });
+    }
   }
 });
 

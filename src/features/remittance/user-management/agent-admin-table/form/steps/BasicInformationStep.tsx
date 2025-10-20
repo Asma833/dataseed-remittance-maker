@@ -1,5 +1,5 @@
-import React from 'react';
-import { useFormContext } from 'react-hook-form';
+import React, { useEffect } from 'react';
+import { useFormContext, useWatch } from 'react-hook-form';
 import { agentAdminCreationConfig } from '../agent-admin-creation.config';
 import { getController } from '@/components/form/utils/get-controller';
 import FieldWrapper from '@/components/form/wrapper/field-wrapper';
@@ -14,8 +14,18 @@ export const BasicInformationStep: React.FC<BasicInformationStepProps> = () => {
   const {
     control,
     formState: { errors },
+    setValue,
   } = useFormContext();
   const config = agentAdminCreationConfig();
+  const agentCategory = useWatch({ control, name: 'agent_category' });
+
+  // Reset credit fields when agent category changes to CNC
+  useEffect(() => {
+    if (agentCategory === 'CNC') {
+      setValue('monthlyCreditLimit', '');
+      setValue('totalCreditDays', '');
+    }
+  }, [agentCategory, setValue]);
 
   return (
     <div className="space-y-6">
@@ -89,7 +99,7 @@ export const BasicInformationStep: React.FC<BasicInformationStepProps> = () => {
       <div>
         <SubTitle title="Credit Type & Credit Information" />
         <FormFieldRow className="mb-4" rowCols={4}>
-          {(['agent_category','monthlyCreditLimit', 'totalCreditDays'] as const).map((fieldName) => {
+          {(['agent_category'] as const).map((fieldName) => {
             const field = config.fields.basicInformation[fieldName];
             return (
               <FieldWrapper key={fieldName}>
@@ -104,6 +114,23 @@ export const BasicInformationStep: React.FC<BasicInformationStepProps> = () => {
             );
           })}
         </FormFieldRow>
+        {agentCategory === 'largeAgent' && (
+          <FormFieldRow className="mb-4" rowCols={4}>
+            {(['monthlyCreditLimit', 'totalCreditDays'] as const).map((fieldName) => {
+              const field = config.fields.basicInformation[fieldName];
+              return (
+                <FieldWrapper key={fieldName}>
+                  {getController({
+                    ...(typeof field === 'object' && field !== null ? field : {}),
+                    name: fieldName,
+                    control,
+                    errors,
+                  })}
+                </FieldWrapper>
+              );
+            })}
+          </FormFieldRow>
+        )}
       </div>
       <div>
         <SubTitle title="Create Password" />
