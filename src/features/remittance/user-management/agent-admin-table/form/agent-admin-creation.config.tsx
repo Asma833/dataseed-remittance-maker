@@ -351,7 +351,7 @@ export const agentAdminCreationConfig = () => {
      
         purposeTypesForCard: {
           name: 'productPurpose.purposeTypesForCard',
-          label: 'Select Purpose Types for Card',
+          label: 'Purpose Types for Card',
           type: FieldType.Checkbox,
           options: {
             personaltravel: { label: 'Personal Travel' },
@@ -365,7 +365,7 @@ export const agentAdminCreationConfig = () => {
         },
         purposeTypesForCurrency: {
           name: 'productPurpose.purposeTypesForCurrency',
-          label: 'Select Purpose Types for Currency',
+          label: 'Purpose Types for Currency',
           type: FieldType.Checkbox,
           options: {
             buying: { label: 'Buying' },
@@ -376,7 +376,7 @@ export const agentAdminCreationConfig = () => {
         },
         purposeTypesForRemittance: {
           name: 'productPurpose.purposeTypesForRemittance',
-          label: 'Select Purpose Types for Remittance',
+          label: 'Purpose Types for Remittance',
           type: FieldType.Checkbox,
           options: {
             familysupport: { label: 'Family Support' },
@@ -388,7 +388,7 @@ export const agentAdminCreationConfig = () => {
         },
         purposeTypesForReferral: {
           name: 'productPurpose.purposeTypesForReferral',
-          label: 'Select Purpose Types for Referral',
+          label: 'Purpose Types for Referral',
           type: FieldType.Checkbox,
           options: {
             agentreferral: { label: 'Agent Referral' },
@@ -403,7 +403,6 @@ export const agentAdminCreationConfig = () => {
           name: 'commission_details.commission_product_type',
           label: '',
           type: FieldType.Select,
-          // required: true,
           placeholder: 'Select Product Type',
           options: [
             { label: 'Remittance', value: 'Remittance' },
@@ -417,8 +416,6 @@ export const agentAdminCreationConfig = () => {
           name: 'commission_details.commission_type',
           label: '',
           type: FieldType.Radio,
-          // required: true,
-          // single-select checkbox group (radio-like)
           options: {
             FIXED: { label: 'Fixed' },
             PERCENTAGE: { label: 'Percentage' },

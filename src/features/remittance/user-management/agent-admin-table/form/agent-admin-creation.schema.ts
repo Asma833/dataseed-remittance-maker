@@ -373,8 +373,9 @@ export const agentAdminCreationSchema = z.object({
     })
     .optional(),
 })
-.superRefine(({ password, confirmPassword, agent_category, monthlyCreditLimit, totalCreditDays }, ctx) => {
-  if (password !== confirmPassword) {
+.superRefine((data, ctx) => {
+  // Password validation
+  if (data.password !== data.confirmPassword) {
     ctx.addIssue({
       code: 'custom',
       path: ['confirmPassword'],
@@ -383,21 +384,42 @@ export const agentAdminCreationSchema = z.object({
   }
 
   // Conditional validation for largeAgent
-  if (agent_category === 'largeAgent') {
-    if (!monthlyCreditLimit || monthlyCreditLimit <= 0) {
+  if (data.agent_category === 'largeAgent') {
+    if (!data.monthlyCreditLimit || data.monthlyCreditLimit <= 0) {
       ctx.addIssue({
         code: 'custom',
         path: ['monthlyCreditLimit'],
         message: 'Monthly credit limit is required for Large Agent',
       });
     }
-    if (!totalCreditDays || totalCreditDays <= 0) {
+    if (!data.totalCreditDays || data.totalCreditDays <= 0) {
       ctx.addIssue({
         code: 'custom',
         path: ['totalCreditDays'],
         message: 'Total credit days is required for Large Agent',
       });
     }
+  }
+
+  // Conditional validation for product purpose types
+  if (data.productPurpose?.chooseProductType) {
+    const productTypes = Object.keys(data.productPurpose.chooseProductType) as Array<'card' | 'currency' | 'remittance' | 'referral'>;
+
+    productTypes.forEach((productType) => {
+      if (data.productPurpose!.chooseProductType![productType]) {
+        // If product is selected, check if at least one purpose is selected
+        const purposesField = `purposeTypesFor${productType.charAt(0).toUpperCase() + productType.slice(1)}` as keyof typeof data.productPurpose;
+        const purposes = data.productPurpose![purposesField] as Record<string, boolean> | undefined;
+
+        if (!purposes || Object.values(purposes).every(val => !val)) {
+          ctx.addIssue({
+            code: 'custom',
+            path: ['productPurpose', purposesField],
+            message: `Please select at least one purpose type for ${productType}`,
+          });
+        }
+      }
+    });
   }
 });
 
