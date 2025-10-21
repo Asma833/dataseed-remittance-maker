@@ -48,9 +48,6 @@ export const ProductPurposeStep: React.FC = () => {
       {/* ===== Product & Purpose Type (TREE with checkboxes) ===== */}
       <div>
         <SubTitle title="Product & Purpose Type" />
-
-       
-
         <div className="space-y-2">
           {nodes.map(({ key, label, purposesField }) => {
             const checked = !!choose?.[key];
