@@ -107,8 +107,6 @@ export const ProductPurposeStep: React.FC = () => {
                 'Please select at least one Product Type'}
             </p>
           )}
-
-   
         </div>
       </div>
        {/* ===== Additional Rights (unchanged) ===== */}

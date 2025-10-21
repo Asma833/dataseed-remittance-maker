@@ -8,13 +8,16 @@
  * @param decimals - Number of decimal places (default: 2)
  * @returns Formatted percentage string or '-' if invalid
  */
-export const toPercentString = (value: any, decimals: number = 2): string => {
+export const toPercentString = (value: any, decimals: number = 0): string => {
+  console.log(value)
   if (value === null || value === undefined || value === '') return '-';
 
   const numValue = parseFloat(value);
   if (isNaN(numValue)) return '-';
 
-  return `${numValue.toFixed(decimals)}%`;
+  // Multiply by 100 to convert decimal to percentage
+  const percentageValue = numValue/100 * 100;
+  return `${percentageValue.toFixed(decimals)}%`;
 };
 
 /**
