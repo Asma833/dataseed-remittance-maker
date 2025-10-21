@@ -35,9 +35,9 @@ const transformFormData = (data: AgentAdminFormType) => {
       roadStreet: data.roadStreet || 'NA',
       areaLocality: data.areaLocality || 'NA',
       gstCity: data.gstCity || 'NA',
-      gstState: data.gstState,
-      pinCode: data.pinCode,
-      gstBranch: data.gstBranch,
+      gstState: data.gstState || 'NA',
+      pinCode: data.pinCode || 'NA',
+      gstBranch: data.gstBranch || 'NA',
     },
     financeDetails: {
       financeSpocName: data.financeSpocName,
@@ -65,13 +65,30 @@ const transformFormData = (data: AgentAdminFormType) => {
             (key) => data.productPurpose.chooseProductType[key as keyof typeof data.productPurpose.chooseProductType]
           )
         : [],
-    
-      purposeTypesForCard: data.productPurpose?.purposeTypesForCard
-        ? Object.keys(data.productPurpose.purposeTypesForCard).filter(
-            (key) =>
-              data.productPurpose.purposeTypesForCard[key as keyof typeof data.productPurpose.purposeTypesForCard]
-          )
-        : [],
+      purposeTypesForCard: (() => {
+        const fields = [
+          { key: 'card', field: 'purposeTypesForCard' },
+          { key: 'currency', field: 'purposeTypesForCurrency' },
+          { key: 'remittance', field: 'purposeTypesForRemittance' },
+          { key: 'referral', field: 'purposeTypesForReferral' },
+        ];
+
+        const result: string[] = [];
+
+        fields.forEach(({ key, field }) => {
+          const purposeField = data.productPurpose?.[field as keyof typeof data.productPurpose];
+          if (purposeField && typeof purposeField === 'object') {
+            const selected = Object.keys(purposeField).filter(
+              (k) => (purposeField as Record<string, boolean>)[k]
+            );
+            if (selected.length > 0) {
+              result.push(`${key}:${selected.join(',')}`);
+            }
+          }
+        });
+
+        return result;
+      })(),
     },
     rateMargin: {
       currency: {},
@@ -84,18 +101,24 @@ const transformFormData = (data: AgentAdminFormType) => {
           commission_type: commissionDetails.commission_type,
           product_margin: {
             ...commissionDetails.product_margin,
+            all_currency_margin: commissionDetails.product_margin.all_currency_margin ?? 0,
             currency_list: Object.entries(commissionDetails.product_margin.currency_list || {}).map(
               ([currency_code, margin]) => ({ currency_code, margin })
             ),
           },
           nostro_charges: {
             ...commissionDetails.nostro_charges,
+            all_currency_margin: commissionDetails.nostro_charges.all_currency_margin ?? 0,
             currency_list: Object.entries(commissionDetails.nostro_charges.currency_list || {}).map(
               ([currency_code, margin]) => ({ currency_code, margin })
             ),
           },
-          tt_charges: commissionDetails.tt_charges,
-          other_charges: commissionDetails.other_charges,
+          tt_charges: {
+            rate: commissionDetails.tt_charges?.rate ?? 0,
+          },
+          other_charges: {
+            rate: commissionDetails.other_charges?.rate ?? 0,
+          },
         }
       : undefined,
   };

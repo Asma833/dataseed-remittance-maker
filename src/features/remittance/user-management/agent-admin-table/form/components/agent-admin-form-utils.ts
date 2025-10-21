@@ -71,11 +71,62 @@ export const transformEditDataToFormData = (editData: any) => {
           (acc: Record<string, boolean>, type: string) => ({ ...acc, [type]: true }),
           {}
         ) || {},
-      purposeTypesForCard:
-        editData.product_purpose?.purposeTypesForCard?.reduce(
-          (acc: Record<string, boolean>, type: string) => ({ ...acc, [type]: true }),
-          {}
-        ) || {},
+      purposeTypesForCard: (() => {
+        const result: Record<string, boolean> = {};
+        if (Array.isArray(editData.product_purpose?.purposeTypesForCard)) {
+          editData.product_purpose.purposeTypesForCard.forEach((item: string) => {
+            const [key, values] = item.split(':');
+            if (key === 'card' && values) {
+              values.split(',').forEach((purpose: string) => {
+                result[purpose] = true;
+              });
+            }
+          });
+        }
+        return result;
+      })(),
+      purposeTypesForCurrency: (() => {
+        const result: Record<string, boolean> = {};
+        if (Array.isArray(editData.product_purpose?.purposeTypesForCard)) {
+          editData.product_purpose.purposeTypesForCard.forEach((item: string) => {
+            const [key, values] = item.split(':');
+            if (key === 'currency' && values) {
+              values.split(',').forEach((purpose: string) => {
+                result[purpose] = true;
+              });
+            }
+          });
+        }
+        return result;
+      })(),
+      purposeTypesForRemittance: (() => {
+        const result: Record<string, boolean> = {};
+        if (Array.isArray(editData.product_purpose?.purposeTypesForCard)) {
+          editData.product_purpose.purposeTypesForCard.forEach((item: string) => {
+            const [key, values] = item.split(':');
+            if (key === 'remittance' && values) {
+              values.split(',').forEach((purpose: string) => {
+                result[purpose] = true;
+              });
+            }
+          });
+        }
+        return result;
+      })(),
+      purposeTypesForReferral: (() => {
+        const result: Record<string, boolean> = {};
+        if (Array.isArray(editData.product_purpose?.purposeTypesForCard)) {
+          editData.product_purpose.purposeTypesForCard.forEach((item: string) => {
+            const [key, values] = item.split(':');
+            if (key === 'referral' && values) {
+              values.split(',').forEach((purpose: string) => {
+                result[purpose] = true;
+              });
+            }
+          });
+        }
+        return result;
+      })(),
     },
     rateMargin: editData.rate_margin,
     commission_details: {

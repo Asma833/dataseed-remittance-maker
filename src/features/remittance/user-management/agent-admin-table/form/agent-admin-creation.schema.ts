@@ -282,15 +282,16 @@ export const agentAdminCreationSchema = z.object({
         z.enum(['personaltravel', 'businesstravel', 'education', 'immigration', 'employment', 'medical']),
         z.boolean()
       )
-      .superRefine((val, ctx) => {
-        if (!Object.values(val || {}).some(Boolean)) {
-          ctx.addIssue({
-            code: z.ZodIssueCode.custom,
-            message: 'Please select at least one product type',
-            path: [], // attach to the object itself
-          });
-        }
-      }),
+      .optional(),
+    purposeTypesForCurrency: z
+      .record(z.string(), z.boolean())
+      .optional(),
+    purposeTypesForRemittance: z
+      .record(z.string(), z.boolean())
+      .optional(),
+    purposeTypesForReferral: z
+      .record(z.string(), z.boolean())
+      .optional(),
   }),
 
   commission_details: z

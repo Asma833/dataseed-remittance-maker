@@ -363,6 +363,39 @@ export const agentAdminCreationConfig = () => {
           },
           isMulti: true,
         },
+        purposeTypesForCurrency: {
+          name: 'productPurpose.purposeTypesForCurrency',
+          label: 'Select Purpose Types for Currency',
+          type: FieldType.Checkbox,
+          options: {
+            buying: { label: 'Buying' },
+            selling: { label: 'Selling' },
+            exchange: { label: 'Exchange' },
+          },
+          isMulti: true,
+        },
+        purposeTypesForRemittance: {
+          name: 'productPurpose.purposeTypesForRemittance',
+          label: 'Select Purpose Types for Remittance',
+          type: FieldType.Checkbox,
+          options: {
+            familysupport: { label: 'Family Support' },
+            business: { label: 'Business' },
+            education: { label: 'Education' },
+            medical: { label: 'Medical' },
+          },
+          isMulti: true,
+        },
+        purposeTypesForReferral: {
+          name: 'productPurpose.purposeTypesForReferral',
+          label: 'Select Purpose Types for Referral',
+          type: FieldType.Checkbox,
+          options: {
+            agentreferral: { label: 'Agent Referral' },
+            customerreferral: { label: 'Customer Referral' },
+          },
+          isMulti: true,
+        },
       },
       rateMargin: {},
       commission: {
