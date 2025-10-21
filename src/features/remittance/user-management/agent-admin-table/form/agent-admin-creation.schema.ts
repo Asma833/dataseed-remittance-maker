@@ -275,6 +275,9 @@ export const agentAdminCreationSchema = z.object({
             path: [], // attach to the object itself
           });
         }
+      })
+      .refine((val) => Object.values(val || {}).some(Boolean), {
+        message: 'Please select at least one product type',
       }),
     
     purposeTypesForCard: z
