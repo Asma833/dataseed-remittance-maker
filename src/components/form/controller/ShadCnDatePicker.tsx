@@ -48,7 +48,8 @@ export const ShadCnDatePicker = ({
   "December"
 ];
 const years = Array.from({length:endYear-startYear +1},(_,i)=> startYear +i);
-  return (
+ 
+return (
     <FormItem className={className}>
       <FormLabel className="text-[var(--color-form-label)]">
         {label}
@@ -75,7 +76,7 @@ const years = Array.from({length:endYear-startYear +1},(_,i)=> startYear +i);
                     <CalendarIcon className="h-4 w-4" />
                   </Button>
                 </PopoverTrigger>
-                <PopoverContent className="w-auto p-0" align="start">
+                <PopoverContent className="w-auto p-0 h-70 overflow-auto"  align="start" >
                 <div className="flex justify-between p-2">
                   <Select
                     value={selectedMonth?.toString() ?? ""}
