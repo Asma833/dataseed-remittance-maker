@@ -23,7 +23,10 @@ export const HolidayCreationDialog: React.FC<HolidayCreationDialogProps> = ({
 }) => {
   const form = useForm<HolidayEditFormData>({
     resolver: zodResolver(holidayEditFormSchema),
-    defaultValues: {},
+    defaultValues: {
+      date:"",
+      holidayName:""
+    },
     mode: 'onChange',
   });
 
@@ -39,15 +42,17 @@ export const HolidayCreationDialog: React.FC<HolidayCreationDialogProps> = ({
           date: editData.date || '',
           holidayName: editData.holiday_name || '',
         });
+        // Clear any stale errors and trigger validation for edit mode
+        clearErrors();
+        setTimeout(() => trigger(), 100);
       } else {
         reset({
           date: '',
           holidayName: '',
         });
+        // Clear any stale errors but don't trigger validation for create mode
+        clearErrors();
       }
-      // Clear any stale errors and trigger validation
-      clearErrors();
-      setTimeout(() => trigger(), 100);
     }
   }, [isOpen, editData, reset, trigger, clearErrors]);
 

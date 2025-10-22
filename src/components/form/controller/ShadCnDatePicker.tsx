@@ -37,36 +37,39 @@ export const ShadCnDatePicker = ({
           name={name}
           control={control}
           render={({ field, fieldState }) => (
-            <Popover>
-              <PopoverTrigger asChild>
-                <Button
-                  variant="outline"
-                  className={cn(
-                    'w-full justify-between text-left font-normal form-input shadow-none',
-                    !field.value && 'text-muted-foreground',
-                    fieldState.error && 'border-destructive focus:ring-destructive'
-                  )}
-                  disabled={disabled}
-                >
-                  {field.value ? format(new Date(field.value), 'PPP') : <span>{placeholder}</span>}
-                  <CalendarIcon className="h-4 w-4" />
-                </Button>
-              </PopoverTrigger>
-              <PopoverContent className="w-auto p-0" align="start">
-                <Calendar
-                  mode="single"
-                  selected={field.value ? new Date(field.value) : undefined}
-                  onSelect={(date) => {
-                    field.onChange(date?.toISOString() || null);
-                    if (date) {
-                      clearErrors(name);
-                    }
-                  }}
-                  disabled={(date) => date < new Date() || date < new Date('1900-01-01')}
-                  initialFocus
-                />
-              </PopoverContent>
-            </Popover>
+            <div>
+              <Popover>
+                <PopoverTrigger asChild>
+                  <Button
+                    variant="outline"
+                    className={cn(
+                      'w-full justify-between text-left font-normal form-input shadow-none',
+                      !field.value && 'text-muted-foreground',
+                      fieldState.error && 'border-destructive focus:ring-destructive'
+                    )}
+                    disabled={disabled}
+                  >
+                    {field.value ? format(new Date(field.value), 'PPP') : <span>{placeholder}</span>}
+                    <CalendarIcon className="h-4 w-4" />
+                  </Button>
+                </PopoverTrigger>
+                <PopoverContent className="w-auto p-0" align="start">
+                  <Calendar
+                    mode="single"
+                    selected={field.value ? new Date(field.value) : undefined}
+                    onSelect={(date) => {
+                      field.onChange(date?.toISOString() || null);
+                      if (date) {
+                        clearErrors(name);
+                      }
+                    }}
+                    disabled={(date) => date < new Date() || date < new Date('1900-01-01')}
+                    initialFocus
+                  />
+                </PopoverContent>
+              </Popover>
+              {fieldState.error && <p className="text-sm text-destructive mt-1">{fieldState.error.message}</p>}
+            </div>
           )}
         />
       </FormControl>
