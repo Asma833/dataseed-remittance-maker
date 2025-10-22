@@ -1,5 +1,5 @@
 export interface HolidayEditFormData {
-  year: string;
+  year?: string;
   date: string;
   holidayName: string;
 }

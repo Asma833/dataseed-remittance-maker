@@ -159,6 +159,12 @@ export const API = {
     GET_ALL: `/currency-rate`,
     UPDATE_TIMEWISE: `/currency-rate/update-timewise`,
   },
+  HOLIDAYS: {
+    LIST: `/holidays`,
+    GET_BY_ID: (id: string) => `/holidays/${id}`,
+    CREATE: `/holidays`,
+    UPDATE: (id: string) => `/holidays/${id}`,
+  },
 } as const;
 
 /**

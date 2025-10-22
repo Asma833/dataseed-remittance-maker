@@ -27,7 +27,7 @@ export function GenericDialog({
   isOpen,
   onClose,
   title,
-  subtitle,
+  subtitle = "",
   form,
   config,
   onSubmit,

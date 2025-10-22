@@ -9,7 +9,6 @@
  * @returns Formatted percentage string or '-' if invalid
  */
 export const toPercentString = (value: any, decimals: number = 0): string => {
-  console.log(value)
   if (value === null || value === undefined || value === '') return '-';
 
   const numValue = parseFloat(value);

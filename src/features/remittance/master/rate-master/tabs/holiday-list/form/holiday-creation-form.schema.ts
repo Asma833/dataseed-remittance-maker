@@ -2,10 +2,6 @@ import { z } from 'zod';
 
 // Zod schema for holiday edit form
 export const holidayEditFormSchema = z.object({
-  year: z
-    .string()
-    .min(1, 'Year is required'),
-
   date: z
     .string()
     .min(1, 'Date is required'),

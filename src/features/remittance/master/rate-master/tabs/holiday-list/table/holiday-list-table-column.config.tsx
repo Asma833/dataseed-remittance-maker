@@ -18,9 +18,9 @@ export const HolidayListTableColumnConfig = ({
       meta: { headerAlign: 'left', cellAlign: 'left' },
     },
     {
-      id: 'created_at',
+      id: 'date',
       header: 'Date',
-      accessorKey: 'created_at',
+      accessorKey: 'date',
       sortable: false,
       filterable: false,
       meta: { headerAlign: 'left', cellAlign: 'left' },

@@ -152,6 +152,11 @@ export const ENDPOINT_MATCHING_RULES: EndpointRulesConfig = {
     endpoint: API.CURRENCY_RATE.UPDATE_TIMEWISE,
     matchType: 'standard' as const,
     description: 'Update currency value',
+  },
+  'holiday':{
+    endpoint: API.HOLIDAYS.CREATE,
+    matchType: 'standard' as const,
+    description: 'Create holidays',
   }
   
 } as const;
