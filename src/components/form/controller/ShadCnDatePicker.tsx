@@ -6,6 +6,7 @@ import { FormItem, FormLabel, FormControl, FormMessage } from '@/components/ui/f
 import { cn } from '@/utils/cn';
 import { CalendarIcon } from 'lucide-react';
 import { format } from 'date-fns';
+import { Select,SelectContent,SelectItem,SelectTrigger,SelectValue } from "@/components/ui/select"
 
 interface ShadCnDatePickerProps {
   name: string;
@@ -14,6 +15,8 @@ interface ShadCnDatePickerProps {
   disabled?: boolean;
   required?: boolean;
   placeholder?: string;
+  startYear?: number;
+  endYear?: number;
 }
 
 export const ShadCnDatePicker = ({
@@ -23,9 +26,25 @@ export const ShadCnDatePicker = ({
   disabled = false,
   required = false,
   placeholder = 'Pick a date',
+  startYear = new Date().getFullYear() - 100,
+  endYear = new Date().getFullYear() + 100
 }: ShadCnDatePickerProps) => {
   const { control, clearErrors } = useFormContext();
-
+  const months= [
+  "January",
+  "February",
+  "March",
+  "April",
+  "May",
+  "June",
+  "July",
+  "August",
+  "September",
+  "October",
+  "November",
+  "December"
+];
+const years = Array.from({length:endYear-startYear +1},(_,i)=> startYear +i);
   return (
     <FormItem className={className}>
       <FormLabel className="text-[var(--color-form-label)]">
@@ -54,6 +73,29 @@ export const ShadCnDatePicker = ({
                   </Button>
                 </PopoverTrigger>
                 <PopoverContent className="w-auto p-0" align="start">
+                <div className="flex justify-between p-2">
+                  <Select>
+                    <SelectTrigger className="w-[110px]">
+                      <SelectValue placeholder="Month" />
+                    </SelectTrigger>
+                    <SelectContent>
+                     {months?.map(month =>
+                       <SelectItem key={month} value={month}>{month}</SelectItem>
+                     )}
+                    </SelectContent>
+                  </Select>
+                  <Select>
+                    <SelectTrigger className="w-[110px]">
+                      <SelectValue placeholder="Year" />
+                    </SelectTrigger>
+                    <SelectContent>
+                     {years?.map(year =>
+                       <SelectItem key={year.toString()} value={year.toString()}>{year}</SelectItem>
+                     )}
+                    </SelectContent>
+                  </Select>
+                </div>
+                 
                   <Calendar
                     mode="single"
                     selected={field.value ? new Date(field.value) : undefined}
@@ -63,7 +105,9 @@ export const ShadCnDatePicker = ({
                         clearErrors(name);
                       }
                     }}
-                    disabled={(date) => date < new Date() || date < new Date('1900-01-01')}
+                    disabled={(date) => date < new Date(startYear, 0, 1)}
+                    fromYear={startYear}
+                    toYear={endYear}
                     initialFocus
                   />
                 </PopoverContent>
