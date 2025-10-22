@@ -99,7 +99,7 @@ export const HolidayCreationDialog: React.FC<HolidayCreationDialogProps> = ({
     <GenericDialog
       isOpen={isOpen}
       onClose={onClose}
-      title={editData ? 'Update Holiday' : 'Create Holiday'}
+      title={editData ? 'Holiday' : 'Create Holiday'}
       form={form}
       config={holidayEditFormConfig()}
       onSubmit={handleFormSubmit}
