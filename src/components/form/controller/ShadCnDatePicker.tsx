@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import { Controller, useFormContext } from 'react-hook-form';
 import { Calendar } from '@/components/ui/calendar';
 import { Button } from '@/components/ui/button';
@@ -27,9 +28,11 @@ export const ShadCnDatePicker = ({
   required = false,
   placeholder = 'Pick a date',
   startYear = new Date().getFullYear() - 100,
-  endYear = new Date().getFullYear() + 100
+  endYear = new Date().getFullYear() + 200
 }: ShadCnDatePickerProps) => {
   const { control, clearErrors } = useFormContext();
+  const [selectedMonth, setSelectedMonth] = useState<number | undefined>();
+  const [selectedYear, setSelectedYear] = useState<number | undefined>();
   const months= [
   "January",
   "February",
@@ -74,17 +77,23 @@ const years = Array.from({length:endYear-startYear +1},(_,i)=> startYear +i);
                 </PopoverTrigger>
                 <PopoverContent className="w-auto p-0" align="start">
                 <div className="flex justify-between p-2">
-                  <Select>
+                  <Select
+                    value={selectedMonth?.toString() ?? ""}
+                    onValueChange={(value) => setSelectedMonth(parseInt(value))}
+                  >
                     <SelectTrigger className="w-[110px]">
                       <SelectValue placeholder="Month" />
                     </SelectTrigger>
                     <SelectContent>
-                     {months?.map(month =>
-                       <SelectItem key={month} value={month}>{month}</SelectItem>
+                     {months?.map((month, index) =>
+                       <SelectItem key={month} value={index.toString()}>{month}</SelectItem>
                      )}
                     </SelectContent>
                   </Select>
-                  <Select>
+                  <Select
+                    value={selectedYear?.toString() ?? ""}
+                    onValueChange={(value) => setSelectedYear(parseInt(value))}
+                  >
                     <SelectTrigger className="w-[110px]">
                       <SelectValue placeholder="Year" />
                     </SelectTrigger>
@@ -99,15 +108,20 @@ const years = Array.from({length:endYear-startYear +1},(_,i)=> startYear +i);
                   <Calendar
                     mode="single"
                     selected={field.value ? new Date(field.value) : undefined}
-                    onSelect={(date) => {
+                    onSelect={(date: Date | undefined) => {
                       field.onChange(date?.toISOString() || null);
                       if (date) {
                         clearErrors(name);
                       }
                     }}
-                    disabled={(date) => date < new Date(startYear, 0, 1)}
+                    disabled={(date: Date) => date < new Date(startYear, 0, 1)}
                     fromYear={startYear}
                     toYear={endYear}
+                    {...(selectedMonth !== undefined && selectedYear !== undefined ? { month: new Date(selectedYear, selectedMonth) } : {})}
+                    onMonthChange={(month: Date) => {
+                      setSelectedMonth(month.getMonth());
+                      setSelectedYear(month.getFullYear());
+                    }}
                     initialFocus
                   />
                 </PopoverContent>
