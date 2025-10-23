@@ -64,7 +64,7 @@ export const superCheckerCreationConfig = (agents: Agent[] = []) => {
           options: {
             active: { label: 'Active', checked: true },
             inactive: { label: 'Inactive' },
-            blocked:{ label: 'Blocked' }
+            blocked:{ label:'Blocked'}
           },
         },
         agents: {

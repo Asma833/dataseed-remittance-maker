@@ -1,4 +1,3 @@
-@import url('../assets/font/stylesheet.css');
 @import 'tailwindcss';
 
 @custom-variant dark (&:where(.dark, .dark *));

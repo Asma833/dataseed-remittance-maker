@@ -34,7 +34,11 @@ export const superCheckerSchema = z
             });
           }
         }),
-      status: z.enum(['active', 'inactive'], { message: 'Please select a status' }),
+        status: z
+          //.union([z.literal('active'), z.literal('inactive'), z.literal('blocked')])
+          .refine((val) => val === 'active' || val === 'inactive' || val === 'blocked', {
+            message: 'Status is required',
+          }),
 
       agents: z.array(z.string()).min(1, 'Agent is required').optional(),
 

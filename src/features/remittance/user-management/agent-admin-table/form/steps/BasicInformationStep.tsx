@@ -76,6 +76,21 @@ export const BasicInformationStep: React.FC<BasicInformationStepProps> = () => {
             );
           })}
         </FormFieldRow>
+          <FormFieldRow className="mb-4" rowCols={3}>
+          {(['entity_name', 'pan_no', 'date_of_incorporation'] as const).map((fieldName) => {
+            const field = config.fields.basicInformation[fieldName];
+            return (
+              <FieldWrapper key={fieldName}>
+                {getController({
+                  ...(typeof field === 'object' && field !== null ? field : {}),
+                  name: fieldName,
+                  control,
+                  errors,
+                })}
+              </FieldWrapper>
+            );
+          })}
+        </FormFieldRow>
       </div>
       <div>
         <SubTitle title="User Status" />

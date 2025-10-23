@@ -93,7 +93,7 @@ export const agentAdminCreationConfig = () => {
         date_of_incorporation: {
           name: 'date_of_incorporation',
           label: 'Date Of Incorporation',
-          type: FieldType.Text,
+          type: FieldType.Date,
           placeholder: 'Enter Date Of Incorporation',
         },
         status: {

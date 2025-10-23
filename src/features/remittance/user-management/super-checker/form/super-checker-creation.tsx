@@ -37,7 +37,7 @@ export const CreateSuperChecker = () => {
         password: '',
         confirmPassword: '',
         transactionTypeMap: { card: 'buy' }, // default transaction type only for selected products
-        status: 'active' as 'active' | 'inactive', // default status
+        status: 'active' // default status
       },
     },
   });
@@ -94,6 +94,7 @@ export const CreateSuperChecker = () => {
         password: formdata.checkerDetails.password,
         id: superChecker.id,
         is_active: formdata.checkerDetails.status === 'active',
+        is_blocked: formdata.checkerDetails.status === 'blocked',
       };
       updateSuperChecker(updateRequestData);
     } else {
@@ -106,6 +107,7 @@ export const CreateSuperChecker = () => {
         product_types,
         password: formdata.checkerDetails.password || '', // Ensure password is always a string for create
         is_active: formdata.checkerDetails.status === 'active',
+        is_blocked: formdata.checkerDetails.status === 'blocked',
       };
       createSuperChecker(createRequestData);
     }
@@ -121,7 +123,7 @@ export const CreateSuperChecker = () => {
           agents: [],
           password: '',
           confirmPassword: '',
-          status: 'active' as 'active' | 'inactive',
+          status: 'active',
         },
       };
     // Map incoming data fields to form field names
@@ -144,7 +146,7 @@ export const CreateSuperChecker = () => {
         agents: data.agent_ids || [],
         password: data.password || '',
         confirmPassword: data.confirmPassword || '',
-        status: (data.is_active ? 'active' : 'inactive') as 'active' | 'inactive',
+        status: data.is_blocked ? 'blocked' : data.is_active ? 'active' : 'inactive',
       },
     };
     return mappedData;

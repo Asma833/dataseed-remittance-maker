@@ -16,6 +16,7 @@ export interface CreateSuperCheckerRequest {
   phone_number?: string;
   agent_ids: string[];
   is_active?: boolean;
+  is_blocked:boolean;
 }
 
 export interface UpdateSuperCheckerRequest extends Omit<CreateSuperCheckerRequest, 'password'> {
