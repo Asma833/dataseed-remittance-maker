@@ -83,26 +83,30 @@ export const CreateBranchAgent = () => {
   /** --- EDIT MODE PREFILL --- */
   useEffect(() => {
     if (!branchAgent) return;
+
+   
+    const checkerName = branchAgent.checker_list !== null ? branchAgents?.find(agent => agent.id === branchAgent.checker_list)?.full_name || '' : '';
+
     reset({
       agentDetails: {
         vendorDetails: {
-          vendorName: branchAgent.agent_vendor_code, 
-          agentEonCode: branchAgent.agent_vendor_code, 
-          systemCode: branchAgent.system_code || '-', 
+          vendorName: branchAgent.agent_vendor_code,
+          agentEonCode: branchAgent.agent_vendor_code,
+          systemCode: branchAgent.system_code || '-',
           primaryAgentEmail: branchAgent.agent_entity_email || '-',
         },
         basicDetails: {
           fullName: branchAgent.full_name || '',
           emailId: branchAgent.email || '',
           mobileNo: branchAgent.phone_number || '',
-          checkerList: branchAgent.checker_list || '', 
+          checkerList: checkerName,
         },
         address: {
           state: branchAgent.address_state || '',
           city: branchAgent.address_city || '',
           branch: branchAgent.address_branch || '',
-          rmName:  branchAgent.rm_name, 
-          rmBranch: branchAgent.rm_branch_name, 
+          rmName:  branchAgent.rm_name,
+          rmBranch: branchAgent.rm_branch_name,
         },
         roleStatus: {
           role: branchAgent.role || 'branch_agent_checker',
@@ -117,7 +121,7 @@ export const CreateBranchAgent = () => {
       clearErrors('agentDetails.basicDetails.emailId');
       trigger();
     }, 0);
-  }, [branchAgent, reset, trigger, clearErrors]);
+  }, [branchAgent, branchAgents, reset, trigger, clearErrors]);
 
   /** --- WHEN SELECT CHANGES: update vendorCode and primaryAgentEmail --- */
   useEffect(() => {
@@ -158,6 +162,11 @@ export const CreateBranchAgent = () => {
     const resolved = resolveAgentFromValue(data.agentDetails.vendorDetails.vendorName, agents);
     const agentCode = resolved?.id ?? String(data.agentDetails.vendorDetails.vendorName ?? '');
 
+    // Convert checker name back to ID for API
+    const checkerId = data.agentDetails.basicDetails.checkerList
+      ? branchAgents?.find(agent => agent.full_name === data.agentDetails.basicDetails.checkerList)?.id
+      : null;
+
     if (branchAgent) {
       // UPDATE
       const payload = {
@@ -171,10 +180,9 @@ export const CreateBranchAgent = () => {
         is_active: data.agentDetails.roleStatus.status === 'active',
         is_blocked: data.agentDetails.roleStatus.status === 'blocked',
         agent_ids: [agentCode],
-        checker_list: data.agentDetails.basicDetails.checkerList ? [data.agentDetails.basicDetails.checkerList] : [],
+        checker_list: checkerId ? [checkerId] : [],
         password: data.agentDetails.security.password,
       };
-      console.log(payload,"payload++++++++")
       updateBranchAgent(payload);
     } else {
       // CREATE
@@ -190,7 +198,7 @@ export const CreateBranchAgent = () => {
         is_active: data.agentDetails.roleStatus.status === 'active',
         is_blocked: data.agentDetails.roleStatus.status === 'blocked',
         agent_ids: [agentCode],
-        checker_list: data.agentDetails.basicDetails.checkerList ? [data.agentDetails.basicDetails.checkerList] : [],
+        checker_list: checkerId ? [checkerId] : [],
       };
       createBranchAgent(payload);
     }

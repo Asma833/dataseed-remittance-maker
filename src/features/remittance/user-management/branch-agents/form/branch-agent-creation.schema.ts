@@ -80,11 +80,11 @@ export const roleStatusSchema = z.object({
     )
     .describe('Choose Role'),
   status: z
-    .union([z.literal('active'), z.literal('inactive'), z.literal('blocked')])
+    //.union([z.literal('active'), z.literal('inactive'), z.literal('blocked')])
     .refine((val) => val === 'active' || val === 'inactive' || val === 'blocked', {
       message: 'Status is required',
     })
-    .describe('Status'),
+    //.describe('Status'),
 });
 export const securitySchema = z
   .object({

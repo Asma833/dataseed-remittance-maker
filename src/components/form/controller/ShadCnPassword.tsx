@@ -12,7 +12,6 @@ interface ShadCnPasswordProps {
   required?: boolean;
   forcedValue?: string;
   placeholder?: string;
-  autocomplete?:string;
 }
 
 const ShadCnPassword = ({
@@ -23,8 +22,7 @@ const ShadCnPassword = ({
   disabled = false,
   required = false,
   forcedValue,
-  placeholder,
-  autocomplete='Off'
+  placeholder
 }: ShadCnPasswordProps) => {
   const { control } = useFormContext();
 

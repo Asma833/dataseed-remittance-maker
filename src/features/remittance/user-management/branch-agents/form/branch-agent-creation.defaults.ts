@@ -22,7 +22,7 @@ export const branchAgentDefaults = {
     },
     roleStatus: {
       role: 'branch_agent_checker',
-      status: 'active' as const,
+      status: 'active',
     },
     security: {
       password: '',

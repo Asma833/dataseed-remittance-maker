@@ -11,7 +11,7 @@ export const branchAgentCreationConfig = (agents: Agent[] = [], branchAgents: Br
   }));
     const branchAgentList = branchAgents?.filter(agent => agent.role === 'branch_agent_checker').map((agent) => ({
     id: agent.id,
-    value: agent.id,
+    value: agent.full_name,
     label: agent.full_name,
   }));
   return {
