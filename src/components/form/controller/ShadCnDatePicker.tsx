@@ -7,7 +7,8 @@ import { FormItem, FormLabel, FormControl, FormMessage } from '@/components/ui/f
 import { cn } from '@/utils/cn';
 import { CalendarIcon } from 'lucide-react';
 import { format } from 'date-fns';
-import { Select,SelectContent,SelectItem,SelectTrigger,SelectValue } from "@/components/ui/select"
+import { DropdownNavProps, DropdownProps } from 'react-day-picker';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 
 interface ShadCnDatePickerProps {
   name: string;
@@ -16,8 +17,6 @@ interface ShadCnDatePickerProps {
   disabled?: boolean;
   required?: boolean;
   placeholder?: string;
-  startYear?: number;
-  endYear?: number;
 }
 
 export const ShadCnDatePicker = ({
@@ -27,29 +26,20 @@ export const ShadCnDatePicker = ({
   disabled = false,
   required = false,
   placeholder = 'Pick a date',
-  startYear = new Date().getFullYear() - 100,
-  endYear = new Date().getFullYear() + 200
 }: ShadCnDatePickerProps) => {
   const { control, clearErrors } = useFormContext();
-  const [selectedMonth, setSelectedMonth] = useState<number | undefined>();
-  const [selectedYear, setSelectedYear] = useState<number | undefined>();
-  const months= [
-  "January",
-  "February",
-  "March",
-  "April",
-  "May",
-  "June",
-  "July",
-  "August",
-  "September",
-  "October",
-  "November",
-  "December"
-];
-const years = Array.from({length:endYear-startYear +1},(_,i)=> startYear +i);
- 
-return (
+  
+  const [date, setDate] = useState<Date | undefined>(new Date());
+
+  const handleCalendarChange = (_value: string | number, _e: React.ChangeEventHandler<HTMLSelectElement>) => {
+    const _event = {
+      target: {
+        value: String(_value),
+      },
+    } as React.ChangeEvent<HTMLSelectElement>;
+    _e(_event);
+  };
+  return (
     <FormItem className={className}>
       <FormLabel className="text-[var(--color-form-label)]">
         {label}
@@ -76,54 +66,48 @@ return (
                     <CalendarIcon className="h-4 w-4" />
                   </Button>
                 </PopoverTrigger>
-                <PopoverContent className="w-auto p-0 h-70 overflow-auto"  align="start" >
-                <div className="flex justify-between p-2">
-                  <Select
-                    value={selectedMonth?.toString() ?? ""}
-                    onValueChange={(value) => setSelectedMonth(parseInt(value))}
-                  >
-                    <SelectTrigger className="w-[110px]">
-                      <SelectValue placeholder="Month" />
-                    </SelectTrigger>
-                    <SelectContent>
-                     {months?.map((month, index) =>
-                       <SelectItem key={month} value={index.toString()}>{month}</SelectItem>
-                     )}
-                    </SelectContent>
-                  </Select>
-                  <Select
-                    value={selectedYear?.toString() ?? ""}
-                    onValueChange={(value) => setSelectedYear(parseInt(value))}
-                  >
-                    <SelectTrigger className="w-[110px]">
-                      <SelectValue placeholder="Year" />
-                    </SelectTrigger>
-                    <SelectContent>
-                     {years?.map(year =>
-                       <SelectItem key={year.toString()} value={year.toString()}>{year}</SelectItem>
-                     )}
-                    </SelectContent>
-                  </Select>
-                </div>
-                 
+                <PopoverContent className="w-auto p-0" align="start">
                   <Calendar
                     mode="single"
-                    selected={field.value ? new Date(field.value) : undefined}
-                    onSelect={(date: Date | undefined) => {
-                      field.onChange(date?.toISOString() || null);
-                      if (date) {
-                        clearErrors(name);
-                      }
+                    selected={date}
+                    onSelect={setDate}
+                    className="rounded-md border p-2 scale-95"
+                    classNames={{
+                      month_caption: 'mx-0',
                     }}
-                    disabled={(date: Date) => date < new Date(startYear, 0, 1)}
-                    fromYear={startYear}
-                    toYear={endYear}
-                    {...(selectedMonth !== undefined && selectedYear !== undefined ? { month: new Date(selectedYear, selectedMonth) } : {})}
-                    onMonthChange={(month: Date) => {
-                      setSelectedMonth(month.getMonth());
-                      setSelectedYear(month.getFullYear());
+                    captionLayout="dropdown"
+                    defaultMonth={new Date()}
+                    startMonth={new Date(1980, 6)}
+                    endMonth={new Date(3000, 6)}
+                    hideNavigation
+                    components={{
+                      DropdownNav: (props: DropdownNavProps) => {
+                        return <div className="flex w-full items-center gap-2">{props.children}</div>;
+                      },
+                      Dropdown: (props: DropdownProps) => {
+                        return (
+                          <Select
+                            value={String(props.value)}
+                            onValueChange={(value) => {
+                              if (props.onChange) {
+                                handleCalendarChange(value, props.onChange);
+                              }
+                            }}
+                          >
+                            <SelectTrigger className="h-8 w-fit font-medium first:grow">
+                              <SelectValue />
+                            </SelectTrigger>
+                            <SelectContent className="max-h-[min(26rem,var(--radix-select-content-available-height))]">
+                              {props.options?.map((option) => (
+                                <SelectItem key={option.value} value={String(option.value)} disabled={option.disabled}>
+                                  {option.label}
+                                </SelectItem>
+                              ))}
+                            </SelectContent>
+                          </Select>
+                        );
+                      },
                     }}
-                    initialFocus
                   />
                 </PopoverContent>
               </Popover>
