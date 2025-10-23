@@ -28,17 +28,19 @@ export const ShadCnDatePicker = ({
   placeholder = 'Pick a date',
 }: ShadCnDatePickerProps) => {
   const { control, clearErrors } = useFormContext();
-  
-  const [date, setDate] = useState<Date | undefined>(new Date());
+   const [date, setDate] = useState<Date | undefined>(new Date())
 
-  const handleCalendarChange = (_value: string | number, _e: React.ChangeEventHandler<HTMLSelectElement>) => {
+  const handleCalendarChange = (
+    _value: string | number,
+    _e: React.ChangeEventHandler<HTMLSelectElement>
+  ) => {
     const _event = {
       target: {
         value: String(_value),
       },
-    } as React.ChangeEvent<HTMLSelectElement>;
-    _e(_event);
-  };
+    } as React.ChangeEvent<HTMLSelectElement>
+    _e(_event)
+  }
   return (
     <FormItem className={className}>
       <FormLabel className="text-[var(--color-form-label)]">
@@ -67,45 +69,54 @@ export const ShadCnDatePicker = ({
                   </Button>
                 </PopoverTrigger>
                 <PopoverContent className="w-auto p-0" align="start">
-                  <Calendar
+                 
+                   <Calendar
                     mode="single"
-                    selected={date}
-                    onSelect={setDate}
-                    className="rounded-md border p-2 scale-95"
-                    classNames={{
-                      month_caption: 'mx-0',
+                    selected={field.value ? new Date(field.value) : undefined}
+                    onSelect={(selectedDate) => {
+                      setDate(selectedDate);
+                      field.onChange(selectedDate?.toISOString());
+                      clearErrors(name);
                     }}
-                    captionLayout="dropdown"
-                    defaultMonth={new Date()}
-                    startMonth={new Date(1980, 6)}
-                    endMonth={new Date(3000, 6)}
-                    hideNavigation
+                    className="rounded-md border p-2"
+                    captionLayout="dropdown-years"
+                    defaultMonth={field.value ? new Date(field.value) : new Date()}
+                    startMonth={new Date(1940, 6)}
+                    endMonth={new Date(2080, 6)}
                     components={{
                       DropdownNav: (props: DropdownNavProps) => {
-                        return <div className="flex w-full items-center gap-2">{props.children}</div>;
+                        return (
+                          <div className="flex w-full items-center justify-center gap-3 [&>span]:text-sm [&>span]:font-medium">
+                            {props.children}
+                          </div>
+                        )
                       },
-                      Dropdown: (props: DropdownProps) => {
+                      YearsDropdown: (props: DropdownProps) => {
                         return (
                           <Select
                             value={String(props.value)}
                             onValueChange={(value) => {
                               if (props.onChange) {
-                                handleCalendarChange(value, props.onChange);
+                                handleCalendarChange(value, props.onChange)
                               }
                             }}
                           >
-                            <SelectTrigger className="h-8 w-fit font-medium first:grow">
+                            <SelectTrigger className="h-8 w-fit font-medium">
                               <SelectValue />
                             </SelectTrigger>
                             <SelectContent className="max-h-[min(26rem,var(--radix-select-content-available-height))]">
                               {props.options?.map((option) => (
-                                <SelectItem key={option.value} value={String(option.value)} disabled={option.disabled}>
+                                <SelectItem
+                                  key={option.value}
+                                  value={String(option.value)}
+                                  disabled={option.disabled}
+                                >
                                   {option.label}
                                 </SelectItem>
                               ))}
                             </SelectContent>
                           </Select>
-                        );
+                        )
                       },
                     }}
                   />
