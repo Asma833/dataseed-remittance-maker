@@ -39,9 +39,9 @@ const transformFormData = (data: AgentAdminFormType): CreateAgentAdminRequest =>
       roadStreet: data.roadStreet || 'NA',
       areaLocality: data.areaLocality || 'NA',
       gstCity: data.gstCity || 'NA',
-      gstState: data.gstState,
-      pinCode: data.pinCode,
-      gstBranch: data.gstBranch,
+      gstState: data.gstState || 'NA',
+      pinCode: data.pinCode || 'NA',
+      gstBranch: data.gstBranch || 'NA',
     },
     financeDetails: {
       financeSpocName: data.financeSpocName,
@@ -72,7 +72,7 @@ const transformFormData = (data: AgentAdminFormType): CreateAgentAdminRequest =>
       purposeTypesForCard: data.productPurpose?.purposeTypesForCard
         ? Object.keys(data.productPurpose.purposeTypesForCard).filter(
             (key) =>
-              data.productPurpose.purposeTypesForCard[key as keyof typeof data.productPurpose.purposeTypesForCard]
+              data.productPurpose.purposeTypesForCard![key as keyof typeof data.productPurpose.purposeTypesForCard]
           )
         : [],
     },

@@ -1,5 +1,5 @@
 import { useEffect } from 'react';
-import { useForm, useWatch } from 'react-hook-form';
+import { useForm, useWatch, SubmitHandler } from 'react-hook-form';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { zodResolver } from '@hookform/resolvers/zod';
 
@@ -46,7 +46,7 @@ export const CreateBranchAgent = () => {
   const methods = useForm<BranchAgentForm>({
     resolver: zodResolver(branchAgentSchema),
     mode: 'onChange',
-    defaultValues: branchAgentDefaults,
+    defaultValues: branchAgentDefaults as BranchAgentForm,
   });
 
   const {
@@ -106,7 +106,7 @@ export const CreateBranchAgent = () => {
         },
         roleStatus: {
           role: branchAgent.role || 'branch_agent_checker',
-          status: branchAgent.is_blocked ? 'blocked' : branchAgent.is_active ? true : false,
+          status: branchAgent.is_blocked ? 'blocked' : branchAgent.is_active ? 'active' : 'inactive',
         },
         security: { password: '', confirmPassword: '' },
       },
@@ -154,7 +154,7 @@ export const CreateBranchAgent = () => {
     onBranchAgentUpdateSuccess: () => navigate('/admin/user-management/branch-agents'),
   });
 
-  const onSubmit = (data: BranchAgentForm) => {
+  const onSubmit: SubmitHandler<BranchAgentForm> = (data) => {
     const resolved = resolveAgentFromValue(data.agentDetails.vendorDetails.vendorName, agents);
     const agentCode = resolved?.id ?? String(data.agentDetails.vendorDetails.vendorName ?? '');
 
@@ -168,12 +168,13 @@ export const CreateBranchAgent = () => {
         address_branch: data.agentDetails.address.branch,
         phone_number: data.agentDetails.basicDetails.mobileNo || '',
         role: data.agentDetails.roleStatus.role,
-        is_active:data.agentDetails.roleStatus.status !== 'blocked' ? data.agentDetails.roleStatus.status : false,
-        is_blocked:data.agentDetails.roleStatus.status === 'blocked' ? true : false,
+        is_active: data.agentDetails.roleStatus.status === 'active',
+        is_blocked: data.agentDetails.roleStatus.status === 'blocked',
         agent_ids: [agentCode],
         checker_list: data.agentDetails.basicDetails.checkerList ? [data.agentDetails.basicDetails.checkerList] : [],
         password: data.agentDetails.security.password,
       };
+      console.log(payload,"payload++++++++")
       updateBranchAgent(payload);
     } else {
       // CREATE
@@ -186,8 +187,8 @@ export const CreateBranchAgent = () => {
         address_branch: data.agentDetails.address.branch,
         phone_number: data.agentDetails.basicDetails.mobileNo || '',
         role: data.agentDetails.roleStatus.role,
-        is_active:data.agentDetails.roleStatus.status !== 'blocked' ? data.agentDetails.roleStatus.status : false,
-        is_blocked:data.agentDetails.roleStatus.status === 'blocked' ? true : false,
+        is_active: data.agentDetails.roleStatus.status === 'active',
+        is_blocked: data.agentDetails.roleStatus.status === 'blocked',
         agent_ids: [agentCode],
         checker_list: data.agentDetails.basicDetails.checkerList ? [data.agentDetails.basicDetails.checkerList] : [],
       };

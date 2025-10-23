@@ -135,8 +135,8 @@ export const branchAgentCreationConfig = (agents: Agent[] = [], branchAgents: Br
           type: FieldType.Radio,
           required: true,
           options: {
-            true: { label: 'Active', checked: true },
-            false: { label: 'Inactive' },
+            active: { label: 'Active', checked: true },
+            inactive: { label: 'Inactive' },
             blocked:{ label:'Blocked'}
           },
         },

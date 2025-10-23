@@ -12,6 +12,7 @@ interface ShadCnPasswordProps {
   required?: boolean;
   forcedValue?: string;
   placeholder?: string;
+  autocomplete?:string;
 }
 
 const ShadCnPassword = ({
@@ -23,6 +24,7 @@ const ShadCnPassword = ({
   required = false,
   forcedValue,
   placeholder,
+  autocomplete='Off'
 }: ShadCnPasswordProps) => {
   const { control } = useFormContext();
 
@@ -48,7 +50,7 @@ const ShadCnPassword = ({
                 forcedValue={forcedValue}
                 placeholder={placeholder}
                 className={cn('form-input', error && 'border-destructive focus-visible:ring-destructive')}
-                autoComplete="new-password"
+                autoComplete="off"
               />
               {error && <p className="text-sm text-destructive mt-1">{error.message}</p>}
             </div>
