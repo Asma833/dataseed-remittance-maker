@@ -31,6 +31,21 @@ export const agentAdminCreationSchema = z.object({
     .regex(/^(?!\s)(?!-)/, 'Cannot start with space or hyphen')
     .optional()
     .or(z.literal('')),
+  entity_name: z
+    .string()
+    .regex(/^(?!\s)(?!-)/, 'Cannot start with space or hyphen')
+    .optional()
+    .or(z.literal('')),
+  pan_no: z
+    .string()
+    .regex(/^(?!\s)(?!-)/, 'Cannot start with space or hyphen')
+    .optional()
+    .or(z.literal('')),
+  date_of_incorporation: z
+    .string()
+    .regex(/^(?!\s)(?!-)/, 'Cannot start with space or hyphen')
+    .optional()
+    .or(z.literal('')),
   agentHOBranchState: z
     .string()
     .regex(/^(?!\s)(?!-)/, 'Cannot start with space or hyphen')

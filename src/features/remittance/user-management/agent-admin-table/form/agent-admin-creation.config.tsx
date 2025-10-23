@@ -78,6 +78,24 @@ export const agentAdminCreationConfig = () => {
           type: FieldType.Text,
           placeholder: 'Enter System Code',
         },
+          entity_name: {
+          name: 'entity_name',
+          label: 'Entity Name',
+          type: FieldType.Text,
+          placeholder: 'Enter Entity Name',
+        },
+        pan_no: {
+          name: 'pan_no',
+          label: 'Pan No',
+          type: FieldType.Text,
+          placeholder: 'Enter Pan No',
+        },
+        date_of_incorporation: {
+          name: 'date_of_incorporation',
+          label: 'Date Of Incorporation',
+          type: FieldType.Text,
+          placeholder: 'Enter Date Of Incorporation',
+        },
         status: {
           name: 'status',
           label: 'Status',

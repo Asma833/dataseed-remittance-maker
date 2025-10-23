@@ -106,7 +106,10 @@ export interface CreateAgentAdminRequest {
     monthlyCreditLimit: number;
     totalCreditDays: number;
     agent_category:string[],
-    password:string
+    password:string,
+    pan_no:string,
+    entity_name:string,
+    date_of_incorporation:string
   };
   companyDetails: {
     gstClassification: string;

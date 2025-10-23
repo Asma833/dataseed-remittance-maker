@@ -25,7 +25,10 @@ const transformFormData = (data: AgentAdminFormType) => {
       monthlyCreditLimit: Number(data.monthlyCreditLimit),
       totalCreditDays: Number(data.totalCreditDays),
       agent_category: [data?.agent_category],
-      password:data?.password
+      password:data?.password,
+      pan_no:data?.pan_no || 'NA',
+      entity_name:data?.entity_name || 'NA',
+      date_of_incorporation:data?.date_of_incorporation || 'NA'
     },
     companyDetails: {
       gstClassification: data.gstClassification,
