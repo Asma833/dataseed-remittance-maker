@@ -3,8 +3,8 @@ import { CurrencyRateResponse, UpdateTimewiseMarginPayload, UpdateTimewiseMargin
 import { API } from '@/core/constant/apis';
 
 // Function to get all currency rates
-export const getCurrencyRates = async (): Promise<CurrencyRateResponse> => {
-  const response = await axiosInstance.get(API.CURRENCY_RATE.GET_ALL);
+export const getCurrencyRates = async (marginType: 'number' | 'percentage' = 'number'): Promise<CurrencyRateResponse> => {
+  const response = await axiosInstance.get(`${API.CURRENCY_RATE.GET_ALL.split('?')[0]}?margin_type=${marginType}`);
   return response.data;
 };
 

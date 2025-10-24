@@ -13,6 +13,7 @@ interface RemittanceEditDialogProps {
   onClose: () => void;
   editData?: RemittanceData | null;
   onEdit?: (remittanceData: RemittanceData) => void;
+  unit?: "inr" | "percentage";
 }
 
 export const RemittanceEditDialog: React.FC<RemittanceEditDialogProps> = ({
@@ -20,6 +21,7 @@ export const RemittanceEditDialog: React.FC<RemittanceEditDialogProps> = ({
   onClose,
   editData,
   onEdit,
+  unit = "inr",
 }) => {
   const form = useForm<RemittanceEditFormData>({
     resolver: zodResolver(remittanceEditFormSchema),
@@ -30,11 +32,12 @@ export const RemittanceEditDialog: React.FC<RemittanceEditDialogProps> = ({
   const { reset } = form;
   const updateTimewiseMarginMutation = useUpdateTimewiseMargin();
 
-  // Reset form when editData changes
+  // Reset form when editData or unit changes
   useEffect(() => {
+    const marginType = unit === 'inr' ? 'number' : 'percentage';
     if (editData) {
       reset({
-        marginType: 'number',
+        marginType,
         currency: String(editData.currency),
         'ttMargin10-12': String(editData['ttMargin10-12'] ?? 0),
         'ttMargin12-02': String(editData['ttMargin12-02'] ?? 0),
@@ -46,7 +49,7 @@ export const RemittanceEditDialog: React.FC<RemittanceEditDialogProps> = ({
       });
     } else {
       reset({
-        marginType: 'number',
+        marginType,
         currency: '',
         'ttMargin10-12': '0',
         'ttMargin12-02': '0',
@@ -57,7 +60,7 @@ export const RemittanceEditDialog: React.FC<RemittanceEditDialogProps> = ({
         ttUpperCircuit: '',
       });
     }
-  }, [editData, reset]);
+  }, [editData, reset, unit]);
 
   const handleSubmit = (data: RemittanceEditFormData) => {
     // Handle form submission

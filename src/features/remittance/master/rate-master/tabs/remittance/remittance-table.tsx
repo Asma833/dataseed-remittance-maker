@@ -9,13 +9,13 @@ import { CurrencyRate } from '../../types/currency-rate.types';
 import { useQueryClient } from '@tanstack/react-query';
 
 const Remittance = () => {
-  // Fetch currency rates from API
-  const { data: currencyRates, isLoading: isLoadingRates, error: ratesError } = useGetCurrencyRates();
   const queryClient = useQueryClient();
   const [loading, setLoading] = useState(false);
   const [unit, setUnit] = useState<"inr" | "percentage">("inr");
   const [editDialogOpen, setEditDialogOpen] = useState(false);
   const [selectedRemittance, setSelectedRemittance] = useState<RemittanceData | null>(null);
+  // Fetch currency rates from API
+  const { data: currencyRates, isLoading: isLoadingRates, error: ratesError } = useGetCurrencyRates(unit === 'inr' ? 'number' : 'percentage');
   // Table configuration
   const config = {
     ...staticConfig,
@@ -117,6 +117,7 @@ const Remittance = () => {
         }}
         editData={selectedRemittance}
         onEdit={handleEditSubmit}
+        unit={unit}
       />
     </div>
   );
