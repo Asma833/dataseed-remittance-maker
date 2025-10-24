@@ -50,7 +50,7 @@ export const SideNavOptions = {
       subMenus: [
          {
           title: 'Rate Master',
-          path: '/admin/master/rate-master',
+          path: '/admin/master/rate-master/rate-margin',
           subMenus: [
           { title: 'Remittance', path: "/admin/master/rate-master/remittance"},
           { title: 'Holiday List', path: "/admin/master/rate-master/holiday-list"},

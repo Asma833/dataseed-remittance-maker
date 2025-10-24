@@ -41,7 +41,7 @@ export const ROUTES = {
     //   },
     MASTER: {
       RATE_MASTER: {
-        RATE_MARGIN: '/master/rate-master/rate-margin/remittance',
+        RATE_MARGIN: '/master/rate-master/rate-margin',
         REMITTANCE: 'rate-master/rate-margin/remittance',
         LIVE_RATES: 'rate-master/rate-margin/live-rates',
         HOLIDAY_LIST: 'rate-master/rate-margin/holiday-list',
