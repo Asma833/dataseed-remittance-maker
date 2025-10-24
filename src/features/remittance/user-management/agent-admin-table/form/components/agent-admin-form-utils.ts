@@ -30,9 +30,9 @@ export const transformEditDataToFormData = (editData: any) => {
     status: editData.status,
     monthlyCreditLimit: editData.monthly_credit_limit || 0,
     totalCreditDays: editData.total_credit_days || 0,
-    entity_name:editData.entity_name,
-    pan_no:editData.pan_no,
-    date_of_incorporation:editData.date_of_incorporation,
+    entity_name:editData.entity_name || '',
+    pan_no:editData.pan_no || '',
+    date_of_incorporation:editData.date_of_incorporation || '',
     // Company Details
     gstClassification: normalizeValue(editData.company_details?.gstClassification),
     gstNumber: normalizeValue(editData.company_details?.gstNumber),
