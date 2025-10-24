@@ -50,7 +50,12 @@ export const SideNavOptions = {
       subMenus: [
          {
           title: 'Rate Master',
-          path: getNavPath('ADMIN', ROUTES.ADMIN.MASTER.RATE_MASTER.RATE_MARGIN),
+          path: '/admin/master/rate-master',
+          subMenus: [
+          { title: 'Remittance', path: "/admin/master/rate-master/remittance"},
+          { title: 'Holiday List', path: "/admin/master/rate-master/holiday-list"},
+          { title: 'Live Rates', path: "/admin/master/rate-master/live-rates"}
+        ]
         },
         {
           title: 'Purpose Master',

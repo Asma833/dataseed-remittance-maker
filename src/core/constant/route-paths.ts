@@ -41,10 +41,10 @@ export const ROUTES = {
     //   },
     MASTER: {
       RATE_MASTER: {
-        RATE_MARGIN: '/master/rate-master/rate-margin',
-        REMITTANCE: 'rate-master/remittance',
-        LIVE_RATES: 'rate-master/live-rates',
-        HOLIDAY_LIST: 'rate-master/holiday-list',
+        RATE_MARGIN: '/master/rate-master/rate-margin/remittance',
+        REMITTANCE: 'rate-master/rate-margin/remittance',
+        LIVE_RATES: 'rate-master/rate-margin/live-rates',
+        HOLIDAY_LIST: 'rate-master/rate-margin/holiday-list',
         CARD: 'rate-master/card',
         CURRENCY: 'rate-master/currency',
       },
