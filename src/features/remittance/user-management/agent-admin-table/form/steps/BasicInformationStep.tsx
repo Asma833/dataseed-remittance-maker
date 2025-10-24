@@ -129,7 +129,7 @@ export const BasicInformationStep: React.FC<BasicInformationStepProps> = () => {
             );
           })}
         </FormFieldRow>
-        {agentCategory === 'largeAgent' && (
+        {agentCategory !== 'CNC' && (
           <FormFieldRow className="mb-4" rowCols={4}>
             {(['monthlyCreditLimit', 'totalCreditDays'] as const).map((fieldName) => {
               const field = config.fields.basicInformation[fieldName];

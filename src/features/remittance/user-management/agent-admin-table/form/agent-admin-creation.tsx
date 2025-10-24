@@ -56,7 +56,7 @@ const AgentAdminCreation: React.FC = () => {
   const methods = useForm({
     resolver: zodResolver(agentAdminCreationSchema),
     defaultValues: agentAdminCreationDefaults,
-    mode: 'onChange',
+    mode: 'onBlur',
   });
 
   useEffect(() => {

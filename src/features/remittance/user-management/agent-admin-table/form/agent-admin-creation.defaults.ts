@@ -30,7 +30,7 @@ export const agentAdminCreationDefaults: z.input<typeof agentAdminCreationSchema
   financeSpocName: '',
   financeSpocEmail: '',
   financeSpocPhoneNo: '',
-  agent_category: "CNC",
+  agent_category: "largeAgent",
   password:'',
   confirmPassword:'',
   bankAccounts: [
