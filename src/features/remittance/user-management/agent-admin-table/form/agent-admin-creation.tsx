@@ -56,7 +56,7 @@ const AgentAdminCreation: React.FC = () => {
   const methods = useForm({
     resolver: zodResolver(agentAdminCreationSchema),
     defaultValues: agentAdminCreationDefaults,
-    mode: 'onBlur',
+    mode: 'onChange',
   });
 
   useEffect(() => {
@@ -70,6 +70,7 @@ const AgentAdminCreation: React.FC = () => {
     trigger,
     formState: { isSubmitting },
   } = methods;
+ 
 
   const clampStep = (n: number) => Math.max(0, Math.min(steps.length - 1, n));
   const goToStep = (n: number) => setCurrentStep(clampStep(n));
