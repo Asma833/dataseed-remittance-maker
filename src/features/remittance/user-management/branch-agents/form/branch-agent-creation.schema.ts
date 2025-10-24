@@ -28,7 +28,9 @@ export const basicDetailsSchema = z.object({
     .refine((val) => !/^[\s-]/.test(val), 'Full name cannot start with space or hyphen')
     .describe('Full Name'),
   emailId: z.string().min(1, 'Email is required').email('Please enter a valid email').describe('Email Id'),
-  mobileNo: z.string().optional(),
+  mobileNo: z.string().optional().refine((val) => !val || /^\d{10}$/.test(val), {
+    message: 'Mobile number must be exactly 10 digits',
+  }),
   checkerList: z.string().optional()
 });
 
