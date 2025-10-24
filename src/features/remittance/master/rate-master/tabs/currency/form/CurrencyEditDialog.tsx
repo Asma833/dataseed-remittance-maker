@@ -59,7 +59,7 @@ export const CurrencyEditDialog: React.FC<CurrencyEditDialogProps> = ({
 
   const handleSubmit = (data: CurrencyEditFormData) => {
     // Handle form submission
-    console.log('Submitting currency edit data:', data);
+  //  console.log('Submitting currency edit data:', data);
   };
 
   const handleEdit = (data: Record<string, any>) => {

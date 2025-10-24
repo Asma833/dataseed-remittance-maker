@@ -59,7 +59,7 @@ export const CardEditDialog: React.FC<CardEditDialogProps> = ({
 
   const handleSubmit = (data: CardEditFormData) => {
     // Handle form submission
-    console.log('Submitting card edit data:', data);
+   // console.log('Submitting card edit data:', data);
   };
 
   const handleEdit = (data: Record<string, any>) => {

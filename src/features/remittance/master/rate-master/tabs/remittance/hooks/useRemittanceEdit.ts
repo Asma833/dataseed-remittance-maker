@@ -7,10 +7,10 @@ export const useUpdateRemittanceData = () => {
   return useMutation({
     mutationFn: (data: RemittanceEditFormData & { id: string | number }) => updateRemittanceData(data),
     onSuccess: () => {
-      console.log('Remittance data updated successfully');
+      //console.log('Remittance data updated successfully');
     },
     onError: (error) => {
-      console.error('Error updating remittance data:', error);
+      //console.error('Error updating remittance data:', error);
     },
   });
 };

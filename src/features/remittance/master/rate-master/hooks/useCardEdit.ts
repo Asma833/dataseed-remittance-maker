@@ -7,10 +7,10 @@ export const useUpdateCardData = () => {
   return useMutation({
     mutationFn: (data: CardEditFormData & { id: string }) => updateCardData(data),
     onSuccess: () => {
-      console.log('Card data updated successfully');
+      //console.log('Card data updated successfully');
     },
     onError: (error) => {
-      console.error('Error updating card data:', error);
+     // console.error('Error updating card data:', error);
     },
   });
 };

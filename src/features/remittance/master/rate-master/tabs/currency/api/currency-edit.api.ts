@@ -8,7 +8,7 @@ export const updateCurrencyData = async (currencyData: CurrencyEditFormData & { 
   // Simulate API call
   return new Promise((resolve) => {
     setTimeout(() => {
-      console.log('Updating currency data:', currencyData);
+     // console.log('Updating currency data:', currencyData);
       resolve(currencyData);
     }, 1000);
   });

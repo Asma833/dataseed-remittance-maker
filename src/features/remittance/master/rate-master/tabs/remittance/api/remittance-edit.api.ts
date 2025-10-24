@@ -8,7 +8,7 @@ export const updateRemittanceData = async (remittanceData: RemittanceEditFormDat
   // Simulate API call
   return new Promise((resolve) => {
     setTimeout(() => {
-      console.log('Updating remittance data:', remittanceData);
+     // console.log('Updating remittance data:', remittanceData);
       resolve(remittanceData);
     }, 1000);
   });

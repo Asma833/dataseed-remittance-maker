@@ -20,12 +20,6 @@ export const BasicInformationStep: React.FC<BasicInformationStepProps> = () => {
   const config = agentAdminCreationConfig();
   const agentCategory = useWatch({ control, name: 'agent_category' });
 
-  // Debug: Log form state
-  console.log('BasicInformationStep - agentCategory:', agentCategory);
-  console.log('BasicInformationStep - isValid:', isValid);
-  console.log('BasicInformationStep - errors:', errors);
-  console.log('BasicInformationStep - watch all:', watch());
-
   // Reset credit fields when agent category changes to CNC
   useEffect(() => {
     if (agentCategory !== 'largeAgent') {

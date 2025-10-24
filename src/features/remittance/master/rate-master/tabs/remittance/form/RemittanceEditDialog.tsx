@@ -64,7 +64,7 @@ export const RemittanceEditDialog: React.FC<RemittanceEditDialogProps> = ({
 
   const handleSubmit = (data: RemittanceEditFormData) => {
     // Handle form submission
-    console.log('Submitting remittance edit data:', data);
+    //console.log('Submitting remittance edit data:', data);
   };
 
   const handleEdit = (data: Record<string, any>) => {
