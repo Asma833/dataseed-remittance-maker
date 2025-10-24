@@ -16,36 +16,36 @@ export const SideNavOptions = {
   admin: [
     {
       title: 'User Management',
-      path: getNavPath('ADMIN', ROUTES.ADMIN.NUSER),
+      path: '/admin/user-management',
       icon: profile,
       subMenus: [
         {
           title: 'Super Checker',
           path: getNavPath('ADMIN', ROUTES.ADMIN.USER_MANAGEMENT.SUPER_CHECKER_TABLE),
            subMenus: [
-            { title: 'Super Checker Creation', path: ROUTES.ADMIN.USER_MANAGEMENT.SUPER_CHECKER_CREATION },
+            { title: 'Super Checker Creation', path: getNavPath('ADMIN', ROUTES.ADMIN.USER_MANAGEMENT.SUPER_CHECKER_CREATION) },
          ]
         },
         {
           title: 'Agent Admin',
           path: getNavPath('ADMIN', ROUTES.ADMIN.USER_MANAGEMENT.AGENT_ADMIN),
          subMenus: [
-          { title: 'Agent Admin Creation', path: ROUTES.ADMIN.USER_MANAGEMENT.AGENT_ADMIN_CREATION },
+          { title: 'Agent Admin Creation', path: getNavPath('ADMIN', ROUTES.ADMIN.USER_MANAGEMENT.AGENT_ADMIN_CREATION) },
          ]
         },
         {
           title: 'Branch Agents',
           path: getNavPath('ADMIN', ROUTES.ADMIN.USER_MANAGEMENT.BRANCH_AGENTS),
          subMenus: [
-          { title: 'Branch Agent Creation', path:ROUTES.ADMIN.USER_MANAGEMENT.BRANCH_AGENT_CREATION  },
+          { title: 'Branch Agent Creation', path: getNavPath('ADMIN', ROUTES.ADMIN.USER_MANAGEMENT.BRANCH_AGENT_CREATION) },
          ]
         },
-        
+
       ],
     },
     {
       title: 'Master Data',
-      path: getNavPath('ADMIN', ROUTES.ADMIN.MASTER.PURPOSE_MASTER),
+      path: '/admin/master',
       icon: master,
       subMenus: [
          {
