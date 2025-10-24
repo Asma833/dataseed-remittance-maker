@@ -22,6 +22,7 @@ import { Stepper } from './stepper';
 import { FormTitle } from '@/features/auth/components/form-title';
 import { useCreateAgent } from '../../hooks/useCreateAgent';
 import { useUpdateAgentAdmin } from '../../hooks/useUpdateAgentAdmin';
+import { ROUTES } from '@/core/constant/route-paths';
 
 type AgentAdminFormType = z.input<typeof agentAdminCreationSchema>;
 
@@ -43,12 +44,12 @@ const AgentAdminCreation: React.FC = () => {
 
   const { mutate: createAgent, isLoading: isCreating } = useCreateAgent({
     onAgentCreateSuccess: () => {
-      navigate('/admin/agent-admin');
+      navigate(`/admin${ROUTES.ADMIN.USER_MANAGEMENT.AGENT_ADMIN}`);
     },
   });
   const { mutate: updateAgent, isLoading: isUpdating } = useUpdateAgentAdmin({
     onAgentAdminUpdateSuccess: () => {
-      navigate('/admin/agent-admin');
+      navigate(`/admin${ROUTES.ADMIN.USER_MANAGEMENT.AGENT_ADMIN}`);
     },
   });
 

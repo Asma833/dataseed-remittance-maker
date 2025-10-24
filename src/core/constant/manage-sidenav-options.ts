@@ -20,21 +20,27 @@ export const SideNavOptions = {
       icon: profile,
       subMenus: [
         {
-          title: 'Superchecker',
-          path: getNavPath('ADMIN', ROUTES.ADMIN.SUPER_CHECKER_TABLE),
+          title: 'Super Checker',
+          path: getNavPath('ADMIN', ROUTES.ADMIN.USER_MANAGEMENT.SUPER_CHECKER_TABLE),
+           subMenus: [
+            { title: 'Super Checker Creation', path: ROUTES.ADMIN.USER_MANAGEMENT.SUPER_CHECKER_CREATION },
+         ]
         },
         {
           title: 'Agent Admin',
-          path: getNavPath('ADMIN', ROUTES.ADMIN.AGENT_ADMIN),
+          path: getNavPath('ADMIN', ROUTES.ADMIN.USER_MANAGEMENT.AGENT_ADMIN),
+         subMenus: [
+          { title: 'Agent Admin Creation', path: ROUTES.ADMIN.USER_MANAGEMENT.AGENT_ADMIN_CREATION },
+         ]
         },
         {
           title: 'Branch Agents',
           path: getNavPath('ADMIN', ROUTES.ADMIN.USER_MANAGEMENT.BRANCH_AGENTS),
+         subMenus: [
+          { title: 'Branch Agent Creation', path:ROUTES.ADMIN.USER_MANAGEMENT.BRANCH_AGENT_CREATION  },
+         ]
         },
-        // {
-        //   title: 'Create User',
-        //   path: getNavPath('ADMIN', ROUTES.ADMIN.CREATEUSER),
-        // }
+        
       ],
     },
     {

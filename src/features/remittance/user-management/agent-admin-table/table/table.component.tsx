@@ -16,7 +16,7 @@ const AgentAdminTable = () => {
   
   // Navigate to agent admin creation page
   const handleAddAdminAgents = () => {
-    navigate(`/admin${ROUTES.ADMIN.AGENT_ADMIN_CREATION}`);
+    navigate(`/admin${ROUTES.ADMIN.USER_MANAGEMENT.AGENT_ADMIN_CREATION}`);
   };
 
   const { data, isLoading: userLoading, error: userError } = useGetAgentAdmins();
@@ -62,7 +62,7 @@ const AgentAdminTable = () => {
   };
 
   const handleEdit = (user: AgentAdminData) => {
-    navigate(`/admin${ROUTES.ADMIN.AGENT_ADMIN_CREATION}`, { state: { editData: user } });
+    navigate(`/admin${ROUTES.ADMIN.USER_MANAGEMENT.AGENT_ADMIN_CREATION}`, { state: { editData: user } });
   };
 
   // Define columns matching your design

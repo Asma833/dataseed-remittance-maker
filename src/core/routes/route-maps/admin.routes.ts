@@ -21,13 +21,13 @@ const baseRole = ROLES.ADMIN; // Admin routes are accessible to admin role
 
 export const adminRoutes: RouteConfig[] = [
   {
-    path: ROUTES.ADMIN.AGENT_ADMIN,
+    path: ROUTES.ADMIN.USER_MANAGEMENT.AGENT_ADMIN,
     element: AdminAgentList,
     roles: [baseRole],
     permission: 'admin',
   },
   {
-    path: ROUTES.ADMIN.AGENT_ADMIN_CREATION,
+    path: ROUTES.ADMIN.USER_MANAGEMENT.AGENT_ADMIN_CREATION,
     element: AgentAdminCreation,
     roles: [baseRole],
     permission: 'admin',
@@ -75,13 +75,13 @@ export const adminRoutes: RouteConfig[] = [
     permission: 'admin',
   },
   {
-    path: ROUTES.ADMIN.SUPER_CHECKER_TABLE,
+    path: ROUTES.ADMIN.USER_MANAGEMENT.SUPER_CHECKER_TABLE,
     element: SuperCheckerTablePage,
     roles: [baseRole],
     permission: 'admin',
   },
   {
-    path: ROUTES.ADMIN.SUPER_CHECKER_CREATION,
+    path: ROUTES.ADMIN.USER_MANAGEMENT.SUPER_CHECKER_CREATION,
     element: CreateSuperChecker,
     roles: [baseRole],
     permission: 'admin',

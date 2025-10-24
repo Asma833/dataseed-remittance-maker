@@ -8,6 +8,7 @@ import { PlusCircle } from 'lucide-react';
 import { TableTitle } from '@/features/auth/components/table-title';
 import { useGetSuperCheckers } from '../../hooks/useGetSuperCheckers';
 import { useInactiveUser } from '../../hooks/useInactiveUser';
+import { ROUTES } from '@/core/constant/route-paths';
 
 const SuperCheckerTable = () => {
   const navigate = useNavigate();
@@ -51,7 +52,7 @@ const SuperCheckerTable = () => {
   };
 
   const handleEdit = (superChecker: SuperCheckerData) => {
-    navigate('/admin/users/super-checker-creation', { state: { superChecker } });
+    navigate(`/admin${ROUTES.ADMIN.USER_MANAGEMENT.SUPER_CHECKER_CREATION}`, { state: { superChecker } });
   };
 
   const handleInacivate = async (superChecker: SuperCheckerData) => {
@@ -76,7 +77,7 @@ const SuperCheckerTable = () => {
 
   // Navigate to super checker creation page
   const handleAddSuperChecker = () => {
-    navigate('/admin/users/super-checker-creation');
+    navigate(`/admin${ROUTES.ADMIN.USER_MANAGEMENT.SUPER_CHECKER_CREATION}`);
   };
   // Define columns matching the screenshot
   const columns = GetSuperCheckerTableColumns({

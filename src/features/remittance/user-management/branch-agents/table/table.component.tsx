@@ -8,6 +8,7 @@ import { PlusCircle, UploadIcon } from 'lucide-react';
 import { TableTitle } from '@/features/auth/components/table-title';
 import { useGetBranchAgents } from '../../hooks/useGetBranchAgents';
 import { useInactiveUser } from '../../hooks/useInactiveUser';
+import { ROUTES } from '@/core/constant/route-paths';
 
 const BranchAgentTable = () => {
   const navigate = useNavigate();
@@ -63,7 +64,7 @@ const BranchAgentTable = () => {
   };
 
   const handleEdit = (branchAgent: BranchAgentData) => {
-    navigate('/admin/user-management/branch-agents/branch-agent-creation', { state: { branchAgent } });
+    navigate(`/admin${ROUTES.ADMIN.USER_MANAGEMENT.BRANCH_AGENT_CREATION}`, { state: { branchAgent } });
   };
 
   const handleInactivate = async (branchAgent: BranchAgentData) => {
@@ -85,7 +86,7 @@ const BranchAgentTable = () => {
 
   // Navigate to branch agent creation page
   const handleCreateBranchAgent = () => {
-    navigate('/admin/user-management/branch-agents/branch-agent-creation');
+    navigate(`/admin${ROUTES.ADMIN.USER_MANAGEMENT.BRANCH_AGENT_CREATION}`);
   };
 
   // Handle bulk upload

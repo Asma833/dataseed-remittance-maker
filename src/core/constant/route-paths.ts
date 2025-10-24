@@ -8,8 +8,7 @@ export const ROUTES = {
   },
   ADMIN: {
     DASHBOARD: '/dashboard',
-    AGENT_ADMIN: '/agent-admin',
-    AGENT_ADMIN_CREATION: '/users/agent-admin-creation',
+   
     AGENT_ADMIN_CREATION_STEPS: {
       BASIC_INFO: '/users/agent-admin-creation/basic-info',
       COMPANY_DETAILS: '/users/agent-admin-creation/company-details',
@@ -20,6 +19,10 @@ export const ROUTES = {
       CORPORATE_ONBOARDING: '/users/agent-admin-creation/corporate-onboarding',
     },
     USER_MANAGEMENT: {
+      SUPER_CHECKER_TABLE: '/user-management/super-checker-table',
+      SUPER_CHECKER_CREATION: '/user-management/super-checker-table/super-checker-creation',
+      AGENT_ADMIN: '/user-management/agent-admin',
+      AGENT_ADMIN_CREATION: '/user-management/agent-admin/agent-admin-creation',
       N_USER: '/user-management/n-user',
       BRANCH_AGENTS: '/user-management/branch-agents',
       BRANCH_AGENT_CREATION: '/user-management/branch-agents/branch-agent-creation',
@@ -27,6 +30,7 @@ export const ROUTES = {
       CREATE_BRANCH_NEW_USER: '/user-management/agent-branch-user-registration',
       AGENT_PROFILE: '/user-management/agent-profile-creation',
       CREATE_AGENT: '/user-management/agent-profile-creation/create-new-agent',
+    
     },
     //  MASTER: {
     //     RATE_MASTER:'/master/rate-master',
@@ -54,8 +58,7 @@ export const ROUTES = {
     UPDATE_MAKER: '/maker/update-maker/:id',
     CREATEUSER: '/users/create-user',
     UPDATEUSER: '/users/update-user/:id',
-    SUPER_CHECKER_TABLE: '/users/super-checker-table',
-    SUPER_CHECKER_CREATION: '/users/super-checker-creation',
+   
     PARTNER: '/partners',
     CREATEPARTNER: '/partners/create-partner',
     UPDATEPARTNER: '/partners/update-partner/:id',
