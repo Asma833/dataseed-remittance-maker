@@ -39,6 +39,7 @@ export const agentAdminCreationSchema = z.object({
   pan_no: z
     .string()
     .regex(/^(?!\s)(?!-)/, 'Cannot start with space or hyphen')
+    .refine((val) => val === '' || /^[A-Z]{5}[0-9]{4}[A-Z]{1}$/.test(val), 'PAN Number must be in format ABCDE9799F')
     .optional()
     .or(z.literal('')),
   date_of_incorporation: z
@@ -66,7 +67,7 @@ export const agentAdminCreationSchema = z.object({
     .regex(/^(?!\s)(?!-)/, 'Cannot start with space or hyphen')
     .optional()
     .or(z.literal('')),
-  status: z.enum(['Active', 'Inactive'], { message: 'Please select a status' }),
+  status: z.enum(['Active', 'Inactive', 'Blocked'], { message: 'Please select a status' }),
   agent_category: z.enum(['CNC', 'largeAgent'], { message: 'Please select an agent category' }),
   monthlyCreditLimit: z
     .union([z.string(), z.number()])

@@ -21,7 +21,7 @@ const transformFormData = (data: AgentAdminFormType) => {
       rm_name: data.rm_name || 'NA',
       rm_branch_name: data.rm_branch_name || 'NA',
       systemCode: data.systemCode || 'NA',
-      status: data.status === 'Active' ? 'ACTIVE' : 'INACTIVE',
+      status: data.status,
       monthlyCreditLimit: Number(data.monthlyCreditLimit),
       totalCreditDays: Number(data.totalCreditDays),
       agent_category: [data?.agent_category],
