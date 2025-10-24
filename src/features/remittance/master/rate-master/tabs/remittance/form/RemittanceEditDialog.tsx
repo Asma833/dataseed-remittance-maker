@@ -21,31 +21,20 @@ export const RemittanceEditDialog: React.FC<RemittanceEditDialogProps> = ({
   editData,
   onEdit,
 }) => {
-  const [displayMode, setDisplayMode] = useState<'inr' | 'percentage'>('inr');
-
   const form = useForm<RemittanceEditFormData>({
     resolver: zodResolver(remittanceEditFormSchema),
     defaultValues: {},
     mode: 'onChange',
   });
 
-  const { reset, watch } = form;
+  const { reset } = form;
   const updateTimewiseMarginMutation = useUpdateTimewiseMargin();
-
-  // Watch for currency type changes
-  const watchedCurrencyType = watch('currencyType');
-
-  useEffect(() => {
-    if (watchedCurrencyType) {
-      setDisplayMode(watchedCurrencyType);
-    }
-  }, [watchedCurrencyType]);
 
   // Reset form when editData changes
   useEffect(() => {
     if (editData) {
       reset({
-        currencyType: 'inr', // Default to INR, can be changed based on data if available
+        marginType: 'number',
         currency: String(editData.currency),
         'ttMargin10-12': String(editData['ttMargin10-12'] ?? 0),
         'ttMargin12-02': String(editData['ttMargin12-02'] ?? 0),
@@ -55,10 +44,9 @@ export const RemittanceEditDialog: React.FC<RemittanceEditDialogProps> = ({
         ttWeekendMargin: String(editData.ttWeekendMargin ?? 0),
         ttUpperCircuit: String(editData.ttUpperCircuit),
       });
-      setDisplayMode('inr');
     } else {
       reset({
-        currencyType: 'inr',
+        marginType: 'number',
         currency: '',
         'ttMargin10-12': '0',
         'ttMargin12-02': '0',
@@ -68,7 +56,6 @@ export const RemittanceEditDialog: React.FC<RemittanceEditDialogProps> = ({
         ttWeekendMargin: '0',
         ttUpperCircuit: '',
       });
-      setDisplayMode('inr');
     }
   }, [editData, reset]);
 
@@ -79,42 +66,31 @@ export const RemittanceEditDialog: React.FC<RemittanceEditDialogProps> = ({
 
   const handleEdit = (data: Record<string, any>) => {
     if (editData?.id && onEdit) {
-      // Convert percentage values back to numbers if needed for API
-      const processedData = { ...data };
-      if (data.currencyType === 'percentage') {
-        // If percentage mode, ensure values are treated as percentages
-        // The API might expect the raw values, so we keep them as strings
-        processedData['ttMargin10-12'] = String(data['ttMargin10-12']);
-        processedData['ttMargin12-02'] = String(data['ttMargin12-02']);
-        processedData['ttMargin02-3-30'] = String(data['ttMargin02-3-30']);
-        processedData['ttMargin03-30end'] = String(data['ttMargin03-30end']);
-        processedData.ttHolidayMargin = String(data.ttHolidayMargin);
-        processedData.ttWeekendMargin = String(data.ttWeekendMargin);
-      }
-
       const updatedRemittance: RemittanceData = {
         ...editData,
         currency: data.currency,
-        'ttMargin10-12': processedData['ttMargin10-12'],
-        'ttMargin12-02': processedData['ttMargin12-02'],
-        'ttMargin02-3-30': processedData['ttMargin02-3-30'],
-        'ttMargin03-30end': processedData['ttMargin03-30end'],
-        ttHolidayMargin: processedData.ttHolidayMargin,
-        ttWeekendMargin: processedData.ttWeekendMargin,
+        'ttMargin10-12': data['ttMargin10-12'],
+        'ttMargin12-02': data['ttMargin12-02'],
+        'ttMargin02-3-30': data['ttMargin02-3-30'],
+        'ttMargin03-30end': data['ttMargin03-30end'],
+        ttHolidayMargin: data.ttHolidayMargin,
+        ttWeekendMargin: data.ttWeekendMargin,
         ttUpperCircuit: data.ttUpperCircuit,
+        margin_type: data.marginType
       };
 
       // Prepare the payload for the API
       const apiPayload = {
-        currency_code: processedData.currency,
+        currency_code: data.currency,
         time_wise_margin: {
-          "10-12": Number(processedData['ttMargin10-12']) || 0,
-          "12-02": Number(processedData['ttMargin12-02']) || 0,
-          "02-3.30": Number(processedData['ttMargin02-3-30']) || 0,
-          "3.30End": Number(processedData['ttMargin03-30end']) || 0,
-          holiday: Number(processedData.ttHolidayMargin) || 0,
-          weekend: Number(processedData.ttWeekendMargin) || 0,
-          upper_circuit: Number(processedData.ttUpperCircuit) || 0,
+          "10-12": Number(data['ttMargin10-12']) || 0,
+          "12-02": Number(data['ttMargin12-02']) || 0,
+          "02-3.30": Number(data['ttMargin02-3-30']) || 0,
+          "3.30End": Number(data['ttMargin03-30end']) || 0,
+          holiday: Number(data.ttHolidayMargin) || 0,
+          weekend: Number(data.ttWeekendMargin) || 0,
+          margin_type: data.marginType,
+          upper_circuit: Number(data.ttUpperCircuit) || 0,
         }
       };
 
@@ -137,7 +113,7 @@ export const RemittanceEditDialog: React.FC<RemittanceEditDialogProps> = ({
       onClose={onClose}
       title="Remittance"
       form={form}
-      config={remittanceEditFormConfig(displayMode)}
+      config={remittanceEditFormConfig()}
       onSubmit={handleSubmit}
       submitButtonText="Update Remittance"
       editData={editData}

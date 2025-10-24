@@ -156,7 +156,7 @@ export const API = {
     DOC_PURPOSE_TRANS_MAPPING: `/trans-purpose-document/map`,
   },
   CURRENCY_RATE: {
-    GET_ALL: `/currency-rate`,
+    GET_ALL: `/currency-rate?margin_type=number`,
     UPDATE_TIMEWISE: `/currency-rate/update-timewise`,
   },
   HOLIDAYS: {

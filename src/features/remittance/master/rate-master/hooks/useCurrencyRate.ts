@@ -1,6 +1,5 @@
 import { useQuery } from '@tanstack/react-query';
 import { getCurrencyRates } from '../api/currency-rate.api';
-import { CurrencyRateResponse } from '../types/currency-rate.types';
 
 // Hook to fetch all currency rates
 export const useGetCurrencyRates = () => {

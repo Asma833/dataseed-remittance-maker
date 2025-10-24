@@ -2,9 +2,9 @@ import { z } from 'zod';
 
 // Zod schema for remittance edit form
 export const remittanceEditFormSchema = z.object({
-  currencyType: z
-    .enum(['inr', 'percentage'])
-    .refine((val) => val, 'Currency type is required'),
+  marginType: z
+    .enum(['number', 'percentage'])
+    .refine((val) => val, 'Margin type is required'),
 
   currency: z
     .string()

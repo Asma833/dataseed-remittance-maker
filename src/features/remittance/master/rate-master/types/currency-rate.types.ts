@@ -20,6 +20,7 @@ export interface UpdateTimewiseMarginPayload {
     "3.30End": number;
     holiday: number;
     weekend: number;
+    margin_type: number,
     upper_circuit: number;
   };
 }
