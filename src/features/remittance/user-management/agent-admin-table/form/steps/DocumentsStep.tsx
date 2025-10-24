@@ -30,7 +30,8 @@ export const DocumentsStep: React.FC = () => {
 
   // Get today's date in YYYY-MM-DD format
   const today = format(new Date(), 'yyyy-MM-dd');
-  const shouldShowExtensionMonth = rbiLicenseValidity >= today;
+  const rbiValidity = format(rbiLicenseValidity, 'yyyy-MM-dd');
+  const shouldShowExtensionMonth = rbiValidity <= today;
 
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [modalImageSrc, setModalImageSrc] = useState('');

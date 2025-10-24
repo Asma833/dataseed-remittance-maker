@@ -77,11 +77,10 @@ export const agentAdminCreationSchema = z.object({
     }, 'Cannot start with space or hyphen')
     .transform((val) => {
       const str = typeof val === 'string' ? val : val.toString();
-      if (str.trim() === '') return 0;
+      if (str.trim() === '') return undefined;
       const num = parseFloat(str);
-      return isNaN(num) ? 0 : num;
-    })
-    .optional(),
+      return isNaN(num) ? undefined : num;
+    }),
     totalCreditDays: z
     .union([z.string(), z.number()])
     .refine((val) => {
@@ -90,11 +89,10 @@ export const agentAdminCreationSchema = z.object({
     }, 'Cannot start with space or hyphen')
     .transform((val) => {
       const str = typeof val === 'string' ? val : val.toString();
-      if (str.trim() === '') return 0;
+      if (str.trim() === '') return undefined;
       const num = parseInt(str);
-      return isNaN(num) ? 0 : num;
-    })
-    .optional(),
+      return isNaN(num) ? undefined : num;
+    }),
   password: z
     .string()
     .min(8, 'Password must be at least 8 characters long')
@@ -239,15 +237,10 @@ export const agentAdminCreationSchema = z.object({
     }),
   extensionMonth: z
     .union([z.string(), z.number()])
+    .optional()
     .superRefine((val, ctx) => {
+      if (val === undefined || val === null || (typeof val === 'string' && val.trim() === '')) return;
       const str = typeof val === 'string' ? val : val.toString();
-      if (str.trim() === '') {
-        ctx.addIssue({
-          code: z.ZodIssueCode.custom,
-          message: 'Extension Month is required',
-        });
-        return;
-      }
       const num = parseInt(str);
       if (isNaN(num)) {
         ctx.addIssue({
@@ -264,9 +257,10 @@ export const agentAdminCreationSchema = z.object({
       }
     })
     .transform((val) => {
+      if (val === undefined || val === null || (typeof val === 'string' && val.trim() === '')) return undefined;
       const str = typeof val === 'string' ? val : val.toString();
       const num = parseInt(str);
-      return num;
+      return isNaN(num) ? undefined : num;
     }),
   agreementCopy: z.any().optional(),
   rbiLicenseCopy: z.any().optional(),
@@ -401,17 +395,18 @@ export const agentAdminCreationSchema = z.object({
       message: 'Passwords do not match',
     });
   }
-
+})
+.superRefine((data, ctx) => {
   // Conditional validation for largeAgent
   if (data.agent_category === 'largeAgent') {
-    if (!data.monthlyCreditLimit || data.monthlyCreditLimit <= 0) {
+    if (data.monthlyCreditLimit === undefined || data.monthlyCreditLimit === null || data.monthlyCreditLimit <= 0) {
       ctx.addIssue({
         code: 'custom',
         path: ['monthlyCreditLimit'],
         message: 'Monthly credit limit is required for Large Agent',
       });
     }
-    if (!data.totalCreditDays || data.totalCreditDays <= 0) {
+    if (data.totalCreditDays === undefined || data.totalCreditDays === null || data.totalCreditDays <= 0) {
       ctx.addIssue({
         code: 'custom',
         path: ['totalCreditDays'],

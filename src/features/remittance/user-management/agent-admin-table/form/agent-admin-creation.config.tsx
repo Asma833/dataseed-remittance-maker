@@ -112,7 +112,6 @@ export const agentAdminCreationConfig = () => {
           label: 'Agent Category',
           type: FieldType.Radio,
           required: true,
-          isMulti:false,
           options: {
             CNC: { label: 'CNC' },
             largeAgent: { label: 'Large Agent' },
@@ -123,14 +122,12 @@ export const agentAdminCreationConfig = () => {
           name: 'monthlyCreditLimit',
           label: 'Monthly Credit Limit (INR)',
           type: FieldType.Number,
-          required: true,
           placeholder: 'Enter Monthly Credit Limit',
         },
         totalCreditDays: {
           name: 'totalCreditDays',
           label: 'Total Credit Days',
           type: FieldType.Number,
-          required: true,
           placeholder: 'Enter Total Credit Days',
         },
          password: {
@@ -273,7 +270,6 @@ export const agentAdminCreationConfig = () => {
           name: 'extensionMonth',
           label: 'Extension Month',
           type: FieldType.Number,
-          required: true,
           placeholder: 'Enter Extension Month',
           min: 0,
         },

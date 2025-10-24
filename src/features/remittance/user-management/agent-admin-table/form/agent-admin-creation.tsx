@@ -25,13 +25,14 @@ import { useUpdateAgentAdmin } from '../../hooks/useUpdateAgentAdmin';
 import { ROUTES } from '@/core/constant/route-paths';
 
 type AgentAdminFormType = z.input<typeof agentAdminCreationSchema>;
+type AgentAdminFormData = z.infer<typeof agentAdminCreationSchema>;
 
 const AgentAdminCreation: React.FC = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const [currentStep, setCurrentStep] = useState(0);
   const [completedSteps, setCompletedSteps] = useState<Set<number>>(new Set());
-  const [submittedData, setSubmittedData] = useState<AgentAdminFormType | null>(null);
+  const [submittedData, setSubmittedData] = useState<AgentAdminFormData | null>(null);
 
   const config = agentAdminCreationConfig();
   const steps = config.steps;

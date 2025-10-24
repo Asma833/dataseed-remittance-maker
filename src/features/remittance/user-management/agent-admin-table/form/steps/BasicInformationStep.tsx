@@ -13,15 +13,22 @@ interface BasicInformationStepProps {
 export const BasicInformationStep: React.FC<BasicInformationStepProps> = () => {
   const {
     control,
-    formState: { errors },
+    formState: { errors, isValid },
     setValue,
+    watch,
   } = useFormContext();
   const config = agentAdminCreationConfig();
   const agentCategory = useWatch({ control, name: 'agent_category' });
 
+  // Debug: Log form state
+  console.log('BasicInformationStep - agentCategory:', agentCategory);
+  console.log('BasicInformationStep - isValid:', isValid);
+  console.log('BasicInformationStep - errors:', errors);
+  console.log('BasicInformationStep - watch all:', watch());
+
   // Reset credit fields when agent category changes to CNC
   useEffect(() => {
-    if (agentCategory === 'CNC') {
+    if (agentCategory !== 'largeAgent') {
       setValue('monthlyCreditLimit', '');
       setValue('totalCreditDays', '');
     }
@@ -123,7 +130,7 @@ export const BasicInformationStep: React.FC<BasicInformationStepProps> = () => {
                   name: fieldName,
                   control,
                   errors,
-                  className: fieldName === 'agent_category' ? 'justify-start' : ''
+                  className: 'justify-start' 
                 })}
               </FieldWrapper>
             );
