@@ -1,4 +1,4 @@
-import { ActionButtons, TableColumn } from '@/components/table';
+import { ActionButtons, StatusBadge, TableColumn } from '@/components/table';
 import { DocumentData } from '../types/document.types';
 
 const GetDocumentMasterTableColumns = ({
@@ -31,7 +31,19 @@ const GetDocumentMasterTableColumns = ({
         cellAlign: 'left',
       },
     },
-    
+    {
+      id: 'is_active',
+      header: 'Status',
+      accessorKey: 'is_active',
+      sortable: true,
+      filterable: true,
+      cell: ({ value }) => <StatusBadge status={value ? 'Active' : 'Inactive'} />,
+      meta: {
+        headerAlign: 'left',
+        cellAlign: 'left',
+      },
+    },
+     
     {
       id: 'action',
       header: 'Action',

@@ -9,9 +9,12 @@ import { FormTitle } from '@/features/auth/components/form-title';
 import { TableTitle } from '@/features/auth/components/table-title';
 import { dummyDocumentData } from '../data/dummy-document-data';
 import { useGetDocuments } from '../hooks/useGetDocuments';
+import { DocumentCreationDialog } from '../form/DocumentCreationDialog';
 
 const DocumentMasterTablePage = () => {
   const navigate = useNavigate();
+  const [isDialogOpen, setIsDialogOpen] = useState(false);
+  const [selectedDocument, setSelectedDocument] = useState<DocumentData | null>(null);
 
   // Fetch documents from API
   const { data: apiDocuments = [], isLoading: isLoadingDocuments } = useGetDocuments();
@@ -47,7 +50,8 @@ const DocumentMasterTablePage = () => {
   };
 
   const handleEdit = (document: DocumentData) => {
-    navigate('/admin/master/document-master/update/:id', { state: { document } });
+    setSelectedDocument(document);
+    setIsDialogOpen(true);
   };
 
   const handleInactivate = (document: DocumentData) => {
@@ -56,7 +60,21 @@ const DocumentMasterTablePage = () => {
   };
 
   const handleCreateDocument = () => {
-    navigate('/admin/master/document-master/add-document');
+    setSelectedDocument(null);
+    setIsDialogOpen(true);
+  };
+
+  const handleDialogClose = () => {
+    setIsDialogOpen(false);
+    setSelectedDocument(null);
+  };
+
+  const handleDocumentCreated = (newDocument: DocumentData) => {
+    // Handle successful document creation/editing
+    console.log('Document created/updated:', newDocument);
+    // TODO: Refresh table data or update local state
+    setIsDialogOpen(false);
+    setSelectedDocument(null);
   };
 
   // Table actions
@@ -105,6 +123,14 @@ const DocumentMasterTablePage = () => {
         }}
         actions={tableActions}
         className="rounded-lg"
+      />
+
+      {/* Document Creation Dialog */}
+      <DocumentCreationDialog
+        isOpen={isDialogOpen}
+        onClose={handleDialogClose}
+        editData={selectedDocument}
+        onEdit={handleDocumentCreated}
       />
     </div>
   );
