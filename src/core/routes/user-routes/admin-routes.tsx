@@ -1,6 +1,6 @@
 import { Routes, Route } from 'react-router-dom';
 import { adminRoutes } from '../routes';
-import { ProtectedRoute } from '../protected-routes';
+// import { ProtectedRoute } from '../protected-routes';
 import SidebarLayout from '@/components/layout/sidebar-layout';
 import NotFoundPage from '@/components/common/not-found-page';
 
@@ -18,11 +18,11 @@ export const AdminRoutes = () => {
               key={path}
               path={normalizedPath}
               element={
-                <ProtectedRoute roles={roles} {...(permission ? { permission } : {})}>
+                // <ProtectedRoute roles={roles} {...(permission ? { permission } : {})}>
                   <SidebarLayout>
                     <Element />
                   </SidebarLayout>
-                </ProtectedRoute>
+                // </ProtectedRoute>
               }
             >
               {subRoutes.map(({ path: subPath, element: SubElement }) => (
@@ -38,11 +38,11 @@ export const AdminRoutes = () => {
             key={path}
             path={normalizedPath}
             element={
-              <ProtectedRoute roles={roles} {...(permission ? { permission } : {})}>
+              // <ProtectedRoute roles={roles} {...(permission ? { permission } : {})}>
                 <SidebarLayout>
                   <Element />
                 </SidebarLayout>
-              </ProtectedRoute>
+              // </ProtectedRoute>
             }
           />
         );

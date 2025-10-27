@@ -26,15 +26,19 @@ export const AppRoutes = () => {
       <Route
         path="/admin/*"
         element={
-          <ProtectedRoute>
+          // <ProtectedRoute>
+          //   <AdminRoutes />
+          //   {/* <div>app</div> */}
+          // </ProtectedRoute>
+
             <AdminRoutes />
-            {/* <div>app</div> */}
-          </ProtectedRoute>
+           
+         
         }
       />
-      <Route path="/" element={<Navigate to={getDefaultRoute(user?.role?.name)} replace />} />
+      {/* <Route path="/" element={<Navigate to={getDefaultRoute(user?.role?.name)} replace />} />
       <Route path="/unauthorized" element={<UnauthorizedPage />} />
-      <Route path="*" element={<NotFoundPage />} />
+      <Route path="*" element={<NotFoundPage />} /> */}
     </Routes>
   );
 };
