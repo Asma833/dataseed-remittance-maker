@@ -1,12 +1,13 @@
 import { useParams } from 'react-router';
 import { useNavigate, useLocation } from 'react-router-dom';
-import { useEffect } from 'react';
+import { useEffect, useMemo } from 'react';
 
 import { zodResolver } from '@hookform/resolvers/zod';
 import { FormProvider, useForm } from 'react-hook-form';
 import { PurposeMasterSchema } from './create-purpose-master.schema';
 import { PurposeMasterConfig } from './create-purpose-master.config';
 import { useCreatePurposeMaster } from '../../../hooks/useCreatePurposeMaster';
+import { useGetTransactionTypes } from '../hooks/useGetTransactionTypes';
 import { PurposeApiPayload } from '@/features/admin/types/purpose.types';
 import { getController } from '@/components/form/utils/get-controller';
 import FieldWrapper from '@/components/form/wrapper/field-wrapper';
@@ -20,11 +21,31 @@ const CreatePurposeMasterPage = ({ setDialogTitle }: { setDialogTitle: (title: s
   const navigate = useNavigate();
   const location = useLocation();
   const isEditMode = !!id;
+
+  // Fetch transaction types for dynamic options
+  const { data: transactionTypes = [] } = useGetTransactionTypes();
+
+  // Create dynamic config with transaction type options
+  const dynamicConfig = useMemo(() => ({
+    ...PurposeMasterConfig,
+    fields: {
+      ...PurposeMasterConfig.fields,
+      transaction_type: {
+        ...PurposeMasterConfig.fields.transaction_type,
+        options: transactionTypes.map(type => ({
+          label: type.name,
+          value: type.id,
+        })),
+      },
+    },
+  }), [transactionTypes]);
+
   const methods = useForm({
     resolver: zodResolver(PurposeMasterSchema),
     defaultValues: {
       purpose_name: '',
       purpose_code: '',
+      transaction_type: '',
     },
   });
   const {
@@ -61,6 +82,7 @@ const CreatePurposeMasterPage = ({ setDialogTitle }: { setDialogTitle: (title: s
     if (purpose && isEditMode) {
       setValue('purpose_name', purpose.purpose_name || '');
       setValue('purpose_code', purpose.purpose_code || '');
+      setValue('transaction_type', purpose.transaction_type_id || '');
 
       // Trigger form validation and re-rendering
       setTimeout(() => {
@@ -83,9 +105,9 @@ const CreatePurposeMasterPage = ({ setDialogTitle }: { setDialogTitle: (title: s
       <FormProvider {...methods}>
         <form onSubmit={handleAddPurpose}>
           <TableTitle title={isEditMode ? 'Update Purpose Master' : 'Create New Purpose Master'}>
-            <FormFieldRow className="mb-4 mt-1" rowCols={3}>
-              {Object.entries(PurposeMasterConfig.fields)
-                .slice(0, 2)
+            <FormFieldRow className="mb-4 mt-1" rowCols={4}>
+              {Object.entries(dynamicConfig.fields)
+                .slice(0, 4)
                 .map(([name, field]) => (
                   <FieldWrapper key={name}>
                     {getController({

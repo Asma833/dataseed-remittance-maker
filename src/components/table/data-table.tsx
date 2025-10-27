@@ -46,6 +46,7 @@ import { TableConfig, TableColumn, TableData, TableActions } from './types';
 import { defaultTableConfig } from './config';
 import { exportTableToCSV } from './csv-export.utils';
 import { Pagination } from './pagination';
+import DynamicTabs from '@/components/remittance/dynamic-tabs';
 
 interface DataTableProps<T> {
   columns: TableColumn<T>[];
@@ -397,11 +398,21 @@ export function DataTable<T>({
     return (
       <div className={cn('space-y-4 mb-20', className)}>
         {/* Search and Filters Header */}
-        {(config.search.enabled || config.filters.enabled) && (
+        {(config.search.enabled || config.filters.enabled || config.tabFilters?.enabled) && (
           <div className="space-y-2">
             <div className="flex items-center justify-between gap-4">
-              {/* Left side - Filters */}
+              {/* Left side - Tab Filters and Filters */}
               <div className="flex items-end gap-3">
+                {/* Tab Filters */}
+                {config.tabFilters?.enabled && (
+                  <div className="flex gap-2">
+                    <DynamicTabs
+                      tabs={config.tabFilters.tabs}
+                      {...(config.tabFilters.defaultValue && { defaultValue: config.tabFilters.defaultValue })}
+                      {...(config.tabFilters.onTabChange && { onTabChange: config.tabFilters.onTabChange })}
+                    />
+                  </div>
+                )}
                 {/* Role Filter */}
                 {roleFilterConfig?.enabled && (
                   <div className="flex flex-col gap-1">

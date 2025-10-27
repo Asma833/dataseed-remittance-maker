@@ -61,10 +61,10 @@ export const SideNavOptions = {
           title: 'Purpose Master',
           path: getNavPath('ADMIN', ROUTES.ADMIN.MASTER.PURPOSE_MASTER),
         },
-        // {
-        //   title: 'Document Master',
-        //   path: getNavPath('ADMIN', ROUTES.ADMIN.MASTER.DOCUMENT_MASTER),
-        // },
+        {
+          title: 'Document Master',
+          path: getNavPath('ADMIN', ROUTES.ADMIN.MASTER.DOCUMENT_MASTER),
+        },
       ],
     },
   ] as NavigationItem[],

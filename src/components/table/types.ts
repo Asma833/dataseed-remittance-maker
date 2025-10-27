@@ -94,6 +94,14 @@ export interface TableConfig {
     includeHeaders?: boolean;
   };
 
+  // Tab filter settings
+  tabFilters?: {
+    enabled: boolean;
+    tabs: { value: string; label: string }[];
+    defaultValue?: string;
+    onTabChange?: (value: string) => void;
+  };
+
   // Loading and error states
   loading?: boolean;
   error?: string | null;

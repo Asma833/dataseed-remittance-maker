@@ -5,13 +5,15 @@ import { MapPin } from 'lucide-react';
 const GetPurposeMasterTableColumns = ({
   handleEdit,
   handleDelete,
+  handleInactivate,
 }: {
   handleEdit: (purpose: PurposeData) => void;
   handleDelete: (purpose: PurposeData) => void;
+  handleInactivate: (purpose: PurposeData) => void;
 }): TableColumn<PurposeData>[] => {
   return [
     {
-      id: 'purposeName',
+      id: 'purpose_name',
       header: 'Purpose Name',
       accessorKey: 'purpose_name',
       sortable: true,
@@ -22,9 +24,9 @@ const GetPurposeMasterTableColumns = ({
       },
     },
     {
-      id: 'purposeCode',
-      header: 'Purpose Code',
-      accessorKey: 'purpose_code',
+      id: 'mapped_documents',
+      header: 'Mapped Documents',
+      accessorKey: 'mapped_documents',
       sortable: true,
       filterable: true,
       meta: {
@@ -33,35 +35,9 @@ const GetPurposeMasterTableColumns = ({
       },
     },
     {
-      id: 'mappedTransactionTypes',
-      header: 'Mapped Transaction Types',
-      accessorKey: 'mappedTransactionTypes',
-      sortable: false,
-      filterable: false,
-      meta: {
-        headerAlign: 'left',
-        cellAlign: 'left',
-      },
-    },
-    {
-      id: 'mappedTransaction',
-      header: 'Mapped Transaction',
-      cell: () => (
-        <div className="flex justify-center">
-          <MapPin className="w-5 h-5 text-muted-foreground" />
-        </div>
-      ),
-      sortable: false,
-      filterable: false,
-      meta: {
-        headerAlign: 'center',
-        cellAlign: 'center',
-      },
-    },
-    {
       id: 'action',
       header: 'Action',
-      cell: ({ row }) => <ActionButtons row={row} onEdit={handleEdit} onDelete={handleDelete} />,
+      cell: ({ row }) => <ActionButtons row={row} onEdit={handleEdit}  onInactivate={handleInactivate}/>,
       sortable: false,
       filterable: false,
       meta: {

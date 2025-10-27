@@ -5,7 +5,7 @@ export const HEADER_KEYS = {
 
 export const API = {
   AUTH: {
-    LOGIN: `/users/login`,
+    LOGIN: `/rem-users/login`,
     LOGOUT: `/auth/logout`,
     REGISTER: `/auth/register`,
     FORGOT_PASSWORD: `/users/forgot-password`,
@@ -146,6 +146,7 @@ export const API = {
   },
   TRANSACTION_PURPOSE_MAP: {
     CREATE: `/transaction-purpose-map`,
+    PURPOSE_MAPPING: `/transaction-purpose-map/purpose-mapping`,
     GET_DOCUMENTS: (transactionTypeId: string) => `/trans-purpose-document/${transactionTypeId}/documents`,
   },
   DOCUMENT_MASTER: {
