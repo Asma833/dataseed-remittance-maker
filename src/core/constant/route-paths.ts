@@ -54,6 +54,7 @@ export const ROUTES = {
       DOCUMENT_MASTER: '/master/document-master',
       CREATE_DOCUMENT_MASTER: '/master/document-master/add-document',
       UPDATE_DOCUMENT_MASTER: '/master/document-master/update/:id',
+      DOCUMENT_MAPPING: '/master/document-mapping',
     },
     NUSER: '/users',
     MAKER: '/maker',

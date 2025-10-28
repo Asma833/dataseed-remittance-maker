@@ -16,6 +16,7 @@ import PurposeMasterTablePage from '@/features/remittance/master/purpose-master/
 import CreatePurposeMasterPage from '@/features/remittance/master/purpose-master/form/create-purpose-master-page';
 import DocumentMasterTablePage from '@/features/remittance/master/document/table/document-master-table-page';
 import CreateDocumentPage from '@/features/remittance/master/document/form/create-document-form';
+import { PurposeDocumentsTable } from '@/features/remittance/master/document-mapping/table/document-mapping-table';
 import AdminAgentList from '@/features/remittance/user-management/agent-admin-table/table/page';
 import AgentAdminCreation from '@/features/remittance/user-management/agent-admin-table/form/agent-admin-creation';
 
@@ -171,6 +172,12 @@ export const adminRoutes: RouteConfig[] = [
   {
     path: ROUTES.ADMIN.MASTER.UPDATE_PURPOSE_MASTER,
     element: CreatePurposeMasterPage,
+    roles: [baseRole],
+    permission: 'admin',
+  },
+  {
+    path: ROUTES.ADMIN.MASTER.DOCUMENT_MAPPING,
+    element: PurposeDocumentsTable,
     roles: [baseRole],
     permission: 'admin',
   },

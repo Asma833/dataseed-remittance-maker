@@ -1,8 +1,11 @@
 import React, { useState } from 'react';
-import CreatePurposeDocumentPage from '../form/create-purpose-document-page';
-import { PurposeDocumentTableConfig } from './purpose-document-table.config';
+import CreatePurposeDocumentPage from '../../document-master/form/create-purpose-document-page';
+import { DocumentMappingTableConfig } from './document-mapping-table.config';
 import { DialogWrapper } from '@/components/common/dialog-wrapper';
 import { DataTable } from '@/components/table/data-table';
+import { TableTitle } from '@/features/auth/components/table-title';
+import { Button } from '@/components/ui/button';
+import { PlusCircle } from 'lucide-react';
 // import { useDynamicPagination } from '@/components/common/dynamic-table/hooks/useDynamicPagination';
 
 export const PurposeDocumentsTable = () => {
@@ -41,6 +44,12 @@ export const PurposeDocumentsTable = () => {
       requirement: 'Mandatory',
     },
   ];
+
+  // Handle opening modal for creating purpose document
+  const handleAddAdminAgents = () => {
+    setIsModalOpen(true);
+    setDialogTitle('Create Purpose Document');
+  };
 
   //  const tableData = useMemo(() => {
   //    if (!data) return [];
@@ -93,37 +102,88 @@ export const PurposeDocumentsTable = () => {
 
   const isPaginationDynamic = false;
 
-  const tableColumns = PurposeDocumentTableConfig();
+  const columns = DocumentMappingTableConfig();
 
   const [isModalOpen, setIsModalOpen] = useState(false);
 
+  // Table configuration
+  const config = {
+    paginationMode: 'static' as const,
+    pagination: {
+      enabled: true,
+      pageSize: 10,
+      pageSizeOptions: [5, 10, 20, 50],
+      showPageSizeSelector: true,
+    },
+    search: {
+      placeholder: 'Search documents...',
+      enabled: true,
+      searchMode: 'static' as const,
+    },
+    filters: {
+      enabled: true,
+      filterMode: 'static' as const,
+      columnFilters: true,
+      globalFilter: true,
+    },
+    sorting: {
+      enabled: true,
+      multiSort: false,
+      sortMode: 'static' as const,
+    },
+    rowSelection: {
+      enabled: true,
+      multiple: true,
+    },
+    export: {
+      enabled: true,
+      fileName: 'document-mapping.csv',
+      includeHeaders: true,
+    },
+    loading: false,
+  };
+
+  // Table data
+  const data = dummyData;
+
+  // Table actions
+  const tableActions = {
+    onPaginationChange: (pagination: { pageIndex: number; pageSize: number }) => {
+      // Handle pagination if needed
+    },
+  };
+
   return (
-    <div className="dynamic-table-wrap relative">
-      {/* <p className="absolute top-1 left-0 p-4 font-semibold">Required Documents</p> */}
-      {/* <DataTable
-        columns={tableColumns}
-        data={dummyData}
-        defaultSortColumn="created_at"
-        defaultSortDirection="desc"
-        renderRightSideActions={() => (
+  
+    <div className="space-y-4 w-full">
+          {/* Header with controls */}
+          <div className="flex items-center justify-between">
+            <div className="space-y-1">
+              <TableTitle title="Document Mapping List" />
+            </div>
+            <div className="flex items-center gap-2">
+              <Button onClick={handleAddAdminAgents} size="sm">
+                <PlusCircle className="h-4 w-4" />
+                Create Purpose Document
+              </Button>
+            </div>
+          </div>
+    
+          {/* Data Table */}
+          <DataTable
+            columns={columns}
+            data={data}
+            config={config}
+            actions={tableActions}
+          />
+
+          {/* Modal for creating purpose document */}
           <DialogWrapper
-            triggerBtnText="Add Documents"
-            triggerBtnClassName="bg-custom-primary text-white hover:bg-custom-primary-hover"
-            title={dialogTitle}
             isOpen={isModalOpen}
             setIsOpen={setIsModalOpen}
-            description=""
-            renderContent={
-              <>
-                <CreatePurposeDocumentPage setDialogTitle={setDialogTitle} />
-              </>
-            }
-            footerBtnText=""
+            title={dialogTitle}
+            renderContent={<CreatePurposeDocumentPage setDialogTitle={setDialogTitle} />}
           />
-        )}
-        paginationMode={'static'}
-        
-      /> */}
-    </div>
+        </div>
   );
 };
