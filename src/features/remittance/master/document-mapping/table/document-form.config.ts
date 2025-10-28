@@ -71,7 +71,7 @@ export const DocumentFormConfig = ({
         placeholder: 'Select transaction type',
         required: true,
         options: uniqueTransactionTypes || [],
-        className: 'w-full p-4',
+        className: 'w-full',
       },
       purpose_type: {
         name: 'purpose_type',
@@ -80,7 +80,7 @@ export const DocumentFormConfig = ({
         placeholder: 'Select purpose type',
         required: true,
         options: purposeTypesForSelectedTransaction || [],
-        className: 'w-full p-4',
+        className: 'w-full',
         disabled: !selectedTransactionTypeId,
       },
     },

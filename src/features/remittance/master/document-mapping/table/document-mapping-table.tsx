@@ -2,14 +2,8 @@ import { useMemo, useState, useEffect } from 'react';
 import { FormProvider, useForm } from 'react-hook-form';
 import { toast } from 'sonner';
 import { useCreateDocumentTransactionMap } from '@/features/remittance/master/document-mapping/hooks/useCreateDocumentTransactionMap';
-
 import { useDeleteDocumentMapping } from '@/features/remittance/master/document-mapping/hooks/useDeleteDocumentMapping';
 import { API } from '@/core/constant/apis';
-
-
-// import { DocumentMappingTableConfig } from './DocumentMappingTableConfig';
-//import CreatePurposeDocumentPage from '../create-documents/CreatePurposeDocumentPage';
-
 import { useGetData } from '@/hooks/useGetData';
 import FormFieldRow from '@/components/form/wrapper/form-field-row';
 import FieldWrapper from '@/components/form/wrapper/field-wrapper';
@@ -487,8 +481,8 @@ const DocumentMappingTable = () => {
       )}
 
       <FormProvider {...methods}>
-        <FormContentWrapper className="mt-0 p-2 rounded-lg mr-auto bg-transparent w-full">
-            <FormFieldRow className="mt-0 p-2" rowCols={3}>
+        <FormContentWrapper className="mt-0 rounded-lg mr-auto bg-transparent w-full">
+            <FormFieldRow className="mt-0" rowCols={4}>
               {Object.entries(config.documentField).map(([name, field]) => (
                 <FieldWrapper key={name}>
                   {getController({
