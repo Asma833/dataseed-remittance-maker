@@ -4,7 +4,7 @@ import { agentAdminCreationConfig } from '../agent-admin-creation.config';
 import { getController } from '@/components/form/utils/get-controller';
 import FieldWrapper from '@/components/form/wrapper/field-wrapper';
 import FormFieldRow from '@/components/form/wrapper/form-field-row';
-import GetBankTableColumns from '../components/bank-table-coulumn';
+import GetBankTableColumns from '../components/bank-table-column';
 import { GenericTable } from '../components/generic-table';
 import SubTitle from '../components/sub-title';
 import {
@@ -16,7 +16,7 @@ import {
 import { BankAccount } from '../../../api/bankAccounts';
 import { Button } from '@/components/ui/button';
 import { PlusCircle } from 'lucide-react';
-import { AddBankDialog } from '../components/AddBankDialog';
+import { AddBankDialog } from '../components/add-bank-dialog';
 
 export const FinanceDetailsStep: React.FC<{ agentId?: string }> = ({ agentId }) => {
   const {

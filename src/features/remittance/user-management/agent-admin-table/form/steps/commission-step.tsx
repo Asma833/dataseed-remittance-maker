@@ -1,5 +1,5 @@
 import React from 'react';
-import CommissionDetailsPage from '../components/commission-details/CommissionDetailsPage';
+import CommissionDetailsPage from '../components/commission-details/commission-details-page';
 
 export const CommissionStep: React.FC = () => {
   return <CommissionDetailsPage />;

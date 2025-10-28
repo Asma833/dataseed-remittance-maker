@@ -10,13 +10,13 @@ import { resetAgentAdminForm } from './components/agent-admin-form-utils';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 
-import { BasicInformationStep } from './steps/BasicInformationStep';
-import { CommissionStep } from './steps/CommissionStep';
-import { CompanyDetailsStep } from './steps/CompanyDetailsStep';
-import { DocumentsStep } from './steps/DocumentsStep';
-import { FinanceDetailsStep } from './steps/FinanceDetailsStep';
-import { ProductPurposeStep } from './steps/ProductPurposeStep';
-import { CorporateOnboardingStep } from './steps/CorporateOnboardingStep';
+import { BasicInformationStep } from './steps/basic-information-step';
+import { CommissionStep } from './steps/commission-step';
+import { CompanyDetailsStep } from './steps/company-details-step';
+import { DocumentsStep } from './steps/documents-step';
+import { FinanceDetailsStep } from './steps/finance-details-step';
+import { ProductPurposeStep } from './steps/product-purpose-step';
+import { CorporateOnboardingStep } from './steps/corporate-onboarding-step';
 
 import { Stepper } from './stepper';
 import { FormTitle } from '@/features/auth/components/form-title';
