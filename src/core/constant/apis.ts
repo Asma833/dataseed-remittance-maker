@@ -122,6 +122,15 @@ export const API = {
     UPLOAD_REMITTANCE_IMAGE: `/documents/uploadRemittanceImage`,
     PRESIGNED_URLS: `/documents/presigned-urls`,
   },
+    DOCUMENT_MASTER: {
+    GET_DOCUMENTS: `/fx/documents`,
+    CREATE_DOCUMENT: `/fx/document`,
+    UPDATE_DOCUMENT: `/fx/document`,
+    DELETE_DOCUMENT: (id: string) => `/fx/document/${id}`,
+    DOC_PURPOSE_TRANS_MAPPING: `/trans-purpose-document/map`,
+    DELETE_MAPPING_DOCUMENT: (id: string) => `/trans-purpose-document/${id}`,
+    UPDATE_MAPPING_DOCUMENT: `/trans-purpose-document`,
+  },
   PRODUCTS: {
     GET_PRODUCTS: '/products',
   },
@@ -149,13 +158,13 @@ export const API = {
     PURPOSE_MAPPING: `/transaction-purpose-map/purpose-mapping`,
     GET_DOCUMENTS: (transactionTypeId: string) => `/trans-purpose-document/${transactionTypeId}/documents`,
   },
-  DOCUMENT_MASTER: {
-    GET_DOCUMENTS: `/fx/documents`,
-    CREATE_DOCUMENT: `/fx/document`,
-    UPDATE_DOCUMENT: `/fx/document`,
-    DELETE_DOCUMENT: (id: string) => `/fx/document/${id}`,
-    DOC_PURPOSE_TRANS_MAPPING: `/trans-purpose-document/map`,
-  },
+  // DOCUMENT_MASTER: {
+  //   GET_DOCUMENTS: `/fx/documents`,
+  //   CREATE_DOCUMENT: `/fx/document`,
+  //   UPDATE_DOCUMENT: `/fx/document`,
+  //   DELETE_DOCUMENT: (id: string) => `/fx/document/${id}`,
+  //   DOC_PURPOSE_TRANS_MAPPING: `/trans-purpose-document/map`,
+  // },
   CURRENCY_RATE: {
     GET_ALL: `/currency-rate?margin_type=number`,
     UPDATE_TIMEWISE: `/currency-rate/update-timewise`,
