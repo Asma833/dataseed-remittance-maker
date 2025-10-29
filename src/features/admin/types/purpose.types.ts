@@ -1,6 +1,7 @@
 export interface PurposeApiPayload {
   purpose_name: string;
   purpose_code: string;
+  transaction_type: string;
 }
 
 export interface PurposeData {

@@ -61,7 +61,7 @@ export const ShadCnSelect = ({
     const counts: Record<string, number> = {};
     return (options as Array<{ id?: string; value: string; label: string; selected?: boolean; typeId?: string }>).map(
       (opt) => {
-        const base = (opt.id ?? opt.value).toString();
+        const base = (opt.id ?? opt.value ?? 'unknown').toString();
         counts[base] = (counts[base] || 0) + 1;
         const key = counts[base] > 1 ? `${base}__${counts[base]}` : base;
         return { ...opt, _key: key } as typeof opt & { _key: string };

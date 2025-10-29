@@ -10,37 +10,31 @@ import { API } from '@/core/constant/apis';
 import { FormTitle } from '@/features/auth/components/form-title';
 import { TableTitle } from '@/features/auth/components/table-title';
 import DynamicTabs from '@/components/remittance/dynamic-tabs';
-import { dummyPurposeData } from '../data/dummy-purpose-data';
+import CreatePurposeMasterDialog from '../form/CreatePurposeMasterDialog';
 
 const PurposeMasterTablePage = () => {
   const navigate = useNavigate();
-  // const { data, isLoading, error, refetch } = useGetData({
-  //   endpoint: API.PURPOSE.GET_PURPOSES,
-  //   queryKey: ['getPurposeList'],
-  // });
+  const { data, isLoading, error, refetch } = useGetData<PurposeData[]>({
+    endpoint: API.PURPOSE.GET_PURPOSES,
+    queryKey: ['getPurposeList'],
+  });
 
   const [purposes, setPurposes] = useState<PurposeData[]>([]);
   const [activeTab, setActiveTab] = useState<string>('card');
-  const formattedDataArray = dummyPurposeData;
-  // const formattedDataArray = useMemo(() => {
-  //   if (!data) return [];
+  const [isCreateDialogOpen, setIsCreateDialogOpen] = useState(false);
 
-  //   // Check if data has a 'data' property (API response structure)
-  //   if (data && typeof data === 'object' && 'data' in data) {
-  //     const apiData = data.data;
-  //     if (Array.isArray(apiData)) {
-  //       return apiData.filter((item) => item != null);
-  //     }
-  //   }
+  // Transform API data to match PurposeData interface
+  const formattedDataArray = useMemo(() => {
+    if (!data || !Array.isArray(data)) return [];
 
-  //   // Fallback: if data is directly an array
-  //   if (Array.isArray(data)) {
-  //     return data.filter((item) => item != null);
-  //   }
-
-  //   return [];
-  // }, [data]);
-
+    return data.map((item: any) => ({
+      id: item.purpose_id,
+      purpose_code:item.purpose_code,
+      purpose_name: item.purpose_name,
+      mapped_documents: item.documents?.map((doc: any) => doc.display_name) || [],
+    }));
+  }, [data]);
+  
   // Table configuration
   const config = {
     ...staticConfig,
@@ -61,37 +55,37 @@ const PurposeMasterTablePage = () => {
   };
 
   // Filter data based on active tab
-  const filteredData = useMemo(() => {
-    if (!formattedDataArray.length) return [];
+  // const filteredData = useMemo(() => {
+  //   if (!formattedDataArray.length) return [];
 
-    switch (activeTab) {
-      case 'card':
-        return formattedDataArray.filter((item: PurposeData) =>
-          item.mappedTransactionTypes?.includes('card') || item.purpose_name?.toLowerCase().includes('card')
-        );
-      case 'currency':
-        return formattedDataArray.filter((item: PurposeData) =>
-          item.mappedTransactionTypes?.includes('currency') || item.purpose_name?.toLowerCase().includes('currency')
-        );
-      case 'remittance':
-        return formattedDataArray.filter((item: PurposeData) =>
-          item.mappedTransactionTypes?.includes('remittance') || item.purpose_name?.toLowerCase().includes('remittance')
-        );
-      default:
-        return formattedDataArray;
-    }
-  }, [formattedDataArray, activeTab]);
+  //   switch (activeTab) {
+  //     case 'card':
+  //       return formattedDataArray.filter((item: PurposeData) =>
+  //         item.mappedTransactionTypes?.includes('card') || item.purpose_name?.toLowerCase().includes('card')
+  //       );
+  //     case 'currency':
+  //       return formattedDataArray.filter((item: PurposeData) =>
+  //         item.mappedTransactionTypes?.includes('currency') || item.purpose_name?.toLowerCase().includes('currency')
+  //       );
+  //     case 'remittance':
+  //       return formattedDataArray.filter((item: PurposeData) =>
+  //         item.mappedTransactionTypes?.includes('remittance') || item.purpose_name?.toLowerCase().includes('remittance')
+  //       );
+  //     default:
+  //       return formattedDataArray;
+  //   }
+  // }, [formattedDataArray, activeTab]);
 
   // Table data
   const tableData: TableData<PurposeData> = {
-    data: filteredData,
-    totalCount: filteredData.length,
-    pageCount: Math.ceil(filteredData.length / (config.pagination?.pageSize || 10)),
+    data: formattedDataArray,
+    totalCount: formattedDataArray.length,
+    pageCount: Math.ceil(formattedDataArray.length / (config.pagination?.pageSize || 10)),
     currentPage: 1,
   };
 
   const handleEdit = (purpose: PurposeData) => {
-    navigate('/admin/master/purpose-master/update/:id', { state: { purpose } });
+    navigate(`/admin/master/purpose-master/update/${purpose.id}`, { state: { purpose } });
   };
 
   const handleDelete = (purpose: PurposeData) => {
@@ -103,7 +97,7 @@ const PurposeMasterTablePage = () => {
   };
 
   const handleCreatePurpose = () => {
-    navigate('/admin/master/purpose-master/add-purpose');
+    setIsCreateDialogOpen(true);
   };
 
   const handleTabChange = (value: string) => {
@@ -143,7 +137,7 @@ const PurposeMasterTablePage = () => {
   return (
     <div className="space-y-4 w-full">
       {/* Header with Create Button */}
-     
+
       <div className="flex justify-between items-center">
           <TableTitle title="Purpose Master" />
         <Button onClick={handleCreatePurpose} className="bg-primary text-white hover:bg-primary">
@@ -152,26 +146,31 @@ const PurposeMasterTablePage = () => {
         </Button>
       </div>
 
-     <DataTable
-       columns={columns}
-       data={tableData}
-       config={{
-         ...config,
-         export: {
-           enabled: true,
-           fileName: 'purpose-master-data.csv',
-           includeHeaders: true,
-         },
-         tabFilters: {
-           enabled: true,
-           tabs: tabs,
-           defaultValue: activeTab,
-           onTabChange: handleTabChange,
-         },
-       }}
-       actions={tableActions}
-       className="rounded-lg"
-     />
+      <DataTable
+        columns={columns}
+        data={tableData}
+        config={{
+          ...config,
+          export: {
+            enabled: true,
+            fileName: 'purpose-master-data.csv',
+            includeHeaders: true,
+          },
+          tabFilters: {
+            enabled: true,
+            tabs: tabs,
+            defaultValue: activeTab,
+            onTabChange: handleTabChange,
+          },
+        }}
+        actions={tableActions}
+        className="rounded-lg"
+      />
+
+      <CreatePurposeMasterDialog
+        isOpen={isCreateDialogOpen}
+        onClose={() => setIsCreateDialogOpen(false)}
+      />
     </div>
   );
 };

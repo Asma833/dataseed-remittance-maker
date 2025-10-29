@@ -7,6 +7,7 @@ import { FormProvider, useForm } from 'react-hook-form';
 import { PurposeMasterSchema } from './create-purpose-master.schema';
 import { PurposeMasterConfig } from './create-purpose-master.config';
 import { useCreatePurposeMaster } from '../../../hooks/useCreatePurposeMaster';
+import { useUpdatePurposeMapping } from '../hooks/useUpdatePurposeMapping';
 import { useGetTransactionTypes } from '../hooks/useGetTransactionTypes';
 import { PurposeApiPayload } from '@/features/admin/types/purpose.types';
 import { getController } from '@/components/form/utils/get-controller';
@@ -33,8 +34,8 @@ const CreatePurposeMasterPage = ({ setDialogTitle }: { setDialogTitle: (title: s
       transaction_type: {
         ...PurposeMasterConfig.fields.transaction_type,
         options: transactionTypes.map(type => ({
-          label: type.name,
-          value: type.id,
+          label: type.transaction_name,
+          value: type.transaction_type_id,
         })),
       },
     },
@@ -63,18 +64,27 @@ const CreatePurposeMasterPage = ({ setDialogTitle }: { setDialogTitle: (title: s
     },
   });
 
+  const { mutate: updatePurposeMapping, isPending: isUpdating } = useUpdatePurposeMapping();
+
   const handleBack = () => {
     navigate(-1);
   };
 
   const handleAddPurpose = handleSubmit(async (formdata: PurposeApiPayload) => {
-    // if (isEditMode) {
-    //   await updateUser({ data: formdata, productOptions, id });
-    // } else {
-    createUser({
-      ...formdata,
-    });
-    //}
+    if (isEditMode) {
+      updatePurposeMapping({
+        id,
+        data: {
+          purpose_name: formdata.purpose_name,
+          purpose_code: formdata.purpose_code,
+          transaction_type_id: formdata.transaction_type,
+        },
+      });
+    } else {
+      createUser({
+        ...formdata,
+      });
+    }
   });
 
   useEffect(() => {
@@ -91,10 +101,6 @@ const CreatePurposeMasterPage = ({ setDialogTitle }: { setDialogTitle: (title: s
     }
   }, [location.state, isEditMode, setValue, trigger]);
 
-  // useEffect(() => {
-  //   const title = isEditMode ? 'Edit Purpose Master' : 'Add Purpose Master';
-  //   setDialogTitle(title);
-  // }, [isEditMode, setDialogTitle]);
   return (
     <div className="space-y-1 w-full">
       <FormTitle
@@ -123,8 +129,8 @@ const CreatePurposeMasterPage = ({ setDialogTitle }: { setDialogTitle: (title: s
               <Button variant="outline" className="w-28" onClick={handleBack}>
                 Back
               </Button>
-              <Button type="submit" variant="secondary" className="w-28" disabled={isSubmitting}>
-                {isSubmitting ? (isEditMode ? 'Updating...' : 'Submitting...') : isEditMode ? 'Update' : 'Submit'}
+              <Button type="submit" variant="secondary" className="w-28" disabled={isSubmitting || isUpdating}>
+                {isSubmitting || isUpdating ? (isEditMode ? 'Updating...' : 'Submitting...') : isEditMode ? 'Update' : 'Submit'}
               </Button>
             </div>
           </TableTitle>

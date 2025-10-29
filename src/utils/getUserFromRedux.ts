@@ -49,7 +49,6 @@ interface RootState {
 
 export const useCurrentUser = () => {
   const user = useSelector((state: RootState) => state.auth.user);
-  console.log(user,"user++++++++++++++++++")
   const getUserHashedKey = (): string | undefined => {
     return user?.hashed_key;
   };

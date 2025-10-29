@@ -2,9 +2,9 @@ import axiosInstance from '@/core/services/axios/axios-instance';
 import { API } from '@/core/constant/apis';
 
 export interface TransactionType {
-  id: string;
-  name: string;
-  code?: string;
+  transaction_type_id: string;
+  hashed_key: string;
+  transaction_name: string;
 }
 
 // Function to get all transaction types

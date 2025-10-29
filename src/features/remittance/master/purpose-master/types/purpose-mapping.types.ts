@@ -12,3 +12,18 @@ export interface CreatePurposeMappingResponse {
   created_at: string;
   updated_at: string;
 }
+
+export interface UpdatePurposeMappingPayload {
+  purpose_name: string;
+  purpose_code: string;
+  transaction_type_id: string;
+}
+
+export interface UpdatePurposeMappingResponse {
+  id: string;
+  purpose_name: string;
+  purpose_code: string;
+  transaction_type_id: string;
+  created_at: string;
+  updated_at: string;
+}

@@ -17,16 +17,16 @@ interface DynamicTabsProps {
 const DynamicTabs: React.FC<DynamicTabsProps> = ({ tabs, defaultValue = 'card', onTabChange, children }) => {
   return (
     <div className="space-y-4">
-      <div className="flex gap-2">
+      <div className="flex flex-wrap items-center pt-4 gap-2">
         {tabs.map((tab) => (
           <button
             key={tab.value}
             onClick={() => onTabChange?.(tab.value)}
-            className={`flex-1 w-36 px-4 py-2 cursor-pointer rounded-md text-sm font-medium transition-colors text-white ${
+            className={`flex-1 min-w-0 px-4 py-2 cursor-pointer rounded-md text-sm font-medium transition-colors text-white ${
               defaultValue === tab.value
                 ? 'bg-gradient-to-r from-[#85308E] to-[#D62058]'
                 : 'bg-[#787878] hover:bg-[#888888]'
-            }`}
+            } sm:flex-none sm:w-36`}
           >
             {tab.label}
           </button>
