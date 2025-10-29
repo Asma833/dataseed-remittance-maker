@@ -2,7 +2,7 @@ import { Role } from '@/types/enums';
 
 export type Permission = 'view_dashboard' | 'manage_agents' | 'view_transactions' | 'approve_transactions';
 
-export type UserRole = 'admin' | 'maker' | 'checker';
+export type UserRole = 'admin' | 'branch_agent_checker' | 'maker' | 'checker';
 
 export interface User {
   id: string;
@@ -13,10 +13,10 @@ export interface User {
   updatedAt: string;
   created_by: string;
   updated_by: string;
-  role: {
+  roles: {
     id: string;
-    name: Role;
-  };
+    role_name: string;
+  }[];
   branch: {
     id: string;
     name: string;

@@ -17,8 +17,8 @@ const UnauthorizedPage = () => {
   const [isLoading, setIsLoading] = useState(false);
 
   const handleGoBack = () => {
-    if (user?.role?.name) {
-      const defaultRoute = DEFAULT_ROUTES[user.role.name as keyof typeof DEFAULT_ROUTES];
+    if (user?.roles[0]?.role_name) {
+      const defaultRoute = DEFAULT_ROUTES[user.roles[0]?.role_name as keyof typeof DEFAULT_ROUTES];
       navigate(defaultRoute || '/login');
     } else {
       navigate('/login');

@@ -5,7 +5,7 @@ import { useNavigate } from 'react-router-dom';
 import { authApi } from '../api/auth.api';
 import { setCredentials } from '../store/auth-slice';
 import { DEFAULT_ROUTES } from '../../../core/constant/manage-default-routes';
-import { LoginResponse } from '../types/auth.types';
+import { LoginResponse, UserRole } from '../types/auth.types';
 import type { LoginCredentials } from '../api/auth.api';
 
 export const useLogin = () => {
@@ -25,7 +25,9 @@ export const useLogin = () => {
       );
 
       // Redirect user to correct route based on role
-      const defaultRoute = DEFAULT_ROUTES[data.user.role.name];
+      const roleName = data.user.roles[0].role_name as UserRole;
+      console.log(data.user.roles[0].role_name,"roleName++++++++++++++")
+      const defaultRoute = DEFAULT_ROUTES[roleName];
       if (defaultRoute) {
         toast.success('Login successful');
         navigate(defaultRoute);

@@ -3,6 +3,7 @@ import { useSelector } from 'react-redux';
 import { createSelector } from '@reduxjs/toolkit';
 import { RootState } from '@/store';
 import { DEFAULT_ROUTES } from '@/core/constant/manage-default-routes';
+import { UserRole } from '@/features/auth/types/auth.types';
 import LoadingFallback from '@/components/loader/LoadingFallback';
 
 interface AuthRedirectGuardProps {
@@ -28,7 +29,7 @@ export const AuthRedirectGuard: React.FC<AuthRedirectGuardProps> = ({ children }
 
   // If user is authenticated, redirect to their dashboard
   if (isAuthenticated && user) {
-    const defaultRoute = DEFAULT_ROUTES[user.role.name];
+    const defaultRoute = DEFAULT_ROUTES[user.roles[0].role_name as UserRole];
     return <Navigate to={defaultRoute || '/dashboard'} replace />;
   }
 

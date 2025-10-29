@@ -21,7 +21,7 @@ import AdminAgentList from '@/features/remittance/user-management/agent-admin-ta
 import AgentAdminCreation from '@/features/remittance/user-management/agent-admin-table/form/agent-admin-creation';
 import DocumentMappingTable from '@/features/remittance/master/document-mapping/table/document-mapping-table';
 
-const baseRole = ROLES.ADMIN; // Admin routes are accessible to admin role
+const baseRole = ROLES.ADMIN || ROLES.BRANCH_AGENT_CHECKER; // Admin routes are accessible to admin role
 
 export const adminRoutes: RouteConfig[] = [
   {

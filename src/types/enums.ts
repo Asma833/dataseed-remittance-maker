@@ -13,6 +13,7 @@ export enum IncidentMode {
 
 export enum Role {
   ADMIN = 'admin',
+  BRANCH_AGENT_CHECKER = 'branch_agent_checker',
   MAKER = 'maker',
   CHECKER = 'checker',
 }

@@ -1,3 +1,4 @@
+import { UserRole } from '@/features/auth/types/auth.types';
 import { useSelector } from 'react-redux';
 
 interface BankAccount {
@@ -16,8 +17,8 @@ interface Branch {
 
 interface Role {
   id: string;
-  name: string;
-}
+  role_name: string;
+}[]
 
 interface User {
   id: string;
@@ -29,7 +30,7 @@ interface User {
   updated_by: string | null;
   createdAt: string;
   updatedAt: string;
-  role: Role;
+  roles: Role[];
   branch: Branch;
   bank_account: BankAccount;
 }
@@ -48,13 +49,13 @@ interface RootState {
 
 export const useCurrentUser = () => {
   const user = useSelector((state: RootState) => state.auth.user);
-
+  console.log(user,"user++++++++++++++++++")
   const getUserHashedKey = (): string | undefined => {
     return user?.hashed_key;
   };
 
   const getUserRole = (): string | undefined => {
-    return user?.role.name;
+    return user?.roles[0]?.role_name;
   };
 
   const getUserId = (): string | undefined => {

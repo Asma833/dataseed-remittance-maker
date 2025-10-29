@@ -38,7 +38,7 @@ export const DocumentMappingTableConfig = ({
     {
       id: 'name',
       header: 'Document Name',
-      accessorKey: 'documentName',
+      accessorKey: 'name',
       meta: {
         className: 'text-left',
       },

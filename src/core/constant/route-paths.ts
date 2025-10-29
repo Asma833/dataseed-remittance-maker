@@ -87,6 +87,7 @@ export const ROUTES = {
 // Route prefixes for different user roles
 export const ROUTE_PREFIXES = {
   ADMIN: '/admin',
+  BRANCH_AGENT_CHECKER: '/admin',
   CHECKER: '/checker',
   MAKER: '/maker',
 } as const;
@@ -97,7 +98,8 @@ export const getNavPath = (role: keyof typeof ROUTE_PREFIXES, route: string): st
 };
 
 export const ROLES = {
-  ADMIN: 'admin',
+  ADMIN:'admin',
+  BRANCH_AGENT_CHECKER: 'branch_agent_checker',
   CHECKER: 'checker',
   MAKER: 'maker',
 };
