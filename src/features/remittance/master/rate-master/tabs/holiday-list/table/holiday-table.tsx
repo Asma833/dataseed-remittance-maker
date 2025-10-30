@@ -8,47 +8,8 @@ import { HolidayCreationDialog } from '../form/HolidayCreationDialog';
 import { HolidayListTableColumnConfig } from './holiday-list-table-column.config';
 import { useGetHolidays } from '../hooks/useHolidays';
 
-// const sampleHolidays: HolidayData[] = [
-//   {
-//     id: '1',
-//     sno: 1,
-//     created_at: '2025-01-01',
-//     holiday_name: "New Year's Day",
-//   },
-//   {
-//     id: '2',
-//     sno: 2,
-//     created_at: '2025-01-26',
-//     holiday_name: 'Republic Day',
-//   },
-//   {
-//     id: '3',
-//     sno: 3,
-//     created_at: '2025-03-29',
-//     holiday_name: 'Holi',
-//   },
-//   {
-//     id: '4',
-//     sno: 4,
-//     created_at: '2025-08-15',
-//     holiday_name: 'Independence Day',
-//   },
-//   {
-//     id: '5',
-//     sno: 5,
-//     created_at: '2025-10-02',
-//     holiday_name: 'Gandhi Jayanti',
-//   },
-//   {
-//     id: '6',
-//     sno: 6,
-//     created_at: '2025-12-25',
-//     holiday_name: 'Christmas Day',
-//   },
-// ];
 
 const HolidayTable = () => {
-  const navigate = useNavigate();
   const { data: apiHolidays, isLoading, error } = useGetHolidays();
   const [holidays, setHolidays] = useState<HolidayData[]>([]);
   const [loading, setLoading] = useState(false);
