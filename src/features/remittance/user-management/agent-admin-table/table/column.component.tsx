@@ -32,9 +32,9 @@ const GetAgentListTableColumns = ({
       },
     },
     {
-      id: 'agent_name',
+      id: 'entity_name',
       header: 'Agent Entity Name',
-      accessorKey: 'agent_name',
+      accessorKey: 'entity_name',
       sortable: true,
       filterable: true,
       cell: ({ value }) => value || '-',
@@ -43,30 +43,6 @@ const GetAgentListTableColumns = ({
         cellAlign: 'left',
       },
     },
-    // {
-    //   id: 'email',
-    //   header: 'Email',
-    //   accessorKey: 'email',
-    //   sortable: true,
-    //   filterable: true,
-    //   cell: ({ value }) => value || '-',
-    //   meta: {
-    //     headerAlign: 'left',
-    //     cellAlign: 'left',
-    //   },
-    // },
-    // {
-    //   id: 'phone_number',
-    //   header: 'Phone Number',
-    //   accessorKey: 'phone_number',
-    //   sortable: true,
-    //   filterable: true,
-    //   cell: ({ value }) => value || '-',
-    //   meta: {
-    //     headerAlign: 'left',
-    //     cellAlign: 'left',
-    //   },
-    // },
     {
       id: 'agent_type',
       header: 'Agent Type',
@@ -79,18 +55,7 @@ const GetAgentListTableColumns = ({
         cellAlign: 'left',
       },
     },
-    // {
-    //   id: 'agent_branch_city',
-    //   header: 'Branch City',
-    //   accessorKey: 'agent_branch_city',
-    //   sortable: true,
-    //   filterable: true,
-    //   cell: ({ value }) => value || '-',
-    //   meta: {
-    //     headerAlign: 'left',
-    //     cellAlign: 'left',
-    //   },
-    // },
+    
     {
       id: 'rm_name',
       header: 'RM',
