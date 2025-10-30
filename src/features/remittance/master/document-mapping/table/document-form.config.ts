@@ -1,4 +1,3 @@
-
 import { FieldType } from '@/types/enums';
 import { TransactionPurposeMap } from '../types/transaction-form.types';
 

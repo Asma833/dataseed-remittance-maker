@@ -28,19 +28,16 @@ export const ShadCnDatePicker = ({
   placeholder = 'Pick a date',
 }: ShadCnDatePickerProps) => {
   const { control, clearErrors } = useFormContext();
-   const [date, setDate] = useState<Date | undefined>(new Date())
+  const [date, setDate] = useState<Date | undefined>(new Date());
 
-  const handleCalendarChange = (
-    _value: string | number,
-    _e: React.ChangeEventHandler<HTMLSelectElement>
-  ) => {
+  const handleCalendarChange = (_value: string | number, _e: React.ChangeEventHandler<HTMLSelectElement>) => {
     const _event = {
       target: {
         value: String(_value),
       },
-    } as React.ChangeEvent<HTMLSelectElement>
-    _e(_event)
-  }
+    } as React.ChangeEvent<HTMLSelectElement>;
+    _e(_event);
+  };
   return (
     <FormItem className={className}>
       <FormLabel className="text-[var(--color-form-label)]">
@@ -69,8 +66,7 @@ export const ShadCnDatePicker = ({
                   </Button>
                 </PopoverTrigger>
                 <PopoverContent className="w-auto p-0" align="start">
-                 
-                   <Calendar
+                  <Calendar
                     mode="single"
                     selected={field.value ? new Date(field.value) : undefined}
                     onSelect={(selectedDate) => {
@@ -89,7 +85,7 @@ export const ShadCnDatePicker = ({
                           <div className="flex w-full items-center justify-center gap-3 [&>span]:text-sm [&>span]:font-medium">
                             {props.children}
                           </div>
-                        )
+                        );
                       },
                       YearsDropdown: (props: DropdownProps) => {
                         return (
@@ -97,7 +93,7 @@ export const ShadCnDatePicker = ({
                             value={String(props.value)}
                             onValueChange={(value) => {
                               if (props.onChange) {
-                                handleCalendarChange(value, props.onChange)
+                                handleCalendarChange(value, props.onChange);
                               }
                             }}
                           >
@@ -106,17 +102,13 @@ export const ShadCnDatePicker = ({
                             </SelectTrigger>
                             <SelectContent className="max-h-[min(26rem,var(--radix-select-content-available-height))]">
                               {props.options?.map((option) => (
-                                <SelectItem
-                                  key={option.value}
-                                  value={String(option.value)}
-                                  disabled={option.disabled}
-                                >
+                                <SelectItem key={option.value} value={String(option.value)} disabled={option.disabled}>
                                   {option.label}
                                 </SelectItem>
                               ))}
                             </SelectContent>
                           </Select>
-                        )
+                        );
                       },
                     }}
                   />

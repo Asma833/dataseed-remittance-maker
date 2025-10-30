@@ -5,11 +5,7 @@ import { CreatePurposeMappingPayload, CreatePurposeMappingResponse } from '../ty
 export const useCreatePurposeMapping = () => {
   const queryClient = useQueryClient();
 
-  return useMutation<
-    CreatePurposeMappingResponse,
-    Error,
-    CreatePurposeMappingPayload
-  >({
+  return useMutation<CreatePurposeMappingResponse, Error, CreatePurposeMappingPayload>({
     mutationFn: createPurposeMapping,
     onSuccess: () => {
       // Invalidate and refetch relevant queries

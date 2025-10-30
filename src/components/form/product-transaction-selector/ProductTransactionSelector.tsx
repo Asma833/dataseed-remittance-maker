@@ -65,7 +65,7 @@ export const ProductTransactionSelector = ({
           type: FieldType.Checkbox,
           required: true,
           options: productOptions,
-          orientation:"vertical",
+          orientation: 'vertical',
           variant: 'circle_check_filled',
           isMulti: true,
           control,
@@ -111,17 +111,17 @@ export const ProductTransactionSelector = ({
                 )}
               >
                 <div className="text-sm mx-2 leading-[12px]">
-                 Transaction Type <span className="text-red-700">*</span>
+                  Transaction Type <span className="text-red-700">*</span>
                 </div>
                 <div className="flex items-center leading-none">
                   {getController({
                     type: FieldType.Radio,
-                    options: { buy: { label: 'Buy' }, sell: { label: 'Sell' }, both:{label: 'Both'} },
+                    options: { buy: { label: 'Buy' }, sell: { label: 'Sell' }, both: { label: 'Both' } },
                     required: true,
                     name: `${transactionFieldName}.${p}`,
                     control,
                     errors,
-                    className:"grid gap-0 scale-90 p-0 m-0",
+                    className: 'grid gap-0 scale-90 p-0 m-0',
                     // if your getController supports classNames, also hide via API:
                     classNames: {
                       error: 'hidden', // optional: if supported, silences internal error slot

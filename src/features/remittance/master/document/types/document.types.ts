@@ -4,7 +4,7 @@ export interface DocumentApiPayload {
   is_required: boolean;
   is_back_required: boolean;
   is_active: boolean;
-  display_name?:string;
+  display_name?: string;
 }
 
 export interface DocumentData {

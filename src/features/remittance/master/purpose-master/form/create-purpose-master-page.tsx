@@ -27,19 +27,22 @@ const CreatePurposeMasterPage = ({ setDialogTitle }: { setDialogTitle: (title: s
   const { data: transactionTypes = [] } = useGetTransactionTypes();
 
   // Create dynamic config with transaction type options
-  const dynamicConfig = useMemo(() => ({
-    ...PurposeMasterConfig,
-    fields: {
-      ...PurposeMasterConfig.fields,
-      transaction_type: {
-        ...PurposeMasterConfig.fields.transaction_type,
-        options: transactionTypes.map(type => ({
-          label: type.transaction_name,
-          value: type.transaction_type_id,
-        })),
+  const dynamicConfig = useMemo(
+    () => ({
+      ...PurposeMasterConfig,
+      fields: {
+        ...PurposeMasterConfig.fields,
+        transaction_type: {
+          ...PurposeMasterConfig.fields.transaction_type,
+          options: transactionTypes.map((type) => ({
+            label: type.transaction_name,
+            value: type.transaction_type_id,
+          })),
+        },
       },
-    },
-  }), [transactionTypes]);
+    }),
+    [transactionTypes]
+  );
 
   const methods = useForm({
     resolver: zodResolver(PurposeMasterSchema),
@@ -130,7 +133,13 @@ const CreatePurposeMasterPage = ({ setDialogTitle }: { setDialogTitle: (title: s
                 Back
               </Button>
               <Button type="submit" variant="secondary" className="w-28" disabled={isSubmitting || isUpdating}>
-                {isSubmitting || isUpdating ? (isEditMode ? 'Updating...' : 'Submitting...') : isEditMode ? 'Update' : 'Submit'}
+                {isSubmitting || isUpdating
+                  ? isEditMode
+                    ? 'Updating...'
+                    : 'Submitting...'
+                  : isEditMode
+                    ? 'Update'
+                    : 'Submit'}
               </Button>
             </div>
           </TableTitle>

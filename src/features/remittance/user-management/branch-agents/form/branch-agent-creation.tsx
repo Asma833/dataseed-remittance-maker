@@ -38,7 +38,8 @@ const resolveAgentFromValue = (val: unknown, agents?: Array<Agent>) => {
     const anyVal = val as any;
     const byCode = anyVal?.agent_code ?? anyVal?.agent_entity_email ?? anyVal?.value ?? anyVal?.code ?? anyVal?.id;
     const byName = anyVal?.agent_name ?? anyVal?.label ?? anyVal?.name ?? anyVal?.text;
-    const found = (byCode && agents.find((a) => a.agent_code === String(byCode) || a.agent_entity_email === String(byCode))) ||
+    const found =
+      (byCode && agents.find((a) => a.agent_code === String(byCode) || a.agent_entity_email === String(byCode))) ||
       (byName && agents.find((a) => a.agent_name === String(byName)));
     return found;
   }
@@ -88,8 +89,10 @@ export const CreateBranchAgent = () => {
   useEffect(() => {
     if (!branchAgent) return;
 
-   
-    const checkerName = branchAgent.checker_list !== null ? branchAgents?.find(agent => agent.id === branchAgent.checker_list)?.full_name || '' : '';
+    const checkerName =
+      branchAgent.checker_list !== null
+        ? branchAgents?.find((agent) => agent.id === branchAgent.checker_list)?.full_name || ''
+        : '';
 
     reset({
       agentDetails: {
@@ -109,7 +112,7 @@ export const CreateBranchAgent = () => {
           state: branchAgent.address_state || '',
           city: branchAgent.address_city || '',
           branch: branchAgent.address_branch || '',
-          rmName:  branchAgent.rm_name,
+          rmName: branchAgent.rm_name,
           rmBranch: branchAgent.rm_branch_name,
         },
         roleStatus: {
@@ -140,17 +143,16 @@ export const CreateBranchAgent = () => {
         shouldDirty: true,
         shouldValidate: true,
       });
-       setValue('agentDetails.address.rmName', found.rm_name || '-', {
+      setValue('agentDetails.address.rmName', found.rm_name || '-', {
         shouldDirty: true,
         shouldValidate: true,
       });
-        setValue('agentDetails.address.rmBranch', found.rm_branch_name || '-', {
+      setValue('agentDetails.address.rmBranch', found.rm_branch_name || '-', {
         shouldDirty: true,
         shouldValidate: true,
       });
-    } 
+    }
   }, [selectedVendorValue, agents, setValue]);
-
 
   const handleBack = () => navigateWithRole(navigate, userRole, '/user-management/branch-agents');
 
@@ -168,7 +170,7 @@ export const CreateBranchAgent = () => {
 
     // Convert checker name back to ID for API
     const checkerId = data.agentDetails.basicDetails.checkerList
-      ? branchAgents?.find(agent => agent.full_name === data.agentDetails.basicDetails.checkerList)?.id
+      ? branchAgents?.find((agent) => agent.full_name === data.agentDetails.basicDetails.checkerList)?.id
       : null;
 
     if (branchAgent) {
@@ -231,7 +233,7 @@ export const CreateBranchAgent = () => {
               <label className="text-sm font-medium absolute">Vendor Details</label>
             </div>
             <FormFieldRow rowCols={4}>
-              {(['vendorName', 'agentEonCode','systemCode','primaryAgentEmail'] as const).map((fieldName) => {
+              {(['vendorName', 'agentEonCode', 'systemCode', 'primaryAgentEmail'] as const).map((fieldName) => {
                 const field = config.fields.agentDetails[fieldName];
                 return (
                   <FieldWrapper key={fieldName}>
@@ -318,9 +320,9 @@ export const CreateBranchAgent = () => {
                 );
               })}
             </FormFieldRow>
-              {/* --- Checker List --- */}
-              {selectedRole === 'branch_agent_maker' && (
-                <FormFieldRow rowCols={4}>
+            {/* --- Checker List --- */}
+            {selectedRole === 'branch_agent_maker' && (
+              <FormFieldRow rowCols={4}>
                 {(['checkerList'] as const).map((fieldName) => {
                   const field = config.fields.agentDetails[fieldName];
                   return (
@@ -334,8 +336,8 @@ export const CreateBranchAgent = () => {
                     </FieldWrapper>
                   );
                 })}
-                </FormFieldRow>
-              )}
+              </FormFieldRow>
+            )}
             <FormFieldRow rowCols={5}>
               {(['status'] as const).map((fieldName) => {
                 const field = config.fields.agentDetails[fieldName];

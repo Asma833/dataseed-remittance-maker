@@ -15,12 +15,7 @@ interface CurrencyEditDialogProps {
   onEdit?: (currencyData: CurrencyData) => void;
 }
 
-export const CurrencyEditDialog: React.FC<CurrencyEditDialogProps> = ({
-  isOpen,
-  onClose,
-  editData,
-  onEdit,
-}) => {
+export const CurrencyEditDialog: React.FC<CurrencyEditDialogProps> = ({ isOpen, onClose, editData, onEdit }) => {
   const form = useForm<CurrencyEditFormData>({
     resolver: zodResolver(currencyEditFormSchema),
     defaultValues: editData || {},
@@ -59,7 +54,7 @@ export const CurrencyEditDialog: React.FC<CurrencyEditDialogProps> = ({
 
   const handleSubmit = (data: CurrencyEditFormData) => {
     // Handle form submission
-  //  console.log('Submitting currency edit data:', data);
+    //  console.log('Submitting currency edit data:', data);
   };
 
   const handleEdit = (data: Record<string, any>) => {
@@ -77,18 +72,15 @@ export const CurrencyEditDialog: React.FC<CurrencyEditDialogProps> = ({
       };
 
       // Call the API update
-      updateCurrencyMutation.mutate(
-        { ...data, id: editData.id } as CurrencyEditFormData & { id: string },
-        {
-          onSuccess: () => {
-            onEdit(updatedCurrency);
-            toast.success('Currency updated successfully');
-          },
-          onError: () => {
-            toast.error('Failed to update currency');
-          },
-        }
-      );
+      updateCurrencyMutation.mutate({ ...data, id: editData.id } as CurrencyEditFormData & { id: string }, {
+        onSuccess: () => {
+          onEdit(updatedCurrency);
+          toast.success('Currency updated successfully');
+        },
+        onError: () => {
+          toast.error('Failed to update currency');
+        },
+      });
     }
   };
 

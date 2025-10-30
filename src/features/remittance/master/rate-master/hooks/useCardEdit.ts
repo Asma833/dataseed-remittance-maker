@@ -10,7 +10,7 @@ export const useUpdateCardData = () => {
       //console.log('Card data updated successfully');
     },
     onError: (error) => {
-     // console.error('Error updating card data:', error);
+      // console.error('Error updating card data:', error);
     },
   });
 };

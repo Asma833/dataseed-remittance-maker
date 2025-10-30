@@ -45,16 +45,17 @@ const LiveRates = () => {
   };
 
   // Transform API data to component format
-  const liveRateData: LiveRateData[] = currencyRates ? currencyRates.map((rate: CurrencyRate) => ({
-    id: rate.id,
-    currency: rate.currency_code || '-',
-    remittanceRate:  '-', 
-    currencyRate:  '-', 
-    cardBuyRate: rate.card_buy_rate || '-',
-    cardSellRate: rate.card_sell_rate || '-',
-  })) : [];
+  const liveRateData: LiveRateData[] = currencyRates
+    ? currencyRates.map((rate: CurrencyRate) => ({
+        id: rate.id,
+        currency: rate.currency_code || '-',
+        remittanceRate: '-',
+        currencyRate: '-',
+        cardBuyRate: rate.card_buy_rate || '-',
+        cardSellRate: rate.card_sell_rate || '-',
+      }))
+    : [];
 
-  
   // Table data in the same shape used by Super Checker table
   const tableData: TableData<LiveRateData> = {
     data: liveRateData,
@@ -62,7 +63,7 @@ const LiveRates = () => {
     pageCount: Math.ceil(liveRateData.length / ((config.pagination?.pageSize as number) || 10)),
     currentPage: 1,
   };
-  
+
   const isPaginationDynamic = false;
 
   // Table columns

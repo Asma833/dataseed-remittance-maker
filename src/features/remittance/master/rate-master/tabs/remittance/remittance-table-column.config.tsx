@@ -64,26 +64,26 @@ export const RemittanceTableColumnConfig = ({
       meta: { headerAlign: 'right', cellAlign: 'right' },
     },
     {
-    id: 'ttUpperCircuit',
-    header: 'TT Upper Circuit',
-    accessorKey: 'ttUpperCircuit',
-    sortable: true,
-    filterable: true,
-    meta: {
-      headerAlign: 'left',
-      cellAlign: 'left',
+      id: 'ttUpperCircuit',
+      header: 'TT Upper Circuit',
+      accessorKey: 'ttUpperCircuit',
+      sortable: true,
+      filterable: true,
+      meta: {
+        headerAlign: 'left',
+        cellAlign: 'left',
+      },
     },
-   },
-   {
-    id: 'action',
-    header: 'Action',
-    cell: ({ row }) => <ActionButtons row={row} onEdit={handleEdit} />,
-    sortable: false,
-    filterable: false,
-    meta: {
-      headerAlign: 'center',
-      cellAlign: 'center',
+    {
+      id: 'action',
+      header: 'Action',
+      cell: ({ row }) => <ActionButtons row={row} onEdit={handleEdit} />,
+      sortable: false,
+      filterable: false,
+      meta: {
+        headerAlign: 'center',
+        cellAlign: 'center',
+      },
     },
-    }
   ];
 };

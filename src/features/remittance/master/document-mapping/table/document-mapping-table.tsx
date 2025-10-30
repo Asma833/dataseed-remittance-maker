@@ -17,7 +17,6 @@ import useGetDocByTransPurpose from '../hooks/useGetDocByTransPurpose';
 import { TransactionPurposeMap } from '../types/transaction-form.types';
 import { DocumentFormConfig } from './document-form.config';
 
-
 const DocumentMappingTable = () => {
   const { mutate, isPending: isDeleting } = useDeleteDocumentMapping();
   const [dialogTitle, setDialogTitle] = useState('Add Documents');
@@ -130,7 +129,7 @@ const DocumentMappingTable = () => {
       // Create a map to handle duplicate document_ids by taking the most recent or preferred mapping
       const documentMappingMap = new Map();
 
-      mappedDocuments.forEach((mappedDoc:any) => {
+      mappedDocuments.forEach((mappedDoc: any) => {
         const existingMapping = documentMappingMap.get(mappedDoc.document_id);
 
         if (!existingMapping) {
@@ -189,7 +188,6 @@ const DocumentMappingTable = () => {
   }, [data, mappedDocuments]);
 
   const isPaginationDynamic = false;
-
 
   const handleDeleteConfirm = async (selectedItem: any, onError?: () => void) => {
     if (!selectedItem?.mappingId) {
@@ -434,13 +432,13 @@ const DocumentMappingTable = () => {
       },
     });
   };
-   const tableActions = {
+  const tableActions = {
     onPaginationChange: (pagination: { pageIndex: number; pageSize: number }) => {
       //console.log('Pagination changed:', pagination);
       // Here you would typically make an API call
-    //  setLoading(true);
+      //  setLoading(true);
       setTimeout(() => {
-       // setLoading(false);
+        // setLoading(false);
       }, 1000);
     },
   };
@@ -451,7 +449,9 @@ const DocumentMappingTable = () => {
 
   const leftsideRenderAction = () => {
     // Calculate unique mapped documents count
-    const uniqueMappedDocsCount = mappedDocuments ? new Set(mappedDocuments.map((doc:any) => doc.document_id)).size : 0;
+    const uniqueMappedDocsCount = mappedDocuments
+      ? new Set(mappedDocuments.map((doc: any) => doc.document_id)).size
+      : 0;
 
     return (
       <div className="flex items-center space-x-2">
@@ -464,7 +464,6 @@ const DocumentMappingTable = () => {
       </div>
     );
   };
-
 
   return (
     <div className="dynamic-table-wrap relative">
@@ -482,18 +481,18 @@ const DocumentMappingTable = () => {
 
       <FormProvider {...methods}>
         <FormContentWrapper className="mt-0 rounded-lg mr-auto bg-transparent w-full">
-            <FormFieldRow className="mt-0" rowCols={4}>
-              {Object.entries(config.documentField).map(([name, field]) => (
-                <FieldWrapper key={name}>
-                  {getController({
-                    ...(typeof field === 'object' && field !== null ? field : {}),
-                    name,
-                    control,
-                    errors,
-                  })}
-                </FieldWrapper>
-              ))}
-            </FormFieldRow>
+          <FormFieldRow className="mt-0" rowCols={4}>
+            {Object.entries(config.documentField).map(([name, field]) => (
+              <FieldWrapper key={name}>
+                {getController({
+                  ...(typeof field === 'object' && field !== null ? field : {}),
+                  name,
+                  control,
+                  errors,
+                })}
+              </FieldWrapper>
+            ))}
+          </FormFieldRow>
         </FormContentWrapper>
       </FormProvider>
       <DataTable

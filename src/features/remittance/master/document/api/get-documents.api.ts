@@ -7,7 +7,7 @@ export const getDocuments = async (): Promise<DocumentData[]> => {
   try {
     const response = await axiosInstance.get(API.DOCUMENT_MASTER.GET_DOCUMENTS);
     return response.data.data;
-  } catch (error) {    
+  } catch (error) {
     console.warn('API failed:', error);
     return [];
   }

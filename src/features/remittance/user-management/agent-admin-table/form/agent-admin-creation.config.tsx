@@ -78,7 +78,7 @@ export const agentAdminCreationConfig = () => {
           type: FieldType.Text,
           placeholder: 'Enter System Code',
         },
-          entity_name: {
+        entity_name: {
           name: 'entity_name',
           label: 'Entity Name',
           type: FieldType.Text,
@@ -107,7 +107,7 @@ export const agentAdminCreationConfig = () => {
             Blocked: { label: 'Blocked' },
           },
         },
-          agent_category: {
+        agent_category: {
           name: 'agent_category',
           label: 'Agent Category',
           type: FieldType.Radio,
@@ -130,7 +130,7 @@ export const agentAdminCreationConfig = () => {
           type: FieldType.Number,
           placeholder: 'Enter Total Credit Days',
         },
-         password: {
+        password: {
           name: 'password',
           label: 'Password',
           type: FieldType.Password,
@@ -154,7 +154,7 @@ export const agentAdminCreationConfig = () => {
           options: [
             { value: 'regular', label: 'Regular' },
             { value: 'composition', label: 'Composition' },
-             { value: 'unregistered', label: 'Unregistered' },
+            { value: 'unregistered', label: 'Unregistered' },
           ],
           placeholder: 'Select GST Classification',
         },
@@ -352,8 +352,8 @@ export const agentAdminCreationConfig = () => {
           name: 'productPurpose.chooseProductType',
           label: 'Choose Product Type',
           type: FieldType.Checkbox,
-          required:true,
-          variant:'circle_check_filled',
+          required: true,
+          variant: 'circle_check_filled',
           options: {
             card: { label: 'Card' },
             currency: { label: 'Currency' },
@@ -362,7 +362,7 @@ export const agentAdminCreationConfig = () => {
           },
           isMulti: true,
         },
-     
+
         purposeTypesForCard: {
           name: 'productPurpose.purposeTypesForCard',
           label: 'Purpose Types for Card',

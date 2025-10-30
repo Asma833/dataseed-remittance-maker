@@ -10,7 +10,7 @@ interface ShadCnPhoneProps {
   disabled?: boolean;
   required?: boolean;
   forcedValue?: string;
-  placeholder:string;
+  placeholder: string;
 }
 
 export const ShadCnPhone = ({
@@ -20,7 +20,7 @@ export const ShadCnPhone = ({
   disabled = false,
   required = false,
   forcedValue,
-  placeholder
+  placeholder,
 }: ShadCnPhoneProps) => {
   const { control } = useFormContext();
 

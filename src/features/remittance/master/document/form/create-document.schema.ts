@@ -13,11 +13,7 @@ export const DocumentSchema = z.object({
     .max(20, 'Document code must be less than 20 characters')
     .nonempty('Document code is required'),
 
-  is_required: z
-    .string()
-    .optional(),
+  is_required: z.string().optional(),
 
-  is_back_required: z
-    .string()
-    .optional(),
+  is_back_required: z.string().optional(),
 });

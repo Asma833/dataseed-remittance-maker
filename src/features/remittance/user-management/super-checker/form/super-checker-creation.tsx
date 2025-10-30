@@ -39,7 +39,7 @@ export const CreateSuperChecker = () => {
         password: '',
         confirmPassword: '',
         transactionTypeMap: { card: 'buy' }, // default transaction type only for selected products
-        status: 'active' // default status
+        status: 'active', // default status
       },
     },
   });
@@ -57,20 +57,20 @@ export const CreateSuperChecker = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const superChecker = location.state?.superChecker;
-   const { getUserRole } = useCurrentUser();
+  const { getUserRole } = useCurrentUser();
   const userRole = getUserRole();
   // Fetch agents for the dropdown
   const { agents, isLoading: isLoadingAgents } = useGetAgents();
 
   const { mutate: createSuperChecker, isLoading: isCreating } = useCreateSuperChecker({
-    onSuperCheckerCreateSuccess: () => navigateWithRole(navigate, userRole, '/user-management/super-checker-table')
+    onSuperCheckerCreateSuccess: () => navigateWithRole(navigate, userRole, '/user-management/super-checker-table'),
   });
   const { mutate: updateSuperChecker, isLoading: isUpdating } = useUpdateSuperChecker({
-    onSuperCheckerUpdateSuccess: () => navigateWithRole(navigate, userRole, '/user-management/super-checker-table')
+    onSuperCheckerUpdateSuccess: () => navigateWithRole(navigate, userRole, '/user-management/super-checker-table'),
   });
 
   const handleBack = () => {
-    navigateWithRole(navigate, userRole, '/user-management/super-checker-table')
+    navigateWithRole(navigate, userRole, '/user-management/super-checker-table');
   };
 
   //  const handleFormSubmit = handleSubmit(onSubmit);

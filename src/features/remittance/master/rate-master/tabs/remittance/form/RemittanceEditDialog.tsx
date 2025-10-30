@@ -13,7 +13,7 @@ interface RemittanceEditDialogProps {
   onClose: () => void;
   editData?: RemittanceData | null;
   onEdit?: (remittanceData: RemittanceData) => void;
-  unit?: "inr" | "percentage";
+  unit?: 'inr' | 'percentage';
 }
 
 export const RemittanceEditDialog: React.FC<RemittanceEditDialogProps> = ({
@@ -21,7 +21,7 @@ export const RemittanceEditDialog: React.FC<RemittanceEditDialogProps> = ({
   onClose,
   editData,
   onEdit,
-  unit = "inr",
+  unit = 'inr',
 }) => {
   const form = useForm<RemittanceEditFormData>({
     resolver: zodResolver(remittanceEditFormSchema),
@@ -79,22 +79,22 @@ export const RemittanceEditDialog: React.FC<RemittanceEditDialogProps> = ({
         ttHolidayMargin: data.ttHolidayMargin,
         ttWeekendMargin: data.ttWeekendMargin,
         ttUpperCircuit: data.ttUpperCircuit,
-        margin_type: data.marginType
+        margin_type: data.marginType,
       };
 
       // Prepare the payload for the API
       const apiPayload = {
         currency_code: data.currency,
         time_wise_margin: {
-          "10-12": Number(data['ttMargin10-12']) || 0,
-          "12-02": Number(data['ttMargin12-02']) || 0,
-          "02-3.30": Number(data['ttMargin02-3-30']) || 0,
-          "3.30End": Number(data['ttMargin03-30end']) || 0,
+          '10-12': Number(data['ttMargin10-12']) || 0,
+          '12-02': Number(data['ttMargin12-02']) || 0,
+          '02-3.30': Number(data['ttMargin02-3-30']) || 0,
+          '3.30End': Number(data['ttMargin03-30end']) || 0,
           holiday: Number(data.ttHolidayMargin) || 0,
           weekend: Number(data.ttWeekendMargin) || 0,
           margin_type: data.marginType,
           upper_circuit: Number(data.ttUpperCircuit) || 0,
-        }
+        },
       };
 
       // Call the API update

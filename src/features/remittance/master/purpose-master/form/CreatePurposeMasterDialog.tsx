@@ -13,35 +13,45 @@ import { toast } from 'sonner';
 interface CreatePurposeMasterDialogProps {
   isOpen: boolean;
   onClose: () => void;
-  purposeData?: {
-    id: string;
-    purpose_name: string;
-    purpose_code: string;
-    transaction_type_id: string;
-  } | undefined;
+  purposeData?:
+    | {
+        id: string;
+        purpose_name: string;
+        purpose_code: string;
+        transaction_type_id: string;
+      }
+    | undefined;
   isEditMode?: boolean;
 }
 
-const CreatePurposeMasterDialog = ({ isOpen, onClose, purposeData, isEditMode = false }: CreatePurposeMasterDialogProps) => {
+const CreatePurposeMasterDialog = ({
+  isOpen,
+  onClose,
+  purposeData,
+  isEditMode = false,
+}: CreatePurposeMasterDialogProps) => {
   const [dialogTitle, setDialogTitle] = useState(isEditMode ? 'Update Purpose Master' : 'Add Purpose Master');
-  
+
   // Fetch transaction types for dynamic options
   const { data: transactionTypes = [] } = useGetTransactionTypes();
 
   // Create dynamic config with transaction type options
-  const dynamicConfig = useMemo(() => ({
-    ...PurposeMasterConfig,
-    fields: {
-      ...PurposeMasterConfig.fields,
-      transaction_type: {
-        ...PurposeMasterConfig.fields.transaction_type,
-        options: transactionTypes.map(type => ({
-          label: type.transaction_name,
-          value: type.transaction_type_id,
-        })),
+  const dynamicConfig = useMemo(
+    () => ({
+      ...PurposeMasterConfig,
+      fields: {
+        ...PurposeMasterConfig.fields,
+        transaction_type: {
+          ...PurposeMasterConfig.fields.transaction_type,
+          options: transactionTypes.map((type) => ({
+            label: type.transaction_name,
+            value: type.transaction_type_id,
+          })),
+        },
       },
-    },
-  }), [transactionTypes]);
+    }),
+    [transactionTypes]
+  );
 
   const methods = useForm({
     resolver: zodResolver(PurposeMasterSchema),
@@ -68,11 +78,11 @@ const CreatePurposeMasterDialog = ({ isOpen, onClose, purposeData, isEditMode = 
         },
         {
           onSuccess: () => {
-            toast.success('Purpose updated successfully')
+            toast.success('Purpose updated successfully');
             methods.reset({});
           },
           onError: (error: any) => {
-             toast.error( error.message || 'Failed to update purpose')
+            toast.error(error.message || 'Failed to update purpose');
           },
         }
       );
@@ -85,11 +95,11 @@ const CreatePurposeMasterDialog = ({ isOpen, onClose, purposeData, isEditMode = 
         },
         {
           onSuccess: () => {
-            toast.success('Purpose created successfully')
+            toast.success('Purpose created successfully');
             methods.reset({});
           },
           onError: (error: any) => {
-            toast.error(error.message || 'Failed to create purpose')
+            toast.error(error.message || 'Failed to create purpose');
           },
         }
       );
@@ -113,7 +123,7 @@ const CreatePurposeMasterDialog = ({ isOpen, onClose, purposeData, isEditMode = 
       form={methods}
       config={dynamicConfig}
       onSubmit={handleSubmit}
-      submitButtonText={isEditMode ? "Update" : "Submit"}
+      submitButtonText={isEditMode ? 'Update' : 'Submit'}
       cancelButtonText="Cancel"
     />
   );

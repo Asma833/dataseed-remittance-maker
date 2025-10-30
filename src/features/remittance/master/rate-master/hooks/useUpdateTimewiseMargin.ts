@@ -10,7 +10,7 @@ export const useUpdateTimewiseMargin = () => {
       //console.log('Timewise margin updated successfully');
     },
     onError: (error) => {
-    //  console.error('Error updating timewise margin:', error);
+      //  console.error('Error updating timewise margin:', error);
     },
   });
 };

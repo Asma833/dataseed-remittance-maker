@@ -122,7 +122,7 @@ export const API = {
     UPLOAD_REMITTANCE_IMAGE: `/documents/uploadRemittanceImage`,
     PRESIGNED_URLS: `/documents/presigned-urls`,
   },
-    DOCUMENT_MASTER: {
+  DOCUMENT_MASTER: {
     GET_DOCUMENTS: `/fx/documents`,
     CREATE_DOCUMENT: `/fx/document`,
     UPDATE_DOCUMENT: (id: string) => `/fx/document/${id}`,

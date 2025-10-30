@@ -40,9 +40,7 @@ const Sidebar: React.FC<SidebarProps> = ({
     setOpenDropdowns((prev) => {
       const next = new Set(prev);
       navItems.forEach((item) => {
-        const shouldOpen =
-          isParentActive(item) ||
-          item.subMenus?.some((submenu) => isSubmenuActive(submenu));
+        const shouldOpen = isParentActive(item) || item.subMenus?.some((submenu) => isSubmenuActive(submenu));
         if (shouldOpen) next.add(item.title);
       });
       return next;

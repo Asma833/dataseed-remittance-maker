@@ -20,7 +20,7 @@ export const transformEditDataToFormData = (editData: any) => {
     emailId: normalizeValue(editData.email),
     phoneNo: normalizeValue(editData.phone_number),
     agentType: normalizeValue(editData.agent_type).toUpperCase().replace(/-/g, ''),
-  
+
     agentBranchCity: normalizeValue(editData.agent_branch_city),
     agentHOBranchState: normalizeValue(editData.agent_ho_branch_state),
     rm_name: normalizeValue(editData.rm_name),
@@ -30,9 +30,9 @@ export const transformEditDataToFormData = (editData: any) => {
     status: editData.status,
     monthlyCreditLimit: editData.monthly_credit_limit || 0,
     totalCreditDays: editData.total_credit_days || 0,
-    entity_name:editData.entity_name || '',
-    pan_no:editData.pan_no || '',
-    date_of_incorporation:editData.date_of_incorporation || '',
+    entity_name: editData.entity_name || '',
+    pan_no: editData.pan_no || '',
+    date_of_incorporation: editData.date_of_incorporation || '',
     // Company Details
     gstClassification: normalizeValue(editData.company_details?.gstClassification),
     gstNumber: normalizeValue(editData.company_details?.gstNumber),

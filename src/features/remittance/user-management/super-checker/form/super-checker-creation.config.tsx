@@ -52,7 +52,7 @@ export const superCheckerCreationConfig = (agents: Agent[] = []) => {
             remittance: { label: 'Remittance' },
             referral: { label: 'Referral' },
           },
-          orientation:"vertical",
+          orientation: 'vertical',
           variant: 'circle_check_filled',
           isMulti: true,
         },
@@ -64,7 +64,7 @@ export const superCheckerCreationConfig = (agents: Agent[] = []) => {
           options: {
             active: { label: 'Active', checked: true },
             inactive: { label: 'Inactive' },
-            blocked:{ label:'Blocked'}
+            blocked: { label: 'Blocked' },
           },
         },
         agents: {

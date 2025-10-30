@@ -33,7 +33,7 @@ export const BasicInformationStep: React.FC<BasicInformationStepProps> = () => {
       <div>
         <SubTitle title="Basic Details" />
         <FormFieldRow className="mb-4" rowCols={3}>
-          {(['agent_name','emailId','systemCode'] as const).map((fieldName) => {
+          {(['agent_name', 'emailId', 'systemCode'] as const).map((fieldName) => {
             const field = config.fields.basicInformation[fieldName];
             return (
               <FieldWrapper key={fieldName}>
@@ -77,7 +77,7 @@ export const BasicInformationStep: React.FC<BasicInformationStepProps> = () => {
             );
           })}
         </FormFieldRow>
-          <FormFieldRow className="mb-4" rowCols={3}>
+        <FormFieldRow className="mb-4" rowCols={3}>
           {(['entity_name', 'pan_no', 'date_of_incorporation'] as const).map((fieldName) => {
             const field = config.fields.basicInformation[fieldName];
             return (
@@ -124,7 +124,7 @@ export const BasicInformationStep: React.FC<BasicInformationStepProps> = () => {
                   name: fieldName,
                   control,
                   errors,
-                  className: 'justify-start' 
+                  className: 'justify-start',
                 })}
               </FieldWrapper>
             );

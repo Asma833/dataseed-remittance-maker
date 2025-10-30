@@ -31,13 +31,13 @@ const PurposeMasterTablePage = () => {
 
     return data.map((item: any) => ({
       id: item.purpose_id,
-      purpose_code:item.purpose_code,
+      purpose_code: item.purpose_code,
       purpose_name: item.purpose_name,
       transaction_type_id: item.transaction_type_id,
       mapped_documents: item.documents?.map((doc: any) => doc.display_name) || [],
     }));
   }, [data]);
-  
+
   // Table configuration
   const config = {
     ...staticConfig,
@@ -143,7 +143,7 @@ const PurposeMasterTablePage = () => {
       {/* Header with Create Button */}
 
       <div className="flex justify-between items-center">
-          <TableTitle title="Purpose Master" />
+        <TableTitle title="Purpose Master" />
         <Button onClick={handleCreatePurpose} className="bg-primary text-white hover:bg-primary">
           <Plus className="w-4 h-4 mr-2" />
           Add Purpose
@@ -171,10 +171,7 @@ const PurposeMasterTablePage = () => {
         className="rounded-lg"
       />
 
-      <CreatePurposeMasterDialog
-        isOpen={isCreateDialogOpen}
-        onClose={() => setIsCreateDialogOpen(false)}
-      />
+      <CreatePurposeMasterDialog isOpen={isCreateDialogOpen} onClose={() => setIsCreateDialogOpen(false)} />
 
       <CreatePurposeMasterDialog
         isOpen={isUpdateDialogOpen}
@@ -183,12 +180,16 @@ const PurposeMasterTablePage = () => {
           setSelectedPurpose(null);
         }}
         isEditMode={true}
-        purposeData={selectedPurpose ? {
-          id: selectedPurpose.id,
-          purpose_name: selectedPurpose.purpose_name,
-          purpose_code: selectedPurpose.purpose_code,
-          transaction_type_id: selectedPurpose.transaction_type_id || '',
-        } : undefined}
+        purposeData={
+          selectedPurpose
+            ? {
+                id: selectedPurpose.id,
+                purpose_name: selectedPurpose.purpose_name,
+                purpose_code: selectedPurpose.purpose_code,
+                transaction_type_id: selectedPurpose.transaction_type_id || '',
+              }
+            : undefined
+        }
       />
     </div>
   );

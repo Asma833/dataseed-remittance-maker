@@ -62,8 +62,7 @@ const SuperCheckerTable = () => {
     if (`${superChecker.full_name}?`) {
       try {
         await inactiveUser(superChecker.id);
-      } catch (error) {
-      }
+      } catch (error) {}
     }
   };
 

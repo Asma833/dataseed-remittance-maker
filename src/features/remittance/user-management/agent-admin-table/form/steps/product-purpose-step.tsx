@@ -26,14 +26,13 @@ export const ProductPurposeStep: React.FC = () => {
 
   // map product -> label + purposes field name
   const nodes = useMemo(() => {
-    const opts = config.fields.productPurpose.chooseProductType
-      .options as Record<ProductKey, { label: string }>;
-    return ([
-      { key: 'card',       label: opts.card?.label ?? 'Card',       purposesField: 'purposeTypesForCard' },
-      { key: 'currency',   label: opts.currency?.label ?? 'Currency', purposesField: 'purposeTypesForCurrency' },
+    const opts = config.fields.productPurpose.chooseProductType.options as Record<ProductKey, { label: string }>;
+    return [
+      { key: 'card', label: opts.card?.label ?? 'Card', purposesField: 'purposeTypesForCard' },
+      { key: 'currency', label: opts.currency?.label ?? 'Currency', purposesField: 'purposeTypesForCurrency' },
       { key: 'remittance', label: opts.remittance?.label ?? 'Remittance', purposesField: 'purposeTypesForRemittance' },
-      { key: 'referral',   label: opts.referral?.label ?? 'Referral', purposesField: 'purposeTypesForReferral' },
-    ] as const);
+      { key: 'referral', label: opts.referral?.label ?? 'Referral', purposesField: 'purposeTypesForReferral' },
+    ] as const;
   }, [config]);
 
   const clearPurposes = (pf: string) => {
@@ -41,10 +40,8 @@ export const ProductPurposeStep: React.FC = () => {
     setValue(`productPurpose.${pf}`, {}, { shouldValidate: true, shouldDirty: true });
   };
 
-
   return (
     <div className="space-y-6 min-h-[500px]">
-     
       {/* ===== Product & Purpose Type (TREE with checkboxes) ===== */}
       <div>
         <SubTitle title="Product & Purpose Type" />
@@ -102,38 +99,33 @@ export const ProductPurposeStep: React.FC = () => {
           {errors?.productPurpose &&
             'chooseProductType' in errors.productPurpose &&
             errors.productPurpose.chooseProductType && (
-            <p className="text-red-600 text-sm mt-1 ml-2">
-              {(errors.productPurpose.chooseProductType as FieldError).message ||
-                'Please select at least one Product Type'}
-            </p>
-          )}
+              <p className="text-red-600 text-sm mt-1 ml-2">
+                {(errors.productPurpose.chooseProductType as FieldError).message ||
+                  'Please select at least one Product Type'}
+              </p>
+            )}
         </div>
       </div>
-       {/* ===== Additional Rights (unchanged) ===== */}
+      {/* ===== Additional Rights (unchanged) ===== */}
       <div>
         <SubTitle title="Additional Rights" />
         <FormFieldRow className="mb-4" rowCols={4}>
-          {(
-            [
-              'addOnForexMargin',
-              'addOnNostroMargin',
-              'addOnTTMargin',
-              'addOnOtherChargersMargin',
-            ] as const
-          ).map((fieldName) => {
-            const field = config.fields.productPurpose[fieldName];
-            return (
-              <FieldWrapper key={fieldName} className="bg-gray-100 p-2 py-4 mb-2 rounded-lg">
-                {getController({
-                  ...(typeof field === 'object' && field !== null ? field : {}),
-                  name: `productPurpose.${fieldName}`,
-                  control,
-                  errors,
-                  className: 'justify-center',
-                })}
-              </FieldWrapper>
-            );
-          })}
+          {(['addOnForexMargin', 'addOnNostroMargin', 'addOnTTMargin', 'addOnOtherChargersMargin'] as const).map(
+            (fieldName) => {
+              const field = config.fields.productPurpose[fieldName];
+              return (
+                <FieldWrapper key={fieldName} className="bg-gray-100 p-2 py-4 mb-2 rounded-lg">
+                  {getController({
+                    ...(typeof field === 'object' && field !== null ? field : {}),
+                    name: `productPurpose.${fieldName}`,
+                    control,
+                    errors,
+                    className: 'justify-center',
+                  })}
+                </FieldWrapper>
+              );
+            }
+          )}
         </FormFieldRow>
 
         <FormFieldRow className="mb-4 justify-center" rowCols={4}>

@@ -25,10 +25,10 @@ const transformFormData = (data: AgentAdminFormType) => {
       monthlyCreditLimit: Number(data.monthlyCreditLimit),
       totalCreditDays: Number(data.totalCreditDays),
       agent_category: [data?.agent_category],
-      password:data?.password,
-      pan_no:data?.pan_no || 'NA',
-      entity_name:data?.entity_name || 'NA',
-      date_of_incorporation:data?.date_of_incorporation || 'NA'
+      password: data?.password,
+      pan_no: data?.pan_no || 'NA',
+      entity_name: data?.entity_name || 'NA',
+      date_of_incorporation: data?.date_of_incorporation || 'NA',
     },
     companyDetails: {
       gstClassification: data.gstClassification,
@@ -81,9 +81,7 @@ const transformFormData = (data: AgentAdminFormType) => {
         fields.forEach(({ key, field }) => {
           const purposeField = data.productPurpose?.[field as keyof typeof data.productPurpose];
           if (purposeField && typeof purposeField === 'object') {
-            const selected = Object.keys(purposeField).filter(
-              (k) => (purposeField as Record<string, boolean>)[k]
-            );
+            const selected = Object.keys(purposeField).filter((k) => (purposeField as Record<string, boolean>)[k]);
             if (selected.length > 0) {
               result.push(`${key}:${selected.join(',')}`);
             }

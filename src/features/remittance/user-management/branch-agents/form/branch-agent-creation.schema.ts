@@ -11,12 +11,9 @@ export const vendorDetailsSchema = z.object({
     .refine((val) => !/^[\s-]/.test(val), 'Vendor name cannot start with space or hyphen')
     .describe('Agent Vendor Name'),
   vendorCode: z.string().optional(),
-  agentEonCode: z
-    .string().optional(),
-  systemCode: z
-    .string().optional(),
+  agentEonCode: z.string().optional(),
+  systemCode: z.string().optional(),
   primaryAgentEmail: z.string().optional(),
-
 });
 
 export const basicDetailsSchema = z.object({
@@ -28,10 +25,13 @@ export const basicDetailsSchema = z.object({
     .refine((val) => !/^[\s-]/.test(val), 'Full name cannot start with space or hyphen')
     .describe('Full Name'),
   emailId: z.string().min(1, 'Email is required').email('Please enter a valid email').describe('Email Id'),
-  mobileNo: z.string().optional().refine((val) => !val || /^\d{10}$/.test(val), {
-    message: 'Mobile number must be exactly 10 digits',
-  }),
-  checkerList: z.string().optional()
+  mobileNo: z
+    .string()
+    .optional()
+    .refine((val) => !val || /^\d{10}$/.test(val), {
+      message: 'Mobile number must be exactly 10 digits',
+    }),
+  checkerList: z.string().optional(),
 });
 
 export const addressSchema = z.object({
@@ -56,12 +56,8 @@ export const addressSchema = z.object({
     .refine((val) => !/^[\s-]+$/.test(val), 'Branch cannot contain only spaces or hyphens')
     .refine((val) => !/^[\s-]/.test(val), 'Branch cannot start with space or hyphen')
     .describe('Branch'),
-  rmName: z
-    .string()
-    .optional(),
-  rmBranch: z
-    .string()
-    .optional(),
+  rmName: z.string().optional(),
+  rmBranch: z.string().optional(),
 });
 
 export const roleStatusSchema = z.object({
@@ -85,28 +81,31 @@ export const roleStatusSchema = z.object({
     //.union([z.literal('active'), z.literal('inactive'), z.literal('blocked')])
     .refine((val) => val === 'active' || val === 'inactive' || val === 'blocked', {
       message: 'Status is required',
-    })
-    //.describe('Status'),
+    }),
+  //.describe('Status'),
 });
 export const securitySchema = z
   .object({
-  password: z
-    .string()
-    .min(8, 'Password must be at least 8 characters long')
-    .refine((val) => val.trim().length >= 8, 'Password cannot be only spaces')
-    .refine((val) => !/^[\s-]+$/.test(val), 'Password cannot contain only spaces or hyphens')
-    .refine((val) => !/^[\s-]/.test(val), 'Password cannot start with space or hyphen')
-    .refine((val) => /[A-Z]/.test(val), 'Password must contain at least one uppercase letter')
-    .refine((val) => /\d/.test(val), 'Password must contain at least one number')
-    .refine((val) => /[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]/.test(val), 'Password must contain at least one special character')
-    .describe('Password'),
+    password: z
+      .string()
+      .min(8, 'Password must be at least 8 characters long')
+      .refine((val) => val.trim().length >= 8, 'Password cannot be only spaces')
+      .refine((val) => !/^[\s-]+$/.test(val), 'Password cannot contain only spaces or hyphens')
+      .refine((val) => !/^[\s-]/.test(val), 'Password cannot start with space or hyphen')
+      .refine((val) => /[A-Z]/.test(val), 'Password must contain at least one uppercase letter')
+      .refine((val) => /\d/.test(val), 'Password must contain at least one number')
+      .refine(
+        (val) => /[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]/.test(val),
+        'Password must contain at least one special character'
+      )
+      .describe('Password'),
     confirmPassword: z
-    .string()
-    .min(8, 'Confirm password must be at least 8 characters long')
-    .refine((val) => val.trim().length >= 8, 'Confirm password cannot be only spaces')
-    .refine((val) => !/^[\s-]+$/.test(val), 'Confirm password cannot contain only spaces or hyphens')
-    .refine((val) => !/^[\s-]/.test(val), 'Confirm password cannot start with space or hyphen')
-    .describe('Confirm Password'),
+      .string()
+      .min(8, 'Confirm password must be at least 8 characters long')
+      .refine((val) => val.trim().length >= 8, 'Confirm password cannot be only spaces')
+      .refine((val) => !/^[\s-]+$/.test(val), 'Confirm password cannot contain only spaces or hyphens')
+      .refine((val) => !/^[\s-]/.test(val), 'Confirm password cannot start with space or hyphen')
+      .describe('Confirm Password'),
   })
   .superRefine(({ password, confirmPassword }, ctx) => {
     if (password !== confirmPassword) {

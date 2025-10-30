@@ -22,7 +22,7 @@ const ShadCnPassword = ({
   disabled = false,
   required = false,
   forcedValue,
-  placeholder
+  placeholder,
 }: ShadCnPasswordProps) => {
   const { control } = useFormContext();
 

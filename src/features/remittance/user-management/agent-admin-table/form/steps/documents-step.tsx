@@ -244,8 +244,23 @@ export const DocumentsStep: React.FC = () => {
 
         {/* RBI meta fields */}
         <FormFieldRow className="mb-4">
-          {(['rbiLicenseCategory', 'rbiLicenseValidity', 'noOfBranches'] as const).map(
-            (fieldName) => {
+          {(['rbiLicenseCategory', 'rbiLicenseValidity', 'noOfBranches'] as const).map((fieldName) => {
+            const field = config.fields.documents?.[fieldName];
+            return (
+              <FieldWrapper key={fieldName}>
+                {getController({
+                  ...(typeof field === 'object' && field !== null ? field : {}),
+                  name: fieldName,
+                  control,
+                  errors,
+                })}
+              </FieldWrapper>
+            );
+          })}
+        </FormFieldRow>
+        {shouldShowExtensionMonth && (
+          <FormFieldRow className="mb-4">
+            {(['extensionMonth'] as const).map((fieldName) => {
               const field = config.fields.documents?.[fieldName];
               return (
                 <FieldWrapper key={fieldName}>
@@ -257,28 +272,11 @@ export const DocumentsStep: React.FC = () => {
                   })}
                 </FieldWrapper>
               );
-            }
-          )}
-        </FormFieldRow>
-        {shouldShowExtensionMonth && (
-          <FormFieldRow className="mb-4">
-            {(['extensionMonth'] as const).map(
-              (fieldName) => {
-                const field = config.fields.documents?.[fieldName];
-                return (
-                  <FieldWrapper key={fieldName}>
-                    {getController({
-                      ...(typeof field === 'object' && field !== null ? field : {}),
-                      name: fieldName,
-                      control,
-                      errors,
-                    })}
-                  </FieldWrapper>
-                );
-              }
-            )}
+            })}
             <div className="flex items-center pt-6">
-              <div className='justify-center bg-red-100 border border-red-500 px-3 py-1 rounded-md font-medium'>{'0/3'}</div>
+              <div className="justify-center bg-red-100 border border-red-500 px-3 py-1 rounded-md font-medium">
+                {'0/3'}
+              </div>
             </div>
           </FormFieldRow>
         )}

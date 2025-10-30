@@ -20,7 +20,7 @@ const GetDocumentMasterTableColumns = ({
         cellAlign: 'left',
       },
     },
-     {
+    {
       id: 'is_back_required',
       header: 'Back Required',
       accessorKey: 'is_back_required',
@@ -44,7 +44,7 @@ const GetDocumentMasterTableColumns = ({
         cellAlign: 'left',
       },
     },
-     
+
     {
       id: 'action',
       header: 'Action',

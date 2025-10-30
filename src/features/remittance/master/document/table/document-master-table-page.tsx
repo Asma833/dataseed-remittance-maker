@@ -18,7 +18,7 @@ const DocumentMasterTablePage = () => {
   const { data: apiDocuments = [], isLoading: isLoadingDocuments } = useGetDocuments();
   // Use API data if available
   const documents = apiDocuments.length > 0 ? apiDocuments : [];
-  
+
   // Table configuration
   const config = {
     ...staticConfig,
@@ -53,7 +53,7 @@ const DocumentMasterTablePage = () => {
 
   const handleInactivate = (document: DocumentData) => {
     // Implement inactivate functionality
-   // console.log('Inactivate document:', document);
+    // console.log('Inactivate document:', document);
   };
 
   const handleCreateDocument = () => {

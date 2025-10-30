@@ -15,14 +15,19 @@ const AgentAdminTable = () => {
   const [loading, setLoading] = useState(false);
   const { getUserRole } = useCurrentUser();
   const userRole = getUserRole();
-  
+
   // Navigate to agent admin creation page
   const handleAddAdminAgents = () => {
-    navigate(getNavPath(userRole?.toUpperCase() as 'ADMIN' | 'BRANCH_AGENT_CHECKER', `/user-management/agent-admin/agent-admin-creation`));
+    navigate(
+      getNavPath(
+        userRole?.toUpperCase() as 'ADMIN' | 'BRANCH_AGENT_CHECKER',
+        `/user-management/agent-admin/agent-admin-creation`
+      )
+    );
   };
 
   const { data, isLoading: userLoading, error: userError } = useGetAgentAdmins();
-// Table configuration
+  // Table configuration
   const config = {
     ...staticConfig,
     search: {
@@ -38,7 +43,7 @@ const AgentAdminTable = () => {
       columnFilters: true,
       globalFilter: true,
       filter: {
-          roleFilter: {
+        roleFilter: {
           enabled: true,
           options: [
             { value: 'ADI', label: 'ADI' },
@@ -49,14 +54,14 @@ const AgentAdminTable = () => {
           columnId: 'agent_type',
           columnName: 'Agent Type',
         },
-          statusFilter: {
+        statusFilter: {
           enabled: true,
           options: [
             { value: 'ACTIVE', label: 'Active' },
             { value: 'INACTIVE', label: 'Inactive' },
           ],
           columnId: 'status',
-          columnName:'Status'
+          columnName: 'Status',
         },
       },
     },
@@ -64,14 +69,19 @@ const AgentAdminTable = () => {
   };
 
   const handleEdit = (user: AgentAdminData) => {
-      navigate(getNavPath(userRole?.toUpperCase() as 'ADMIN' | 'BRANCH_AGENT_CHECKER', `/user-management/agent-admin/agent-admin-creation`), { state: { editData: user } });
+    navigate(
+      getNavPath(
+        userRole?.toUpperCase() as 'ADMIN' | 'BRANCH_AGENT_CHECKER',
+        `/user-management/agent-admin/agent-admin-creation`
+      ),
+      { state: { editData: user } }
+    );
   };
 
   // Define columns matching your design
   const columns = GetAgentListTableColumns({
     handleEdit,
   });
-
 
   // Dynamic table actions (when using dynamic mode)
   const tableActions = {

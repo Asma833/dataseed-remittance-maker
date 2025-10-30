@@ -27,7 +27,7 @@ export function GenericDialog({
   isOpen,
   onClose,
   title,
-  subtitle = "",
+  subtitle = '',
   form,
   config,
   onSubmit,
@@ -37,7 +37,6 @@ export function GenericDialog({
   editData,
   onEdit,
 }: GenericDialogProps) {
-
   const handleFormSubmit = (data: any) => {
     try {
       if (editData?.id && onEdit) {

@@ -44,14 +44,14 @@ const BranchAgentTable = () => {
           columnId: 'role',
           columnName: 'Role',
         },
-          statusFilter: {
+        statusFilter: {
           enabled: true,
           options: [
             { value: 'Active', label: 'Active' },
             { value: 'Inactive', label: 'Inactive' },
           ],
           columnId: 'is_active',
-          columnName:'Status'
+          columnName: 'Status',
         },
       },
     },
@@ -72,7 +72,7 @@ const BranchAgentTable = () => {
 
   const handleInactivate = async (branchAgent: BranchAgentData) => {
     if (`${branchAgent.full_name}?`) {
-     await inactiveUser(branchAgent.id!);
+      await inactiveUser(branchAgent.id!);
     }
   };
 
@@ -89,7 +89,7 @@ const BranchAgentTable = () => {
 
   // Navigate to branch agent creation page
   const handleCreateBranchAgent = () => {
-     navigateWithRole(navigate, userRole, '/user-management/branch-agents/branch-agent-creation');
+    navigateWithRole(navigate, userRole, '/user-management/branch-agents/branch-agent-creation');
   };
 
   // Handle bulk upload

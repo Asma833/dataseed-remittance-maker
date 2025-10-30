@@ -13,7 +13,5 @@ export const PurposeMasterSchema = z.object({
     .max(10, 'Purpose code must be less than 10 characters')
     .nonempty('Purpose code is required'),
 
-  transaction_type: z
-    .string()
-    .nonempty('Transaction type is required'),
+  transaction_type: z.string().nonempty('Transaction type is required'),
 });

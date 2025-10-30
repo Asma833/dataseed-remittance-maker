@@ -18,7 +18,8 @@ interface Branch {
 interface Role {
   id: string;
   role_name: string;
-}[]
+}
+[];
 
 interface User {
   id: string;

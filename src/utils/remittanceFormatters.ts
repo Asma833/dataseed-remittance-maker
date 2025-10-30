@@ -15,7 +15,7 @@ export const toPercentString = (value: any, decimals: number = 0): string => {
   if (isNaN(numValue)) return '-';
 
   // Multiply by 100 to convert decimal to percentage
-  const percentageValue = numValue/100 * 100;
+  const percentageValue = (numValue / 100) * 100;
   return `${percentageValue.toFixed(decimals)}%`;
 };
 

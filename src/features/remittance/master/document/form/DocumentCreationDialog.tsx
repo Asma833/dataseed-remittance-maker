@@ -27,7 +27,7 @@ export const DocumentCreationDialog: React.FC<DocumentCreationDialogProps> = ({
       name: '',
       code: '',
       is_required: '',
-      is_back_required: ''
+      is_back_required: '',
     },
     mode: 'onChange',
   });
@@ -44,7 +44,7 @@ export const DocumentCreationDialog: React.FC<DocumentCreationDialogProps> = ({
           name: editData.name || '',
           code: editData.code || '',
           is_required: editData.is_required ? 'is_required' : '',
-          is_back_required:editData.is_back_required ? 'is_back_required' : '',
+          is_back_required: editData.is_back_required ? 'is_back_required' : '',
         });
         // Clear any stale errors and trigger validation for edit mode
         clearErrors();
@@ -54,7 +54,7 @@ export const DocumentCreationDialog: React.FC<DocumentCreationDialogProps> = ({
           name: '',
           code: '',
           is_required: '',
-          is_back_required: ''
+          is_back_required: '',
         });
         // Clear any stale errors but don't trigger validation for create mode
         clearErrors();
@@ -69,7 +69,7 @@ export const DocumentCreationDialog: React.FC<DocumentCreationDialogProps> = ({
       is_required: data.is_required ? true : false,
       is_back_required: data.is_back_required ? true : false,
       is_active: true,
-      display_name:'',
+      display_name: '',
     };
 
     if (editData?.id) {

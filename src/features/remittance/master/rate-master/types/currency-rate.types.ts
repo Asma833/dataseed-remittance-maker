@@ -14,13 +14,13 @@ export type CurrencyRateResponse = CurrencyRate[];
 export interface UpdateTimewiseMarginPayload {
   currency_code: string;
   time_wise_margin: {
-    "10-12": number;
-    "12-02": number;
-    "02-3.30": number;
-    "3.30End": number;
+    '10-12': number;
+    '12-02': number;
+    '02-3.30': number;
+    '3.30End': number;
     holiday: number;
     weekend: number;
-    margin_type: number,
+    margin_type: number;
     upper_circuit: number;
   };
 }

@@ -51,10 +51,10 @@ const CurrencyTable = () => {
   const navigate = useNavigate();
   const [currencies, setCurrencies] = useState<CurrencyData[]>(sampleCurrencies);
   const [loading, setLoading] = useState(false);
-  const [txn, setTxn] = useState<"buy" | "sell">("buy");
+  const [txn, setTxn] = useState<'buy' | 'sell'>('buy');
   const [editDialogOpen, setEditDialogOpen] = useState(false);
   const [selectedCurrency, setSelectedCurrency] = useState<CurrencyData | null>(null);
-   
+
   // Table configuration
   const config = {
     ...staticConfig,
@@ -88,10 +88,8 @@ const CurrencyTable = () => {
   };
 
   const handleEditSubmit = (updatedCurrency: CurrencyData) => {
-    setCurrencies(prevCurrencies =>
-      prevCurrencies.map(currency =>
-        currency.id === updatedCurrency.id ? updatedCurrency : currency
-      )
+    setCurrencies((prevCurrencies) =>
+      prevCurrencies.map((currency) => (currency.id === updatedCurrency.id ? updatedCurrency : currency))
     );
     setEditDialogOpen(false);
     setSelectedCurrency(null);
@@ -123,15 +121,18 @@ const CurrencyTable = () => {
 
   return (
     <div className="space-y-4 w-full">
-       <div className="flex gap-6 justify-center">
+      <div className="flex gap-6 justify-center">
         <SegmentedToggle
           value={txn}
-          onChange={(v) => setTxn(v as "buy" | "sell")}
-          options={[{label:'Buy', value:'buy'}, {label:'Sell', value:'sell'}]}
+          onChange={(v) => setTxn(v as 'buy' | 'sell')}
+          options={[
+            { label: 'Buy', value: 'buy' },
+            { label: 'Sell', value: 'sell' },
+          ]}
           size="md"
           segmentWidthPx={100} // make each pill wider
         />
-        </div>
+      </div>
       <DataTable
         columns={columns}
         data={tableData}

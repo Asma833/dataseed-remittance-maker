@@ -103,7 +103,7 @@ const GetAgentListTableColumns = ({
         cellAlign: 'left',
       },
     },
-    
+
     {
       id: 'documents.agreementValid',
       header: 'Agreement Expiry Date',

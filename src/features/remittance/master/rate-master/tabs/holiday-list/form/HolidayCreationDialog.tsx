@@ -15,17 +15,12 @@ interface HolidayCreationDialogProps {
   onEdit?: (holidayData: HolidayData) => void;
 }
 
-export const HolidayCreationDialog: React.FC<HolidayCreationDialogProps> = ({
-  isOpen,
-  onClose,
-  editData,
-  onEdit,
-}) => {
+export const HolidayCreationDialog: React.FC<HolidayCreationDialogProps> = ({ isOpen, onClose, editData, onEdit }) => {
   const form = useForm<HolidayEditFormData>({
     resolver: zodResolver(holidayEditFormSchema),
     defaultValues: {
-      date:"",
-      holidayName:""
+      date: '',
+      holidayName: '',
     },
     mode: 'onChange',
   });
@@ -93,7 +88,6 @@ export const HolidayCreationDialog: React.FC<HolidayCreationDialogProps> = ({
       });
     }
   };
-
 
   return (
     <GenericDialog

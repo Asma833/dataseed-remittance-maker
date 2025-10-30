@@ -6,19 +6,15 @@ import { toast } from 'sonner';
 export const useCreateDocument = () => {
   const queryClient = useQueryClient();
 
-  return useMutation<
-    CreateDocumentResponse,
-    Error,
-    DocumentApiPayload
-  >({
+  return useMutation<CreateDocumentResponse, Error, DocumentApiPayload>({
     mutationFn: createDocument,
     onSuccess: (data: CreateDocumentResponse) => {
       // Invalidate and refetch relevant queries
       queryClient.invalidateQueries({ queryKey: ['documents'] });
-      toast.success('Document created successfully')
+      toast.success('Document created successfully');
     },
     onError: (error: Error) => {
-       toast.error(error.message || 'Failed to create document')
+      toast.error(error.message || 'Failed to create document');
     },
   });
 };

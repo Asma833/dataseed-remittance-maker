@@ -28,17 +28,15 @@ export const AppRoutes = () => {
         element={
           <ProtectedRoute>
             <AdminRoutes />
-          </ProtectedRoute> 
-         
+          </ProtectedRoute>
         }
       />
-       <Route
+      <Route
         path="/branch_agent_checker/*"
         element={
           <ProtectedRoute>
-            <BranchCheckerRoutes/>
-          </ProtectedRoute> 
-         
+            <BranchCheckerRoutes />
+          </ProtectedRoute>
         }
       />
       <Route path="/" element={<Navigate to={getDefaultRoute(user?.roles[0]?.role_name as UserRole)} replace />} />

@@ -11,7 +11,7 @@ export const DocumentFormConfig = {
       placeholder: 'Enter document name',
       required: true,
     },
-  
+
     code: {
       name: 'code',
       label: 'Document Code',
@@ -23,17 +23,17 @@ export const DocumentFormConfig = {
       name: 'is_required',
       label: '',
       type: FieldType.Checkbox,
-      options:{
-        is_required:{label:'Mandatory'},
+      options: {
+        is_required: { label: 'Mandatory' },
       },
       required: false,
     },
-      is_back_required: {
+    is_back_required: {
       name: 'is_back_required',
       label: '',
       type: FieldType.Checkbox,
-      options:{
-        is_back_required:{label:'Back Required'},
+      options: {
+        is_back_required: { label: 'Back Required' },
       },
       required: false,
     },

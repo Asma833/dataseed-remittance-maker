@@ -14,7 +14,7 @@ export interface AgentAdminData {
   monthly_credit_limit: string | null;
   total_credit_days: number | null;
   agent_category: string;
-  password:string | null;
+  password: string | null;
   company_details: {
     gstCity: string;
     pinCode: string;
@@ -105,11 +105,11 @@ export interface CreateAgentAdminRequest {
     status: string;
     monthlyCreditLimit: number;
     totalCreditDays: number;
-    agent_category:string[],
-    password:string,
-    pan_no:string,
-    entity_name:string,
-    date_of_incorporation:string
+    agent_category: string[];
+    password: string;
+    pan_no: string;
+    entity_name: string;
+    date_of_incorporation: string;
   };
   companyDetails: {
     gstClassification: string;

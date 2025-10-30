@@ -23,7 +23,7 @@ export const ENDPOINT_MATCHING_RULES: EndpointRulesConfig = {
     matchType: 'exact-only' as const,
     description: 'Authentication logout endpoint',
   },
-   'login': {
+  login: {
     endpoint: API.AUTH.LOGIN,
     matchType: 'exact-only' as const,
     description: 'login endpoint',
@@ -148,27 +148,26 @@ export const ENDPOINT_MATCHING_RULES: EndpointRulesConfig = {
     matchType: 'standard' as const,
     description: 'Get documents',
   },
-  'inactive-superchecker':{
+  'inactive-superchecker': {
     endpoint: '/rem-users/active-inactive',
     matchType: 'standard' as const,
     description: 'Inactive super checker',
   },
-  'update-currency':{
+  'update-currency': {
     endpoint: API.CURRENCY_RATE.UPDATE_TIMEWISE,
     matchType: 'standard' as const,
     description: 'Update currency value',
   },
-  'holiday':{
+  holiday: {
     endpoint: API.HOLIDAYS.CREATE,
     matchType: 'standard' as const,
     description: 'Create holidays',
   },
-  'transaction':{
+  transaction: {
     endpoint: API.PURPOSE.TRANSACTION_MAPPING,
     matchType: 'standard' as const,
     description: 'Create transaction',
-  }
-  
+  },
 } as const;
 
 /**

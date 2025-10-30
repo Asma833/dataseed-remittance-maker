@@ -36,7 +36,7 @@ export const HolidayListTableColumnConfig = ({
     {
       id: 'action',
       header: 'Action',
-      cell: ({ row }) => <ActionButtons row={row} onEdit={handleEdit} onDelete={handleDelete}/>,
+      cell: ({ row }) => <ActionButtons row={row} onEdit={handleEdit} onDelete={handleDelete} />,
       sortable: false,
       filterable: false,
       meta: {

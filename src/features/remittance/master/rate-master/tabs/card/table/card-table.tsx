@@ -52,11 +52,11 @@ const CardTable = () => {
   const navigate = useNavigate();
   const [cards, setCards] = useState<CardData[]>(sampleCards);
   const [loading, setLoading] = useState(false);
-  const [txn, setTxn] = React.useState<"buy" | "sell">("buy");
-  const [unit, setUnit] = React.useState<"inr" | "percentage">("inr");
+  const [txn, setTxn] = React.useState<'buy' | 'sell'>('buy');
+  const [unit, setUnit] = React.useState<'inr' | 'percentage'>('inr');
   const [editDialogOpen, setEditDialogOpen] = useState(false);
   const [selectedCard, setSelectedCard] = useState<CardData | null>(null);
- 
+
   // Table configuration
   const config = {
     ...staticConfig,
@@ -90,11 +90,7 @@ const CardTable = () => {
   };
 
   const handleEditSubmit = (updatedCard: CardData) => {
-    setCards(prevCards =>
-      prevCards.map(card =>
-        card.id === updatedCard.id ? updatedCard : card
-      )
-    );
+    setCards((prevCards) => prevCards.map((card) => (card.id === updatedCard.id ? updatedCard : card)));
     setEditDialogOpen(false);
     setSelectedCard(null);
   };
@@ -125,22 +121,28 @@ const CardTable = () => {
 
   return (
     <div className="space-y-4 w-full">
-       <div className="flex gap-6 justify-center">
+      <div className="flex gap-6 justify-center">
         <SegmentedToggle
           value={txn}
-          onChange={(v) => setTxn(v as "buy" | "sell")}
-          options={[{label:'Buy', value:'buy'}, {label:'Sell', value:'sell'}]}
+          onChange={(v) => setTxn(v as 'buy' | 'sell')}
+          options={[
+            { label: 'Buy', value: 'buy' },
+            { label: 'Sell', value: 'sell' },
+          ]}
           size="md"
           segmentWidthPx={120} // make each pill wider
         />
-         <SegmentedToggle
+        <SegmentedToggle
           value={unit}
-          onChange={(v) => setUnit(v as "inr" | "percentage")}
-          options={[{label:'INR', value:'inr'}, {label:'Percentage', value:'percentage'}]}
+          onChange={(v) => setUnit(v as 'inr' | 'percentage')}
+          options={[
+            { label: 'INR', value: 'inr' },
+            { label: 'Percentage', value: 'percentage' },
+          ]}
           size="md"
           segmentWidthPx={120} // make each pill wider
         />
-        </div>
+      </div>
       {/* Data Table */}
       <DataTable
         columns={columns}

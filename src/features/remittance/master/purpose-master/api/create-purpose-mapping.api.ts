@@ -3,7 +3,9 @@ import { CreatePurposeMappingPayload, CreatePurposeMappingResponse } from '../ty
 import { API } from '@/core/constant/apis';
 
 // Function to create purpose mapping
-export const createPurposeMapping = async (payload: CreatePurposeMappingPayload): Promise<CreatePurposeMappingResponse> => {
+export const createPurposeMapping = async (
+  payload: CreatePurposeMappingPayload
+): Promise<CreatePurposeMappingResponse> => {
   const response = await axiosInstance.post(API.TRANSACTION_PURPOSE_MAP.PURPOSE_MAPPING, payload);
   return response.data;
 };

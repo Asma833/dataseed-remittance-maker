@@ -4,7 +4,11 @@ import { activeInactiveApi } from '../api/activeInactive';
 export const useInactiveUser = () => {
   const queryClient = useQueryClient();
 
-  const { mutateAsync: inactiveUser, isPending, error } = useMutation({
+  const {
+    mutateAsync: inactiveUser,
+    isPending,
+    error,
+  } = useMutation({
     mutationFn: (id: string) => activeInactiveApi.inactiveUser(id),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['getSuperCheckers'] });

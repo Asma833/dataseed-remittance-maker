@@ -108,30 +108,26 @@ const HolidayTable = () => {
   const handleEditSubmit = (updatedHoliday: HolidayData) => {
     if (selectedHoliday) {
       // Edit mode
-      setHolidays(prevHolidays =>
-        prevHolidays.map(holiday =>
-          holiday.id === updatedHoliday.id ? updatedHoliday : holiday
-        )
+      setHolidays((prevHolidays) =>
+        prevHolidays.map((holiday) => (holiday.id === updatedHoliday.id ? updatedHoliday : holiday))
       );
     } else {
       // Add mode
       const newId = Date.now().toString();
-      const maxSno = Math.max(...holidays.map(h => h.sno || 0), 0);
+      const maxSno = Math.max(...holidays.map((h) => h.sno || 0), 0);
       const newHoliday: HolidayData = {
         ...updatedHoliday,
         id: newId,
         sno: maxSno + 1,
       };
-      setHolidays(prevHolidays => [...prevHolidays, newHoliday]);
+      setHolidays((prevHolidays) => [...prevHolidays, newHoliday]);
     }
     setEditDialogOpen(false);
     setSelectedHoliday(null);
   };
 
   const handleDelete = (holiday: HolidayData) => {
-    setHolidays(prevHolidays =>
-      prevHolidays.filter(h => h.id !== holiday.id)
-    );
+    setHolidays((prevHolidays) => prevHolidays.filter((h) => h.id !== holiday.id));
   };
 
   // Table actions
@@ -162,7 +158,7 @@ const HolidayTable = () => {
   // Define columns
   const columns = HolidayListTableColumnConfig({
     handleEdit,
-    handleDelete
+    handleDelete,
   });
 
   return (

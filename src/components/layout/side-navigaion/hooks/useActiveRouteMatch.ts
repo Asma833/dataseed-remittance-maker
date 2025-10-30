@@ -27,11 +27,13 @@ export function useActiveRouteMatch<T extends NavLikeItem>(navItems: T[]) {
   };
 
   const currentParent = useMemo(() => {
-    return navItems.find((item) => {
-      const parentHit = isParentActive(item);
-      const subHit = item.subMenus?.some((s) => isSubmenuActive(s as T));
-      return parentHit || subHit;
-    }) ?? null;
+    return (
+      navItems.find((item) => {
+        const parentHit = isParentActive(item);
+        const subHit = item.subMenus?.some((s) => isSubmenuActive(s as T));
+        return parentHit || subHit;
+      }) ?? null
+    );
   }, [current, navItems]); // eslint-disable-line react-hooks/exhaustive-deps
 
   return { location, isParentActive, isSubmenuActive, currentParent };

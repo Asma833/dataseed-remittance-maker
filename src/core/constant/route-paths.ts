@@ -8,7 +8,7 @@ export const ROUTES = {
   },
   ADMIN: {
     DASHBOARD: '/dashboard',
-   
+
     AGENT_ADMIN_CREATION_STEPS: {
       BASIC_INFO: '/users/agent-admin-creation/basic-info',
       COMPANY_DETAILS: '/users/agent-admin-creation/company-details',
@@ -30,7 +30,6 @@ export const ROUTES = {
       CREATE_BRANCH_NEW_USER: '/user-management/agent-branch-user-registration',
       AGENT_PROFILE: '/user-management/agent-profile-creation',
       CREATE_AGENT: '/user-management/agent-profile-creation/create-new-agent',
-    
     },
     //  MASTER: {
     //     RATE_MASTER:'/master/rate-master',
@@ -62,7 +61,7 @@ export const ROUTES = {
     UPDATE_MAKER: '/maker/update-maker/:id',
     CREATEUSER: '/users/create-user',
     UPDATEUSER: '/users/update-user/:id',
-   
+
     PARTNER: '/partners',
     CREATEPARTNER: '/partners/create-partner',
     UPDATEPARTNER: '/partners/update-partner/:id',
@@ -82,9 +81,9 @@ export const ROUTES = {
     EDIT_TRANSACTION: '/edit-transaction',
     VIEW_STATUS: '/view-status',
   },
-   BRANCH_AGENT_CHECKER: {
+  BRANCH_AGENT_CHECKER: {
     DASHBOARD: '/dashboard',
-   
+
     AGENT_ADMIN_CREATION_STEPS: {
       BASIC_INFO: '/users/agent-admin-creation/basic-info',
       COMPANY_DETAILS: '/users/agent-admin-creation/company-details',
@@ -106,7 +105,6 @@ export const ROUTES = {
       CREATE_BRANCH_NEW_USER: '/user-management/agent-branch-user-registration',
       AGENT_PROFILE: '/user-management/agent-profile-creation',
       CREATE_AGENT: '/user-management/agent-profile-creation/create-new-agent',
-    
     },
     //  MASTER: {
     //     RATE_MASTER:'/master/rate-master',
@@ -138,7 +136,7 @@ export const ROUTES = {
     UPDATE_MAKER: '/maker/update-maker/:id',
     CREATEUSER: '/users/create-user',
     UPDATEUSER: '/users/update-user/:id',
-   
+
     PARTNER: '/partners',
     CREATEPARTNER: '/partners/create-partner',
     UPDATEPARTNER: '/partners/update-partner/:id',
@@ -161,7 +159,7 @@ export const getNavPath = (role: keyof typeof ROUTE_PREFIXES, route: string): st
 
 export const ROLES = {
   BRANCH_AGENT_CHECKER: 'branch_agent_checker',
-  ADMIN:'admin',
+  ADMIN: 'admin',
   CHECKER: 'checker',
   MAKER: 'maker',
 };

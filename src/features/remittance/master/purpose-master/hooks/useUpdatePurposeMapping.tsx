@@ -4,11 +4,7 @@ import { updatePurposeMapping } from '../api/update-purpose-mapping.api';
 
 export const useUpdatePurposeMapping = () => {
   const queryClient = useQueryClient();
-  return useMutation<
-    UpdatePurposeMappingResponse,
-    Error,
-    { id: string; data: UpdatePurposeMappingPayload }
-  >({
+  return useMutation<UpdatePurposeMappingResponse, Error, { id: string; data: UpdatePurposeMappingPayload }>({
     mutationFn: ({ id, data }) => updatePurposeMapping(id, data),
     onSuccess: () => {
       // Invalidate and refetch relevant queries

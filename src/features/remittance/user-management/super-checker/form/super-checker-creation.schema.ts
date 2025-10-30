@@ -34,35 +34,37 @@ export const superCheckerSchema = z
             });
           }
         }),
-        status: z
-          //.union([z.literal('active'), z.literal('inactive'), z.literal('blocked')])
-          .refine((val) => val === 'active' || val === 'inactive' || val === 'blocked', {
-            message: 'Status is required',
-          }),
+      status: z
+        //.union([z.literal('active'), z.literal('inactive'), z.literal('blocked')])
+        .refine((val) => val === 'active' || val === 'inactive' || val === 'blocked', {
+          message: 'Status is required',
+        }),
 
       agents: z.array(z.string()).min(1, 'Agent is required').optional(),
 
-     password: z
-      .string()
-      .min(8, 'Password must be at least 8 characters long')
-      .refine((val) => val.trim().length >= 8, 'Password cannot be only spaces')
-      .refine((val) => !/^[\s-]+$/.test(val), 'Password cannot contain only spaces or hyphens')
-      .refine((val) => !/^[\s-]/.test(val), 'Password cannot start with space or hyphen')
-      .refine((val) => /[A-Z]/.test(val), 'Password must contain at least one uppercase letter')
-      .refine((val) => /\d/.test(val), 'Password must contain at least one number')
-      .refine((val) => /[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]/.test(val), 'Password must contain at least one special character')
-      .describe('Password'),
+      password: z
+        .string()
+        .min(8, 'Password must be at least 8 characters long')
+        .refine((val) => val.trim().length >= 8, 'Password cannot be only spaces')
+        .refine((val) => !/^[\s-]+$/.test(val), 'Password cannot contain only spaces or hyphens')
+        .refine((val) => !/^[\s-]/.test(val), 'Password cannot start with space or hyphen')
+        .refine((val) => /[A-Z]/.test(val), 'Password must contain at least one uppercase letter')
+        .refine((val) => /\d/.test(val), 'Password must contain at least one number')
+        .refine(
+          (val) => /[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]/.test(val),
+          'Password must contain at least one special character'
+        )
+        .describe('Password'),
       confirmPassword: z
-      .string()
-      .min(8, 'Confirm password must be at least 8 characters long')
-      .refine((val) => val.trim().length >= 8, 'Confirm password cannot be only spaces')
-      .refine((val) => !/^[\s-]+$/.test(val), 'Confirm password cannot contain only spaces or hyphens')
-      .refine((val) => !/^[\s-]/.test(val), 'Confirm password cannot start with space or hyphen')
-      .describe('Confirm Password'),
-    
+        .string()
+        .min(8, 'Confirm password must be at least 8 characters long')
+        .refine((val) => val.trim().length >= 8, 'Confirm password cannot be only spaces')
+        .refine((val) => !/^[\s-]+$/.test(val), 'Confirm password cannot contain only spaces or hyphens')
+        .refine((val) => !/^[\s-]/.test(val), 'Confirm password cannot start with space or hyphen')
+        .describe('Confirm Password'),
 
       transactionTypeMap: z
-        .record(z.string(), z.enum(['buy', 'sell','both']))
+        .record(z.string(), z.enum(['buy', 'sell', 'both']))
         .optional()
         .refine(
           (val) => {

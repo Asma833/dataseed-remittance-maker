@@ -9,11 +9,13 @@ export const branchAgentCreationConfig = (agents: Agent[] = [], branchAgents: Br
     value: agent.agent_code,
     label: agent.agent_name,
   }));
-    const branchAgentList = branchAgents?.filter(agent => agent.role === 'branch_agent_checker').map((agent) => ({
-    id: agent.id,
-    value: agent.full_name,
-    label: agent.full_name,
-  }));
+  const branchAgentList = branchAgents
+    ?.filter((agent) => agent.role === 'branch_agent_checker')
+    .map((agent) => ({
+      id: agent.id,
+      value: agent.full_name,
+      label: agent.full_name,
+    }));
   return {
     sectionTitle: 'Branch Agent Creation',
     fields: {
@@ -27,28 +29,28 @@ export const branchAgentCreationConfig = (agents: Agent[] = [], branchAgents: Br
           placeholder: 'Select Primary Agent Name',
           options: agentOptions,
         },
-        agentEonCode:{
+        agentEonCode: {
           name: 'agentDetails.vendorDetails.agentEonCode',
           label: 'Vendor Code',
           type: FieldType.Text,
-          disabled:true,
+          disabled: true,
           placeholder: 'Enter Vendor Code',
         },
-         systemCode:{
+        systemCode: {
           name: 'agentDetails.vendorDetails.systemCode',
           label: 'System Code',
           type: FieldType.Text,
-          disabled:true,
+          disabled: true,
           placeholder: 'Enter System Code',
         },
-        primaryAgentEmail:{
+        primaryAgentEmail: {
           name: 'agentDetails.vendorDetails.primaryAgentEmail',
           label: 'Primary Agent Email',
           type: FieldType.Email,
-          disabled:true,
+          disabled: true,
           placeholder: 'Enter Primary Agent Email',
         },
-       
+
         // Basic
         fullName: {
           name: 'agentDetails.basicDetails.fullName',
@@ -96,14 +98,14 @@ export const branchAgentCreationConfig = (agents: Agent[] = [], branchAgents: Br
           name: 'agentDetails.address.rmName',
           label: 'RM Name',
           type: FieldType.Text,
-          disabled:true,
+          disabled: true,
           placeholder: 'Enter Branch Name',
         },
-         rmBranch: {
+        rmBranch: {
           name: 'agentDetails.address.rmBranch',
           label: 'RM Branch Name',
           type: FieldType.Text,
-          disabled:true,
+          disabled: true,
           placeholder: 'Enter RM Branch Name',
         },
         // Role / Checker / Status
@@ -121,14 +123,14 @@ export const branchAgentCreationConfig = (agents: Agent[] = [], branchAgents: Br
             branch_agent_co_admin: { label: 'Co Admin' },
           },
         },
-          checkerList:{
-            name: 'agentDetails.basicDetails.checkerList',
-            label: 'Checker List',
-            type: FieldType.Select,
-            isMulti: false,
-            placeholder: 'Select Checker List',
-            options: branchAgentList
-          },
+        checkerList: {
+          name: 'agentDetails.basicDetails.checkerList',
+          label: 'Checker List',
+          type: FieldType.Select,
+          isMulti: false,
+          placeholder: 'Select Checker List',
+          options: branchAgentList,
+        },
         status: {
           name: 'agentDetails.roleStatus.status',
           label: 'Status',
@@ -137,7 +139,7 @@ export const branchAgentCreationConfig = (agents: Agent[] = [], branchAgents: Br
           options: {
             active: { label: 'Active', checked: true },
             inactive: { label: 'Inactive' },
-            blocked:{ label:'Blocked'}
+            blocked: { label: 'Blocked' },
           },
         },
 

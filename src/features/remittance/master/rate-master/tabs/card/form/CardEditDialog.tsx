@@ -15,12 +15,7 @@ interface CardEditDialogProps {
   onEdit?: (cardData: CardData) => void;
 }
 
-export const CardEditDialog: React.FC<CardEditDialogProps> = ({
-  isOpen,
-  onClose,
-  editData,
-  onEdit,
-}) => {
+export const CardEditDialog: React.FC<CardEditDialogProps> = ({ isOpen, onClose, editData, onEdit }) => {
   const form = useForm<CardEditFormData>({
     resolver: zodResolver(cardEditFormSchema),
     defaultValues: editData || {},
@@ -59,7 +54,7 @@ export const CardEditDialog: React.FC<CardEditDialogProps> = ({
 
   const handleSubmit = (data: CardEditFormData) => {
     // Handle form submission
-   // console.log('Submitting card edit data:', data);
+    // console.log('Submitting card edit data:', data);
   };
 
   const handleEdit = (data: Record<string, any>) => {
@@ -77,18 +72,15 @@ export const CardEditDialog: React.FC<CardEditDialogProps> = ({
       };
 
       // Call the API update
-      updateCardMutation.mutate(
-        { ...data, id: editData.id } as CardEditFormData & { id: string },
-        {
-          onSuccess: () => {
-            onEdit(updatedCard);
-            toast.success('Card updated successfully');
-          },
-          onError: () => {
-            toast.error('Failed to update card');
-          },
-        }
-      );
+      updateCardMutation.mutate({ ...data, id: editData.id } as CardEditFormData & { id: string }, {
+        onSuccess: () => {
+          onEdit(updatedCard);
+          toast.success('Card updated successfully');
+        },
+        onError: () => {
+          toast.error('Failed to update card');
+        },
+      });
     }
   };
 
