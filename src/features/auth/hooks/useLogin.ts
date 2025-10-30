@@ -26,7 +26,6 @@ export const useLogin = () => {
 
       // Redirect user to correct route based on role
       const roleName = data.user.roles[0].role_name as UserRole;
-      console.log(data.user.roles[0].role_name,"roleName++++++++++++++")
       const defaultRoute = DEFAULT_ROUTES[roleName];
       if (defaultRoute) {
         toast.success('Login successful');

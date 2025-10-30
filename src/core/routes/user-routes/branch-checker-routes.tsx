@@ -8,7 +8,6 @@ export const BranchCheckerRoutes = () => {
   return (
     <Routes>
       {branchCheckerRoutes.map(({ path, element: Element, roles, permission, subRoutes }) => {
-        console.log("branchCheckerRoutes",branchCheckerRoutes)
         // Make child paths relative to /branchCheckerRoutes/*
         const normalizedPath = path.replace(/^\//, '');
 
