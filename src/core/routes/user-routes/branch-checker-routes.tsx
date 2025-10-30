@@ -1,14 +1,15 @@
 import { Routes, Route } from 'react-router-dom';
-import { adminRoutes } from '../routes';
+import { branchCheckerRoutes } from '../route-maps/branch-checker.routes';
 import { ProtectedRoute } from '../protected-routes';
 import SidebarLayout from '@/components/layout/sidebar-layout';
 import NotFoundPage from '@/components/common/not-found-page';
 
-export const AdminRoutes = () => {
+export const BranchCheckerRoutes = () => {
   return (
     <Routes>
-      {adminRoutes.map(({ path, element: Element, roles, permission, subRoutes }) => {
-        // Make child paths relative to /admin/*
+      {branchCheckerRoutes.map(({ path, element: Element, roles, permission, subRoutes }) => {
+        console.log("branchCheckerRoutes",branchCheckerRoutes)
+        // Make child paths relative to /branchCheckerRoutes/*
         const normalizedPath = path.replace(/^\//, '');
 
         // If route has subRoutes, render nested routes under the parent

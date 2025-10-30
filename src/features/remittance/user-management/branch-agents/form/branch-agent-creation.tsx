@@ -22,6 +22,7 @@ import { useUpdateBranchAgent } from '../../hooks/useUpdateBranchAgent';
 import { useGetAgents } from '../../hooks/useGetAgents';
 import { useGetBranchAgents } from '../../hooks/useGetBranchAgents';
 import { Agent } from '../../api/agents';
+import { ROUTE_PREFIXES, ROUTES } from '@/core/constant/route-paths';
 
 // Helper to normalize any vendor value to an agent object
 const resolveAgentFromValue = (val: unknown, agents?: Array<Agent>) => {
@@ -148,7 +149,7 @@ export const CreateBranchAgent = () => {
   }, [selectedVendorValue, agents, setValue]);
 
 
-  const handleBack = () => navigate('/admin/user-management/branch-agents');
+  const handleBack = () => navigate('/admin/user-management/branch-agents',);
 
   const { mutate: createBranchAgent, isLoading: isCreating } = useCreateBranchAgent({
     onBranchAgentCreateSuccess: () => navigate('/admin/user-management/branch-agents'),

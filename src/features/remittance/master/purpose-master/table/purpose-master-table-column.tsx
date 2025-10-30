@@ -1,6 +1,5 @@
 import { ActionButtons, TableColumn } from '@/components/table';
 import { PurposeData } from '@/features/admin/types/purpose.types';
-import { MapPin } from 'lucide-react';
 
 const GetPurposeMasterTableColumns = ({
   handleEdit,

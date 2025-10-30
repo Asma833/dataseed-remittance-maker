@@ -1,4 +1,3 @@
-import { LayoutDashboard, ClipboardList, FileEdit, Eye, CreditCard, User, BookCopy } from 'lucide-react';
 import { ROUTES, getNavPath } from './route-paths';
 import profile from '@/assets/icons/profile.svg';
 import master from '@/assets/icons/master.svg';
@@ -16,28 +15,28 @@ export const SideNavOptions = {
   branch_agent_checker: [
     {
       title: 'User Management',
-      path: '/admin/user-management',
+      path: '/branch_agent_checker/user-management',
       icon: profile,
       subMenus: [
         {
           title: 'Super Checker',
-          path: getNavPath('ADMIN', ROUTES.ADMIN.USER_MANAGEMENT.SUPER_CHECKER_TABLE),
+          path: getNavPath('BRANCH_AGENT_CHECKER', ROUTES.BRANCH_AGENT_CHECKER.USER_MANAGEMENT.SUPER_CHECKER_TABLE),
            subMenus: [
-            { title: 'Super Checker Creation', path: getNavPath('ADMIN', ROUTES.ADMIN.USER_MANAGEMENT.SUPER_CHECKER_CREATION) },
+            { title: 'Super Checker Creation', path: getNavPath('BRANCH_AGENT_CHECKER', ROUTES.BRANCH_AGENT_CHECKER.USER_MANAGEMENT.SUPER_CHECKER_CREATION) },
          ]
         },
         {
           title: 'Agent Admin',
-          path: getNavPath('ADMIN', ROUTES.ADMIN.USER_MANAGEMENT.AGENT_ADMIN),
+          path: getNavPath('BRANCH_AGENT_CHECKER', ROUTES.BRANCH_AGENT_CHECKER.USER_MANAGEMENT.AGENT_ADMIN),
          subMenus: [
-          { title: 'Agent Admin Creation', path: getNavPath('ADMIN', ROUTES.ADMIN.USER_MANAGEMENT.AGENT_ADMIN_CREATION) },
+          { title: 'Agent Admin Creation', path: getNavPath('BRANCH_AGENT_CHECKER', ROUTES.BRANCH_AGENT_CHECKER.USER_MANAGEMENT.AGENT_ADMIN_CREATION) },
          ]
         },
         {
           title: 'Branch Agents',
-          path: getNavPath('ADMIN', ROUTES.ADMIN.USER_MANAGEMENT.BRANCH_AGENTS),
+          path: getNavPath('BRANCH_AGENT_CHECKER', ROUTES.BRANCH_AGENT_CHECKER.USER_MANAGEMENT.BRANCH_AGENTS),
          subMenus: [
-          { title: 'Branch Agent Creation', path: getNavPath('ADMIN', ROUTES.ADMIN.USER_MANAGEMENT.BRANCH_AGENT_CREATION) },
+          { title: 'Branch Agent Creation', path: getNavPath('BRANCH_AGENT_CHECKER', ROUTES.BRANCH_AGENT_CHECKER.USER_MANAGEMENT.BRANCH_AGENT_CREATION) },
          ]
         },
 
@@ -45,29 +44,29 @@ export const SideNavOptions = {
     },
     {
       title: 'Master Data',
-      path: '/admin/master',
+      path: '/branch_agent_checker/master',
       icon: master,
       subMenus: [
          {
           title: 'Rate Master',
-          path: '/admin/master/rate-master/rate-margin',
+          path: '/branch_agent_checker/master/rate-master/rate-margin',
           subMenus: [
-          { title: 'Remittance', path: "/admin/master/rate-master/remittance"},
-          { title: 'Holiday List', path: "/admin/master/rate-master/holiday-list"},
-          { title: 'Live Rates', path: "/admin/master/rate-master/live-rates"}
+          { title: 'Remittance', path: "/branch_agent_checker/master/rate-master/remittance"},
+          { title: 'Holiday List', path: "/branch_agent_checker/master/rate-master/holiday-list"},
+          { title: 'Live Rates', path: "/branch_agent_checker/master/rate-master/live-rates"}
         ]
         },
         {
           title: 'Purpose Master',
-          path: getNavPath('ADMIN', ROUTES.ADMIN.MASTER.PURPOSE_MASTER),
+          path: getNavPath('BRANCH_AGENT_CHECKER', ROUTES.BRANCH_AGENT_CHECKER.MASTER.PURPOSE_MASTER),
         },
         {
           title: 'Document Master',
-          path: getNavPath('ADMIN', ROUTES.ADMIN.MASTER.DOCUMENT_MASTER),
+          path: getNavPath('BRANCH_AGENT_CHECKER', ROUTES.BRANCH_AGENT_CHECKER.MASTER.DOCUMENT_MASTER),
         },
          {
           title: 'Document Mapping',
-          path: getNavPath('ADMIN', ROUTES.ADMIN.MASTER.DOCUMENT_MAPPING),
+          path: getNavPath('BRANCH_AGENT_CHECKER', ROUTES.BRANCH_AGENT_CHECKER.MASTER.DOCUMENT_MAPPING),
         },
       ],
     },
@@ -81,23 +80,23 @@ export const SideNavOptions = {
       subMenus: [
         {
           title: 'Super Checker',
-          path: getNavPath('ADMIN', ROUTES.ADMIN.USER_MANAGEMENT.SUPER_CHECKER_TABLE),
+          path: getNavPath('ADMIN', ROUTES.BRANCH_AGENT_CHECKER.USER_MANAGEMENT.SUPER_CHECKER_TABLE),
            subMenus: [
-            { title: 'Super Checker Creation', path: getNavPath('ADMIN', ROUTES.ADMIN.USER_MANAGEMENT.SUPER_CHECKER_CREATION) },
+            { title: 'Super Checker Creation', path: getNavPath('ADMIN', ROUTES.BRANCH_AGENT_CHECKER.USER_MANAGEMENT.SUPER_CHECKER_CREATION) },
          ]
         },
         {
           title: 'Agent Admin',
-          path: getNavPath('ADMIN', ROUTES.ADMIN.USER_MANAGEMENT.AGENT_ADMIN),
+          path: getNavPath('ADMIN', ROUTES.BRANCH_AGENT_CHECKER.USER_MANAGEMENT.AGENT_ADMIN),
          subMenus: [
-          { title: 'Agent Admin Creation', path: getNavPath('ADMIN', ROUTES.ADMIN.USER_MANAGEMENT.AGENT_ADMIN_CREATION) },
+          { title: 'Agent Admin Creation', path: getNavPath('ADMIN', ROUTES.BRANCH_AGENT_CHECKER.USER_MANAGEMENT.AGENT_ADMIN_CREATION) },
          ]
         },
         {
           title: 'Branch Agents',
-          path: getNavPath('ADMIN', ROUTES.ADMIN.USER_MANAGEMENT.BRANCH_AGENTS),
+          path: getNavPath('ADMIN', ROUTES.BRANCH_AGENT_CHECKER.USER_MANAGEMENT.BRANCH_AGENTS),
          subMenus: [
-          { title: 'Branch Agent Creation', path: getNavPath('ADMIN', ROUTES.ADMIN.USER_MANAGEMENT.BRANCH_AGENT_CREATION) },
+          { title: 'Branch Agent Creation', path: getNavPath('ADMIN', ROUTES.BRANCH_AGENT_CHECKER.USER_MANAGEMENT.BRANCH_AGENT_CREATION) },
          ]
         },
 
@@ -119,11 +118,11 @@ export const SideNavOptions = {
         },
         {
           title: 'Purpose Master',
-          path: getNavPath('ADMIN', ROUTES.ADMIN.MASTER.PURPOSE_MASTER),
+          path: getNavPath('ADMIN', ROUTES.BRANCH_AGENT_CHECKER.MASTER.PURPOSE_MASTER),
         },
         {
           title: 'Document Master',
-          path: getNavPath('ADMIN', ROUTES.ADMIN.MASTER.DOCUMENT_MASTER),
+          path: getNavPath('ADMIN', ROUTES.BRANCH_AGENT_CHECKER.MASTER.DOCUMENT_MASTER),
         },
       ],
     },

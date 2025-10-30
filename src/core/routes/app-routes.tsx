@@ -10,11 +10,11 @@ import UnauthorizedPage from '@/components/common/unauthorize-page';
 // import { AdminRoutes } from './AdminRoutes';
 import { ProtectedRoute } from './protected-routes';
 import { AdminRoutes } from './user-routes/admin-routes';
+import { BranchCheckerRoutes } from './user-routes/branch-checker-routes';
 
 export const AppRoutes = () => {
   const selectUser = useMemo(() => (state: RootState) => state.auth.user, []);
   const user = useSelector(selectUser);
-
   const getDefaultRoute = (userRole?: UserRole | null) =>
     userRole ? (DEFAULT_ROUTES[userRole] ?? '/login') : '/login';
 
@@ -26,19 +26,24 @@ export const AppRoutes = () => {
       <Route
         path="/admin/*"
         element={
-          // <ProtectedRoute>
-          //   <AdminRoutes />
-          //   {/* <div>app</div> */}
-          // </ProtectedRoute>
-
+          <ProtectedRoute>
             <AdminRoutes />
-           
+          </ProtectedRoute> 
          
         }
       />
-      {/* <Route path="/" element={<Navigate to={getDefaultRoute(user?.role?.name)} replace />} />
+       <Route
+        path="/branch_agent_checker/*"
+        element={
+          <ProtectedRoute>
+            <BranchCheckerRoutes/>
+          </ProtectedRoute> 
+         
+        }
+      />
+      <Route path="/" element={<Navigate to={getDefaultRoute(user?.roles[0]?.role_name as UserRole)} replace />} />
       <Route path="/unauthorized" element={<UnauthorizedPage />} />
-      <Route path="*" element={<NotFoundPage />} /> */}
+      <Route path="*" element={<NotFoundPage />} />
     </Routes>
   );
 };

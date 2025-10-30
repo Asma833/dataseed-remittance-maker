@@ -42,7 +42,7 @@ export const ProtectedRoute: React.FC<ProtectedRouteProps> = ({
 
   // Use roles parameter if provided, otherwise fall back to allowedRoles
   const requiredRoles = roles.length > 0 ? roles : allowedRoles;
-
+  console.log(allowedRoles,"allowedRoles++++++++++")
   // Check if the current path is public
   const isPublicPath = publicPaths.some((path) => {
     // Handle paths with parameters (like reset-password with token)
@@ -74,8 +74,9 @@ export const ProtectedRoute: React.FC<ProtectedRouteProps> = ({
   }
 
   // Check if user has required role
-  const hasRequiredRole = requiredRoles.length === 0 || (user.role && requiredRoles.includes(user.role.name));
-
+  const hasRequiredRole = requiredRoles.length === 0 || (user.roles && requiredRoles.includes(user.roles[0]?.role_name));
+ console.log(requiredRoles,requiredRoles.includes(user.roles[0]?.role_name) || user.roles[0]?.role_name,"user.roles[0]?.role_name")
+  console.log(hasRequiredRole,"hasRequiredRole")
   if (!hasRequiredRole) {
     return <Navigate to="/unauthorized" replace />;
   }
