@@ -54,7 +54,7 @@ const SuperCheckerTable = () => {
   };
 
   const handleEdit = (superChecker: SuperCheckerData) => {
-    navigate(getNavPath(userRole?.toUpperCase() as 'ADMIN' | 'BRANCH_AGENT_CHECKER', ROUTES.ADMIN.USER_MANAGEMENT.SUPER_CHECKER_CREATION), { state: { superChecker } });
+    navigate(getNavPath(userRole?.toUpperCase() as 'ADMIN' | 'BRANCH_AGENT_CHECKER', `/user-management/super-checker-table/super-checker-creation`), { state: { superChecker } });
   };
 
   const handleInacivate = async (superChecker: SuperCheckerData) => {
