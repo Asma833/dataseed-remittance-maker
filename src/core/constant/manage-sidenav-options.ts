@@ -99,7 +99,10 @@ export const SideNavOptions = {
           { title: 'Branch Agent Creation', path: getNavPath('ADMIN', ROUTES.BRANCH_AGENT_CHECKER.USER_MANAGEMENT.BRANCH_AGENT_CREATION) },
          ]
         },
-
+        {
+          title: 'Document Mapping',
+          path: getNavPath('BRANCH_AGENT_CHECKER', ROUTES.BRANCH_AGENT_CHECKER.MASTER.DOCUMENT_MAPPING),
+        },
       ],
     },
     {
