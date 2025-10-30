@@ -1,5 +1,4 @@
-// components/stepper.tsx
-import * as React from 'react';
+
 import { Check } from 'lucide-react';
 import { cn } from '@/utils/cn';
 

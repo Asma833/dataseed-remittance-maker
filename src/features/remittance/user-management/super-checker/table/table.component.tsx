@@ -8,15 +8,16 @@ import { PlusCircle } from 'lucide-react';
 import { TableTitle } from '@/features/auth/components/table-title';
 import { useGetSuperCheckers } from '../../hooks/useGetSuperCheckers';
 import { useInactiveUser } from '../../hooks/useInactiveUser';
-import { ROUTES, getNavPath } from '@/core/constant/route-paths';
+import { ROUTES } from '@/core/constant/route-paths';
 import { useCurrentUser } from '@/utils/getUserFromRedux';
+import { navigateWithRole } from '@/utils/navigationUtils';
 
 const SuperCheckerTable = () => {
   const navigate = useNavigate();
   const { data: superCheckers = [], isLoading: loading, error } = useGetSuperCheckers();
   const { inactiveUser, isPending: deletePending } = useInactiveUser();
   const { getUserRole } = useCurrentUser();
-   const userRole = getUserRole();
+  const userRole = getUserRole();
   // Table configuration
   const config = {
     ...staticConfig,
@@ -54,7 +55,7 @@ const SuperCheckerTable = () => {
   };
 
   const handleEdit = (superChecker: SuperCheckerData) => {
-    navigate(getNavPath(userRole?.toUpperCase() as 'ADMIN' | 'BRANCH_AGENT_CHECKER', `/user-management/super-checker-table/super-checker-creation`), { state: { superChecker } });
+    navigateWithRole(navigate, userRole, ROUTES.ADMIN.USER_MANAGEMENT.SUPER_CHECKER_CREATION, { superChecker });
   };
 
   const handleInacivate = async (superChecker: SuperCheckerData) => {
@@ -79,8 +80,7 @@ const SuperCheckerTable = () => {
 
   // Navigate to super checker creation page
   const handleAddSuperChecker = () => {
-   
-    navigate(getNavPath(userRole?.toUpperCase() as 'ADMIN' | 'BRANCH_AGENT_CHECKER', `/user-management/super-checker-table/super-checker-creation`));
+    navigateWithRole(navigate, userRole, ROUTES.ADMIN.USER_MANAGEMENT.SUPER_CHECKER_CREATION);
   };
   // Define columns matching the screenshot
   const columns = GetSuperCheckerTableColumns({

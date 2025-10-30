@@ -9,12 +9,15 @@ import { TableTitle } from '@/features/auth/components/table-title';
 import { useGetBranchAgents } from '../../hooks/useGetBranchAgents';
 import { useInactiveUser } from '../../hooks/useInactiveUser';
 import { ROUTES } from '@/core/constant/route-paths';
+import { useCurrentUser } from '@/utils/getUserFromRedux';
+import { navigateWithRole } from '@/utils/navigationUtils';
 
 const BranchAgentTable = () => {
   const navigate = useNavigate();
   const { data: branchAgents = [], isLoading } = useGetBranchAgents();
   const { inactiveUser, isPending: deletePending } = useInactiveUser();
-
+  const { getUserRole } = useCurrentUser();
+  const userRole = getUserRole();
   // Table configuration
   const config = {
     ...staticConfig,
@@ -64,7 +67,7 @@ const BranchAgentTable = () => {
   };
 
   const handleEdit = (branchAgent: BranchAgentData) => {
-    navigate(`/admin${ROUTES.ADMIN.USER_MANAGEMENT.BRANCH_AGENT_CREATION}`, { state: { branchAgent } });
+    navigateWithRole(navigate, userRole, ROUTES.ADMIN.USER_MANAGEMENT.BRANCH_AGENT_CREATION, { branchAgent });
   };
 
   const handleInactivate = async (branchAgent: BranchAgentData) => {
@@ -86,7 +89,7 @@ const BranchAgentTable = () => {
 
   // Navigate to branch agent creation page
   const handleCreateBranchAgent = () => {
-    navigate(`/admin${ROUTES.ADMIN.USER_MANAGEMENT.BRANCH_AGENT_CREATION}`);
+     navigateWithRole(navigate, userRole, ROUTES.ADMIN.USER_MANAGEMENT.BRANCH_AGENT_CREATION);
   };
 
   // Handle bulk upload

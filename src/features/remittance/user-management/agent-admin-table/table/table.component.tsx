@@ -5,18 +5,20 @@ import { AgentAdminData } from './types';
 import { Button } from '@/components/ui/button';
 import { DataTable, dynamicConfig, staticConfig, TableConfig, tableConfigPresets, TableData } from '@/components/table';
 import { useGetAgentAdmins } from '../../hooks/useGetAgentAdmins';
-import { ROUTES } from '@/core/constant/route-paths';
+import { getNavPath, ROUTES } from '@/core/constant/route-paths';
 import { TableTitle } from '@/features/auth/components/table-title';
 import { PlusCircle } from 'lucide-react';
+import { useCurrentUser } from '@/utils/getUserFromRedux';
 
 const AgentAdminTable = () => {
   const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
-
+  const { getUserRole } = useCurrentUser();
+  const userRole = getUserRole();
   
   // Navigate to agent admin creation page
   const handleAddAdminAgents = () => {
-    navigate(`/admin${ROUTES.ADMIN.USER_MANAGEMENT.AGENT_ADMIN_CREATION}`);
+    navigate(getNavPath(userRole?.toUpperCase() as 'ADMIN' | 'BRANCH_AGENT_CHECKER', `/user-management/agent-admin/agent-admin-creation`));
   };
 
   const { data, isLoading: userLoading, error: userError } = useGetAgentAdmins();
@@ -62,7 +64,7 @@ const AgentAdminTable = () => {
   };
 
   const handleEdit = (user: AgentAdminData) => {
-    navigate(`/admin${ROUTES.ADMIN.USER_MANAGEMENT.AGENT_ADMIN_CREATION}`, { state: { editData: user } });
+      navigate(getNavPath(userRole?.toUpperCase() as 'ADMIN' | 'BRANCH_AGENT_CHECKER', `/user-management/agent-admin/agent-admin-creation`), { state: { editData: user } });
   };
 
   // Define columns matching your design
@@ -70,16 +72,6 @@ const AgentAdminTable = () => {
     handleEdit,
   });
 
-  // Current mode selector
-  const [mode, setMode] = useState<'static' | 'dynamic'>('static');
-
-  // Table data
-  // const tableData: TableData<UserData> = {
-  //   data: users,
-  //   totalCount: users.length,
-  //   pageCount: Math.ceil(users.length / (currentConfig.pagination?.pageSize || 10)),
-  //   currentPage: 1,
-  // };
 
   // Dynamic table actions (when using dynamic mode)
   const tableActions = {
