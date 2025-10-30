@@ -126,7 +126,7 @@ export const API = {
     DOCUMENT_MASTER: {
     GET_DOCUMENTS: `/fx/documents`,
     CREATE_DOCUMENT: `/fx/document`,
-    UPDATE_DOCUMENT: `/fx/document`,
+    UPDATE_DOCUMENT: (id: string) => `/fx/document/${id}`,
     DELETE_DOCUMENT: (id: string) => `/fx/document/${id}`,
     DOC_PURPOSE_TRANS_MAPPING: `/trans-purpose-document/map`,
     DELETE_MAPPING_DOCUMENT: (id: string) => `/trans-purpose-document/${id}`,

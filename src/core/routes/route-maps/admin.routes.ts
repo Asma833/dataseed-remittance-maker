@@ -15,8 +15,6 @@ import Currency from '@/features/remittance/master/rate-master/tabs/currency/Cur
 import PurposeMasterTablePage from '@/features/remittance/master/purpose-master/table/purpose-master-table-page';
 import CreatePurposeMasterPage from '@/features/remittance/master/purpose-master/form/create-purpose-master-page';
 import DocumentMasterTablePage from '@/features/remittance/master/document/table/document-master-table-page';
-import CreateDocumentPage from '@/features/remittance/master/document/form/create-document-form';
-
 import AdminAgentList from '@/features/remittance/user-management/agent-admin-table/table/page';
 import AgentAdminCreation from '@/features/remittance/user-management/agent-admin-table/form/agent-admin-creation';
 import DocumentMappingTable from '@/features/remittance/master/document-mapping/table/document-mapping-table';
@@ -143,18 +141,6 @@ export const adminRoutes: RouteConfig[] = [
   {
     path: ROUTES.ADMIN.MASTER.DOCUMENT_MASTER,
     element: DocumentMasterTablePage,
-    roles: [baseRole],
-    permission: 'admin',
-  },
-  {
-    path: ROUTES.ADMIN.MASTER.CREATE_DOCUMENT_MASTER,
-    element: CreateDocumentPage,
-    roles: [baseRole],
-    permission: 'admin',
-  },
-  {
-    path: ROUTES.ADMIN.MASTER.UPDATE_DOCUMENT_MASTER,
-    element: CreateDocumentPage,
     roles: [baseRole],
     permission: 'admin',
   },

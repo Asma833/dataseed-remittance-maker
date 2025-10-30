@@ -19,17 +19,23 @@ export const DocumentFormConfig = {
       placeholder: 'Enter document code',
       required: true,
     },
-    is_mandatory: {
-      name: 'code',
+    is_required: {
+      name: 'is_required',
       label: '',
       type: FieldType.Checkbox,
       options:{
         is_required:{label:'Mandatory'},
-        is_backrequired:{label:'Back Required'},
       },
-      isMuti:true,
-      required: true,
+      required: false,
     },
-    
+      is_back_required: {
+      name: 'is_back_required',
+      label: '',
+      type: FieldType.Checkbox,
+      options:{
+        is_back_required:{label:'Back Required'},
+      },
+      required: false,
+    },
   },
 };

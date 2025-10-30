@@ -13,8 +13,11 @@ export const DocumentSchema = z.object({
     .max(20, 'Document code must be less than 20 characters')
     .nonempty('Document code is required'),
 
-  is_mandatory: z
-    .array(z.string())
-    .min(1, 'At least one option must be selected')
-    .max(2, 'Maximum 2 options can be selected'),
+  is_required: z
+    .string()
+    .optional(),
+
+  is_back_required: z
+    .string()
+    .optional(),
 });

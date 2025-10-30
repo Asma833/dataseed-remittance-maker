@@ -8,6 +8,7 @@ export interface PurposeData {
   id: string;
   purpose_name: string;
   purpose_code: string;
+  transaction_type_id?: string;
   mappedTransactionTypes?: string[];
   is_active?: boolean;
   created_at?: string;

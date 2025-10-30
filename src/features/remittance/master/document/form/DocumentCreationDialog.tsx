@@ -5,7 +5,8 @@ import { GenericDialog } from '@/components/common/generic-dialog';
 import { DocumentSchema } from './create-document.schema';
 import { DocumentFormConfig } from './create-document.config';
 import { useCreateDocument } from '../hooks/useCreateDocument';
-import { DocumentData } from '../types/document.types';
+import { useUpdateDocument } from '../hooks/useUpdateDocument';
+import { DocumentData, CreateDocumentResponse } from '../types/document.types';
 
 interface DocumentCreationDialogProps {
   isOpen: boolean;
@@ -25,13 +26,15 @@ export const DocumentCreationDialog: React.FC<DocumentCreationDialogProps> = ({
     defaultValues: {
       name: '',
       code: '',
-      is_mandatory: [],
+      is_required: '',
+      is_back_required: ''
     },
     mode: 'onChange',
   });
 
   const { reset, trigger, clearErrors } = form;
   const createDocumentMutation = useCreateDocument();
+  const updateDocumentMutation = useUpdateDocument();
 
   // Reset form when dialog opens
   useEffect(() => {
@@ -40,7 +43,8 @@ export const DocumentCreationDialog: React.FC<DocumentCreationDialogProps> = ({
         reset({
           name: editData.name || '',
           code: editData.code || '',
-          is_mandatory: editData.is_mandatory || [],
+          is_required: editData.is_required ? 'is_required' : '',
+          is_back_required:editData.is_back_required ? 'is_back_required' : '',
         });
         // Clear any stale errors and trigger validation for edit mode
         clearErrors();
@@ -49,7 +53,8 @@ export const DocumentCreationDialog: React.FC<DocumentCreationDialogProps> = ({
         reset({
           name: '',
           code: '',
-          is_mandatory: [],
+          is_required: '',
+          is_back_required: ''
         });
         // Clear any stale errors but don't trigger validation for create mode
         clearErrors();
@@ -61,26 +66,48 @@ export const DocumentCreationDialog: React.FC<DocumentCreationDialogProps> = ({
     const payload = {
       name: data.name,
       code: data.code,
-      is_mandatory: data.is_mandatory,
+      is_required: data.is_required ? true : false,
+      is_back_required: data.is_back_required ? true : false,
       is_active: true,
+      display_name:'',
     };
 
     if (editData?.id) {
-      // Update existing document - TODO: Implement update functionality
-      console.log('Update document:', { ...data, id: editData.id });
-      onClose();
+      // Update existing document
+      updateDocumentMutation.mutate(
+        { id: editData.id, payload },
+        {
+          onSuccess: (response: CreateDocumentResponse) => {
+            const updatedDocument: DocumentData = {
+              id: response.id,
+              name: response.name,
+              code: response.code,
+              is_required: response.is_required,
+              is_back_required: response.is_back_required,
+              is_active: response.is_active,
+            };
+            if (onEdit) {
+              onEdit(updatedDocument);
+            }
+            reset();
+            onClose();
+          },
+          onError: (error) => {
+            console.error('Failed to update document:', error);
+          },
+        }
+      );
     } else {
       // Create new document
       createDocumentMutation.mutate(payload, {
-        onSuccess: (response) => {
+        onSuccess: (response: CreateDocumentResponse) => {
           const newDocument: DocumentData = {
             id: response.id,
             name: response.name,
             code: response.code,
-            is_mandatory: response.is_mandatory,
+            is_required: response.is_required,
+            is_back_required: response.is_back_required,
             is_active: response.is_active,
-            created_at: response.created_at,
-            updated_at: response.updated_at,
           };
           if (onEdit) {
             onEdit(newDocument);

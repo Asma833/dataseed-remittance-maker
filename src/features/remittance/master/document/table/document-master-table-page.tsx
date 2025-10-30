@@ -5,9 +5,7 @@ import { DocumentData } from '../types/document.types';
 import { DataTable, TableData, staticConfig } from '@/components/table';
 import { Button } from '@/components/ui/button';
 import { Plus } from 'lucide-react';
-import { FormTitle } from '@/features/auth/components/form-title';
 import { TableTitle } from '@/features/auth/components/table-title';
-import { dummyDocumentData } from '../data/dummy-document-data';
 import { useGetDocuments } from '../hooks/useGetDocuments';
 import { DocumentCreationDialog } from '../form/DocumentCreationDialog';
 
@@ -18,10 +16,9 @@ const DocumentMasterTablePage = () => {
 
   // Fetch documents from API
   const { data: apiDocuments = [], isLoading: isLoadingDocuments } = useGetDocuments();
-
-  // Use API data if available, otherwise fallback to dummy data
-  const documents = apiDocuments.length > 0 ? apiDocuments : dummyDocumentData;
-
+  // Use API data if available
+  const documents = apiDocuments.length > 0 ? apiDocuments : [];
+  
   // Table configuration
   const config = {
     ...staticConfig,
@@ -56,7 +53,7 @@ const DocumentMasterTablePage = () => {
 
   const handleInactivate = (document: DocumentData) => {
     // Implement inactivate functionality
-    console.log('Inactivate document:', document);
+   // console.log('Inactivate document:', document);
   };
 
   const handleCreateDocument = () => {

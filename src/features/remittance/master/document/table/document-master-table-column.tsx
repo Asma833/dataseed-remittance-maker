@@ -21,11 +21,12 @@ const GetDocumentMasterTableColumns = ({
       },
     },
      {
-      id: 'is_backrequired',
+      id: 'is_back_required',
       header: 'Back Required',
-      accessorKey: 'is_backrequired',
+      accessorKey: 'is_back_required',
       sortable: true,
       filterable: true,
+      cell: ({ value }) => (value ? 'Yes' : 'No'),
       meta: {
         headerAlign: 'left',
         cellAlign: 'left',

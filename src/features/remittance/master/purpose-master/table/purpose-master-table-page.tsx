@@ -22,6 +22,8 @@ const PurposeMasterTablePage = () => {
   const [purposes, setPurposes] = useState<PurposeData[]>([]);
   const [activeTab, setActiveTab] = useState<string>('card');
   const [isCreateDialogOpen, setIsCreateDialogOpen] = useState(false);
+  const [isUpdateDialogOpen, setIsUpdateDialogOpen] = useState(false);
+  const [selectedPurpose, setSelectedPurpose] = useState<PurposeData | null>(null);
 
   // Transform API data to match PurposeData interface
   const formattedDataArray = useMemo(() => {
@@ -31,6 +33,7 @@ const PurposeMasterTablePage = () => {
       id: item.purpose_id,
       purpose_code:item.purpose_code,
       purpose_name: item.purpose_name,
+      transaction_type_id: item.transaction_type_id,
       mapped_documents: item.documents?.map((doc: any) => doc.display_name) || [],
     }));
   }, [data]);
@@ -85,7 +88,8 @@ const PurposeMasterTablePage = () => {
   };
 
   const handleEdit = (purpose: PurposeData) => {
-    navigate(`/admin/master/purpose-master/update/${purpose.id}`, { state: { purpose } });
+    setSelectedPurpose(purpose);
+    setIsUpdateDialogOpen(true);
   };
 
   const handleDelete = (purpose: PurposeData) => {
@@ -170,6 +174,21 @@ const PurposeMasterTablePage = () => {
       <CreatePurposeMasterDialog
         isOpen={isCreateDialogOpen}
         onClose={() => setIsCreateDialogOpen(false)}
+      />
+
+      <CreatePurposeMasterDialog
+        isOpen={isUpdateDialogOpen}
+        onClose={() => {
+          setIsUpdateDialogOpen(false);
+          setSelectedPurpose(null);
+        }}
+        isEditMode={true}
+        purposeData={selectedPurpose ? {
+          id: selectedPurpose.id,
+          purpose_name: selectedPurpose.purpose_name,
+          purpose_code: selectedPurpose.purpose_code,
+          transaction_type_id: selectedPurpose.transaction_type_id || '',
+        } : undefined}
       />
     </div>
   );
