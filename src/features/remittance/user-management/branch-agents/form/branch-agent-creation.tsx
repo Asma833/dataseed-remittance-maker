@@ -22,7 +22,9 @@ import { useUpdateBranchAgent } from '../../hooks/useUpdateBranchAgent';
 import { useGetAgents } from '../../hooks/useGetAgents';
 import { useGetBranchAgents } from '../../hooks/useGetBranchAgents';
 import { Agent } from '../../api/agents';
-import { ROUTE_PREFIXES, ROUTES } from '@/core/constant/route-paths';
+import { ROUTES } from '@/core/constant/route-paths';
+import { navigateWithRole } from '@/utils/navigationUtils';
+import { useCurrentUser } from '@/utils/getUserFromRedux';
 
 // Helper to normalize any vendor value to an agent object
 const resolveAgentFromValue = (val: unknown, agents?: Array<Agent>) => {
@@ -67,7 +69,8 @@ export const CreateBranchAgent = () => {
   const branchAgent = location.state?.branchAgent;
   const { agents } = useGetAgents();
   const { data: branchAgents } = useGetBranchAgents();
-
+  const { getUserRole } = useCurrentUser();
+  const userRole = getUserRole();
   const config = branchAgentCreationConfig(agents, branchAgents || []);
 
   // Watch the vendor select field (holds agent_code)
@@ -149,14 +152,14 @@ export const CreateBranchAgent = () => {
   }, [selectedVendorValue, agents, setValue]);
 
 
-  const handleBack = () => navigate('/admin/user-management/branch-agents',);
+  const handleBack = () => navigateWithRole(navigate, userRole, '/user-management/branch-agents');
 
   const { mutate: createBranchAgent, isLoading: isCreating } = useCreateBranchAgent({
-    onBranchAgentCreateSuccess: () => navigate('/admin/user-management/branch-agents'),
+    onBranchAgentCreateSuccess: () => navigateWithRole(navigate, userRole, '/user-management/branch-agents'),
   });
 
   const { mutate: updateBranchAgent, isLoading: isUpdating } = useUpdateBranchAgent({
-    onBranchAgentUpdateSuccess: () => navigate('/admin/user-management/branch-agents'),
+    onBranchAgentUpdateSuccess: () => navigateWithRole(navigate, userRole, '/user-management/branch-agents'),
   });
 
   const onSubmit: SubmitHandler<BranchAgentForm> = (data) => {

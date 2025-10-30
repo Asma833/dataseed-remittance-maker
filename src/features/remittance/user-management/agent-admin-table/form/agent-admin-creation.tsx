@@ -23,6 +23,8 @@ import { FormTitle } from '@/features/auth/components/form-title';
 import { useCreateAgent } from '../../hooks/useCreateAgent';
 import { useUpdateAgentAdmin } from '../../hooks/useUpdateAgentAdmin';
 import { ROUTES } from '@/core/constant/route-paths';
+import { navigateWithRole } from '@/utils/navigationUtils';
+import { useCurrentUser } from '@/utils/getUserFromRedux';
 
 type AgentAdminFormType = z.input<typeof agentAdminCreationSchema>;
 type AgentAdminFormData = z.infer<typeof agentAdminCreationSchema>;
@@ -33,7 +35,8 @@ const AgentAdminCreation: React.FC = () => {
   const [currentStep, setCurrentStep] = useState(0);
   const [completedSteps, setCompletedSteps] = useState<Set<number>>(new Set());
   const [submittedData, setSubmittedData] = useState<AgentAdminFormData | null>(null);
-
+  const { getUserRole } = useCurrentUser();
+  const userRole = getUserRole();
   const config = agentAdminCreationConfig();
   const steps = config.steps;
 
@@ -45,12 +48,12 @@ const AgentAdminCreation: React.FC = () => {
 
   const { mutate: createAgent, isLoading: isCreating } = useCreateAgent({
     onAgentCreateSuccess: () => {
-      navigate(`/admin${ROUTES.ADMIN.USER_MANAGEMENT.AGENT_ADMIN}`);
+      navigateWithRole(navigate, userRole, '/user-management/agent-admin');
     },
   });
   const { mutate: updateAgent, isLoading: isUpdating } = useUpdateAgentAdmin({
     onAgentAdminUpdateSuccess: () => {
-      navigate(`/admin${ROUTES.ADMIN.USER_MANAGEMENT.AGENT_ADMIN}`);
+      navigateWithRole(navigate, userRole, '/user-management/agent-admin');
     },
   });
 

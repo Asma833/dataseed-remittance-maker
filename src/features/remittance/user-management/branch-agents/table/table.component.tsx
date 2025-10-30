@@ -67,7 +67,7 @@ const BranchAgentTable = () => {
   };
 
   const handleEdit = (branchAgent: BranchAgentData) => {
-    navigateWithRole(navigate, userRole, ROUTES.ADMIN.USER_MANAGEMENT.BRANCH_AGENT_CREATION, { branchAgent });
+    navigateWithRole(navigate, userRole, '/user-management/branch-agents/branch-agent-creation', { branchAgent });
   };
 
   const handleInactivate = async (branchAgent: BranchAgentData) => {
@@ -89,7 +89,7 @@ const BranchAgentTable = () => {
 
   // Navigate to branch agent creation page
   const handleCreateBranchAgent = () => {
-     navigateWithRole(navigate, userRole, ROUTES.ADMIN.USER_MANAGEMENT.BRANCH_AGENT_CREATION);
+     navigateWithRole(navigate, userRole, '/user-management/branch-agents/branch-agent-creation');
   };
 
   // Handle bulk upload

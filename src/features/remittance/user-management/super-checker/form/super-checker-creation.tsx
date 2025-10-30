@@ -20,6 +20,8 @@ import { useUpdateSuperChecker } from '../../hooks/useUpdateSuperChecker';
 import { useGetAgents } from '../../hooks/useGetAgents';
 import { ProductTransactionSelector } from '@/components/form/product-transaction-selector';
 import type { CreateSuperCheckerRequest, UpdateSuperCheckerRequest } from '../table/types';
+import { navigateWithRole } from '@/utils/navigationUtils';
+import { useCurrentUser } from '@/utils/getUserFromRedux';
 
 export const CreateSuperChecker = () => {
   type SuperCheckerFormType = z.infer<typeof superCheckerSchema>;
@@ -55,19 +57,20 @@ export const CreateSuperChecker = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const superChecker = location.state?.superChecker;
-
+   const { getUserRole } = useCurrentUser();
+  const userRole = getUserRole();
   // Fetch agents for the dropdown
   const { agents, isLoading: isLoadingAgents } = useGetAgents();
 
   const { mutate: createSuperChecker, isLoading: isCreating } = useCreateSuperChecker({
-    onSuperCheckerCreateSuccess: () => navigate(-1),
+    onSuperCheckerCreateSuccess: () => navigateWithRole(navigate, userRole, '/user-management/super-checker-table')
   });
   const { mutate: updateSuperChecker, isLoading: isUpdating } = useUpdateSuperChecker({
-    onSuperCheckerUpdateSuccess: () => navigate(-1),
+    onSuperCheckerUpdateSuccess: () => navigateWithRole(navigate, userRole, '/user-management/super-checker-table')
   });
 
   const handleBack = () => {
-    navigate(-1);
+    navigateWithRole(navigate, userRole, '/user-management/super-checker-table')
   };
 
   //  const handleFormSubmit = handleSubmit(onSubmit);
