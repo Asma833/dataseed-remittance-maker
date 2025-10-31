@@ -10,7 +10,7 @@ import { API } from '@/core/constant/apis';
 import { FormTitle } from '@/features/auth/components/form-title';
 import { TableTitle } from '@/features/auth/components/table-title';
 import DynamicTabs from '@/components/remittance/dynamic-tabs';
-import CreatePurposeMasterDialog from '../form/CreatePurposeMasterDialog';
+import CreatePurposeMasterDialog from '../form/create-purpose-master-dialog';
 
 const PurposeMasterTablePage = () => {
   const navigate = useNavigate();

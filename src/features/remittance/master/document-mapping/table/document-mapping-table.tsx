@@ -488,7 +488,10 @@ const DocumentMappingTable = () => {
             enabled: true,
             searchMode: 'static' as const,
             rightElement: (
-              <Button size="sm" className="ml-2" onClick={() => setIsModalOpen(true)}>
+              <Button size="sm" className="ml-2" onClick={() => {
+                reset();
+                setIsModalOpen(true);
+              }}>
                 <PlusCircle className="h-4 w-4 mr-2" />
                 Map New Document
               </Button>

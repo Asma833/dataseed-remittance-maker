@@ -7,7 +7,7 @@ import { Button } from '@/components/ui/button';
 import { Plus } from 'lucide-react';
 import { TableTitle } from '@/features/auth/components/table-title';
 import { useGetDocuments } from '../hooks/useGetDocuments';
-import { DocumentCreationDialog } from '../form/DocumentCreationDialog';
+import { DocumentCreationDialog } from '../form/document-creation-dialog';
 
 const DocumentMasterTablePage = () => {
   const navigate = useNavigate();
