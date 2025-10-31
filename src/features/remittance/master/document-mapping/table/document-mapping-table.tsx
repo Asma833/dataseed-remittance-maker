@@ -124,10 +124,10 @@ const DocumentMappingTable = () => {
       return;
     }
 
-    // Filter out null items and merge with mapped document data
+    // Filter out null items
     const baseDocuments = documentArray.filter((item) => item != null);
 
-    // If we have mapped documents, update the base documents with mapping info
+    // If we have mapped documents, only show mapped documents
     if (mappedDocuments && mappedDocuments.length > 0) {
       // Create a map to handle duplicate document_ids by taking the most recent or preferred mapping
       const documentMappingMap = new Map();
@@ -152,41 +152,37 @@ const DocumentMappingTable = () => {
         }
       });
 
-      const updatedDocuments = baseDocuments.map((doc) => {
-        // Find if this document is mapped using the deduplicated map
-        const mappedDoc = documentMappingMap.get(doc.id);
+      // Only show documents that are mapped
+      const mappedDocumentIds = new Set(mappedDocuments.map((doc: any) => doc.document_id));
+      const mappedDocumentsOnly = baseDocuments
+        .filter((doc) => mappedDocumentIds.has(doc.id))
+        .map((doc) => {
+          // Find if this document is mapped using the deduplicated map
+          const mappedDoc = documentMappingMap.get(doc.id);
 
-        if (mappedDoc) {
+          if (mappedDoc) {
+            return {
+              ...doc,
+              isSelected: true,
+              requirement: mappedDoc.is_mandatory,
+              backRequirement: mappedDoc.is_back_required,
+              mappingId: mappedDoc.id, // Store the mapping ID for potential updates
+            };
+          }
+
           return {
             ...doc,
-            isSelected: true,
-            requirement: mappedDoc.is_mandatory,
-            backRequirement: mappedDoc.is_back_required,
-            mappingId: mappedDoc.id, // Store the mapping ID for potential updates
+            isSelected: false,
+            requirement: false,
+            backRequirement: false,
+            mappingId: null,
           };
-        }
+        });
 
-        return {
-          ...doc,
-          isSelected: false,
-          requirement: false,
-          backRequirement: false,
-          mappingId: null,
-        };
-      });
-
-      setformattedDataArray(updatedDocuments);
+      setformattedDataArray(mappedDocumentsOnly);
     } else {
-      // No mapped documents, reset all to unselected
-      const resetDocuments = baseDocuments.map((doc) => ({
-        ...doc,
-        isSelected: false,
-        requirement: false,
-        backRequirement: false,
-        mappingId: null,
-      }));
-
-      setformattedDataArray(resetDocuments);
+      // No mapped documents, show empty array
+      setformattedDataArray([]);
     }
   }, [data, mappedDocuments]);
 
