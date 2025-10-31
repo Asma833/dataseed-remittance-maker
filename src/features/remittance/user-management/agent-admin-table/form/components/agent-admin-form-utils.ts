@@ -26,7 +26,7 @@ export const transformEditDataToFormData = (editData: any) => {
     rm_name: normalizeValue(editData.rm_name),
     rm_branch_name: normalizeValue(editData.rm_branch_name),
     systemCode: normalizeValue(editData.system_code),
-    agent_category: editData.agent_category[0] || 'CNC',
+    agent_category: editData.agent_category !== null ? editData.agent_category[0] : 'CNC',
     status: editData.status,
     monthlyCreditLimit: editData.monthly_credit_limit || 0,
     totalCreditDays: editData.total_credit_days || 0,
