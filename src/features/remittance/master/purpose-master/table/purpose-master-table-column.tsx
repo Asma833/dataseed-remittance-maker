@@ -36,7 +36,7 @@ const GetPurposeMasterTableColumns = ({
     {
       id: 'action',
       header: 'Action',
-      cell: ({ row }) => <ActionButtons row={row} onEdit={handleEdit} onInactivate={handleInactivate} />,
+      cell: ({ row }) => <ActionButtons row={row} onEdit={handleEdit} />,
       sortable: false,
       filterable: false,
       meta: {
