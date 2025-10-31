@@ -18,13 +18,14 @@ import { TransactionPurposeMap } from '../types/transaction-form.types';
 import { DocumentFormConfig } from './document-form.config';
 import { Button } from '@/components/ui/button';
 import { PlusCircle } from 'lucide-react';
+import DocumentMappingDialog from '../form/document-dialog';
 
 const DocumentMappingTable = () => {
   const { mutate, isPending: isDeleting } = useDeleteDocumentMapping();
-  const [dialogTitle, setDialogTitle] = useState('Add Documents');
-  const [isModalOpen, setIsModalOpen] = useState(false);
   const [rowData, setRowData] = useState(null);
   const [isProcessingSelection, setIsProcessingSelection] = useState(false);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [dialogTitle, setDialogTitle] = useState('Map New Document');
 
   const {
     data: mappedPurposeTransactionTypesData,
@@ -217,22 +218,7 @@ const DocumentMappingTable = () => {
       },
     });
   };
-  const handleEditDocument = (rowData: any) => {
-    setDialogTitle('Edit Document');
-    setIsModalOpen(true);
-
-    // Preserve current form values for transaction and purpose types
-    const currentFormValues = methods.getValues();
-    const preservedValues = {
-      transaction_type: currentFormValues.transaction_type,
-      purpose_type: currentFormValues.purpose_type,
-      ...rowData, // Add any row-specific data needed for editing
-    };
-
-    reset(preservedValues);
-    setRowData(rowData);
-  };
-
+ 
   const handleSelectionChange = (rowId: string, isSelected: boolean) => {
     // Prevent interaction if already processing a selection
     if (isProcessingSelection || isSavingDocument || isUpdatingDocument || isDeleting) {
@@ -334,7 +320,6 @@ const DocumentMappingTable = () => {
   const isTypeSelectionIncomplete = !selectedTransactionType || !selectedPurposeType;
 
   const tableColumns = DocumentMappingTableConfig({
-    handleEditDocument,
     handleSelectionChange,
     handleMandatoryChange,
     handleBackMandatoryChange,
@@ -345,7 +330,6 @@ const DocumentMappingTable = () => {
 
   const { mutate: mapDocument, isLoading: isSavingDocument } = useCreateDocumentTransactionMap({
     onCreateSuccess: () => {
-      setIsModalOpen(false);
       setIsProcessingSelection(false);
       // Refetch mapped documents to update the UI with new mappings
       if (refetchMappedDocs) {
@@ -357,7 +341,6 @@ const DocumentMappingTable = () => {
 
   const { mutate: editMapDocument, isLoading: isUpdatingDocument } = useDeleteDocumentMapping({
     onDeleteSuccess: () => {
-      setIsModalOpen(false);
       setIsProcessingSelection(false);
       // Refetch mapped documents to update the UI with updated mappings
       if (refetchMappedDocs) {
@@ -373,7 +356,6 @@ const DocumentMappingTable = () => {
 
   // Update table columns with the correct disabled state
   const tableColumnsWithLoading = DocumentMappingTableConfig({
-    handleEditDocument,
     handleSelectionChange,
     handleMandatoryChange,
     handleBackMandatoryChange,
@@ -506,7 +488,7 @@ const DocumentMappingTable = () => {
             enabled: true,
             searchMode: 'static' as const,
             rightElement: (
-              <Button size="sm" className="ml-2">
+              <Button size="sm" className="ml-2" onClick={() => setIsModalOpen(true)}>
                 <PlusCircle className="h-4 w-4 mr-2" />
                 Map New Document
               </Button>
@@ -515,6 +497,15 @@ const DocumentMappingTable = () => {
           export: { enabled: true, fileName: 'mapped-documents.csv', includeHeaders: true },
         }}
         actions={tableActions}
+      />
+
+      <DocumentMappingDialog
+        isModalOpen={isModalOpen}
+        setIsModalOpen={setIsModalOpen}
+        dialogTitle={dialogTitle}
+        setDialogTitle={setDialogTitle}
+        rowData={rowData}
+        setRowData={setRowData}
       />
     </div>
   );

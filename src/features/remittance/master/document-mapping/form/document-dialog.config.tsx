@@ -1,5 +1,3 @@
-import { Edit, Trash2 } from 'lucide-react';
-
 import { TableColumn } from '@/components/table/types';
 import { CustomCheckbox } from '@/components/checkbox/checkbox';
 

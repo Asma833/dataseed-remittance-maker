@@ -11,17 +11,33 @@ import { getController } from '@/components/form/utils/get-controller';
 import { DataTable } from '@/components/table';
 import { DocumentsResponse } from '../types/document.type';
 import { FormContentWrapper } from '@/components/form/wrapper/form-content-wrapper';
-import { DocumentMappingTableConfig } from './document-mapping-table.config';
+import { DocumentMappingTableConfig } from './document-dialog.config';
 import { queryKeys } from '@/core/constant/query-keys';
 import useGetDocByTransPurpose from '../hooks/useGetDocByTransPurpose';
 import { TransactionPurposeMap } from '../types/transaction-form.types';
 import { DocumentFormConfig } from './document-form.config';
+import { Button } from '@/components/ui/button';
+import { PlusCircle } from 'lucide-react';
+import { GenericDialog } from '@/components/ui/generic-dialog';
 
-const DocumentMappingTable = () => {
+interface DocumentMappingTableProps {
+  isModalOpen: boolean;
+  setIsModalOpen: (open: boolean) => void;
+  dialogTitle: string;
+  setDialogTitle: (title: string) => void;
+  rowData: any;
+  setRowData: (data: any) => void;
+}
+
+const DocumentMappingTable: React.FC<DocumentMappingTableProps> = ({
+  isModalOpen,
+  setIsModalOpen,
+  dialogTitle,
+  setDialogTitle,
+  rowData,
+  setRowData,
+}) => {
   const { mutate, isPending: isDeleting } = useDeleteDocumentMapping();
-  const [dialogTitle, setDialogTitle] = useState('Add Documents');
-  const [isModalOpen, setIsModalOpen] = useState(false);
-  const [rowData, setRowData] = useState(null);
   const [isProcessingSelection, setIsProcessingSelection] = useState(false);
 
   const {
@@ -466,45 +482,56 @@ const DocumentMappingTable = () => {
   };
 
   return (
-    <div className="dynamic-table-wrap relative">
-      {/* Loading overlay */}
-      {isTableDisabled && (isProcessingSelection || isSavingDocument || isUpdatingDocument || isDeleting) && (
-        <div className="absolute inset-0 bg-white/50 backdrop-blur-sm z-50 flex items-center justify-center">
-          <div className="flex items-center space-x-2 bg-white p-4 rounded-lg shadow-lg">
-            <div className="w-6 h-6 border-2 border-dashed rounded-full animate-spin border-blue-600" />
-            <span className="text-sm font-medium text-gray-700">
-              {isDeleting ? 'Removing document...' : 'Saving changes...'}
-            </span>
+    <GenericDialog
+      open={isModalOpen}
+      onOpenChange={setIsModalOpen}
+      title={dialogTitle}
+      contentClassName="!w-[80vw]"
+    >
+      <div className="dynamic-table-wrap relative">
+        {/* Loading overlay */}
+        {isTableDisabled && (isProcessingSelection || isSavingDocument || isUpdatingDocument || isDeleting) && (
+          <div className="absolute inset-0 bg-white/50 backdrop-blur-sm z-50 flex items-center justify-center">
+            <div className="flex items-center space-x-2 bg-white p-4 rounded-lg shadow-lg">
+              <div className="w-6 h-6 border-2 border-dashed rounded-full animate-spin border-blue-600" />
+              <span className="text-sm font-medium text-gray-700">
+                {isDeleting ? 'Removing document...' : 'Saving changes...'}
+              </span>
+            </div>
           </div>
-        </div>
-      )}
+        )}
 
-      <FormProvider {...methods}>
-        <FormContentWrapper className="mt-0 rounded-lg mr-auto bg-transparent w-full">
-          <FormFieldRow className="mt-0" rowCols={4}>
-            {Object.entries(config.documentField).map(([name, field]) => (
-              <FieldWrapper key={name}>
-                {getController({
-                  ...(typeof field === 'object' && field !== null ? field : {}),
-                  name,
-                  control,
-                  errors,
-                })}
-              </FieldWrapper>
-            ))}
-          </FormFieldRow>
-        </FormContentWrapper>
-      </FormProvider>
-      <DataTable
-        columns={tableColumnsWithLoading}
-        data={formattedDataArray}
-        config={{
-          ...config,
-          export: { enabled: true, fileName: 'mapped-documents.csv', includeHeaders: true },
-        }}
-        actions={tableActions}
-      />
-    </div>
+        <FormProvider {...methods}>
+          <FormContentWrapper className="mt-0 rounded-lg mr-auto bg-transparent w-full">
+            <FormFieldRow className="mt-0" rowCols={4}>
+              {Object.entries(config.documentField).map(([name, field]) => (
+                <FieldWrapper key={name}>
+                  {getController({
+                    ...(typeof field === 'object' && field !== null ? field : {}),
+                    name,
+                    control,
+                    errors,
+                  })}
+                </FieldWrapper>
+              ))}
+            </FormFieldRow>
+          </FormContentWrapper>
+        </FormProvider>
+        <DataTable
+          columns={tableColumnsWithLoading}
+          data={formattedDataArray}
+          config={{
+            search: {
+              placeholder: 'Search...',
+              enabled: true,
+              searchMode: 'static' as const,
+            },
+            export: { enabled: true, fileName: 'mapped-documents.csv', includeHeaders: true },
+          }}
+          actions={tableActions}
+        />
+      </div>
+    </GenericDialog>
   );
 };
 

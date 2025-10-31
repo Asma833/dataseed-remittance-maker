@@ -4,13 +4,11 @@ import { TableColumn } from '@/components/table/types';
 import { CustomCheckbox } from '@/components/checkbox/checkbox';
 
 export const DocumentMappingTableConfig = ({
-  handleEditDocument,
   handleSelectionChange,
   handleMandatoryChange,
   handleBackMandatoryChange,
   disabled: isDisabled = false,
 }: {
-  handleEditDocument: (rowData: any) => void;
   handleSelectionChange: (rowId: string, isSelected: boolean) => void;
   handleMandatoryChange: (rowId: string, isChecked: boolean) => void;
   handleBackMandatoryChange: (rowId: string, isChecked: boolean) => void;
