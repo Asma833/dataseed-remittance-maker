@@ -1,7 +1,7 @@
 // components/sidebar/Sidebar.tsx
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { ChevronDown, ChevronRight } from 'lucide-react';
+import { ChevronDown, ChevronRight, PanelLeft, PanelRight } from 'lucide-react';
 import { cn } from '@/utils/cn';
 import themeConfig from '@/core/configs/theme-config';
 import PoweredBy from '../footer/powered-by';
@@ -61,13 +61,24 @@ const Sidebar: React.FC<SidebarProps> = ({
   return (
     <aside
       className={cn(
-        'bg-[--sidenav-bg] h-[calc(100vh-60px)] fixed bottom-0 left-0 flex flex-col transition-all z-30 rounded-2xl m-1',
+        'bg-[--sidenav-bg] h-[calc(100vh-60px)] fixed bottom-0 left-0 flex flex-col transition-all duration-500 ease-in-out z-30 rounded-2xl m-1',
         collapsed ? 'w-20' : 'w-50',
         themeConfig.sidebar.isGradient && 'bg-gradient-to-b sidenav-main',
         className
       )}
     >
-      <nav className="px-3 mt-8">
+      <nav className="px-3 mt-2">
+        {/* Collapse/Expand Button */}
+        <div className="flex justify-end mb-2">
+          <button
+            onClick={() => setCollapsed(!collapsed)}
+            className="p-1 rounded-md hover:bg-muted/20 transition-colors cursor-pointer"
+            title={collapsed ? 'Expand sidebar' : 'Collapse sidebar'}
+            aria-label={collapsed ? 'Expand sidebar' : 'Collapse sidebar'}
+          >
+            {collapsed ? <PanelRight className="h-4 w-4" /> : <PanelLeft className="h-4 w-4" />}
+          </button>
+        </div>
         <ul className="space-y-1">
           {navItems.map((item, idx) => {
             const hasSub = !!item.subMenus?.length;
@@ -83,6 +94,7 @@ const Sidebar: React.FC<SidebarProps> = ({
                     collapsed ? 'gap-0 justify-center py-3' : 'gap-3 py-2 justify-between',
                     item.disabled && 'opacity-50 cursor-not-allowed'
                   )}
+                  title={item.title}
                 >
                   <div className={cn('flex items-center', collapsed ? 'gap-0' : 'gap-2')}>
                     {typeof item.icon === 'string' ? (
@@ -116,6 +128,7 @@ const Sidebar: React.FC<SidebarProps> = ({
                               childActive ? childActiveClass : 'hover:bg-muted/20 text-muted-foreground',
                               submenu.disabled && 'opacity-50 cursor-not-allowed'
                             )}
+                            title={submenu.title}
                           >
                             {typeof submenu.icon === 'string' ? (
                               <img src={submenu.icon} className="h-4 w-4 flex-shrink-0" />
