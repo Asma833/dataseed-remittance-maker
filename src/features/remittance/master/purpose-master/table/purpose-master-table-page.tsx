@@ -30,7 +30,7 @@ const PurposeMasterTablePage = () => {
     if (!data || !Array.isArray(data)) return [];
 
     return data.map((item: any) => ({
-      id: item.purpose_id,
+      id: item.id,
       purpose_code: item.purpose_code,
       purpose_name: item.purpose_name,
       transaction_type_id: item.transaction_type_id,
