@@ -46,7 +46,7 @@ import { TableConfig, TableColumn, TableData, TableActions } from './types';
 import { defaultTableConfig } from './config';
 import { exportTableToCSV } from './csv-export.utils';
 import { Pagination } from './pagination';
-import DynamicTabs from '@/components/remittance/dynamic-tabs';
+import DynamicTabs from '@/components/tabs/dynamic-tabs';
 
 interface DataTableProps<T> {
   columns: TableColumn<T>[];
@@ -405,10 +405,11 @@ export function DataTable<T>({
               <div className="flex items-end gap-3">
                 {/* Tab Filters */}
                 {config.tabFilters?.enabled && (
-                  <div className="flex gap-2">
+                  <div className="flex gap-1 pt-4">
                     <DynamicTabs
                       tabs={config.tabFilters.tabs}
                       {...(config.tabFilters.defaultValue && { defaultValue: config.tabFilters.defaultValue })}
+                      {...(config.tabFilters.activeTab && { activeTab: config.tabFilters.activeTab })}
                       {...(config.tabFilters.onTabChange && { onTabChange: config.tabFilters.onTabChange })}
                     />
                   </div>

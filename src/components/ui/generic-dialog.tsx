@@ -39,7 +39,7 @@ function GenericDialog({
           )}
         >
           {(title || description) && (
-            <div className="flex flex-col gap-1 text-center sm:text-left">
+            <div className="flex flex-col gap-1 text-center sm:text-left ">
               {title && (
                 <DialogPrimitive.Title className="text-lg leading-none font-semibold">
                   {title}

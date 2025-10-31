@@ -1,4 +1,4 @@
-import { useMemo, useState } from 'react';
+import { useMemo, useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import GetPurposeMasterTableColumns from './purpose-master-table-column';
 import { PurposeData } from '@/features/admin/types/purpose.types';
@@ -9,21 +9,23 @@ import { useGetData } from '@/hooks/useGetData';
 import { API } from '@/core/constant/apis';
 import { FormTitle } from '@/features/auth/components/form-title';
 import { TableTitle } from '@/features/auth/components/table-title';
-import DynamicTabs from '@/components/remittance/dynamic-tabs';
 import CreatePurposeMasterDialog from '../form/create-purpose-master-dialog';
+import { useGetTransactionTypes } from '../hooks/useGetTransactionTypes';
 
 const PurposeMasterTablePage = () => {
   const navigate = useNavigate();
-  const { data, isLoading, error, refetch } = useGetData<PurposeData[]>({
-    endpoint: API.PURPOSE.GET_PURPOSES,
-    queryKey: ['getPurposeList'],
-  });
+  const { data: transactionTypesData, isLoading: transactionTypesLoading } = useGetTransactionTypes();
 
   const [purposes, setPurposes] = useState<PurposeData[]>([]);
-  const [activeTab, setActiveTab] = useState<string>('card');
+  const [activeTab, setActiveTab] = useState<string>('');
   const [isCreateDialogOpen, setIsCreateDialogOpen] = useState(false);
   const [isUpdateDialogOpen, setIsUpdateDialogOpen] = useState(false);
   const [selectedPurpose, setSelectedPurpose] = useState<PurposeData | null>(null);
+
+  const { data, isLoading, error, refetch } = useGetData<PurposeData[]>({
+    endpoint: API.PURPOSE.GET_PURPOSES(activeTab),
+    queryKey: ['getPurposeList', activeTab],
+  });
 
   // Transform API data to match PurposeData interface
   const formattedDataArray = useMemo(() => {
@@ -57,28 +59,6 @@ const PurposeMasterTablePage = () => {
     loading: false,
   };
 
-  // Filter data based on active tab
-  // const filteredData = useMemo(() => {
-  //   if (!formattedDataArray.length) return [];
-
-  //   switch (activeTab) {
-  //     case 'card':
-  //       return formattedDataArray.filter((item: PurposeData) =>
-  //         item.mappedTransactionTypes?.includes('card') || item.purpose_name?.toLowerCase().includes('card')
-  //       );
-  //     case 'currency':
-  //       return formattedDataArray.filter((item: PurposeData) =>
-  //         item.mappedTransactionTypes?.includes('currency') || item.purpose_name?.toLowerCase().includes('currency')
-  //       );
-  //     case 'remittance':
-  //       return formattedDataArray.filter((item: PurposeData) =>
-  //         item.mappedTransactionTypes?.includes('remittance') || item.purpose_name?.toLowerCase().includes('remittance')
-  //       );
-  //     default:
-  //       return formattedDataArray;
-  //   }
-  // }, [formattedDataArray, activeTab]);
-
   // Table data
   const tableData: TableData<PurposeData> = {
     data: formattedDataArray,
@@ -108,12 +88,42 @@ const PurposeMasterTablePage = () => {
     setActiveTab(value);
   };
 
-  // Define tabs for filtering
-  const tabs = [
-    { value: 'card', label: 'Card' },
-    { value: 'currency', label: 'Currency' },
-    { value: 'remittance', label: 'Remittance' },
-  ];
+  // Set initial active tab when transaction types are loaded (default to Remittance)
+  useEffect(() => {
+    console.log(transactionTypesData,"transactionTypesData+++++++++++")
+    if (transactionTypesData && transactionTypesData.length > 0 && !activeTab) {
+      const remittanceType = transactionTypesData.find(
+        (type: any) => type.transaction_name.toLowerCase() === 'remittance'
+      );
+      if (remittanceType) {
+        setActiveTab(remittanceType.transaction_type_id);
+      } else if (transactionTypesData.length > 0) {
+        setActiveTab(transactionTypesData[0].transaction_type_id);
+      }
+    }
+  }, [transactionTypesData, activeTab]);
+
+  // Define tabs for filtering based on transaction types from API
+  const tabs = useMemo(() => {
+    if (!transactionTypesData || !Array.isArray(transactionTypesData)) {
+      return [];
+    }
+
+    const groupedTabs = transactionTypesData.reduce((acc: any[], transaction: any) => {
+      const name = transaction.transaction_name.toLowerCase();
+
+      if (name) {
+        acc.push({
+          value: transaction.transaction_type_id,
+          label: transaction.transaction_name
+        });
+      }
+
+      return acc;
+    }, []);
+
+    return groupedTabs;
+  }, [transactionTypesData]);
 
   // Table actions
   const tableActions = {
@@ -163,7 +173,7 @@ const PurposeMasterTablePage = () => {
           tabFilters: {
             enabled: true,
             tabs: tabs,
-            defaultValue: activeTab,
+            activeTab: activeTab,
             onTabChange: handleTabChange,
           },
         }}

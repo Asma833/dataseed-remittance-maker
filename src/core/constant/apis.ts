@@ -143,7 +143,9 @@ export const API = {
     GET_MAPPED_PURPOSES_BY_ID: (id: string) => `/transaction-purpose-map/purposes/${id}`,
   },
   PURPOSE: {
-    GET_PURPOSES: `/trans-purpose-document/with-documents?transaction_type_id=3f9fbf53-057f-4cf7-90f5-5035edd2e158`,
+    GET_PURPOSES: (transactionTypeId?: string) => transactionTypeId
+      ? `/trans-purpose-document/with-documents?transaction_type_id=${transactionTypeId}`
+      : `/trans-purpose-document/with-documents`,
     UPDATE_PURPOSE: `/transaction-purpose-map/purpose-mapping/8f4a7d12-3a4c-4c3e-bad1-9a9c83a1c55b`,
     CREATE_PURPOSE: `/transaction-purpose-map/purpose-mapping`,
     TRANSACTION_MAPPING: `/transaction-purpose-map`,

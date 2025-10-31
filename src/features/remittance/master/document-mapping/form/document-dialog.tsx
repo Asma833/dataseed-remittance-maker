@@ -470,7 +470,7 @@ const DocumentDialog: React.FC<DocumentMappingTableProps> = ({
       open={isModalOpen}
       onOpenChange={setIsModalOpen}
       title={dialogTitle}
-      contentClassName="!w-[50vw] overflow-hidden"
+      contentClassName="!w-[50vw] overflow-hidden]"
     >
       <div className="dynamic-table-wrap relative">
         {/* Loading overlay */}
@@ -501,7 +501,7 @@ const DocumentDialog: React.FC<DocumentMappingTableProps> = ({
             </FormFieldRow>
           </FormContentWrapper>
         </FormProvider>
-        <div className="space-y-4">
+        <div className="space-y-2 mt-2">
           {/* <div className="flex items-center justify-between">
             <h3 className="text-lg font-semibold">Available Documents</h3>
             <div className="text-sm text-muted-foreground">
@@ -512,7 +512,7 @@ const DocumentDialog: React.FC<DocumentMappingTableProps> = ({
           <div className="max-h-96 overflow-y-auto  rounded-lg">
             <div className="divide-y divide-gray-200">
               {formattedDataArray.map((doc: any) => (
-                <div key={doc.id} className="p-4 hover:bg-muted/50 transition-colors">
+                <div key={doc.id} className="p-2 hover:bg-muted/50 transition-colors">
                   <div className="flex items-center justify-between">
                     <div className="flex items-center space-x-4">
                       <label className="flex items-center space-x-2 me-2">

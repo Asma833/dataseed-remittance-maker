@@ -100,6 +100,7 @@ export interface TableConfig {
     enabled: boolean;
     tabs: { value: string; label: string }[];
     defaultValue?: string;
+    activeTab?: string;
     onTabChange?: (value: string) => void;
   };
 
