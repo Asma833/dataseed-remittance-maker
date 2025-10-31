@@ -21,20 +21,14 @@ export const DocumentFormConfig = {
     },
     is_required: {
       name: 'is_required',
-      label: '',
+      label: 'Mandatory',
       type: FieldType.Checkbox,
-      options: {
-        is_required: { label: 'Mandatory' },
-      },
       required: false,
     },
     is_back_required: {
       name: 'is_back_required',
-      label: '',
+      label: 'Back Required',
       type: FieldType.Checkbox,
-      options: {
-        is_back_required: { label: 'Back Required' },
-      },
       required: false,
     },
   },

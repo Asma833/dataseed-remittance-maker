@@ -26,13 +26,17 @@ export const CustomCheckbox: React.FC<CustomCheckboxProps> = ({
           onChange={(e) => onChange(rowId, e.target.checked)}
           disabled={disabled}
           sx={{
-            color: 'hsl(var(--primary))',
+            color: 'var(--color-primary)',
             '&.Mui-checked': {
-              color: 'hsl(var(--primary))',
+              color: 'var(--color-primary)',
             },
             padding: '0px',
             height: '30px !important',
             width: '30px !important',
+            borderRadius: '50%',
+            '& .MuiSvgIcon-root': {
+              borderRadius: '50%',
+            },
           }}
           size="small"
         />

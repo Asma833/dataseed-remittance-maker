@@ -39,45 +39,6 @@ export const DocumentMappingTableConfig = ({
       meta: {
         className: 'text-left',
       },
-    },
-    {
-      id: 'requirement',
-      header: 'Mandatory',
-      cell: ({ row }) => (
-        <CustomCheckbox
-          rowId={row.id}
-          value={row.requirement ?? false}
-          label="Mandatory"
-          requirementType="mandatory"
-          onChange={handleMandatoryChange}
-          disabled={!row.isSelected}
-        />
-      ),
-    },
-    {
-      id: 'backRequirement',
-      header: 'Back Required',
-      cell: ({ row }) => (
-        <CustomCheckbox
-          rowId={row.id}
-          value={row.backRequirement ?? false}
-          label="Back Required"
-          requirementType="back-required"
-          onChange={handleBackMandatoryChange}
-          disabled={!row.isSelected}
-        />
-      ),
-    },
-    // {
-    //   id: 'actions',
-    //   header: 'Action',
-    //   cell: ({ row }) => (
-    //     <div className="flex flex-row items-center justify-center">
-    //       <button className="p-2 rounded-md hover:bg-muted/20" onClick={() => handleEditDocument(row)}>
-    //         <Edit className="w-5 h-5 text-muted-foreground" />
-    //       </button>
-    //     </div>
-    //   ),
-    // },
+    }
   ];
 };

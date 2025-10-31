@@ -19,6 +19,7 @@ import { DocumentFormConfig } from './document-form.config';
 import { Button } from '@/components/ui/button';
 import { PlusCircle } from 'lucide-react';
 import { GenericDialog } from '@/components/ui/generic-dialog';
+import { CustomCheckbox } from '@/components/checkbox/checkbox';
 
 interface DocumentMappingTableProps {
   isModalOpen: boolean;
@@ -29,7 +30,7 @@ interface DocumentMappingTableProps {
   setRowData: (data: any) => void;
 }
 
-const DocumentMappingTable: React.FC<DocumentMappingTableProps> = ({
+const DocumentDialog: React.FC<DocumentMappingTableProps> = ({
   isModalOpen,
   setIsModalOpen,
   dialogTitle,
@@ -463,30 +464,13 @@ const DocumentMappingTable: React.FC<DocumentMappingTableProps> = ({
     handleSaveDocuments(); // Call without specific document to process all selected
   });
 
-  const leftsideRenderAction = () => {
-    // Calculate unique mapped documents count
-    const uniqueMappedDocsCount = mappedDocuments
-      ? new Set(mappedDocuments.map((doc: any) => doc.document_id)).size
-      : 0;
-
-    return (
-      <div className="flex items-center space-x-2">
-        <p className="pl-3 font-semibold">Required Documents</p>
-        {selectedMapping && (
-          <span className="text-sm text-muted-foreground bg-blue-100 px-2 py-1 rounded">
-            {uniqueMappedDocsCount} mapped
-          </span>
-        )}
-      </div>
-    );
-  };
-
+ 
   return (
     <GenericDialog
       open={isModalOpen}
       onOpenChange={setIsModalOpen}
       title={dialogTitle}
-      contentClassName="!w-[80vw]"
+      contentClassName="!w-[50vw] overflow-hidden"
     >
       <div className="dynamic-table-wrap relative">
         {/* Loading overlay */}
@@ -503,7 +487,7 @@ const DocumentMappingTable: React.FC<DocumentMappingTableProps> = ({
 
         <FormProvider {...methods}>
           <FormContentWrapper className="mt-0 rounded-lg mr-auto bg-transparent w-full">
-            <FormFieldRow className="mt-0" rowCols={4}>
+            <FormFieldRow className="mt-0 justify-center" rowCols={2}>
               {Object.entries(config.documentField).map(([name, field]) => (
                 <FieldWrapper key={name}>
                   {getController({
@@ -517,22 +501,44 @@ const DocumentMappingTable: React.FC<DocumentMappingTableProps> = ({
             </FormFieldRow>
           </FormContentWrapper>
         </FormProvider>
-        <DataTable
-          columns={tableColumnsWithLoading}
-          data={formattedDataArray}
-          config={{
-            search: {
-              placeholder: 'Search...',
-              enabled: true,
-              searchMode: 'static' as const,
-            },
-            export: { enabled: true, fileName: 'mapped-documents.csv', includeHeaders: true },
-          }}
-          actions={tableActions}
-        />
+        <div className="space-y-4">
+          {/* <div className="flex items-center justify-between">
+            <h3 className="text-lg font-semibold">Available Documents</h3>
+            <div className="text-sm text-muted-foreground">
+              {formattedDataArray.length} documents
+            </div>
+          </div> */}
+
+          <div className="max-h-96 overflow-y-auto  rounded-lg">
+            <div className="divide-y divide-gray-200">
+              {formattedDataArray.map((doc: any) => (
+                <div key={doc.id} className="p-4 hover:bg-muted/50 transition-colors">
+                  <div className="flex items-center justify-between">
+                    <div className="flex items-center space-x-4">
+                      <label className="flex items-center space-x-2 me-2">
+                         <CustomCheckbox
+                           rowId={doc.id}
+                           value={doc.isSelected || false}
+                           label=""
+                           requirementType="select"
+                           onChange={handleSelectionChange}
+                           disabled={isTableDisabled}
+                         />
+                      </label>
+                    </div>
+                    <div className="flex-1">
+                      <div className="font-medium">{doc.name}</div>
+                    </div>
+                    
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
       </div>
     </GenericDialog>
   );
 };
 
-export default DocumentMappingTable;
+export default DocumentDialog;
