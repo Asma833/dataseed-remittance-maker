@@ -32,6 +32,7 @@ export interface TableConfig {
     placeholder?: string;
     searchMode: 'static' | 'dynamic';
     debounceMs?: number;
+    rightElement?: React.ReactNode;
   };
 
   // Filter settings

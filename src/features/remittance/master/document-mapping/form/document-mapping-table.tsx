@@ -16,8 +16,6 @@ import { queryKeys } from '@/core/constant/query-keys';
 import useGetDocByTransPurpose from '../hooks/useGetDocByTransPurpose';
 import { TransactionPurposeMap } from '../types/transaction-form.types';
 import { DocumentFormConfig } from './document-form.config';
-import { Button } from '@/components/ui/button';
-import { PlusCircle } from 'lucide-react';
 
 const DocumentMappingTable = () => {
   const { mutate, isPending: isDeleting } = useDeleteDocumentMapping();
@@ -501,17 +499,7 @@ const DocumentMappingTable = () => {
         columns={tableColumnsWithLoading}
         data={formattedDataArray}
         config={{
-          search: {
-            placeholder: 'Search...',
-            enabled: true,
-            searchMode: 'static' as const,
-            rightElement: (
-              <Button size="sm" className="ml-2">
-                <PlusCircle className="h-4 w-4 mr-2" />
-                Map New Document
-              </Button>
-            ),
-          },
+          ...config,
           export: { enabled: true, fileName: 'mapped-documents.csv', includeHeaders: true },
         }}
         actions={tableActions}
