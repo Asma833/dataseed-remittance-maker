@@ -279,14 +279,15 @@ export const agentAdminCreationSchema = z
       }),
       esignDocumentDownload: z.enum(['Yes', 'No'], { message: 'Please select an option for Esign Document Download' }),
       vkycDocumentDownload: z.enum(['Yes', 'No'], { message: 'Please select an option for VKYC Document Download' }),
-      chooseProductType: z
-        .record(z.enum(['card', 'currency', 'remittance', 'referral']), z.coerce.boolean())
-        .refine((val) => {
+      chooseProductType: z.record(z.enum(['card', 'currency', 'remittance', 'referral']), z.coerce.boolean()).refine(
+        (val) => {
           if (!val || typeof val !== 'object') return false;
-          return Object.values(val).some(v => v === true);
-        }, {
+          return Object.values(val).some((v) => v === true);
+        },
+        {
           message: 'Please select at least one product type',
-        }),
+        }
+      ),
 
       purposeTypesForCard: z
         .record(

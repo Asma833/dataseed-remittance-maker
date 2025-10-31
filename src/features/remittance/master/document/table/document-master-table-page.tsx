@@ -68,7 +68,6 @@ const DocumentMasterTablePage = () => {
 
   const handleDocumentCreated = (newDocument: DocumentData) => {
     // Handle successful document creation/editing
-    console.log('Document created/updated:', newDocument);
     // TODO: Refresh table data or update local state
     setIsDialogOpen(false);
     setSelectedDocument(null);

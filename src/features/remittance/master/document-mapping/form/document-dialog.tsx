@@ -464,7 +464,6 @@ const DocumentDialog: React.FC<DocumentMappingTableProps> = ({
     handleSaveDocuments(); // Call without specific document to process all selected
   });
 
- 
   return (
     <GenericDialog
       open={isModalOpen}
@@ -516,20 +515,19 @@ const DocumentDialog: React.FC<DocumentMappingTableProps> = ({
                   <div className="flex items-center justify-between">
                     <div className="flex items-center space-x-4">
                       <label className="flex items-center space-x-2 me-2">
-                         <CustomCheckbox
-                           rowId={doc.id}
-                           value={doc.isSelected || false}
-                           label=""
-                           requirementType="select"
-                           onChange={handleSelectionChange}
-                           disabled={isTableDisabled}
-                         />
+                        <CustomCheckbox
+                          rowId={doc.id}
+                          value={doc.isSelected || false}
+                          label=""
+                          requirementType="select"
+                          onChange={handleSelectionChange}
+                          disabled={isTableDisabled}
+                        />
                       </label>
                     </div>
                     <div className="flex-1">
                       <div className="font-medium">{doc.name}</div>
                     </div>
-                    
                   </div>
                 </div>
               ))}

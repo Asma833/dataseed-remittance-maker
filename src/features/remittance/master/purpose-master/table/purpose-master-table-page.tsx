@@ -90,7 +90,7 @@ const PurposeMasterTablePage = () => {
 
   // Set initial active tab when transaction types are loaded (default to Remittance)
   useEffect(() => {
-    console.log(transactionTypesData,"transactionTypesData+++++++++++")
+    console.log(transactionTypesData, 'transactionTypesData+++++++++++');
     if (transactionTypesData && transactionTypesData.length > 0 && !activeTab) {
       const remittanceType = transactionTypesData.find(
         (type: any) => type.transaction_name.toLowerCase() === 'remittance'
@@ -115,7 +115,7 @@ const PurposeMasterTablePage = () => {
       if (name) {
         acc.push({
           value: transaction.transaction_type_id,
-          label: transaction.transaction_name
+          label: transaction.transaction_name,
         });
       }
 

@@ -37,7 +37,10 @@ export const SideNavOptions = {
           subMenus: [
             {
               title: 'Agent Admin Creation',
-              path: getNavPath('BRANCH_AGENT_CHECKER',ROUTES.BRANCH_AGENT_CHECKER.USER_MANAGEMENT.AGENT_ADMIN_CREATION),
+              path: getNavPath(
+                'BRANCH_AGENT_CHECKER',
+                ROUTES.BRANCH_AGENT_CHECKER.USER_MANAGEMENT.AGENT_ADMIN_CREATION
+              ),
             },
           ],
         },

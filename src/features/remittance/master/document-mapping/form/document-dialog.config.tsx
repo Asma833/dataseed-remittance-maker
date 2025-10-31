@@ -39,6 +39,6 @@ export const DocumentMappingTableConfig = ({
       meta: {
         className: 'text-left',
       },
-    }
+    },
   ];
 };

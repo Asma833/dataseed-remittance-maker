@@ -55,7 +55,7 @@ const GetAgentListTableColumns = ({
         cellAlign: 'left',
       },
     },
-    
+
     {
       id: 'rm_name',
       header: 'RM',

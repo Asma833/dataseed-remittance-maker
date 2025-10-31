@@ -214,7 +214,7 @@ const DocumentMappingTable = () => {
       },
     });
   };
- 
+
   const handleSelectionChange = (rowId: string, isSelected: boolean) => {
     // Prevent interaction if already processing a selection
     if (isProcessingSelection || isSavingDocument || isUpdatingDocument || isDeleting) {
@@ -484,10 +484,14 @@ const DocumentMappingTable = () => {
             enabled: true,
             searchMode: 'static' as const,
             rightElement: (
-              <Button size="sm" className="ml-2" onClick={() => {
-                reset();
-                setIsModalOpen(true);
-              }}>
+              <Button
+                size="sm"
+                className="ml-2"
+                onClick={() => {
+                  reset();
+                  setIsModalOpen(true);
+                }}
+              >
                 <PlusCircle className="h-4 w-4 mr-2" />
                 Map New Document
               </Button>

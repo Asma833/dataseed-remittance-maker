@@ -8,7 +8,6 @@ import { HolidayCreationDialog } from '../form/HolidayCreationDialog';
 import { HolidayListTableColumnConfig } from './holiday-list-table-column.config';
 import { useGetHolidays } from '../hooks/useHolidays';
 
-
 const HolidayTable = () => {
   const { data: apiHolidays, isLoading, error } = useGetHolidays();
   const [holidays, setHolidays] = useState<HolidayData[]>([]);

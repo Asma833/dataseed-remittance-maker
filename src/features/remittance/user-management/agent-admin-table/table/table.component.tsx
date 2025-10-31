@@ -19,7 +19,9 @@ const AgentAdminTable = () => {
   // Navigate to agent admin creation page
   const handleAddAdminAgents = () => {
     navigate(
-      getNavPath(userRole?.toUpperCase() as 'ADMIN' | 'BRANCH_AGENT_CHECKER', `/user-management/agent-admin/agent-admin-creation`
+      getNavPath(
+        userRole?.toUpperCase() as 'ADMIN' | 'BRANCH_AGENT_CHECKER',
+        `/user-management/agent-admin/agent-admin-creation`
       )
     );
   };

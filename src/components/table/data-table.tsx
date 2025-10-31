@@ -542,7 +542,7 @@ export function DataTable<T>({
                       <SearchIcon className="absolute right-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-[var(--color-title)] pointer-events-none" />
                     )}
                   </div>
-                )}               
+                )}
                 {config.export?.enabled && (
                   <TooltipButton
                     variant="outline"
