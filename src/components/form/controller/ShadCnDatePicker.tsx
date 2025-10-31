@@ -61,14 +61,26 @@ export const ShadCnDatePicker = ({
                     )}
                     disabled={disabled}
                   >
-                    {field.value ? format(new Date(field.value), 'PPP') : <span>{placeholder}</span>}
+                    {field.value ? (() => {
+                      try {
+                        return format(new Date(field.value), 'PPP');
+                      } catch (error) {
+                        return <span>{placeholder}</span>;
+                      }
+                    })() : <span>{placeholder}</span>}
                     <CalendarIcon className="h-4 w-4" />
                   </Button>
                 </PopoverTrigger>
                 <PopoverContent className="w-auto p-0" align="start">
                   <Calendar
                     mode="single"
-                    selected={field.value ? new Date(field.value) : undefined}
+                    selected={field.value ? (() => {
+                      try {
+                        return new Date(field.value);
+                      } catch (error) {
+                        return undefined;
+                      }
+                    })() : undefined}
                     onSelect={(selectedDate) => {
                       setDate(selectedDate);
                       field.onChange(selectedDate?.toISOString());
@@ -76,7 +88,13 @@ export const ShadCnDatePicker = ({
                     }}
                     className="rounded-md border p-2"
                     captionLayout="dropdown-years"
-                    defaultMonth={field.value ? new Date(field.value) : new Date()}
+                    defaultMonth={field.value ? (() => {
+                      try {
+                        return new Date(field.value);
+                      } catch (error) {
+                        return new Date();
+                      }
+                    })() : new Date()}
                     startMonth={new Date(1940, 6)}
                     endMonth={new Date(2080, 6)}
                     components={{
