@@ -68,7 +68,7 @@ export const CreateBranchAgent = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const branchAgent = location.state?.branchAgent;
-  const { agents } = useGetAgents();
+  const { agents }: { agents: Agent[] } = useGetAgents();
   const { data: branchAgents } = useGetBranchAgents();
   const { getUserRole } = useCurrentUser();
   const userRole = getUserRole();

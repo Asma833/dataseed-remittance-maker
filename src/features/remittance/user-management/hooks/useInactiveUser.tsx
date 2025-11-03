@@ -1,5 +1,6 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { activeInactiveApi } from '../api/activeInactive';
+import { toast } from 'sonner';
 
 export const useInactiveUser = () => {
   const queryClient = useQueryClient();

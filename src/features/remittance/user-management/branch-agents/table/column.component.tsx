@@ -64,6 +64,18 @@ const GetBranchAgentTableColumns = ({
         cellAlign: 'left',
       },
     },
+  {
+      id: 'is_active',
+      header: 'Status',
+      accessorKey: 'is_active',
+      sortable: true,
+      filterable: true,
+      cell: ({ value }) => <StatusBadge status={value ? 'Active' : 'Inactive'} />,
+      meta: {
+        headerAlign: 'center',
+        cellAlign: 'center',
+      },
+    },
     {
       id: 'action',
       header: 'Action',
