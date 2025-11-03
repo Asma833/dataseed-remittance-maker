@@ -1,7 +1,5 @@
+import { ClipboardList, Eye } from 'lucide-react';
 import { ROUTES, getNavPath } from './route-paths';
-import profile from '@/assets/icons/profile.svg';
-import master from '@/assets/icons/master.svg';
-import { UserCheck, UserCog, Users, TrendingUp, Target, FileText, Link } from 'lucide-react';
 // Navigation item type definition
 export interface NavigationItem {
   title: string;
@@ -13,24 +11,21 @@ export interface NavigationItem {
 
 // User role navigation configurations
 export const SideNavOptions = {
-  maker: [
+ maker: [
     {
-      title: 'Master Data',
-      path: '/maker/master',
-      icon: master,
-      subMenus: [
-        {
-          title: 'Rate Master',
-          path: '/maker/master/rate-master/rate-margin',
-          icon: TrendingUp,
-          subMenus: [
-            { title: 'Remittance', path: '/maker/master/rate-master/remittance', icon: TrendingUp },
-            { title: 'Holiday List', path: '/maker/master/rate-master/holiday-list', icon: TrendingUp },
-            { title: 'Live Rates', path: '/maker/master/rate-master/live-rates', icon: TrendingUp },
-          ],
-        },
-       
-      ],
+      title: 'Create Transaction',
+      path: getNavPath('MAKER', ROUTES.MAKER.CREATE_TRANSACTION),
+      icon: ClipboardList,
+    },
+    {
+      title: 'View Status',
+      path: getNavPath('MAKER', ROUTES.MAKER.VIEW_STATUS),
+      icon: Eye,
+    },
+    {
+      title: 'Transaction',
+      //path: getNavPath('MAKER', ROUTES.MAKER.TRANSACTION.DEAL_BOOKING),
+      icon: Eye,
     },
   ] as NavigationItem[],
 };
