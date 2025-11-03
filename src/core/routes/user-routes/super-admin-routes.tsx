@@ -1,13 +1,13 @@
 import { Routes, Route } from 'react-router-dom';
-import { adminRoutes } from '../routes';
+import { superAdminRoutes } from '../routes';
 import { ProtectedRoute } from '../protected-routes';
 import SidebarLayout from '@/components/layout/sidebar-layout';
 import NotFoundPage from '@/components/common/not-found-page';
 
-export const AdminRoutes = () => {
+export const SuperAdminRoutes = () => {
   return (
     <Routes>
-      {adminRoutes.map(({ path, element: Element, roles, permission, subRoutes }) => {
+      {superAdminRoutes.map(({ path, element: Element, roles, permission, subRoutes }) => {
         // Make child paths relative to /admin/*
         const normalizedPath = path.replace(/^\//, '');
 

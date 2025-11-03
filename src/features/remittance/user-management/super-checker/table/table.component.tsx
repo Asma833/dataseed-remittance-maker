@@ -55,7 +55,7 @@ const SuperCheckerTable = () => {
   };
 
   const handleEdit = (superChecker: SuperCheckerData) => {
-    navigateWithRole(navigate, userRole, ROUTES.ADMIN.USER_MANAGEMENT.SUPER_CHECKER_CREATION, { superChecker });
+    navigateWithRole(navigate, userRole, `/user-management/super-checker-table/super-checker-creation`, { superChecker });
   };
 
   const handleInacivate = async (superChecker: SuperCheckerData) => {
@@ -79,7 +79,7 @@ const SuperCheckerTable = () => {
 
   // Navigate to super checker creation page
   const handleAddSuperChecker = () => {
-    navigateWithRole(navigate, userRole, ROUTES.ADMIN.USER_MANAGEMENT.SUPER_CHECKER_CREATION);
+    navigateWithRole(navigate, userRole, `/user-management/super-checker-table/super-checker-creation`);
   };
   // Define columns matching the screenshot
   const columns = GetSuperCheckerTableColumns({

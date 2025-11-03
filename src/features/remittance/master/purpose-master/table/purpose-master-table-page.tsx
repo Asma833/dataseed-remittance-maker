@@ -13,10 +13,7 @@ import CreatePurposeMasterDialog from '../form/create-purpose-master-dialog';
 import { useGetTransactionTypes } from '../hooks/useGetTransactionTypes';
 
 const PurposeMasterTablePage = () => {
-  const navigate = useNavigate();
   const { data: transactionTypesData, isLoading: transactionTypesLoading } = useGetTransactionTypes();
-
-  const [purposes, setPurposes] = useState<PurposeData[]>([]);
   const [activeTab, setActiveTab] = useState<string>('');
   const [isCreateDialogOpen, setIsCreateDialogOpen] = useState(false);
   const [isUpdateDialogOpen, setIsUpdateDialogOpen] = useState(false);
@@ -36,7 +33,7 @@ const PurposeMasterTablePage = () => {
       purpose_code: item.purpose_code,
       purpose_name: item.purpose_name,
       transaction_type_id: item.transaction_type_id,
-      mapped_documents: item.documents?.map((doc: any) => doc.display_name) || [],
+      mapped_documents: item.documents?.map((doc: any) => doc.name) || [],
     }));
   }, [data]);
 

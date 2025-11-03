@@ -19,86 +19,44 @@ import AdminAgentList from '@/features/remittance/user-management/agent-admin-ta
 import AgentAdminCreation from '@/features/remittance/user-management/agent-admin-table/form/agent-admin-creation';
 import DocumentMappingTable from '@/features/remittance/master/document-mapping/table/document-mapping-table';
 
-const baseRole = ROLES.ADMIN; // Admin routes are accessible to admin role
+const baseRole = ROLES.SUPER_ADMIN; // Admin routes are accessible to admin role
 
-export const adminRoutes: RouteConfig[] = [
+export const superAdminRoutes: RouteConfig[] = [
   {
-    path: ROUTES.ADMIN.USER_MANAGEMENT.AGENT_ADMIN,
+    path: ROUTES.SUPER_ADMIN.USER_MANAGEMENT.AGENT_ADMIN,
     element: AdminAgentList,
     roles: [baseRole],
-    permission: 'admin',
+    permission: 'super_admin',
   },
   {
-    path: ROUTES.ADMIN.USER_MANAGEMENT.AGENT_ADMIN_CREATION,
+    path: ROUTES.SUPER_ADMIN.USER_MANAGEMENT.AGENT_ADMIN_CREATION,
     element: AgentAdminCreation,
     roles: [baseRole],
-    permission: 'admin',
+    permission: 'super_admin',
   },
   {
-    path: ROUTES.ADMIN.AGENT_ADMIN_CREATION_STEPS.BASIC_INFO,
-    element: AgentAdminCreation,
-    roles: [baseRole],
-    permission: 'admin',
-  },
-  {
-    path: ROUTES.ADMIN.AGENT_ADMIN_CREATION_STEPS.COMPANY_DETAILS,
-    element: AgentAdminCreation,
-    roles: [baseRole],
-    permission: 'admin',
-  },
-  {
-    path: ROUTES.ADMIN.AGENT_ADMIN_CREATION_STEPS.FINANCE_DETAILS,
-    element: AgentAdminCreation,
-    roles: [baseRole],
-    permission: 'admin',
-  },
-  {
-    path: ROUTES.ADMIN.AGENT_ADMIN_CREATION_STEPS.DOCUMENTS,
-    element: AgentAdminCreation,
-    roles: [baseRole],
-    permission: 'admin',
-  },
-  {
-    path: ROUTES.ADMIN.AGENT_ADMIN_CREATION_STEPS.PRODUCT_PURPOSE,
-    element: AgentAdminCreation,
-    roles: [baseRole],
-    permission: 'admin',
-  },
-  {
-    path: ROUTES.ADMIN.AGENT_ADMIN_CREATION_STEPS.COMMISSION,
-    element: AgentAdminCreation,
-    roles: [baseRole],
-    permission: 'admin',
-  },
-  {
-    path: ROUTES.ADMIN.AGENT_ADMIN_CREATION_STEPS.CORPORATE_ONBOARDING,
-    element: AgentAdminCreation,
-    roles: [baseRole],
-    permission: 'admin',
-  },
-  {
-    path: ROUTES.ADMIN.USER_MANAGEMENT.SUPER_CHECKER_TABLE,
+    path: ROUTES.SUPER_ADMIN.USER_MANAGEMENT.SUPER_CHECKER_TABLE,
     element: SuperCheckerTablePage,
     roles: [baseRole],
-    permission: 'admin',
+    permission: 'super_admin',
   },
   {
-    path: ROUTES.ADMIN.USER_MANAGEMENT.SUPER_CHECKER_CREATION,
+    path: ROUTES.SUPER_ADMIN.USER_MANAGEMENT.SUPER_CHECKER_CREATION,
     element: CreateSuperChecker,
     roles: [baseRole],
-    permission: 'admin',
+    permission: 'super_admin',
   },
   {
-    path: ROUTES.ADMIN.USER_MANAGEMENT.BRANCH_AGENTS,
+    path: ROUTES.SUPER_ADMIN.USER_MANAGEMENT.BRANCH_AGENTS,
     element: BranchAgentsPage,
     roles: [baseRole],
-    permission: 'admin',
+    permission: 'super_admin',
   },
   {
-    path: ROUTES.ADMIN.USER_MANAGEMENT.BRANCH_AGENT_CREATION,
+    path: ROUTES.SUPER_ADMIN.USER_MANAGEMENT.BRANCH_AGENT_CREATION,
     element: CreateBranchAgent,
     roles: [baseRole],
-    permission: 'admin',
+    permission: 'super_admin',
   },
   {
     path: '/master/*',
@@ -107,31 +65,31 @@ export const adminRoutes: RouteConfig[] = [
     permission: '',
     subRoutes: [
       // {
-      //   path: ROUTES.ADMIN.MASTER.RATE_MASTER.CARD,
+      //   path: ROUTES.SUPER_ADMIN.MASTER.RATE_MASTER.CARD,
       //   label: 'Card',
       //   element: Card,
       //   permission: '',
       // },
       // {
-      //   path: ROUTES.ADMIN.MASTER.RATE_MASTER.CURRENCY,
+      //   path: ROUTES.SUPER_ADMIN.MASTER.RATE_MASTER.CURRENCY,
       //   label: 'Currency',
       //   element: Currency,
       //   permission: '',
       // },
       {
-        path: ROUTES.ADMIN.MASTER.RATE_MASTER.REMITTANCE,
+        path: ROUTES.SUPER_ADMIN.MASTER.RATE_MASTER.REMITTANCE,
         label: 'Remittance',
         element: Remittance,
         permission: '',
       },
       {
-        path: ROUTES.ADMIN.MASTER.RATE_MASTER.LIVE_RATES,
+        path: ROUTES.SUPER_ADMIN.MASTER.RATE_MASTER.LIVE_RATES,
         label: 'Live Rates',
         element: LiveRates,
         permission: '',
       },
       {
-        path: ROUTES.ADMIN.MASTER.RATE_MASTER.HOLIDAY_LIST,
+        path: ROUTES.SUPER_ADMIN.MASTER.RATE_MASTER.HOLIDAY_LIST,
         label: 'Holiday List',
         element: HolidayList,
         permission: '',
@@ -139,36 +97,36 @@ export const adminRoutes: RouteConfig[] = [
     ],
   },
   {
-    path: ROUTES.ADMIN.MASTER.DOCUMENT_MASTER,
+    path: ROUTES.SUPER_ADMIN.MASTER.DOCUMENT_MASTER,
     element: DocumentMasterTablePage,
     roles: [baseRole],
-    permission: 'admin',
+    permission: 'super_admin',
   },
   {
-    path: ROUTES.ADMIN.MASTER.PURPOSE_MASTER,
+    path: ROUTES.SUPER_ADMIN.MASTER.PURPOSE_MASTER,
     element: PurposeMasterTablePage,
     roles: [baseRole],
-    permission: 'admin',
+    permission: 'super_admin',
   },
   {
-    path: ROUTES.ADMIN.MASTER.CREATE_PURPOSE_MASTER,
+    path: ROUTES.SUPER_ADMIN.MASTER.CREATE_PURPOSE_MASTER,
     element: CreatePurposeMasterPage,
     roles: [baseRole],
-    permission: 'admin',
+    permission: 'super_admin',
   },
   {
-    path: ROUTES.ADMIN.MASTER.UPDATE_PURPOSE_MASTER,
+    path: ROUTES.SUPER_ADMIN.MASTER.UPDATE_PURPOSE_MASTER,
     element: CreatePurposeMasterPage,
     roles: [baseRole],
-    permission: 'admin',
+    permission: 'super_admin',
   },
   {
-    path: ROUTES.ADMIN.MASTER.DOCUMENT_MAPPING,
+    path: ROUTES.SUPER_ADMIN.MASTER.DOCUMENT_MAPPING,
     element: DocumentMappingTable,
     roles: [baseRole],
-    permission: 'admin',
+    permission: 'super_admin',
   },
 ];
 export const getAdminTransactionTabs = () => {
-  return getTabsFromRoute('/master/*', adminRoutes);
+  return getTabsFromRoute('/master/*', superAdminRoutes);
 };

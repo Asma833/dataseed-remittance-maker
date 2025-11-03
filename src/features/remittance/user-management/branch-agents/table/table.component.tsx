@@ -8,7 +8,6 @@ import { PlusCircle, UploadIcon } from 'lucide-react';
 import { TableTitle } from '@/features/auth/components/table-title';
 import { useGetBranchAgents } from '../../hooks/useGetBranchAgents';
 import { useInactiveUser } from '../../hooks/useInactiveUser';
-import { ROUTES } from '@/core/constant/route-paths';
 import { useCurrentUser } from '@/utils/getUserFromRedux';
 import { navigateWithRole } from '@/utils/navigationUtils';
 

@@ -43,8 +43,8 @@ const GetCorporateOnboardingColumns = ({
       },
     },
     {
-      id: 'entityType',
-      accessorKey: 'entityType',
+      id: 'entity_type',
+      accessorKey: 'entity_type',
       header: 'Entity Type',
       sortable: true,
       filterable: true,
