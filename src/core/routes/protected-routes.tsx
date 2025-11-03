@@ -1,3 +1,4 @@
+import React from 'react';
 import { Navigate, useLocation } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import { createSelector } from '@reduxjs/toolkit';
@@ -12,6 +13,8 @@ interface ProtectedRouteProps {
   roles?: string[];
   permission?: string;
 }
+
+type ProtectedRouteComponent = (props: ProtectedRouteProps) => React.ReactElement | null;
 
 const selectAuth = (state: RootState) => state.auth;
 
@@ -32,7 +35,7 @@ const publicPaths = [
 
 const defaultAllowedRoles = Object.values(ROLES);
 
-export const ProtectedRoute: React.FC<ProtectedRouteProps> = ({
+export const ProtectedRoute: ProtectedRouteComponent = ({
   children,
   allowedRoles = [],
   roles = defaultAllowedRoles,
@@ -62,23 +65,23 @@ export const ProtectedRoute: React.FC<ProtectedRouteProps> = ({
 
   // If it's a public route or has a wildcard role, allow access without authentication
   if (isPublicPath || isWildcardRole) {
-    return <>{children}</>;
+    return React.createElement(React.Fragment, null, children);
   }
 
   if (isLoading) {
-    return <LoadingFallback />;
+    return React.createElement(LoadingFallback);
   }
 
   if (!isAuthenticated || !user) {
-    return <Navigate to="/login" replace />;
+    return React.createElement(Navigate, { to: "/login", replace: true });
   }
 
   // Check if user has required role
   const hasRequiredRole =
     requiredRoles.length === 0 || (user.roles && requiredRoles.includes(user.roles[0]?.role_name));
   if (!hasRequiredRole) {
-    return <Navigate to="/unauthorized" replace />;
+    return React.createElement(Navigate, { to: "/unauthorized", replace: true });
   }
 
-  return <>{children}</>;
+  return React.createElement(React.Fragment, null, children);
 };

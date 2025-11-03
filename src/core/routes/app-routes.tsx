@@ -1,4 +1,4 @@
-import { useMemo } from 'react';
+import React, { useMemo } from 'react';
 import { Routes, Route, Navigate } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import { publicRoutes } from './routes';
@@ -8,7 +8,8 @@ import { RootState } from '@/store';
 import NotFoundPage from '@/components/common/not-found-page';
 import UnauthorizedPage from '@/components/common/unauthorize-page';
 import { ProtectedRoute } from './protected-routes';
-import { SuperAdminRoutes } from './user-routes/super-admin-routes';
+import { AgentMakerRoutes } from './user-routes/agent-maker-routes';
+import LoadingFallback from '@/components/loader/LoadingFallback';
 
 export const AppRoutes = () => {
   const selectUser = useMemo(() => (state: RootState) => state.auth.user, []);
@@ -19,14 +20,14 @@ export const AppRoutes = () => {
   return (
     <Routes>
       {publicRoutes.map(({ path, element: Element }) => (
-        <Route key={path} path={path} element={<Element />} />
+        <Route key={path} path={path} element={React.createElement(Element)} />
       ))}
       <Route
-        path="/super_admin/*"
+        path="/maker/*"
         element={
-          <ProtectedRoute>
-            <SuperAdminRoutes />
-          </ProtectedRoute>
+          // <ProtectedRoute>
+            <AgentMakerRoutes />
+          // </ProtectedRoute>
         }
       />
       <Route path="/" element={<Navigate to={getDefaultRoute(user?.roles[0]?.role_name as UserRole)} replace />} />
