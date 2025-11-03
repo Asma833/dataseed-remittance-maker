@@ -13,80 +13,23 @@ export interface NavigationItem {
 
 // User role navigation configurations
 export const SideNavOptions = {
-  super_admin: [
-    {
-      title: 'User Management',
-      path: '/super_admin/user-management',
-      icon: profile,
-      subMenus: [
-        {
-          title: 'Super Checker',
-          path: getNavPath('SUPER_ADMIN', ROUTES.SUPER_ADMIN.USER_MANAGEMENT.SUPER_CHECKER_TABLE),
-          icon: UserCheck,
-          subMenus: [
-            {
-              title: 'Super Checker Creation',
-              path: getNavPath('SUPER_ADMIN', ROUTES.SUPER_ADMIN.USER_MANAGEMENT.SUPER_CHECKER_CREATION),
-              icon: UserCheck,
-            },
-          ],
-        },
-        {
-          title: 'Agent Admin',
-          path: getNavPath('SUPER_ADMIN', ROUTES.SUPER_ADMIN.USER_MANAGEMENT.AGENT_ADMIN),
-          icon: UserCog,
-          subMenus: [
-            {
-              title: 'Agent Admin Creation',
-              path: getNavPath('SUPER_ADMIN', ROUTES.SUPER_ADMIN.USER_MANAGEMENT.AGENT_ADMIN_CREATION),
-              icon: UserCog,
-            },
-          ],
-        },
-        {
-          title: 'Branch Agents',
-          path: getNavPath('SUPER_ADMIN', ROUTES.SUPER_ADMIN.USER_MANAGEMENT.BRANCH_AGENTS),
-          icon: Users,
-          subMenus: [
-            {
-              title: 'Branch Agent Creation',
-              path: getNavPath('SUPER_ADMIN', ROUTES.SUPER_ADMIN.USER_MANAGEMENT.BRANCH_AGENT_CREATION),
-              icon: Users,
-            },
-          ],
-        },
-      ],
-    },
+  maker: [
     {
       title: 'Master Data',
-      path: '/super_admin/master',
+      path: '/maker/master',
       icon: master,
       subMenus: [
         {
           title: 'Rate Master',
-          path: '/super_admin/master/rate-master/rate-margin',
+          path: '/maker/master/rate-master/rate-margin',
           icon: TrendingUp,
           subMenus: [
-            { title: 'Remittance', path: '/super_admin/master/rate-master/remittance', icon: TrendingUp },
-            { title: 'Holiday List', path: '/super_admin/master/rate-master/holiday-list', icon: TrendingUp },
-            { title: 'Live Rates', path: '/super_admin/master/rate-master/live-rates', icon: TrendingUp },
+            { title: 'Remittance', path: '/maker/master/rate-master/remittance', icon: TrendingUp },
+            { title: 'Holiday List', path: '/maker/master/rate-master/holiday-list', icon: TrendingUp },
+            { title: 'Live Rates', path: '/maker/master/rate-master/live-rates', icon: TrendingUp },
           ],
         },
-        {
-          title: 'Purpose Master',
-          path: getNavPath('SUPER_ADMIN', ROUTES.SUPER_ADMIN.MASTER.PURPOSE_MASTER),
-          icon: Target,
-        },
-        {
-          title: 'Document Master',
-          path: getNavPath('SUPER_ADMIN', ROUTES.SUPER_ADMIN.MASTER.DOCUMENT_MASTER),
-          icon: FileText,
-        },
-        {
-          title: 'Document Mapping',
-          path: getNavPath('SUPER_ADMIN', ROUTES.SUPER_ADMIN.MASTER.DOCUMENT_MAPPING),
-          icon: Link,
-        },
+       
       ],
     },
   ] as NavigationItem[],

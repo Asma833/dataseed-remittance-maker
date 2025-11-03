@@ -2,7 +2,7 @@ import { Role } from '@/types/enums';
 
 export type Permission = 'view_dashboard' | 'manage_agents' | 'view_transactions' | 'approve_transactions';
 
-export type UserRole = 'super_admin' | 'maker' | 'checker';
+export type UserRole = 'maker' ;
 
 export interface User {
   id: string;

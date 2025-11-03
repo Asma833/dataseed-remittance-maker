@@ -4,7 +4,7 @@ import { ProtectedRoute } from '../protected-routes';
 import SidebarLayout from '@/components/layout/sidebar-layout';
 import NotFoundPage from '@/components/common/not-found-page';
 
-export const SuperAdminRoutes = () => {
+export const AgentMakerRoutes = () => {
   return (
     <Routes>
       {superAdminRoutes.map(({ path, element: Element, roles, permission, subRoutes }) => {
