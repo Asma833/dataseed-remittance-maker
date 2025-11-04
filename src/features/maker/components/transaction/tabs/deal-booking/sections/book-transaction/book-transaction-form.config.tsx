@@ -5,6 +5,7 @@ export const bookTransactionConfig = {
   sectionTitle: 'Book Transaction',
   fields: {
     transactionType: {
+      name:'transactionType',
       label: 'Transaction Type',
       type: FieldType.Select,
       required: true,
@@ -16,6 +17,7 @@ export const bookTransactionConfig = {
       isMulti: false,
     },
     purpose: {
+      name:'purpose',
       label: 'Purpose',
       type: FieldType.Select,
       required: true,
@@ -30,6 +32,7 @@ export const bookTransactionConfig = {
       isMulti: false,
     },
     fxCurrency: {
+      name:'fxCurrency',
       label: 'Fx Currency',
       type: FieldType.Select,
       required: true,
@@ -44,6 +47,7 @@ export const bookTransactionConfig = {
       isMulti: false,
     },
     fxAmount: {
+      name:'fxAmount',
       label: 'Fx Amount',
       type: FieldType.Text,
       required: false,
@@ -56,6 +60,7 @@ export const bookTransactionConfig = {
       },
     },
     niumSettlementRate: {
+      name:'niumSettlementRate',
       label: 'Nium Settlement Rate',
       type: FieldType.Text,
       required: false,
@@ -69,6 +74,7 @@ export const bookTransactionConfig = {
       },
     },
     addMargins: {
+      name:'addMargins',
       label: 'Add Margins',
       type: FieldType.Text,
       required: false,
@@ -89,6 +95,7 @@ export const bookTransactionConfig = {
       },
     },
     customerRate: {
+      name:'customerRate',
       label: 'Customer Rate',
       type: FieldType.Text,
       required: false,
@@ -102,6 +109,7 @@ export const bookTransactionConfig = {
       },
     },
     nostroCharges: {
+      name:'nostroCharges',
       label: 'Nostro Charges',
       type: FieldType.Text,
       required: false,

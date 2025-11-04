@@ -1,3 +1,4 @@
+import * as React from 'react';
 import { useState } from 'react';
 import { Controller, useFormContext } from 'react-hook-form';
 import { Calendar } from '@/components/ui/calendar';
@@ -9,6 +10,8 @@ import { CalendarIcon } from 'lucide-react';
 import { format } from 'date-fns';
 import { DropdownNavProps, DropdownProps } from 'react-day-picker';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+
+
 
 interface ShadCnDatePickerProps {
   name: string;
@@ -52,10 +55,10 @@ export const ShadCnDatePicker = ({
             <div>
               <Popover>
                 <PopoverTrigger asChild>
-                  <Button
-                    variant="outline"
+                  <button
+                    type="button"
                     className={cn(
-                      'w-full justify-between text-left font-normal form-input shadow-none',
+                      'p-2 inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium transition-[color,box-shadow] disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg:not([class*="size-"])]:size-4 [&_svg]:shrink-0 outline-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] dark:bg-[var(--color-black)] cursor-pointer border border-input bg-background shadow-xs hover:bg-accent hover:text-accent-foreground w-full justify-between text-left font-normal form-input shadow-none',
                       !field.value && 'text-muted-foreground',
                       fieldState.error && 'border-destructive focus:ring-destructive'
                     )}
@@ -73,7 +76,7 @@ export const ShadCnDatePicker = ({
                       <span>{placeholder}</span>
                     )}
                     <CalendarIcon className="h-4 w-4" />
-                  </Button>
+                  </button>
                 </PopoverTrigger>
                 <PopoverContent className="w-auto p-0" align="start">
                   <Calendar

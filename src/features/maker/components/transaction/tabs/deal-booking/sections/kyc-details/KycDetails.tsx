@@ -1,12 +1,12 @@
 
 import { Control, FieldErrors, FieldValues,FormProvider } from 'react-hook-form';
-import Spacer from '@/components/form/wrapper/Spacer';
+import Spacer from '@/components/form/wrapper/spacer';
 import kycDetailsConfig from './kyc-detailsform-config';
-import Button from '@mui/material/Button';
 import { FormContentWrapper } from '@/components/form/wrapper/form-content-wrapper';
 import FormFieldRow from '@/components/form/wrapper/form-field-row';
 import FieldWrapper from '@/components/form/wrapper/field-wrapper';
 import { getController } from '@/components/form/utils/get-controller';
+import { Button } from '@/components/ui/button';
 
 interface KycDetailsProps {
   control: Control<any>;
@@ -49,8 +49,8 @@ const KycDetails = ({ control, errors }: KycDetailsProps) => {
                   {getController({ ...field, name, control, errors })}
                 </FieldWrapper>
               ))}
-              <div className="my-1">
-              <Button type="button" onClick={handleValidatePan} variant="contained" className="!capitalize w-64">
+              <div className="flex items-center md:pt-5">
+              <Button type="button" onClick={handleValidatePan} variant="secondary" className="!capitalize">
                           Validate PAN Details
               </Button>
               </div>

@@ -1,13 +1,14 @@
 import { useState } from 'react';
 import { FieldValues, FormProvider } from 'react-hook-form';
 import { kycDetailsSchema } from './sections/kyc-details/kyc-details.schema';
-import Button from '@mui/material/Button';
+
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import BookTransaction from './sections/book-transaction/BookTransaction';
 import KycDetails from './sections/kyc-details/KycDetails';
 import SourceOfEducation from './sections/source-of-funds/SourceOfEducation';
 import { DialogWrapper } from '@/components/common/dialog-wrapper';
+import { Button } from '@/components/ui/button';
 
 const defaultValues = {
   transactionType: '',
@@ -72,24 +73,19 @@ const DealBooking = () => {
         )}
        
        <div className="mt-16 flex flex-col items-center gap-10"> 
-          <div className="flex justify-center gap-6 flex-wrap">
-            <Button type="button" onClick={handleValidateAll} variant="contained" className="!capitalize w-64"> 
-              Next 
-            </Button> 
-            <Button type="button" onClick={handlePaymentSuccess} variant="contained" className="!capitalize w-64"> 
+          <div className="flex justify-center gap-1 flex-wrap">
+              <Button type="button" onClick={handleCancel} variant="light" className="!capitalize"> 
+              Cancel 
+            </Button>
+            <Button type="button" onClick={handlePaymentSuccess} variant="secondary" className="!capitalize"> 
               Confirm Booking 
             </Button> 
-            <Button type="button" onClick={handleCancel} variant="contained" className="!capitalize w-64"> 
-              Cancel 
-            </Button> 
-          </div>
-          <div className="flex justify-center gap-6">
-            <Button type="button" onClick={handleShareTransactionDetails} variant="contained" className="!capitalize w-64"> 
+              <Button type="button" onClick={handleShareTransactionDetails} variant="secondary" className="!capitalize"> 
               Share Transaction Details PDF 
             </Button> 
-            <Button type="button" onClick={handlePayment} variant="contained" className="!capitalize w-64"> 
+              <Button type="button" onClick={handlePayment} variant="secondary" className="!capitalize"> 
               Payment 
-            </Button> 
+            </Button>
           </div>
         </div>
       </FormProvider>

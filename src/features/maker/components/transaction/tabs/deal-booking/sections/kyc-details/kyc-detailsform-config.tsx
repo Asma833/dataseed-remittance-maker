@@ -6,7 +6,8 @@ const kycDetailsConfig = {
   sectionTitle: 'KYC Details',
   fields: {
     applicantName: {
-      label: 'Applicant Name*',
+      name:'applicantName',
+      label: 'Applicant Name',
       type: FieldType.Text,
       required: true,
       placeholder: 'Enter Applicant Name',
@@ -15,7 +16,8 @@ const kycDetailsConfig = {
       },
     },
     applicantPanNumber: {
-      label: 'Applicant PAN Number*',
+      name:'applicantPanNumber',
+      label: 'Applicant PAN Number',
       type: FieldType.Text,
       required: true,
       placeholder: 'Enter PAN Number',
@@ -28,39 +30,29 @@ const kycDetailsConfig = {
       },
     },
     applicantDob: {
-      label: 'Applicant DOB*',
+      name:'applicantDob',
+      label: 'Applicant DOB',
       type: FieldType.Date,
       required: true,
       placeholder: 'Select Date of Birth',
-      validation: {
-        required: 'Date of birth is required',
-      },
     },
     applicantEmail: {
+      name:'applicantEmail',
       label: 'Applicant Email',
       type: FieldType.Text,
       required: false,
       placeholder: 'Enter Email Address',
-      validation: {
-        pattern: {
-          value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i,
-          message: 'Invalid email address format',
-        },
-      },
+     
     },
     applicantMobileNumber: {
+      name:'applicantMobileNumber',
       label: 'Applicant Mobile Number',
       type: FieldType.Text,
       required: false,
       placeholder: 'Enter Mobile Number',
-      validation: {
-        pattern: {
-          value: /^[0-9]{10}$/,
-          message: 'Mobile number must be 10 digits',
-        },
-      },
     },
     sourceOfFunds: {
+      name:'sourceOfFunds',
       label: 'Source of Funds',
       type: FieldType.Select,
       required: false,
@@ -76,6 +68,7 @@ const kycDetailsConfig = {
       },
     },
     paidBy: {
+      name:'paidBy',
       label: 'Paid By',
       type: FieldType.Select,
       required: false,
@@ -88,26 +81,23 @@ const kycDetailsConfig = {
       },
     },
     payeeNameAsPerPan: {
+      name:'payeeNameAsPerPan',
       label: 'Payee Name As Per PAN',
       type: FieldType.Text,
       required: false,
       placeholder: 'Enter Payee Name',
     },
     payeePanNumber: {
+      name:'payeePanNumber',
       label: 'Payee PAN Number',
       type: FieldType.Text,
       required: false,
       placeholder: 'Enter Payee PAN Number',
-      validation: {
-        pattern: {
-          value: /^[A-Z]{5}[0-9]{4}[A-Z]{1}$/,
-          message: 'Invalid PAN number format',
-        },
-      },
     },
     payeeDobAsPerPan: {
+      name:'payeeDobAsPerPan',
       label: 'Payee DOB As Per PAN',
-      type:FieldType.Date,
+      type: FieldType.Date,
       required: false,
       placeholder: 'Select Payee DOB',
     },
