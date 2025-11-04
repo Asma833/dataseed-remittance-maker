@@ -23,7 +23,7 @@ export const AppRoutes = () => {
         <Route key={path} path={path} element={React.createElement(Element)} />
       ))}
       <Route
-        path="/maker/*"
+        path="/branch_agent_maker/*"
         element={
           // <ProtectedRoute>
             <AgentMakerRoutes />

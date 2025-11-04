@@ -7,7 +7,7 @@ export const ROUTES = {
     RESET_PASSWORD: '/reset-password',
   },
   
-  MAKER: {
+  BRANCH_AGENT_MAKER: {
     CREATE_TRANSACTION: '/create-transaction',
     UPDATE_TRANSACTION: '/update-transaction',
     VIEW_TRANSACTION: '/view-transaction',
@@ -27,7 +27,7 @@ export const ROUTES = {
 
 // Route prefixes for different user roles
 export const ROUTE_PREFIXES = {
-  MAKER: '/maker',
+  BRANCH_AGENT_MAKER: '/branch_agent_maker',
 } as const;
 
 // Helper function to generate navigation paths with prefixes
@@ -36,5 +36,5 @@ export const getNavPath = (role: keyof typeof ROUTE_PREFIXES, route: string): st
 };
 
 export const ROLES = {
-  MAKER: 'maker',
+  BRANCH_AGENT_MAKER: 'branch_agent_maker',
 };

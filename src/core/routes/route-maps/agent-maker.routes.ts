@@ -1,8 +1,6 @@
 import { lazy } from 'react';
-
 import { RouteConfig } from '@/types/route.types';
 import { getTabsFromRoute } from '@/utils/routeUtils';
-import { ROUTES } from '@/core/constant/route-paths';
 
 export const makerComponents = {
   CreateTransaction: lazy(() => import('@/features/maker/pages/create-transaction/CreateTransaction')),
@@ -22,39 +20,9 @@ export const makerComponents = {
   ),
 };
 
-const baseRole = 'maker';
+const baseRole = 'branch_agent_maker';
 
 export const agentMakerRoutes: RouteConfig[] = [
-  {
-    path: ROUTES.MAKER.CREATE_TRANSACTION,
-    element: makerComponents.CreateTransaction,
-    roles: [baseRole],
-    permission: '',
-  },
-  {
-    path: ROUTES.MAKER.UPDATE_TRANSACTION,
-    element: makerComponents.Update,
-    roles: [baseRole],
-    permission: '',
-  },
-  {
-    path: ROUTES.MAKER.VIEW_TRANSACTION,
-    element: makerComponents.ViewTransaction,
-    roles: [baseRole],
-    permission: '',
-  },
-  {
-    path: ROUTES.MAKER.EDIT_TRANSACTION,
-    element: makerComponents.EditTransaction,
-    roles: [baseRole],
-    permission: '',
-  },
-  {
-    path: ROUTES.MAKER.VIEW_STATUS,
-    element: makerComponents.ViewStatus,
-    roles: [baseRole],
-    permission: '',
-  },
   {
     path: '/transaction/*',
     element: makerComponents.TransactionPage,

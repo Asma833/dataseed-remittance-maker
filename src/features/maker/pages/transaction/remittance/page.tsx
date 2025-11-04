@@ -8,8 +8,8 @@ const TransactionPage = () => {
   const location = useLocation();
 
   // Determine if we're in admin or maker context
-  const isAdminContext = location.pathname.startsWith('/admin');
-  const baseRole = isAdminContext ? 'admin' : 'maker';
+  const isAdminContext = location.pathname.startsWith('/branch_agent_maker');
+  const baseRole = "branch_agent_maker";
 
   // Get appropriate tabs based on context
   const transactionTabs = isAdminContext ? getTransactionTabs() : getTransactionTabs();

@@ -11,28 +11,18 @@ export interface NavigationItem {
 
 // User role navigation configurations
 export const SideNavOptions = {
- maker: [
-    {
-      title: 'Create Transaction',
-      path: getNavPath('MAKER', ROUTES.MAKER.CREATE_TRANSACTION),
-      icon: ClipboardList,
-    },
-    {
-      title: 'View Status',
-      path: getNavPath('MAKER', ROUTES.MAKER.VIEW_STATUS),
-      icon: Eye,
-    },
+  BRANCH_AGENT_MAKER: [
     {
       title: 'Transaction',
-      path: getNavPath('MAKER', ROUTES.MAKER.TRANSACTION.DEAL_BOOKING),
+      path: getNavPath('BRANCH_AGENT_MAKER', ROUTES.BRANCH_AGENT_MAKER.TRANSACTION.DEAL_BOOKING),
       icon: Eye,
     },
   ] as NavigationItem[],
-  
+
 };
 
 // Helper function to get navigation items by role
 export const getNavigationItemsByRole = (role: string): NavigationItem[] => {
-  const normalizedRole = role.toLowerCase();
+  const normalizedRole = role.toUpperCase().replace(/_/g, '_');
   return SideNavOptions[normalizedRole as keyof typeof SideNavOptions] || [];
 };
