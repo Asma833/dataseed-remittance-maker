@@ -13,6 +13,14 @@ export const ROUTES = {
     VIEW_TRANSACTION: '/view-transaction',
     EDIT_TRANSACTION: '/edit-transaction',
     VIEW_STATUS: '/view-status',
+    TRANSACTION: {
+      BASE: '/transaction',
+      DEAL_BOOKING: '/transaction/deal-booking',
+      CREATE_TRANSACTION: '/transaction/create-transaction',
+      KYC_UPLOAD: '/transaction/kyc-upload',
+      PAYMENT_STATUS: '/transaction/payment-status',
+      VIEW_ALL_TRANSACTIONS: '/transaction/view-all-transactions',
+    },
   },
   
 } as const;

@@ -1,3 +1,4 @@
+import React from 'react';
 import { Navigate } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import { createSelector } from '@reduxjs/toolkit';
@@ -19,7 +20,7 @@ const selectAuthState = createSelector(
   })
 );
 
-export const AuthRedirectGuard: React.FC<AuthRedirectGuardProps> = ({ children }) => {
+export const AuthRedirectGuard = ({ children }: AuthRedirectGuardProps) => {
   const { user, isAuthenticated, isLoading } = useSelector(selectAuthState);
 
   // Show loading while checking authentication status
@@ -29,10 +30,12 @@ export const AuthRedirectGuard: React.FC<AuthRedirectGuardProps> = ({ children }
 
   // If user is authenticated, redirect to their dashboard
   if (isAuthenticated && user) {
-    const defaultRoute = DEFAULT_ROUTES[user.roles[0].role_name as UserRole];
+    const defaultRoute = DEFAULT_ROUTES[user.roles?.[0]?.role_name as UserRole];
     return <Navigate to={defaultRoute || '/dashboard'} replace />;
   }
 
   // If not authenticated, show the auth page (login, forgot password, etc.)
   return <>{children}</>;
 };
+
+// export default AuthRedirectGuard;

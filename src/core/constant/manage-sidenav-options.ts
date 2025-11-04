@@ -24,7 +24,7 @@ export const SideNavOptions = {
     },
     {
       title: 'Transaction',
-      //path: getNavPath('MAKER', ROUTES.MAKER.TRANSACTION.DEAL_BOOKING),
+      path: getNavPath('MAKER', ROUTES.MAKER.TRANSACTION.DEAL_BOOKING),
       icon: Eye,
     },
   ] as NavigationItem[],

@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import PoweredBy from './footer/powered-by';
 import { Link } from 'react-router-dom';
 
@@ -7,7 +7,7 @@ interface AuthLayoutProps {
   title?: string;
 }
 
-export const AuthLayout: React.FC<AuthLayoutProps> = ({ children, title }) => {
+const AuthLayout = ({ children, title }: AuthLayoutProps) => {
   const [mounted, setMounted] = useState(false);
 
   useEffect(() => {
@@ -29,14 +29,14 @@ export const AuthLayout: React.FC<AuthLayoutProps> = ({ children, title }) => {
       </div>
 
       {/* Footer */}
-      <footer className="relative w-full py-4 px-4 sm:px-6 flex items-center justify-center">
+      <div role="contentinfo" className="relative w-full py-4 px-4 sm:px-6 flex items-center justify-center">
         {/* Center text */}
         <p className="text-white text-xs sm:text-sm text-center">© EbixCash. All rights reserved</p>
         {/* Right aligned powered by */}
         <div className="absolute right-4 sm:right-6 bottom-4 hidden sm:block">
           <PoweredBy />
         </div>
-      </footer>
+      </div>
     </div>
   );
 };
