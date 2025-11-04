@@ -1,4 +1,5 @@
-import React, { useEffect, useState } from 'react';
+import * as React from 'react';
+import { useEffect, useState } from 'react';
 import PoweredBy from './footer/powered-by';
 import { Link } from 'react-router-dom';
 
