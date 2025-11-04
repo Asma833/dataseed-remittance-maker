@@ -28,6 +28,7 @@ export const SideNavOptions = {
       icon: Eye,
     },
   ] as NavigationItem[],
+  
 };
 
 // Helper function to get navigation items by role

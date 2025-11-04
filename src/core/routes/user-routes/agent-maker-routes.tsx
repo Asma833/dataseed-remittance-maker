@@ -1,13 +1,13 @@
 import { Routes, Route } from 'react-router-dom';
-import { superAdminRoutes } from '../routes';
 import { ProtectedRoute } from '../protected-routes';
 import SidebarLayout from '@/components/layout/sidebar-layout';
 import NotFoundPage from '@/components/common/not-found-page';
+import { agentMakerRoutes } from '../route-maps/agent-maker.routes';
 
 export const AgentMakerRoutes = () => {
   return (
     <Routes>
-      {superAdminRoutes.map(({ path, element: Element, roles, permission, subRoutes }) => {
+      {agentMakerRoutes.map(({ path, element: Element, roles, permission, subRoutes }) => {
         // Make child paths relative to /admin/*
         const normalizedPath = path.replace(/^\//, '');
 
@@ -18,11 +18,11 @@ export const AgentMakerRoutes = () => {
               key={path}
               path={normalizedPath}
               element={
-                <ProtectedRoute roles={roles} {...(permission ? { permission } : {})}>
+                // <ProtectedRoute roles={roles} {...(permission ? { permission } : {})}>
                   <SidebarLayout>
                     <Element />
                   </SidebarLayout>
-                </ProtectedRoute>
+                // </ProtectedRoute>
               }
             >
               {subRoutes.map(({ path: subPath, element: SubElement }) => (
@@ -38,11 +38,11 @@ export const AgentMakerRoutes = () => {
             key={path}
             path={normalizedPath}
             element={
-              <ProtectedRoute roles={roles} {...(permission ? { permission } : {})}>
+              // <ProtectedRoute roles={roles} {...(permission ? { permission } : {})}>
                 <SidebarLayout>
                   <Element />
                 </SidebarLayout>
-              </ProtectedRoute>
+              // </ProtectedRoute>
             }
           />
         );

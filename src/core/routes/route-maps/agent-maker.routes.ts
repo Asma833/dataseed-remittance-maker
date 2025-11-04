@@ -3,7 +3,7 @@ import type { RouteConfig } from '@/types/route.types';
 
 const baseRole = ROLES.MAKER; 
 
-export const superAdminRoutes: RouteConfig[] = [
+export const agentMakerRoutes: RouteConfig[] = [
   // {
   //   path: ROUTES.SUPER_ADMIN.USER_MANAGEMENT.AGENT_ADMIN,
   //   element: AdminAgentList,

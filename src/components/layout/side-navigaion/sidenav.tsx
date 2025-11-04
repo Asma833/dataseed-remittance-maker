@@ -35,7 +35,7 @@ const Sidebar: React.FC<SidebarProps> = ({
   const navigate = useNavigate();
   const { location, isParentActive, isSubmenuActive } = useActiveRouteMatch(navItems);
   const [openDropdowns, setOpenDropdowns] = useState<Set<string>>(new Set());
-
+  console.log(navItems,"navItems+++++++++++++++++++++++")
   useEffect(() => {
     setOpenDropdowns((prev) => {
       const next = new Set(prev);
