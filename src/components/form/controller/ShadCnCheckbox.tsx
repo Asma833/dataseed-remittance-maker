@@ -42,7 +42,7 @@ export const ShadCnCheckbox = ({
   handleCheckboxChange,
   isMulti,
   defaultSelected = {},
-  variant = 'circle_check',
+  variant = 'circle_check_filled',
   size = 'medium',
   classNames = { wrapper: '', formGroup: '' },
   disabled = false,

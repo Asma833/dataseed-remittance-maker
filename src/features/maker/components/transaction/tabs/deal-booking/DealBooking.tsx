@@ -9,6 +9,7 @@ import KycDetails from './sections/kyc-details/KycDetails';
 import SourceOfEducation from './sections/source-of-funds/SourceOfEducation';
 import { DialogWrapper } from '@/components/common/dialog-wrapper';
 import { Button } from '@/components/ui/button';
+import Payments from '@/components/payments/Payments';
 
 const defaultValues = {
   transactionType: '',
@@ -91,8 +92,7 @@ const DealBooking = () => {
       </FormProvider>
       {isModalOpen && (
         <DialogWrapper title="Payment" isOpen={isModalOpen} setIsOpen={setIsModalOpen} renderContent={
-        // <Payments setIsOpen={setIsModalOpen} uploadScreen={true}/>
-        ""
+        <Payments setIsOpen={setIsModalOpen} uploadScreen={true}/>
       } />
       )}
     </div>
