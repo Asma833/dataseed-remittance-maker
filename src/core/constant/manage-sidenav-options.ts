@@ -1,4 +1,4 @@
-import { ClipboardList, Eye } from 'lucide-react';
+import { DollarSign, Send } from 'lucide-react';
 import { ROUTES, getNavPath } from './route-paths';
 // Navigation item type definition
 export interface NavigationItem {
@@ -14,8 +14,14 @@ export const SideNavOptions = {
   BRANCH_AGENT_MAKER: [
     {
       title: 'Transaction',
-      path: getNavPath('BRANCH_AGENT_MAKER', ROUTES.BRANCH_AGENT_MAKER.TRANSACTION.DEAL_BOOKING),
-      icon: Eye,
+      icon: DollarSign,
+      subMenus:[
+        {
+        title: 'Remittance',
+        path: getNavPath('BRANCH_AGENT_MAKER', ROUTES.BRANCH_AGENT_MAKER.TRANSACTION.DEAL_BOOKING),
+        icon: Send,
+      }
+      ],
     },
   ] as NavigationItem[],
 
