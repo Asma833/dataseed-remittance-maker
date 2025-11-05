@@ -74,16 +74,16 @@ const DealBooking = () => {
        
        <div className="mt-16 flex flex-col items-center gap-10"> 
           <div className="flex justify-center gap-1 flex-wrap">
-              <Button type="button" onClick={handleCancel} variant="light" className="!capitalize"> 
+              <Button type="button" onClick={handleCancel} variant="light"> 
               Cancel 
             </Button>
-            <Button type="button" onClick={handlePaymentSuccess} variant="secondary" className="!capitalize"> 
+            <Button type="button" onClick={handlePaymentSuccess} variant="secondary"> 
               Confirm Booking 
             </Button> 
-              <Button type="button" onClick={handleShareTransactionDetails} variant="secondary" className="!capitalize"> 
+              <Button type="button" onClick={handleShareTransactionDetails} variant="secondary"> 
               Share Transaction Details PDF 
             </Button> 
-              <Button type="button" onClick={handlePayment} variant="secondary" className="!capitalize"> 
+              <Button type="button" onClick={handlePayment} variant="secondary"> 
               Payment 
             </Button>
           </div>

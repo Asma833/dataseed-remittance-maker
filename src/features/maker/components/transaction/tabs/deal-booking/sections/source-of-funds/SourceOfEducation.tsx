@@ -1,7 +1,7 @@
 
 
 
-import Spacer from '@/components/form/wrapper/Spacer';
+import Spacer from '@/components/form/wrapper/spacer';
 import { FieldValues, Control, FieldErrors } from 'react-hook-form';
 import sourceOfEducationConfig from './source-of-education-config';
 
@@ -20,9 +20,9 @@ const SourceOfEducation = ({ control, errors }: SourceOfEducationProps) => {
   
   return (
   <Spacer>
-      <FormFieldRow rowCols={2} wrapperClassName="flex-row md:!flex-nowrap">
-        <div className="flex flex-wrap w-1/2 gap-4">
-            <FormFieldRow rowCols={2}>
+      <FormFieldRow rowCols={1} wrapperClassName="flex-row md:!flex-nowrap">
+        <div className="flex flex-wrap w-1/3 gap-4">
+            <FormFieldRow rowCols={1}>
               {Object.entries(sourceOfEducationConfig.fields)
                 .slice(0, 2)
                 .map(([name, field]) => (
@@ -31,7 +31,7 @@ const SourceOfEducation = ({ control, errors }: SourceOfEducationProps) => {
                   </FieldWrapper>
                 ))}
             </FormFieldRow>
-            <FormFieldRow rowCols={2}>
+            <FormFieldRow rowCols={1}>
               {Object.entries(sourceOfEducationConfig.fields)
                 .slice(2, 4)
                 .map(([name, field]) => (
@@ -42,7 +42,7 @@ const SourceOfEducation = ({ control, errors }: SourceOfEducationProps) => {
             </FormFieldRow>
           
         </div>
-        <div className="flex flex-wrap w-1/2">
+        <div className="flex flex-wrap w-1/1">
             <RateTable
               id={'invoiceRateTable'}
               mode={'edit'}
