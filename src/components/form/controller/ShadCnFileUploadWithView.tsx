@@ -40,7 +40,7 @@ export const ShadCnFileUploadWithView = ({
 
   return (
     <FormItem className={className}>
-      <FormLabel className="text-[var(--color-form-label)]">
+      <FormLabel className="text-(--color-form-label)">
         {label}
         {required && <span className="text-destructive ml-1">*</span>}
       </FormLabel>
@@ -50,7 +50,7 @@ export const ShadCnFileUploadWithView = ({
           control={control}
           defaultValue={[]}
           render={({ field: { value, onChange }, fieldState: { error } }) => (
-            <div className={cn('w-full p-3 flex flex-col gap-2', className)}>
+            <div className={cn('w-full flex flex-col gap-2', className)}>
               <label htmlFor={id}>
                 <div className="relative">
                   <input
@@ -104,6 +104,7 @@ export const ShadCnFileUploadWithView = ({
                   View File
                 </Button>
               )}
+              {error && <p className="text-sm text-destructive mt-1">{error.message}</p>}
             </div>
           )}
         />

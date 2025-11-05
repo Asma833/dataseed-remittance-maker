@@ -7,7 +7,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import BookTransaction from './sections/book-transaction/BookTransaction';
 import KycDetails from './sections/kyc-details/KycDetails';
 import SourceOfEducation from './sections/source-of-funds/SourceOfEducation';
-import { DialogWrapper } from '@/components/common/dialog-wrapper';
+import { GenericDialog } from '@/components/ui/generic-dialog';
 import { Button } from '@/components/ui/button';
 import Payments from '@/components/payments/Payments';
 
@@ -90,11 +90,9 @@ const DealBooking = () => {
           </div>
         </div>
       </FormProvider>
-      {isModalOpen && (
-        <DialogWrapper title="Payment" isOpen={isModalOpen} setIsOpen={setIsModalOpen} renderContent={
+      <GenericDialog open={isModalOpen} onOpenChange={setIsModalOpen} title="Payment" contentClassName='md:w-[40vw]'>
         <Payments setIsOpen={setIsModalOpen} uploadScreen={true}/>
-      } />
-      )}
+      </GenericDialog>
     </div>
   );
 };

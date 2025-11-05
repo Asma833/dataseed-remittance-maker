@@ -14,48 +14,48 @@ const Payments = ({ setIsOpen = () => {} ,uploadScreen}: { setIsOpen: (isOpen: b
   const methods = useForm({
   resolver: zodResolver(paymentsFormSchema),
   defaultValues: {
-     paymentMethod: 'true',
-     fileUpload: null
+     paymentMethod: 'bank',
+     fileUpload: ''
   }
 });
   const {
     control,
     formState: { errors },
+    handleSubmit
   } = methods;
-  const handleSubmit = methods.handleSubmit((data) => {
+  const submit = async (data: any) => {
     console.log('Form Data:', data);
-    //    setIsOpen(false)
-  });
+    // Validate the form before submitting
+    const isValid = await methods.trigger();
+    if (isValid) {
+      setIsOpen(false);
+    }
+  };
   return (
     <>
       <FormProvider {...methods}>
-        <FormContentWrapper className="py-4 rounded-lg w-full mr-auto bg-transparent">
+        <FormContentWrapper className="rounded-lg w-full mr-auto bg-transparent">
           <Spacer>
             {uploadScreen && (
-              <FormFieldRow rowCols={1}>
-              {Object.entries(paymentsFormConfig.fields)
-                .slice(0, 1)
-                .map(([name, field]) => (
-                  <FieldWrapper key={name}>{getController({ ...field, name, control, errors})}</FieldWrapper>
-                ))}
-            </FormFieldRow>
+                <FormFieldRow rowCols={1}>
+                  {( ['paymentMethod'] as const ).map(name => {
+                    const field = paymentsFormConfig.fields[name];
+                    return <FieldWrapper key={name}>{getController({ ...field, name, control, errors })}</FieldWrapper>;
+                  })}
+                </FormFieldRow>
             )}
            
             <FormFieldRow rowCols={1}>
-              {Object.entries(paymentsFormConfig.fields)
-                .slice(1, 2)
-                .map(([name, field]) => (
-                  <FieldWrapper key={name}>
-                    <span className="text-sm text-gray-500 mb-1">For Bank Transfer Upload Screenshot</span>
-                    {getController({ ...field, name, control, errors })}
-                  </FieldWrapper>
-                ))}
+              {( ['fileUpload'] as const ).map(name => {
+                const field = paymentsFormConfig.fields[name];
+                return <FieldWrapper key={name}>{getController({ ...field, name, control, errors })}</FieldWrapper>;
+              })}
             </FormFieldRow>
-            <div className="flex gap-4 m-auto">
-                <Button type="button" onClick={handleSubmit} variant="light" className="mx-auto">
+            <div className="flex gap-2 justify-center">
+                <Button type="button" onClick={() => setIsOpen(false)} variant="light" className='px-5'>
                 Cancel
               </Button>
-              <Button type="button" onClick={handleSubmit} variant="secondary" className="mx-auto">
+              <Button type="button" onClick={handleSubmit(submit)} variant="secondary" className='px-5'>
                 Submit
               </Button>
             </div>

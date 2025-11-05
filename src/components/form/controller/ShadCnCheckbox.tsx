@@ -180,7 +180,7 @@ export const ShadCnCheckbox = ({
   return (
     <FormItem className={classNames.wrapper}>
       {label && (
-        <FormLabel className="text-[var(--color-form-label)]">
+        <FormLabel className="text-(--color-form-label)">
           {label}
           {required && <span className="text-destructive ml-1">*</span>}
         </FormLabel>
@@ -273,7 +273,7 @@ export const ShadCnCheckbox = ({
                           </button>
                           <label
                             htmlFor={`${name}-${key}`}
-                            className="text-sm text-[var(--color-form-label)] leading-none cursor-pointer select-none"
+                            className="text-sm text-(--color-form-label) leading-none cursor-pointer select-none"
                             onClick={() => !disabled && document.getElementById(`${name}-${key}`)?.click()}
                           >
                             {option.label}

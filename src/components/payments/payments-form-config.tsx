@@ -1,32 +1,31 @@
-import { FieldType } from "@/types/enums";
+import { FieldType } from '@/types/enums';
 
 const paymentsFormConfig = {
   fields: {
     paymentMethod: {
       type: FieldType.Checkbox,
-      label: 'Payment',
+      label: 'Payment Method',
       required: true,
-         options: {
-            true: { label: 'Payment Via Bank Transfer / Online' },
-            false: { label: 'Generate Payment Link - API for Online Payment' },
-          },
-          isMulti:false
+      options: {
+        bank: { label: 'Payment Via Bank Transfer / Online' },
+        paymentLink: { label: 'Generate Payment Link - API for Online Payment' },
+      },
+      isMulti: false,
     },
-    fileUpload :{
-        type: FieldType.FileUploadWithButton,
-        label: 'Choose file',
-        required: false,
-        placeholder: 'Upload Payment Receipt',
-        validation: {
-            validate: (value:string) => {
-            if (!value || value.length === 0) {
-                return 'Payment receipt is required';
-            }
-            return true;
-            },
+    fileUpload: {
+      type: FieldType.Fileupload_View,
+      label: 'For Bank Transfer Upload Screenshot',
+      required: true,
+      placeholder: 'Upload Payment Receipt',
+      validation: {
+        validate: (value: string) => {
+          if (!value || value.length === 0) {
+            return 'Payment receipt is required';
+          }
+          return true;
         },
+      },
     },
-    
   },
 };
 
