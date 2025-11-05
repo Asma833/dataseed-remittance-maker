@@ -19,38 +19,28 @@ const KycDetails = ({ control, errors }: KycDetailsProps) => {
  };
   return (
     <>
-      <p className="font-semibold text-gray-600 my-2">KYC Details</p>
-       <hr className="border-slate-300"/>
-      <FormContentWrapper className="py-6 rounded-lg w-full mr-auto bg-transparent">
+      <p className="font-semibold text-gray-600 pt-6">KYC Details</p>
+      <FormContentWrapper className="rounded-lg w-full mr-auto bg-transparent">
         <Spacer>
           <FormFieldRow rowCols={4}>
-            {Object.entries(kycDetailsConfig.fields)
-              .slice(0, 4)
-              .map(([name, field]) => (
-                <FieldWrapper key={name}>
-                  {getController({ ...field, name, control, errors })}
-                </FieldWrapper>
-              ))}
+            {( ['applicantName', 'applicantPanNumber', 'applicantDob', 'applicantEmail'] as const ).map(name => {
+              const field = kycDetailsConfig.fields[name];
+              return <FieldWrapper key={name}>{getController({ ...field, name, control, errors })}</FieldWrapper>;
+            })}
           </FormFieldRow>
           <FormFieldRow rowCols={4}>
-            {Object.entries(kycDetailsConfig.fields)
-              .slice(4, 8)
-              .map(([name, field]) => (
-                <FieldWrapper key={name}>
-                  {getController({ ...field, name, control, errors })}
-                </FieldWrapper>
-              ))}
+            {( ['applicantMobileNumber', 'sourceOfFunds', 'paidBy', 'payeeNameAsPerPan'] as const ).map(name => {
+              const field = kycDetailsConfig.fields[name];
+              return <FieldWrapper key={name}>{getController({ ...field, name, control, errors })}</FieldWrapper>;
+            })}
           </FormFieldRow>
           <FormFieldRow rowCols={4}>
-            {Object.entries(kycDetailsConfig.fields)
-              .slice(8, 12)
-              .map(([name, field]) => (
-                <FieldWrapper key={name}>
-                  {getController({ ...field, name, control, errors })}
-                </FieldWrapper>
-              ))}
+            {( ['payeePanNumber', 'payeeDobAsPerPan'] as const ).map(name => {
+              const field = kycDetailsConfig.fields[name];
+              return <FieldWrapper key={name}>{getController({ ...field, name, control, errors })}</FieldWrapper>;
+            })}
               <div className="flex items-center md:pt-5">
-              <Button type="button" onClick={handleValidatePan} variant="secondary" className="!capitalize">
+              <Button type="button" onClick={handleValidatePan} variant="secondary" >
                           Validate PAN Details
               </Button>
               </div>

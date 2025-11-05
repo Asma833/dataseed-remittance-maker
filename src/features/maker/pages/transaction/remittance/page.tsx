@@ -23,7 +23,7 @@ const TransactionPage = () => {
 
   return (
     <div className="w-full">
-      <div className="flex justify-between gap-4 px-10">
+      <div className="flex flex-col md:flex-row justify-between gap-2 px-4 md:px-6 text-center">
         {' '}
         {transactionTabs.map((tab) => (
           <NavLink
@@ -31,17 +31,20 @@ const TransactionPage = () => {
             to={`/${baseRole}/transaction/${tab.path}`}
             className={({ isActive }) =>
               cn(
-                'px-4 py-2 rounded-tl-lg rounded-tr-lg text-sm no-underline transition-colors flex flex-1 justify-center items-center',
-                isActive ? 'bg-gray-500 text-white font-bold' : 'bg-primary text-white hover:bg-gray-400'
+                'px-2 py-2 rounded-tl-md rounded-tr-md text-sm no-underline transition-colors flex flex-1 justify-center items-center hover:opacity-80',
+                isActive ? 'text-white font-bold' : 'bg-gray-500 text-white hover:bg-gray-500/80'
               )
             }
+            style={({ isActive }) => ({
+              background: isActive ? 'linear-gradient(90deg, #85308E 0%, #D62058 100%)' : undefined,
+            })}
             end
           >
             {tab.label}
           </NavLink>
         ))}
       </div>{' '}
-      <div className="bg-background min-h-[calc(100vh-4rem)] p-8 rounded-lg">
+      <div className="bg-background min-h-[calc(100vh-4rem)] p-4 rounded-lg w-full">
         {isBasePath ? (
           // Show default component when on base path
           <DefaultComponent />

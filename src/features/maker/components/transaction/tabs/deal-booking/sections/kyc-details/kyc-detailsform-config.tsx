@@ -1,6 +1,5 @@
 import { FieldType } from "@/types/enums";
 
-
 // KYC Details configuration
 const kycDetailsConfig = {
   sectionTitle: 'KYC Details',
@@ -11,23 +10,13 @@ const kycDetailsConfig = {
       type: FieldType.Text,
       required: true,
       placeholder: 'Enter Applicant Name',
-      validation: {
-        required: 'Applicant name is required',
-      },
     },
     applicantPanNumber: {
       name:'applicantPanNumber',
       label: 'Applicant PAN Number',
       type: FieldType.Text,
       required: true,
-      placeholder: 'Enter PAN Number',
-      validation: {
-        required: 'PAN number is required',
-        pattern: {
-          value: /^[A-Z]{5}[0-9]{4}[A-Z]{1}$/,
-          message: 'Invalid PAN number format',
-        },
-      },
+      placeholder: 'Enter PAN Number'
     },
     applicantDob: {
       name:'applicantDob',
@@ -42,7 +31,6 @@ const kycDetailsConfig = {
       type: FieldType.Text,
       required: false,
       placeholder: 'Enter Email Address',
-     
     },
     applicantMobileNumber: {
       name:'applicantMobileNumber',

@@ -52,12 +52,6 @@ export const bookTransactionConfig = {
       type: FieldType.Text,
       required: false,
       placeholder: 'Enter Fx Amount',
-      validation: {
-        pattern: {
-          value: /^[0-9]*\.?[0-9]*$/,
-          message: 'Please enter a valid amount',
-        },
-      },
     },
     niumSettlementRate: {
       name:'niumSettlementRate',
@@ -65,13 +59,6 @@ export const bookTransactionConfig = {
       type: FieldType.Text,
       required: false,
       placeholder: 'Enter Settlement Rate',
-      readOnly: true,
-      validation: {
-        pattern: {
-          value: /^[0-9]*\.?[0-9]*$/,
-          message: 'Please enter a valid rate',
-        },
-      },
     },
     addMargins: {
       name:'addMargins',
