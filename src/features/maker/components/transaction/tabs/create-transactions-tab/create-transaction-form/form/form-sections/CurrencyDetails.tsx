@@ -1,7 +1,7 @@
 
 import Spacer from '@/components/form/wrapper/Spacer';
 import { currecnyDetailsMeta } from '../form-meta/currencyDetails';
-import RateTable from '../../../../../../rate-table/RateTable';
+import RateTable from '../../../../../../rate-table/rate-table';
 import { CommonCreateTransactionProps } from '@/features/maker/types/create-transaction.types';
 import Actions from '../../components/Actions';
 import { useState } from 'react';

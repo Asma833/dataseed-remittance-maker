@@ -1,5 +1,4 @@
 import axiosInstance from '@/core/services/axios/axios-instance';
-
 import { API } from '@/core/constant/apis';
 import { CurrencyRateResponse } from '../types/currency-rate.types';
 

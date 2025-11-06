@@ -1,13 +1,13 @@
 import { useState } from 'react';
-import { DynamicTable } from '@/components/common/dynamic-table/DynamicTable';
+// import { DynamicTable } from '@/components/common/dynamic-table/DynamicTable';
 import { Button } from '@/components/ui/button';
 import { GetTransactionTableColumns } from './CompletedTransactionTableColumns';
 import { exportToCSV } from '@/utils/exportUtils';
-import useGetCheckerOrders from '@/features/checker/hooks/useGetCheckerOrders';
+
 import { API } from '@/core/constant/apis';
-import { IncidentMode, IncidentPageId, TransactionTypeEnum } from '@/features/checker/types/updateIncident.types';
-import { useDynamicOptions } from '@/features/checker/hooks/useDynamicOptions';
-import UpdateIncidentDialog from '@/features/checker/components/update-incident-dialog/UpdateIncidentDialog';
+import useGetCheckerOrders from '@/hooks/common/useGetCheckerOrders';
+import { useDynamicOptions } from '@/hooks/common/useDynamicOptions';
+import { TransactionTypeEnum } from '@/types/enums';
 
 
 const CompletedTransactionTable = () => {
@@ -27,9 +27,9 @@ const CompletedTransactionTable = () => {
     setIsModalOpen(true);
   };
   const columns = GetTransactionTableColumns(openModal);
-  const { options: purposeTypeOptions } = useDynamicOptions(API.PURPOSE.GET_PURPOSES);
+  // const { options: purposeTypeOptions } = useDynamicOptions(API.PURPOSE.GET_PURPOSES);
 
-  const { options: transactionTypeOptions } = useDynamicOptions(API.TRANSACTION.GET_TRANSACTIONS);
+  // const { options: transactionTypeOptions } = useDynamicOptions(API.TRANSACTION.GET_TRANSACTIONS);
 
   // Transform checker orders data to match the table format
   const transformOrderForTable = (order: any) => {
@@ -112,7 +112,7 @@ const CompletedTransactionTable = () => {
   })();
   return (
     <div className="dynamic-table-wrap">
-      <DynamicTable
+      {/* <DynamicTable
         columns={columns}
         data={getTableData()}
         refreshAction={{
@@ -151,19 +151,19 @@ const CompletedTransactionTable = () => {
             ],
           },
         }}
-      />
+      /> */}
       <div className="flex justify-center sm:justify-start mt-4 gap-3">
         <Button onClick={handleExportToCSV}>Export CSV</Button>
       </div>{' '}
-      {isModalOpen && (
-        <UpdateIncidentDialog
-          pageId={IncidentPageId.COMPLETED}
-          mode={IncidentMode.EDIT_INVOICE}
-          selectedRowData={selectedRowData}
-          isModalOpen={isModalOpen}
-          setIsModalOpen={setIsModalOpen}
-        />
-      )}
+      {/* {isModalOpen && (
+        // <UpdateIncidentDialog
+        //   pageId={IncidentPageId.COMPLETED}
+        //   mode={IncidentMode.EDIT_INVOICE}
+        //   selectedRowData={selectedRowData}
+        //   isModalOpen={isModalOpen}
+        //   setIsModalOpen={setIsModalOpen}
+        // />
+      )} */}
     </div>
   );
 };

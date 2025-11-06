@@ -1,5 +1,5 @@
 import { Table, TableBody, TableCell, TableFooter, TableHead, TableHeader, TableRow } from '@/components/ui/table';
-import GetRateTableColumns, { columnKeys, ColumnKey } from './RateTableColumns';
+import GetRateTableColumns, { columnKeys, ColumnKey } from './rate-table-columns';
 import { cn } from '@/utils/cn';
 
 export default function RateTable({

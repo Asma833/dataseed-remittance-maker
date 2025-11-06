@@ -8,7 +8,7 @@ import { generateRateTablePdf } from '@/utils/pdfUtils';
 import BookTransaction from './sections/book-transaction/book-transaction';
 import KycDetails from './sections/kyc-details/kyc-details';
 import SourceOfEducation from './sections/source-of-funds/source-of-education';
-import RateTable from '@/features/maker/components/rate-table/RateTable';
+import RateTable from '@/features/maker/components/rate-table/rate-table';
 import { GenericDialog } from '@/components/ui/generic-dialog';
 import { Button } from '@/components/ui/button';
 import Payments from '@/components/payments/Payments';

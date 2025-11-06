@@ -7,7 +7,7 @@ import sourceOfEducationConfig from './source-of-education-config';
 
 import ChargesTable from '../charges-table/charges-table';
 import type { kycDetailsSchema } from '../kyc-details/kyc-details.schema'; // <-- Add this import or adjust the path/type as needed
-import RateTable from '@/features/maker/components/rate-table/RateTable';
+import RateTable from '@/features/maker/components/rate-table/rate-table';
 import FieldWrapper from '@/components/form/wrapper/field-wrapper';
 import FormFieldRow from '@/components/form/wrapper/form-field-row';
 import { getController } from '@/components/form/utils/get-controller';
