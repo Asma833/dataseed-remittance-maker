@@ -9,6 +9,8 @@ const bookTransactionConfig = {
       type: FieldType.Select,
       required: true,
       placeholder: 'Select Purpose',
+      options: {},
+      // options will be overridden dynamically from useGetPurposes hook
       isMulti: false,
     },
     fxCurrency: {
@@ -17,13 +19,8 @@ const bookTransactionConfig = {
       type: FieldType.Select,
       required: true,
       placeholder: 'Select Currency',
-      options: {
-        USD: { label: 'USD - United States Dollar' },
-        EUR: { label: 'EUR - Euro' },
-        GBP: { label: 'GBP - British Pound' },
-        AUD: { label: 'AUD - Australian Dollar' },
-        CAD: { label: 'CAD - Canadian Dollar' },
-      },
+      options: {},
+      // options will be overridden dynamically from useGetCurrencyRates
       isMulti: false,
     },
     fxAmount: {
@@ -35,7 +32,7 @@ const bookTransactionConfig = {
     },
     companySettlementRate: {
       name:'companySettlementRate',
-      label: 'Nium Settlement Rate',
+      label: 'Company Settlement Rate',
       type: FieldType.Number,
       required: false,
       placeholder: 'Enter Settlement Rate',
@@ -63,7 +60,7 @@ const bookTransactionConfig = {
       placeholder: 'Select Nostro Charges',
       options: {
         BEN: { label: 'BEN' },
-        OUR: { label: 'OUR' },
+        OUR: { label: 'OUR' }
       }
     },
   },

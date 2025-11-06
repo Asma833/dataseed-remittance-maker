@@ -1,10 +1,14 @@
 import { FieldType } from './enums';
 
 export type FormField = {
+  name?: string;
   label: string;
   type: FieldType;
   required: boolean;
   placeholder: string;
+  isMulti?: boolean;
+  options?: Record<string, { label: string }>;
+  readOnly?: boolean;
 };
 
 export type TransactionOrderData = {

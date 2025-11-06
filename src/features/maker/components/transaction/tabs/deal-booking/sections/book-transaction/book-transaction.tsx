@@ -6,18 +6,25 @@ import { getController } from '@/components/form/utils/get-controller';
 import Spacer from '@/components/form/wrapper/spacer'
 import bookTransactionConfig from './book-transaction-form.config';
 import useGetPurposes from '@/hooks/useGetPurposes';
+import { useGetCurrencyRates } from '@/features/maker/hooks/useCurrencyRate';
 
 interface BookTransactionProps {
   control: Control<any>;
   errors: FieldErrors<any>;
 }
 const BookTransaction = ({ control, errors }: BookTransactionProps) => {
-  const { purposeTypes, loading } = useGetPurposes();
+  const { purposeTypes, loading: purposeLoading } = useGetPurposes();
+  const { data: currencyRates, isLoading: currencyLoading } = useGetCurrencyRates();
 
   const purposeOptions = purposeTypes.reduce((acc: Record<string, { label: string }>, { id, text }) => {
     acc[id] = { label: text };
     return acc;
   }, {});
+
+  const currencyOptions = currencyRates?.reduce((acc: Record<string, { label: string }>, currency) => {
+    acc[currency.currency_code] = { label: currency.currency_code };
+    return acc;
+  }, {}) || {};
 
   return (
     <>
@@ -27,7 +34,12 @@ const BookTransaction = ({ control, errors }: BookTransactionProps) => {
           <FormFieldRow rowCols={4}>
             {( ['purpose', 'fxCurrency', 'fxAmount'] as const ).map(name => {
               const field = bookTransactionConfig.fields[name];
-              const fieldWithOptions = name === 'purpose' ? { ...field, options: purposeOptions } : field;
+              let fieldWithOptions = field;
+              if (name === 'purpose') {
+                fieldWithOptions = { ...field, options: purposeOptions };
+              } else if (name === 'fxCurrency') {
+                fieldWithOptions = { ...field, options: currencyOptions };
+              }
               return <FieldWrapper key={name}>{getController({ ...fieldWithOptions, name, control, errors })}</FieldWrapper>;
             })}
           </FormFieldRow>
