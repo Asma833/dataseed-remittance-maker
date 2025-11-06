@@ -20,26 +20,26 @@ export type CommonInputStyles = {
 export const columnKeys: Record<ColumnKey, ColumnKeyConfig> = {
   invoiceName: {
     className: 'text-left',
-    label: '',
+    label: 'Particulars',
   },
   niumRate: {
-    className: '',
-    label: 'NIUM Rate',
+    className: 'text-center',
+    label: 'Rate (₹)',
   },
   agentMarkUp: {
-    className: '',
-    label: 'Agent Mark Up',
+    className: 'text-center',
+    label: 'Agent Mark Up (₹)',
   },
   rate: {
     className: '',
-    label: 'Rate',
+    label: 'Amount (₹)',
   },
 } as const;
 
 const GetRateTableColumns = ({
   id = 'rateTable',
   mode = 'edit',
-  editableFields = [] as string[],
+  editableFields = ['remittanceCharges.agentMarkUp', 'nostroCharges.agentMarkUp', 'otherCharges.agentMarkUp'],
 }): Partial<RateTableColumn>[] => {
   const commonInputStyles = (fieldPath: string): CommonInputStyles => {
     return {
@@ -60,48 +60,97 @@ const GetRateTableColumns = ({
       ...commonInputStyles(fieldPath),
     });
 
+  const getDummyValue = (section: string, key: 'niumRate' | 'agentMarkUp' | 'rate'): number => {
+    const dummies: Record<string, Partial<Record<'niumRate' | 'agentMarkUp' | 'rate', number>>> = {
+      transactionValue: {
+        niumRate: 1.0,
+        agentMarkUp: 0,
+        rate: 1000,
+      },
+      remittanceCharges: {
+        niumRate: 10,
+        agentMarkUp: 0,
+        rate: 10,
+      },
+      nostroCharges: {
+        niumRate: 5,
+        agentMarkUp: 0,
+        rate: 5,
+      },
+      otherCharges: {
+        niumRate: 2,
+        agentMarkUp: 0,
+        rate: 2,
+      },
+      transactionAmount: {
+        rate: 1017,
+      },
+      gstAmount: {
+        rate: 183,
+      },
+      totalInrAmount: {
+        rate: 1200,
+      },
+      tcs: {
+        rate: 120,
+      },
+    };
+    return dummies[section]?.[key] ?? 0;
+  };
+
+  const getCellContent = (section: string, key: 'niumRate' | 'agentMarkUp' | 'rate', fieldPath: string) => {
+    const relativePath = fieldPath.replace(`${id}.`, '');
+    const isEditable = editableFields.includes(relativePath);
+    if (isEditable) {
+      return getFormField(fieldPath);
+    } else {
+      const dummy = getDummyValue(section, key);
+      return <span className="text-right">{dummy}</span>;
+    }
+  };
+
   return [
     {
       id: 'transactionValue',
       cells: {
         invoiceName: () => <span className="text-left">{`Tnx Value`}</span>,
-        niumRate: () => getFormField(`${id}.transactionValue.niumRate`),
-        agentMarkUp: () => getFormField(`${id}.transactionValue.agentMarkUp`),
-        rate: () => getFormField(`${id}.transactionValue.rate`),
+        niumRate: () => getCellContent('transactionValue', 'niumRate', `${id}.transactionValue.niumRate`),
+        agentMarkUp: () => getCellContent('transactionValue', 'agentMarkUp', `${id}.transactionValue.agentMarkUp`),
+        rate: () => getCellContent('transactionValue', 'rate', `${id}.transactionValue.rate`),
       },
     },
     {
       id: 'remittanceCharges',
       cells: {
         invoiceName: () => <span className="text-left">{`Remittance Charges`}</span>,
-        niumRate: () => getFormField(`${id}.remittanceCharges.niumRate`),
-        agentMarkUp: () => getFormField(`${id}.remittanceCharges.agentMarkUp`),
-        rate: () => getFormField(`${id}.remittanceCharges.rate`),
+        niumRate: () => getCellContent('remittanceCharges', 'niumRate', `${id}.remittanceCharges.niumRate`),
+        agentMarkUp: () => getCellContent('remittanceCharges', 'agentMarkUp', `${id}.remittanceCharges.agentMarkUp`),
+        rate: () => getCellContent('remittanceCharges', 'rate', `${id}.remittanceCharges.rate`),
       },
     },
     {
       id: 'nostroCharges',
       cells: {
         invoiceName: () => <span className="text-left">{`Nostro Charges: BEN/OUR`}</span>,
-        niumRate: () => getFormField(`${id}.nostroCharges.niumRate`),
-        agentMarkUp: () => getFormField(`${id}.nostroCharges.agentMarkUp`),
-        rate: () => getFormField(`${id}.nostroCharges.rate`),
+        niumRate: () => getCellContent('nostroCharges', 'niumRate', `${id}.nostroCharges.niumRate`),
+        agentMarkUp: () => getCellContent('nostroCharges', 'agentMarkUp', `${id}.nostroCharges.agentMarkUp`),
+        rate: () => getCellContent('nostroCharges', 'rate', `${id}.nostroCharges.rate`),
       },
     },
     {
       id: 'otherCharges',
       cells: {
         invoiceName: () => <span className="text-left">{`Other Charges`}</span>,
-        niumRate: () => getFormField(`${id}.otherCharges.niumRate`),
-        agentMarkUp: () => getFormField(`${id}.otherCharges.agentMarkUp`),
-        rate: () => getFormField(`${id}.otherCharges.rate`),
+        niumRate: () => getCellContent('otherCharges', 'niumRate', `${id}.otherCharges.niumRate`),
+        agentMarkUp: () => getCellContent('otherCharges', 'agentMarkUp', `${id}.otherCharges.agentMarkUp`),
+        rate: () => getCellContent('otherCharges', 'rate', `${id}.otherCharges.rate`),
       },
     },
     {
       id: 'transactionAmount',
       cells: {
         invoiceName: () => <span className="text-left font-semibold">{`Transaction Amount`}</span>,
-        rate: () => getFormField(`${id}.transactionAmount.rate`),
+        rate: () => getCellContent('transactionAmount', 'rate', `${id}.transactionAmount.rate`),
       },
     },
     {
@@ -112,21 +161,21 @@ const GetRateTableColumns = ({
             Total GST Amount <br /> <b> CGST IGST/UTGST</b>
           </span>
         ),
-        rate: () => getFormField(`${id}.gstAmount.rate`),
+        rate: () => getCellContent('gstAmount', 'rate', `${id}.gstAmount.rate`),
       },
     },
     {
       id: 'totalInrAmount',
       cells: {
         invoiceName: () => <span className="text-left font-semibold">{`Total INR Amount`}</span>,
-        rate: () => getFormField(`${id}.totalInrAmount.rate`),
+        rate: () => getCellContent('totalInrAmount', 'rate', `${id}.totalInrAmount.rate`),
       },
     },
     {
       id: 'tcs',
       cells: {
         invoiceName: () => <span className="text-left">{`TCS`}</span>,
-        rate: () => getFormField(`${id}.tcs.rate`),
+        rate: () => getCellContent('tcs', 'rate', `${id}.tcs.rate`),
       },
     },
   ];

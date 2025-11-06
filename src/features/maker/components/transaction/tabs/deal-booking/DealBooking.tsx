@@ -12,28 +12,27 @@ import { Button } from '@/components/ui/button';
 import Payments from '@/components/payments/Payments';
 
 const defaultValues = {
-  transactionType: '',
   purpose: '',
   fxCurrency: '',
-  fxAmount: undefined,
-  niumSettlementRate: undefined,
-  addMargins: undefined,
-  customerRate: undefined,
-  nostroCharges: undefined,
+  fxAmount: '',
+  companySettlementRate: '',
+  addMargins: '',
+  customerRate: '',
+  nostroCharges: '',
   applicantName: '',
   applicantPanNumber: '',
   applicantDob: '',
-  applicantEmail: undefined,
-  applicantMobileNumber: undefined,
-  sourceOfFunds: undefined,
-  paidBy: undefined,
-  payeeNameAsPerPan: undefined,
-  payeePanNumber: undefined,
-  payeeDobAsPerPan: undefined,
-  declaredEducationLoanAmount: undefined,
-  niumPreviousTransactionAmount: undefined,
-  declarePreviousAmountByOtherAd: undefined,
-  totalTransactionAmountTcs: undefined,
+  applicantEmail: '',
+  applicantMobileNumber: '',
+  sourceOfFunds: '',
+  paidBy: '',
+  payeeNameAsPerPan: '',
+  payeePanNumber: '',
+  payeeDobAsPerPan: '',
+  declaredEducationLoanAmount: '',
+  niumPreviousTransactionAmount: '',
+  declarePreviousAmountByOtherAd: '',
+  totalTransactionAmountTcs: '',
 };
 
 
@@ -42,6 +41,7 @@ const DealBooking = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const methods = useForm({
     resolver: zodResolver(kycDetailsSchema),
+    mode: 'onChange',
     defaultValues: defaultValues,
   });
   const {
@@ -78,7 +78,7 @@ const DealBooking = () => {
               <Button type="button" onClick={handleCancel} variant="light"> 
               Cancel 
             </Button>
-            <Button type="button" onClick={handlePaymentSuccess} variant="secondary"> 
+            <Button type="button" onClick={handleValidateAll} variant="secondary"> 
               Confirm Booking 
             </Button> 
               <Button type="button" onClick={handleShareTransactionDetails} variant="secondary"> 

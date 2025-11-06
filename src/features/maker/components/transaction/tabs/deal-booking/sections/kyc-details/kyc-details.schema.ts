@@ -1,12 +1,8 @@
 import { z } from 'zod';
 
 export const kycDetailsSchema = z.object({
-  transactionType: z.string().nonempty('Transaction Type is required'),
-
   purpose: z.string().nonempty('Purpose is required'),
-
   fxCurrency: z.string().nonempty('FX Currency is required'),
-
   fxAmount: z
     .string()
     .optional()
@@ -14,7 +10,7 @@ export const kycDetailsSchema = z.object({
       message: 'Please enter a valid amount',
     }),
 
-  niumSettlementRate: z
+  companySettlementRate: z
     .string()
     .optional()
     .refine((val) => !val || /^[0-9]*\.?[0-9]*$/.test(val), {
@@ -87,10 +83,50 @@ export const kycDetailsSchema = z.object({
     }),
 
   payeeDobAsPerPan: z.string().optional(),
-  declaredEducationLoanAmount: z.string().optional(),
-  niumPreviousTransactionAmount: z.string().optional(),
-  declarePreviousAmountByOtherAd: z.string().optional(),
-  totalTransactionAmountTcs: z.string().optional(),
+  declaredEducationLoanAmount: z
+    .string()
+    .optional()
+    .refine((val) => !val || /^[0-9]*\.?[0-9]*$/.test(val), {
+      message: 'Please enter a valid amount',
+    })
+    .refine((val) => !val || parseFloat(val) >= 0, {
+      message: 'Amount cannot be negative',
+    }),
+  niumPreviousTransactionAmount: z
+    .string()
+    .optional()
+    .refine((val) => !val || /^[0-9]*\.?[0-9]*$/.test(val), {
+      message: 'Please enter a valid amount',
+    })
+    .refine((val) => !val || parseFloat(val) >= 0, {
+      message: 'Amount cannot be negative',
+    }),
+  declarePreviousAmountByOtherAd: z
+    .string()
+    .optional()
+    .refine((val) => !val || !val.includes(' ') && !val.includes('-'), {
+      message: 'Declare Previous Amount By OtherAd cannot contain spaces or hyphens',
+    })
+    .transform((val) => val?.trim() || '')
+    .refine((val) => !val || /^[0-9]*\.?[0-9]*$/.test(val), {
+      message: 'Please enter a valid amount',
+    })
+    .refine((val) => !val || parseFloat(val) >= 0, {
+      message: 'Amount cannot be negative',
+    }),
+  totalTransactionAmountTcs: z
+    .string()
+    .optional()
+    .refine((val) => !val || !val.includes(' ') && !val.includes('-'), {
+      message: 'Total Transaction Amount Tcs cannot contain spaces or hyphens',
+    })
+    .transform((val) => val?.trim() || '')
+    .refine((val) => !val || /^[0-9]*\.?[0-9]*$/.test(val), {
+      message: 'Please enter a valid amount',
+    })
+    .refine((val) => !val || parseFloat(val) >= 0, {
+      message: 'Amount cannot be negative',
+    }),
 }).refine((data) => {
   if (data.sourceOfFunds === 'education') {
     return (

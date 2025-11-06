@@ -19,26 +19,23 @@ interface SourceOfEducationProps {
 const SourceOfEducation = ({ control, errors }: SourceOfEducationProps) => {
   
   return (
-  <Spacer>
-      <FormFieldRow rowCols={1} wrapperClassName="flex-row md:!flex-nowrap">
-        <div className="flex flex-wrap w-1/3 gap-4">
+      <FormFieldRow rowCols={1} wrapperClassName="flex-row md:!flex-nowrap items-start mt-10">
+        <div className="flex flex-wrap w-1/2 gap-4 items-start">
             <FormFieldRow rowCols={1}>
-              {Object.entries(sourceOfEducationConfig.fields)
-                .slice(0, 2)
-                .map(([name, field]) => (
-                  <FieldWrapper key={name}>
-                    {getController({ field, name, control, errors })}
-                  </FieldWrapper>
-                ))}
+              <FieldWrapper key="declaredEducationLoanAmount">
+                {getController({ ...sourceOfEducationConfig.fields.declaredEducationLoanAmount, name: 'declaredEducationLoanAmount', control, errors })}
+              </FieldWrapper>
+              <FieldWrapper key="niumPreviousTransactionAmount">
+                {getController({ ...sourceOfEducationConfig.fields.niumPreviousTransactionAmount, name: 'niumPreviousTransactionAmount', control, errors })}
+              </FieldWrapper>
             </FormFieldRow>
             <FormFieldRow rowCols={1}>
-              {Object.entries(sourceOfEducationConfig.fields)
-                .slice(2, 4)
-                .map(([name, field]) => (
-                  <FieldWrapper key={name}>
-                    {getController({...field, name, control, errors })}
-                  </FieldWrapper>
-                ))}
+              <FieldWrapper key="declarePreviousAmountByOtherAd">
+                {getController({ ...sourceOfEducationConfig.fields.declarePreviousAmountByOtherAd, name: 'declarePreviousAmountByOtherAd', control, errors })}
+              </FieldWrapper>
+              <FieldWrapper key="totalTransactionAmountTcs">
+                {getController({ ...sourceOfEducationConfig.fields.totalTransactionAmountTcs, name: 'totalTransactionAmountTcs', control, errors })}
+              </FieldWrapper>
             </FormFieldRow>
           
         </div>
@@ -51,8 +48,6 @@ const SourceOfEducation = ({ control, errors }: SourceOfEducationProps) => {
             />
         </div>
      </FormFieldRow>
-     </Spacer>
-     
   );
 };
 

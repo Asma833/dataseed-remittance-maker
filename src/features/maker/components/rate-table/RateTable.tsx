@@ -30,7 +30,7 @@ export default function RateTable({
         {invoices.map((invoice) => (
           <TableRow key={invoice.id}>
             {Object.keys(columnKeys).map((key) => (
-              <TableCell key={key} className={cn('text-right', columnKeys[key as ColumnKey]?.className)}>
+              <TableCell key={key} className={cn('text-right pb-5', columnKeys[key as ColumnKey]?.className)}>
                 {invoice.cells?.[key as ColumnKey]?.()}
               </TableCell>
             ))}
@@ -38,11 +38,17 @@ export default function RateTable({
         ))}
       </TableBody>
       <TableFooter>
-        <TableRow className="bg-[#9e9e9e]">
-          <TableCell colSpan={3} className="text-white">
-            Total
+        <TableRow className="bg-gray-50/50">
+          <TableCell colSpan={3}>
+            Total Payable Amount
           </TableCell>
-          <TableCell className="text-right text-white">{totalAmount}</TableCell>
+          <TableCell className="text-right">{totalAmount}</TableCell>
+        </TableRow>
+         <TableRow className="bg-gray-50/50">
+         <TableCell colSpan={3}>
+            Beneficiary Amount (In Fx Value)
+          </TableCell>
+          <TableCell className="text-right">{totalAmount}</TableCell>
         </TableRow>
       </TableFooter>
     </Table>
