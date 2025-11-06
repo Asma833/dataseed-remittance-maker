@@ -1,7 +1,7 @@
 import { NavLink, Outlet, useLocation } from 'react-router-dom';
 import { cn } from '@/utils/cn';
-import DealBooking from '../../../components/transaction/tabs/deal-booking/DealBooking';
-import CreateTransactions from '../../../components/transaction/tabs/create-transactions-tab/CreateTransactions';
+import DealBooking from '../../../components/transaction/tabs/deal-booking/deal-booking';
+import CreateTransactions from '../../../components/transaction/tabs/create-transactions-tab/create-transactions';
 import { getTransactionTabs } from '@/core/routes/route-maps/agent-maker.routes';
 
 const TransactionPage = () => {

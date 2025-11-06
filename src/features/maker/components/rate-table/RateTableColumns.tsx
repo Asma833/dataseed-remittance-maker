@@ -57,6 +57,17 @@ const GetRateTableColumns = ({
       name: fieldPath,
       type: 'text',
       disabled: mode === 'view' || !editableFields.includes(fieldPath.replace(`${id}.`, '')),
+      onInputChange: (e: React.ChangeEvent<HTMLInputElement>) => {
+        let value = e.target.value;
+        // Remove spaces and hyphens
+        value = value.replace(/[\s-]/g, '');
+        // Ensure only one dot and digits
+        const parts = value.split('.');
+        if (parts.length > 2) {
+          value = parts[0] + '.' + parts.slice(1).join('');
+        }
+        e.target.value = value;
+      },
       ...commonInputStyles(fieldPath),
     });
 

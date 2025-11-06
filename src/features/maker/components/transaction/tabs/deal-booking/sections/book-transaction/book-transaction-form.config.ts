@@ -1,7 +1,6 @@
 import { FieldType } from "@/types/enums";
 
-
-export const bookTransactionConfig = {
+const bookTransactionConfig = {
   sectionTitle: 'Book Transaction',
   fields: {
     purpose: {
@@ -10,13 +9,6 @@ export const bookTransactionConfig = {
       type: FieldType.Select,
       required: true,
       placeholder: 'Select Purpose',
-      options: {
-        education_fee: { label: 'Education Fee' },
-        medical_treatment: { label: 'Medical Treatment' },
-        family_maintenance: { label: 'Family Maintenance' },
-        business_travel: { label: 'Business Travel' },
-        investment: { label: 'Investment' },
-      },
       isMulti: false,
     },
     fxCurrency: {
@@ -37,28 +29,28 @@ export const bookTransactionConfig = {
     fxAmount: {
       name:'fxAmount',
       label: 'Fx Amount',
-      type: FieldType.Text,
+      type: FieldType.Number,
       required: false,
       placeholder: 'Enter Fx Amount',
     },
     companySettlementRate: {
       name:'companySettlementRate',
       label: 'Nium Settlement Rate',
-      type: FieldType.Text,
+      type: FieldType.Number,
       required: false,
       placeholder: 'Enter Settlement Rate',
     },
     addMargins: {
       name:'addMargins',
       label: 'Add Margins',
-      type: FieldType.Text,
+      type: FieldType.Number,
       required: false,
       placeholder: 'Enter Margins',
     },
     customerRate: {
       name:'customerRate',
       label: 'Customer Rate',
-      type: FieldType.Text,
+      type: FieldType.Number,
       required: false,
       placeholder: 'Customer Rate',
       readOnly: true,

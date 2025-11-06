@@ -9,9 +9,9 @@ export const makerComponents = {
   ViewStatus: lazy(() => import('@/features/maker/pages/view-status/ViewStatusPage')),
   EditTransaction: lazy(() => import('@/features/maker/pages/edit-transaction/EditTransaction')),
   TransactionPage: lazy(() => import('@/features/maker/pages/transaction/remittance/page')),
-  DealBooking: lazy(() => import('@/features/maker/components/transaction/tabs/deal-booking/DealBooking')),
+  DealBooking: lazy(() => import('@/features/maker/components/transaction/tabs/deal-booking/deal-booking')),
   CreateTransactions: lazy(
-    () => import('@/features/maker/components/transaction/tabs/create-transactions-tab/CreateTransactions')
+    () => import('@/features/maker/components/transaction/tabs/create-transactions-tab/create-transactions')
   ),
   KYCUpload: lazy(() => import('@/features/maker/components/transaction/tabs/kyc-upload-tab/KYCUpload')),
   PaymentStatus: lazy(() => import('@/features/maker/components/transaction/tabs/payment-tab/Payment')),

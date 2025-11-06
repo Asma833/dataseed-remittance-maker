@@ -1,6 +1,157 @@
 import { z } from 'zod';
 
 export const kycDetailsSchema = z.object({
+  invoiceRateTable: z.object({
+    transactionValue: z.object({
+      niumRate: z.number().optional(),
+      agentMarkUp: z.number().optional(),
+      rate: z.number().optional(),
+    }),
+    remittanceCharges: z.object({
+      niumRate: z.string().optional()
+        .refine((val) => !val || !val.includes(' ') && !val.includes('-'), {
+          message: 'Nium Rate cannot contain spaces or hyphens',
+        })
+        .refine((val) => !val || /^[0-9]*\.?[0-9]*$/.test(val), {
+          message: 'Please enter a valid amount',
+        })
+        .refine((val) => !val || parseFloat(val) >= 0, {
+          message: 'Amount cannot be negative',
+        }),
+      agentMarkUp: z.string().optional()
+        .refine((val) => !val || !val.includes(' ') && !val.includes('-'), {
+          message: 'Agent Mark Up cannot contain spaces or hyphens',
+        })
+        .refine((val) => !val || /^[0-9]*\.?[0-9]*$/.test(val), {
+          message: 'Please enter a valid amount',
+        })
+        .refine((val) => !val || parseFloat(val) >= 0, {
+          message: 'Amount cannot be negative',
+        }),
+      rate: z.string().optional()
+        .refine((val) => !val || !val.includes(' ') && !val.includes('-'), {
+          message: 'Rate cannot contain spaces or hyphens',
+        })
+        .refine((val) => !val || /^[0-9]*\.?[0-9]*$/.test(val), {
+          message: 'Please enter a valid amount',
+        })
+        .refine((val) => !val || parseFloat(val) >= 0, {
+          message: 'Amount cannot be negative',
+        }),
+    }),
+    nostroCharges: z.object({
+      niumRate: z.string().optional()
+        .refine((val) => !val || !val.includes(' ') && !val.includes('-'), {
+          message: 'Nium Rate cannot contain spaces or hyphens',
+        })
+        .refine((val) => !val || /^[0-9]*\.?[0-9]*$/.test(val), {
+          message: 'Please enter a valid amount',
+        })
+        .refine((val) => !val || parseFloat(val) >= 0, {
+          message: 'Amount cannot be negative',
+        }),
+      agentMarkUp: z.string().optional()
+        .refine((val) => !val || !val.includes(' ') && !val.includes('-'), {
+          message: 'Agent Mark Up cannot contain spaces or hyphens',
+        })
+        .refine((val) => !val || /^[0-9]*\.?[0-9]*$/.test(val), {
+          message: 'Please enter a valid amount',
+        })
+        .refine((val) => !val || parseFloat(val) >= 0, {
+          message: 'Amount cannot be negative',
+        }),
+      rate: z.string().optional()
+        .refine((val) => !val || !val.includes(' ') && !val.includes('-'), {
+          message: 'Rate cannot contain spaces or hyphens',
+        })
+        .refine((val) => !val || /^[0-9]*\.?[0-9]*$/.test(val), {
+          message: 'Please enter a valid amount',
+        })
+        .refine((val) => !val || parseFloat(val) >= 0, {
+          message: 'Amount cannot be negative',
+        }),
+    }),
+    otherCharges: z.object({
+      niumRate: z.string().optional()
+        .refine((val) => !val || !val.includes(' ') && !val.includes('-'), {
+          message: 'Nium Rate cannot contain spaces or hyphens',
+        })
+        .refine((val) => !val || /^[0-9]*\.?[0-9]*$/.test(val), {
+          message: 'Please enter a valid amount',
+        })
+        .refine((val) => !val || parseFloat(val) >= 0, {
+          message: 'Amount cannot be negative',
+        }),
+      agentMarkUp: z.string().optional()
+        .refine((val) => !val || !val.includes(' ') && !val.includes('-'), {
+          message: 'Agent Mark Up cannot contain spaces or hyphens',
+        })
+        .refine((val) => !val || /^[0-9]*\.?[0-9]*$/.test(val), {
+          message: 'Please enter a valid amount',
+        })
+        .refine((val) => !val || parseFloat(val) >= 0, {
+          message: 'Amount cannot be negative',
+        }),
+      rate: z.string().optional()
+        .refine((val) => !val || !val.includes(' ') && !val.includes('-'), {
+          message: 'Rate cannot contain spaces or hyphens',
+        })
+        .refine((val) => !val || /^[0-9]*\.?[0-9]*$/.test(val), {
+          message: 'Please enter a valid amount',
+        })
+        .refine((val) => !val || parseFloat(val) >= 0, {
+          message: 'Amount cannot be negative',
+        }),
+    }),
+    transactionAmount: z.object({
+      rate: z.string().optional()
+        .refine((val) => !val || !val.includes(' ') && !val.includes('-'), {
+          message: 'Rate cannot contain spaces or hyphens',
+        })
+        .refine((val) => !val || /^[0-9]*\.?[0-9]*$/.test(val), {
+          message: 'Please enter a valid amount',
+        })
+        .refine((val) => !val || parseFloat(val) >= 0, {
+          message: 'Amount cannot be negative',
+        }),
+    }),
+    gstAmount: z.object({
+      rate: z.string().optional()
+        .refine((val) => !val || !val.includes(' ') && !val.includes('-'), {
+          message: 'Rate cannot contain spaces or hyphens',
+        })
+        .refine((val) => !val || /^[0-9]*\.?[0-9]*$/.test(val), {
+          message: 'Please enter a valid amount',
+        })
+        .refine((val) => !val || parseFloat(val) >= 0, {
+          message: 'Amount cannot be negative',
+        }),
+    }),
+    totalInrAmount: z.object({
+      rate: z.string().optional()
+        .refine((val) => !val || !val.includes(' ') && !val.includes('-'), {
+          message: 'Rate cannot contain spaces or hyphens',
+        })
+        .refine((val) => !val || /^[0-9]*\.?[0-9]*$/.test(val), {
+          message: 'Please enter a valid amount',
+        })
+        .refine((val) => !val || parseFloat(val) >= 0, {
+          message: 'Amount cannot be negative',
+        }),
+    }),
+    tcs: z.object({
+      rate: z.string().optional()
+        .refine((val) => !val || !val.includes(' ') && !val.includes('-'), {
+          message: 'Rate cannot contain spaces or hyphens',
+        })
+        .refine((val) => !val || /^[0-9]*\.?[0-9]*$/.test(val), {
+          message: 'Please enter a valid amount',
+        })
+        .refine((val) => !val || parseFloat(val) >= 0, {
+          message: 'Amount cannot be negative',
+        }),
+    }),
+  }),
   purpose: z.string().nonempty('Purpose is required'),
   fxCurrency: z.string().nonempty('FX Currency is required'),
   fxAmount: z
