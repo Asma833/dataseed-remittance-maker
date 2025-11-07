@@ -32,19 +32,19 @@ const BookTransaction = ({ control, errors }: BookTransactionProps) => {
       <FormContentWrapper className="rounded-lg w-full mr-auto bg-transparent">
         <Spacer>
           <FormFieldRow rowCols={4}>
-            {( ['purpose', 'fxCurrency', 'fxAmount'] as const ).map(name => {
+            {( ['purpose', 'fx_currency', 'fx_amount'] as const ).map(name => {
               const field = bookTransactionConfig.fields[name];
               let fieldWithOptions = field;
               if (name === 'purpose') {
                 fieldWithOptions = { ...field, options: purposeOptions };
-              } else if (name === 'fxCurrency') {
+              } else if (name === 'fx_currency') {
                 fieldWithOptions = { ...field, options: currencyOptions };
               }
               return <FieldWrapper key={name}>{getController({ ...fieldWithOptions, name, control, errors })}</FieldWrapper>;
             })}
           </FormFieldRow>
           <FormFieldRow rowCols={4}>
-            {( ['companySettlementRate', 'addMargins', 'customerRate', 'nostroCharges'] as const ).map(name => {
+            {( ['company_settlement_rate', 'add_margins', 'customer_rate', 'nostro_charges'] as const ).map(name => {
               const field = bookTransactionConfig.fields[name];
               return <FieldWrapper key={name}>{getController({ ...field, name, control, errors })}</FieldWrapper>;
             })}

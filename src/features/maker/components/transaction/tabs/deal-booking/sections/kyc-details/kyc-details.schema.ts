@@ -1,14 +1,14 @@
 import { z } from 'zod';
 
 export const kycDetailsSchema = z.object({
-  invoiceRateTable: z.object({
-    transactionValue: z.object({
-      niumRate: z.number().optional(),
-      agentMarkUp: z.number().optional(),
+  invoice_rate_table: z.object({
+    transaction_value: z.object({
+      nium_rate: z.number().optional(),
+      agent_mark_up: z.number().optional(),
       rate: z.number().optional(),
     }),
-    remittanceCharges: z.object({
-      niumRate: z.string().optional()
+    remittance_charges: z.object({
+      nium_rate: z.string().optional()
         .refine((val) => !val || !val.includes(' ') && !val.includes('-'), {
           message: 'Nium Rate cannot contain spaces or hyphens',
         })
@@ -18,7 +18,7 @@ export const kycDetailsSchema = z.object({
         .refine((val) => !val || parseFloat(val) >= 0, {
           message: 'Amount cannot be negative',
         }),
-      agentMarkUp: z.string().optional()
+      agent_mark_up: z.string().optional()
         .refine((val) => !val || !val.includes(' ') && !val.includes('-'), {
           message: 'Agent Mark Up cannot contain spaces or hyphens',
         })
@@ -39,8 +39,8 @@ export const kycDetailsSchema = z.object({
           message: 'Amount cannot be negative',
         }),
     }),
-    nostroCharges: z.object({
-      niumRate: z.string().optional()
+    nostro_charges: z.object({
+      nium_rate: z.string().optional()
         .refine((val) => !val || !val.includes(' ') && !val.includes('-'), {
           message: 'Nium Rate cannot contain spaces or hyphens',
         })
@@ -50,7 +50,7 @@ export const kycDetailsSchema = z.object({
         .refine((val) => !val || parseFloat(val) >= 0, {
           message: 'Amount cannot be negative',
         }),
-      agentMarkUp: z.string().optional()
+      agent_mark_up: z.string().optional()
         .refine((val) => !val || !val.includes(' ') && !val.includes('-'), {
           message: 'Agent Mark Up cannot contain spaces or hyphens',
         })
@@ -71,8 +71,8 @@ export const kycDetailsSchema = z.object({
           message: 'Amount cannot be negative',
         }),
     }),
-    otherCharges: z.object({
-      niumRate: z.string().optional()
+    other_charges: z.object({
+      nium_rate: z.string().optional()
         .refine((val) => !val || !val.includes(' ') && !val.includes('-'), {
           message: 'Nium Rate cannot contain spaces or hyphens',
         })
@@ -82,7 +82,7 @@ export const kycDetailsSchema = z.object({
         .refine((val) => !val || parseFloat(val) >= 0, {
           message: 'Amount cannot be negative',
         }),
-      agentMarkUp: z.string().optional()
+      agent_mark_up: z.string().optional()
         .refine((val) => !val || !val.includes(' ') && !val.includes('-'), {
           message: 'Agent Mark Up cannot contain spaces or hyphens',
         })
@@ -103,7 +103,7 @@ export const kycDetailsSchema = z.object({
           message: 'Amount cannot be negative',
         }),
     }),
-    transactionAmount: z.object({
+    transaction_amount: z.object({
       rate: z.string().optional()
         .refine((val) => !val || !val.includes(' ') && !val.includes('-'), {
           message: 'Rate cannot contain spaces or hyphens',
@@ -115,7 +115,7 @@ export const kycDetailsSchema = z.object({
           message: 'Amount cannot be negative',
         }),
     }),
-    gstAmount: z.object({
+    gst_amount: z.object({
       rate: z.string().optional()
         .refine((val) => !val || !val.includes(' ') && !val.includes('-'), {
           message: 'Rate cannot contain spaces or hyphens',
@@ -127,7 +127,7 @@ export const kycDetailsSchema = z.object({
           message: 'Amount cannot be negative',
         }),
     }),
-    totalInrAmount: z.object({
+    total_inr_amount: z.object({
       rate: z.string().optional()
         .refine((val) => !val || !val.includes(' ') && !val.includes('-'), {
           message: 'Rate cannot contain spaces or hyphens',
@@ -153,22 +153,22 @@ export const kycDetailsSchema = z.object({
     }),
   }),
   purpose: z.string().nonempty('Purpose is required'),
-  fxCurrency: z.string().nonempty('FX Currency is required'),
-  fxAmount: z
+  fx_currency: z.string().nonempty('FX Currency is required'),
+  fx_amount: z
     .string()
     .optional()
     .refine((val) => !val || /^[0-9]*\.?[0-9]*$/.test(val), {
       message: 'Please enter a valid amount',
     }),
 
-  companySettlementRate: z
+  company_settlement_rate: z
     .string()
     .optional()
     .refine((val) => !val || /^[0-9]*\.?[0-9]*$/.test(val), {
       message: 'Please enter a valid rate',
     }),
 
-  addMargins: z
+  add_margins: z
     .string()
     .optional()
     .refine((val) => !val || /^[0-9]*\.?[0-9]*$/.test(val), {
@@ -178,26 +178,26 @@ export const kycDetailsSchema = z.object({
       message: 'Margin must be between 0 and 100',
     }),
 
-  customerRate: z
+  customer_rate: z
     .string()
     .optional()
     .refine((val) => !val || /^[0-9]*\.?[0-9]*$/.test(val), {
       message: 'Please enter a valid rate',
     }),
 
-  nostroCharges: z
+  nostro_charges: z
     .string()
     .optional(),
-  applicantName: z.string().nonempty('Applicant name is required'),
+  applicant_name: z.string().nonempty('Applicant name is required'),
 
-  applicantPanNumber: z
+  applicant_pan_number: z
     .string()
     .nonempty('PAN number is required')
     .regex(/^[A-Z]{5}[0-9]{4}[A-Z]{1}$/, 'PAN number must be in format ABCDE9799F'),
 
-  applicantDob: z.string().nonempty('Date of birth is required'),
+  applicant_dob: z.string().nonempty('Date of birth is required'),
 
-  applicantEmail: z
+  applicant_email: z
     .string()
     .optional()
     .refine(
@@ -206,28 +206,28 @@ export const kycDetailsSchema = z.object({
       'Invalid email address format'
     ),
 
-  applicantMobileNumber: z
+  applicant_mobile_number: z
     .string()
     .optional()
     .refine((val) => !val || /^[0-9]{10}$/.test(val), {
       message: 'Mobile number must be 10 digits',
     }),
 
-  sourceOfFunds: z.string().optional(),
+  source_of_funds: z.string().optional(),
 
-  paidBy: z.string().optional(),
+  paid_by: z.string().optional(),
 
-  payeeNameAsPerPan: z.string().optional(),
+  payee_name_as_per_pan: z.string().optional(),
 
-  payeePanNumber: z
+  payee_pan_number: z
     .string()
     .optional()
     .refine((val) => !val || /^[A-Z]{5}[0-9]{4}[A-Z]{1}$/.test(val), {
       message: 'PAN number must be in format ABCDE9799F',
     }),
 
-  payeeDobAsPerPan: z.string().optional(),
-  declaredEducationLoanAmount: z
+  payee_dob_as_per_pan: z.string().optional(),
+  declared_education_loan_amount: z
     .string()
     .optional()
     .refine((val) => !val || /^[0-9]*\.?[0-9]*$/.test(val), {
@@ -236,7 +236,7 @@ export const kycDetailsSchema = z.object({
     .refine((val) => !val || parseFloat(val) >= 0, {
       message: 'Amount cannot be negative',
     }),
-  niumPreviousTransactionAmount: z
+  nium_previous_transaction_amount: z
     .string()
     .optional()
     .refine((val) => !val || /^[0-9]*\.?[0-9]*$/.test(val), {
@@ -245,7 +245,7 @@ export const kycDetailsSchema = z.object({
     .refine((val) => !val || parseFloat(val) >= 0, {
       message: 'Amount cannot be negative',
     }),
-  declarePreviousAmountByOtherAd: z
+  declare_previous_amount_by_other_ad: z
     .string()
     .optional()
     .refine((val) => !val || !val.includes(' ') && !val.includes('-'), {
@@ -258,7 +258,7 @@ export const kycDetailsSchema = z.object({
     .refine((val) => !val || parseFloat(val) >= 0, {
       message: 'Amount cannot be negative',
     }),
-  totalTransactionAmountTcs: z
+  total_transaction_amount_tcs: z
     .string()
     .optional()
     .refine((val) => !val || !val.includes(' ') && !val.includes('-'), {
@@ -272,12 +272,12 @@ export const kycDetailsSchema = z.object({
       message: 'Amount cannot be negative',
     }),
 }).refine((data) => {
-  if (data.sourceOfFunds === 'education') {
+  if (data.source_of_funds === 'education') {
     return (
-      data.declaredEducationLoanAmount &&
-      data.niumPreviousTransactionAmount &&
-      data.declarePreviousAmountByOtherAd &&
-      data.totalTransactionAmountTcs
+      data.declared_education_loan_amount &&
+      data.nium_previous_transaction_amount &&
+      data.declare_previous_amount_by_other_ad &&
+      data.total_transaction_amount_tcs
     );
   }
   return true;

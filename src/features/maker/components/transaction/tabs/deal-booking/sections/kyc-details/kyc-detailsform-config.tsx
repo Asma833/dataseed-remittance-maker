@@ -4,43 +4,43 @@ import { FieldType } from "@/types/enums";
 const kycDetailsConfig = {
   sectionTitle: 'KYC Details',
   fields: {
-    applicantName: {
-      name:'applicantName',
+    applicant_name: {
+      name:'applicant_name',
       label: 'Applicant Name',
       type: FieldType.Text,
       required: true,
       placeholder: 'Enter Applicant Name',
     },
-    applicantPanNumber: {
-      name:'applicantPanNumber',
+    applicant_pan_number: {
+      name:'applicant_pan_number',
       label: 'Applicant PAN Number',
       type: FieldType.Text,
       required: true,
       placeholder: 'Enter PAN Number'
     },
-    applicantDob: {
-      name:'applicantDob',
+    applicant_dob: {
+      name:'applicant_dob',
       label: 'Applicant DOB',
       type: FieldType.Date,
       required: true,
       placeholder: 'Select Date of Birth'
     },
-    applicantEmail: {
-      name:'applicantEmail',
+    applicant_email: {
+      name:'applicant_email',
       label: 'Applicant Email',
       type: FieldType.Text,
       required: false,
       placeholder: 'Enter Email Address',
     },
-    applicantMobileNumber: {
-      name:'applicantMobileNumber',
+    applicant_mobile_number: {
+      name:'applicant_mobile_number',
       label: 'Applicant Mobile Number',
       type: FieldType.Text,
       required: false,
       placeholder: 'Enter Mobile Number',
     },
-    sourceOfFunds: {
-      name:'sourceOfFunds',
+    source_of_funds: {
+      name:'source_of_funds',
       label: 'Source of Funds',
       type: FieldType.Select,
       required: false,
@@ -50,8 +50,8 @@ const kycDetailsConfig = {
         others: { label: 'Others' },
       },
     },
-    paidBy: {
-      name:'paidBy',
+    paid_by: {
+      name:'paid_by',
       label: 'Paid By',
       type: FieldType.Select,
       required: false,
@@ -65,22 +65,22 @@ const kycDetailsConfig = {
         brother: { label: 'Brother' }
       },
     },
-    payeeNameAsPerPan: {
-      name:'payeeNameAsPerPan',
+    payee_name_as_per_pan: {
+      name:'payee_name_as_per_pan',
       label: 'Payee Name As Per PAN',
       type: FieldType.Text,
       required: false,
       placeholder: 'Enter Payee Name',
     },
-    payeePanNumber: {
-      name:'payeePanNumber',
+    payee_pan_number: {
+      name:'payee_pan_number',
       label: 'Payee PAN Number',
       type: FieldType.Text,
       required: false,
       placeholder: 'Enter Payee PAN Number',
     },
-    payeeDobAsPerPan: {
-      name:'payeeDobAsPerPan',
+    payee_dob_as_per_pan: {
+      name:'payee_dob_as_per_pan',
       label: 'Payee DOB As Per PAN',
       type: FieldType.Date,
       required: false,
