@@ -15,6 +15,7 @@ import Payments from '@/components/payments/Payments';
 import { useDealBooking } from '@/features/maker/hooks/useDealBooking';
 import { useCurrentUser } from '@/utils/getUserFromRedux';
 import { toast } from 'sonner';
+import useGetPurposes from '@/hooks/useGetPurposes';
 
 const defaultValues = {
   purpose: '',
@@ -96,7 +97,9 @@ const DealBooking = () => {
     formState: { errors, isSubmitting },
   } = methods;
   const purpose = watch('purpose');
-  console.log(purpose,"purpose=====================")
+  const { purposeTypes } = useGetPurposes();
+  const purposeLabel = purposeTypes?.find(p => p.id === purpose)?.text || '';
+  console.log(purposeLabel, "purposeLabel=====================")
   const totalInr = watch('invoiceRateTable.totalInrAmount.rate');
   const tcsRate = watch('invoiceRateTable.tcs.rate');
   const totalPayable = parseFloat(totalInr || '0') + parseFloat(tcsRate || '0');
@@ -190,7 +193,7 @@ const DealBooking = () => {
         <BookTransaction control={control} errors={errors} />
         <KycDetails control={control} errors={errors} />
       
-        {purpose === 'Education' && (
+        {purposeLabel === 'Education' && (
           <>
             <SourceOfEducation control={control} errors={errors}/>
           </>
