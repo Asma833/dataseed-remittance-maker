@@ -171,6 +171,9 @@ export const API = {
     CREATE: `/holidays`,
     UPDATE: (id: string) => `/holidays/${id}`,
   },
+  DEAL_BOOKING:{
+    CREATE:`/deal-booking`
+  }
 } as const;
 
 /**

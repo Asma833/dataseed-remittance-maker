@@ -46,13 +46,8 @@ const kycDetailsConfig = {
       required: false,
       placeholder: 'Select Source of Funds',
       options: {
-        salary: { label: 'Salary' },
-        business: { label: 'Business Income' },
-        investment: { label: 'Investment Returns' },
-        savings: { label: 'Savings' },
-        education: { label: 'Education' },
-        inheritance: { label: 'Inheritance' },
-        other: { label: 'Other' },
+        self: { label: 'Self' },
+        others: { label: 'Others' },
       },
     },
     paidBy: {
@@ -62,10 +57,12 @@ const kycDetailsConfig = {
       required: false,
       placeholder: 'Select Payment Method',
       options: {
-        self: { label: 'Self' },
-        company: { label: 'Company' },
-        relative: { label: 'Relative' },
-        other: { label: 'Other' },
+        father: { label: 'Father' },
+        mother: { label: 'Mother' },
+        husband: { label: 'Husband' },
+        wife: { label: 'Wife' },
+        sister: { label: 'Sister' },
+        brother: { label: 'Brother' }
       },
     },
     payeeNameAsPerPan: {

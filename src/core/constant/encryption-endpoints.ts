@@ -158,16 +158,21 @@ export const ENDPOINT_MATCHING_RULES: EndpointRulesConfig = {
     matchType: 'standard' as const,
     description: 'Update currency value',
   },
-  holiday: {
+  'holiday': {
     endpoint: API.HOLIDAYS.CREATE,
     matchType: 'standard' as const,
     description: 'Create holidays',
   },
-  transaction: {
+  'transaction': {
     endpoint: API.PURPOSE.TRANSACTION_MAPPING,
     matchType: 'standard' as const,
     description: 'Create transaction',
   },
+  'deal-booking':{
+    endpoint: API.DEAL_BOOKING.CREATE,
+    matchType: 'standard' as const,
+    description: 'Deal booking',
+  }
 } as const;
 
 /**

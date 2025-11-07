@@ -95,20 +95,21 @@ const DealBooking = () => {
     getValues,
     formState: { errors, isSubmitting },
   } = methods;
-  const sourceOfFunds = watch('sourceOfFunds');
+  const purpose = watch('purpose');
+  console.log(purpose,"purpose=====================")
   const totalInr = watch('invoiceRateTable.totalInrAmount.rate');
   const tcsRate = watch('invoiceRateTable.tcs.rate');
   const totalPayable = parseFloat(totalInr || '0') + parseFloat(tcsRate || '0');
 
   const onSubmit = async (formData: FieldValues) => {
-    const createdBy = getUserId() || 'user-123'; // Fallback if no user
+    const createdBy = getUserId() || ''; 
     const dealCode = `DEAL-${Date.now()}`;
 
     const payload = {
       customer_name: formData.applicantName || '',
       currency_code: formData.fxCurrency || '',
-      deal_amount: parseFloat(formData.fxAmount || '0'),
-      margin_amount: parseFloat(formData.addMargins || '0'),
+      deal_amount: formData.fxAmount || '0',
+      margin_amount: formData.addMargins || '0',
       deal_code: dealCode,
       created_by: createdBy,
       transaction_type: 'REMITTANCE',
@@ -116,13 +117,13 @@ const DealBooking = () => {
       kyc_status: 'PENDING',
       status: 'DRAFT',
       fx_currency: 'INR',
-      settlement_rate: parseFloat(formData.companySettlementRate || '0'),
-      customer_rate: parseFloat(formData.customerRate || '0'),
+      settlement_rate: formData.companySettlementRate || '0',
+      customer_rate: formData.customerRate || '0',
       applicant_email: formData.applicantEmail || '',
       applicant_mobile: formData.applicantMobileNumber || '',
       applicant_pan: formData.applicantPanNumber || '',
       applicant_dob: formData.applicantDob || '',
-      purpose: sourceOfFunds === 'education' ? 'Education' : (formData.purpose || ''),
+      purpose: formData.purpose || '',
       payee_name: formData.payeeNameAsPerPan || '',
       payee_pan: formData.payeePanNumber || '',
       payee_dob: formData.payeeDobAsPerPan || '',
@@ -189,7 +190,7 @@ const DealBooking = () => {
         <BookTransaction control={control} errors={errors} />
         <KycDetails control={control} errors={errors} />
       
-        {sourceOfFunds === 'education' && (
+        {purpose === 'Education' && (
           <>
             <SourceOfEducation control={control} errors={errors}/>
           </>

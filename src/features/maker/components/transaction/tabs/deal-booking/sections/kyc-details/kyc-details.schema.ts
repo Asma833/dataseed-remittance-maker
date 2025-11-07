@@ -187,20 +187,13 @@ export const kycDetailsSchema = z.object({
 
   nostroCharges: z
     .string()
-    .optional()
-    .refine((val) => !val || /^[0-9]*\.?[0-9]*$/.test(val), {
-      message: 'Please enter a valid amount',
-    })
-    .refine((val) => !val || parseFloat(val) >= 0, {
-      message: 'Charges cannot be negative',
-    }),
-
+    .optional(),
   applicantName: z.string().nonempty('Applicant name is required'),
 
   applicantPanNumber: z
     .string()
     .nonempty('PAN number is required')
-    .regex(/^[A-Z]{5}[0-9]{4}[A-Z]{1}$/, 'Invalid PAN number format'),
+    .regex(/^[A-Z]{5}[0-9]{4}[A-Z]{1}$/, 'PAN number must be in format ABCDE9799F'),
 
   applicantDob: z.string().nonempty('Date of birth is required'),
 
@@ -230,7 +223,7 @@ export const kycDetailsSchema = z.object({
     .string()
     .optional()
     .refine((val) => !val || /^[A-Z]{5}[0-9]{4}[A-Z]{1}$/.test(val), {
-      message: 'Invalid PAN number format',
+      message: 'PAN number must be in format ABCDE9799F',
     }),
 
   payeeDobAsPerPan: z.string().optional(),
