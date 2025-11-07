@@ -23,7 +23,7 @@ const kycDetailsConfig = {
       label: 'Applicant DOB',
       type: FieldType.Date,
       required: true,
-      placeholder: 'Select Date of Birth',
+      placeholder: 'Select Date of Birth'
     },
     applicantEmail: {
       name:'applicantEmail',

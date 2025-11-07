@@ -10,7 +10,6 @@ const bookTransactionConfig = {
       required: true,
       placeholder: 'Select Purpose',
       options: {},
-      // options will be overridden dynamically from useGetPurposes hook
       isMulti: false,
     },
     fxCurrency: {
@@ -20,7 +19,6 @@ const bookTransactionConfig = {
       required: true,
       placeholder: 'Select Currency',
       options: {},
-      // options will be overridden dynamically from useGetCurrencyRates
       isMulti: false,
     },
     fxAmount: {
