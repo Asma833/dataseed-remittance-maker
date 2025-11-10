@@ -1,6 +1,5 @@
 import { useState } from 'react';
 import { FieldValues, FormProvider } from 'react-hook-form';
-import { kycDetailsSchema } from './sections/kyc-details/kyc-details.schema';
 
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
@@ -17,56 +16,58 @@ import { useCurrentUser } from '@/utils/getUserFromRedux';
 import { toast } from 'sonner';
 import useGetPurposes from '@/hooks/useGetPurposes';
 
+import { kycDetailsSchema } from './sections/kyc-details/kyc-details.schema';
+
 const defaultValues = {
   purpose: '',
-  fxCurrency: '',
-  fxAmount: '',
-  companySettlementRate: '',
-  addMargins: '',
-  customerRate: '',
-  nostroCharges: '',
-  applicantName: '',
-  applicantPanNumber: '',
-  applicantDob: '',
-  applicantEmail: '',
-  applicantMobileNumber: '',
-  sourceOfFunds: '',
-  paidBy: '',
-  payeeNameAsPerPan: '',
-  payeePanNumber: '',
-  payeeDobAsPerPan: '',
-  declaredEducationLoanAmount: '',
-  niumPreviousTransactionAmount: '',
-  declarePreviousAmountByOtherAd: '',
-  totalTransactionAmountTcs: '',
-  invoiceRateTable: {
-    transactionValue: {
-      niumRate: undefined,
-      agentMarkUp: undefined,
+  fx_currency: '',
+  fx_amount: '',
+  company_settlement_rate: '',
+  add_margins: '',
+  customer_rate: '',
+  nostro_charges: '',
+  applicant_name: '',
+  applicant_pan_number: '',
+  applicant_dob: '',
+  applicant_email: '',
+  applicant_mobile_number: '',
+  source_of_funds: '',
+  paid_by: '',
+  payee_name_as_per_pan: '',
+  payee_pan_number: '',
+  payee_dob_as_per_pan: '',
+  declared_education_loan_amount: '',
+  nium_previous_transaction_amount: '',
+  declare_previous_amount_by_other_ad: '',
+  total_transaction_amount_tcs: '',
+  invoice_rate_table: {
+    transaction_value: {
+      nium_rate: undefined,
+      agent_mark_up: undefined,
       rate: undefined,
     },
-    remittanceCharges: {
-      niumRate: '',
-      agentMarkUp: '',
+    remittance_charges: {
+      nium_rate: '',
+      agent_mark_up: '',
       rate: '',
     },
-    nostroCharges: {
-      niumRate: '',
-      agentMarkUp: '',
+    nostro_charges: {
+      nium_rate: '',
+      agent_mark_up: '',
       rate: '',
     },
-    otherCharges: {
-      niumRate: '',
-      agentMarkUp: '',
+    other_charges: {
+      nium_rate: '',
+      agent_mark_up: '',
       rate: '',
     },
-    transactionAmount: {
+    transaction_amount: {
       rate: '',
     },
-    gstAmount: {
+    gst_amount: {
       rate: '',
     },
-    totalInrAmount: {
+    total_inr_amount: {
       rate: '',
     },
     tcs: {
@@ -74,7 +75,6 @@ const defaultValues = {
     },
   },
 };
-
 
 
 const DealBooking = () => {
@@ -99,9 +99,8 @@ const DealBooking = () => {
   const purpose = watch('purpose');
   const { purposeTypes } = useGetPurposes();
   const purposeLabel = purposeTypes?.find(p => p.id === purpose)?.text || '';
-  console.log(purposeLabel, "purposeLabel=====================")
-  const totalInr = watch('invoiceRateTable.totalInrAmount.rate');
-  const tcsRate = watch('invoiceRateTable.tcs.rate');
+  const totalInr = watch('invoice_rate_table.total_inr_amount.rate');
+  const tcsRate = watch('invoice_rate_table.tcs.rate');
   const totalPayable = parseFloat(totalInr || '0') + parseFloat(tcsRate || '0');
 
   const onSubmit = async (formData: FieldValues) => {
@@ -109,10 +108,10 @@ const DealBooking = () => {
     const dealCode = `DEAL-${Date.now()}`;
 
     const payload = {
-      customer_name: formData.applicantName || '',
-      currency_code: formData.fxCurrency || '',
-      deal_amount: formData.fxAmount || '0',
-      margin_amount: formData.addMargins || '0',
+      customer_name: formData.applicant_name || '',
+      currency_code: formData.fx_currency || '',
+      deal_amount: formData.fx_amount || '0',
+      margin_amount: formData.add_margins || '0',
       deal_code: dealCode,
       created_by: createdBy,
       transaction_type: 'REMITTANCE',
@@ -120,16 +119,16 @@ const DealBooking = () => {
       kyc_status: 'PENDING',
       status: 'DRAFT',
       fx_currency: 'INR',
-      settlement_rate: formData.companySettlementRate || '0',
-      customer_rate: formData.customerRate || '0',
-      applicant_email: formData.applicantEmail || '',
-      applicant_mobile: formData.applicantMobileNumber || '',
-      applicant_pan: formData.applicantPanNumber || '',
-      applicant_dob: formData.applicantDob || '',
+      settlement_rate: formData.company_settlement_rate || '0',
+      customer_rate: formData.customer_rate || '0',
+      applicant_email: formData.applicant_email || '',
+      applicant_mobile: formData.applicant_mobile_number || '',
+      applicant_pan: formData.applicant_pan_number || '',
+      applicant_dob: formData.applicant_dob || '',
       purpose: formData.purpose || '',
-      payee_name: formData.payeeNameAsPerPan || '',
-      payee_pan: formData.payeePanNumber || '',
-      payee_dob: formData.payeeDobAsPerPan || '',
+      payee_name: formData.payee_name_as_per_pan || '',
+      payee_pan: formData.payee_pan_number || '',
+      payee_dob: formData.payee_dob_as_per_pan || '',
     };
 
     try {
@@ -145,42 +144,42 @@ const DealBooking = () => {
   const handleCancel = () => {};
   const handleShareTransactionDetails = () => {
     const formData = getValues();
-    const { invoiceRateTable } = formData;
+    const { invoice_rate_table } = formData;
     const pdfTable = {
       transactionValue: {
-        niumRate: invoiceRateTable.transactionValue.niumRate ?? '',
-        agentMarkUp: invoiceRateTable.transactionValue.agentMarkUp ?? '',
-        rate: invoiceRateTable.transactionValue.rate ?? '',
+        niumRate: invoice_rate_table.transaction_value.nium_rate ?? '',
+        agentMarkUp: invoice_rate_table.transaction_value.agent_mark_up ?? '',
+        rate: invoice_rate_table.transaction_value.rate ?? '',
       },
       remittanceCharges: {
-        niumRate: invoiceRateTable.remittanceCharges.niumRate ?? '',
-        agentMarkUp: invoiceRateTable.remittanceCharges.agentMarkUp ?? '',
-        rate: invoiceRateTable.remittanceCharges.rate ?? '',
+        niumRate: invoice_rate_table.remittance_charges.nium_rate ?? '',
+        agentMarkUp: invoice_rate_table.remittance_charges.agent_mark_up ?? '',
+        rate: invoice_rate_table.remittance_charges.rate ?? '',
       },
       nostroCharges: {
-        niumRate: invoiceRateTable.nostroCharges.niumRate ?? '',
-        agentMarkUp: invoiceRateTable.nostroCharges.agentMarkUp ?? '',
-        rate: invoiceRateTable.nostroCharges.rate ?? '',
+        niumRate: invoice_rate_table.nostro_charges.nium_rate ?? '',
+        agentMarkUp: invoice_rate_table.nostro_charges.agent_mark_up ?? '',
+        rate: invoice_rate_table.nostro_charges.rate ?? '',
       },
       otherCharges: {
-        niumRate: invoiceRateTable.otherCharges.niumRate ?? '',
-        agentMarkUp: invoiceRateTable.otherCharges.agentMarkUp ?? '',
-        rate: invoiceRateTable.otherCharges.rate ?? '',
+        niumRate: invoice_rate_table.other_charges.nium_rate ?? '',
+        agentMarkUp: invoice_rate_table.other_charges.agent_mark_up ?? '',
+        rate: invoice_rate_table.other_charges.rate ?? '',
       },
       transactionAmount: {
-        rate: invoiceRateTable.transactionAmount.rate ?? '',
+        rate: invoice_rate_table.transaction_amount.rate ?? '',
       },
       gstAmount: {
-        rate: invoiceRateTable.gstAmount.rate ?? '',
+        rate: invoice_rate_table.gst_amount.rate ?? '',
       },
       totalInrAmount: {
-        rate: invoiceRateTable.totalInrAmount.rate ?? '',
+        rate: invoice_rate_table.total_inr_amount.rate ?? '',
       },
       tcs: {
-        rate: invoiceRateTable.tcs.rate ?? '',
+        rate: invoice_rate_table.tcs.rate ?? '',
       },
     };
-    generateRateTablePdf(pdfTable, totalPayable, 'transaction-details');
+    //generateRateTablePdf(pdfTable, totalPayable, 'transaction-details');
   };
   const handlePayment = () => {
     setIsModalOpen(true);

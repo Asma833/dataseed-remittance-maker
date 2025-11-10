@@ -44,19 +44,23 @@ const KycDetails = ({ control, errors }: KycDetailsProps) => {
               </>
             )}
           </FormFieldRow>
-          {sourceOfFunds === 'others' && (
+        
             <FormFieldRow rowCols={4}>
-              {( ['payee_pan_number'] as const ).map(name => {
-                const field = kycDetailsConfig.fields[name];
-                return <FieldWrapper key={name}>{getController({ ...field, name, control, errors })}</FieldWrapper>;
-              })}
-                <div className="flex items-center md:pt-5">
+              {sourceOfFunds === 'others' && (
+                <FieldWrapper>
+                  {( ['payee_pan_number'] as const ).map(name => {
+                    const field = kycDetailsConfig.fields[name];
+                    return getController({ ...field, name, control, errors });
+                  })}
+                </FieldWrapper>
+               )}
+                <div className="flex items-center justify-end md:pt-5 col-span-3">
                 <Button type="button" onClick={handleValidatePan} variant="secondary" >
                             Validate PAN Details
                 </Button>
                 </div>
             </FormFieldRow>
-          )}
+         
           
         </Spacer>
       </FormContentWrapper>

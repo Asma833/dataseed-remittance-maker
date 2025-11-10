@@ -1,12 +1,5 @@
-
-
-
-import Spacer from '@/components/form/wrapper/spacer';
-import { FieldValues, Control, FieldErrors } from 'react-hook-form';
+import { Control, FieldErrors } from 'react-hook-form';
 import sourceOfEducationConfig from './source-of-education-config';
-
-import ChargesTable from '../charges-table/charges-table';
-import type { kycDetailsSchema } from '../kyc-details/kyc-details.schema'; // <-- Add this import or adjust the path/type as needed
 import RateTable from '@/features/maker/components/rate-table/rate-table';
 import FieldWrapper from '@/components/form/wrapper/field-wrapper';
 import FormFieldRow from '@/components/form/wrapper/form-field-row';
