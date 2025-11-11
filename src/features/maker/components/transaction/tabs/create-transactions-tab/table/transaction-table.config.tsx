@@ -1,21 +1,6 @@
 import { ActionButtons, StatusBadge, TableColumn } from '@/components/table';
+import { TransactionData } from '../../../types/transaction.types';
 
-export interface TransactionData {
-  company_ref_no: string;
-  agent_ref_no: string;
-  order_date: string;
-  expiry_date: string;
-  applicant_name: string;
-  applicant_pan_number: string;
-  transaction_type: string;
-  purpose: string;
-  fx_currency: string;
-  fx_amount: number;
-  settlement_rate: number;
-  customer_rate: number;
-  transaction_amount: number;
-  deal_status: string;
-}
 
 export const GetTransactionTableColumns = ({
   handleEdit,
@@ -92,7 +77,7 @@ export const GetTransactionTableColumns = ({
       accessorKey: 'fx_amount',
       sortable: true,
       filterable: true,
-      cell: ({ value }: { value: number }) => value.toFixed(2),
+      cell: ({ value }: { value: number }) => (value || 0).toFixed(2),
     },
     {
       id: 'settlement_rate',
@@ -100,7 +85,7 @@ export const GetTransactionTableColumns = ({
       accessorKey: 'settlement_rate',
       sortable: true,
       filterable: true,
-      cell: ({ value }: { value: number }) => value.toFixed(4),
+      cell: ({ value }: { value: number }) => (value || 0).toFixed(4),
     },
     {
       id: 'customer_rate',
@@ -108,7 +93,7 @@ export const GetTransactionTableColumns = ({
       accessorKey: 'customer_rate',
       sortable: true,
       filterable: true,
-      cell: ({ value }: { value: number }) => value.toFixed(4),
+      cell: ({ value }: { value: number }) => (value || 0).toFixed(4),
     },
     {
       id: 'transaction_amount',
@@ -116,7 +101,7 @@ export const GetTransactionTableColumns = ({
       accessorKey: 'transaction_amount',
       sortable: true,
       filterable: true,
-      cell: ({ value }: { value: number }) => value.toFixed(2),
+      cell: ({ value }: { value: number }) => (value || 0).toFixed(2),
     },
     {
       id: 'deal_status',
@@ -124,12 +109,12 @@ export const GetTransactionTableColumns = ({
       accessorKey: 'deal_status',
       sortable: true,
       filterable: true,
-      cell: ({ value }: { value: string }) => <StatusBadge status={value} />,
+      cell: ({ value }: { value: string }) => <StatusBadge status={value || ''} />,
     },
     {
       id: 'action',
       header: 'Action',
-      // cell: (props: { row: TransactionData; value: any }) => <ActionButtons row={{ original: props.row }} onEdit={handleEdit} />,
+      cell: ({ row, value }: { row: TransactionData; value: any; }) => <ActionButtons row={row} onEdit={handleEdit} />,
       sortable: false,
       filterable: false,
     },
