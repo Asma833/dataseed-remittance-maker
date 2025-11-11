@@ -1,6 +1,6 @@
 import { FieldType } from "@/types/enums";
 
-const transactionBasicDetails = [
+const transactionBasicDetailsConfig = [
   {
     name: 'company_reference_number',
     label: 'Company Reference Number',
@@ -213,4 +213,4 @@ const transactionBasicDetails = [
   },
 ];
 
-export default transactionBasicDetails;
+export default transactionBasicDetailsConfig;

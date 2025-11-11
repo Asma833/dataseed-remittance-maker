@@ -4,11 +4,12 @@ import { beneficiaryBank, beneficiaryDetailsMeta } from './beneficairy-details.c
 
 import { CommonCreateTransactionProps } from '@/features/maker/types/create-transaction.types';
 import { cn } from '@/utils/cn';
-import Actions from '../../../components/Actions';
+
 import { useState } from 'react';
 import FormFieldRow from '@/components/form/wrapper/form-field-row';
 import FieldWrapper from '@/components/form/wrapper/field-wrapper';
 import { getController } from '@/components/form/utils/get-controller';
+import Actions from '../../../components/Actions';
 
 const BeneficiaryDetails = ({ setAccordionState }: CommonCreateTransactionProps) => {
   console.log('BeneficiaryDetails: RENDERING');

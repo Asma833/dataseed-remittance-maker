@@ -1,5 +1,5 @@
-import CreateTransactionsAccordion from '../components/CreateTransactionsAccordion';
-import { accordionItems } from '../config/accordionConfig';
+import CreateTransactionsAccordion from '../components/create-transactions-accordion';
+import { accordionItems } from '../config/accordion-config';
 import { Button } from '@/components/ui/button';
 
 type Props = {
