@@ -25,14 +25,14 @@ export default function CreateTransactionsAccordion({ accordionItems }: { accord
           key={item.id}
           expanded={expanded === item.id}
           onChange={handleChange(item.id)}
-          className="!bg-background"
+          className="bg-background!"
           sx={{ boxShadow: 'none' }}
         >
           <AccordionSummary
             expandIcon={<ChevronDown />}
             aria-controls={`${item.id}bh-content`}
             id={`${item.id}bh-header`}
-            className="!bg-transparent"
+            className="bg-transparent!"
           >
             <Typography component="span" className="w-1/3 shrink-0 bg-transparent text-foreground">
               {item.title}

@@ -1,13 +1,16 @@
 import { useMemo, useState } from 'react';
+import { useNavigate } from 'react-router-dom'
 import GetTransactionTableColumns from './transaction-table.config';
 import { DataTable, TableData, staticConfig } from '@/components/table';
 import { useGetTransactions } from '../../../hooks/useGetTransactions';
 import { TransactionData } from '../../../types/transaction.types';
+import { useCurrentUser } from '@/utils/getUserFromRedux';
+import { navigateWithRole } from '@/utils/navigationUtils';
 
 
-const TransactionTable = () => {
+const TransactionTable = ({ onCreate }: { onCreate?: () => void }) => {
   const { data: apiTransactions = [], isLoading } = useGetTransactions();
-
+  const navigate = useNavigate()
   const transactions: TransactionData[] = useMemo(() => {
     return (apiTransactions || []).map((item: any) => ({
       company_ref_no: item.company_ref_no || '-',
@@ -26,7 +29,8 @@ const TransactionTable = () => {
       deal_status: item.status || '-',
     }));
   }, [apiTransactions]);
-
+   const { getUserRole } = useCurrentUser();
+  const userRole = getUserRole();
   const config = {
     ...staticConfig,
     search: {
@@ -51,8 +55,9 @@ const TransactionTable = () => {
     pageCount: Math.ceil(transactions.length / (config.pagination?.pageSize || 10)),
     currentPage: 1,
   };
-  const handleCreate = () => {
-  };
+  const handleCreate = onCreate || (() => {
+    navigateWithRole(navigate, userRole, '/add-transaction');
+  });
   const handleDownload = (transaction: TransactionData) => {
     
   };
