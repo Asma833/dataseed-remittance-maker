@@ -1,11 +1,15 @@
-import { ActionButtons, StatusBadge, TableColumn } from '@/components/table';
+import { ActionButtons, StatusBadge, TableColumn } from '../../../../../../../components/table';
 import { TransactionData } from '../../../types/transaction.types';
 
 
 export const GetTransactionTableColumns = ({
-  handleEdit,
+  handleCreate,
+  handleDownload,
+  handleCustomerFillUpLink,
 }: {
-  handleEdit: (transaction: TransactionData) => void;
+  handleCreate?: (transaction: TransactionData) => void;
+  handleDownload?: (transaction: TransactionData) => void;
+  handleCustomerFillUpLink?: (transaction: TransactionData) => void;
 }): TableColumn<TransactionData>[] => {
   return [
     {
@@ -114,7 +118,14 @@ export const GetTransactionTableColumns = ({
     {
       id: 'action',
       header: 'Action',
-      cell: ({ row, value }: { row: TransactionData; value: any; }) => <ActionButtons row={row} onEdit={handleEdit} />,
+      cell: ({ row, value }: { row: TransactionData; value: any; }) => (
+        <ActionButtons
+          row={row}
+          {...(handleCreate && { onAdd: handleCreate })}
+          {...(handleDownload && { onDownload: handleDownload })}
+          {...(handleCustomerFillUpLink && { onCustomer: handleCustomerFillUpLink })}
+        />
+      ),
       sortable: false,
       filterable: false,
     },

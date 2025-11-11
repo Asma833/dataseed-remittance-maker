@@ -4,13 +4,8 @@ import { DataTable, TableData, staticConfig } from '@/components/table';
 import { useGetTransactions } from '../../../hooks/useGetTransactions';
 import { TransactionData } from '../../../types/transaction.types';
 
-// Placeholder for dialog
-// import TransactionDialog from '../transaction-dialog';
 
 const TransactionTable = () => {
-  const [isDialogOpen, setIsDialogOpen] = useState(false);
-  const [selectedTransaction, setSelectedTransaction] = useState<TransactionData | null>(null);
-
   const { data: apiTransactions = [], isLoading } = useGetTransactions();
 
   const transactions: TransactionData[] = useMemo(() => {
@@ -56,19 +51,15 @@ const TransactionTable = () => {
     pageCount: Math.ceil(transactions.length / (config.pagination?.pageSize || 10)),
     currentPage: 1,
   };
-
-  const handleEdit = (transaction: TransactionData) => {
-    // Map back to original data if needed, but for now use transformed
-    setSelectedTransaction(transaction);
-    setIsDialogOpen(true);
-  };
-
   const handleCreate = () => {
-    setSelectedTransaction(null);
-    setIsDialogOpen(true);
   };
-
-  const columns = useMemo(() => GetTransactionTableColumns({ handleEdit }), [handleEdit]);
+  const handleDownload = (transaction: TransactionData) => {
+    
+  };
+  const handleCustomerFillUpLink = (transaction: TransactionData) => {
+    
+  };
+  const columns =  GetTransactionTableColumns({handleCreate,handleDownload,handleCustomerFillUpLink });
 
   return (
     <div className="space-y-4 w-full">
@@ -91,13 +82,6 @@ const TransactionTable = () => {
         }}
         className="rounded-lg"
       />
-
-      {/* Placeholder for dialog */}
-      {/* <TransactionDialog
-        isOpen={isDialogOpen}
-        onClose={() => setIsDialogOpen(false)}
-        editData={selectedTransaction}
-      /> */}
     </div>
   );
 };

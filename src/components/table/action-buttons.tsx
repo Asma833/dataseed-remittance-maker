@@ -1,9 +1,9 @@
 import { TooltipButton } from '@/components/common/tooltip-button';
 import { ActionButtonsProps } from './types';
 import { AiOutlineEye, AiOutlineDelete, AiOutlineStop } from 'react-icons/ai';
-import { FilePenLine } from 'lucide-react';
+import { FilePenLine, CirclePlus, Download, User, Link } from 'lucide-react';
 
-export function ActionButtons<T>({ row, onEdit, onDelete, onView, onInactivate }: ActionButtonsProps<T>) {
+export function ActionButtons<T>({ row, onEdit, onDelete, onView, onInactivate,onAdd,onDownload,onCustomer }: ActionButtonsProps<T>) {
   return (
     <div className="flex items-center justify-center gap-2">
       {onView && (
@@ -33,7 +33,7 @@ export function ActionButtons<T>({ row, onEdit, onDelete, onView, onInactivate }
           className="h-6 w-6 p-0 bg-blue-100 text-blue-600 hover:bg-blue-200 hover:text-blue-800"
           tooltip="Edit"
         >
-          <FilePenLine />
+          <FilePenLine className="h-4 w-4" />
         </TooltipButton>
       )}
 
@@ -65,6 +65,51 @@ export function ActionButtons<T>({ row, onEdit, onDelete, onView, onInactivate }
           tooltip="Active/Inactivate"
         >
           <AiOutlineStop className="h-4 w-4" />
+        </TooltipButton>
+      )}
+      {onAdd && (
+        <TooltipButton
+          type="button"
+          variant="ghost"
+          size="sm"
+          onClick={(e) => {
+            e.stopPropagation();
+            onAdd(row);
+          }}
+          className="h-6 w-6 p-0 bg-blue-100 text-blue-600 hover:bg-blue-200 hover:text-blue-800"
+          tooltip="Create Transaction"
+        >
+          <CirclePlus className="h-4 w-4" />
+        </TooltipButton>
+      )}
+      {onDownload && (
+        <TooltipButton
+          type="button"
+          variant="ghost"
+          size="sm"
+          onClick={(e) => {
+            e.stopPropagation();
+            onDownload(row);
+          }}
+          className="h-6 w-6 p-0 bg-blue-100 text-blue-600 hover:bg-blue-200 hover:text-blue-800"
+          tooltip="Download"
+        >
+          <Download className="h-4 w-4" />
+        </TooltipButton>
+      )}
+        {onCustomer && (
+        <TooltipButton
+          type="button"
+          variant="ghost"
+          size="sm"
+          onClick={(e) => {
+            e.stopPropagation();
+            onCustomer(row);
+          }}
+          className="h-6 w-6 p-0 bg-blue-100 text-blue-600 hover:bg-blue-200 hover:text-blue-800"
+          tooltip="Customer fill up link"
+        >
+          <Link className="h-4 w-4" />
         </TooltipButton>
       )}
     </div>
