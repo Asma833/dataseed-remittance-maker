@@ -3,6 +3,15 @@ import { FieldType } from "@/types/enums";
 const bookTransactionConfig = {
   sectionTitle: 'Book Transaction',
   fields: {
+     company_reference_number: {
+      name:'company_reference_number',
+      label: 'Company Reference Number',
+      type: FieldType.Text,
+      required: true,
+      placeholder: 'Enter company reference number',
+      options: {},
+      isMulti: false,
+    },
     purpose: {
       name:'purpose',
       label: 'Purpose',

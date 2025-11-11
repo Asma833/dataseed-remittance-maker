@@ -152,6 +152,7 @@ export const kycDetailsSchema = z.object({
         }),
     }),
   }),
+  company_reference_number:z.string(),
   purpose: z.string().nonempty('Purpose is required'),
   fx_currency: z.string().nonempty('FX Currency is required'),
   fx_amount: z

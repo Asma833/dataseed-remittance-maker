@@ -19,6 +19,7 @@ import useGetPurposes from '@/hooks/useGetPurposes';
 import { kycDetailsSchema } from './sections/kyc-details/kyc-details.schema';
 
 const defaultValues = {
+  company_reference_number:'',
   purpose: '',
   fx_currency: '',
   fx_amount: '',
@@ -108,6 +109,7 @@ const DealBooking = () => {
     const dealCode = `DEAL-${Date.now()}`;
 
     const payload = {
+      company_reference_number:formData.company_reference_number,
       customer_name: formData.applicant_name || '',
       currency_code: formData.fx_currency || '',
       deal_amount: formData.fx_amount || '0',
@@ -118,7 +120,7 @@ const DealBooking = () => {
       payment_status: 'PENDING',
       kyc_status: 'PENDING',
       status: 'DRAFT',
-      fx_currency: 'INR',
+      fx_currency: formData.fx_currency,
       settlement_rate: formData.company_settlement_rate || '0',
       customer_rate: formData.customer_rate || '0',
       applicant_email: formData.applicant_email || '',

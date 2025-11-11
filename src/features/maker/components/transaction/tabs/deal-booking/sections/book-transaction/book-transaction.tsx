@@ -32,7 +32,7 @@ const BookTransaction = ({ control, errors }: BookTransactionProps) => {
       <FormContentWrapper className="rounded-lg w-full mr-auto bg-transparent">
         <Spacer>
           <FormFieldRow rowCols={4}>
-            {( ['purpose', 'fx_currency', 'fx_amount'] as const ).map(name => {
+            {( ['company_reference_number','purpose', 'fx_currency', 'fx_amount'] as const ).map(name => {
               const field = bookTransactionConfig.fields[name];
               let fieldWithOptions = field;
               if (name === 'purpose') {
