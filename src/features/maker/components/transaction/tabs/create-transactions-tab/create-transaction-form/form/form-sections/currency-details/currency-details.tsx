@@ -1,9 +1,9 @@
 
-import Spacer from '@/components/form/wrapper/Spacer';
-import { currecnyDetailsMeta } from '../form-meta/currencyDetails';
-import RateTable from '../../../../../../rate-table/rate-table';
+import Spacer from '@/components/form/wrapper/spacer';
+import { currecnyDetailsMeta } from './currency-details.config';
+import RateTable from '../../../../../../../rate-table/rate-table';
 import { CommonCreateTransactionProps } from '@/features/maker/types/create-transaction.types';
-import Actions from '../../components/Actions';
+import Actions from '../../../components/Actions';
 import { useState } from 'react';
 import { useFormContext } from 'react-hook-form';
 import FormFieldRow from '@/components/form/wrapper/form-field-row';

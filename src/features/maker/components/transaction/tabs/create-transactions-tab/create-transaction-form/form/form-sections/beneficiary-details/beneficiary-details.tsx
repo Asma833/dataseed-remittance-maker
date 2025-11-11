@@ -1,10 +1,10 @@
 
-import Spacer from '@/components/form/wrapper/Spacer';
-import { beneficiaryBank, beneficiaryDetailsMeta } from '../form-meta/beneficairyDetailsMeta';
+import Spacer from '@/components/form/wrapper/spacer';
+import { beneficiaryBank, beneficiaryDetailsMeta } from './beneficairy-details.config';
 
 import { CommonCreateTransactionProps } from '@/features/maker/types/create-transaction.types';
 import { cn } from '@/utils/cn';
-import Actions from '../../components/Actions';
+import Actions from '../../../components/Actions';
 import { useState } from 'react';
 import FormFieldRow from '@/components/form/wrapper/form-field-row';
 import FieldWrapper from '@/components/form/wrapper/field-wrapper';
@@ -45,7 +45,7 @@ const BeneficiaryDetails = ({ setAccordionState }: CommonCreateTransactionProps)
             <FieldWrapper
               key={item.name}
               className={cn({
-                'md:!w-[calc(50%-15px)]': item.name === 'messageToBeneficaryAdditionalInformation',
+                'md:w-[calc(50%-15px)]!': item.name === 'messageToBeneficaryAdditionalInformation',
               })}
             >
               {getController({

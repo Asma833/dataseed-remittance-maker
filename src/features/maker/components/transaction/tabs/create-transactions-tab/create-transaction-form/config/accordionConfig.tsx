@@ -1,12 +1,12 @@
 import { AccordionItem } from '../types/createTransactionForm.types';
-import BeneficiaryDetails from '../form/form-sections/BeneficiaryDetails';
-import CurrencyDetails from '../form/form-sections/CurrencyDetails';
-import TransactionBasicDetails from '../form/form-sections/TransactionBasicDetails';
+import BeneficiaryDetails from '../form/form-sections/beneficiary-details/beneficiary-details';
+import CurrencyDetails from '../form/form-sections/currency-details/currency-details';
+import TransactionBasicDetails from '../form/form-sections/transaction-details/transaction-basic-details';
 
 export const accordionItems: AccordionItem[] = [
   {
     id: 'panel1',
-    title: 'Create Transaction',
+    title: 'Transaction Details',
     content: (props) => <TransactionBasicDetails {...props} />,
   },
   {

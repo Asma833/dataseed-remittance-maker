@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import CreateTransactionForm from './create-transaction-form/form/CreateTransactionForm';
+import CreateTransactionForm from './create-transaction-form/form/create-transaction-form';
 import { FormProvider, useForm } from 'react-hook-form';
 import { AccordionStateProvider } from './create-transaction-form/context/accordion-control-context';
 import TransactionTable from './table/transaction-table';
