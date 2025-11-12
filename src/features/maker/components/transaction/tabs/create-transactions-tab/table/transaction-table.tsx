@@ -12,6 +12,44 @@ const TransactionTable = ({ onCreate }: { onCreate?: () => void }) => {
   const { data: apiTransactions = [], isLoading } = useGetTransactions();
   const navigate = useNavigate()
   const transactions: TransactionData[] = useMemo(() => {
+    if (apiTransactions.length === 0) {
+      // Dummy data when no API data
+      return [
+        {
+          company_ref_no: 'COMP001',
+          agent_ref_no: 'AGENT001',
+          order_date: new Date().toLocaleDateString(),
+          expiry_date: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000).toLocaleDateString(),
+          applicant_name: 'John Doe',
+          applicant_pan_number: 'ABCDE1234F',
+          transaction_type: 'Education',
+          purpose: 'Tuition Fee',
+          fx_currency: 'USD',
+          fx_amount: 5000,
+          settlement_rate: 83.50,
+          customer_rate: 84.00,
+          transaction_amount: 5000 * 84.00,
+          deal_status: 'Pending',
+        },
+        {
+          company_ref_no: 'COMP002',
+          agent_ref_no: 'AGENT002',
+          order_date: new Date().toLocaleDateString(),
+          expiry_date: new Date(Date.now() + 15 * 24 * 60 * 60 * 1000).toLocaleDateString(),
+          applicant_name: 'Jane Smith',
+          applicant_pan_number: 'FGHIJ5678K',
+          transaction_type: 'Travel',
+          purpose: 'Medical Treatment',
+          fx_currency: 'EUR',
+          fx_amount: 3000,
+          settlement_rate: 90.25,
+          customer_rate: 91.00,
+          transaction_amount: 3000 * 91.00,
+          deal_status: 'Approved',
+        },
+      ];
+    }
+
     return (apiTransactions || []).map((item: any) => ({
       company_ref_no: item.company_ref_no || '-',
       agent_ref_no: item.agent_ref_no || '-',

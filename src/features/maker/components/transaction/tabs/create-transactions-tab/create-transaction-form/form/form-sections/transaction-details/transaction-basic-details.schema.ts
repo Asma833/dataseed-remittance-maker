@@ -17,10 +17,10 @@ export const transactionBasicDetailsSchema = z.object({
     .max(50, 'Reference number too long')
     .optional()
     .or(z.literal('')),
-  created_date: z.date()
+  created_date: z.coerce.date()
     .max(new Date(), 'Created date cannot be in the future')
     .optional(),
-  deal_expiry: z.date()
+  deal_expiry: z.coerce.date()
     .min(new Date(), 'Deal expiry must be in the future')
     .optional(),
   transaction_type: z.string()
@@ -36,15 +36,15 @@ export const transactionBasicDetailsSchema = z.object({
     .regex(CURRENCY_CODE_REGEX, 'Invalid currency code (must be 3 uppercase letters)')
     .optional()
     .or(z.literal('')),
-  fx_amount: z.number()
+  fx_amount: z.coerce.number()
     .min(0, 'Amount must be positive')
     .max(999999999, 'Amount too large')
     .optional(),
-  settlement_rate: z.number()
+  settlement_rate: z.coerce.number()
     .min(0, 'Rate must be positive')
     .max(999999, 'Rate too large')
     .optional(),
-  billing_rate: z.number()
+  billing_rate: z.coerce.number()
     .min(0, 'Rate must be positive')
     .max(999999, 'Rate too large')
     .optional(),
@@ -59,7 +59,7 @@ export const transactionBasicDetailsSchema = z.object({
     .length(10, 'PAN must be 10 characters')
     .optional()
     .or(z.literal('')),
-  applicant_dob: z.date()
+  applicant_dob: z.coerce.date()
     .max(new Date(), 'Date of birth cannot be in the future')
     .refine((date) => (new Date().getFullYear() - date.getFullYear()) >= 18, 'Must be at least 18 years old')
     .optional(),
@@ -94,7 +94,7 @@ export const transactionBasicDetailsSchema = z.object({
     .length(10, 'PAN must be 10 characters')
     .optional()
     .or(z.literal('')),
-  payee_dob: z.date()
+  payee_dob: z.coerce.date()
     .max(new Date(), 'Date of birth cannot be in the future')
     .refine((date) => (new Date().getFullYear() - date.getFullYear()) >= 18, 'Must be at least 18 years old')
     .optional(),
@@ -109,10 +109,10 @@ export const transactionBasicDetailsSchema = z.object({
     .regex(NO_LEADING_HYPHEN_OR_SPACE, 'Passport number cannot start with hyphen or space')
     .optional()
     .or(z.literal('')),
-  passport_issued_date: z.date()
+  passport_issued_date: z.coerce.date()
     .max(new Date(), 'Issued date cannot be in the future')
     .optional(),
-  passport_expiry_date: z.date()
+  passport_expiry_date: z.coerce.date()
     .min(new Date(), 'Expiry date must be in the future')
     .optional(),
   place_of_issue: z.string()

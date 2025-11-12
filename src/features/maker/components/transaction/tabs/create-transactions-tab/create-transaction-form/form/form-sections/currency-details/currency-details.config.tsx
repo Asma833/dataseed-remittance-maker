@@ -1,56 +1,67 @@
-export const currecnyDetailsMeta = {
-  fxCurrency: {
+import { FieldType } from "@/types/enums";
+
+export const currencyDetailsConfig = [
+  {
+    name:'fx_currency',
     label: 'FX Currency',
-    type: 'number',
-    placeholder: 'Enter FX Currency',
+    type: FieldType.Select,
+    placeholder: 'Select FX Currency',
     required: false,
   },
-  fxAmount: {
+  {
+    name:'fx_amount',
     label: 'FX Amount',
-    type: 'number',
+    type: FieldType.Number,
     placeholder: 'Enter FX Amount',
     required: false,
   },
-  settlementRate: {
+  {
+    name:'settlement_rate',
     label: 'Settlement Rate',
-    type: 'number',
+    type: FieldType.Number,
     placeholder: 'Enter Settlement Rate',
     required: false,
   },
-  addMargin: {
+  {
+    name:'add_margin',
     label: 'Add Margin',
-    type: 'number',
+    type: FieldType.Number,
     placeholder: 'Enter Add Margin',
     required: false,
   },
-  customerRate: {
+  {
+    name:'customer_rate',
     label: 'Customer Rate',
-    type: 'number',
+    type: FieldType.Number,
     placeholder: 'Enter Customer Rate',
     required: false,
   },
-  declaredEducationLoanAmount: {
+  {
+    name:'declared_education_loan_amount',
     label: 'Declared Education Loan Amount',
-    type: 'number',
+    type: FieldType.Number,
     placeholder: 'Enter Declared Education Loan Amount',
     required: false,
   },
-  previousTransactionAmount: {
+  {
+    name:'previous_transaction_amount',
     label: 'Previous Transaction Amount',
-    type: 'number',
+    type: FieldType.Number,
     placeholder: 'Enter Previous Transaction Amount',
     required: false,
   },
-  declaredPreviousAmount: {
+  {
+    name:'declared_previous_amount',
     label: 'Declared Previous Amount',
-    type: 'number',
+    type: FieldType.Number,
     placeholder: 'Enter Declared Previous Amount',
     required: false,
   },
-  totalTransactionAmountTCS: {
+  {
+    name:'total_transaction_amount_tcs',
     label: 'Total Transaction Amount (TCS)',
-    type: 'number',
+    type: FieldType.Number,
     placeholder: 'Enter Total Transaction Amount (TCS)',
     required: false,
-  },
-};
+  }
+];

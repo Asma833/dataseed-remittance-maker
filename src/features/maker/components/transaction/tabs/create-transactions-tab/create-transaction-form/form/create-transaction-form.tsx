@@ -2,14 +2,107 @@ import CreateTransactionsAccordion from '../components/create-transactions-accor
 import { accordionItems } from '../config/accordion-config';
 import { Button } from '@/components/ui/button';
 import { useAccordionStateProvider } from '../context/accordion-control-context';
+import { useForm, Resolver } from 'react-hook-form';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { currencyDetailsSchema, CurrencyDetailsFormData } from './form-sections/currency-details/currency-details.schema';
+import { z } from 'zod';
+import { beneficiaryDetailsSchema } from './form-sections/beneficiary-details/beneficiary-details.schema';
+import { transactionBasicDetailsSchema } from './form-sections/transaction-details/transaction-basic-details.schema';
+
+// Combined schema - extend with other sections as needed
+const createTransactionSchema = z.object({
+  // Add other sections' schemas here, e.g., transactionBasicDetails: transactionBasicSchema,
+  currencyDetails: currencyDetailsSchema,
+  beneficiaryDetails:beneficiaryDetailsSchema,
+  transactionDetails:transactionBasicDetailsSchema
+});
+
+export type CreateTransactionFormData = z.infer<typeof createTransactionSchema>;
 
 type Props = {
   onCancel?: () => void;
+  onSubmit?: (data: CreateTransactionFormData) => void;
 };
 
-const CreateTransactionForm = ({ onCancel }: Props) => {
+const CreateTransactionForm = ({ onCancel, onSubmit }: Props) => {
   const { accordionState, setAccordionState } = useAccordionStateProvider();
   const currentTab = accordionState.currentActiveTab;
+
+  const defaultValues: Partial<CreateTransactionFormData> = {
+    currencyDetails: {
+      fx_currency: '',
+      fx_amount: 0,
+      settlement_rate: 0,
+      add_margin: 0,
+      customer_rate: 0,
+      declared_education_loan_amount: 0,
+      previous_transaction_amount: 0,
+      declared_previous_amount: 0,
+      total_transaction_amount_tcs: 0,
+    },
+    beneficiaryDetails: {
+      beneficiary_name: '',
+      beneficiary_address: '',
+      beneficiary_city: '',
+      beneficiary_country: '',
+      beneficiary_account_number_iban_number: '',
+      beneficiary_swift_code: '',
+      beneficiary_bank_name: '',
+      beneficiary_bank_address: '',
+      sort_bsb_aba_transit_code: '',
+      nostro_charges: '',
+      message_to_beneficiary_additional_information: '',
+      student_name: '',
+      student_passport_number: '',
+      payment_instruction_number: '',
+      university_name: '',
+      intermediaryBankDetails: 'no',
+      intermediary_bank_account_number: '',
+      intermediary_bank_swift_code: '',
+      intermediary_bank_name: '',
+      intermediary_bank_address: '',
+    },
+    transactionDetails: {
+      company_reference_number: '',
+      agent_reference_number: '',
+      created_date: undefined,
+      deal_expiry: undefined,
+      transaction_type: '',
+      purpose: '',
+      fx_currency: '',
+      fx_amount: 0,
+      settlement_rate: 0,
+      billing_rate: 0,
+      applicant_name: '',
+      applicant_pan_number: '',
+      applicant_dob: undefined,
+      applicant_email: '',
+      applicant_mobile_number: '',
+      source_of_funds: '',
+      paid_by: '',
+      payee_name: '',
+      payee_pan_number: '',
+      payee_dob: undefined,
+      applicant_id_document: '',
+      passport_number: '',
+      passport_issued_date: undefined,
+      passport_expiry_date: undefined,
+      place_of_issue: '',
+      applicant_address: '',
+      applicant_city: '',
+      applicant_state: '',
+      applicant_country: '',
+      postal_code: '',
+    },
+  };
+
+  const form = useForm<CreateTransactionFormData>({
+    resolver: zodResolver(createTransactionSchema) as Resolver<CreateTransactionFormData>,
+    defaultValues,
+    mode: 'onChange', // Trigger validation on change
+  });
+
+  const { handleSubmit: onFormSubmit } = form;
 
   const handlePrevious = () => {
     if (currentTab === 'panel2') {
@@ -47,6 +140,7 @@ const CreateTransactionForm = ({ onCancel }: Props) => {
               Next
             </Button>
           )}
+          
         </div>
       </div>
       <CreateTransactionsAccordion accordionItems={accordionItems} />
