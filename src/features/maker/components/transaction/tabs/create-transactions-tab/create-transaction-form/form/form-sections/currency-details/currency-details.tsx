@@ -1,6 +1,6 @@
 
 import Spacer from '@/components/form/wrapper/spacer';
-import { currecnyDetailsMeta } from './currency-details.config';
+import { currencyDetailsConfig } from './currency-details.config';
 import RateTable from '../../../../../../../rate-table/rate-table';
 import { CommonCreateTransactionProps } from '@/features/maker/types/create-transaction.types';
 import Actions from '../../../components/Actions';
@@ -9,11 +9,14 @@ import { useFormContext } from 'react-hook-form';
 import FormFieldRow from '@/components/form/wrapper/form-field-row';
 import FieldWrapper from '@/components/form/wrapper/field-wrapper';
 import { getController } from '@/components/form/utils/get-controller';
+import { Button } from '@/components/ui/button';
+import { FieldConfig } from '../../../types/createTransactionForm.types';
 
 const CurrencyDetails = ({ setAccordionState }: CommonCreateTransactionProps) => {
   const [isSaving, setIsSaving] = useState(false);
   const [isEditing, setIsEditing] = useState(false);
-  const { watch } = useFormContext();
+ const { control, formState: { errors }, watch } = useFormContext();
+
   // useEffect(() => {
   //   const currentValues = watch();
   //   console.log('currentValues:', currentValues);
@@ -33,35 +36,40 @@ const CurrencyDetails = ({ setAccordionState }: CommonCreateTransactionProps) =>
     // }
   };
 
-  const handleEdit = () => {
-    setIsEditing(true);
-    console.log('Editing mode enabled');
-  };
-
-  const handleCancel = () => {
-    console.log('Cancelling operation');
-    setIsEditing(false);
-    // Reset form or navigate away
-  };
-
   return (
     <Spacer>
-      <FormFieldRow rowCols={2} wrapperClassName="flex-row md:!flex-nowrap">
+      <FormFieldRow rowCols={2} wrapperClassName="flex-row md:!flex-nowrap items-start">
         <div className="flex flex-wrap w-1/2 gap-4">
-          {Object.entries(currecnyDetailsMeta).map(([key, item]) => {
-            return (
-              <FieldWrapper key={key}>
-                {getController({
-                  name: key,
-                  label: item.label,
-                  type: item.type,
-                  placeholder: item.placeholder,
-                  required: item.required,
-                  options: 'options' in item ? (item as any).options : undefined,
-                })}
-              </FieldWrapper>
-            );
-          })}
+          <FormFieldRow rowCols={2}>
+            {( ['fx_currency','fx_amount'] as const ).map(name => {
+              const field = currencyDetailsConfig.find(f => f.name === name ) as FieldConfig;
+              return <FieldWrapper key={name}>{getController({ ...field, name, control, errors })}</FieldWrapper>;
+            })}
+          </FormFieldRow>
+          <FormFieldRow rowCols={2}>
+            {( ['settlement_rate','add_margin'] as const ).map(name => {
+              const field = currencyDetailsConfig.find(f => f.name === name ) as FieldConfig;
+              return <FieldWrapper key={name}>{getController({ ...field, name, control, errors })}</FieldWrapper>;
+            })}
+          </FormFieldRow>
+          <FormFieldRow rowCols={2}>
+            {( ['customer_rate','declared_education_loan_amount'] as const ).map(name => {
+              const field = currencyDetailsConfig.find(f => f.name === name ) as FieldConfig;
+              return <FieldWrapper key={name}>{getController({ ...field, name, control, errors })}</FieldWrapper>;
+            })}
+          </FormFieldRow>
+           <FormFieldRow rowCols={2}>
+            {( ['previous_transaction_amount','declared_previous_amount'] as const ).map(name => {
+              const field = currencyDetailsConfig.find(f => f.name === name ) as FieldConfig;
+              return <FieldWrapper key={name}>{getController({ ...field, name, control, errors })}</FieldWrapper>;
+            })}
+          </FormFieldRow>
+           <FormFieldRow rowCols={2} className='w-full'>
+            {( ['total_transaction_amount_tcs'] as const ).map(name => {
+              const field = currencyDetailsConfig.find(f => f.name === name ) as FieldConfig;
+              return <FieldWrapper key={name}>{getController({ ...field, name, control, errors })}</FieldWrapper>;
+            })}
+          </FormFieldRow>
         </div>
         <div className="flex flex-wrap w-1/2">
           <RateTable
@@ -72,20 +80,11 @@ const CurrencyDetails = ({ setAccordionState }: CommonCreateTransactionProps) =>
           />
         </div>
       </FormFieldRow>
-      <Actions
-        handleSave={handleSave}
-        handleEdit={handleEdit}
-        // handleNext={() => setAccordionState({ currentActiveTab: 'panel2' })}
-        handlePrevious={() => setAccordionState({ currentActiveTab: 'panel2' })}
-        handleCancel={handleCancel}
-        isSaving={isSaving}
-        isEditing={isEditing}
-        showSave={true}
-        handleValidatePanAndSave={() => {
-          console.log('Validating PAN and saving...');
-          // Implement validation and save logic
-        }}
-      />
+         <div className='flex justify-center items-center'>
+          <Button onClick={handleSave} className='mx-2 w-32'>
+              Submit
+          </Button>
+        </div>
     </Spacer>
   );
 };

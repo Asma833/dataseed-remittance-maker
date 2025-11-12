@@ -1,27 +1,29 @@
 
 import Spacer from '@/components/form/wrapper/spacer';
-import { beneficiaryBank, beneficiaryDetailsMeta } from './beneficairy-details.config';
-
+import { beneficiaryBank, beneficiaryDetailsConfig } from './beneficairy-details.config';
 import { CommonCreateTransactionProps } from '@/features/maker/types/create-transaction.types';
-import { cn } from '@/utils/cn';
-
 import { useState } from 'react';
+import { useFormContext, useWatch } from 'react-hook-form';
+import { ShadCnRadioGroup } from '@/components/form/controller/ShadCnRadioGroup';
 import FormFieldRow from '@/components/form/wrapper/form-field-row';
 import FieldWrapper from '@/components/form/wrapper/field-wrapper';
 import { getController } from '@/components/form/utils/get-controller';
-import Actions from '../../../components/Actions';
+import { Button } from '@/components/ui/button';
 
 const BeneficiaryDetails = ({ setAccordionState }: CommonCreateTransactionProps) => {
-  console.log('BeneficiaryDetails: RENDERING');
   const [isSaving, setIsSaving] = useState(false);
   const [isEditing, setIsEditing] = useState(false);
+  const { control, formState: { errors }, trigger } = useFormContext();
+  const intermediaryBankDetails = useWatch({ name: "intermediaryBankDetails", defaultValue: "no" });
 
   const handleSave = async () => {
+    const isValid = await trigger();
+    if (!isValid) {
+      return;
+    }
     setIsSaving(true);
     try {
-      // Implement save functionality
-      console.log('Saving transaction basic details...');
-      // Simulate API call
+      // TODO: Implement actual save functionality, e.g., using useCreateTransaction hook
       await new Promise((resolve) => setTimeout(resolve, 1000));
     } finally {
       setIsSaving(false);
@@ -30,80 +32,107 @@ const BeneficiaryDetails = ({ setAccordionState }: CommonCreateTransactionProps)
 
   const handleEdit = () => {
     setIsEditing(true);
-    console.log('Editing mode enabled');
   };
 
-  const handleCancel = () => {
-    console.log('Cancelling operation');
-    setIsEditing(false);
-    // Reset form or navigate away
-  };
   return (
     <Spacer>
-      <FormFieldRow rowCols={4}>
-        {beneficiaryDetailsMeta.map((item) => {
+      <FormFieldRow rowCols={3}>
+        {(['beneficiary_name', 'beneficiary_address', 'beneficiary_city'] as const).map(name => {
+          const field = beneficiaryDetailsConfig.find(f => f.name === name);
+          if (!field) return null;
           return (
-            <FieldWrapper
-              key={item.name}
-              className={cn({
-                'md:w-[calc(50%-15px)]!': item.name === 'messageToBeneficaryAdditionalInformation',
-              })}
-            >
-              {getController({
-                name: item.name,
-                label: item.label,
-                type: item.type,
-                placeholder: item.placeholder,
-                required: item.required,
-              })}
+            <FieldWrapper key={name}>
+              {getController({ ...field, name, control, errors })}
+            </FieldWrapper>
+          );
+        })}
+      </FormFieldRow>
+      <FormFieldRow rowCols={3}>
+        {(['beneficiary_country', 'beneficiary_account_number_iban_number', 'beneficiary_swift_code'] as const).map(name => {
+          const field = beneficiaryDetailsConfig.find(f => f.name === name);
+          if (!field) return null;
+          return (
+            <FieldWrapper key={name}>
+              {getController({ ...field, name, control, errors })}
+            </FieldWrapper>
+          );
+        })}
+      </FormFieldRow>
+      <FormFieldRow rowCols={3}>
+        {(['beneficiary_bank_name', 'beneficiary_bank_address', 'sort_bsb_aba_transit_code'] as const).map(name => {
+          const field = beneficiaryDetailsConfig.find(f => f.name === name);
+          if (!field) return null;
+          return (
+            <FieldWrapper key={name}>
+              {getController({ ...field, name, control, errors })}
+            </FieldWrapper>
+          );
+        })}
+      </FormFieldRow>
+      <FormFieldRow rowCols={3}>
+        {(['nostro_charges', 'message_to_beneficiary_additional_information', 'student_name'] as const).map(name => {
+          const field = beneficiaryDetailsConfig.find(f => f.name === name);
+          if (!field) return null;
+          return (
+            <FieldWrapper key={name}>
+              {getController({ ...field, name, control, errors })}
+            </FieldWrapper>
+          );
+        })}
+      </FormFieldRow>
+      <FormFieldRow rowCols={3}>
+        {(['student_passport_number', 'payment_instruction_number', 'university_name'] as const).map(name => {
+          const field = beneficiaryDetailsConfig.find(f => f.name === name);
+          if (!field) return null;
+          return (
+            <FieldWrapper key={name}>
+              {getController({ ...field, name, control, errors })}
             </FieldWrapper>
           );
         })}
       </FormFieldRow>
       <div className="flex w-full items-start">
-        {/* <FieldWrapper className="w-1/4">
-          <MaterialRadioGroup
+        <FieldWrapper className="w-1/4">
+          <ShadCnRadioGroup
             name="intermediaryBankDetails"
             label="Intermediary Bank Details"
             options={{
               yes: { label: 'Yes' },
               no: { label: 'No' },
             }}
-            onChange={(e) => {
-              alert('Intermediary Bank Details changed:');
-            }}
+            className='justify-start'
           />
-        </FieldWrapper> */}
-        <FormFieldRow rowCols={3}>
-          {beneficiaryBank.map((item) => {
-            return (
-              <FieldWrapper key={item.name}>
-                {getController({
-                  name: item.name,
-                  label: item.label,
-                  type: item.type,
-                  placeholder: item.placeholder,
-                  required: item.required,
-                })}
-              </FieldWrapper>
-            );
-          })}
-        </FormFieldRow>
+        </FieldWrapper>
+        {intermediaryBankDetails === 'yes' && (
+          <div className="flex-1 ml-4">
+            <FormFieldRow rowCols={2}>
+              {beneficiaryBank.map((item) => {
+                return (
+                  <FieldWrapper key={item.name}>
+                    {getController({
+                      name: item.name,
+                      label: item.label,
+                      type: item.type,
+                      placeholder: item.placeholder,
+                      required: item.required,
+                      control,
+                      errors,
+                    })}
+                  </FieldWrapper>
+                );
+              })}
+            </FormFieldRow>
+          </div>
+        )}
       </div>
-      <Actions
-        handleSave={handleSave}
-        handleEdit={handleEdit}
-        handleNext={() => setAccordionState({ currentActiveTab: 'panel3' })}
-        handlePrevious={() => setAccordionState({ currentActiveTab: 'panel1' })}
-        handleCancel={handleCancel}
-        isSaving={isSaving}
-        isEditing={isEditing}
-        showSave={false}
-        handleValidatePanAndSave={() => {
-          console.log('Validating PAN and saving...');
-          // Implement validation and save logic
-        }}
-      />
+      <div className='flex justify-center items-center'>
+        <Button onClick={handleSave} disabled={isSaving} className='mx-2 w-32'>
+          {isSaving ? 'Saving...' : 'Save'}
+        </Button>
+        <Button onClick={handleEdit} className='w-32' variant='outline' disabled={isEditing}>
+          {isEditing ? 'Editing' : 'Edit'}
+        </Button>
+      </div>
     </Spacer>
   );
 };

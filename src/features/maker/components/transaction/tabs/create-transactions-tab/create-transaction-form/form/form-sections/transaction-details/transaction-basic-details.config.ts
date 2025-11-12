@@ -210,7 +210,7 @@ const transactionBasicDetailsConfig = [
     type: FieldType.Text,
     placeholder: 'Enter Postal Code',
     required: false,
-  },
+  }
 ];
 
 export default transactionBasicDetailsConfig;

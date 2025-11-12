@@ -145,18 +145,6 @@ export const transactionBasicDetailsSchema = z.object({
     .length(6, 'Postal code must be 6 digits')
     .optional()
     .or(z.literal('')),
-  add_margins: z.number()
-    .min(0, 'Margins must be positive')
-    .max(100, 'Margins too high')
-    .optional(),
-  customer_rate: z.number()
-    .min(0, 'Rate must be positive')
-    .max(999999, 'Rate too large')
-    .optional(),
-  nostro_charges: z.number()
-    .min(0, 'Charges must be positive')
-    .max(999999, 'Charges too large')
-    .optional(),
 }).refine((data) => {
   // Additional cross-field validations if needed, e.g., deal_expiry > created_date
   if (data.created_date && data.deal_expiry && data.deal_expiry <= data.created_date) {

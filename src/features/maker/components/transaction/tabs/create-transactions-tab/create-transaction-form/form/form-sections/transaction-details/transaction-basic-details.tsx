@@ -12,6 +12,8 @@ import Actions from '../../../components/Actions';
 import useGetPurposes from '@/hooks/useGetPurposes';
 import { useGetCurrencyRates } from '@/hooks/useCurrencyRate';
 import { useFormContext } from 'react-hook-form';
+import { Button } from '@/components/ui/button';
+import { FieldConfig } from '../../../types/createTransactionForm.types';
  
 
 const TransactionBasicDetails = ({ setAccordionState }: CommonCreateTransactionProps) => {
@@ -21,14 +23,7 @@ const TransactionBasicDetails = ({ setAccordionState }: CommonCreateTransactionP
   const { data: currencyRates, isLoading: currencyLoading } = useGetCurrencyRates();
   const { control, formState: { errors } } = useFormContext();
 
-  type FieldConfig = {
-    name: string;
-    label: string;
-    type: FieldType;
-    placeholder: string;
-    required: boolean;
-    options?: Record<string, { label: string }>;
-  };
+ 
 
   const purposeOptions = purposeTypes.reduce((acc: Record<string, { label: string }>, { id, text }) => {
     acc[id] = { label: text };
@@ -40,26 +35,11 @@ const TransactionBasicDetails = ({ setAccordionState }: CommonCreateTransactionP
     return acc;
   }, {}) || {};
 
-  const handleSave = async () => {
-    setIsSaving(true);
-    try {
-      // Implement save functionality
-      // Simulate API call
-      await new Promise((resolve) => setTimeout(resolve, 1000));
-    } finally {
-      setIsSaving(false);
-    }
-  };
 
+  const handleValidatePanAndSave = () =>{}
   const handleEdit = () => {
     setIsEditing(true);
     // console.log('Editing mode enabled');
-  };
-
-  const handleCancel = () => {
-    // console.log('Cancelling operation');
-    setIsEditing(false);
-    // Reset form or navigate away
   };
 
   return (
@@ -130,20 +110,14 @@ const TransactionBasicDetails = ({ setAccordionState }: CommonCreateTransactionP
           
         </Spacer>
       </FormContentWrapper>
-      <Actions
-        handleSave={handleSave}
-        handleEdit={handleEdit}
-        handleNext={() => setAccordionState({ currentActiveTab: 'panel2' })}
-        // handlePrevious={() => setAccordionState({ currentActiveTab: 'panel1' })}
-        handleCancel={handleCancel}
-        isSaving={isSaving}
-        isEditing={isEditing}
-        showSave={false}
-        handleValidatePanAndSave={() => {
-          console.log('Validating PAN and saving...');
-          // Implement validation and save logic
-        }}
-      />
+      <div className='flex justify-center items-center'>
+        <Button onClick={handleValidatePanAndSave} className='mx-2'>
+            ValidatePanAndSave
+          </Button>
+         <Button onClick={handleEdit} className='w-32'>
+            Edit
+          </Button>
+      </div>
     </Spacer>
   );
 };

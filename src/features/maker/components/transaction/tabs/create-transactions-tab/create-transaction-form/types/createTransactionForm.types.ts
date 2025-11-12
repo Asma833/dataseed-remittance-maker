@@ -1,3 +1,5 @@
+import { FieldType } from "@/types/enums";
+
 export type AccordionItem = {
   id: string;
   title: string;
@@ -15,4 +17,12 @@ export type AccordionState = {
   isCurrencyDetailsOpen: boolean;
   isBeneficiaryOpen: boolean;
   isEditMode: boolean;
+};
+ export type FieldConfig = {
+  name: string;
+  label: string;
+  type: FieldType;
+  placeholder: string;
+  required: boolean;
+  options?: Record<string, { label: string }>;
 };
