@@ -173,7 +173,7 @@ export const API = {
   },
   DEAL_BOOKING:{
     CREATE:`/deal-booking`,
-    LIST:`/deal-booking`
+    LIST:`/remittance/deals/`
   }
 } as const;
 

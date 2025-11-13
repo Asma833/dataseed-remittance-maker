@@ -12,59 +12,23 @@ const TransactionTable = ({ onCreate }: { onCreate?: () => void }) => {
   const { data: apiTransactions = [], isLoading } = useGetTransactions();
   const navigate = useNavigate()
   const transactions: TransactionData[] = useMemo(() => {
-    if (apiTransactions.length === 0) {
-      // Dummy data when no API data
-      return [
-        {
-          company_ref_no: 'COMP001',
-          agent_ref_no: 'AGENT001',
-          order_date: new Date().toLocaleDateString(),
-          expiry_date: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000).toLocaleDateString(),
-          applicant_name: 'John Doe',
-          applicant_pan_number: 'ABCDE1234F',
-          transaction_type: 'Education',
-          purpose: 'Tuition Fee',
-          fx_currency: 'USD',
-          fx_amount: 5000,
-          settlement_rate: 83.50,
-          customer_rate: 84.00,
-          transaction_amount: 5000 * 84.00,
-          deal_status: 'Pending',
-        },
-        {
-          company_ref_no: 'COMP002',
-          agent_ref_no: 'AGENT002',
-          order_date: new Date().toLocaleDateString(),
-          expiry_date: new Date(Date.now() + 15 * 24 * 60 * 60 * 1000).toLocaleDateString(),
-          applicant_name: 'Jane Smith',
-          applicant_pan_number: 'FGHIJ5678K',
-          transaction_type: 'Travel',
-          purpose: 'Medical Treatment',
-          fx_currency: 'EUR',
-          fx_amount: 3000,
-          settlement_rate: 90.25,
-          customer_rate: 91.00,
-          transaction_amount: 3000 * 91.00,
-          deal_status: 'Approved',
-        },
-      ];
-    }
-
-    return (apiTransactions || []).map((item: any) => ({
-      company_ref_no: item.company_ref_no || '-',
-      agent_ref_no: item.agent_ref_no || '-',
-      order_date: item.createdAt ? new Date(item.createdAt).toLocaleDateString() : '-',
+    return (apiTransactions || []).map((item:TransactionData) => ({
+      ...item,
+      company_ref_no:  '-',// Not available in API response
+      agent_ref_no: '-',// Not available in API response
+      order_date: item.created_at ? new Date(item.created_at).toLocaleDateString() : '-',
       expiry_date: '-', // Not available in API response
-      applicant_name: item.applicant_name || '-',
-      applicant_pan_number: item.applicant_pan || '-',
+      applicant_name: '-', // Not available in API response
+      applicant_pan_number: '-', // Not available in API response
       transaction_type: item.transaction_type || '-',
-      purpose: item.purpose || '-',
-      fx_currency: item.fx_currency || '-',
-      fx_amount: parseFloat(item.fx_amount || '0') || 0,
-      settlement_rate: parseFloat(item.settlement_rate || '0') || 0,
-      customer_rate: parseFloat(item.customer_rate || '0') || 0,
-      transaction_amount: (parseFloat(item.fx_amount || '0') * (parseFloat(item.customer_rate || '0') || 0)) || 0,
-      deal_status: item.status || '-',
+      purpose: '-', // Not available in API response
+      fx_currency: item.currency_code || '-',
+      fx_amount: item.deal_amount || '0',
+      settlement_rate: item.settlement_rate || '0',
+      customer_rate: item.customer_rate || '0',
+      transaction_amount: '0',// Not available in API response
+      deal_status: item.booking_status || '-',
+      margin_amount: item.margin_amount || '0',
     }));
   }, [apiTransactions]);
    const { getUserRole } = useCurrentUser();
