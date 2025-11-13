@@ -81,23 +81,20 @@ export const GetTransactionTableColumns = ({
       accessorKey: 'fx_amount',
       sortable: true,
       filterable: true,
-      cell: ({ value }: { value: number }) => (value || 0).toFixed(2),
     },
     {
       id: 'settlement_rate',
       header: 'Settlement Rate',
       accessorKey: 'settlement_rate',
       sortable: true,
-      filterable: true,
-      cell: ({ value }: { value: number }) => (value || 0).toFixed(4),
+      filterable: true
     },
     {
       id: 'customer_rate',
       header: 'Customer Rate',
       accessorKey: 'customer_rate',
       sortable: true,
-      filterable: true,
-      cell: ({ value }: { value: number }) => (value || 0).toFixed(4),
+      filterable: true
     },
     {
       id: 'transaction_amount',
@@ -105,7 +102,6 @@ export const GetTransactionTableColumns = ({
       accessorKey: 'transaction_amount',
       sortable: true,
       filterable: true,
-      cell: ({ value }: { value: number }) => (value || 0).toFixed(2),
     },
     {
       id: 'deal_status',
