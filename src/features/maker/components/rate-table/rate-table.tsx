@@ -1,6 +1,7 @@
 import { Table, TableBody, TableCell, TableFooter, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import GetRateTableColumns, { columnKeys, ColumnKey } from './rate-table-columns';
 import { cn } from '@/utils/cn';
+import { useFormContext } from 'react-hook-form';
 
 export default function RateTable({
   id,
@@ -13,7 +14,8 @@ export default function RateTable({
   editableFields?: string[];
   totalAmount?: number;
 }) {
-  const invoices = GetRateTableColumns({ id, mode, editableFields });
+  const { setValue } = useFormContext();
+  const invoices = GetRateTableColumns({ id, mode, editableFields, setValue });
 
   return (
     <Table>

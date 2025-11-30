@@ -31,6 +31,40 @@ export const currencyDetailsSchema = z.object({
   total_transaction_amount_tcs: z.string()
     .min(1, 'Total Transaction Amount (TCS) is required')
     .regex(numberRegex, 'Total Transaction Amount (TCS) must be a valid number without spaces or hyphens'),
+  invoiceRateTable: z.object({
+    transaction_value: z.object({
+      nium_rate: z.string().min(1, 'Nium Rate is required').regex(numberRegex, 'Nium Rate must be a valid number'),
+      agent_mark_up: z.string().min(1, 'Agent Mark Up is required').regex(numberRegex, 'Agent Mark Up must be a valid number'),
+      rate: z.string().min(1, 'Rate is required').regex(numberRegex, 'Rate must be a valid number'),
+    }),
+    remittance_charges: z.object({
+      nium_rate: z.string().min(1, 'Nium Rate is required').regex(numberRegex, 'Nium Rate must be a valid number'),
+      agent_mark_up: z.string().min(1, 'Agent Mark Up is required').regex(numberRegex, 'Agent Mark Up must be a valid number'),
+      rate: z.string().min(1, 'Rate is required').regex(numberRegex, 'Rate must be a valid number'),
+    }),
+    nostro_charges: z.object({
+      nium_rate: z.string().min(1, 'Nium Rate is required').regex(numberRegex, 'Nium Rate must be a valid number'),
+      agent_mark_up: z.string().min(1, 'Agent Mark Up is required').regex(numberRegex, 'Agent Mark Up must be a valid number'),
+      rate: z.string().min(1, 'Rate is required').regex(numberRegex, 'Rate must be a valid number'),
+    }),
+    other_charges: z.object({
+      nium_rate: z.string().min(1, 'Nium Rate is required').regex(numberRegex, 'Nium Rate must be a valid number'),
+      agent_mark_up: z.string().min(1, 'Agent Mark Up is required').regex(numberRegex, 'Agent Mark Up must be a valid number'),
+      rate: z.string().min(1, 'Rate is required').regex(numberRegex, 'Rate must be a valid number'),
+    }),
+    transaction_amount: z.object({
+      rate: z.string().min(1, 'Rate is required').regex(numberRegex, 'Rate must be a valid number'),
+    }),
+    gst_amount: z.object({
+      rate: z.string().min(1, 'Rate is required').regex(numberRegex, 'Rate must be a valid number'),
+    }),
+    total_inr_amount: z.object({
+      rate: z.string().min(1, 'Rate is required').regex(numberRegex, 'Rate must be a valid number'),
+    }),
+    tcs: z.object({
+      rate: z.string().min(1, 'Rate is required').regex(numberRegex, 'Rate must be a valid number'),
+    }),
+  }),
 });
 
 export type CurrencyDetailsFormData = z.infer<typeof currencyDetailsSchema>;

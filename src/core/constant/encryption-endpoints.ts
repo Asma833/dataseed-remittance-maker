@@ -38,30 +38,10 @@ export const ENDPOINT_MATCHING_RULES: EndpointRulesConfig = {
     matchType: 'exact-only' as const,
     description: 'Forgot password endpoint',
   },
-  'unassign-orders': {
-    endpoint: API.CHECKER.UPDATE_INCIDENT.UNASSIGN,
-    matchType: 'standard' as const,
-    description: 'Unassign orders endpoint',
-  },
-  'take-request': {
-    endpoint: API.CHECKER.ASSIGN.TAKE_REQUEST,
-    matchType: 'exact-only' as const,
-    description: 'Take request endpoint for checker orders',
-  },
-  'generate-e-sign': {
-    endpoint: API.CHECKER.UPDATE_INCIDENT.REGENERATE_ESIGN_LINK,
-    matchType: 'exact-only' as const,
-    description: 'Generate e-sign link endpoint',
-  },
   'upload-documents': {
     endpoint: API.DOCUMENTS.UPLOAD,
     matchType: 'exact-only' as const,
     description: 'Upload documents endpoint',
-  },
-  'generate-vkyc': {
-    endpoint: API.CHECKER.UPDATE_INCIDENT.REGENERATE_VKYC_LINK,
-    matchType: 'standard' as const,
-    description: 'Generate vkyc link endpoint',
   },
   'trans-purpose-document': {
     endpoint: API.TRANSACTION_PURPOSE_MAP.CREATE,

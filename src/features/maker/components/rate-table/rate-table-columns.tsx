@@ -1,6 +1,7 @@
 import { cn } from '@/utils/cn';
 import { RateTableColumn } from '../transaction/tabs/create-transactions-tab/create-transaction-form/types/rateTable.types';
 import { getController } from '@/components/form/utils/get-controller';
+import type { UseFormSetValue } from 'react-hook-form';
 
 
 export type ColumnKey = 'invoiceName' | 'niumRate' | 'agentMarkUp' | 'rate';
@@ -39,7 +40,13 @@ export const columnKeys: Record<ColumnKey, ColumnKeyConfig> = {
 const GetRateTableColumns = ({
   id = 'rateTable',
   mode = 'edit',
-  editableFields = ['remittanceCharges.agentMarkUp', 'nostroCharges.agentMarkUp', 'otherCharges.agentMarkUp'],
+  editableFields = ['remittance_charges.agent_mark_up', 'nostro_charges.agent_mark_up', 'other_charges.agent_mark_up'],
+  setValue,
+}: {
+  id?: string;
+  mode?: 'edit' | 'view';
+  editableFields?: string[];
+  setValue?: UseFormSetValue<Record<string, any>>;
 }): Partial<RateTableColumn>[] => {
   const commonInputStyles = (fieldPath: string): CommonInputStyles => {
     return {
@@ -57,129 +64,151 @@ const GetRateTableColumns = ({
       name: fieldPath,
       type: 'text',
       disabled: mode === 'view' || !editableFields.includes(fieldPath.replace(`${id}.`, '')),
-      onInputChange: (e: React.ChangeEvent<HTMLInputElement>) => {
-        let value = e.target.value;
+      onInputChange: (value?: string) => {
+        if (value == null || !setValue) return;
         // Remove spaces and hyphens
-        value = value.replace(/[\s-]/g, '');
+        let newValue = value.replace(/[\s-]/g, '');
         // Ensure only one dot and digits
-        const parts = value.split('.');
+        const parts = newValue.split('.');
         if (parts.length > 2) {
-          value = parts[0] + '.' + parts.slice(1).join('');
+          newValue = parts[0] + '.' + parts.slice(1).join('');
         }
-        e.target.value = value;
+        setValue(fieldPath, newValue);
       },
       ...commonInputStyles(fieldPath),
     });
 
-  const getDummyValue = (section: string, key: 'niumRate' | 'agentMarkUp' | 'rate'): number => {
-    const dummies: Record<string, Partial<Record<'niumRate' | 'agentMarkUp' | 'rate', number>>> = {
-      transactionValue: {
-        niumRate: 1.0,
-        agentMarkUp: 0,
+  const getDummyValue = (section: string, columnKey: 'niumRate' | 'agentMarkUp' | 'rate'): number => {
+    const sectionMap: Record<string, string> = {
+      transaction_value: 'transaction_value',
+      remittance_charges: 'remittance_charges',
+      nostro_charges: 'nostro_charges',
+      other_charges: 'other_charges',
+      transaction_amount: 'transaction_amount',
+      gst_amount: 'gst_amount',
+      total_inr_amount: 'total_inr_amount',
+      tcs: 'tcs',
+    };
+    const mappedSection = sectionMap[section] || section;
+
+    const keyMap: Record<'niumRate' | 'agentMarkUp' | 'rate', string> = {
+      niumRate: 'nium_rate',
+      agentMarkUp: 'agent_mark_up',
+      rate: 'rate',
+    };
+    const mappedKey = keyMap[columnKey];
+
+    const dummies: Record<string, Partial<Record<string, number>>> = {
+      transaction_value: {
+        nium_rate: 1.0,
+        agent_mark_up: 0,
         rate: 1000,
       },
-      remittanceCharges: {
-        niumRate: 10,
-        agentMarkUp: 0,
+      remittance_charges: {
+        nium_rate: 10,
+        agent_mark_up: 0,
         rate: 10,
       },
-      nostroCharges: {
-        niumRate: 5,
-        agentMarkUp: 0,
+      nostro_charges: {
+        nium_rate: 5,
+        agent_mark_up: 0,
         rate: 5,
       },
-      otherCharges: {
-        niumRate: 2,
-        agentMarkUp: 0,
+      other_charges: {
+        nium_rate: 2,
+        agent_mark_up: 0,
         rate: 2,
       },
-      transactionAmount: {
+      transaction_amount: {
         rate: 1017,
       },
-      gstAmount: {
+      gst_amount: {
         rate: 183,
       },
-      totalInrAmount: {
+      total_inr_amount: {
         rate: 1200,
       },
       tcs: {
         rate: 120,
       },
     };
-    return dummies[section]?.[key] ?? 0;
+    return dummies[mappedSection]?.[mappedKey] ?? 0;
   };
 
-  const getCellContent = (section: string, key: 'niumRate' | 'agentMarkUp' | 'rate', fieldPath: string) => {
+  const getCellContent = (section: string, columnKey: 'niumRate' | 'agentMarkUp' | 'rate', fieldPath: string) => {
     const relativePath = fieldPath.replace(`${id}.`, '');
     const isEditable = editableFields.includes(relativePath);
     if (isEditable) {
       return getFormField(fieldPath);
     } else {
-      const dummy = getDummyValue(section, key);
+      const dummy = getDummyValue(section, columnKey);
+      if (setValue) {
+        setValue(fieldPath, dummy.toString());
+      }
       return <span className="text-right">{dummy}</span>;
     }
   };
 
   return [
     {
-      id: 'transactionValue',
+      id: 'transaction_value',
       cells: {
         invoiceName: () => <span className="text-left">{`Tnx Value`}</span>,
-        niumRate: () => getCellContent('transactionValue', 'niumRate', `${id}.transactionValue.niumRate`),
-        agentMarkUp: () => getCellContent('transactionValue', 'agentMarkUp', `${id}.transactionValue.agentMarkUp`),
-        rate: () => getCellContent('transactionValue', 'rate', `${id}.transactionValue.rate`),
+        niumRate: () => getCellContent('transaction_value', 'niumRate', `${id}.transaction_value.nium_rate`),
+        agentMarkUp: () => getCellContent('transaction_value', 'agentMarkUp', `${id}.transaction_value.agent_mark_up`),
+        rate: () => getCellContent('transaction_value', 'rate', `${id}.transaction_value.rate`),
       },
     },
     {
-      id: 'remittanceCharges',
+      id: 'remittance_charges',
       cells: {
         invoiceName: () => <span className="text-left">{`Remittance Charges`}</span>,
-        niumRate: () => getCellContent('remittanceCharges', 'niumRate', `${id}.remittanceCharges.niumRate`),
-        agentMarkUp: () => getCellContent('remittanceCharges', 'agentMarkUp', `${id}.remittanceCharges.agentMarkUp`),
-        rate: () => getCellContent('remittanceCharges', 'rate', `${id}.remittanceCharges.rate`),
+        niumRate: () => getCellContent('remittance_charges', 'niumRate', `${id}.remittance_charges.nium_rate`),
+        agentMarkUp: () => getCellContent('remittance_charges', 'agentMarkUp', `${id}.remittance_charges.agent_mark_up`),
+        rate: () => getCellContent('remittance_charges', 'rate', `${id}.remittance_charges.rate`),
       },
     },
     {
-      id: 'nostroCharges',
+      id: 'nostro_charges',
       cells: {
         invoiceName: () => <span className="text-left">{`Nostro Charges: BEN/OUR`}</span>,
-        niumRate: () => getCellContent('nostroCharges', 'niumRate', `${id}.nostroCharges.niumRate`),
-        agentMarkUp: () => getCellContent('nostroCharges', 'agentMarkUp', `${id}.nostroCharges.agentMarkUp`),
-        rate: () => getCellContent('nostroCharges', 'rate', `${id}.nostroCharges.rate`),
+        niumRate: () => getCellContent('nostro_charges', 'niumRate', `${id}.nostro_charges.nium_rate`),
+        agentMarkUp: () => getCellContent('nostro_charges', 'agentMarkUp', `${id}.nostro_charges.agent_mark_up`),
+        rate: () => getCellContent('nostro_charges', 'rate', `${id}.nostro_charges.rate`),
       },
     },
     {
-      id: 'otherCharges',
+      id: 'other_charges',
       cells: {
         invoiceName: () => <span className="text-left">{`Other Charges`}</span>,
-        niumRate: () => getCellContent('otherCharges', 'niumRate', `${id}.otherCharges.niumRate`),
-        agentMarkUp: () => getCellContent('otherCharges', 'agentMarkUp', `${id}.otherCharges.agentMarkUp`),
-        rate: () => getCellContent('otherCharges', 'rate', `${id}.otherCharges.rate`),
+        niumRate: () => getCellContent('other_charges', 'niumRate', `${id}.other_charges.nium_rate`),
+        agentMarkUp: () => getCellContent('other_charges', 'agentMarkUp', `${id}.other_charges.agent_mark_up`),
+        rate: () => getCellContent('other_charges', 'rate', `${id}.other_charges.rate`),
       },
     },
     {
-      id: 'transactionAmount',
+      id: 'transaction_amount',
       cells: {
         invoiceName: () => <span className="text-left font-semibold">{`Transaction Amount`}</span>,
-        rate: () => getCellContent('transactionAmount', 'rate', `${id}.transactionAmount.rate`),
+        rate: () => getCellContent('transaction_amount', 'rate', `${id}.transaction_amount.rate`),
       },
     },
     {
-      id: 'gstAmount',
+      id: 'gst_amount',
       cells: {
         invoiceName: () => (
           <span className="text-left">
             Total GST Amount <br /> <b> CGST IGST/UTGST</b>
           </span>
         ),
-        rate: () => getCellContent('gstAmount', 'rate', `${id}.gstAmount.rate`),
+        rate: () => getCellContent('gst_amount', 'rate', `${id}.gst_amount.rate`),
       },
     },
     {
-      id: 'totalInrAmount',
+      id: 'total_inr_amount',
       cells: {
         invoiceName: () => <span className="text-left font-semibold">{`Total INR Amount`}</span>,
-        rate: () => getCellContent('totalInrAmount', 'rate', `${id}.totalInrAmount.rate`),
+        rate: () => getCellContent('total_inr_amount', 'rate', `${id}.total_inr_amount.rate`),
       },
     },
     {
