@@ -237,7 +237,7 @@ export const kycDetailsSchema = z.object({
     .refine((val) => !val || parseFloat(val) >= 0, {
       message: 'Amount cannot be negative',
     }),
-  nium_previous_transaction_amount: z
+   previous_transaction_amount: z
     .string()
     .optional()
     .refine((val) => !val || /^[0-9]*\.?[0-9]*$/.test(val), {
@@ -276,7 +276,7 @@ export const kycDetailsSchema = z.object({
   if (data.source_of_funds === 'education') {
     return (
       data.declared_education_loan_amount &&
-      data.nium_previous_transaction_amount &&
+      data.previous_transaction_amount &&
       data.declare_previous_amount_by_other_ad &&
       data.total_transaction_amount_tcs
     );

@@ -38,7 +38,7 @@ const defaultValues = {
   payee_pan_number: '',
   payee_dob_as_per_pan: '',
   declared_education_loan_amount: '',
-  nium_previous_transaction_amount: '',
+  previous_transaction_amount: '',
   declare_previous_amount_by_other_ad: '',
   total_transaction_amount_tcs: '',
   invoice_rate_table: {

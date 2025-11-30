@@ -5,7 +5,8 @@ export const HEADER_KEYS = {
 
 export const API = {
   AUTH: {
-    LOGIN: `/rem-users/login`,
+    // LOGIN: `/rem-users/login`,
+    LOGIN: `/login`,
     LOGOUT: `/auth/logout`,
     REGISTER: `/auth/register`,
     FORGOT_PASSWORD: `/users/forgot-password`,
