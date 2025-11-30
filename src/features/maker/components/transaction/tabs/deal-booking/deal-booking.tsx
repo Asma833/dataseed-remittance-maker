@@ -20,16 +20,16 @@ import { kycDetailsSchema } from './sections/kyc-details/kyc-details.schema';
 
 const defaultValues = {
   company_reference_number:'',
-  purpose: '',
-  fx_currency: '',
+  purpose: 'personal',
+  fx_currency: 'USD',
   fx_amount: '',
   company_settlement_rate: '',
   add_margins: '',
   customer_rate: '',
   nostro_charges: '',
-  applicant_name: '',
-  applicant_pan_number: '',
-  applicant_dob: '',
+  applicant_name: 'John Doe',
+  applicant_pan_number: 'ABCDE1234F',
+  applicant_dob: '1990-01-01',
   applicant_email: '',
   applicant_mobile_number: '',
   source_of_funds: '',
@@ -85,7 +85,7 @@ const DealBooking = () => {
 
   const methods = useForm({
     resolver: zodResolver(kycDetailsSchema),
-    mode: 'onChange',
+    mode: 'onSubmit',
     defaultValues: defaultValues,
   });
   const {
