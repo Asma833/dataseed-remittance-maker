@@ -8,7 +8,7 @@ import { useCurrentUser } from '@/utils/getUserFromRedux';
 import { navigateWithRole } from '@/utils/navigationUtils';
 
 
-const TransactionTable = ({ onCreate }: { onCreate?: () => void }) => {
+const TransactionTable = ({ onCreate }: { onCreate?: (transaction: TransactionData) => void }) => {
   const { data: apiTransactions = [], isLoading } = useGetTransactions();
   const navigate = useNavigate()
   const transactions: TransactionData[] = useMemo(() => {

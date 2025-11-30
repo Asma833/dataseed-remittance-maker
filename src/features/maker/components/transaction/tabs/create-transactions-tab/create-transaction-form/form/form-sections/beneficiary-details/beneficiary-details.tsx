@@ -14,7 +14,7 @@ const BeneficiaryDetails = ({ setAccordionState }: CommonCreateTransactionProps)
   const [isSaving, setIsSaving] = useState(false);
   const [isEditing, setIsEditing] = useState(false);
   const { control, formState: { errors }, trigger } = useFormContext();
-  const intermediaryBankDetails = useWatch({ name: "intermediaryBankDetails", defaultValue: "no" });
+  const intermediaryBankDetails = useWatch({ name: "beneficiaryDetails.intermediaryBankDetails", defaultValue: "no" });
 
   const handleSave = async () => {
     const isValid = await trigger();
@@ -42,7 +42,7 @@ const BeneficiaryDetails = ({ setAccordionState }: CommonCreateTransactionProps)
           if (!field) return null;
           return (
             <FieldWrapper key={name}>
-              {getController({ ...field, name, control, errors })}
+              {getController({ ...field, name: `beneficiaryDetails.${name}`, control, errors })}
             </FieldWrapper>
           );
         })}
@@ -53,7 +53,7 @@ const BeneficiaryDetails = ({ setAccordionState }: CommonCreateTransactionProps)
           if (!field) return null;
           return (
             <FieldWrapper key={name}>
-              {getController({ ...field, name, control, errors })}
+              {getController({ ...field, name: `beneficiaryDetails.${name}`, control, errors })}
             </FieldWrapper>
           );
         })}
@@ -64,7 +64,7 @@ const BeneficiaryDetails = ({ setAccordionState }: CommonCreateTransactionProps)
           if (!field) return null;
           return (
             <FieldWrapper key={name}>
-              {getController({ ...field, name, control, errors })}
+              {getController({ ...field, name: `beneficiaryDetails.${name}`, control, errors })}
             </FieldWrapper>
           );
         })}
@@ -75,7 +75,7 @@ const BeneficiaryDetails = ({ setAccordionState }: CommonCreateTransactionProps)
           if (!field) return null;
           return (
             <FieldWrapper key={name}>
-              {getController({ ...field, name, control, errors })}
+              {getController({ ...field, name: `beneficiaryDetails.${name}`, control, errors })}
             </FieldWrapper>
           );
         })}
@@ -86,7 +86,7 @@ const BeneficiaryDetails = ({ setAccordionState }: CommonCreateTransactionProps)
           if (!field) return null;
           return (
             <FieldWrapper key={name}>
-              {getController({ ...field, name, control, errors })}
+              {getController({ ...field, name: `beneficiaryDetails.${name}`, control, errors })}
             </FieldWrapper>
           );
         })}
@@ -94,7 +94,7 @@ const BeneficiaryDetails = ({ setAccordionState }: CommonCreateTransactionProps)
       <div className="flex w-full items-start">
         <FieldWrapper className="w-1/4">
           <ShadCnRadioGroup
-            name="intermediaryBankDetails"
+            name="beneficiaryDetails.intermediaryBankDetails"
             label="Intermediary Bank Details"
             options={{
               yes: { label: 'Yes' },
@@ -110,7 +110,7 @@ const BeneficiaryDetails = ({ setAccordionState }: CommonCreateTransactionProps)
                 return (
                   <FieldWrapper key={item.name}>
                     {getController({
-                      name: item.name,
+                      name: `beneficiaryDetails.${item.name}`,
                       label: item.label,
                       type: item.type,
                       placeholder: item.placeholder,

@@ -1,44 +1,35 @@
+import { useEffect, useMemo } from 'react';
 import CreateTransactionsAccordion from '../components/create-transactions-accordion';
 import { accordionItems } from '../config/accordion-config';
 import { Button } from '@/components/ui/button';
 import { useAccordionStateProvider } from '../context/accordion-control-context';
-import { useForm, Resolver } from 'react-hook-form';
+import { useForm, Resolver, FormProvider } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { currencyDetailsSchema, CurrencyDetailsFormData } from './form-sections/currency-details/currency-details.schema';
-import { z } from 'zod';
-import { beneficiaryDetailsSchema } from './form-sections/beneficiary-details/beneficiary-details.schema';
-import { transactionBasicDetailsSchema } from './form-sections/transaction-details/transaction-basic-details.schema';
-
-// Combined schema - extend with other sections as needed
-const createTransactionSchema = z.object({
-  currencyDetails: currencyDetailsSchema,
-  beneficiaryDetails: beneficiaryDetailsSchema,
-  transactionDetails: transactionBasicDetailsSchema
-});
-
-export type CreateTransactionFormData = z.infer<typeof createTransactionSchema>;
+import { createTransactionSchema, CreateTransactionFormData } from './common-schema';
 
 type Props = {
   onCancel?: () => void;
   onSubmit?: (data: CreateTransactionFormData) => void;
+  initialData?: Partial<CreateTransactionFormData>;
 };
 
-const CreateTransactionForm = ({ onCancel, onSubmit }: Props) => {
+const CreateTransactionForm = ({ onCancel, onSubmit, initialData }: Props) => {
+  console.log("Form initialData:", initialData);
   const { accordionState, setAccordionState } = useAccordionStateProvider();
   const currentTab = accordionState.currentActiveTab;
 
-  const defaultValues: Partial<CreateTransactionFormData> = {
+  const defaultValues: Partial<CreateTransactionFormData> = useMemo(() => ({
     currencyDetails: {
-      fx_currency: '',
-      fx_amount: '',
-      settlement_rate: '',
-      add_margin: '',
-      customer_rate: '',
-      declared_education_loan_amount: '',
-      previous_transaction_amount: '',
-      declared_previous_amount: '',
-      total_transaction_amount_tcs: '',
-      invoiceRateTable: {
+      fx_currency: initialData?.currencyDetails?.fx_currency || '-',
+      fx_amount: initialData?.currencyDetails?.fx_amount || '-',
+      settlement_rate: initialData?.currencyDetails?.settlement_rate || '',
+      add_margin: initialData?.currencyDetails?.add_margin || '',
+      customer_rate: initialData?.currencyDetails?.customer_rate || '',
+      declared_education_loan_amount: initialData?.currencyDetails?.declared_education_loan_amount || '',
+      previous_transaction_amount: initialData?.currencyDetails?.previous_transaction_amount || '',
+      declared_previous_amount: initialData?.currencyDetails?.declared_previous_amount || '',
+      total_transaction_amount_tcs: initialData?.currencyDetails?.total_transaction_amount_tcs || '',
+      invoiceRateTable: initialData?.currencyDetails?.invoiceRateTable || {
         transaction_value: {
           company_rate: '',
           agent_mark_up: '',
@@ -73,7 +64,7 @@ const CreateTransactionForm = ({ onCancel, onSubmit }: Props) => {
         },
       },
     },
-    beneficiaryDetails: {
+    beneficiaryDetails: initialData?.beneficiaryDetails || {
       beneficiary_name: '',
       beneficiary_address: '',
       beneficiary_city: '',
@@ -95,11 +86,9 @@ const CreateTransactionForm = ({ onCancel, onSubmit }: Props) => {
       intermediary_bank_name: '',
       intermediary_bank_address: '',
     },
-    transactionDetails: {
-      company_reference_number: '',
-      agent_reference_number: '',
-      created_date: undefined,
-      deal_expiry: undefined,
+    transactionDetails: initialData?.transactionDetails || {
+      company_reference_number: '-',
+      agent_reference_number: '-',
       transaction_type: '',
       purpose: '',
       fx_currency: '',
@@ -108,18 +97,14 @@ const CreateTransactionForm = ({ onCancel, onSubmit }: Props) => {
       billing_rate: 0,
       applicant_name: '',
       applicant_pan_number: '',
-      applicant_dob: undefined,
       applicant_email: '',
       applicant_mobile_number: '',
       source_of_funds: '',
       paid_by: '',
       payee_name: '',
       payee_pan_number: '',
-      payee_dob: undefined,
       applicant_id_document: '',
       passport_number: '',
-      passport_issued_date: undefined,
-      passport_expiry_date: undefined,
       place_of_issue: '',
       applicant_address: '',
       applicant_city: '',
@@ -127,15 +112,21 @@ const CreateTransactionForm = ({ onCancel, onSubmit }: Props) => {
       applicant_country: '',
       postal_code: '',
     },
-  };
+  }), [initialData]);
 
   const form = useForm<CreateTransactionFormData>({
     resolver: zodResolver(createTransactionSchema) as Resolver<CreateTransactionFormData>,
-    defaultValues,
+    defaultValues: {},
     mode: 'onChange', // Trigger validation on change
   });
 
   const { handleSubmit: onFormSubmit } = form;
+
+  useEffect(() => {
+    if (initialData) {
+      form.reset(initialData);
+    }
+  }, [initialData, form]);
 
   const handlePrevious = () => {
     if (currentTab === 'panel2') {
@@ -157,27 +148,29 @@ const CreateTransactionForm = ({ onCancel, onSubmit }: Props) => {
   const showNext = currentTab !== 'panel3';
 
   return (
-    <div>
-      <div className="flex justify-between mb-4 gap-2">
-        <Button variant="light" onClick={onCancel}>
-          Cancel
-        </Button>
-        <div className="flex gap-2">
-          {showPrevious && (
-            <Button variant="light" onClick={handlePrevious}>
-              Previous
-            </Button>
-          )}
-          {showNext && (
-            <Button onClick={handleNext} className='w-24'>
-              Next
-            </Button>
-          )}
-          
+    <FormProvider {...form}>
+      <div>
+        <div className="flex justify-between mb-4 gap-2">
+          <Button variant="light" onClick={onCancel}>
+            Cancel
+          </Button>
+          <div className="flex gap-2">
+            {showPrevious && (
+              <Button variant="light" onClick={handlePrevious}>
+                Previous
+              </Button>
+            )}
+            {showNext && (
+              <Button onClick={handleNext} className='w-24'>
+                Next
+              </Button>
+            )}
+
+          </div>
         </div>
+        <CreateTransactionsAccordion accordionItems={accordionItems} />
       </div>
-      <CreateTransactionsAccordion accordionItems={accordionItems} />
-    </div>
+    </FormProvider>
   );
 };
 
