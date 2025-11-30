@@ -11,8 +11,8 @@ import { ShadCnIndianPhone } from '@/components/form/controller/ShadCnIndianPhon
 import ShadCnPassword from '@/components/form/controller/ShadCnPassword';
 import { ShadCnTextArea } from '../controller/ShadCnTextArea';
 import { ShadCnFileUpload } from '../controller/ShadCnFileUpload';
-import { ShadCnFileUploadWithView } from '../controller/ShadCnFileUploadWithView';
 import { ShadCnFileUploadWithButton } from '../controller/ShadCnFileUploadWithButton';
+import FileUploadWithView from '../controller/FileUploadWithView';
 
 export const getController = (field: any) => {
   const baseProps = {
@@ -71,15 +71,15 @@ export const getController = (field: any) => {
         />
       );
     case 'fileupload_view':
-      return (
-        <ShadCnFileUploadWithView
+        return (
+        <FileUploadWithView
           {...baseProps}
+          className={field.className}
           maxFiles={field.maxFiles}
           description={field.description}
           helpText={field.helpText}
           accept={field.accept}
           multiple={field.maxFiles > 1}
-          handleFileChange={field.handleFileChange}
           viewFile={field.viewFile}
         />
       );

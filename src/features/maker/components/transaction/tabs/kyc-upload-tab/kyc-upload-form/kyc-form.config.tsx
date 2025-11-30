@@ -1,4 +1,5 @@
-import { FieldType } from '@/types/common.type';
+import { FieldType } from "@/types/enums";
+
 
 export const kycDocumentsConfig = {
   sectionTitle: 'KYC Documents',
@@ -39,7 +40,7 @@ export const kycDocumentsConfig = {
       className: '',
     },
     Passport_Aadhar_DL_Voter_ID_Front: {
-      label: 'Passport / Aadhar / DL / Voter ID - Front',
+      label: 'Passport / Aadhar / DL / Voter ID',
       type: FieldType.Fileupload_View,
       required: false,
       placeholder: 'Upload Front Side',
@@ -101,24 +102,24 @@ export const kycDocumentsConfig = {
       placeholder: 'Upload Visa',
       className: '',
     },
-    kycType: {
-      label: 'Select KYC Type',
-      type: FieldType.Select,
-      required: true,
-      placeholder: 'Choose KYC Type',
-      options: {
-        full_kyc: { label: 'Full KYC' },
-        limited_kyc: { label: 'Limited KYC' },
-        video_kyc: { label: 'Video KYC' },
-      },
-      isMulti: false,
-      className: 'mt-4',
-    },
-    viewA2Form: {
-      label: 'View A2 Form',
-      type: FieldType.Fileupload_View,
-      required: false,
-      className: 'col-span-2',
-    },
+    // kycType: {
+    //   label: 'Select KYC Type',
+    //   type: FieldType.Select,
+    //   required: true,
+    //   placeholder: 'Choose KYC Type',
+    //   options: {
+    //     full_kyc: { label: 'Full KYC' },
+    //     limited_kyc: { label: 'Limited KYC' },
+    //     video_kyc: { label: 'Video KYC' },
+    //   },
+    //   isMulti: false,
+    //   className: 'mt-4',
+    // },
+    // viewA2Form: {
+    //   label: 'View A2 Form',
+    //   type: FieldType.Fileupload_View,
+    //   required: false,
+    //   className: 'col-span-2',
+    // },
   },
 };

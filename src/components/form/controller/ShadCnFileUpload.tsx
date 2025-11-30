@@ -32,6 +32,7 @@ export const ShadCnFileUpload = ({
   defaultValue,
   disabled = false,
   required = false,
+  accept,
 }: ShadCnFileUploadProps) => {
   const { control } = useFormContext();
 
@@ -78,7 +79,7 @@ export const ShadCnFileUpload = ({
                       handleChange(e);
                     }}
                     className="n-filetype-hidden"
-                    accept=".pdf,.jpg,.png"
+                    accept={accept || ".pdf,.jpg,.png"}
                     disabled={disabled}
                   />
                   <Button

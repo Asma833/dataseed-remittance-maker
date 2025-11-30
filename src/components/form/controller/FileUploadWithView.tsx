@@ -1,6 +1,6 @@
 import { ChangeEvent, useState, useEffect } from 'react';
 import { Eye, X } from 'lucide-react';
-import { ShadCnFileUpload as FileUpload } from './ShadCnFileUpload';
+import { FileUpload } from './FileUpload';
 import { useFormContext } from 'react-hook-form';
 import '../styles/form-layout.css';
 
@@ -15,12 +15,9 @@ interface FileUploadProps {
   accept?: string;
   multiple?: boolean;
   viewFile?: boolean;
-  handleFileChange?: (e: ChangeEvent<HTMLInputElement> | null) => void;
-  disabled?: boolean;
-  required?: boolean;
 }
 
-const FileUploadWithView = ({ id, name, label, className, viewFile = true, handleFileChange: externalHandleFileChange, maxFiles, description, helpText, accept, multiple, disabled, required }: FileUploadProps) => {
+const FileUploadWithView = ({ id, name, label, className, viewFile = true }: FileUploadProps) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const { watch } = useFormContext();
@@ -41,9 +38,6 @@ const FileUploadWithView = ({ id, name, label, className, viewFile = true, handl
     if (e && e.target.files?.[0]) {
       const file = e.target.files[0];
       setSelectedFile(file);
-    }
-    if (externalHandleFileChange) {
-      externalHandleFileChange(e);
     }
   };
 
@@ -102,9 +96,6 @@ const FileUploadWithView = ({ id, name, label, className, viewFile = true, handl
             handleFileChange={handleFileChange}
             className="w-5/6 p-0 flex-1"
             styleType="fileUploadWithView"
-            {...(accept !== undefined && { accept })}
-            {...(disabled !== undefined && { disabled })}
-            {...(required !== undefined && { required })}
           />
           {viewFile && (
             <button
@@ -113,7 +104,7 @@ const FileUploadWithView = ({ id, name, label, className, viewFile = true, handl
               className={`px-2 text-gray-500 disabled:text-gray-400 hover:text-gray-800 text-sm border-none bg-transparent rounded w-[60px] flex items-center justify-center gap-2 ${className}`}
               onClick={() => setIsModalOpen(true)}
             >
-              <Eye size={20} className="min-w-5" /> View
+              <Eye size={20} className="min-w-5" /> <span className="hidden md:block">View</span>
             </button>
           )}
         </div>
