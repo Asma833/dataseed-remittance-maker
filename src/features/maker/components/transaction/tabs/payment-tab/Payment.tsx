@@ -5,13 +5,14 @@ import { useMemo, useState } from "react";
 // import { useSendEsignLink } from "@/features/checker/hooks/useSendEsignLink";
 // import { useSendVkycLink } from "@/features/checker/hooks/useSendVkycLink";
 //import useGetAllOrders from "@/features/admin/hooks/useGetAllOrders";
-import { PaymentTableColumn } from "./PaymentTableColumn";
+import { PaymentTableColumn } from "./payment-table-column";
 // import { DialogWrapper } from "@/components/common/DialogWrapper";
-import Payments from "@/features/admin/components/transaction/tabs/deal-booking/sections/payments/Payments";
+// import Payments from "@/features/admin/components/transaction/tabs/deal-booking/sections/payments/Payments";
 import { useSendEsignLink } from "@/hooks/common/useSendEsignLink";
 import { useSendVkycLink } from "@/hooks/common/useSendVkycLink";
 import { DialogWrapper } from "@/components/common/dialog-wrapper";
 import { Order } from "@/types/common/updateIncident.types";
+import Payments from "@/components/payments/Payments";
 const PaymentStatus = () => {
        const [isModalOpen, setIsModalOpen] = useState(false);
        const [loadingOrderId, setLoadingOrderId] = useState<string>('');

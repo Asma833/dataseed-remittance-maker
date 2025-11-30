@@ -40,7 +40,8 @@ export const kycDocumentsConfig = {
       className: '',
     },
     Passport_Aadhar_DL_Voter_ID_Front: {
-      label: 'Passport / Aadhar / DL / Voter ID',
+      // label: 'Passport / Aadhar / DL / Voter ID',
+      label: 'Passport/Aadhar/DL/Voter ID Front',
       type: FieldType.Fileupload_View,
       required: false,
       placeholder: 'Upload Front Side',
@@ -53,13 +54,7 @@ export const kycDocumentsConfig = {
       placeholder: 'Upload Back Side',
       className: '' 
     },
-    payerPan: {
-      label: 'Payer PAN',
-      type: FieldType.Fileupload_View,
-      required: false,
-      placeholder: 'Enter Payer PAN',
-      className: 'col-span-2' 
-    },
+    
     studentPassportFront: {
       label: 'Valid Student Passport Front',
       type: FieldType.Fileupload_View,
@@ -73,6 +68,13 @@ export const kycDocumentsConfig = {
       required: false,
       placeholder: 'Upload Back Page',
       className: ''
+    },
+    payerPan: {
+      label: 'Payer PAN',
+      type: FieldType.Fileupload_View,
+      required: false,
+      placeholder: 'Enter Payer PAN',
+      className: 'col-span-2' 
     },
     payerRelationshipProof: {
       label: 'Payer Relationship Proof',

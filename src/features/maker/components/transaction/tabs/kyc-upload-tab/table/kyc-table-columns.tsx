@@ -1,58 +1,100 @@
 import { useState } from 'react';
 import { formatDateWithFallback } from '@/utils/formatDateWithFallback';
-import { SignLinkButton } from '@/components/common/SignLinkButton';
-import TooltipActionButton from '@/components/common/TooltipActionButton';
-import EsignStatusCell from '@/features/checker/components/table/EsignStatusCell';
-import VKycStatusCell from '@/features/checker/components/table/VKycStatusCell';
-import { Eye, Upload } from 'lucide-react';
-import PaymentStatusCell from '@/features/checker/components/table/PaymentStatusCell';
-import KycStatusCell from '@/features/checker/components/table/KycStatusCell';
+import EsignStatusCell from '@/components/cell/table/EsignStatusCell';
+import VKycStatusCell from '@/components/cell/table/VKycStatusCell';
+import { Eye } from 'lucide-react';
+import KycStatusCell from '@/components/cell/table/KycStatusCell';
+import { SignLinkButton } from '@/components/common/single-link-button';
+import TooltipActionButton from '@/components/common/tooltip-action-button';
 
-export const PaymentTableColumn = ({
+export const KycTableColumnsConfig = ({
   handleRegenerateEsignLink,
   handleRegenerateVkycLink,
   isSendEsignLinkLoading = false,
   isSendVkycLinkLoading = false,
   loadingOrderId = null,
   navigate,
-  handlePayment,
 }: {
   handleRegenerateEsignLink: (rowData: any) => void;
   handleRegenerateVkycLink: (rowData: any) => void;
-  handlePayment: (rowData: any) => void;
   isSendEsignLinkLoading?: boolean;
   isSendVkycLinkLoading?: boolean;
   loadingOrderId?: string | null;
-  navigate: (path: string) => void;
+  navigate: (url: string) => void;
 }) => {
   const [hasGeneratedLink, setHasGeneratedLink] = useState(false);
   return [
-    { key: 'nium_ref_no', id: 'nium_ref_no', name: 'Nium Ref No', className: 'min-w-0 p-2' },
-    { key: 'agent_ref_no', id: 'agent_ref_no', name: 'Agent Ref No', className: 'min-w-0 p-2' },
-    {
-      key: 'created_date',
-      id: 'created_date',
-      name: 'Created Date',
-      className: 'min-w-0 p-2',
-      cell: (_: any, rowData: any) => <span>{formatDateWithFallback(rowData.created_date)}</span>,
-    },
-    { key: 'expiry_date', id: 'expiry_date', name: 'Expiry Date', className: 'min-w-0 p-2' },
-    { key: 'applicant_name', id: 'applicant_name', name: 'Applicant Name', className: 'min-w-0 p-2' },
-    { key: 'applicant_pan', id: 'applicant_pan', name: 'Applicant PAN Number', className: 'min-w-0 p-2' },
-    { key: 'transaction_type', id: 'transaction_type', name: 'Transaction Type', className: 'min-w-0 p-2' },
-    { key: 'purpose', id: 'purpose', name: 'Purpose', className: 'min-w-0 p-2' },
-    { key: 'kyc_type', id: 'kyc_type', name: 'KYC Type', className: 'min-w-0 p-2' },
-    { key: 'kyc_status', id: 'kyc_status', name: 'KYC Status', className: 'min-w-0 p-2',
-      cell: (_: any, rowData: any) => <KycStatusCell rowData={rowData} />,
-     },
-    {
-      key: 'e_sign_status',
-      id: 'e_sign_status',
-      name: 'Esign Status',
-      className: 'min-w-0 p-2',
-      cell: (_: any, rowData: any) => <EsignStatusCell rowData={rowData} />,
-    },
-    {
+  {
+    key: 'nium_reference_no',
+    id: 'nium_reference_no',
+    name: 'Nium Ref.No',
+    className: 'min-w-0 p-2',
+  },
+  {
+    key: 'agent_reference_no',
+    id: 'agent_reference_no',
+    name: 'Agent Ref.No.',
+    className: 'min-w-0 p-2',
+  },
+  {
+    key: 'created_date',
+    id: 'created_date',
+    name: 'Created Date',
+    className: 'min-w-0 p-2',
+    cell: (_: any, rowData: any) => <span>{formatDateWithFallback(rowData.created_date)}</span>,
+  },
+  {
+    key: 'expiry_date',
+    id: 'expiry_date',
+    name: 'Expiry Date',
+    className: 'min-w-0 p-2',
+    cell: (_: any, rowData: any) => <span>{formatDateWithFallback(rowData.expiry_date)}</span>,
+  },
+  {
+    key: 'applicant_name',
+    id: 'applicant_name',
+    name: 'Applicant Name',
+    className: 'min-w-0 p-2',
+  },
+  {
+    key: 'applicant_pan',
+    id: 'applicant_pan',
+    name: 'Applicant PAN Number',
+    className: 'min-w-0 p-2',
+  },
+  {
+    key: 'transaction_type',
+    id: 'transaction_type',
+    name: 'Transaction Type',
+    className: 'min-w-0 p-2',
+  },
+  {
+    key: 'purpose',
+    id: 'purpose',
+    name: 'Purpose',
+    className: 'min-w-0 p-2',
+  },
+  {
+    key: 'kyc_type',
+    id: 'kyc_type',
+    name: 'KYC Type',
+    className: 'min-w-0 p-2',
+  },
+  {
+    key: 'kyc_status',
+    id: 'kyc_status',
+    name: 'KYC Status',
+    className: 'min-w-0 p-2',
+    cell: (_: any, rowData: any) => <KycStatusCell rowData={rowData} />,
+  },
+  {
+    key: 'e_sign_status',
+    id: 'e_sign_status',
+    name: 'E Sign Status',
+    className: 'min-w-0 p-2',
+    cell: (_: any, rowData: any) => <EsignStatusCell rowData={rowData} />,
+  },
+  {
       key: 'e_sign_link',
       id: 'e_sign_link',
       name: 'E Sign Link',
@@ -110,19 +152,19 @@ export const PaymentTableColumn = ({
         );
       },
     },
-    {
-      key: 'v_kyc_status',
-      id: 'v_kyc_status',
-      name: 'VKYC Status',
-      className: 'min-w-0 p-2',
-      cell: (_: any, rowData: any) => <VKycStatusCell rowData={rowData} />,
-    },
-    {
-      key: 'v_kyc_link',
-      id: 'v_kyc_link',
-      name: 'VKYC Link',
-      className: 'min-w-0 max-w-[80px]',
-      cell: (_: unknown, rowData: any) => {
+  {
+    key: 'v_kyc_status',
+    id: 'v_kyc_status',
+    name: 'VKYC Status',
+    className: 'min-w-0 p-2',
+   cell: (_: any, rowData: any) => <VKycStatusCell rowData={rowData} />,
+  },
+  {
+    key: 'v_kyc_link',
+    id: 'v_kyc_link',
+    name: 'VKYC Link',
+    className: 'min-w-0 p-2',
+     cell: (_: unknown, rowData: any) => {
         const { v_kyc_status, e_sign_status, is_v_kyc_required, nium_order_id, v_kyc_link } = rowData;
         const isActionNeeded = v_kyc_status === 'N/A' || v_kyc_status === 'expired';
 
@@ -162,57 +204,22 @@ export const PaymentTableColumn = ({
           />
         );
       },
-    },
-    { key: 'payment_status', 
-      id: 'payment_status', 
-      name: 'Payment Status', 
-      className: 'min-w-0 p-2',
-      cell: (_: unknown, rowData: any) => <PaymentStatusCell rowData={rowData} />,
-     },
-    {
-      key: 'payment_link',
-      id: 'payment_link',
-      name: 'Payment Link',
-      className: 'min-w-0 p-2',
-      cell: (_: any, rowData: any) => {
-        const { nium_ref_no, payment_link } = rowData;
-        return (
-          <SignLinkButton
-            id={nium_ref_no}
-            copyLinkUrl={payment_link || ''}
-            toastInfoText="Payment link copied successfully!"
-            tooltipText="Copy payment link"
-            buttonType="copy_link"
-            buttonIconType="copy_link"
-          />
-        );
-      },
-    },
-
-    {
-      key: 'payment_screenshot',
-      id: 'payment_screenshot',
-      name: 'Payment Screenshot',
-      className: 'min-w-0 p-2',
-      cell: (_: any, rowData: any) => (
-        <TooltipActionButton
-          onClick={() => handlePayment(rowData)}
-          icon={<Upload size={16} className="text-primary group-hover:text-white group-disabled:text-gray-400" />}
-          tooltipText="Upload Payment Screenshot"
-          variant="upload"
-          disabled={rowData.payment_screenshot !== null}
-          className="group"
-        />
-      ),
-    },
-    {
-      key: 'view_action',
-      id: 'view_action',
-      name: 'View',
-      className: 'min-w-0 p-2',
-      cell: (_: any, rowData: any) => (
-        <TooltipActionButton onClick={() => navigate(``)} icon={<Eye size={16} />} tooltipText="View" variant="view" />
-      ),
-    },
-  ];
-};
+  },
+  {
+    key: 'view_action',
+    id: 'view_action',
+    name: 'View',
+    className: 'min-w-0 p-2',
+    cell: (_: any, rowData: any) => (
+      <TooltipActionButton
+        onClick={() =>
+          navigate(`/maker/view-transaction?partner-order-id=${rowData.agent_reference_no}&action=view`)
+        }
+        icon={<Eye size={16} />}
+        tooltipText="View"
+        variant="view"
+      />
+    ),
+  },
+]
+}

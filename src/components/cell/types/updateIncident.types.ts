@@ -184,6 +184,7 @@ export type Order = {
   e_sign_completed_by_customer?: string | null;
   e_sign_customer_completion_date?: string | null;
   e_sign_doc_comments?: string | null;
+  kyc_status?: string;
   v_kyc_reference_id?: string | null;
   v_kyc_profile_id?: string | null;
   v_kyc_status?: string;

@@ -13,7 +13,7 @@ export const makerComponents = {
   CreateTransactions: lazy(
     () => import('@/features/maker/components/transaction/tabs/create-transactions-tab/create-transactions')
   ),
-  KYCUpload: lazy(() => import('@/features/maker/components/transaction/tabs/kyc-upload-tab/KYCUpload')),
+  KYCUpload: lazy(() => import('@/features/maker/components/transaction/tabs/kyc-upload-tab/kyc-uplod')),
   PaymentStatus: lazy(() => import('@/features/maker/components/transaction/tabs/payment-tab/Payment')),
   ViewAllTransactions: lazy(
     () => import('@/features/maker/components/transaction/tabs/view-all-tab/ViewAllTransactions')
