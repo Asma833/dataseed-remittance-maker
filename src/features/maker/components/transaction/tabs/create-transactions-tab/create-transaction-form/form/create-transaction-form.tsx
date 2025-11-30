@@ -40,22 +40,22 @@ const CreateTransactionForm = ({ onCancel, onSubmit }: Props) => {
       total_transaction_amount_tcs: '',
       invoiceRateTable: {
         transaction_value: {
-          nium_rate: '',
+          company_rate: '',
           agent_mark_up: '',
           rate: '',
         },
         remittance_charges: {
-          nium_rate: '',
+          company_rate: '',
           agent_mark_up: '',
           rate: '',
         },
         nostro_charges: {
-          nium_rate: '',
+          company_rate: '',
           agent_mark_up: '',
           rate: '',
         },
         other_charges: {
-          nium_rate: '',
+          company_rate: '',
           agent_mark_up: '',
           rate: '',
         },

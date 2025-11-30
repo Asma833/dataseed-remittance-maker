@@ -3,14 +3,14 @@ import { z } from 'zod';
 export const kycDetailsSchema = z.object({
   invoice_rate_table: z.object({
     transaction_value: z.object({
-      nium_rate: z.number().optional(),
+      company_rate: z.number().optional(),
       agent_mark_up: z.number().optional(),
       rate: z.number().optional(),
     }),
     remittance_charges: z.object({
-      nium_rate: z.string().optional()
+      company_rate: z.string().optional()
         .refine((val) => !val || !val.includes(' ') && !val.includes('-'), {
-          message: 'Nium Rate cannot contain spaces or hyphens',
+          message: 'Company Rate cannot contain spaces or hyphens',
         })
         .refine((val) => !val || /^[0-9]*\.?[0-9]*$/.test(val), {
           message: 'Please enter a valid amount',
@@ -40,9 +40,9 @@ export const kycDetailsSchema = z.object({
         }),
     }),
     nostro_charges: z.object({
-      nium_rate: z.string().optional()
+      company_rate: z.string().optional()
         .refine((val) => !val || !val.includes(' ') && !val.includes('-'), {
-          message: 'Nium Rate cannot contain spaces or hyphens',
+          message: 'Company Rate cannot contain spaces or hyphens',
         })
         .refine((val) => !val || /^[0-9]*\.?[0-9]*$/.test(val), {
           message: 'Please enter a valid amount',
@@ -72,9 +72,9 @@ export const kycDetailsSchema = z.object({
         }),
     }),
     other_charges: z.object({
-      nium_rate: z.string().optional()
+      company_rate: z.string().optional()
         .refine((val) => !val || !val.includes(' ') && !val.includes('-'), {
-          message: 'Nium Rate cannot contain spaces or hyphens',
+          message: 'Company Rate cannot contain spaces or hyphens',
         })
         .refine((val) => !val || /^[0-9]*\.?[0-9]*$/.test(val), {
           message: 'Please enter a valid amount',

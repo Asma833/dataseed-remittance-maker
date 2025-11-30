@@ -16,15 +16,15 @@ const BookTransaction = ({ control, errors }: BookTransactionProps) => {
   const { purposeTypes, loading: purposeLoading } = useGetPurposes();
   const { data: currencyRates, isLoading: currencyLoading } = useGetCurrencyRates();
 
-  const purposeOptions = purposeTypes.reduce((acc: Record<string, { label: string }>, { id, text }) => {
+  const purposeOptions = purposeTypes.length > 0 ? purposeTypes.reduce((acc: Record<string, { label: string }>, { id, text }) => {
     acc[id] = { label: text };
     return acc;
-  }, {});
+  }, {}) : {};
 
-  const currencyOptions = currencyRates?.reduce((acc: Record<string, { label: string }>, currency) => {
+  const currencyOptions = currencyRates && currencyRates.length > 0 ? currencyRates.reduce((acc: Record<string, { label: string }>, currency) => {
     acc[currency.currency_code] = { label: currency.currency_code };
     return acc;
-  }, {}) || {};
+  }, {}) : {};
 
   return (
     <>
@@ -36,9 +36,9 @@ const BookTransaction = ({ control, errors }: BookTransactionProps) => {
               const field = bookTransactionConfig.fields[name];
               let fieldWithOptions = field;
               if (name === 'purpose') {
-                fieldWithOptions = { ...field, options: purposeOptions };
+                fieldWithOptions = { ...field, options: Object.keys(purposeOptions).length > 0 ? purposeOptions : (field as any).options };
               } else if (name === 'fx_currency') {
-                fieldWithOptions = { ...field, options: currencyOptions };
+                fieldWithOptions = { ...field, options: Object.keys(currencyOptions).length > 0 ? currencyOptions : (field as any).options };
               }
               return <FieldWrapper key={name}>{getController({ ...fieldWithOptions, name, control, errors })}</FieldWrapper>;
             })}

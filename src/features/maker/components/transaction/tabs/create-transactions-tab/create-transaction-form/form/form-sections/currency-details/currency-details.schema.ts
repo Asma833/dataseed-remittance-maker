@@ -33,22 +33,22 @@ export const currencyDetailsSchema = z.object({
     .regex(numberRegex, 'Total Transaction Amount (TCS) must be a valid number without spaces or hyphens'),
   invoiceRateTable: z.object({
     transaction_value: z.object({
-      nium_rate: z.string().min(1, 'Nium Rate is required').regex(numberRegex, 'Nium Rate must be a valid number'),
+      company_rate: z.string().min(1, 'Company Rate is required').regex(numberRegex, 'Company Rate must be a valid number'),
       agent_mark_up: z.string().min(1, 'Agent Mark Up is required').regex(numberRegex, 'Agent Mark Up must be a valid number'),
       rate: z.string().min(1, 'Rate is required').regex(numberRegex, 'Rate must be a valid number'),
     }),
     remittance_charges: z.object({
-      nium_rate: z.string().min(1, 'Nium Rate is required').regex(numberRegex, 'Nium Rate must be a valid number'),
+      company_rate: z.string().min(1, 'Company Rate is required').regex(numberRegex, 'Company Rate must be a valid number'),
       agent_mark_up: z.string().min(1, 'Agent Mark Up is required').regex(numberRegex, 'Agent Mark Up must be a valid number'),
       rate: z.string().min(1, 'Rate is required').regex(numberRegex, 'Rate must be a valid number'),
     }),
     nostro_charges: z.object({
-      nium_rate: z.string().min(1, 'Nium Rate is required').regex(numberRegex, 'Nium Rate must be a valid number'),
+      company_rate: z.string().min(1, 'Company Rate is required').regex(numberRegex, 'Company Rate must be a valid number'),
       agent_mark_up: z.string().min(1, 'Agent Mark Up is required').regex(numberRegex, 'Agent Mark Up must be a valid number'),
       rate: z.string().min(1, 'Rate is required').regex(numberRegex, 'Rate must be a valid number'),
     }),
     other_charges: z.object({
-      nium_rate: z.string().min(1, 'Nium Rate is required').regex(numberRegex, 'Nium Rate must be a valid number'),
+      company_rate: z.string().min(1, 'Company Rate is required').regex(numberRegex, 'Company Rate must be a valid number'),
       agent_mark_up: z.string().min(1, 'Agent Mark Up is required').regex(numberRegex, 'Agent Mark Up must be a valid number'),
       rate: z.string().min(1, 'Rate is required').regex(numberRegex, 'Rate must be a valid number'),
     }),

@@ -92,7 +92,7 @@ const GetRateTableColumns = ({
     const mappedSection = sectionMap[section] || section;
 
     const keyMap: Record<'niumRate' | 'agentMarkUp' | 'rate', string> = {
-      niumRate: 'nium_rate',
+      niumRate: 'company_rate',
       agentMarkUp: 'agent_mark_up',
       rate: 'rate',
     };
@@ -100,22 +100,22 @@ const GetRateTableColumns = ({
 
     const dummies: Record<string, Partial<Record<string, number>>> = {
       transaction_value: {
-        nium_rate: 1.0,
+        company_rate: 1.0,
         agent_mark_up: 0,
         rate: 1000,
       },
       remittance_charges: {
-        nium_rate: 10,
+        company_rate: 10,
         agent_mark_up: 0,
         rate: 10,
       },
       nostro_charges: {
-        nium_rate: 5,
+        company_rate: 5,
         agent_mark_up: 0,
         rate: 5,
       },
       other_charges: {
-        nium_rate: 2,
+        company_rate: 2,
         agent_mark_up: 0,
         rate: 2,
       },
@@ -154,7 +154,7 @@ const GetRateTableColumns = ({
       id: 'transaction_value',
       cells: {
         invoiceName: () => <span className="text-left">{`Tnx Value`}</span>,
-        niumRate: () => getCellContent('transaction_value', 'niumRate', `${id}.transaction_value.nium_rate`),
+        niumRate: () => getCellContent('transaction_value', 'niumRate', `${id}.transaction_value.company_rate`),
         agentMarkUp: () => getCellContent('transaction_value', 'agentMarkUp', `${id}.transaction_value.agent_mark_up`),
         rate: () => getCellContent('transaction_value', 'rate', `${id}.transaction_value.rate`),
       },
@@ -163,7 +163,7 @@ const GetRateTableColumns = ({
       id: 'remittance_charges',
       cells: {
         invoiceName: () => <span className="text-left">{`Remittance Charges`}</span>,
-        niumRate: () => getCellContent('remittance_charges', 'niumRate', `${id}.remittance_charges.nium_rate`),
+        niumRate: () => getCellContent('remittance_charges', 'niumRate', `${id}.remittance_charges.company_rate`),
         agentMarkUp: () => getCellContent('remittance_charges', 'agentMarkUp', `${id}.remittance_charges.agent_mark_up`),
         rate: () => getCellContent('remittance_charges', 'rate', `${id}.remittance_charges.rate`),
       },
@@ -172,7 +172,7 @@ const GetRateTableColumns = ({
       id: 'nostro_charges',
       cells: {
         invoiceName: () => <span className="text-left">{`Nostro Charges: BEN/OUR`}</span>,
-        niumRate: () => getCellContent('nostro_charges', 'niumRate', `${id}.nostro_charges.nium_rate`),
+        niumRate: () => getCellContent('nostro_charges', 'niumRate', `${id}.nostro_charges.company_rate`),
         agentMarkUp: () => getCellContent('nostro_charges', 'agentMarkUp', `${id}.nostro_charges.agent_mark_up`),
         rate: () => getCellContent('nostro_charges', 'rate', `${id}.nostro_charges.rate`),
       },
@@ -181,7 +181,7 @@ const GetRateTableColumns = ({
       id: 'other_charges',
       cells: {
         invoiceName: () => <span className="text-left">{`Other Charges`}</span>,
-        niumRate: () => getCellContent('other_charges', 'niumRate', `${id}.other_charges.nium_rate`),
+        niumRate: () => getCellContent('other_charges', 'niumRate', `${id}.other_charges.company_rate`),
         agentMarkUp: () => getCellContent('other_charges', 'agentMarkUp', `${id}.other_charges.agent_mark_up`),
         rate: () => getCellContent('other_charges', 'rate', `${id}.other_charges.rate`),
       },

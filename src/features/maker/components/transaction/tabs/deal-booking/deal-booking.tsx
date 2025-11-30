@@ -43,22 +43,22 @@ const defaultValues = {
   total_transaction_amount_tcs: '',
   invoice_rate_table: {
     transaction_value: {
-      nium_rate: undefined,
+      company_rate: undefined,
       agent_mark_up: undefined,
       rate: undefined,
     },
     remittance_charges: {
-      nium_rate: '',
+      company_rate: '',
       agent_mark_up: '',
       rate: '',
     },
     nostro_charges: {
-      nium_rate: '',
+      company_rate: '',
       agent_mark_up: '',
       rate: '',
     },
     other_charges: {
-      nium_rate: '',
+      company_rate: '',
       agent_mark_up: '',
       rate: '',
     },
@@ -149,22 +149,22 @@ const DealBooking = () => {
     const { invoice_rate_table } = formData;
     const pdfTable = {
       transactionValue: {
-        niumRate: invoice_rate_table.transaction_value.nium_rate ?? '',
+        niumRate: invoice_rate_table.transaction_value.company_rate ?? '',
         agentMarkUp: invoice_rate_table.transaction_value.agent_mark_up ?? '',
         rate: invoice_rate_table.transaction_value.rate ?? '',
       },
       remittanceCharges: {
-        niumRate: invoice_rate_table.remittance_charges.nium_rate ?? '',
+        niumRate: invoice_rate_table.remittance_charges.company_rate ?? '',
         agentMarkUp: invoice_rate_table.remittance_charges.agent_mark_up ?? '',
         rate: invoice_rate_table.remittance_charges.rate ?? '',
       },
       nostroCharges: {
-        niumRate: invoice_rate_table.nostro_charges.nium_rate ?? '',
+        niumRate: invoice_rate_table.nostro_charges.company_rate ?? '',
         agentMarkUp: invoice_rate_table.nostro_charges.agent_mark_up ?? '',
         rate: invoice_rate_table.nostro_charges.rate ?? '',
       },
       otherCharges: {
-        niumRate: invoice_rate_table.other_charges.nium_rate ?? '',
+        niumRate: invoice_rate_table.other_charges.company_rate ?? '',
         agentMarkUp: invoice_rate_table.other_charges.agent_mark_up ?? '',
         rate: invoice_rate_table.other_charges.rate ?? '',
       },

@@ -18,7 +18,13 @@ const bookTransactionConfig = {
       type: FieldType.Select,
       required: true,
       placeholder: 'Select Purpose',
-      options: {},
+      options: {
+        personal: { label: 'Personal' },
+        business: { label: 'Business' },
+        education: { label: 'Education' },
+        medical: { label: 'Medical' },
+        travel: { label: 'Travel' },
+      },
       isMulti: false,
     },
     fx_currency: {
@@ -27,7 +33,13 @@ const bookTransactionConfig = {
       type: FieldType.Select,
       required: true,
       placeholder: 'Select Currency',
-      options: {},
+      options: {
+        USD: { label: 'USD' },
+        EUR: { label: 'EUR' },
+        GBP: { label: 'GBP' },
+        AUD: { label: 'AUD' },
+        CAD: { label: 'CAD' },
+      },
       isMulti: false,
     },
     fx_amount: {
