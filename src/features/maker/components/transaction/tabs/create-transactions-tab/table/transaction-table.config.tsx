@@ -1,5 +1,5 @@
 import { ActionButtons, StatusBadge, TableColumn } from '../../../../../../../components/table';
-import { TransactionData } from '../../../types/transaction.types';
+import { TransactionData } from '@/features/maker/types/transaction.types';
 
 
 export const GetTransactionTableColumns = ({

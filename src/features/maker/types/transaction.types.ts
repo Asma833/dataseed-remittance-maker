@@ -17,4 +17,15 @@ export interface TransactionData {
   updated_at: string;
   transactions: unknown[];
   payment_records: unknown[];
+  company_ref_no: string;
+  agent_ref_no: string;
+  order_date: string;
+  expiry_date: string;
+  applicant_name: string;
+  applicant_pan_number: string;
+  purpose: string;
+  fx_currency: string;
+  fx_amount: string;
+  transaction_amount: string;
+  deal_status: string;
 }

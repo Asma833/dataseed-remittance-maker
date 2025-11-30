@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom'
 import GetTransactionTableColumns from './transaction-table.config';
 import { DataTable, TableData, staticConfig } from '@/components/table';
 import { useGetTransactions } from '../../../hooks/useGetTransactions';
-import { TransactionData } from '../../../types/transaction.types';
+import { TransactionData } from '@/features/maker/types/transaction.types';
 import { useCurrentUser } from '@/utils/getUserFromRedux';
 import { navigateWithRole } from '@/utils/navigationUtils';
 
@@ -12,7 +12,7 @@ const TransactionTable = ({ onCreate }: { onCreate?: () => void }) => {
   const { data: apiTransactions = [], isLoading } = useGetTransactions();
   const navigate = useNavigate()
   const transactions: TransactionData[] = useMemo(() => {
-    return (apiTransactions || []).map((item:TransactionData) => ({
+    const mappedTransactions = (apiTransactions || []).map((item:TransactionData) => ({
       ...item,
       company_ref_no:  '-',// Not available in API response
       agent_ref_no: '-',// Not available in API response
@@ -30,6 +30,77 @@ const TransactionTable = ({ onCreate }: { onCreate?: () => void }) => {
       deal_status: item.booking_status || '-',
       margin_amount: item.margin_amount || '0',
     }));
+
+    // Add dummy data if no API data
+    if (mappedTransactions.length === 0) {
+      const dummyTransactions: TransactionData[] = [
+        {
+          id: 'dummy-1',
+          temp_id: 'temp-1',
+          deal_code: null,
+          transaction_type: 'REMITTANCE',
+          currency_code: 'USD',
+          deal_amount: '1000',
+          margin_amount: '0.5',
+          settlement_rate: '83.5',
+          customer_rate: '84.0',
+          booking_status: 'DRAFT',
+          created_by: 'dummy-user',
+          approved_by: null,
+          approved_at: null,
+          rejection_reason: null,
+          created_at: new Date().toISOString(),
+          updated_at: new Date().toISOString(),
+          transactions: [],
+          payment_records: [],
+          company_ref_no: 'REF001',
+          agent_ref_no: 'AGT001',
+          order_date: new Date().toLocaleDateString(),
+          expiry_date: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000).toLocaleDateString(),
+          applicant_name: 'John Doe',
+          applicant_pan_number: 'ABCDE1234F',
+          purpose: 'Personal',
+          fx_currency: 'USD',
+          fx_amount: '1000',
+          transaction_amount: '84000',
+          deal_status: 'DRAFT',
+        },
+        {
+          id: 'dummy-2',
+          temp_id: 'temp-2',
+          deal_code: null,
+          transaction_type: 'REMITTANCE',
+          currency_code: 'EUR',
+          deal_amount: '500',
+          margin_amount: '0.5',
+          settlement_rate: '90.2',
+          customer_rate: '90.7',
+          booking_status: 'PENDING',
+          created_by: 'dummy-user',
+          approved_by: null,
+          approved_at: null,
+          rejection_reason: null,
+          created_at: new Date().toISOString(),
+          updated_at: new Date().toISOString(),
+          transactions: [],
+          payment_records: [],
+          company_ref_no: 'REF002',
+          agent_ref_no: 'AGT002',
+          order_date: new Date().toLocaleDateString(),
+          expiry_date: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000).toLocaleDateString(),
+          applicant_name: 'Jane Smith',
+          applicant_pan_number: 'FGHIJ5678G',
+          purpose: 'Business',
+          fx_currency: 'EUR',
+          fx_amount: '500',
+          transaction_amount: '45350',
+          deal_status: 'PENDING',
+        },
+      ];
+      return dummyTransactions;
+    }
+
+    return mappedTransactions;
   }, [apiTransactions]);
    const { getUserRole } = useCurrentUser();
   const userRole = getUserRole();
