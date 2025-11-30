@@ -1,11 +1,13 @@
 import { useState } from 'react';
 import { formatDateWithFallback } from '@/utils/formatDateWithFallback';
-import { SignLinkButton } from '@/components/common/SignLinkButton';
-import TooltipActionButton from '@/components/common/TooltipActionButton';
-import EsignStatusCell from '@/features/checker/components/table/EsignStatusCell';
-import VKycStatusCell from '@/features/checker/components/table/VKycStatusCell';
+// import { SignLinkButton } from '@/components/common/SignLinkButton';
+//import TooltipActionButton from '@/components/common/TooltipActionButton';
+import EsignStatusCell from '@/components/cell/table/EsignStatusCell';
+import VKycStatusCell from '@/components/cell/table/VKycStatusCell';
 import { Eye } from 'lucide-react';
-import KycStatusCell from '@/features/checker/components/table/KycStatusCell';
+import KycStatusCell from '@/components/cell/table/VKycStatusCell';
+import { SignLinkButton } from '@/components/common/single-link-button';
+import TooltipActionButton from '@/components/common/tooltip-action-button';
 
 export const KycTableColumnsConfig = ({
   handleRegenerateEsignLink,
