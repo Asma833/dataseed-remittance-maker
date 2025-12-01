@@ -35,7 +35,7 @@ const Sidebar: React.FC<SidebarProps> = ({
   const navigate = useNavigate();
   const { location, isParentActive, isSubmenuActive } = useActiveRouteMatch(navItems);
   const [openDropdowns, setOpenDropdowns] = useState<Set<string>>(new Set());
-  console.log(navItems,"navItems+++++++++++++++++++++++")
+
   useEffect(() => {
     setOpenDropdowns((prev) => {
       const next = new Set(prev);
@@ -61,9 +61,9 @@ const Sidebar: React.FC<SidebarProps> = ({
   return (
     <aside
       className={cn(
-        'bg-[--sidenav-bg] h-[calc(100vh-60px)] fixed bottom-0 left-0 flex flex-col transition-all duration-500 ease-in-out z-30 rounded-2xl m-1',
-        collapsed ? 'w-20' : 'w-50',
-        themeConfig.sidebar.isGradient && 'bg-gradient-to-b sidenav-main',
+        'bg-[--sidenav-bg] h-[calc(100vh-70px)] fixed bottom-0 left-0 flex flex-col transition-all duration-500 ease-in-out z-30 rounded-2xl m-1',
+        collapsed ? 'w-20' : 'w-52',
+        themeConfig.sidebar.isGradient && 'bg-linear-to-b sidenav-main',
         className
       )}
     >
@@ -98,9 +98,9 @@ const Sidebar: React.FC<SidebarProps> = ({
                 >
                   <div className={cn('flex items-center', collapsed ? 'gap-0' : 'gap-2')}>
                     {typeof item.icon === 'string' ? (
-                      <img src={item.icon} className="h-5 w-5 flex-shrink-0" />
+                      <img src={item.icon} className="h-5 w-5 shrink-0" />
                     ) : item.icon ? (
-                      <item.icon className="h-5 w-5 flex-shrink-0" />
+                      <item.icon className="h-5 w-5 shrink-0" />
                     ) : null}
                     {!collapsed && <span className="truncate text-[13px]">{item.title}</span>}
                   </div>
@@ -131,9 +131,9 @@ const Sidebar: React.FC<SidebarProps> = ({
                             title={submenu.title}
                           >
                             {typeof submenu.icon === 'string' ? (
-                              <img src={submenu.icon} className="h-4 w-4 flex-shrink-0" />
+                              <img src={submenu.icon} className="h-4 w-4 shrink-0" />
                             ) : submenu.icon ? (
-                              <submenu.icon className="h-4 w-4 flex-shrink-0" />
+                              <submenu.icon className="h-4 w-4 shrink-0" />
                             ) : null}
                             <span className="truncate">{submenu.title}</span>
                           </div>
