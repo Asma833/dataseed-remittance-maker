@@ -1,12 +1,5 @@
-
-// import { Order } from "@/features/checker/types/updateIncident.types";
-import { useMemo, useState } from "react";
-// import { useSendEsignLink } from "@/features/checker/hooks/useSendEsignLink";
-// import { useSendVkycLink } from "@/features/checker/hooks/useSendVkycLink";
-//import useGetAllOrders from "@/features/admin/hooks/useGetAllOrders";
+import { useMemo, useState, useEffect } from "react";
 import { PaymentTableColumn } from "./payment-table-column";
-// import { DialogWrapper } from "@/components/common/DialogWrapper";
-// import Payments from "@/features/admin/components/transaction/tabs/deal-booking/sections/payments/Payments";
 import { useSendEsignLink } from "@/hooks/common/useSendEsignLink";
 import { useSendVkycLink } from "@/hooks/common/useSendVkycLink";
 import { DialogWrapper } from "@/components/common/dialog-wrapper";
@@ -38,11 +31,19 @@ interface PaymentData {
 }
 
 const PaymentStatus = () => {
-       const [isModalOpen, setIsModalOpen] = useState(false);
-       const [loadingOrderId, setLoadingOrderId] = useState<string>('');
-       const { mutate: sendEsignLink, isSendEsignLinkLoading } = useSendEsignLink();
-       const { mutate: sendVkycLink, isSendVkycLinkLoading } = useSendVkycLink();
-      //  const { data, loading: isLoading, error, fetchData: refreshData } = useGetAllOrders();
+        const [isModalOpen, setIsModalOpen] = useState(false);
+        const [loadingOrderId, setLoadingOrderId] = useState<string>('');
+        const [isLoading, setIsLoading] = useState(true); // Temporary loading state for demo
+        const { mutate: sendEsignLink, isSendEsignLinkLoading } = useSendEsignLink();
+        const { mutate: sendVkycLink, isSendVkycLinkLoading } = useSendVkycLink();
+
+        // Simulate loading for demo purposes
+        useEffect(() => {
+          const timer = setTimeout(() => {
+            setIsLoading(false);
+          }, 5000); // Show loader for 5 seconds
+          return () => clearTimeout(timer);
+        }, []);
     
 
       const dummyPaymentTableData: PaymentData[] = [
@@ -174,6 +175,7 @@ const PaymentStatus = () => {
        // Table config
        const tableConfig = {
          ...staticConfig,
+         loading: isLoading,
          export: { enabled: true, fileName: 'payment-status.csv' },
        };
 

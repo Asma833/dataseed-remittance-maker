@@ -1,27 +1,13 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import { TableRow, TableCell } from '@/components/ui/table';
 
 interface TableLoaderProps {
   columns: number;
-  minDuration?: number; // minimum duration in milliseconds
 }
 
 export const TableLoader: React.FC<TableLoaderProps> = ({
-  columns,
-  minDuration = 3000
+  columns
 }) => {
-  const [showLoader, setShowLoader] = useState(true);
-
-  useEffect(() => {
-    const timer = setTimeout(() => {
-      setShowLoader(false);
-    }, minDuration);
-
-    return () => clearTimeout(timer);
-  }, [minDuration]);
-
-  if (!showLoader) return null;
-
   return (
     <>
       {/* Render 5 skeleton rows */}

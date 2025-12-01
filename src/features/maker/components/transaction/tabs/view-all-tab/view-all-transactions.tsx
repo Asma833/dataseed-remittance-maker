@@ -1,7 +1,7 @@
 
 import { ViewAllTransactionTableColumns } from "./view-transaction-column";
 
-import { useMemo, useState } from "react";
+import { useMemo, useState, useEffect } from "react";
 
 import { useDeleteTransaction } from "@/features/maker/hooks/useDeleteTransaction";
 import { Order } from "@/types/common/updateIncident.types";
@@ -12,10 +12,20 @@ import { staticConfig } from "@/components/table/config";
 
 const ViewAllTransactions = () => {
       const [loadingOrderId, setLoadingOrderId] = useState<string>('');
+      const [isLoading, setIsLoading] = useState(true); // Temporary loading state for demo
       const { mutate: sendEsignLink, isSendEsignLinkLoading } = useSendEsignLink();
       const { mutate: sendVkycLink, isSendVkycLinkLoading } = useSendVkycLink();
-      //const { data, loading: isLoading, error, fetchData: refreshData } = useGetAllOrders();
-    
+
+      // Simulate loading for demo purposes
+      useEffect(() => {
+        const timer = setTimeout(() => {
+          setIsLoading(false);
+        }, 5000); // Show loader for 5 seconds
+        return () => clearTimeout(timer);
+      }, []);
+
+        // Temporary: using dummy data for now
+
         const dummyTransactionData = [
       {
         company_reference_no: 'NIUM-0001',
@@ -148,6 +158,7 @@ const ViewAllTransactions = () => {
       // Table config
       const tableConfig = {
         ...staticConfig,
+        loading: isLoading,
         export: { enabled: true, fileName: 'view-all-transactions.csv' },
       };
 
@@ -156,15 +167,15 @@ const ViewAllTransactions = () => {
 
   return (
  <div className="data-table-wrap">
-      <DataTable
-        columns={tableColumns}
-        data={dummyTransactionData}
-        config={tableConfig}
-        actions={tableActions}
-      />
+     <DataTable
+       columns={tableColumns}
+       data={dummyTransactionData}
+       config={tableConfig}
+       actions={tableActions}
+     />
 
-    </div>
-  )
+   </div>
+ )
 };
 
 export default ViewAllTransactions;

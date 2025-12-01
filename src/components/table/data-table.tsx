@@ -602,7 +602,7 @@ export function DataTable<T>({
             </TableHeader>
             <TableBody>
               {config.loading ? (
-                <TableLoader columns={columns.length} minDuration={3000} />
+                <TableLoader columns={columns.length} />
               ) : config.error ? (
                 <TableRow>
                   <TableCell colSpan={columns.length} className="h-24 text-center">
