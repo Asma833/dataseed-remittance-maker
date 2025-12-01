@@ -417,7 +417,7 @@ export function DataTable<T>({
                       Select {roleFilterConfig.columnName || 'Role'}
                     </p>
                     <Select value={selectedRoleFilter} onValueChange={(value) => setSelectedRoleFilter(value)}>
-                      <SelectTrigger className="w-full sm:w-40 bg-[(--color-table-header-bg)]">
+                      <SelectTrigger className="w-full sm:w-40 bg-(--color-table-header-bg)">
                         <SelectValue placeholder={roleFilterConfig.columnName || 'Role'} />
                       </SelectTrigger>
                       <SelectContent>
@@ -439,7 +439,7 @@ export function DataTable<T>({
                       Select {statusFilterConfig.columnName || 'Status'}
                     </p>
                     <Select value={selectedStatusFilter} onValueChange={(value) => setSelectedStatusFilter(value)}>
-                      <SelectTrigger className="w-full sm:w-40 bg-[(--color-table-header-bg)]">
+                      <SelectTrigger className="w-full sm:w-40 bg-(--color-table-header-bg)">
                         <SelectValue placeholder={statusFilterConfig.columnName || 'Status'} />
                       </SelectTrigger>
                       <SelectContent>
@@ -466,7 +466,7 @@ export function DataTable<T>({
                             setSelectedCustomFilters((prev) => ({ ...prev, [filter.columnId]: value }))
                           }
                         >
-                          <SelectTrigger className="w-full sm:w-40 bg-[(--color-table-header-bg)]">
+                          <SelectTrigger className="w-full sm:w-40 bg-(--color-table-header-bg)">
                             <SelectValue placeholder={filter.columnName} />
                           </SelectTrigger>
                           <SelectContent>
@@ -494,20 +494,20 @@ export function DataTable<T>({
                         variant="outline"
                         size="sm"
                         onClick={applyFilters}
-                        className="h-9 w-10 p-0 bg-[(--color-background-icon)] hover:bg-[(--color-background-icon)]/80"
+                        className="h-9 w-10 p-0 bg-(--color-background-icon) hover:bg-(--color-background-icon)/80"
                         tooltip="Apply Filters"
                       >
-                        <ArrowRightIcon className="h-4 w-4 text-[(--color-title)]" />
+                        <ArrowRightIcon className="h-4 w-4 text-(--color-title)" />
                       </TooltipButton>
 
                       <TooltipButton
                         variant="outline"
                         size="sm"
                         onClick={clearAllFilters}
-                        className="h-9 w-10 p-0 bg-[(--color-background-icon)] hover:bg-[(--color-background-icon)]/80"
+                        className="h-9 w-10 p-0 bg-(--color-background-icon) hover:bg-(--color-background-icon)/80"
                         tooltip="Clear All Filters"
                       >
-                        <RefreshCwIcon className="h-4 w-4 text-[(--color-title)]" />
+                        <RefreshCwIcon className="h-4 w-4 text-(--color-title)" />
                       </TooltipButton>
                     </div>
                   </div>
@@ -524,18 +524,18 @@ export function DataTable<T>({
                       placeholder={config.search.placeholder}
                       value={globalFilter}
                       onChange={(e) => setGlobalFilter(e.target.value)}
-                      className="pl-3 pr-10 bg-[(--color-table-header-bg)]"
+                      className="pl-3 pr-10 bg-(--color-table-header-bg)"
                     />
                     {globalFilter ? (
                       <button
                         onClick={() => setGlobalFilter('')}
-                        className="absolute right-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-[(--color-title)] hover:text-[(--color-title)]/70 transition-colors cursor-pointer"
+                        className="absolute right-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-(--color-title) hover:text-(--color-title)/70 transition-colors cursor-pointer"
                         aria-label="Clear search"
                       >
                         <X className="h-4 w-4" />
                       </button>
                     ) : (
-                      <SearchIcon className="absolute right-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-[(--color-title)] pointer-events-none" />
+                      <SearchIcon className="absolute right-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-(--color-title) pointer-events-none" />
                     )}
                   </div>
                 )}
@@ -544,10 +544,10 @@ export function DataTable<T>({
                     variant="outline"
                     size="sm"
                     onClick={exportToCSV}
-                    className="h-9 w-9 sm:w-10 p-0 text-[(--color-white)] bg-[(--color-title)] hover:bg-[(--color-title)] hover:opacity-90 hover:text-[(--color-white)] transition-opacity shrink-0"
+                    className="h-9 w-9 sm:w-10 p-0 text-white bg-(--color-title) hover:bg-(--color-title) hover:opacity-90 hover:text-white transition-opacity shrink-0"
                     tooltip="Download CSV"
                   >
-                    <DownloadIcon className="h-4 w-4 text-[(--color-white)]" />
+                    <DownloadIcon className="h-4 w-4 text-white" />
                   </TooltipButton>
                 )}
               </div>
@@ -557,7 +557,7 @@ export function DataTable<T>({
 
         {/* Table */}
         <div className="rounded-md shadow-sm">
-          <Table className="border-collapse [&_th]:border [&_th]:border-white [&_th]:p-3 [&_th]:text-center [&_th]:bg-[(--color-table-header-bg)] [&_th]:text-[(--color-table-header-text)] [&_th]:font-semibold [&_th]:border-b-2 [&_th]:border-b-white [&_th]:text-[13px] [&_td]:border [&_td]:border-white [&_td]:p-3 [&_td]:text-center [&_td]:text-xs [&_tbody_tr:nth-child(even)]:bg-[(--color-table-striped)] [&_tbody_tr:nth-child(odd)]:bg-white [&_tbody_tr:hover]:bg-[(--color-table-striped)]">
+          <Table className="border-collapse [&_th]:border [&_th]:border-white [&_th]:p-3 [&_th]:text-center [&_th]:bg-(--color-table-header-bg) [&_th]:text-(--color-table-header-text) [&_th]:font-semibold [&_th]:border-b-2 [&_th]:border-b-white [&_th]:text-[13px] [&_td]:border [&_td]:border-white [&_td]:p-3 [&_td]:text-center [&_td]:text-xs [&_tbody_tr:nth-child(even)]:bg-(--color-table-striped) [&_tbody_tr:nth-child(odd)]:bg-white [&_tbody_tr:hover]:bg-(--color-table-striped)">
             <TableHeader>
               {table.getHeaderGroups().map((headerGroup) => (
                 <TableRow key={headerGroup.id}>
