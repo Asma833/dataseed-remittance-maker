@@ -1,5 +1,4 @@
 
-// import { useDynamicPagination } from "@/components/common/dynamic-table/hooks/useDynamicPagination";
 // import { Order } from "@/features/checker/types/updateIncident.types";
 import { useMemo, useState } from "react";
 // import { useSendEsignLink } from "@/features/checker/hooks/useSendEsignLink";
@@ -13,6 +12,31 @@ import { useSendVkycLink } from "@/hooks/common/useSendVkycLink";
 import { DialogWrapper } from "@/components/common/dialog-wrapper";
 import { Order } from "@/types/common/updateIncident.types";
 import Payments from "@/components/payments/Payments";
+import { DataTable } from "@/components/table/data-table";
+import { staticConfig } from "@/components/table/config";
+
+interface PaymentData {
+  nium_ref_no: string;
+  agent_ref_no: string;
+  created_date: string;
+  expiry_date: string;
+  applicant_name: string;
+  applicant_pan: string;
+  transaction_type: string;
+  purpose: string;
+  kyc_type: string;
+  kyc_status: string;
+  e_sign_status: string;
+  e_sign_link: string | null;
+  v_kyc_status: string;
+  v_kyc_link: string | null;
+  payment_status: string;
+  payment_link: string | null;
+  payment_screenshot: string | null;
+  is_esign_required: boolean;
+  is_v_kyc_required: boolean;
+}
+
 const PaymentStatus = () => {
        const [isModalOpen, setIsModalOpen] = useState(false);
        const [loadingOrderId, setLoadingOrderId] = useState<string>('');
@@ -21,7 +45,7 @@ const PaymentStatus = () => {
       //  const { data, loading: isLoading, error, fetchData: refreshData } = useGetAllOrders();
     
 
-      const dummyPaymentTableData = [
+      const dummyPaymentTableData: PaymentData[] = [
           {
             nium_ref_no: 'NIUM123456',
             agent_ref_no: 'AGENT7890',
@@ -146,27 +170,24 @@ const PaymentStatus = () => {
          navigate: (path: string) => {},
          handlePayment,
        });
-     
+
+       // Table config
+       const tableConfig = {
+         ...staticConfig,
+         export: { enabled: true, fileName: 'payment-status.csv' },
+       };
+
+       // Table actions
+       const tableActions = {};
+
    return (
-  <div className="dynamic-table-wrap">
-       {/* <DynamicTable
+  <div className="data-table-wrap">
+       <DataTable
          columns={tableColumns}
          data={dummyPaymentTableData}
-         defaultSortColumn="created_at"
-         defaultSortDirection="desc"
-         //loading={isLoading}
-         //refreshAction={{
-           //isRefreshButtonVisible: false,
-          //  onRefresh: refreshData,
-          //  isLoading: isLoading,
-          //  hasError: error,
-        // }}
-        //  paginationMode={'static'}
-        //  onPageChange={
-        //    isPaginationDynamic ? pagination.handlePageChange : async (_page: number, _pageSize: number) => []
-        //  }
-      
-       /> */}
+         config={tableConfig}
+         actions={tableActions}
+       />
        {isModalOpen && (
              <DialogWrapper title="Upload Payment Screen Shot" isOpen={isModalOpen} setIsOpen={setIsModalOpen} renderContent={<Payments setIsOpen={setIsModalOpen} uploadScreen={false} /> } />
       )}

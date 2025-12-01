@@ -1,5 +1,5 @@
 import React from 'react';
-import { Delete, Edit, Eye, LinkIcon, Plus, RefreshCw, X } from 'lucide-react';
+import { Delete, Edit, Eye, LinkIcon, Plus, RefreshCw, Upload, X } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { copyToClipboard } from '@/utils/clipboard';
 import { cn } from '@/utils/cn';
@@ -13,10 +13,11 @@ interface SignLinkButtonProps {
   disabled?: boolean;
   className?: string;
   tooltipText?: string;
-  buttonType?: 'button' | 'copy_link' | 'refresh' | 'remove' | 'delete' | 'edit' | 'view' | 'add';
-  buttonIconType?: 'button' | 'copy_link' | 'refresh' | 'remove' | 'delete' | 'edit' | 'view' | 'add';
+  buttonType?: 'button' | 'copy_link' | 'refresh' | 'remove' | 'delete' | 'edit' | 'view' | 'add' | 'upload';
+  buttonIconType?: 'button' | 'copy_link' | 'refresh' | 'remove' | 'delete' | 'edit' | 'view' | 'add' | 'upload';
   onClick?: () => void;
   loading?: string | boolean;
+  iconClassName?: string;
 }
 
 export const SignLinkButton: React.FC<SignLinkButtonProps> = ({
@@ -30,6 +31,7 @@ export const SignLinkButton: React.FC<SignLinkButtonProps> = ({
   buttonIconType,
   onClick,
   loading,
+  iconClassName,
 }) => {
   const handleClick = () => {
     if (onClick) {
@@ -44,27 +46,30 @@ export const SignLinkButton: React.FC<SignLinkButtonProps> = ({
   const getIcon = () => {
     switch (buttonIconType) {
       case 'copy_link':
-        return <LinkIcon className="cursor-pointer" />;
+        return <LinkIcon className={cn("cursor-pointer", iconClassName)} />;
       case 'refresh':
         return (
           <RefreshCw
             className={cn(
               'cursor-pointer text-inherit',
               loading ? 'animate-spin' : '',
-              disabled ? 'text-gray-500' : ''
+              disabled ? 'text-gray-500' : '',
+              iconClassName
             )}
           />
         );
       case 'remove':
-        return <X className="cursor-pointer" />;
+        return <X className={cn("cursor-pointer", iconClassName)} />;
       case 'delete':
-        return <Delete className="cursor-pointer" />;
+        return <Delete className={cn("cursor-pointer", iconClassName)} />;
       case 'edit':
-        return <Edit className="cursor-pointer" />;
+        return <Edit className={cn("cursor-pointer", iconClassName)} />;
       case 'view':
-        return <Eye className="cursor-pointer" />;
+        return <Eye className={cn("cursor-pointer", iconClassName)} />;
       case 'add':
-        return <Plus className="cursor-pointer" />;
+        return <Plus className={cn("cursor-pointer", iconClassName)} />;
+      case 'upload':
+        return <Upload className={cn("cursor-pointer", iconClassName)} />;
       default:
         return null;
     }
@@ -87,7 +92,7 @@ export const SignLinkButton: React.FC<SignLinkButtonProps> = ({
           {getIcon()}
         </Button>
       </TooltipTrigger>
-      <TooltipContent className="bg-secondary text-foreground">{tooltipText}</TooltipContent>
+      <TooltipContent className="bg-gray-400/20 backdrop-blur-sm border-0 px-3 py-2 text-xs font-medium rounded-md shadow-xl shadow-black/20">{tooltipText}</TooltipContent>
     </Tooltip>
   );
 };

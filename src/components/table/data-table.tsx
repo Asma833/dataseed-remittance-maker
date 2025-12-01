@@ -47,6 +47,7 @@ import { defaultTableConfig } from './config';
 import { exportTableToCSV } from './csv-export.utils';
 import { Pagination } from './pagination';
 import DynamicTabs from '@/components/tabs/dynamic-tabs';
+import { TableLoader } from './table-loader';
 
 interface DataTableProps<T> {
   columns: TableColumn<T>[];
@@ -400,12 +401,12 @@ export function DataTable<T>({
         {/* Search and Filters Header */}
         {(config.search.enabled || config.filters.enabled || config.tabFilters?.enabled) && (
           <div className="space-y-2">
-            <div className="flex items-center justify-between gap-4">
+            <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4">
               {/* Left side - Tab Filters and Filters */}
-              <div className="flex items-end gap-3">
+              <div className="flex flex-wrap items-end gap-2 lg:gap-3">
                 {/* Tab Filters */}
                 {config.tabFilters?.enabled && (
-                  <div className="flex gap-1 pt-4">
+                  <div className="flex gap-1 pt-2">
                     <DynamicTabs
                       tabs={config.tabFilters.tabs}
                       {...(config.tabFilters.defaultValue && { defaultValue: config.tabFilters.defaultValue })}
@@ -417,11 +418,11 @@ export function DataTable<T>({
                 {/* Role Filter */}
                 {roleFilterConfig?.enabled && (
                   <div className="flex flex-col gap-1">
-                    <p className="text-sm text-gray-600 px-1 h-5 flex items-center">
+                    <p className="text-xs text-gray-600 px-1 h-5 flex items-center">
                       Select {roleFilterConfig.columnName || 'Role'}
                     </p>
                     <Select value={selectedRoleFilter} onValueChange={(value) => setSelectedRoleFilter(value)}>
-                      <SelectTrigger className="w-40 bg-[var(--color-table-header-bg)]">
+                      <SelectTrigger className="w-full sm:w-40 bg-[var(--color-table-header-bg)]">
                         <SelectValue placeholder={roleFilterConfig.columnName || 'Role'} />
                       </SelectTrigger>
                       <SelectContent>
@@ -439,11 +440,11 @@ export function DataTable<T>({
                 {/* Status Filter */}
                 {statusFilterConfig?.enabled && (
                   <div className="flex flex-col gap-1">
-                    <p className="text-sm text-gray-600 px-1 h-5 flex items-center">
+                    <p className="text-xs text-gray-600 px-1 h-5 flex items-center">
                       Select {statusFilterConfig.columnName || 'Status'}
                     </p>
                     <Select value={selectedStatusFilter} onValueChange={(value) => setSelectedStatusFilter(value)}>
-                      <SelectTrigger className="w-40 bg-[var(--color-table-header-bg)]">
+                      <SelectTrigger className="w-full sm:w-40 bg-[var(--color-table-header-bg)]">
                         <SelectValue placeholder={statusFilterConfig.columnName || 'Status'} />
                       </SelectTrigger>
                       <SelectContent>
@@ -470,7 +471,7 @@ export function DataTable<T>({
                             setSelectedCustomFilters((prev) => ({ ...prev, [filter.columnId]: value }))
                           }
                         >
-                          <SelectTrigger className="w-40 bg-[var(--color-table-header-bg)]">
+                          <SelectTrigger className="w-full sm:w-40 bg-[var(--color-table-header-bg)]">
                             <SelectValue placeholder={filter.columnName} />
                           </SelectTrigger>
                           <SelectContent>
@@ -492,7 +493,7 @@ export function DataTable<T>({
                   (config.filters.customFilters && config.filters.customFilters.some((f) => f.enabled))) && (
                   <div className="flex flex-col gap-1">
                     {/* invisible label spacer to match the selects’ label row */}
-                    <div className="h-5" />
+                    <div className="h-1" />
                     <div className="flex gap-2">
                       <TooltipButton
                         variant="outline"
@@ -519,11 +520,11 @@ export function DataTable<T>({
               </div>
 
               {/* Right side - Search */}
-              <div className="flex items-center pt-4 gap-2">
+              <div className="flex items-center gap-2 lg:pt-4">
                 {config.search.rightElement && config.search.rightElement}
                 {/* Global Search */}
                 {config.search.enabled && (
-                  <div className="relative max-w-sm">
+                  <div className="relative w-full sm:max-w-sm">
                     <Input
                       placeholder={config.search.placeholder}
                       value={globalFilter}
@@ -548,7 +549,7 @@ export function DataTable<T>({
                     variant="outline"
                     size="sm"
                     onClick={exportToCSV}
-                    className="h-9 w-10 p-0 text-[var(--color-white)] bg-[var(--color-title)] hover:bg-[var(--color-title)] hover:opacity-90 hover:text-[var(--color-white)] transition-opacity"
+                    className="h-9 w-9 sm:w-10 p-0 text-[var(--color-white)] bg-[var(--color-title)] hover:bg-[var(--color-title)] hover:opacity-90 hover:text-[var(--color-white)] transition-opacity flex-shrink-0"
                     tooltip="Download CSV"
                   >
                     <DownloadIcon className="h-4 w-4 text-[var(--color-white)]" />
@@ -561,7 +562,7 @@ export function DataTable<T>({
 
         {/* Table */}
         <div className="rounded-md shadow-sm">
-          <Table className="border-collapse [&_th]:border [&_th]:border-white [&_th]:p-3 [&_th]:text-center [&_th]:bg-[var(--color-table-header-bg)] [&_th]:text-black [&_th]:font-semibold [&_th]:border-b-2 [&_th]:border-b-white [&_td]:border [&_td]:border-white [&_td]:p-3 [&_td]:text-center [&_tbody_tr:nth-child(even)]:bg-[var(--color-table-striped)] [&_tbody_tr:nth-child(odd)]:bg-white [&_tbody_tr:hover]:bg-[var(--color-table-striped)]">
+          <Table className="border-collapse [&_th]:border [&_th]:border-white [&_th]:p-3 [&_th]:text-center [&_th]:bg-[var(--color-table-header-bg)] [&_th]:text-[var(--color-table-header-text)] [&_th]:font-semibold [&_th]:border-b-2 [&_th]:border-b-white [&_th]:text-[13px] [&_td]:border [&_td]:border-white [&_td]:p-3 [&_td]:text-center [&_td]:text-xs [&_tbody_tr:nth-child(even)]:bg-[var(--color-table-striped)] [&_tbody_tr:nth-child(odd)]:bg-white [&_tbody_tr:hover]:bg-[var(--color-table-striped)]">
             <TableHeader>
               {table.getHeaderGroups().map((headerGroup) => (
                 <TableRow key={headerGroup.id}>
@@ -606,14 +607,7 @@ export function DataTable<T>({
             </TableHeader>
             <TableBody>
               {config.loading ? (
-                <TableRow>
-                  <TableCell colSpan={columns.length} className="h-64">
-                    <div className="flex flex-col items-center justify-center space-y-4">
-                      <Loader2 className="h-8 w-8 animate-spin text-[var(--color-title)]" />
-                      <div className="text-sm font-medium text-[var(--color-title)]">Loading data...</div>
-                    </div>
-                  </TableCell>
-                </TableRow>
+                <TableLoader columns={columns.length} minDuration={3000} />
               ) : config.error ? (
                 <TableRow>
                   <TableCell colSpan={columns.length} className="h-24 text-center">
@@ -696,7 +690,7 @@ export function DataTable<T>({
             table={table}
             showPageSizeSelector={config.pagination.showPageSizeSelector}
             pageSizeOptions={config.pagination.pageSizeOptions}
-            rowsLabel="Rows per Page:"
+            rowsLabel="Rows per page:"
           />
         )}
       </div>

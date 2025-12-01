@@ -104,7 +104,7 @@
   * {
     border-color: var(--color-border);
   }
-  body {
+ body {
     color: var(--color-foreground);
     overflow: hidden;
     font-family: 'Roboto', 'Inter', sans-serif !important;

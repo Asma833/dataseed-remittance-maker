@@ -10,7 +10,7 @@ export interface NavLikeItem {
 
 const normalize = (p?: string) => (p ?? '').replace(/\/+$/, '');
 
-export function useActiveRouteMatch<T extends NavLikeItem>(navItems: T[]) {
+export function useActiveRouteMatch<T extends NavLikeItem>(navItems: T[] | undefined) {
   const location = useLocation();
   const current = normalize(location.pathname);
 
@@ -27,6 +27,7 @@ export function useActiveRouteMatch<T extends NavLikeItem>(navItems: T[]) {
   };
 
   const currentParent = useMemo(() => {
+    if (!navItems) return null;
     return (
       navItems.find((item) => {
         const parentHit = isParentActive(item);
