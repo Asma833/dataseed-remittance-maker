@@ -14,9 +14,9 @@ export const makerComponents = {
     () => import('@/features/maker/components/transaction/tabs/create-transactions-tab/create-transactions')
   ),
   KYCUpload: lazy(() => import('@/features/maker/components/transaction/tabs/kyc-upload-tab/kyc-uplod')),
-  PaymentStatus: lazy(() => import('@/features/maker/components/transaction/tabs/payment-tab/Payment')),
+  PaymentStatus: lazy(() => import('@/features/maker/components/transaction/tabs/payment-tab/payment')),
   ViewAllTransactions: lazy(
-    () => import('@/features/maker/components/transaction/tabs/view-all-tab/ViewAllTransactions')
+    () => import('@/features/maker/components/transaction/tabs/view-all-tab/view-all-transactions')
   ),
 };
 

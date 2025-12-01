@@ -1,5 +1,5 @@
 import React from 'react';
-import { Delete, Edit, Eye, LinkIcon, Plus, RefreshCw, Upload, X } from 'lucide-react';
+import { Delete, Download, Edit, Eye, LinkIcon, Plus, RefreshCw, Upload, X } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { copyToClipboard } from '@/utils/clipboard';
 import { cn } from '@/utils/cn';
@@ -13,8 +13,8 @@ interface SignLinkButtonProps {
   disabled?: boolean;
   className?: string;
   tooltipText?: string;
-  buttonType?: 'button' | 'copy_link' | 'refresh' | 'remove' | 'delete' | 'edit' | 'view' | 'add' | 'upload';
-  buttonIconType?: 'button' | 'copy_link' | 'refresh' | 'remove' | 'delete' | 'edit' | 'view' | 'add' | 'upload';
+  buttonType?: 'button' | 'copy_link' | 'refresh' | 'remove' | 'delete' | 'edit' | 'view' | 'add' | 'upload' | 'download';
+  buttonIconType?: 'button' | 'copy_link' | 'refresh' | 'remove' | 'delete' | 'edit' | 'view' | 'add' | 'upload' | 'download';
   onClick?: () => void;
   loading?: string | boolean;
   iconClassName?: string;
@@ -70,6 +70,8 @@ export const SignLinkButton: React.FC<SignLinkButtonProps> = ({
         return <Plus className={cn("cursor-pointer", iconClassName)} />;
       case 'upload':
         return <Upload className={cn("cursor-pointer", iconClassName)} />;
+      case 'download':
+        return <Download className={cn("cursor-pointer", iconClassName)} />;
       default:
         return null;
     }

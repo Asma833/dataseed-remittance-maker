@@ -8,7 +8,7 @@ const bookTransactionConfig = {
       label: 'Company Reference Number',
       type: FieldType.Text,
       required: true,
-      placeholder: 'Enter company reference number',
+      placeholder: 'Enter Company Reference Number',
       options: {},
       isMulti: false,
     },

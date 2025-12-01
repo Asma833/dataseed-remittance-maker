@@ -9,7 +9,7 @@ import TooltipActionButton from '@/components/common/tooltip-action-button';
 import { Eye } from 'lucide-react';
 
 type KYCData = {
-  nium_reference_no: string;
+  company_reference_no: string;
   agent_reference_no: string;
   created_date: string;
   expiry_date: string;
@@ -32,7 +32,7 @@ const KYCPage = () => {
 
   const dummyKYCData: KYCData[] = [
     {
-      nium_reference_no: 'NIUM001234',
+      company_reference_no: 'NIUM001234',
       agent_reference_no: 'AGT123456',
       created_date: '2024-06-01T10:00:00Z',
       expiry_date: '2024-07-01T10:00:00Z',
@@ -50,7 +50,7 @@ const KYCPage = () => {
       is_v_kyc_required: true
     },
     {
-      nium_reference_no: 'NIUM005678',
+      company_reference_no: 'NIUM005678',
       agent_reference_no: 'AGT789012',
       created_date: '2024-06-05T14:30:00Z',
       expiry_date: '2024-07-05T14:30:00Z',
@@ -68,7 +68,7 @@ const KYCPage = () => {
       is_v_kyc_required: true
     },
     {
-      nium_reference_no: 'NIUM009999',
+      company_reference_no: 'NIUM009999',
       agent_reference_no: 'AGT345678',
       created_date: '2024-06-10T09:45:00Z',
       expiry_date: '2024-07-10T09:45:00Z',
@@ -89,19 +89,19 @@ const KYCPage = () => {
 
   const handleRegenerateEsignLink = (rowData: KYCData): void => {
     // Placeholder for esign link regeneration
-    console.log('Regenerate esign link for:', rowData.nium_reference_no);
+    console.log('Regenerate esign link for:', rowData.company_reference_no);
   };
 
   const handleRegenerateVkycLink = (rowData: KYCData): void => {
     // Placeholder for vkyc link regeneration
-    console.log('Regenerate vkyc link for:', rowData.nium_reference_no);
+    console.log('Regenerate vkyc link for:', rowData.company_reference_no);
   };
 
   const columns: TableColumn<KYCData>[] = [
     {
-      id: 'nium_reference_no',
+      id: 'company_reference_no',
       header: 'Nium Ref.No',
-      accessorKey: 'nium_reference_no',
+      accessorKey: 'company_reference_no',
     },
     {
       id: 'agent_reference_no',
@@ -163,7 +163,7 @@ const KYCPage = () => {
       accessorKey: 'e_sign_link',
       cell: ({ row }) => {
         const data = row as KYCData;
-        const { nium_reference_no, e_sign_link, e_sign_status, is_esign_required } = data;
+        const { company_reference_no, e_sign_link, e_sign_status, is_esign_required } = data;
 
         if (!is_esign_required) {
           return <span>N/A</span>;
@@ -173,7 +173,7 @@ const KYCPage = () => {
 
         return (
           <SignLinkButton
-            id={nium_reference_no}
+            id={company_reference_no}
             copyLinkUrl={e_sign_link || ''}
             loading={false}
             toastInfoText="E Sign link copied successfully!"
@@ -198,7 +198,7 @@ const KYCPage = () => {
       accessorKey: 'v_kyc_link',
       cell: ({ row }) => {
         const data = row as KYCData;
-        const { nium_reference_no, v_kyc_status, v_kyc_link, is_v_kyc_required } = data;
+        const { company_reference_no, v_kyc_status, v_kyc_link, is_v_kyc_required } = data;
 
         if (!is_v_kyc_required) {
           return <span>N/A</span>;
@@ -208,7 +208,7 @@ const KYCPage = () => {
 
         return (
           <SignLinkButton
-            id={nium_reference_no}
+            id={company_reference_no}
             copyLinkUrl={v_kyc_link || ''}
             loading={false}
             toastInfoText="VKYC Link copied successfully!"

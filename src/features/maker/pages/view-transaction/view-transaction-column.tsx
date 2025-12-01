@@ -23,8 +23,8 @@ export const ViewAllTransactionTableColumns = ({
   navigate: (path: string) => void;
 }) => [
   {
-    key: 'nium_reference_no',
-    id: 'nium_reference_no',
+    key: 'company_reference_no',
+    id: 'company_reference_no',
     name: 'NIUM Reference No',
     className: 'min-w-0 p-2',
   },
@@ -120,12 +120,12 @@ export const ViewAllTransactionTableColumns = ({
     name: 'E Sign Link',
     className: 'min-w-0 p-2',
     cell: (_: unknown, rowData: any) => {
-      const { nium_reference_no, e_sign_link } = rowData;
-      const isLoading = isSendEsignLinkLoading && loadingOrderId === nium_reference_no;
+      const { company_reference_no, e_sign_link } = rowData;
+      const isLoading = isSendEsignLinkLoading && loadingOrderId === company_reference_no;
 
       return (
         <SignLinkButton
-          id={nium_reference_no}
+          id={company_reference_no}
           copyLinkUrl={e_sign_link || ''}
           loading={isLoading}
           toastInfoText="E Sign link copied successfully!"
@@ -162,12 +162,12 @@ export const ViewAllTransactionTableColumns = ({
     name: 'VKYC Link',
     className: 'min-w-0 p-2',
     cell: (_: unknown, rowData: any) => {
-      const { nium_reference_no, v_kyc_link } = rowData;
-      const isLoading = isSendVkycLinkLoading && loadingOrderId === nium_reference_no;
+      const { company_reference_no, v_kyc_link } = rowData;
+      const isLoading = isSendVkycLinkLoading && loadingOrderId === company_reference_no;
 
       return (
         <SignLinkButton
-          id={nium_reference_no}
+          id={company_reference_no}
           copyLinkUrl={v_kyc_link || ''}
           loading={isLoading}
           toastInfoText="VKYC link copied successfully!"

@@ -25,8 +25,8 @@ export const KycTableColumnsConfig = ({
   const [hasGeneratedLink, setHasGeneratedLink] = useState(false);
   return [
   {
-    key: 'nium_reference_no',
-    id: 'nium_reference_no',
+    key: 'company_reference_no',
+    id: 'company_reference_no',
     name: 'Nium Ref.No',
     className: 'min-w-0 p-2',
   },

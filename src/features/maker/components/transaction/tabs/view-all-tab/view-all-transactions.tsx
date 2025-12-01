@@ -1,5 +1,5 @@
 
-import { ViewAllTransactionTableColumns } from "./ViewTransactionColumn";
+import { ViewAllTransactionTableColumns } from "./view-transaction-column";
 
 import { useMemo, useState } from "react";
 
@@ -7,6 +7,8 @@ import { useDeleteTransaction } from "@/features/maker/hooks/useDeleteTransactio
 import { Order } from "@/types/common/updateIncident.types";
 import { useSendEsignLink } from "@/hooks/common/useSendEsignLink";
 import { useSendVkycLink } from "@/hooks/common/useSendVkycLink";
+import { DataTable } from "@/components/table/data-table";
+import { staticConfig } from "@/components/table/config";
 
 const ViewAllTransactions = () => {
       const [loadingOrderId, setLoadingOrderId] = useState<string>('');
@@ -16,7 +18,7 @@ const ViewAllTransactions = () => {
     
         const dummyTransactionData = [
       {
-        nium_reference_no: 'NIUM-0001',
+        company_reference_no: 'NIUM-0001',
         agent_reference_no: 'AGENT-1001',
         created_date: '2024-06-10T10:30:00Z',
         expiry_date: '2024-07-10T10:30:00Z',
@@ -42,7 +44,7 @@ const ViewAllTransactions = () => {
         is_v_kyc_required: true
       },
       {
-        nium_reference_no: 'NIUM-0002',
+        company_reference_no: 'NIUM-0002',
         agent_reference_no: 'AGENT-1002',
         created_date: '2024-06-11T09:00:00Z',
         expiry_date: '2024-07-11T09:00:00Z',
@@ -68,7 +70,7 @@ const ViewAllTransactions = () => {
         is_v_kyc_required: true
       },
       {
-        nium_reference_no: 'NIUM-0003',
+        company_reference_no: 'NIUM-0003',
         agent_reference_no: 'AGENT-1003',
         created_date: '2024-06-12T14:20:00Z',
         expiry_date: '2024-07-12T14:20:00Z',
@@ -95,55 +97,6 @@ const ViewAllTransactions = () => {
       },
     ];
 
-      // const tableData = useMemo(() => {
-      //   if (!data) return [];
-    
-      //   // If already an array
-      //   if (Array.isArray(data)) {
-      //     return (data as Order[]).filter(
-      //       (item): item is Order => !!item && typeof item === 'object' && 'created_at' in item
-      //     );
-      //   }
-    
-      //   // If object with 'orders' property
-      //   if (typeof data === 'object' && 'orders' in data) {
-      //     const orders = (data as any).orders;
-      //     if (Array.isArray(orders)) {
-      //       return orders.filter((item: any): item is Order => !!item && typeof item === 'object' && 'created_at' in item);
-      //     }
-      //     if (orders && typeof orders === 'object') {
-      //       return Object.values(orders).filter(
-      //         (item: any): item is Order => !!item && typeof item === 'object' && 'created_at' in item
-      //       );
-      //     }
-      //     return [];
-      //   }
-    
-      //   // If object of objects
-      //   if (typeof data === 'object') {
-      //     return Object.values(data).filter(
-      //       (item: any): item is Order => !!item && typeof item === 'object' && 'created_at' in item
-      //     );
-      //   }
-    
-      //   return [];
-      // }, [data]);
-    
-      // // Format error message consistently
-      // const errorMessage = useMemo(() => {
-      //   if (!error) return '';
-    
-      //   if (typeof error === 'string') {
-      //     return error;
-      //   }
-    
-      //   if (error && typeof error === 'object' && 'message' in error) {
-      //     return (error as Error).message;
-      //   }
-    
-      //   return 'An unexpected error occurred';
-      // }, [error]);
-    
       const handleRegenerateEsignLink = (rowData: Order): void => {
         if (rowData.nium_order_id) {
           setLoadingOrderId(rowData.nium_order_id);
@@ -177,11 +130,12 @@ const ViewAllTransactions = () => {
         );
       };
       const isPaginationDynamic = false;
-    
+
       // Use the dynamic pagination hook for fallback
-    
-    
-   
+
+
+
+
       // Table columns
       const tableColumns = ViewAllTransactionTableColumns({
         isSendEsignLinkLoading,
@@ -190,28 +144,25 @@ const ViewAllTransactions = () => {
         handleRegenerateEsignLink,
         handleRegenerateVkycLink
       });
-    
+
+      // Table config
+      const tableConfig = {
+        ...staticConfig,
+        export: { enabled: true, fileName: 'view-all-transactions.csv' },
+      };
+
+      // Table actions
+      const tableActions = {};
+
   return (
- <div className="dynamic-table-wrap">
-      {/* <DynamicTable
+ <div className="data-table-wrap">
+      <DataTable
         columns={tableColumns}
         data={dummyTransactionData}
-        defaultSortColumn="created_at"
-        defaultSortDirection="desc"
-        loading={isLoading}
-        refreshAction={{
-          isRefreshButtonVisible: false,
-          onRefresh: refreshData,
-          isLoading: isLoading,
-          hasError: error,
-        }}
-        paginationMode={'static'}
-        onPageChange={
-          isPaginationDynamic ? pagination.handlePageChange : async (_page: number, _pageSize: number) => []
-        }
-     
-      /> */}
-    
+        config={tableConfig}
+        actions={tableActions}
+      />
+
     </div>
   )
 };
