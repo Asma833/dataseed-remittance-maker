@@ -30,7 +30,7 @@ const Sidebar: React.FC<SidebarProps> = ({
   setCollapsed,
   className,
   parentActiveClass = 'sidemenu-active-menu text-white',
-  childActiveClass = 'active',
+  childActiveClass = 'sidemenu-active-menu text-white',
 }) => {
   const navigate = useNavigate();
   const { location, isParentActive, isSubmenuActive } = useActiveRouteMatch(navItems);

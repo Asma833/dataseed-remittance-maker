@@ -10,7 +10,7 @@ export interface NavLikeItem {
 
 const normalize = (p?: string) => (p ?? '').replace(/\/+$/, '');
 
-export function useActiveRouteMatch<T extends NavLikeItem>(navItems: T[] | undefined) {
+export function useActiveRouteMatch<T extends NavLikeItem>(navItems: T[]) {
   const location = useLocation();
   const current = normalize(location.pathname);
 
@@ -20,14 +20,14 @@ export function useActiveRouteMatch<T extends NavLikeItem>(navItems: T[] | undef
     return current === parent || current.startsWith(parent + '/');
   };
 
-  const isSubmenuActive = (submenu: T) => {
+  const isSubmenuActive = (submenu: NavLikeItem): boolean => {
     const sub = normalize(submenu.path);
-    if (!sub) return false;
-    return current === sub || current.startsWith(sub + '/');
+    if (sub && (current === sub || current.startsWith(sub + '/'))) return true;
+    // Check nested submenus recursively
+    return submenu.subMenus?.some((nested) => isSubmenuActive(nested)) ?? false;
   };
 
   const currentParent = useMemo(() => {
-    if (!navItems) return null;
     return (
       navItems.find((item) => {
         const parentHit = isParentActive(item);

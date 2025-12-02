@@ -15,20 +15,37 @@ export const SideNavOptions = {
     {
       title: 'Transaction',
       icon: DollarSign,
-      subMenus:[
+      subMenus: [
         {
-        title: 'Remittance',
-        path: getNavPath('BRANCH_AGENT_MAKER', ROUTES.BRANCH_AGENT_MAKER.TRANSACTION.DEAL_BOOKING),
-        icon: Send,
-      }
+          title: 'Remittance',
+          path: getNavPath('BRANCH_AGENT_MAKER', ROUTES.BRANCH_AGENT_MAKER.TRANSACTION.DEAL_BOOKING),
+          icon: Send,
+          subMenus: [
+            {
+              title: 'Create Transaction',
+              path: '/branch_agent_maker/transaction/create-transactions',
+            },
+            {
+              title: 'KYC Upload',
+              path: '/branch_agent_maker/transaction/kyc',
+            },
+            {
+              title: 'Payment Status',
+              path:  '/branch_agent_maker/transaction/payment',
+            },
+            {
+              title: 'View All Transactions',
+              path: '/branch_agent_maker/transaction/approved-deals',
+            },
+          ],
+        },
       ],
     },
   ] as NavigationItem[],
-
 };
 
 // Helper function to get navigation items by role
 export const getNavigationItemsByRole = (role: string): NavigationItem[] => {
-  const normalizedRole = role.toUpperCase().replace(/_/g, '_');
+  const normalizedRole = role.toUpperCase();
   return SideNavOptions[normalizedRole as keyof typeof SideNavOptions] || [];
 };
