@@ -39,7 +39,6 @@ const TransactionBasicDetails = ({ setAccordionState }: CommonCreateTransactionP
   const handleValidatePanAndSave = () =>{}
   const handleEdit = () => {
     setIsEditing(true);
-    // console.log('Editing mode enabled');
   };
 
   return (

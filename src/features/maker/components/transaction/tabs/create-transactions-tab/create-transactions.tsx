@@ -111,11 +111,9 @@ const CreateTransactions = () => {
 
   const handleCreate = (transaction: TransactionData) => {
     const formData = mapTransactionToFormData(transaction);
-    console.log("initialData:", formData);
     setInitialData(formData);
     setShowForm(true);
   };
-  console.log(initialData,"initialData+++++++++++++++++")
   return (
     <AccordionStateProvider>
       {showForm ? (

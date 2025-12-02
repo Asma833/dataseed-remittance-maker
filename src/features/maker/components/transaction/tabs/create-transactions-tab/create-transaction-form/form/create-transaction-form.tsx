@@ -14,7 +14,6 @@ type Props = {
 };
 
 const CreateTransactionForm = ({ onCancel, onSubmit, initialData }: Props) => {
-  console.log("Form initialData:", initialData);
   const { accordionState, setAccordionState } = useAccordionStateProvider();
   const currentTab = accordionState.currentActiveTab;
 

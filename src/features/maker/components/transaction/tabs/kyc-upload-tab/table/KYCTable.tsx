@@ -27,7 +27,7 @@ type KYCData = {
   is_v_kyc_required: boolean;
 };
 
-const KYCPage = () => {
+const KYCTable = () => {
   const [loadingOrderId, setLoadingOrderId] = useState<string>('');
 
   const dummyKYCData: KYCData[] = [
@@ -88,13 +88,14 @@ const KYCPage = () => {
   ];
 
   const handleRegenerateEsignLink = (rowData: KYCData): void => {
-    // Placeholder for esign link regeneration
-    console.log('Regenerate esign link for:', rowData.company_reference_no);
   };
 
   const handleRegenerateVkycLink = (rowData: KYCData): void => {
-    // Placeholder for vkyc link regeneration
-    console.log('Regenerate vkyc link for:', rowData.company_reference_no);
+  };
+
+  const handleView = (rowData: KYCData): void => {
+    // TODO: Implement view logic, e.g., open modal or navigate to details page
+    console.log('Viewing KYC data:', rowData);
   };
 
   const columns: TableColumn<KYCData>[] = [
@@ -229,7 +230,7 @@ const KYCPage = () => {
         const data = row as KYCData;
         return (
           <TooltipActionButton
-            onClick={() => console.log('View transaction:', data.agent_reference_no)}
+            onClick={() => handleView(data)}
             icon={<Eye size={16} />}
             tooltipText="View"
             variant="view"
@@ -254,4 +255,4 @@ const KYCPage = () => {
   );
 };
 
-export default KYCPage;
+export default KYCTable;

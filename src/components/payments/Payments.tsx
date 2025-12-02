@@ -24,7 +24,6 @@ const Payments = ({ setIsOpen = () => {} ,uploadScreen}: { setIsOpen: (isOpen: b
     handleSubmit
   } = methods;
   const submit = async (data: any) => {
-    console.log('Form Data:', data);
     // Validate the form before submitting
     const isValid = await methods.trigger();
     if (isValid) {
