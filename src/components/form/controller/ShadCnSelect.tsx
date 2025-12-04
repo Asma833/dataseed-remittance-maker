@@ -161,7 +161,7 @@ export const ShadCnSelect = ({
                   {/* Select Trigger */}
                   <div
                     className={cn(
-                      'flex h-10 w-full items-center justify-between rounded-lg border border-input bg-background px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 hover:border-primary/50 transition-colors disabled:cursor-not-allowed disabled:opacity-50 form-input',
+                      'flex h-10 w-full items-center justify-between rounded-lg border border-input bg-background px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 hover:border-primary/50 transition-colors disabled:cursor-not-allowed disabled:opacity-50 form-input truncate',
                       disabled && 'cursor-not-allowed opacity-50',
                       error && 'border-destructive'
                     )}
@@ -236,7 +236,7 @@ export const ShadCnSelect = ({
                 <Select value={(forcedValue ? forcedValue : value) || ''} onValueChange={onChange} disabled={disabled}>
                   <SelectTrigger
                     className={cn(
-                      'form-input shadow-none focus-visible:ring-0',
+                      'form-input shadow-none focus-visible:ring-0 truncate',
                       'aria-invalid:focus-visible:ring-destructive/20 dark:aria-invalid:focus-visible:ring-destructive/40 aria-invalid:focus-visible:border-destructive'
                     )}
                   >

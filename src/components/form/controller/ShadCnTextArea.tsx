@@ -52,7 +52,7 @@ export const ShadCnTextArea = ({
                 placeholder={placeholder}
                 disabled={disabled}
                 className={cn(
-                  'form-input',
+                  'form-input truncate',
                   'aria-invalid:focus-visible:ring-destructive/20 dark:aria-invalid:focus-visible:ring-destructive/40 aria-invalid:focus-visible:border-destructive'
                 )}
                 onChange={(e) => {

@@ -1,5 +1,4 @@
 import * as React from 'react';
-import { useState } from 'react';
 import { Controller, useFormContext } from 'react-hook-form';
 import { Calendar } from '@/components/ui/calendar';
 import { Button } from '@/components/ui/button';
@@ -31,7 +30,6 @@ export const ShadCnDatePicker = ({
   placeholder = 'Pick a date',
 }: ShadCnDatePickerProps) => {
   const { control, clearErrors } = useFormContext();
-  const [date, setDate] = useState<Date | undefined>(new Date());
 
   const handleCalendarChange = (_value: string | number, _e: React.ChangeEventHandler<HTMLSelectElement>) => {
     const _event = {
@@ -43,7 +41,7 @@ export const ShadCnDatePicker = ({
   };
   return (
     <FormItem className={className}>
-      <FormLabel className="text-[var(--color-form-label)]">
+      <FormLabel className="text-[--color-form-label]">
         {label}
         {required && <span className="text-destructive ml-1">*</span>}
       </FormLabel>
@@ -58,7 +56,7 @@ export const ShadCnDatePicker = ({
                   <button
                     type="button"
                     className={cn(
-                      'p-2 inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium transition-[color,box-shadow] disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg:not([class*="size-"])]:size-4 [&_svg]:shrink-0 outline-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] dark:bg-[var(--color-black)] cursor-pointer border border-input bg-background shadow-xs hover:bg-accent hover:text-accent-foreground w-full justify-between text-left font-normal form-input shadow-none',
+                      'p-2 inline-flex items-center gap-2 whitespace-nowrap rounded-md text-sm font-medium transition-[color,box-shadow] disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg:not([class*="size-"])]:size-4 [&_svg]:shrink-0 outline-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] dark:bg-[var(--color-black)] cursor-pointer border border-input bg-background shadow-xs hover:bg-accent hover:text-accent-foreground w-full justify-between text-left font-normal form-input shadow-none truncate',
                       !field.value && 'text-muted-foreground',
                       fieldState.error && 'border-destructive focus:ring-destructive'
                     )}
@@ -93,7 +91,6 @@ export const ShadCnDatePicker = ({
                         : undefined
                     }
                     onSelect={(selectedDate) => {
-                      setDate(selectedDate);
                       field.onChange(selectedDate?.toISOString());
                       clearErrors(name);
                     }}
