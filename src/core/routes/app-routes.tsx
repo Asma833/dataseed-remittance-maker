@@ -25,9 +25,9 @@ export const AppRoutes = () => {
       <Route
         path="/branch_agent_maker/*"
         element={
-          // <ProtectedRoute>
+           <ProtectedRoute>
             <AgentMakerRoutes />
-          // </ProtectedRoute>
+          </ProtectedRoute>
         }
       />
       <Route path="/" element={<Navigate to={getDefaultRoute(user?.roles[0]?.role_name as UserRole)} replace />} />

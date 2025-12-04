@@ -18,7 +18,7 @@ export const SideNavOptions = {
       subMenus: [
         {
           title: 'Remittance',
-          path: getNavPath('BRANCH_AGENT_MAKER', ROUTES.BRANCH_AGENT_MAKER.TRANSACTION.DEAL_BOOKING),
+          path: getNavPath('BRANCH_AGENT_MAKER', ROUTES.BRANCH_AGENT_MAKER.TRANSACTION.CREATE_TRANSACTION),
           icon: Send,
           subMenus: [
             {

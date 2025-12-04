@@ -9,7 +9,6 @@ export const makerComponents = {
   ViewStatus: lazy(() => import('@/features/maker/pages/view-status/ViewStatusPage')),
   EditTransaction: lazy(() => import('@/features/maker/pages/edit-transaction/EditTransaction')),
   TransactionPage: lazy(() => import('@/features/maker/pages/transaction/remittance/page')),
-  DealBooking: lazy(() => import('@/features/maker/components/transaction/tabs/deal-booking/deal-booking')),
   CreateTransactions: lazy(
     () => import('@/features/maker/components/transaction/tabs/create-transactions-tab/create-transactions')
   ),
@@ -29,12 +28,6 @@ export const agentMakerRoutes: RouteConfig[] = [
     roles: [baseRole],
     permission: '',
     subRoutes: [
-      {
-        path: 'deal-booking',
-        label: 'Deal Booking',
-        element: makerComponents.DealBooking,
-        permission: '',
-      },
       {
         path: 'create-transactions',
         label: 'Create Transactions',

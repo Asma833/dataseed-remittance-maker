@@ -18,11 +18,11 @@ export const AgentMakerRoutes = () => {
               key={path}
               path={normalizedPath}
               element={
-                // <ProtectedRoute roles={roles} {...(permission ? { permission } : {})}>
+                 <ProtectedRoute roles={roles} {...(permission ? { permission } : {})}>
                   <SidebarLayout>
                     <Element />
                   </SidebarLayout>
-                // </ProtectedRoute>
+                 </ProtectedRoute>
               }
             >
               {subRoutes.map(({ path: subPath, element: SubElement }) => (

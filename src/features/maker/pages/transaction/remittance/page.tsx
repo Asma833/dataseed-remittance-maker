@@ -1,6 +1,5 @@
 import { NavLink, Outlet, useLocation } from 'react-router-dom';
 import { cn } from '@/utils/cn';
-import DealBooking from '../../../components/transaction/tabs/deal-booking/deal-booking';
 import CreateTransactions from '../../../components/transaction/tabs/create-transactions-tab/create-transactions';
 import { getTransactionTabs } from '@/core/routes/route-maps/agent-maker.routes';
 
@@ -19,7 +18,7 @@ const TransactionPage = () => {
     location.pathname === `/${baseRole}/transaction` || location.pathname === `/${baseRole}/transaction/`;
 
   // Default component based on role
-  const DefaultComponent = isAdminContext ? CreateTransactions : DealBooking;
+  const DefaultComponent = isAdminContext ? CreateTransactions : CreateTransactions;
 
   return (
     <div className="w-full">
