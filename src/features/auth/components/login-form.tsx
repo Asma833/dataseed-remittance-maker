@@ -33,7 +33,6 @@ const LoginForm = () => {
     <div className="w-full grid grid-cols-1 lg:grid-cols-2 min-h-[70vh] lg:h-[70vh]">
       <div className="hidden lg:flex flex-col items-center justify-center space-y-4 bg-[white]/30 rounded-t-2xl lg:rounded-l-2xl lg:rounded-tr-none">
         <img src={logo} alt="logo" className="max-w-[150px] xl:max-w-[200px] h-auto" />
-        <img src={mask} alt="mask" className="max-w-[150px] xl:max-w-[200px] h-auto" />
       </div>
       <div className="flex flex-col px-6 sm:px-10 md:px-16 lg:px-20 py-8 lg:py-0 justify-center space-y-4 bg-[white] rounded-2xl lg:rounded-r-2xl lg:rounded-l-none">
         <h1 className="text-2xl font-semibold mb-0">Login</h1>

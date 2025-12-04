@@ -61,9 +61,9 @@ export default function UserMenu() {
       <DropdownMenu>
         <DropdownMenuTrigger asChild>
           <Button variant="ghost" className="h-auto p-0 hover:bg-transparent relative cursor-pointer">
-            <Avatar>
+            <Avatar >
               <AvatarImage src="./avatar.jpg" alt="Profile image" />
-              <AvatarFallback>
+              <AvatarFallback className="bg-[#ece7e7]">
                 <UserRoundIcon size={16} className="opacity-60" aria-hidden="true" />
               </AvatarFallback>
             </Avatar>
@@ -100,7 +100,7 @@ export default function UserMenu() {
       </DropdownMenu>
 
       <AlertDialog open={isLogoutDialogOpen} onOpenChange={setIsLogoutDialogOpen}>
-        <AlertDialogContent className="bg-card max-w-sm sm:max-w-md z-[99999]">
+        <AlertDialogContent className="bg-card max-w-sm sm:max-w-md z-99999">
           <AlertDialogHeader>
             <AlertDialogTitle>Confirm Logout</AlertDialogTitle>
             <AlertDialogDescription>Are you sure you want to logout from your account?</AlertDialogDescription>

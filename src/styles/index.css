@@ -1,5 +1,5 @@
 @import 'tailwindcss';
-
+@import '../assets/font/stylesheet.css';
 @custom-variant dark (&:where(.dark, .dark *));
 
 @theme {
@@ -17,8 +17,8 @@
   --color-accent-foreground: #35354a;
   --color-popover: #ffffff;
   --color-popover-foreground: #242434;
-  --color-card: #ffffff;
-  --color-card-foreground: #242434;
+  --color-card: #f1f1f1;
+  --color-card-foreground: #f1f1f1;
   --color-border: #ffffff;
   --color-input: #dcdcde;
   --color-ring: #7d22e24a;
