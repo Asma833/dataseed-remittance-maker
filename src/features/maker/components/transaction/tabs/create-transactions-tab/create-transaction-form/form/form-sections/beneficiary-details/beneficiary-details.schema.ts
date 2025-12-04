@@ -29,7 +29,7 @@ export const beneficiaryDetailsSchema = z.object({
     .min(1, 'Beneficiary bank address is required')
     .regex(nameRegex, 'Beneficiary bank address cannot start with space or hyphen'),
   sort_bsb_aba_transit_code: z.string()
-    .min(1, 'Sort/BSB/ABA Transit Code is required')
+    .min(1, 'SORT/BSB/ABA/TRANSIT Code is required')
     .regex(alphanumericRegex, 'Only alphanumeric characters allowed, no spaces or hyphens'),
   nostro_charges: z.string()
     .min(1, 'Nostro charges is required')

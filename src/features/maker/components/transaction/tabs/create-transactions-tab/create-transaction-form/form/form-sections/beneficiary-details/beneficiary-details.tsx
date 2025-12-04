@@ -36,8 +36,30 @@ const BeneficiaryDetails = ({ setAccordionState }: CommonCreateTransactionProps)
 
   return (
     <Spacer>
-      <FormFieldRow rowCols={3}>
-        {(['beneficiary_name', 'beneficiary_address', 'beneficiary_city'] as const).map(name => {
+      <FormFieldRow rowCols={4}>
+        {(['beneficiary_name', 'beneficiary_address', 'beneficiary_city','beneficiary_country'] as const).map(name => {
+          const field = beneficiaryDetailsConfig.find(f => f.name === name);
+          if (!field) return null;
+          return (
+            <FieldWrapper key={name}>
+              {getController({ ...field, name: `beneficiaryDetails.${name}`, control, errors })}
+            </FieldWrapper>
+          );
+        })}
+      </FormFieldRow>
+      <FormFieldRow rowCols={4}>
+        {(['beneficiary_account_number_iban_number', 'beneficiary_swift_code','beneficiary_bank_name', 'beneficiary_bank_address'] as const).map(name => {
+          const field = beneficiaryDetailsConfig.find(f => f.name === name);
+          if (!field) return null;
+          return (
+            <FieldWrapper key={name}>
+              {getController({ ...field, name: `beneficiaryDetails.${name}`, control, errors })}
+            </FieldWrapper>
+          );
+        })}
+      </FormFieldRow>
+      <FormFieldRow rowCols={4}>
+        {([ 'sort_bsb_aba_transit_code','nostro_charges', 'message_to_beneficiary_additional_information',] as const).map(name => {
           const field = beneficiaryDetailsConfig.find(f => f.name === name);
           if (!field) return null;
           return (
@@ -48,29 +70,7 @@ const BeneficiaryDetails = ({ setAccordionState }: CommonCreateTransactionProps)
         })}
       </FormFieldRow>
       <FormFieldRow rowCols={3}>
-        {(['beneficiary_country', 'beneficiary_account_number_iban_number', 'beneficiary_swift_code'] as const).map(name => {
-          const field = beneficiaryDetailsConfig.find(f => f.name === name);
-          if (!field) return null;
-          return (
-            <FieldWrapper key={name}>
-              {getController({ ...field, name: `beneficiaryDetails.${name}`, control, errors })}
-            </FieldWrapper>
-          );
-        })}
-      </FormFieldRow>
-      <FormFieldRow rowCols={3}>
-        {(['beneficiary_bank_name', 'beneficiary_bank_address', 'sort_bsb_aba_transit_code'] as const).map(name => {
-          const field = beneficiaryDetailsConfig.find(f => f.name === name);
-          if (!field) return null;
-          return (
-            <FieldWrapper key={name}>
-              {getController({ ...field, name: `beneficiaryDetails.${name}`, control, errors })}
-            </FieldWrapper>
-          );
-        })}
-      </FormFieldRow>
-      <FormFieldRow rowCols={3}>
-        {(['nostro_charges', 'message_to_beneficiary_additional_information', 'student_name'] as const).map(name => {
+        {([ 'student_name'] as const).map(name => {
           const field = beneficiaryDetailsConfig.find(f => f.name === name);
           if (!field) return null;
           return (

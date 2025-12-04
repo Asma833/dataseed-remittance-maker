@@ -57,9 +57,9 @@ export const beneficiaryDetailsConfig = [
   },
   {
     name: 'sort_bsb_aba_transit_code',
-    label: 'Sort/BSB/ABA Transit Code',
+    label: 'SORT/BSB/ABA/TRANSIT Code',
     type: 'text',
-    placeholder: 'Enter Sort/BSB/ABA Transit Code',
+    placeholder: 'Enter SORT/BSB/ABA/TRANSIT Code',
     required: true,
   },
   {
