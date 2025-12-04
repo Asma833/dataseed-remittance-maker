@@ -71,7 +71,7 @@ const LoginForm = () => {
                           aria-invalid={invalid}
                           className={cn(
                             'pr-10',
-                            invalid && '!border-red-500 !focus-visible:ring-red-500 !focus-visible:border-red-500'
+                            invalid && 'border-red-500! !focus-visible:ring-red-500 !focus-visible:border-red-500'
                           )}
                         />
                         <button

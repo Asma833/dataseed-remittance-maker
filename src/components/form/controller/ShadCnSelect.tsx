@@ -108,7 +108,7 @@ export const ShadCnSelect = ({
 
   return (
     <FormItem className={className}>
-      <FormLabel className="text-[var(--color-form-label)]">
+      <FormLabel className="text-[--color-form-label]">
         {label}
         {required && <span className="text-destructive ml-1">*</span>}
       </FormLabel>
@@ -214,7 +214,7 @@ export const ShadCnSelect = ({
                             onClick={() => handleRemoveChip(option.value)}
                             className="hover:[var(--color-title)]/20 rounded-full  transition-colors"
                           >
-                            <CircleXIcon size={14} className="text-[var(--color-title)] cursor-pointer" />
+                            <CircleXIcon size={14} className="text-[--color-title] cursor-pointer" />
                           </button>
                         </div>
                       ))}
