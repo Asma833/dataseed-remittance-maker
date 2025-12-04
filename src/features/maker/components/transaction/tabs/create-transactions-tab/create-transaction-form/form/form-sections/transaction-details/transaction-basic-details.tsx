@@ -64,7 +64,7 @@ const TransactionBasicDetails = ({ setAccordionState }: CommonCreateTransactionP
             })}
           </FormFieldRow>
           <FormFieldRow rowCols={4}>
-            {( ['company_settlement_rate', 'billing_rate', 'applicant_name', 'applicant_pan_number'] as const ).map(name => {
+            {( ['company_settlement_rate', 'add_margin', 'customer_rate', 'nostro_charges'] as const ).map(name => {
               const field = transactionBasicDetailsConfig.find(f => f.name === name) as FieldConfig;
               return <FieldWrapper key={name}>{getController({ ...field, name: `transactionDetails.${name}`, control, errors })}</FieldWrapper>;
             })}
@@ -100,23 +100,9 @@ const TransactionBasicDetails = ({ setAccordionState }: CommonCreateTransactionP
               return <FieldWrapper key={name}>{getController({ ...field, name: `transactionDetails.${name}`, control, errors })}</FieldWrapper>;
             })}
           </FormFieldRow>
-          <FormFieldRow rowCols={4}>
-            {( ['add_margins', 'customer_rate','nostro_charges'] as const ).map(name => {
-              const field = transactionBasicDetailsConfig.find(f => f.name === name) as FieldConfig;
-              return <FieldWrapper key={name}>{getController({ ...field, name: `transactionDetails.${name}`, control, errors })}</FieldWrapper>;
-            })}
-          </FormFieldRow>
           
         </Spacer>
       </FormContentWrapper>
-      <div className='flex justify-center items-center'>
-        <Button onClick={handleValidatePanAndSave} className='mx-2'>
-            ValidatePanAndSave
-          </Button>
-         <Button onClick={handleEdit} className='w-32'>
-            Edit
-          </Button>
-      </div>
     </Spacer>
   );
 };

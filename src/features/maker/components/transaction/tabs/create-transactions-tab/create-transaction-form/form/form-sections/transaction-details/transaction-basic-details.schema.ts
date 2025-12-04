@@ -20,7 +20,7 @@ export const transactionBasicDetailsSchema = z.object({
   created_date: z.coerce.date()
     .max(new Date(), 'Created date cannot be in the future')
     .optional(),
-  deal_expiry: z.coerce.date()
+  order_expiry: z.coerce.date()
     .min(new Date(), 'Deal expiry must be in the future')
     .optional(),
   transaction_type: z.string()
@@ -40,12 +40,20 @@ export const transactionBasicDetailsSchema = z.object({
     .min(0, 'Amount must be positive')
     .max(999999999, 'Amount too large')
     .optional(),
-  settlement_rate: z.coerce.number()
+  company_settlement_rate: z.coerce.number()
     .min(0, 'Rate must be positive')
     .max(999999, 'Rate too large')
     .optional(),
-  billing_rate: z.coerce.number()
-    .min(0, 'Rate must be positive')
+  add_margin: z.coerce.number()
+    .min(0, 'Add margin must be positive')
+    .max(999999, 'Rate too large')
+    .optional(),
+  customer_rate: z.coerce.number()
+    .min(0, 'Customer rate must be positive')
+    .max(999999, 'Rate too large')
+    .optional(),
+  nostro_charges: z.coerce.number()
+    .min(0, 'Nostro charges must be positive')
     .max(999999, 'Rate too large')
     .optional(),
   applicant_name: z.string()
@@ -147,7 +155,7 @@ export const transactionBasicDetailsSchema = z.object({
     .or(z.literal('')),
 }).refine((data) => {
   // Additional cross-field validations if needed, e.g., deal_expiry > created_date
-  if (data.created_date && data.deal_expiry && data.deal_expiry <= data.created_date) {
+  if (data.created_date && data.order_expiry && data.order_expiry <= data.created_date) {
     return false;
   }
   if (data.passport_issued_date && data.passport_expiry_date && data.passport_expiry_date <= data.passport_issued_date) {

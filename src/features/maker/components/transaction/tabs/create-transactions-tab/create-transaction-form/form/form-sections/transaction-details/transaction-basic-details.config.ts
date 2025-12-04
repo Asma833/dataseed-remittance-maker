@@ -65,10 +65,24 @@ const transactionBasicDetailsConfig = [
     required: false,
   },
   {
-    name: 'billing_rate',
-    label: 'Billing Rate',
+    name: 'add_margin',
+    label: 'Add Margin',
     type: FieldType.Number,
-    placeholder: 'Enter Billing Rate',
+    placeholder: 'Enter Add Margin',
+    required: false,
+  },
+  {
+    name: 'customer_rate',
+    label: 'Customer Rate',
+    type: FieldType.Number,
+    placeholder: 'Enter Customer Rate',
+    required: false,
+  },
+  {
+    name: 'nostro_charges',
+    label: 'Nostro Charges',
+    type: FieldType.Number,
+    placeholder: 'Enter Nostro Charges',
     required: false,
   },
   {

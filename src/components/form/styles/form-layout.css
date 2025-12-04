@@ -51,12 +51,6 @@
   }
 }
 
-@media (min-width: 1024px) {
-  /* lg: 3 columns */
-  .formFieldRow .fieldWrapper {
-    width: calc(33.33% - 15px);
-  }
-}
 
 @media (max-width: 768px) {
   .fieldWrapper {
