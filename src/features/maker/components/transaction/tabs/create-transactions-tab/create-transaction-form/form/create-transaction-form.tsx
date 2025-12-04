@@ -154,17 +154,17 @@ const CreateTransactionForm = ({ onCancel, onSubmit, initialData }: Props) => {
     <FormProvider {...form}>
       <div>
         <div className="flex justify-between mb-4 gap-2">
-          <Button variant="light" onClick={onCancel}>
+          <Button variant="light"  className='w-24' onClick={onCancel}>
             Cancel
           </Button>
           <div className="flex gap-2">
             {showPrevious && (
-              <Button variant="light" onClick={handlePrevious}>
+              <Button variant="light" className='w-24' onClick={handlePrevious}>
                 Previous
               </Button>
             )}
             {showNext && (
-              <Button onClick={handleNext} className='w-24'>
+              <Button variant="secondary" onClick={handleNext} className='w-24'>
                 Next
               </Button>
             )}

@@ -31,7 +31,7 @@ const TransactionPage = () => {
             className={({ isActive }) =>
               cn(
                 'px-2 py-2 rounded-tl-md rounded-tr-md text-sm no-underline transition-colors flex flex-1 justify-center items-center hover:opacity-80',
-                isActive ? 'text-white font-bold' : 'bg-gray-500 text-white hover:bg-gray-500/80'
+                isActive ? 'text-white font-bold' : 'bg-[#787878] text-white hover:bg-[#787878/80]'
               )
             }
             style={({ isActive }) => ({
