@@ -565,7 +565,7 @@ export function DataTable<T>({
                     <TableHead
                       key={header.id}
                       className={cn(
-                        'select-none text-center',
+                        'select-none text-center truncate',
                         // header.column.getCanSort() && 'cursor-pointer hover:bg-muted/50',
                         header.column.columnDef.meta?.headerAlign === 'left' && 'text-left',
                         header.column.columnDef.meta?.headerAlign === 'right' && 'text-right',
@@ -632,6 +632,7 @@ export function DataTable<T>({
                               <TableCell
                                 key={cell.id}
                                 className={cn(
+                                  'truncate',
                                   cell.column.columnDef.meta?.cellAlign === 'center' && 'text-center',
                                   cell.column.columnDef.meta?.cellAlign === 'right' && 'text-right',
                                   cell.column.columnDef.meta?.className,
@@ -646,6 +647,7 @@ export function DataTable<T>({
                               <TableCell
                                 key={cell.id}
                                 className={cn(
+                                  'truncate',
                                   cell.column.columnDef.meta?.cellAlign === 'center' && 'text-center',
                                   cell.column.columnDef.meta?.cellAlign === 'right' && 'text-right',
                                   cell.column.columnDef.meta?.className,

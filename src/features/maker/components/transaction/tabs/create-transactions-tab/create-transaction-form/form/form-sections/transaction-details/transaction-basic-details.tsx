@@ -46,7 +46,7 @@ const TransactionBasicDetails = ({ setAccordionState }: CommonCreateTransactionP
       <FormContentWrapper className="rounded-lg w-full mr-auto bg-transparent">
         <Spacer>
           <FormFieldRow rowCols={4}>
-            {( ['company_reference_number', 'agent_reference_number', 'created_date', 'deal_expiry'] as const ).map(name => {
+            {( ['company_reference_number', 'agent_reference_number', 'order_date', 'order_expiry'] as const ).map(name => {
               const field = transactionBasicDetailsConfig.find(f => f.name === name) as FieldConfig;
               return <FieldWrapper key={name}>{getController({ ...field, name: `transactionDetails.${name}`, control, errors })}</FieldWrapper>;
             })}
@@ -64,7 +64,7 @@ const TransactionBasicDetails = ({ setAccordionState }: CommonCreateTransactionP
             })}
           </FormFieldRow>
           <FormFieldRow rowCols={4}>
-            {( ['settlement_rate', 'billing_rate', 'applicant_name', 'applicant_pan_number'] as const ).map(name => {
+            {( ['company_settlement_rate', 'billing_rate', 'applicant_name', 'applicant_pan_number'] as const ).map(name => {
               const field = transactionBasicDetailsConfig.find(f => f.name === name) as FieldConfig;
               return <FieldWrapper key={name}>{getController({ ...field, name: `transactionDetails.${name}`, control, errors })}</FieldWrapper>;
             })}

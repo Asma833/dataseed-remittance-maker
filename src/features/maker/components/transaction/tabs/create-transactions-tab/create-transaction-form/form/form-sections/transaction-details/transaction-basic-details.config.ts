@@ -16,17 +16,17 @@ const transactionBasicDetailsConfig = [
     required: false,
   },
   {
-    name: 'created_date',
-    label: 'Created Date',
+    name: 'order_date',
+    label: 'Order Date',
     type: FieldType.Date,
-    placeholder: 'Select Created Date',
+    placeholder: 'Select Order Date',
     required: false,
   },
   {
-    name: 'deal_expiry',
-    label: 'Deal Expiry',
+    name: 'order_expiry',
+    label: 'Order Expiry',
     type: FieldType.Date,
-    placeholder: 'Select Deal Expiry Date',
+    placeholder: 'Select Order Expiry Date',
     required: false,
   },
   {
@@ -58,10 +58,10 @@ const transactionBasicDetailsConfig = [
     required: false,
   },
   {
-    name: 'settlement_rate',
-    label: 'Settlement Rate',
+    name: 'company_settlement_rate',
+    label: 'Company Settlement Rate',
     type: FieldType.Number,
-    placeholder: 'Enter Settlement Rate',
+    placeholder: 'Enter Company Settlement Rate',
     required: false,
   },
   {

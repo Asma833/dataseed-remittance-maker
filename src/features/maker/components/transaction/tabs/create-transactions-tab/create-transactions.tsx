@@ -116,11 +116,11 @@ const CreateTransactions = () => {
   };
   return (
     <AccordionStateProvider>
-      {showForm ? (
+      {/* {showForm ? ( */}
         <CreateTransactionForm {...(initialData && { initialData })} onCancel={() => setShowForm(false)} />
-      ) : (
+      {/* ) : (
         <TransactionTable onCreate={handleCreate} />
-      )}
+      )} */}
     </AccordionStateProvider>
   );
 };
