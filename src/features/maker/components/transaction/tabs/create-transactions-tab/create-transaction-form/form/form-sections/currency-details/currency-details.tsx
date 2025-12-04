@@ -88,7 +88,7 @@ const CurrencyDetails = ({ setAccordionState }: CommonCreateTransactionProps) =>
         </div>
       </FormFieldRow>
          <div className='flex justify-center items-center'>
-          <Button  onClick={handleSave} disabled={isSaving} className='mx-2 w-32'>
+          <Button variant="secondary"  onClick={handleSave} disabled={isSaving} className='mx-2 w-24'>
               {isSaving ? 'Saving...' : 'Save'}
           </Button>
         </div>

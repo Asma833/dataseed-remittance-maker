@@ -126,10 +126,10 @@ const BeneficiaryDetails = ({ setAccordionState }: CommonCreateTransactionProps)
         )}
       </div>
       <div className='flex justify-center items-center'>
-        <Button onClick={handleSave} disabled={isSaving} className='mx-2 w-32'>
+        <Button variant='secondary' onClick={handleSave} disabled={isSaving} className='mx-2 w-24'>
           {isSaving ? 'Saving...' : 'Save'}
         </Button>
-        <Button onClick={handleEdit} className='w-32' variant='outline' disabled={isEditing}>
+        <Button variant='light' onClick={handleEdit} className='w-24'  disabled={isEditing}>
           {isEditing ? 'Editing' : 'Edit'}
         </Button>
       </div>

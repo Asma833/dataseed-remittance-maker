@@ -8,13 +8,13 @@ const NO_LEADING_HYPHEN_OR_SPACE = /^[^-\s].*/; // No leading hyphen or space
 
 export const transactionBasicDetailsSchema = z.object({
   company_reference_number: z.string()
-    .regex(NO_LEADING_HYPHEN_OR_SPACE, 'Reference number cannot start with hyphen or space')
-    .max(50, 'Reference number too long')
+    .regex(NO_LEADING_HYPHEN_OR_SPACE, 'Company reference number cannot start with hyphen or space')
+    .max(50, 'Company Reference number too long')
     .optional()
     .or(z.literal('')),
   agent_reference_number: z.string()
-    .regex(NO_LEADING_HYPHEN_OR_SPACE, 'Reference number cannot start with hyphen or space')
-    .max(50, 'Reference number too long')
+    .regex(NO_LEADING_HYPHEN_OR_SPACE, 'Company reference number cannot start with hyphen or space')
+    .max(50, 'Company reference number too long')
     .optional()
     .or(z.literal('')),
   created_date: z.coerce.date()
@@ -112,11 +112,10 @@ export const transactionBasicDetailsSchema = z.object({
     .optional()
     .or(z.literal('')),
   passport_number: z.string()
+    .nonempty('Passport number is required')
     .min(5, 'Passport number too short')
     .max(20, 'Passport number too long')
-    .regex(NO_LEADING_HYPHEN_OR_SPACE, 'Passport number cannot start with hyphen or space')
-    .optional()
-    .or(z.literal('')),
+    .regex(NO_LEADING_HYPHEN_OR_SPACE, 'Passport number cannot start with hyphen or space'),
   passport_issued_date: z.coerce.date()
     .max(new Date(), 'Issued date cannot be in the future')
     .optional(),
@@ -129,30 +128,25 @@ export const transactionBasicDetailsSchema = z.object({
     .optional()
     .or(z.literal('')),
   applicant_address: z.string()
+    .nonempty('Applicant address is required')
     .max(200, 'Address too long')
-    .regex(NO_LEADING_HYPHEN_OR_SPACE, 'Address cannot start with hyphen or space')
-    .optional()
-    .or(z.literal('')),
+    .regex(NO_LEADING_HYPHEN_OR_SPACE, 'Address cannot start with hyphen or space'),
   applicant_city: z.string()
+    .nonempty('Applicant city is required')
     .max(50, 'City too long')
-    .regex(NO_LEADING_HYPHEN_OR_SPACE, 'City cannot start with hyphen or space')
-    .optional()
-    .or(z.literal('')),
+    .regex(NO_LEADING_HYPHEN_OR_SPACE, 'City cannot start with hyphen or space'),
   applicant_state: z.string()
+    .nonempty('Applicant state is required')
     .max(50, 'State too long')
-    .regex(NO_LEADING_HYPHEN_OR_SPACE, 'State cannot start with hyphen or space')
-    .optional()
-    .or(z.literal('')),
+    .regex(NO_LEADING_HYPHEN_OR_SPACE, 'State cannot start with hyphen or space'),
   applicant_country: z.string()
+    .nonempty('Applicant country is required')
     .max(50, 'Country too long')
-    .regex(NO_LEADING_HYPHEN_OR_SPACE, 'Country cannot start with hyphen or space')
-    .optional()
-    .or(z.literal('')),
+    .regex(NO_LEADING_HYPHEN_OR_SPACE, 'Country cannot start with hyphen or space'),
   postal_code: z.string()
+    .nonempty('Postal code is required')
     .regex(POSTAL_CODE_REGEX, 'Invalid postal code (must be 6 digits)')
-    .length(6, 'Postal code must be 6 digits')
-    .optional()
-    .or(z.literal('')),
+    .length(6, 'Postal code must be 6 digits'),
 }).refine((data) => {
   // Additional cross-field validations if needed, e.g., deal_expiry > created_date
   if (data.created_date && data.order_expiry && data.order_expiry <= data.created_date) {

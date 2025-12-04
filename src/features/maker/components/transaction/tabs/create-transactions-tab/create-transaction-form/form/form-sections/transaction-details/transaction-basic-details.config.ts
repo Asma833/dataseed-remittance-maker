@@ -101,7 +101,7 @@ const transactionBasicDetailsConfig = [
   },
   {
     name: 'applicant_dob',
-    label: 'Applicant Date of Birth',
+    label: 'Applicant DOB',
     type: FieldType.Date,
     placeholder: 'Select Applicant DOB',
     required: false,
@@ -136,9 +136,9 @@ const transactionBasicDetailsConfig = [
   },
   {
     name: 'payee_name',
-    label: 'Payee Name',
+    label: 'Payee Name As Per PAN',
     type: FieldType.Text,
-    placeholder: 'Enter Payee Name',
+    placeholder: 'Enter Payee Name As Per PAN',
     required: false,
   },
   {
@@ -150,9 +150,9 @@ const transactionBasicDetailsConfig = [
   },
   {
     name: 'payee_dob',
-    label: 'Payee Date of Birth',
+    label: 'Payee DOB As Per PAN',
     type: FieldType.Date,
-    placeholder: 'Select Payee DOB',
+    placeholder: 'Select Payee DOB As Per PAN',
     required: false,
   },
   {
@@ -167,7 +167,7 @@ const transactionBasicDetailsConfig = [
     label: 'Passport Number',
     type: FieldType.Text,
     placeholder: 'Enter Passport Number',
-    required: false,
+    required: true,
   },
   {
     name: 'passport_issued_date',
@@ -195,35 +195,35 @@ const transactionBasicDetailsConfig = [
     label: 'Applicant Address',
     type: FieldType.Text,
     placeholder: 'Enter Applicant Address',
-    required: false,
+    required: true,
   },
   {
     name: 'applicant_city',
     label: 'Applicant City',
     type: FieldType.Text,
     placeholder: 'Enter Applicant City',
-    required: false,
+    required: true,
   },
   {
     name: 'applicant_state',
     label: 'Applicant State',
     type: FieldType.Text,
     placeholder: 'Enter Applicant State',
-    required: false,
+    required: true,
   },
   {
     name: 'applicant_country',
     label: 'Applicant Country',
     type: FieldType.Text,
     placeholder: 'Enter Applicant Country',
-    required: false,
+    required: true,
   },
   {
     name: 'postal_code',
     label: 'Postal Code',
     type: FieldType.Text,
     placeholder: 'Enter Postal Code',
-    required: false,
+    required: true,
   }
 ];
 
