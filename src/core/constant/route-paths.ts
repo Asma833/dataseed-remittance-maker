@@ -15,7 +15,7 @@ export const ROUTES = {
     VIEW_STATUS: '/view-status',
     TRANSACTION: {
       BASE: '/transaction',
-      CREATE_TRANSACTION: '/transaction/create-transaction',
+      CREATE_TRANSACTION: '/transaction/create-transactions',
       KYC_UPLOAD: '/transaction/kyc-upload',
       PAYMENT_STATUS: '/transaction/payment-status',
       VIEW_ALL_TRANSACTIONS: '/transaction/view-all-transactions',

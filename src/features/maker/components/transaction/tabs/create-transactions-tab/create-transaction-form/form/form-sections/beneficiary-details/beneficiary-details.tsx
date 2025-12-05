@@ -93,7 +93,7 @@ const BeneficiaryDetails = ({ setAccordionState }: CommonCreateTransactionProps)
           />
         </FieldWrapper>
         {intermediaryBankDetails === 'yes' && (
-          <div className="flex-1 ml-4">
+          <div className="flex-1">
             <FormFieldRow rowCols={3}>
               {beneficiaryBank.map((item) => {
                 return (
