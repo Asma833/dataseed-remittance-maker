@@ -1,4 +1,3 @@
-// import { FaAngleLeft, FaAngleRight } from "react-icons/fa";
 import panelright from '@/assets/icons/panel-right-open.svg';
 type Props = {
   collapsed: boolean;
