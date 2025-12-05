@@ -25,35 +25,6 @@ export const API = {
   FEATURES: {
     ENABLE_GEMINI_FLASH: `/features/gemini-flash/enable`,
   },
-  USER_MANAGEMENT: {
-    AGENT_BRANCH_USER: {
-      LIST: `/rem-users/getAllBranchAgents`,
-      CREATE: `/rem-users/create-branch-agent`,
-      UPDATE: (id: string) => `/rem-users/update-branch-agent/${id}`,
-    },
-    SUPER_CHECKER: {
-      LIST: '/rem-users/getAllSuperCheckers',
-      CREATE: '/rem-users/create-super-checker',
-      UPDATE: (id: string) => `/rem-users/update-super-checker/${id}`,
-    },
-    ACTIVE_INACTIVE: {
-      DELETE: (id: string) => `/rem-users/active-inactive/${id}`,
-    },
-    AGENTS: {
-      LIST: `/agents`,
-      CREATE: `/agents`,
-      UPDATE: (id: string) => `/agents/${id}`,
-    },
-    BANK_ACCOUNTS: {
-      LIST: (ownerId: string) => `/bank-accounts/findBankAccounts/${ownerId}`,
-      CREATE: `/bank-accounts`,
-      UPDATE: (id: string) => `/bank-accounts/${id}`,
-      DELETE: (id: string) => `/bank-accounts/${id}`,
-    },
-    AGENT_CORPORATES: {
-      LIST: `/agent-corporates`,
-    },
-  },
   CONFIG: {
     GET_CONFIG: `/config`,
     GET_PURPOSE_TYPES: `/config?type=purpose_type`,
@@ -68,15 +39,7 @@ export const API = {
     UPLOAD_REMITTANCE_IMAGE: `/documents/uploadRemittanceImage`,
     PRESIGNED_URLS: `/documents/presigned-urls`,
   },
-  DOCUMENT_MASTER: {
-    GET_DOCUMENTS: `/fx/documents`,
-    CREATE_DOCUMENT: `/fx/document`,
-    UPDATE_DOCUMENT: (id: string) => `/fx/document/${id}`,
-    DELETE_DOCUMENT: (id: string) => `/fx/document/${id}`,
-    DOC_PURPOSE_TRANS_MAPPING: `/trans-purpose-document/map`,
-    DELETE_MAPPING_DOCUMENT: (id: string) => `/trans-purpose-document/${id}`,
-    UPDATE_MAPPING_DOCUMENT: `/trans-purpose-document`,
-  },
+ 
   TRANSACTION: {
     GET_TRANSACTIONS: `/transaction_type`,
     GET_ALL_TRANSACTIONS: `/transaction_type/all`,
@@ -107,16 +70,7 @@ export const API = {
   CURRENCY_RATE: {
     GET_ALL: `/currency-rate?margin_type=number`,
     UPDATE_TIMEWISE: `/currency-rate/update-timewise`,
-  },
-  HOLIDAYS: {
-    LIST: `/holidays`,
-    GET_BY_ID: (id: string) => `/holidays/${id}`,
-    CREATE: `/holidays`,
-    UPDATE: (id: string) => `/holidays/${id}`,
-  },
-  DEAL_BOOKING:{
-    CREATE:`/remittance/deals/complete`,
-    LIST:`/remittance/deals/`
+    GET_CURRENCY_RATES: `/currency-rate`,
   }
 } as const;
 

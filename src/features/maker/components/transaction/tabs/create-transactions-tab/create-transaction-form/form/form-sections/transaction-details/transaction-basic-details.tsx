@@ -11,6 +11,7 @@ import { FieldType } from '@/types/enums';
 import Actions from '../../../components/Actions';
 import useGetPurposes from '@/hooks/useGetPurposes';
 import { useGetCurrencyRates } from '@/hooks/useCurrencyRate';
+import useGetTransactionType from '@/hooks/useGetTransactionType';
 import { useFormContext } from 'react-hook-form';
 import { Button } from '@/components/ui/button';
 import { FieldConfig } from '../../../types/createTransactionForm.types';
@@ -21,11 +22,17 @@ const TransactionBasicDetails = ({ setAccordionState }: CommonCreateTransactionP
   const [isEditing, setIsEditing] = useState(false);
   const { purposeTypes, loading: purposeLoading } = useGetPurposes();
   const { data: currencyRates, isLoading: currencyLoading } = useGetCurrencyRates();
+  const { transactionTypes, loading: transactionTypeLoading } = useGetTransactionType();
   const { control, formState: { errors } } = useFormContext();
 
  
 
   const purposeOptions = purposeTypes.reduce((acc: Record<string, { label: string }>, { id, text }) => {
+    acc[id] = { label: text };
+    return acc;
+  }, {});
+
+  const transactionTypeOptions = transactionTypes.reduce((acc: Record<string, { label: string }>, { id, text }) => {
     acc[id] = { label: text };
     return acc;
   }, {});
@@ -59,6 +66,8 @@ const TransactionBasicDetails = ({ setAccordionState }: CommonCreateTransactionP
                 fieldWithOptions = { ...field, options: purposeOptions };
               } else if (name === 'fx_currency') {
                 fieldWithOptions = { ...field, options: currencyOptions };
+              } else if (name === 'transaction_type') {
+                fieldWithOptions = { ...field, options: transactionTypeOptions };
               }
               return <FieldWrapper key={name}>{getController({ ...fieldWithOptions, name: `transactionDetails.${name}`, control, errors })}</FieldWrapper>;
             })}

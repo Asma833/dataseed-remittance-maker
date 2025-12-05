@@ -13,7 +13,7 @@ export interface TransactionTypeItem {
  */
 const fetchTransactionTypes = async (): Promise<TransactionTypeItem[]> => {
   try {
-    const response = await axiosInstance.get(API.CONFIG.GET_TRANSACTION_TYPES, {
+    const response = await axiosInstance.get(API.TRANSACTION.GET_ALL_TRANSACTIONS, {
       headers: {
         accept: 'application/json',
         api_key: HEADER_KEYS.API_KEY,
@@ -23,7 +23,11 @@ const fetchTransactionTypes = async (): Promise<TransactionTypeItem[]> => {
 
     // Check if response and response.data exist before returning
     if (response && response.data) {
-      return Array.isArray(response.data) ? response.data : [];
+      const data = Array.isArray(response.data) ? response.data : [];
+      return data.map((item: any) => ({
+        id: item.transaction_type_id,
+        text: item.transaction_name,
+      }));
     }
     return [];
   } catch (error) {
