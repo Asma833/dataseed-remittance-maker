@@ -110,9 +110,9 @@ export const beneficiaryDetailsConfig = [
 export const beneficiaryBank = [
   {
     name: 'intermediary_bank_account_number',
-    label: 'Intermediary Bank Account Number',
+    label: 'Intermediary Bank Account No',
     type: 'text',
-    placeholder: 'Enter Intermediary Bank Account Number',
+    placeholder: 'Enter Intermediary Bank Account No',
     required: false,
   },
   {

@@ -63,25 +63,14 @@ const BeneficiaryDetails = ({ setAccordionState }: CommonCreateTransactionProps)
           const field = beneficiaryDetailsConfig.find(f => f.name === name);
           if (!field) return null;
           return (
-            <FieldWrapper key={name}>
+            <FieldWrapper key={name} className={name === 'message_to_beneficiary_additional_information' ? 'col-span-2' : ''}>
               {getController({ ...field, name: `beneficiaryDetails.${name}`, control, errors })}
             </FieldWrapper>
           );
         })}
       </FormFieldRow>
-      <FormFieldRow rowCols={3}>
-        {([ 'student_name'] as const).map(name => {
-          const field = beneficiaryDetailsConfig.find(f => f.name === name);
-          if (!field) return null;
-          return (
-            <FieldWrapper key={name}>
-              {getController({ ...field, name: `beneficiaryDetails.${name}`, control, errors })}
-            </FieldWrapper>
-          );
-        })}
-      </FormFieldRow>
-      <FormFieldRow rowCols={3}>
-        {(['student_passport_number', 'payment_instruction_number', 'university_name'] as const).map(name => {
+      <FormFieldRow rowCols={4}>
+        {(['student_name','student_passport_number', 'payment_instruction_number', 'university_name'] as const).map(name => {
           const field = beneficiaryDetailsConfig.find(f => f.name === name);
           if (!field) return null;
           return (
@@ -105,7 +94,7 @@ const BeneficiaryDetails = ({ setAccordionState }: CommonCreateTransactionProps)
         </FieldWrapper>
         {intermediaryBankDetails === 'yes' && (
           <div className="flex-1 ml-4">
-            <FormFieldRow rowCols={2}>
+            <FormFieldRow rowCols={3}>
               {beneficiaryBank.map((item) => {
                 return (
                   <FieldWrapper key={item.name}>

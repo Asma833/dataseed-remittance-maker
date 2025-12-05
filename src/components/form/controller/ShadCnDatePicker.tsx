@@ -56,7 +56,7 @@ export const ShadCnDatePicker = ({
                   <button
                     type="button"
                     className={cn(
-                      'p-2 inline-flex items-center gap-2 whitespace-nowrap rounded-md text-sm font-medium transition-[color,box-shadow] disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg:not([class*="size-"])]:size-4 [&_svg]:shrink-0 outline-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] dark:bg-[--color-black] cursor-pointer border border-input bg-background shadow-xs hover:bg-accent hover:text-accent-foreground w-full justify-between text-left font-normal form-input shadow-none truncate',
+                      'p-2 inline-flex items-center gap-2 whitespace-nowrap rounded-md text-sm font-medium transition-[color,box-shadow] disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg:not([class*="size-"])]:size-4 [&_svg]:shrink-0 outline-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] dark:bg-[--color-black] cursor-pointer border border-input bg-background shadow-xs hover:bg-accent hover:text-accent-foreground w-full justify-between text-left font-medium form-input shadow-none truncate',
                       !field.value && 'text-muted-foreground',
                       fieldState.error && 'border-destructive focus:ring-destructive'
                     )}
