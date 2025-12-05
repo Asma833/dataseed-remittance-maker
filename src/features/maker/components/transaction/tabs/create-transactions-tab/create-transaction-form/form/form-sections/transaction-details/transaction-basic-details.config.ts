@@ -62,6 +62,7 @@ const transactionBasicDetailsConfig = [
     label: 'Company Settlement Rate',
     type: FieldType.Number,
     placeholder: 'Enter Company Settlement Rate',
+    disabled:true,
     required: false,
   },
   {

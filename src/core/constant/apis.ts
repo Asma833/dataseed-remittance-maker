@@ -70,7 +70,7 @@ export const API = {
   CURRENCY_RATE: {
     GET_ALL: `/currency-rate?margin_type=number`,
     UPDATE_TIMEWISE: `/currency-rate/update-timewise`,
-    GET_CURRENCY_RATES: `/currency-rate`,
+    GET_CURRENCY_RATES: (currencyCode: string) => `/currency-rate/${currencyCode}`,
   }
 } as const;
 
