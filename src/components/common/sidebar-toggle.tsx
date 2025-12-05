@@ -12,7 +12,6 @@ const SidebarToggle = ({ collapsed, setCollapsed }: Props) => {
       onClick={() => setCollapsed(!collapsed)}
       title={collapsed ? 'Expand' : 'Collapse'}
     >
-      {/* {collapsed ? <FaAngleRight  className="w-4 h-4 text-[var(--color-title)]" /> : <FaAngleLeft   className="w-4 h-4 text-[var(--color-title)]" />} */}
       <img src={panelright} />
     </button>
   );
