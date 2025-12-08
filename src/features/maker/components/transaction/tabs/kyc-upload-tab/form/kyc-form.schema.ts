@@ -18,24 +18,21 @@ const fileValidation = z
 
 
 export const KycFormSchema = z.object({
-  niumReferenceNumber: z.string().optional(),
-  agentReferenceNumber: z.string().optional(),
-  applicantName: z.string({ required_error: 'Applicant Name is required' }).nonempty('Applicant Name is required'),
+  company_reference_number: z.string().optional(),
+  agent_reference_number: z.string().optional(),
+  applicant_name: z.string().nonempty('Applicant Name is required'),
 
-  applicantPan: fileValidation,
+  applicant_pan: fileValidation,
 
-  otherDocument: fileValidation,
-  Passport_Aadhar_DL_Voter_ID_Front: fileValidation,
-  Passport_Aadhar_DL_Voter_ID_Back: fileValidation,
+  other_document: fileValidation,
+  passport_aadhar_dl_voter_id_front: fileValidation,
+  passport_aadhar_dl_voter_id_back: fileValidation,
 
-  payerPan:fileValidation,
-  studentPassportFront: fileValidation,
-  studentPassportBack: fileValidation,
-  payerRelationshipProof: fileValidation,
-  universityOfferLetter: fileValidation,
-  educationLoanDoc: fileValidation,
-  studentVisa: fileValidation,
-
-  kycType: z.string({ required_error: 'KYC Type is required' }).nonempty('KYC Type is required'),
-  viewA2Form: fileValidation,
+  payer_pan: fileValidation,
+  student_passport_front: fileValidation,
+  student_passport_back: fileValidation,
+  payer_relationship_proof: fileValidation,
+  university_offer_letter: fileValidation,
+  education_loan_doc: fileValidation,
+  student_visa: fileValidation,
 });

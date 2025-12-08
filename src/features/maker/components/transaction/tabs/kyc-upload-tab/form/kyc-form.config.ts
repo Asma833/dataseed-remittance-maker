@@ -4,105 +4,90 @@ import { FieldType } from "@/types/enums";
 export const kycDocumentsConfig = {
   sectionTitle: 'KYC Documents',
   fields: {
-    niumReferenceNumber: {
-      label: 'NIUM Reference Number',
+   company_reference_number: {
+      label: 'Company Reference Number',
       type: FieldType.Text,
       required: false,
-      placeholder: 'Enter NIUM Reference Number',
-      className: '',
+      placeholder: 'Enter Company Reference Number'
     },
-    agentReferenceNumber: {
+    agent_reference_number: {
       label: 'Agent Reference Number',
       type: FieldType.Text,
       required: false,
-      placeholder: 'Enter Agent Reference Number',
-      className: '',
+      placeholder: 'Enter Agent Reference Number'
     },
-    applicantName: {
+    applicant_name: {
       label: 'Applicant Name',
       type: FieldType.Text,
       required: true,
-      placeholder: 'Enter Applicant Name',
-      className: '',
+      placeholder: 'Enter Applicant Name'
     },
-    applicantPan: {
+    applicant_pan: {
       label: 'PAN',
       type: FieldType.Fileupload_View,
       required: false,
-      placeholder: 'Enter PAN',
-      className: '',
+      placeholder: 'Enter PAN'
     },
-    otherDocument: {
+    other_document: {
       label: 'Other Document',
       type: FieldType.Fileupload_View,
       required: false,
-      placeholder: 'Upload Front Side',
-      className: '',
+      placeholder: 'Upload Front Side'
     },
-    Passport_Aadhar_DL_Voter_ID_Front: {
-      // label: 'Passport / Aadhar / DL / Voter ID',
+    passport_aadhar_dl_voter_id_front: {
       label: 'Passport/Aadhar/DL/Voter ID Front',
       type: FieldType.Fileupload_View,
       required: false,
-      placeholder: 'Upload Front Side',
-      className: '' 
+      placeholder: 'Upload Front Side'
     },
-    Passport_Aadhar_DL_Voter_ID_Back: {
+    passport_aadhar_dl_voter_id_back: {
       label: 'Back',
       type: FieldType.Fileupload_View,
       required: false,
-      placeholder: 'Upload Back Side',
-      className: '' 
+      placeholder: 'Upload Back Side'
     },
     
-    studentPassportFront: {
+    student_passport_front: {
       label: 'Valid Student Passport Front',
       type: FieldType.Fileupload_View,
       required: false,
-      placeholder: 'Upload Front Page',
-      className: ''
+      placeholder: 'Upload Front Page'
     },
-    studentPassportBack: {
+    student_passport_back: {
       label: 'Back',
       type: FieldType.Fileupload_View,
       required: false,
-      placeholder: 'Upload Back Page',
-      className: ''
+      placeholder: 'Upload Back Page'
     },
-    payerPan: {
+    payer_pan: {
       label: 'Payer PAN',
       type: FieldType.Fileupload_View,
       required: false,
-      placeholder: 'Enter Payer PAN',
-      className: 'col-span-2' 
+      placeholder: 'Enter Payer PAN'
     },
-    payerRelationshipProof: {
+    payer_relationship_proof: {
       label: 'Payer Relationship Proof',
       type: FieldType.Fileupload_View,
       required: false,
-      placeholder: 'Upload Proof Document',
-      className: 'col-span-2'
+      placeholder: 'Upload Proof Document'
     },
-    universityOfferLetter: {
+    university_offer_letter: {
       label: 'Valid Student University Offer Letter / I20',
       type: FieldType.Fileupload_View,
       required: false,
       placeholder: 'Upload Offer Letter',
-      className: '',
     },
-    educationLoanDoc: {
+    education_loan_doc: {
       label: 'Education Loan Document',
       type: FieldType.Fileupload_View,
       required: false,
       placeholder: 'Upload Loan Document',
-      className: '',
     },
-    studentVisa: {
+    student_visa: {
       label: 'Valid Student Visa',
       type: FieldType.Fileupload_View,
       required: false,
       placeholder: 'Upload Visa',
-      className: '',
     },
     // kycType: {
     //   label: 'Select KYC Type',
