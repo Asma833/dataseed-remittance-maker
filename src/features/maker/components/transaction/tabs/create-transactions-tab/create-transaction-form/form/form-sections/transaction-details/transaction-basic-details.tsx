@@ -1,34 +1,24 @@
 import { FormContentWrapper } from '@/components/form/wrapper/form-content-wrapper';
 import Spacer from '@/components/form/wrapper/spacer';
- 
-import { useState, useEffect } from 'react';
+
 import { CommonCreateTransactionProps } from '@/features/maker/types/create-transaction.types';
 import FormFieldRow from '@/components/form/wrapper/form-field-row';
 import FieldWrapper from '@/components/form/wrapper/field-wrapper';
 import { getController } from '@/components/form/utils/get-controller';
 import transactionBasicDetailsConfig from './transaction-basic-details.config';
 import { FieldType } from '@/types/enums';
-import Actions from '../../../components/Actions';
 import useGetPurposes from '@/hooks/useGetPurposes';
 import useGetTransactionType from '@/hooks/useGetTransactionType';
 import { useFormContext } from 'react-hook-form';
-import { useGetCurrencyRates as useGetAllCurrencyRates } from '@/hooks/useCurrencyRate';
-//import { useGetCurrencyRates } from '../../../../hooks/useCurrencyRate';
-import { Button } from '@/components/ui/button';
+import { useGetCurrencyRates } from '@/hooks/useCurrencyRate';
 import { FieldConfig } from '../../../types/createTransactionForm.types';
-import { useGetCurrencyRates } from '../../../hooks/useCurrencyRate';
  
 
 const TransactionBasicDetails = ({ setAccordionState }: CommonCreateTransactionProps) => {
   const { purposeTypes, loading: purposeLoading } = useGetPurposes();
-  const { data: currencyRates, isLoading: currencyLoading } = useGetAllCurrencyRates();
+  const { data: currencyCode, isLoading: currencyLoading } = useGetCurrencyRates();
   const { transactionTypes, loading: transactionTypeLoading } = useGetTransactionType();
-  const { control, formState: { errors }, watch, setValue } = useFormContext();
-
-  const selectedCurrency = watch('transactionDetails.fx_currency');
-  const { data: selectedCurrencyRate } = useGetCurrencyRates(selectedCurrency);
-
-
+  const { control, formState: { errors } } = useFormContext();
 
   const purposeOptions = purposeTypes.reduce((acc: Record<string, { label: string }>, { id, text }) => {
     acc[id] = { label: text };
@@ -40,16 +30,15 @@ const TransactionBasicDetails = ({ setAccordionState }: CommonCreateTransactionP
     return acc;
   }, {});
 
-  const currencyOptions = currencyRates?.reduce((acc: Record<string, { label: string }>, currency) => {
-    acc[currency.currency_code] = { label: currency.currency_code };
-    return acc;
-  }, {}) || {};
+  // const currencyOptions = currencyRates?.reduce((acc: Record<string, { label: string }>, currency) => {
+  //   acc[currency.currency_code] = { label: currency.currency_code };
+  //   return acc;
+  // }, {}) || {};
 
-  useEffect(() => {
-    if (selectedCurrencyRate && selectedCurrencyRate.length > 0) {
-      setValue('transactionDetails.company_settlement_rate', parseFloat(selectedCurrencyRate[0].card_buy_rate));
-    }
-  }, [selectedCurrencyRate, setValue]);
+  const currenyCodeType = currencyCode?.reduce((acc: Record<string, { label: string }>, currency) => {
+      acc[currency.currency_code] = { label: currency.currency_code };
+      return acc;
+    }, {}) || {};
 
   return (
     <Spacer>
@@ -68,7 +57,7 @@ const TransactionBasicDetails = ({ setAccordionState }: CommonCreateTransactionP
               if (name === 'purpose') {
                 fieldWithOptions = { ...field, options: purposeOptions };
               } else if (name === 'fx_currency') {
-                fieldWithOptions = { ...field, options: currencyOptions };
+                fieldWithOptions = { ...field, options: currenyCodeType };
               } else if (name === 'transaction_type') {
                 fieldWithOptions = { ...field, options: transactionTypeOptions };
               }

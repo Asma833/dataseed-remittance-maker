@@ -58,50 +58,15 @@ export const ENDPOINT_MATCHING_RULES: EndpointRulesConfig = {
     matchType: 'standard' as const,
     description: 'Create purpose endpoint',
   },
-  'add-document': {
-    endpoint: API.DOCUMENT_MASTER.CREATE_DOCUMENT,
-    matchType: 'standard' as const,
-    description: 'Add document endpoint',
-  },
-  'document-map': {
-    endpoint: API.DOCUMENT_MASTER.DOC_PURPOSE_TRANS_MAPPING,
-    matchType: 'standard' as const,
-    description: 'Document mapping endpoint',
-  },
-  'create-super-checker': {
-    endpoint: API.USER_MANAGEMENT.SUPER_CHECKER.CREATE,
-    matchType: 'standard' as const,
-    description: 'Create super checker endpoint',
-  },
   'update-super-checker': {
     endpoint: '/rem-users/update-super-checker',
     matchType: 'standard' as const,
     description: 'Update super checker endpoint',
   },
-  'get-super-checker': {
-    endpoint: API.USER_MANAGEMENT.SUPER_CHECKER.LIST,
-    matchType: 'standard' as const,
-    description: 'Get super checker endpoint',
-  },
-  'create-branch-agent': {
-    endpoint: API.USER_MANAGEMENT.AGENT_BRANCH_USER.CREATE,
-    matchType: 'standard' as const,
-    description: 'Create super checker endpoint',
-  },
   'update-branch-agent': {
     endpoint: '/rem-users/update-branch-agent',
     matchType: 'standard' as const,
     description: 'Update branch agent endpoint',
-  },
-  'get-branch-agent': {
-    endpoint: API.USER_MANAGEMENT.AGENT_BRANCH_USER.LIST,
-    matchType: 'standard' as const,
-    description: 'Get super checker endpoint',
-  },
-  'create-agent-admin': {
-    endpoint: API.USER_MANAGEMENT.AGENTS.CREATE,
-    matchType: 'standard' as const,
-    description: 'Create Agent Admin',
   },
   'upload-agreement': {
     endpoint: API.DOCUMENTS.UPLOAD_REMITTANCE_IMAGE,
@@ -138,20 +103,10 @@ export const ENDPOINT_MATCHING_RULES: EndpointRulesConfig = {
     matchType: 'standard' as const,
     description: 'Update currency value',
   },
-  'holiday': {
-    endpoint: API.HOLIDAYS.CREATE,
-    matchType: 'standard' as const,
-    description: 'Create holidays',
-  },
   'transaction': {
     endpoint: API.PURPOSE.TRANSACTION_MAPPING,
     matchType: 'standard' as const,
     description: 'Create transaction',
-  },
-  'deal-booking':{
-    endpoint: API.DEAL_BOOKING.CREATE,
-    matchType: 'standard' as const,
-    description: 'Deal booking',
   }
 } as const;
 
