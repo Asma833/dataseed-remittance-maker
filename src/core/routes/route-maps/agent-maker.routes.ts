@@ -3,16 +3,11 @@ import { RouteConfig } from '@/types/route.types';
 import { getTabsFromRoute } from '@/utils/routeUtils';
 
 export const makerComponents = {
-  //CreateTransaction: lazy(() => import('@/features/maker/pages/create-transaction/CreateTransaction')),
-  //Update: lazy(() => import('@/features/maker/pages/update-doc-transaction/UpdateDocTransaction')),
-  //ViewTransaction: lazy(() => import('@/features/maker/pages/view-transaction/ViewTransaction')),
-  //ViewStatus: lazy(() => import('@/features/maker/pages/view-status/ViewStatusPage')),
-  //EditTransaction: lazy(() => import('@/features/maker/pages/edit-transaction/EditTransaction')),
   TransactionPage: lazy(() => import('@/features/maker/pages/transaction/remittance/page')),
   CreateTransactions: lazy(
     () => import('@/features/maker/components/transaction/tabs/create-transactions-tab/create-transactions')
   ),
-  KYCUpload: lazy(() => import('@/features/maker/components/transaction/tabs/kyc-upload-tab/kyc-uplod')),
+  KYCUpload: lazy(() => import('@/features/maker/components/transaction/tabs/kyc-upload-tab/kyc-upload')),
   PaymentStatus: lazy(() => import('@/features/maker/components/transaction/tabs/payment-tab/payment')),
   ViewAllTransactions: lazy(
     () => import('@/features/maker/components/transaction/tabs/view-all-tab/view-all-transactions')
