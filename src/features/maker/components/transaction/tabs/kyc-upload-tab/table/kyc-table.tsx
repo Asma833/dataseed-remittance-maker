@@ -1,36 +1,10 @@
 import { DataTable } from "@/components/table/data-table";
-import { TableColumn } from "@/components/table/types";
-import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { KycTableColumnsConfig } from "./kyc-table-columns";
 
-type KYCData = {
-  company_reference_no: string;
-  agent_reference_no: string;
-  order_date: string;
-  expiry_date: string;
-  applicant_name: string;
-  applicant_pan: string;
-  transaction_type: string;
-  purpose: string;
-  kyc_type: string;
-  kyc_status: string;
-  e_sign_status: string;
-  e_sign_link: string | null;
-  v_kyc_status: string;
-  v_kyc_link: string | null;
-  is_esign_required: boolean;
-  is_v_kyc_required: boolean;
-  merged_document: string | null;
-  nium_order_id: string;
-  e_sign_link_status: string;
-};
-
-const KYCTable = () => {
+const KYCTable = ({ onUploadClick }: { onUploadClick: () => void }) => {
   const navigate = useNavigate();
-  const [loadingOrderId, setLoadingOrderId] = useState<string>('');
-
-  const dummyKYCData: KYCData[] = [
+  const dummyKYCData = [
     {
       company_reference_no: 'NIUM001234',
       agent_reference_no: 'AGT123456',
@@ -96,25 +70,9 @@ const KYCTable = () => {
     },
   ];
 
-  const handleRegenerateEsignLink = (rowData: KYCData): void => {
-    setLoadingOrderId(rowData.nium_order_id);
-    // Simulate API call
-    setTimeout(() => setLoadingOrderId(''), 2000);
-  };
-
-  const handleRegenerateVkycLink = (rowData: KYCData): void => {
-    setLoadingOrderId(rowData.nium_order_id);
-    // Simulate API call
-    setTimeout(() => setLoadingOrderId(''), 2000);
-  };
-
   const columns = KycTableColumnsConfig({
-    handleRegenerateEsignLink,
-    handleRegenerateVkycLink,
-    isSendEsignLinkLoading: loadingOrderId !== '',
-    isSendVkycLinkLoading: loadingOrderId !== '',
-    loadingOrderId,
     navigate,
+    onUploadClick,
   });
 
   return (

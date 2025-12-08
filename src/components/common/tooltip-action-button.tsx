@@ -55,7 +55,7 @@ const TooltipActionButton = ({
           {icon}
         </Button>
       </TooltipTrigger>
-      <TooltipContent className="bg-secondary text-foreground">{tooltipText}</TooltipContent>
+      <TooltipContent className="bg-gray-200 text-gray-800 shadow-lg border-none">{tooltipText}</TooltipContent>
     </Tooltip>
   );
 };

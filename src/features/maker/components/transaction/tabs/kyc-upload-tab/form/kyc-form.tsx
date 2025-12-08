@@ -10,8 +10,7 @@ import { kycDocumentsConfig } from "./kyc-form.config";
 import { KycFormSchema } from "./kyc-form.schema";
 
 
-const KYCForm = () => {
-    const [isFormEnabled, setIsFormEnabled] = useState(true);
+const KYCForm = ({ onFormSubmit }: { onFormSubmit: () => void }) => {
     
       const methods = useForm({
         resolver: zodResolver(KycFormSchema),
@@ -40,7 +39,9 @@ const KYCForm = () => {
       } = methods;
     
       const handleKycSubmit = handleSubmit(async (formdata: FieldValues) => {
-        setIsFormEnabled(false);
+        // Handle form submission logic here
+        console.log('Form submitted:', formdata);
+        onFormSubmit();
       });
     
       const handleCancel = () => {

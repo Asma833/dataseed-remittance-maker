@@ -1,28 +1,18 @@
-import { useState } from 'react';
 import { formatDateWithFallback } from '@/utils/formatDateWithFallback';
-import EsignStatusCell from '@/components/cell/table/EsignStatusCell';
-import VKycStatusCell from '@/components/cell/table/VKycStatusCell';
 import { Eye } from 'lucide-react';
 import KycStatusCell from '@/components/cell/table/KycStatusCell';
-import { SignLinkButton } from '@/components/common/single-link-button';
 import TooltipActionButton from '@/components/common/tooltip-action-button';
+import TooltipImageButton from '@/components/common/tooltip-image-button';
+import Reupload from '@/assets/icons/re-upload.svg'
+import upload from '@/assets/icons/upload.svg'
 
 export const KycTableColumnsConfig = ({
-  handleRegenerateEsignLink,
-  handleRegenerateVkycLink,
-  isSendEsignLinkLoading = false,
-  isSendVkycLinkLoading = false,
-  loadingOrderId = null,
   navigate,
+  onUploadClick,
 }: {
-  handleRegenerateEsignLink: (rowData: any) => void;
-  handleRegenerateVkycLink: (rowData: any) => void;
-  isSendEsignLinkLoading?: boolean;
-  isSendVkycLinkLoading?: boolean;
-  loadingOrderId?: string | null;
   navigate: (url: string) => void;
+  onUploadClick: () => void;
 }) => {
-  const [hasGeneratedLink, setHasGeneratedLink] = useState(false);
   return [
   {
     accessorKey: 'company_reference_no',
@@ -79,6 +69,17 @@ export const KycTableColumnsConfig = ({
     id: 'kyc_doc',
     header: 'KYC Doc',
     meta: { className: 'min-w-0 p-2' },
+    cell: (props: { row: any; value: any }) => {
+      const isCompleted = props.row.kyc_status === 'completed';
+      return (
+        <TooltipImageButton
+          onClick={onUploadClick}
+          src={isCompleted ? Reupload : upload}
+          alt="Upload"
+          tooltipText={isCompleted ? 'Reupload' : 'Upload'}
+        />
+      );
+    },
   },
   {
     accessorKey: 'kyc_status',
