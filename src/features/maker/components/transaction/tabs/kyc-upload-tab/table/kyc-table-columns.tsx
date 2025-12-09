@@ -5,6 +5,7 @@ import TooltipActionButton from '@/components/common/tooltip-action-button';
 import TooltipImageButton from '@/components/common/tooltip-image-button';
 import Reupload from '@/assets/icons/re-upload.svg'
 import upload from '@/assets/icons/upload.svg'
+import { SignLinkButton } from '@/components/cell/table/SignLinkButton';
 
 export const KycTableColumnsConfig = ({
   navigate,
@@ -95,13 +96,12 @@ export const KycTableColumnsConfig = ({
     header: 'View',
     meta: { className: 'min-w-0 p-2' },
     cell: (props: { row: any; value: any }) => (
-      <TooltipActionButton
-        onClick={() =>
-          navigate(`/maker/view-transaction?partner-order-id=${props.row.agent_reference_no}&action=view`)
-        }
-        icon={<Eye size={16} />}
+      <SignLinkButton
+        id={props.row.nium_ref_no}
+        onClick={() => navigate(``)}
         tooltipText="View"
-        variant="view"
+        buttonType="view"
+        buttonIconType="view"
       />
     ),
   },

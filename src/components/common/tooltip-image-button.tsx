@@ -1,6 +1,7 @@
 import { Button } from '@/components/ui/button';
 import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip';
 import { cn } from '@/utils/cn';
+import { useState } from 'react';
 
 interface TooltipImageButtonProps {
   onClick: (e: React.MouseEvent<HTMLButtonElement>) => void;
@@ -21,6 +22,8 @@ const TooltipImageButton = ({
   size = 'sm',
   className,
 }: TooltipImageButtonProps) => {
+  const [isHovered, setIsHovered] = useState(false);
+
   return (
     <Tooltip>
       <TooltipTrigger asChild>
@@ -29,18 +32,30 @@ const TooltipImageButton = ({
             e.stopPropagation();
             onClick(e);
           }}
-          variant="light"
-          size={size}
+          onMouseEnter={() => setIsHovered(true)}
+          onMouseLeave={() => setIsHovered(false)}
+          variant="outline"
+          size="sm"
           disabled={disabled}
           className={cn(
-            'text-foreground border-none bg-transparent shadow-none disabled:text-gray-500',
+            'text-foreground bg-transparent border-none shadow-none disabled:text-gray-500',
+            'hover:bg-primary hover:text-white',
             className
           )}
         >
-          <img src={src} alt={alt} className="w-4 h-4" />
+          <img
+            src={src}
+            alt={alt}
+            className="w-3 h-3 transition-all duration-200"
+            style={{
+              filter: isHovered
+                ? 'brightness(0) drop-shadow(0 0 0.5px white)! drop-shadow(0 0 0.5px white)!'
+                : 'brightness(0) drop-shadow(0 0 0.2px black) drop-shadow(0 0 0.2px black)',
+            }}
+          />
         </Button>
       </TooltipTrigger>
-      <TooltipContent className="bg-gray-300 border-none text-gray-800 shadow-lg">{tooltipText}</TooltipContent>
+      <TooltipContent className="bg-gray-400/20 backdrop-blur-sm border-0 px-3 py-2 text-xs font-medium rounded-md shadow-xl shadow-black/20">{tooltipText}</TooltipContent>
     </Tooltip>
   );
 };
