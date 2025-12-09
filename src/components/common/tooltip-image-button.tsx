@@ -49,8 +49,8 @@ const TooltipImageButton = ({
             className="w-3 h-3 transition-all duration-200"
             style={{
               filter: isHovered
-                ? 'brightness(0) drop-shadow(0 0 0.5px white)! drop-shadow(0 0 0.5px white)!'
-                : 'brightness(0) drop-shadow(0 0 0.2px black) drop-shadow(0 0 0.2px black)',
+                ? 'brightness(0) saturate(100%) invert(1) contrast(1.2) drop-shadow(0 0 0.5px white)'
+                : 'brightness(0) saturate(100%) contrast(2) drop-shadow(0 0 0.3px black)',
             }}
           />
         </Button>
