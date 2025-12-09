@@ -40,7 +40,7 @@ const TooltipImageButton = ({
           <img src={src} alt={alt} className="w-4 h-4" />
         </Button>
       </TooltipTrigger>
-      <TooltipContent className="bg-gray-200 border-none text-gray-800 shadow-lg">{tooltipText}</TooltipContent>
+      <TooltipContent className="bg-gray-300 border-none text-gray-800 shadow-lg">{tooltipText}</TooltipContent>
     </Tooltip>
   );
 };

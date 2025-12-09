@@ -25,18 +25,18 @@ const TooltipActionButton = ({
   const getVariantClasses = () => {
     const baseClasses = 'text-foreground bg-transparent border-none shadow-none disabled:text-gray-500';
 
-    switch (variant) {
-      case 'edit':
-        return cn(baseClasses, 'hover:bg-primary hover:text-white');
-      case 'view':
-        return cn(baseClasses, 'hover:bg-primary hover:text-white');
-      case 'delete':
-        return cn(baseClasses, 'hover:bg-destructive hover:text-white');
-      case 'upload':
-        return cn(baseClasses, 'hover:bg-primary hover:text-white');
-      default:
-        return cn(baseClasses, 'hover:bg-primary hover:text-white');
-    }
+    // switch (variant) {
+    //   case 'edit':
+    //     return cn(baseClasses, 'hover:bg-primary hover:text-white');
+    //   case 'view':
+    //     return cn(baseClasses, 'hover:bg-primary hover:text-white');
+    //   case 'delete':
+    //     return cn(baseClasses, 'hover:bg-destructive hover:text-white');
+    //   case 'upload':
+    //     return cn(baseClasses, 'hover:bg-primary hover:text-white');
+    //   default:
+    //     return cn(baseClasses, 'hover:bg-primary hover:text-white');
+    // }
   };
 
   return (
@@ -47,15 +47,15 @@ const TooltipActionButton = ({
             e.stopPropagation();
             onClick(e);
           }}
-          variant="outline"
+          variant="transparent"
           size={size}
           disabled={disabled}
-          className={cn(getVariantClasses(), className)}
+          className={className}
         >
           {icon}
         </Button>
       </TooltipTrigger>
-      <TooltipContent className="bg-gray-200 text-gray-800 shadow-lg border-none">{tooltipText}</TooltipContent>
+      <TooltipContent className="bg-gray-300 text-gray-800 shadow-lg border-none">{tooltipText}</TooltipContent>
     </Tooltip>
   );
 };
