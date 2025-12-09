@@ -557,7 +557,7 @@ export function DataTable<T>({
 
         {/* Table */}
         <div className="rounded-md shadow-sm">
-          <Table className="border-collapse [&_th]:border [&_th]:border-white [&_th]:p-3 [&_th]:text-center [&_th]:bg-(--color-table-header-bg) [&_th]:text-(--color-table-header-text) [&_th]:font-semibold [&_th]:border-b-2 [&_th]:border-b-white [&_th]:text-[13px] [&_td]:border [&_td]:border-white [&_td]:p-3 [&_td]:text-center [&_td]:text-xs [&_tbody_tr:nth-child(even)]:bg-(--color-table-striped) [&_tbody_tr:nth-child(odd)]:bg-white [&_tbody_tr:hover]:bg-(--color-table-striped)">
+          <Table className="border-collapse [&_th]:border [&_th]:border-white [&_th]:p-3 [&_th]:text-center [&_th]:bg-(--color-table-header-bg) [&_th]:text-(--color-table-header-text) [&_th]:font-semibold [&_th]:border-b-2 [&_th]:border-b-white [&_th]:text-[13px] [&_td]:border [&_td]:border-white [&_td]:p-3 [&_td]:text-center [&_td]:text-[13px] [&_tbody_tr:nth-child(even)]:bg-(--color-table-striped) [&_tbody_tr:nth-child(odd)]:bg-white [&_tbody_tr:hover]:bg-(--color-table-striped)">
             <TableHeader>
               {table.getHeaderGroups().map((headerGroup) => (
                 <TableRow key={headerGroup.id}>
