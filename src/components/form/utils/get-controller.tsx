@@ -133,8 +133,8 @@ export const getController = (field: any) => {
         <MuiDateRangePicker
           {...baseProps}
           placeholder={field.placeholder}
-          startLabel={field.startLabel}
-          endLabel={field.endLabel}
+          startLabel={field.startLabel || 'From Date'}
+          endLabel={field.endLabel || 'To Date'}
         />
       );
     case FieldType.Radio:

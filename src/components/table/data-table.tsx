@@ -334,6 +334,23 @@ export function DataTable<T>({
     setSelectedDateRange(newDateRange);
   };
 
+  // Handle form submission for date range
+  const onSubmitDateRange = (data: any) => {
+    if (data.dateRange) {
+      const newDateRange: { from?: Date; to?: Date } = {};
+      
+      if (data.dateRange.startDate) {
+        newDateRange.from = new Date(data.dateRange.startDate);
+      }
+      
+      if (data.dateRange.endDate) {
+        newDateRange.to = new Date(data.dateRange.endDate);
+      }
+      
+      setSelectedDateRange(newDateRange);
+    }
+  };
+
   // Helper function to clear all filters
   const clearAllFilters = () => {
     setGlobalFilter('');
@@ -370,8 +387,25 @@ export function DataTable<T>({
     // Apply the selected role filter
     setAppliedRoleFilter(selectedRoleFilter);
 
-    // Apply the selected date range
-    setAppliedDateRange(selectedDateRange);
+    // Get current form values and apply date range
+    const formValues = methods.getValues();
+    if (formValues.dateRange) {
+      const newDateRange: { from?: Date; to?: Date } = {};
+      
+      if (formValues.dateRange.startDate) {
+        newDateRange.from = new Date(formValues.dateRange.startDate);
+      }
+      
+      if (formValues.dateRange.endDate) {
+        newDateRange.to = new Date(formValues.dateRange.endDate);
+      }
+      
+      setSelectedDateRange(newDateRange);
+      setAppliedDateRange(newDateRange);
+    } else {
+      // Apply the selected date range from state
+      setAppliedDateRange(selectedDateRange);
+    }
 
     // Apply custom filters
     setAppliedCustomFilters(selectedCustomFilters);
@@ -566,9 +600,10 @@ export function DataTable<T>({
                 {/* Actions */}
                 {(statusFilterConfig?.enabled ||
                   roleFilterConfig?.enabled ||
+                  dateRangeFilterConfig?.enabled ||
                   (config.filters.customFilters && config.filters.customFilters.some((f) => f.enabled))) && (
                   <div className="flex flex-col gap-1">
-                    {/* invisible label spacer to match the selects’ label row */}
+                    {/* invisible label spacer to match the selects' label row */}
                     <div className="h-1" />
                     <div className="flex gap-2">
                       <TooltipButton
