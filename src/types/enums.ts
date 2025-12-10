@@ -22,6 +22,7 @@ export enum FieldType {
   Text = 'text',
   Number = 'number',
   Date = 'date',
+  DateRange = 'daterange',
   DateTime = 'datetime',
   Time = 'time',
   Phone = 'phone',

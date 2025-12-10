@@ -43,6 +43,10 @@ import { exportTableToCSV } from './csv-export.utils';
 import { Pagination } from './pagination';
 import DynamicTabs from '@/components/tabs/dynamic-tabs';
 import { TableLoader } from './table-loader';
+import { MuiDateRangePicker } from '@/components/form/controller/MuiDateRangePicker';
+import { FormProvider, useForm } from 'react-hook-form';
+import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
+import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
 
 interface DataTableProps<T> {
   columns: TableColumn<T>[];
@@ -125,6 +129,17 @@ export function DataTable<T>({
   // Get filter configurations (support both nested and direct properties)
   const statusFilterConfig = config.filters.filter?.statusFilter || config.filters.statusFilter;
   const roleFilterConfig = config.filters.filter?.roleFilter || config.filters.roleFilter;
+  const dateRangeFilterConfig = config.filters.dateRangeFilter;
+
+  // Form methods for MuiDateRangePicker
+  const methods = useForm({
+    defaultValues: {
+      dateRange: {
+        startDate: null,
+        endDate: null,
+      },
+    },
+  });
 
   // Table state
   const [sorting, setSorting] = useState<SortingState>([]);
@@ -134,6 +149,8 @@ export function DataTable<T>({
   const [appliedStatusFilter, setAppliedStatusFilter] = useState<string>('all');
   const [selectedRoleFilter, setSelectedRoleFilter] = useState<string>('all');
   const [appliedRoleFilter, setAppliedRoleFilter] = useState<string>('all');
+  const [selectedDateRange, setSelectedDateRange] = useState<{ from?: Date; to?: Date }>({});
+  const [appliedDateRange, setAppliedDateRange] = useState<{ from?: Date; to?: Date }>({});
 
   // State for custom filters
   const [selectedCustomFilters, setSelectedCustomFilters] = useState<Record<string, string>>(() => {
@@ -235,6 +252,24 @@ export function DataTable<T>({
       });
     }
 
+    // Apply date range filtering if enabled and dates are selected
+    if (dateRangeFilterConfig?.enabled && (appliedDateRange.from || appliedDateRange.to)) {
+      const columnId = dateRangeFilterConfig?.columnId || 'createdAt';
+      filteredData = filteredData.filter((item: any) => {
+        const itemValue = item[columnId];
+        if (!itemValue) return false;
+
+        const itemDate = new Date(itemValue);
+        if (isNaN(itemDate.getTime())) return false;
+
+        // Check if item date is within the selected range
+        if (appliedDateRange.from && itemDate < appliedDateRange.from) return false;
+        if (appliedDateRange.to && itemDate > appliedDateRange.to) return false;
+
+        return true;
+      });
+    }
+
     // Apply custom filters
     if (config.filters.customFilters) {
       config.filters.customFilters.forEach((filter) => {
@@ -266,8 +301,10 @@ export function DataTable<T>({
     appliedStatusFilter,
     appliedRoleFilter,
     appliedCustomFilters,
+    appliedDateRange,
     statusFilterConfig,
     roleFilterConfig,
+    dateRangeFilterConfig,
     config.filters.customFilters,
   ]);
 
@@ -282,6 +319,21 @@ export function DataTable<T>({
     });
   };
 
+  // Handle date range change from MuiDateRangePicker
+  const handleDateRangeChange = (value: { startDate?: string | null; endDate?: string | null }) => {
+    const newDateRange: { from?: Date; to?: Date } = {};
+    
+    if (value.startDate) {
+      newDateRange.from = new Date(value.startDate);
+    }
+    
+    if (value.endDate) {
+      newDateRange.to = new Date(value.endDate);
+    }
+    
+    setSelectedDateRange(newDateRange);
+  };
+
   // Helper function to clear all filters
   const clearAllFilters = () => {
     setGlobalFilter('');
@@ -290,6 +342,16 @@ export function DataTable<T>({
     setAppliedStatusFilter('all');
     setSelectedRoleFilter('all');
     setAppliedRoleFilter('all');
+    setSelectedDateRange({});
+    setAppliedDateRange({});
+
+    // Clear form values
+    methods.reset({
+      dateRange: {
+        startDate: null,
+        endDate: null,
+      },
+    });
 
     // Clear custom filters
     const clearedFilters: Record<string, string> = {};
@@ -307,6 +369,9 @@ export function DataTable<T>({
 
     // Apply the selected role filter
     setAppliedRoleFilter(selectedRoleFilter);
+
+    // Apply the selected date range
+    setAppliedDateRange(selectedDateRange);
 
     // Apply custom filters
     setAppliedCustomFilters(selectedCustomFilters);
@@ -392,13 +457,14 @@ export function DataTable<T>({
   // Wrap the entire table rendering in error boundary
   try {
     return (
-      <div className={cn('space-y-4 mb-20', className)}>
-        {/* Search and Filters Header */}
-        {(config.search.enabled || config.filters.enabled || config.tabFilters?.enabled) && (
-          <div className="space-y-2">
-            <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4">
-              {/* Left side - Tab Filters and Filters */}
-              <div className="flex flex-wrap items-end gap-2 lg:gap-3">
+      <FormProvider {...methods}>
+        <div className={cn('space-y-4 mb-20', className)}>
+          {/* Search and Filters Header */}
+          {(config.search.enabled || config.filters.enabled || config.tabFilters?.enabled) && (
+            <div className="space-y-2">
+              <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4">
+                {/* Left side - Tab Filters and Filters */}
+                <div className="flex flex-wrap items-end gap-2 lg:gap-3">
                 {/* Tab Filters */}
                 {config.tabFilters?.enabled && (
                   <div className="flex gap-1 pt-2">
@@ -451,6 +517,21 @@ export function DataTable<T>({
                         ))}
                       </SelectContent>
                     </Select>
+                  </div>
+                )}
+
+                {/* Date Range Filter */}
+                {dateRangeFilterConfig?.enabled && dateRangeFilterConfig.useMuiDateRangePicker && (
+                  <div className="flex flex-col gap-1">
+                    <LocalizationProvider dateAdapter={AdapterDateFns}>
+                      <MuiDateRangePicker
+                        name="dateRange"
+                        label="Date Range"
+                        startLabel="From Date"
+                        endLabel="To Date"
+                        className="w-auto"
+                      />
+                    </LocalizationProvider>
                   </div>
                 )}
 
@@ -691,6 +772,7 @@ export function DataTable<T>({
           />
         )}
       </div>
+      </FormProvider>
     );
   } catch (error) {
     return (

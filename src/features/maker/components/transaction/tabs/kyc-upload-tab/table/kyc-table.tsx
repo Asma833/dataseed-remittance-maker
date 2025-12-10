@@ -84,6 +84,17 @@ const KYCTable = ({ onUploadClick }: { onUploadClick: () => void }) => {
           search: { enabled: true, searchMode: "static" },
           pagination: { enabled: true, pageSize: 10, pageSizeOptions: [5, 10, 20, 50, 100], showPageSizeSelector: true },
           sorting: { enabled: true, multiSort: false, sortMode: "static" },
+          filters: {
+            enabled: true,
+            filterMode: "static",
+            columnFilters: true,
+            globalFilter: true,
+            dateRangeFilter: {
+              enabled: true,
+              columnId: 'order_date',
+              useMuiDateRangePicker: true,
+            },
+          },
         }}
       />
     </div>

@@ -20,6 +20,11 @@ export const defaultTableConfig: TableConfig = {
     filterMode: 'static',
     columnFilters: true,
     globalFilter: true,
+    dateRangeFilter: {
+      enabled: false,
+      columnId: 'createdAt',
+      useMuiDateRangePicker: true,
+    },
   },
   sorting: {
     enabled: true,

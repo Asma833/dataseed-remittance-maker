@@ -13,6 +13,8 @@ import { ShadCnTextArea } from '../controller/ShadCnTextArea';
 import { ShadCnFileUpload } from '../controller/ShadCnFileUpload';
 import { ShadCnFileUploadWithButton } from '../controller/ShadCnFileUploadWithButton';
 import FileUploadWithView from '../controller/FileUploadWithView';
+import { MuiDateRangePicker } from '../controller/MuiDateRangePicker';
+import { FieldType } from '@/types/enums';
 
 export const getController = (field: any) => {
   const baseProps = {
@@ -27,6 +29,7 @@ export const getController = (field: any) => {
   };
 
   switch (field.type) {
+    case FieldType.Text:
     case 'text':
       return (
         <ShadCnText
@@ -36,6 +39,7 @@ export const getController = (field: any) => {
           onInputChange={field.onInputChange}
         />
       );
+    case FieldType.TextArea:
     case 'textarea':
       return (
         <ShadCnTextArea
@@ -47,16 +51,21 @@ export const getController = (field: any) => {
           onInputChange={field.onInputChange}
         />
       );
+    case FieldType.Email:
     case 'email':
       return <ShadCnEmail {...baseProps} />;
+    case FieldType.Number:
     case 'number':
       return <ShadCnNumber {...baseProps} min={field.min} step={field.step} />;
+    case FieldType.Phone:
     case 'phone':
       return <ShadCnPhone {...baseProps} />;
+    case FieldType.IndianPhone:
     case 'indian_phone':
       return <ShadCnIndianPhone {...baseProps} />;
     case 'file':
       return <ShadCnFile {...baseProps} />;
+    case FieldType.FileUpload:
     case 'fileupload':
       return (
         <ShadCnFileUpload
@@ -70,6 +79,7 @@ export const getController = (field: any) => {
           styleType={field.styleType}
         />
       );
+    case FieldType.Fileupload_View:
     case 'fileupload_view':
         return (
         <FileUploadWithView
@@ -83,6 +93,7 @@ export const getController = (field: any) => {
           viewFile={field.viewFile}
         />
       );
+    case FieldType.FileUploadWithButton:
     case 'fileupload_with_button':
       return (
         <ShadCnFileUploadWithButton
@@ -93,6 +104,7 @@ export const getController = (field: any) => {
           required={field.required}
         />
       );
+    case FieldType.Checkbox:
     case 'checkbox':
       return (
         <ShadCnCheckbox
@@ -107,12 +119,25 @@ export const getController = (field: any) => {
           orientation={field.orientation}
         />
       );
+    case FieldType.Select:
     case 'select':
       return (
         <ShadCnSelect {...baseProps} options={field.options} placeholder={field.placeholder} isMulti={field.isMulti} />
       );
+    case FieldType.Date:
     case 'date':
       return <ShadCnDatePicker {...baseProps} placeholder={field.placeholder} />;
+    case FieldType.DateRange:
+    case 'daterange':
+      return (
+        <MuiDateRangePicker
+          {...baseProps}
+          placeholder={field.placeholder}
+          startLabel={field.startLabel}
+          endLabel={field.endLabel}
+        />
+      );
+    case FieldType.Radio:
     case 'radio':
       // Find the default checked option
       const defaultRadioValue = Object.keys(field.options).find((key) => field.options[key].checked);
@@ -126,6 +151,7 @@ export const getController = (field: any) => {
         (radioProps as any).defaultValue = defaultRadioValue;
       }
       return <ShadCnRadioGroup {...radioProps} />;
+    case FieldType.Password:
     case 'password':
       return <ShadCnPassword {...baseProps} uppercase={field.uppercase} />;
     default:

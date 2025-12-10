@@ -2,10 +2,14 @@ import { useEffect, useState, useCallback, useRef, useMemo } from 'react';
 import dayjs from 'dayjs';
 import { CalendarDays, RefreshCw } from 'lucide-react';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
+import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
+import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
 import { SearchInput } from './search-input';
 import { TableSearchFilterProps } from '../types/filter.types';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Button } from '@/components/ui/button';
+import { MuiDateRangePicker } from '@/components/form/controller/MuiDateRangePicker';
+import { FormProvider, useForm } from 'react-hook-form';
 
 const CustomCalendarIcon = () => {
   return (
@@ -27,6 +31,16 @@ const TableSearchFilter = ({
   const { search, dateRange, status, selects } = filterConfig.renderFilterOptions;
   const mode = filterConfig.mode || 'static';
   const callbacks = filterConfig.dynamicCallbacks;
+
+  // Form methods for MuiDateRangePicker
+  const methods = useForm({
+    defaultValues: {
+      dateRange: {
+        startDate: filters.dateRange.from?.toISOString() || null,
+        endDate: filters.dateRange.to?.toISOString() || null,
+      },
+    },
+  });
 
   // Sentinel for representing an originally empty option (Radix disallows value="")
   const EMPTY_SENTINEL = '__EMPTY_OPTION__';
@@ -186,6 +200,29 @@ const TableSearchFilter = ({
     });
   }, []);
 
+  // Handle date range change from MuiDateRangePicker
+  const handleDateRangeChange = useCallback((value: { startDate?: string | null; endDate?: string | null }) => {
+    const newDateRange = {
+      from: value.startDate ? new Date(value.startDate) : undefined,
+      to: value.endDate ? new Date(value.endDate) : undefined,
+    };
+    setLocalDateRange(newDateRange);
+    
+    // Update form values - convert undefined to null for form compatibility
+    methods.setValue('dateRange', {
+      startDate: value.startDate ?? null,
+      endDate: value.endDate ?? null,
+    });
+  }, [methods]);
+
+  // Update form when local date range changes
+  useEffect(() => {
+    methods.setValue('dateRange', {
+      startDate: localDateRange.from?.toISOString() || null,
+      endDate: localDateRange.to?.toISOString() || null,
+    });
+  }, [localDateRange, methods]);
+
   const handleStatusChange = useCallback(
     (value: string) => {
       // Translate sentinel back to empty string for internal state consistency
@@ -271,74 +308,23 @@ const TableSearchFilter = ({
   }, [filters, mode, callbacks, onReset, setDynamicData, setFilters, executeAsyncOperation]);
 
   return (
-    <div className="flex flex-col gap-3 w-full" role="search" aria-label="Table filter controls">
-      <div className="flex items-end justify-between gap-4 flex-wrap text-[--primary-text]">
-        <div className="flex items-end gap-2 flex-wrap">
-          {dateRange && (
-            <>
-              <div className="flex items-start flex-col">
-                <span id="from-date-label" className="text-sm whitespace-nowrap text-gray-500">
-                  From Date
-                </span>
-                <DatePicker
-                  value={localDateRange.from ? dayjs(localDateRange.from) : null}
-                  onChange={(date) => handleDateChange('from', date?.toDate() || null)}
-                  slotProps={{
-                    textField: {
-                      size: 'small',
-                      inputProps: {
-                        'aria-labelledby': 'from-date-label',
-                      },
-                      sx: {
-                        borderRadius: '5px',
-                        width: '170px',
-                        '& .MuiOutlinedInput-notchedOutline': {
-                          border: 'none',
-                          borderRadius: '20px',
-                        },
-                      },
-                    },
-                  }}
-                  slots={{
-                    openPickerIcon: () => <CustomCalendarIcon />,
-                  }}
-                  format="DD/MM/YYYY"
-                  className="bg-[--color-table-header-bg] text-[--color-foreground]"
-                />
-              </div>
-              <div className="flex items-start flex-col">
-                <span id="to-date-label" className="text-sm whitespace-nowrap text-gray-500">
-                  To Date
-                </span>
-                <DatePicker
-                  value={localDateRange.to ? dayjs(localDateRange.to) : null}
-                  onChange={(date) => handleDateChange('to', date?.toDate() || null)}
-                  shouldDisableDate={(day) => !!localDateRange.from && day.isBefore(dayjs(localDateRange.from), 'day')}
-                  slotProps={{
-                    textField: {
-                      size: 'small',
-                      inputProps: {
-                        'aria-labelledby': 'to-date-label',
-                      },
-                      sx: {
-                        borderRadius: '5px',
-                        width: '170px',
-                        '& .MuiOutlinedInput-notchedOutline': {
-                          border: 'none',
-                          borderRadius: '20px',
-                        },
-                      },
-                    },
-                  }}
-                  slots={{
-                    openPickerIcon: () => <CustomCalendarIcon />,
-                  }}
-                  format="DD/MM/YYYY"
-                  className="bg-[--color-table-header-bg] text-[--color-foreground]"
-                />
-              </div>
-            </>
-          )}
+    <FormProvider {...methods}>
+      <div className="flex flex-col gap-3 w-full" role="search" aria-label="Table filter controls">
+        <div className="flex items-end justify-between gap-4 flex-wrap text-[--primary-text]">
+          <div className="flex items-end gap-2 flex-wrap">
+            {dateRange && (
+              <LocalizationProvider dateAdapter={AdapterDateFns}>
+                <div className="flex items-start flex-col">
+                  <MuiDateRangePicker
+                    name="dateRange"
+                    label="Date Range"
+                    startLabel="From Date"
+                    endLabel="To Date"
+                    className="w-auto"
+                  />
+                </div>
+              </LocalizationProvider>
+            )}
 
           {status && status.options && (
             <div className="flex items-start flex-col ">
@@ -418,6 +404,7 @@ const TableSearchFilter = ({
         )}
       </div>
     </div>
+    </FormProvider>
   );
 };
 

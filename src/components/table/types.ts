@@ -41,6 +41,11 @@ export interface TableConfig {
     filterMode: 'static' | 'dynamic';
     columnFilters: boolean;
     globalFilter: boolean;
+    dateRangeFilter?: {
+      enabled: boolean;
+      columnId?: string;
+      useMuiDateRangePicker?: boolean; // New option to use our MuiDateRangePicker
+    };
     filter?: {
       statusFilter?: {
         enabled: boolean;
