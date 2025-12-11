@@ -31,7 +31,7 @@ export const MuiDateRangePicker = ({
   const { control, clearErrors, watch, formState } = useFormContext();
 
   return (
-    <FormItem className={cn(className, 'w-96')}>
+    <FormItem className={cn(className, 'lg:w-96')}>
       <FormLabel className="text-[--color-form-label]">
         {required && <span className="text-destructive ml-1">*</span>}
       </FormLabel>
@@ -80,6 +80,12 @@ export const MuiDateRangePicker = ({
                   '&.Mui-focused fieldset': {
                     borderColor: fieldState.error ? 'var(--destructive)' : 'var(--ring)',
                   },
+                  borderRadius: '5px',
+                        width: '170px',
+                        '& .MuiOutlinedInput-notchedOutline': {
+                          border: 'none',
+                          borderRadius: '20px',
+                        },
                 },
                 '& .MuiInputLabel-root': {
                   color: 'var(--foreground)',

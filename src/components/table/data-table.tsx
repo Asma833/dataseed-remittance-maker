@@ -578,7 +578,7 @@ export function DataTable<T>({
 
                 {/* Date Range Filter */}
                 {dateRangeFilterConfig?.enabled && dateRangeFilterConfig.useMuiDateRangePicker && (
-                  <div className="flex flex-col gap-1">
+                  <div className="flex items-start flex-col gap-1">
                     <LocalizationProvider dateAdapter={AdapterDateFns}>
                       <MuiDateRangePicker
                         name="dateRange"
