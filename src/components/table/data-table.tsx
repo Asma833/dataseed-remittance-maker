@@ -381,25 +381,47 @@ export function DataTable<T>({
 
   // Helper function to apply filters (for manual submission)
   const applyFilters = () => {
+    // Clear previous errors
+    methods.clearErrors();
+
+    // Validate date range if enabled
+    const formValues = methods.getValues();
+    if (dateRangeFilterConfig?.enabled) {
+      const hasStartDate = formValues.dateRange?.startDate;
+      const hasEndDate = formValues.dateRange?.endDate;
+
+      let hasError = false;
+      if (!hasStartDate) {
+        methods.setError("dateRange.startDate", { message: "From date is required" });
+        hasError = true;
+      }
+      if (!hasEndDate) {
+        methods.setError("dateRange.endDate", { message: "To date is required" });
+        hasError = true;
+      }
+      if (hasError) {
+        return; // Don't apply filters if validation fails
+      }
+    }
+
     // Apply the selected status filter
     setAppliedStatusFilter(selectedStatusFilter);
 
     // Apply the selected role filter
     setAppliedRoleFilter(selectedRoleFilter);
 
-    // Get current form values and apply date range
-    const formValues = methods.getValues();
+    // Apply date range
     if (formValues.dateRange) {
       const newDateRange: { from?: Date; to?: Date } = {};
-      
+
       if (formValues.dateRange.startDate) {
         newDateRange.from = new Date(formValues.dateRange.startDate);
       }
-      
+
       if (formValues.dateRange.endDate) {
         newDateRange.to = new Date(formValues.dateRange.endDate);
       }
-      
+
       setSelectedDateRange(newDateRange);
       setAppliedDateRange(newDateRange);
     } else {
@@ -498,7 +520,7 @@ export function DataTable<T>({
             <div className="space-y-2">
               <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4">
                 {/* Left side - Tab Filters and Filters */}
-                <div className="flex flex-wrap items-end gap-2 lg:gap-3">
+                <div className="flex flex-wrap items-center gap-2 lg:gap-3">
                 {/* Tab Filters */}
                 {config.tabFilters?.enabled && (
                   <div className="flex gap-1 pt-2">
@@ -819,3 +841,4 @@ export function DataTable<T>({
     );
   }
 }
+

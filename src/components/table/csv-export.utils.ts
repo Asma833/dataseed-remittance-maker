@@ -22,7 +22,7 @@ export const exportTableToCSV = <T>(
     }
 
     // Get column headers (exclude action columns and non-filterable columns)
-    const exportableColumns = columns.filter((col) => col.id !== 'action' && col.filterable !== false);
+    const exportableColumns = columns.filter((col) => !['action', 'kyc_doc', 'view_action'].includes(col.id || '') && col.filterable !== false);
 
     const headers = exportableColumns.map((col) => col.header);
 

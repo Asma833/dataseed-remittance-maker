@@ -95,6 +95,7 @@ const KYCTable = ({ onUploadClick }: { onUploadClick: () => void }) => {
               useMuiDateRangePicker: true,
             },
           },
+          export: { enabled: true, fileName: 'kyc-details.csv' },
         }}
       />
     </div>

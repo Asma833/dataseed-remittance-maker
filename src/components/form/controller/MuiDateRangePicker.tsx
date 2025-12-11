@@ -5,6 +5,7 @@ import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
 import { Box } from '@mui/material';
 import Grid from '@mui/material/Grid';
+import { cn } from '@/utils/cn';
 
 interface MuiDateRangePickerProps {
   name: string;
@@ -27,10 +28,10 @@ export const MuiDateRangePicker = ({
   startLabel = 'From Date',
   endLabel = 'To Date',
 }: MuiDateRangePickerProps) => {
-  const { control, clearErrors, watch } = useFormContext();
+  const { control, clearErrors, watch, formState } = useFormContext();
 
   return (
-    <FormItem className={className}>
+    <FormItem className={cn(className, 'w-96')}>
       <FormLabel className="text-[--color-form-label]">
         {required && <span className="text-destructive ml-1">*</span>}
       </FormLabel>
@@ -65,6 +66,8 @@ export const MuiDateRangePicker = ({
               variant: 'outlined' as const,
               size: 'small' as const,
               fullWidth: true,
+              readOnly: true,
+              placeholder: 'DD/MM/YYYY',
               sx: {
                 '& .MuiOutlinedInput-root': {
                   backgroundColor: 'var(--background)',
@@ -95,29 +98,45 @@ export const MuiDateRangePicker = ({
                 <Box sx={{ width: '100%' }}>
                   <Grid container spacing={2}>
                     <Grid size={{ xs: 12, sm: 6 }}>
-                      <DatePicker
-                        label={startLabel}
-                        value={startDate}
-                        onChange={handleStartDateChange}
-                        disabled={disabled}
-                        {...(endDate && { maxDate: endDate })}
-                        slotProps={{
-                          textField: commonTextFieldProps,
-                        }}
-                      />
-                    </Grid>
-                    <Grid size={{ xs: 12, sm: 6 }}>
-                      <DatePicker
-                        label={endLabel}
-                        value={endDate}
-                        onChange={handleEndDateChange}
-                        disabled={disabled}
-                        {...(startDate && { minDate: startDate })}
-                        slotProps={{
-                          textField: commonTextFieldProps,
-                        }}
-                      />
-                    </Grid>
+                       <FormLabel className="text-[--color-form-label] text-sm font-medium">
+                         {startLabel}
+                       </FormLabel>
+                       <DatePicker
+                         label=""
+                         value={startDate}
+                         onChange={handleStartDateChange}
+                         disabled={disabled}
+                         format="dd/MM/yyyy"
+                         {...(endDate && { maxDate: endDate })}
+                         slotProps={{
+                           textField: {
+                             ...commonTextFieldProps,
+                             error: !!(formState.errors[name] as any)?.startDate,
+                             helperText: (formState.errors[name] as any)?.startDate?.message || ' ',
+                           },
+                         }}
+                       />
+                     </Grid>
+                     <Grid size={{ xs: 12, sm: 6 }}>
+                       <FormLabel className="text-[--color-form-label] text-sm font-medium">
+                         {endLabel}
+                       </FormLabel>
+                       <DatePicker
+                         label=""
+                         value={endDate}
+                         onChange={handleEndDateChange}
+                         disabled={disabled}
+                         format="dd/MM/yyyy"
+                         {...(startDate && { minDate: startDate })}
+                         slotProps={{
+                           textField: {
+                             ...commonTextFieldProps,
+                             error: !!(formState.errors[name] as any)?.endDate,
+                             helperText: (formState.errors[name] as any)?.endDate?.message || ' ',
+                           },
+                         }}
+                       />
+                     </Grid>
                   </Grid>
                 </Box>
               </LocalizationProvider>
