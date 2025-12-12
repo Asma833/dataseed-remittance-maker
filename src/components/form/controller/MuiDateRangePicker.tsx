@@ -31,9 +31,8 @@ export const MuiDateRangePicker = ({
   const { control, clearErrors, watch, formState } = useFormContext();
 
   return (
-    <FormItem className={cn(className, 'lg:w-96')}>
+    <FormItem className={cn(className, 'xs:w-40 sm:w-96')}>
       <FormLabel className="text-[--color-form-label]">
-        {required && <span className="text-destructive ml-1">*</span>}
       </FormLabel>
       <FormControl>
         <Controller
@@ -81,7 +80,7 @@ export const MuiDateRangePicker = ({
                     borderColor: fieldState.error ? 'var(--destructive)' : 'var(--ring)',
                   },
                   borderRadius: '5px',
-                        width: '170px',
+                        width: '',
                         '& .MuiOutlinedInput-notchedOutline': {
                           border: 'none',
                           borderRadius: '20px',
@@ -102,10 +101,11 @@ export const MuiDateRangePicker = ({
             return (
               <LocalizationProvider dateAdapter={AdapterDateFns}>
                 <Box sx={{ width: '100%' }}>
-                  <Grid container spacing={2}>
-                    <Grid size={{ xs: 12, sm: 6 }}>
+                  <Grid container spacing={1}>
+                    <Grid size={{ xs: 10, sm: 6, md:6, lg:6}}>
                        <FormLabel className="text-[--color-form-label] text-sm font-medium">
                          {startLabel}
+                         {required && <span className="text-destructive ml-1">*</span>}
                        </FormLabel>
                        <DatePicker
                          label=""
@@ -123,9 +123,10 @@ export const MuiDateRangePicker = ({
                          }}
                        />
                      </Grid>
-                     <Grid size={{ xs: 12, sm: 6 }}>
+                     <Grid size={{ xs: 10, sm: 6, md:6, lg:6 }}>
                        <FormLabel className="text-[--color-form-label] text-sm font-medium">
                          {endLabel}
+                         {required && <span className="text-destructive ml-1">*</span>}
                        </FormLabel>
                        <DatePicker
                          label=""

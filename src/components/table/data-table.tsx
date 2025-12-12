@@ -586,12 +586,14 @@ export function DataTable<T>({
                         startLabel="From Date"
                         endLabel="To Date"
                         className="w-auto"
+                        required={true}
                       />
                     </LocalizationProvider>
                   </div>
                 )}
 
                 {/* Custom Filters */}
+              
                 {config.filters.customFilters?.map(
                   (filter) =>
                     filter.enabled && (
