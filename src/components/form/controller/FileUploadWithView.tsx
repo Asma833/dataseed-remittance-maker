@@ -88,13 +88,13 @@ const FileUploadWithView = ({ id, name, label, className, viewFile = true }: Fil
     <div className="flex">
       <div className="flex flex-col w-full">
         <span className="fileupload-label text-sm mb-2">{label}</span>
-        <div className="flex w-full">
+        <div className="flex w-full gap-2">
           <FileUpload
             id={id || name}
             name={name}
             label={label}
             handleFileChange={handleFileChange}
-            className="w-5/6 p-0 flex-1"
+            className="p-0 flex-1"
             styleType="fileUploadWithView"
           />
           {viewFile && (
