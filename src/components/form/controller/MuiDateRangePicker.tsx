@@ -70,7 +70,7 @@ export const MuiDateRangePicker = ({
               sx: {
                 '& .MuiOutlinedInput-root': {
                   backgroundColor: 'var(--background)',
-                  transform: 'scale(0.95)',
+                  transform: 'scale(0.85)',
                   '& fieldset': {
                     borderColor: fieldState.error ? 'var(--destructive)' : 'var(--border)',
                   },
@@ -153,7 +153,7 @@ export const MuiDateRangePicker = ({
           }}
         />
       </FormControl>
-      <FormMessage />
+      <FormMessage className="m-0" />
     </FormItem>
   );
 };

@@ -514,7 +514,7 @@ export function DataTable<T>({
   try {
     return (
       <FormProvider {...methods}>
-        <div className={cn('space-y-4 mb-20', className)}>
+        <div className={cn('space-y-2', className)}>
           {/* Search and Filters Header */}
           {(config.search.enabled || config.filters.enabled || config.tabFilters?.enabled) && (
             <div className="space-y-2">
