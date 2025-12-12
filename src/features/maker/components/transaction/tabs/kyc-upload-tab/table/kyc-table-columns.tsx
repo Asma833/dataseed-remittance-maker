@@ -12,7 +12,7 @@ export const KycTableColumnsConfig = ({
   onUploadClick,
 }: {
   navigate: (url: string) => void;
-  onUploadClick: () => void;
+  onUploadClick: (isReupload: boolean) => void;
 }) => {
   return [
   {
@@ -74,7 +74,7 @@ export const KycTableColumnsConfig = ({
       const isCompleted = props.row.kyc_status === 'completed';
       return (
         <TooltipImageButton
-          onClick={onUploadClick}
+          onClick={() => onUploadClick(isCompleted)}
           src={isCompleted ? Reupload : upload}
           alt="Upload"
           tooltipText={isCompleted ? 'Reupload' : 'Upload'}

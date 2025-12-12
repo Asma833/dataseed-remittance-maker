@@ -2,8 +2,9 @@ import { DataTable } from "@/components/table/data-table";
 import { useNavigate } from "react-router-dom";
 import { KycTableColumnsConfig } from "./kyc-table-columns";
 
-const KYCTable = ({ onUploadClick }: { onUploadClick: () => void }) => {
+const KYCTable = ({ onUploadClick }: { onUploadClick: (isReupload: boolean) => void }) => {
   const navigate = useNavigate();
+  
   const dummyKYCData = [
     {
       company_reference_no: 'NIUM001234',
@@ -72,7 +73,10 @@ const KYCTable = ({ onUploadClick }: { onUploadClick: () => void }) => {
 
   const columns = KycTableColumnsConfig({
     navigate,
-    onUploadClick,
+    onUploadClick: (isReupload: boolean) => {
+      // Pass the isReupload to parent
+      onUploadClick(isReupload);
+    },
   });
 
   return (
