@@ -70,6 +70,7 @@ export const MuiDateRangePicker = ({
               sx: {
                 '& .MuiOutlinedInput-root': {
                   backgroundColor: 'var(--background)',
+                  transform: 'scale(0.95)',
                   '& fieldset': {
                     borderColor: fieldState.error ? 'var(--destructive)' : 'var(--border)',
                   },
@@ -94,6 +95,7 @@ export const MuiDateRangePicker = ({
                 },
                 '& .MuiInputBase-input': {
                   color: 'var(--foreground)',
+                  fontSize: '0.10125rem',
                 },
               },
             };
