@@ -6,7 +6,7 @@ import { useQueryInvalidator } from '@/hooks/useQueryInvalidator';
 
 export const useCompleteDeal = () => {
   const { invalidateMultipleQueries } = useQueryInvalidator();
-  const { mutate, isPending, error } = useMutation<CompleteDealResponse, Error, CompleteDealRequest>({
+  const { mutateAsync, isPending, error } = useMutation<CompleteDealResponse, Error, CompleteDealRequest>({
     mutationFn: async (dealData: CompleteDealRequest) => {
       return await completeDealApi.completeDeal(dealData);
     },
@@ -21,5 +21,5 @@ export const useCompleteDeal = () => {
     },
   });
 
-  return { mutate, isCompleteDealLoading: isPending, error };
+  return { mutateAsync, isCompleteDealLoading: isPending, error };
 };

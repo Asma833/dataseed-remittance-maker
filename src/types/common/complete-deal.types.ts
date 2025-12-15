@@ -104,7 +104,6 @@ export interface CompleteDealRequest {
   currencyDetails: CurrencyDetails;
   beneficiaryDetails: BeneficiaryDetails;
   transactionDetails: TransactionDetails;
-  paymentDetails: PaymentDetails;
 }
 
 export interface CompleteDealResponse {

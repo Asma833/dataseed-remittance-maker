@@ -17,8 +17,8 @@ export const transactionBasicDetailsSchema = z.object({
     .max(50, 'Company reference number too long')
     .optional()
     .or(z.literal('')),
-  created_date: z.coerce.date()
-    .max(new Date(), 'Created date cannot be in the future')
+  order_date: z.coerce.date()
+    .max(new Date(), 'Order date cannot be in the future')
     .optional(),
   order_expiry: z.coerce.date()
     .min(new Date(), 'Deal expiry must be in the future')
@@ -148,8 +148,8 @@ export const transactionBasicDetailsSchema = z.object({
     .regex(POSTAL_CODE_REGEX, 'Invalid postal code (must be 6 digits)')
     .length(6, 'Postal code must be 6 digits'),
 }).refine((data) => {
-  // Additional cross-field validations if needed, e.g., deal_expiry > created_date
-  if (data.created_date && data.order_expiry && data.order_expiry <= data.created_date) {
+  // Additional cross-field validations if needed, e.g., deal_expiry > order_date
+  if (data.order_date && data.order_expiry && data.order_expiry <= data.order_date) {
     return false;
   }
   if (data.passport_issued_date && data.passport_expiry_date && data.passport_expiry_date <= data.passport_issued_date) {
@@ -157,8 +157,8 @@ export const transactionBasicDetailsSchema = z.object({
   }
   return true;
 }, {
-  message: 'Deal expiry must be after created date',
-  path: ['deal_expiry'],
+  message: 'Order expiry must be after order date',
+  path: ['order_expiry'],
 }).refine((data) => {
   if (data.passport_issued_date && data.passport_expiry_date && data.passport_expiry_date <= data.passport_issued_date) {
     return false;
