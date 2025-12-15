@@ -74,6 +74,11 @@ export const API = {
     UPDATE_TIMEWISE: `/currency-rate/update-timewise`,
     GET_CURRENCY_RATES: (currencyCode: string) => `/currency-rate/${currencyCode}`,
   },
+  REMITTANCE: {
+    DEALS: {
+      COMPLETE: `/remittance/deals/complete`,
+    },
+  },
 } as const;
 
 /**

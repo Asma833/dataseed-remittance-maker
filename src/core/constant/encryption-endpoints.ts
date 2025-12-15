@@ -23,11 +23,6 @@ export const ENDPOINT_MATCHING_RULES: EndpointRulesConfig = {
     matchType: 'exact-only' as const,
     description: 'Authentication logout endpoint',
   },
-  login: {
-    endpoint: API.AUTH.LOGIN,
-    matchType: 'exact-only' as const,
-    description: 'login endpoint',
-  },
   'auth-refresh': {
     endpoint: API.AUTH.REFRESH_TOKEN,
     matchType: 'exact-only' as const,
