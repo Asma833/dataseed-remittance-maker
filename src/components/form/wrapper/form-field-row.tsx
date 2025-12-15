@@ -14,7 +14,8 @@ const FormFieldRow = ({ children, className, groupName, rowCols, wrapperClassNam
   return (
     <div className={cn('flex flex-col gap-3 px-1', className)}>
       {groupName && <div className="font-bold pt-3">{groupName}</div>}
-      <div className={cn('formFieldRow', rowCols ? `row-cols-${rowCols}` : '', wrapperClassName)}>{children}</div>
+      {/* <div className={cn('formFieldRow', rowCols ? `row-cols-${rowCols}` : '', wrapperClassName)}>{children}</div> */}
+      <div className={cn('formFieldRow', rowCols ?`lg:row-cols-${rowCols}`:`md:row-cols-2`, wrapperClassName)}>{children}</div>
     </div>
   );
 };

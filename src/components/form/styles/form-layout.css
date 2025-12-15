@@ -61,3 +61,21 @@
     width: 100% !important;
   }
 }
+
+@media (min-width: 1024px) {
+  .formFieldRow.lg\:row-cols-1 .fieldWrapper {
+    width: calc(100% - 15px);
+  }
+  .formFieldRow.lg\:row-cols-2 .fieldWrapper {
+    width: calc(50% - 15px);
+  }
+  .formFieldRow.lg\:row-cols-3 .fieldWrapper {
+    width: calc(33.33% - 15px);
+  }
+  .formFieldRow.lg\:row-cols-4 .fieldWrapper {
+    width: calc(25% - 20px);
+  }
+  .formFieldRow.lg\:row-cols-5 .fieldWrapper {
+    width: calc(20% - 20px);
+  }
+}
