@@ -39,9 +39,11 @@ export const API = {
     UPLOAD_REMITTANCE_IMAGE: `/documents/uploadRemittanceImage`,
     PRESIGNED_URLS: `/documents/presigned-urls`,
   },
- 
+
   TRANSACTION: {
+    GET_PAYMENT_STATUS: `/transaction-status`,
     GET_TRANSACTIONS: `/transaction_type`,
+    GET_ALL_REMIT_TRANSACTIONS: `/transaction/all`,
     GET_ALL_TRANSACTIONS: `/transaction_type/all`,
     GET_ALL_TRANSACTIONS_TYPES: `/transaction_type/all`,
     GET_TRANSACTIONS_TYPES: `/transaction_type`,
@@ -71,7 +73,7 @@ export const API = {
     GET_ALL: `/currency-rate?margin_type=number`,
     UPDATE_TIMEWISE: `/currency-rate/update-timewise`,
     GET_CURRENCY_RATES: (currencyCode: string) => `/currency-rate/${currencyCode}`,
-  }
+  },
 } as const;
 
 /**

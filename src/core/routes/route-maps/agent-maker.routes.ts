@@ -8,7 +8,7 @@ export const makerComponents = {
     () => import('@/features/maker/components/transaction/tabs/create-transactions-tab/create-transactions')
   ),
   KYCUpload: lazy(() => import('@/features/maker/components/transaction/tabs/kyc-upload-tab/kyc-upload')),
-  PaymentStatus: lazy(() => import('@/features/maker/components/transaction/tabs/payment-tab/payment')),
+  PaymentStatus: lazy(() => import('@/features/maker/components/transaction/tabs/payment-tab/payment-table')),
   ViewAllTransactions: lazy(
     () => import('@/features/maker/components/transaction/tabs/view-all-tab/view-all-transactions')
   ),
