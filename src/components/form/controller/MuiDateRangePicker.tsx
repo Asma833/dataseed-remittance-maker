@@ -66,38 +66,7 @@ export const MuiDateRangePicker = ({
               size: 'small' as const,
               fullWidth: true,
               readOnly: true,
-              placeholder: 'DD/MM/YYYY',
-              sx: {
-                '& .MuiOutlinedInput-root': {
-                  backgroundColor: 'var(--background)',
-                  transform: 'scale(0.85)',
-                  '& fieldset': {
-                    borderColor: fieldState.error ? 'var(--destructive)' : 'var(--border)',
-                  },
-                  '&:hover fieldset': {
-                    borderColor: fieldState.error ? 'var(--destructive)' : 'var(--border)',
-                  },
-                  '&.Mui-focused fieldset': {
-                    borderColor: fieldState.error ? 'var(--destructive)' : 'var(--ring)',
-                  },
-                  borderRadius: '5px',
-                        width: '',
-                        '& .MuiOutlinedInput-notchedOutline': {
-                          border: 'none',
-                          borderRadius: '20px',
-                        },
-                },
-                '& .MuiInputLabel-root': {
-                  color: 'var(--foreground)',
-                  '&.Mui-focused': {
-                    color: fieldState.error ? 'var(--destructive)' : 'var(--ring)',
-                  },
-                },
-                '& .MuiInputBase-input': {
-                  color: 'var(--foreground)',
-                  fontSize: '0.10125rem',
-                },
-              },
+              placeholder: 'DD/MM/YYYY'
             };
 
             return (
