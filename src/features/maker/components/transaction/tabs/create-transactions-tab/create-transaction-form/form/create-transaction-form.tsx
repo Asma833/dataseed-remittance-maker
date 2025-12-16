@@ -126,38 +126,72 @@ const sampleInitialData: CreateTransactionFormInput = {
     previous_transaction_amount: '',
     declared_previous_amount: '',
     total_transaction_amount_tcs: '',
+    // invoiceRateTable: {
+    //   transaction_value: {
+    //     company_rate: '',
+    //     agent_mark_up: '',
+    //     rate: '',
+    //   },
+    //   remittance_charges: {
+    //     company_rate: '',
+    //     agent_mark_up: '',
+    //     rate: '',
+    //   },
+    //   nostro_charges: {
+    //     company_rate: '',
+    //     agent_mark_up: '',
+    //     rate: '',
+    //   },
+    //   other_charges: {
+    //     company_rate: '',
+    //     agent_mark_up: '',
+    //     rate: '',
+    //   },
+    //   transaction_amount: {
+    //     rate: '',
+    //   },
+    //   gst_amount: {
+    //     rate: '',
+    //   },
+    //   total_inr_amount: {
+    //     rate: '',
+    //   },
+    //   tcs: {
+    //     rate: '',
+    //   },
+    // },
     invoiceRateTable: {
       transaction_value: {
-        company_rate: '',
-        agent_mark_up: '',
-        rate: '',
+        company_rate: '740000',
+        agent_mark_up: '500',
+        rate: '740500',
       },
       remittance_charges: {
-        company_rate: '',
-        agent_mark_up: '',
-        rate: '',
+        company_rate: '500',
+        agent_mark_up: '50',
+        rate: '550',
       },
       nostro_charges: {
-        company_rate: '',
-        agent_mark_up: '',
-        rate: '',
+        company_rate: '300',
+        agent_mark_up: '30',
+        rate: '330',
       },
       other_charges: {
-        company_rate: '',
-        agent_mark_up: '',
-        rate: '',
+        company_rate: '200',
+        agent_mark_up: '20',
+        rate: '220',
       },
       transaction_amount: {
-        rate: '',
+        rate: '741600',
       },
       gst_amount: {
-        rate: '',
+        rate: '133488',
       },
       total_inr_amount: {
-        rate: '',
+        rate: '875088',
       },
       tcs: {
-        rate: '',
+        rate: '1500',
       },
     },
   },
@@ -189,7 +223,7 @@ const sampleInitialData: CreateTransactionFormInput = {
     company_reference_number: '',
     agent_reference_number: '',
     order_date: '',
-    order_expiry: '',
+    // order_expiry: '',
     transaction_type: '',
     purpose: '',
     fx_currency: '',
@@ -446,10 +480,8 @@ const defaultValues: Partial<CreateTransactionFormInput> = useMemo(() => {
           order_date: data.transactionDetails.order_date
             ? data.transactionDetails.order_date.toISOString()
             : new Date().toISOString(),
-          order_expiry: data.transactionDetails.order_expiry
-            ? data.transactionDetails.order_expiry.toISOString()
-            : new Date().toISOString(),
-          transaction_type: normalizeString(data.transactionDetails.transaction_type),
+          order_expiry: "",
+          transaction_type: "REMITTANCE",
           purpose: normalizeString(data.transactionDetails.purpose),
           fx_currency: normalizeString(data.transactionDetails.fx_currency),
           fx_amount: safeNumber(data.transactionDetails.fx_amount),

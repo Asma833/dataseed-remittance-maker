@@ -20,9 +20,9 @@ export const transactionBasicDetailsSchema = z.object({
   order_date: z.coerce.date()
     .max(new Date(), 'Order date cannot be in the future')
     .optional(),
-  order_expiry: z.coerce.date()
-    .min(new Date(), 'Deal expiry must be in the future')
-    .optional(),
+  // order_expiry: z.coerce.date()
+  //   .min(new Date(), 'Deal expiry must be in the future')
+  //   .optional(),
   transaction_type: z.string()
     .regex(NO_LEADING_HYPHEN_OR_SPACE, 'Transaction type cannot start with hyphen or space')
     .max(100, 'Transaction type too long')
@@ -149,17 +149,15 @@ export const transactionBasicDetailsSchema = z.object({
     .length(6, 'Postal code must be 6 digits'),
 }).refine((data) => {
   // Additional cross-field validations if needed, e.g., deal_expiry > order_date
-  if (data.order_date && data.order_expiry && data.order_expiry <= data.order_date) {
-    return false;
-  }
+  // if (data.order_date && data.order_expiry && data.order_expiry <= data.order_date) {
+  //   return false;
+  // }
   if (data.passport_issued_date && data.passport_expiry_date && data.passport_expiry_date <= data.passport_issued_date) {
     return false;
   }
   return true;
-}, {
-  message: 'Order expiry must be after order date',
-  path: ['order_expiry'],
-}).refine((data) => {
+}
+).refine((data) => {
   if (data.passport_issued_date && data.passport_expiry_date && data.passport_expiry_date <= data.passport_issued_date) {
     return false;
   }

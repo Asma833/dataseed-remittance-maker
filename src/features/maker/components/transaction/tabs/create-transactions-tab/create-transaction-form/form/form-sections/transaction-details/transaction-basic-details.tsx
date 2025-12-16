@@ -21,13 +21,13 @@ const TransactionBasicDetails = ({ setAccordionState }: CommonCreateTransactionP
   const { control, formState: { errors } } = useFormContext();
   const sourceOfFunds = useWatch({ control, name: 'transactionDetails.source_of_funds' });
 
-  const purposeOptions = purposeTypes.reduce((acc: Record<string, { label: string }>, { id, text }) => {
-    acc[id] = { label: text };
+  const purposeOptions = purposeTypes.reduce((acc: Record<string, { label: string }>, { text }) => {
+    acc[text] = { label: text };
     return acc;
   }, {});
 
-  const transactionTypeOptions = transactionTypes.reduce((acc: Record<string, { label: string }>, { id, text }) => {
-    acc[id] = { label: text };
+  const transactionTypeOptions = transactionTypes.reduce((acc: Record<string, { label: string }>, { text }) => {
+    acc[text] = { label: text };
     return acc;
   }, {});
 
@@ -88,24 +88,30 @@ const TransactionBasicDetails = ({ setAccordionState }: CommonCreateTransactionP
                   return <FieldWrapper key={name}>{getController({ ...field, name: `transactionDetails.${name}`, control, errors })}</FieldWrapper>;
                 })}
               </FormFieldRow>
-             <FormFieldRow rowCols={4}>
-               {( ['payee_pan_number', 'payee_dob','passport_issued_date','passport_expiry_date'] as const ).map(name => {
-                 if ((name === 'payee_pan_number' || name === 'payee_dob') && sourceOfFunds !== 'others') {
-                   return null;
-                 }
-                 const field = transactionBasicDetailsConfig.find(f => f.name === name) as FieldConfig;
-                 return <FieldWrapper key={name}>{getController({ ...field, name: `transactionDetails.${name}`, control, errors })}</FieldWrapper>;
-               })}
-             </FormFieldRow>
               <FormFieldRow rowCols={4}>
-                {( ['place_of_issue', 'applicant_address','applicant_city','applicant_state'] as const ).map(name => {
+                {( ['payee_pan_number', 'payee_dob'] as const ).map(name => {
+                  if ((name === 'payee_pan_number' || name === 'payee_dob') && sourceOfFunds !== 'others') {
+                    return null;
+                  }
                   const field = transactionBasicDetailsConfig.find(f => f.name === name) as FieldConfig;
                   return <FieldWrapper key={name}>{getController({ ...field, name: `transactionDetails.${name}`, control, errors })}</FieldWrapper>;
                 })}
               </FormFieldRow>
               <FormFieldRow rowCols={4}>
-                {( ['applicant_country', 'postal_code'] as const ).map(name => {
+                {( ['passport_number', 'passport_issued_date','passport_expiry_date','place_of_issue'] as const ).map(name => {
                   const field = transactionBasicDetailsConfig.find(f => f.name === name) as FieldConfig;
+                  return <FieldWrapper key={name}>{getController({ ...field, name: `transactionDetails.${name}`, control, errors })}</FieldWrapper>;
+                })}
+              </FormFieldRow>
+               <FormFieldRow rowCols={4}>
+                 {( ['applicant_address','applicant_city','applicant_state'] as const ).map(name => {
+                   const field = transactionBasicDetailsConfig.find(f => f.name === name) as FieldConfig;
+                   return <FieldWrapper key={name}>{getController({ ...field, name: `transactionDetails.${name}`, control, errors })}</FieldWrapper>;
+                 })}
+               </FormFieldRow>
+               <FormFieldRow rowCols={4}>
+                 {( ['applicant_country', 'postal_code'] as const ).map(name => {
+                   const field = transactionBasicDetailsConfig.find(f => f.name === name) as FieldConfig;
                   return <FieldWrapper key={name}>{getController({ ...field, name: `transactionDetails.${name}`, control, errors })}</FieldWrapper>;
                 })}
               </FormFieldRow>
