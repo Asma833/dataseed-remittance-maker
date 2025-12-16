@@ -1,8 +1,7 @@
+import EsignStatusCell from '@/components/cell/table/EsignStatusCell';
+import NiumOrderID from '@/components/cell/table/NiumOrderIdCell';
+import VKycStatusCell from '@/components/cell/table/VKycStatusCell';
 import { formatDate } from '@/utils/dateFormat';
-import IncidentStatusCell from '@/features/checker/components/table/IncidentStatusCell';
-import VKycStatusCell from '@/features/checker/components/table/VKycStatusCell';
-import EsignStatusCell from '@/features/checker/components/table/EsignStatusCell';
-import NiumOrderID from '@/features/checker/components/table/NiumOrderIdCell';
 
 export const GetTransactionTableColumns = (openModal: (value: string) => void) => [
   {
@@ -83,8 +82,7 @@ export const GetTransactionTableColumns = (openModal: (value: string) => void) =
     key: 'incident_status',
     id: 'incident_status',
     name: 'Incident Status',
-    className: 'min-w-0',
-    cell: (_: unknown, rowData: any) => <IncidentStatusCell rowData={rowData} />,
+    className: 'min-w-0'
   },
   {
     key: 'incident_completion_date',

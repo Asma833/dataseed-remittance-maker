@@ -1,4 +1,4 @@
-import { OrderRowData } from '../../types/updateIncident.types';
+import { OrderRowData } from "@/types/common/updateIncident.types";
 
 const PurposeType = ({ rowData }: OrderRowData) => {
   const purposeTypeText = rowData?.purpose_type_name?.purpose_name || 'N/A';

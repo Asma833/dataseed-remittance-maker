@@ -1,5 +1,5 @@
+import { Order } from '@/types/common/updateIncident.types';
 import _ from 'lodash';
-import { Order } from '../../types/updateIncident.types';
 
 const CompletedTransactionStatusCell = ({ rowData }: { rowData: Order }) => {
   const { e_sign_status, is_esign_required, v_kyc_status, is_v_kyc_required, incident_status } = rowData;

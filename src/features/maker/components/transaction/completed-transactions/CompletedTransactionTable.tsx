@@ -5,7 +5,7 @@ import { GetTransactionTableColumns } from './CompletedTransactionTableColumns';
 import { exportToCSV } from '@/utils/exportUtils';
 
 import { API } from '@/core/constant/apis';
-import useGetCheckerOrders from '@/hooks/common/useGetCheckerOrders';
+// import useGetCheckerOrders from '@/hooks/common/useGetCheckerOrders';
 import { useDynamicOptions } from '@/hooks/common/useDynamicOptions';
 import { TransactionTypeEnum } from '@/types/enums';
 
@@ -168,3 +168,7 @@ const CompletedTransactionTable = () => {
 };
 
 export default CompletedTransactionTable;
+function useGetCheckerOrders(COMPLETED: TransactionTypeEnum, arg1: boolean): { data: any; loading: any; error: any; fetchData: any; } {
+  throw new Error('Function not implemented.');
+}
+

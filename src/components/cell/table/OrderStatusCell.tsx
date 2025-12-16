@@ -1,5 +1,5 @@
 import { ORDER_STATUS_CLASSNAMES, ORDER_STATUS_LABELS, ORDER_STATUSES } from '@/components/types/status';
-import { Order } from '../../types/updateIncident.types';
+import { Order } from '@/types/common/updateIncident.types';
 import _ from 'lodash';
 
 type Props = {
