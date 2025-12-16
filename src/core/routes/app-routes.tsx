@@ -25,7 +25,7 @@ export const AppRoutes = () => {
       <Route
         path="/branch_agent_maker/*"
         element={
-           <ProtectedRoute>
+          <ProtectedRoute>
             <AgentMakerRoutes />
           </ProtectedRoute>
         }

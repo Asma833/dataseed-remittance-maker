@@ -1,10 +1,10 @@
-import { DataTable } from "@/components/table/data-table";
-import { useNavigate } from "react-router-dom";
-import { KycTableColumnsConfig } from "./kyc-table-columns";
+import { DataTable } from '@/components/table/data-table';
+import { useNavigate } from 'react-router-dom';
+import { KycTableColumnsConfig } from './kyc-table-columns';
 
 const KYCTable = ({ onUploadClick }: { onUploadClick: (isReupload: boolean) => void }) => {
   const navigate = useNavigate();
-  
+
   const dummyKYCData = [
     {
       company_reference_no: 'NIUM001234',
@@ -25,7 +25,7 @@ const KYCTable = ({ onUploadClick }: { onUploadClick: (isReupload: boolean) => v
       is_v_kyc_required: true,
       merged_document: 'doc1.pdf',
       nium_order_id: 'NIUM001234',
-      e_sign_link_status: 'active'
+      e_sign_link_status: 'active',
     },
     {
       company_reference_no: 'NIUM005678',
@@ -46,7 +46,7 @@ const KYCTable = ({ onUploadClick }: { onUploadClick: (isReupload: boolean) => v
       is_v_kyc_required: true,
       merged_document: null,
       nium_order_id: 'NIUM005678',
-      e_sign_link_status: 'pending'
+      e_sign_link_status: 'pending',
     },
     {
       company_reference_no: 'NIUM009999',
@@ -67,7 +67,7 @@ const KYCTable = ({ onUploadClick }: { onUploadClick: (isReupload: boolean) => v
       is_v_kyc_required: true,
       merged_document: 'doc3.pdf',
       nium_order_id: 'NIUM009999',
-      e_sign_link_status: 'expired'
+      e_sign_link_status: 'expired',
     },
   ];
 
@@ -85,12 +85,17 @@ const KYCTable = ({ onUploadClick }: { onUploadClick: (isReupload: boolean) => v
         columns={columns}
         data={dummyKYCData}
         config={{
-          search: { enabled: true, searchMode: "static" },
-          pagination: { enabled: true, pageSize: 10, pageSizeOptions: [5, 10, 20, 50, 100], showPageSizeSelector: true },
-          sorting: { enabled: true, multiSort: false, sortMode: "static" },
+          search: { enabled: true, searchMode: 'static' },
+          pagination: {
+            enabled: true,
+            pageSize: 10,
+            pageSizeOptions: [5, 10, 20, 50, 100],
+            showPageSizeSelector: true,
+          },
+          sorting: { enabled: true, multiSort: false, sortMode: 'static' },
           filters: {
             enabled: true,
-            filterMode: "static",
+            filterMode: 'static',
             columnFilters: true,
             globalFilter: true,
             dateRangeFilter: {

@@ -257,7 +257,7 @@ const CreateTransactionForm = ({ onCancel, onSubmit, initialData }: Props) => {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const { mutateAsync } = useCompleteDeal();
 
-const defaultValues: Partial<CreateTransactionFormInput> = useMemo(() => {
+  const defaultValues: Partial<CreateTransactionFormInput> = useMemo(() => {
     const sourceData = initialData ?? sampleInitialData;
     return {
       currencyDetails: {
@@ -361,7 +361,7 @@ const defaultValues: Partial<CreateTransactionFormInput> = useMemo(() => {
   }, [initialData]);
   const form = useForm<CreateTransactionFormInput, unknown, CreateTransactionFormData>({
     resolver: zodResolver(createTransactionSchema),
-    defaultValues ,
+    defaultValues,
     mode: 'onSubmit', // Trigger validation on change
   });
 
@@ -413,11 +413,11 @@ const defaultValues: Partial<CreateTransactionFormInput> = useMemo(() => {
         'beneficiary_bank_address',
         'sort_bsb_aba_transit_code',
         'nostro_charges',
-        'message_to_beneficiary_additional_information'
+        'message_to_beneficiary_additional_information',
       ];
 
       const missingFields = requiredBeneficiaryFields.filter(
-        field => !safeString(data.beneficiaryDetails?.[field as keyof typeof data.beneficiaryDetails])
+        (field) => !safeString(data.beneficiaryDetails?.[field as keyof typeof data.beneficiaryDetails])
       );
 
       if (missingFields.length > 0) {
@@ -457,13 +457,17 @@ const defaultValues: Partial<CreateTransactionFormInput> = useMemo(() => {
           beneficiary_address: normalizeString(data.beneficiaryDetails.beneficiary_address),
           beneficiary_city: normalizeString(data.beneficiaryDetails.beneficiary_city),
           beneficiary_country: normalizeString(data.beneficiaryDetails.beneficiary_country),
-          beneficiary_account_number_iban_number: normalizeString(data.beneficiaryDetails.beneficiary_account_number_iban_number),
+          beneficiary_account_number_iban_number: normalizeString(
+            data.beneficiaryDetails.beneficiary_account_number_iban_number
+          ),
           beneficiary_swift_code: normalizeString(data.beneficiaryDetails.beneficiary_swift_code),
           beneficiary_bank_name: normalizeString(data.beneficiaryDetails.beneficiary_bank_name),
           beneficiary_bank_address: normalizeString(data.beneficiaryDetails.beneficiary_bank_address),
           sort_bsb_aba_transit_code: normalizeString(data.beneficiaryDetails.sort_bsb_aba_transit_code),
           nostro_charges: normalizeString(data.beneficiaryDetails.nostro_charges),
-          message_to_beneficiary_additional_information: normalizeString(data.beneficiaryDetails.message_to_beneficiary_additional_information),
+          message_to_beneficiary_additional_information: normalizeString(
+            data.beneficiaryDetails.message_to_beneficiary_additional_information
+          ),
           student_name: normalizeString(data.beneficiaryDetails.student_name),
           student_passport_number: normalizeString(data.beneficiaryDetails.student_passport_number),
           payment_instruction_number: normalizeString(data.beneficiaryDetails.payment_instruction_number),
@@ -480,8 +484,8 @@ const defaultValues: Partial<CreateTransactionFormInput> = useMemo(() => {
           order_date: data.transactionDetails.order_date
             ? data.transactionDetails.order_date.toISOString()
             : new Date().toISOString(),
-          order_expiry: "",
-          transaction_type: "REMITTANCE",
+          order_expiry: '',
+          transaction_type: 'REMITTANCE',
           purpose: normalizeString(data.transactionDetails.purpose),
           fx_currency: normalizeString(data.transactionDetails.fx_currency),
           fx_amount: safeNumber(data.transactionDetails.fx_amount),
@@ -506,13 +510,13 @@ const defaultValues: Partial<CreateTransactionFormInput> = useMemo(() => {
           applicant_country: normalizeString(data.transactionDetails.applicant_country),
           postal_code: normalizeString(data.transactionDetails.postal_code),
         },
-         "paymentDetails": {
-        "payment_method": "UPI",
-        "payment_reference": "PAY-REF-001",
-        "upi_id": "user@upi",
-        "bank_name": "SBI",
-        "amount": 875088
-      }
+        paymentDetails: {
+          payment_method: 'UPI',
+          payment_reference: 'PAY-REF-001',
+          upi_id: 'user@upi',
+          bank_name: 'SBI',
+          amount: 875088,
+        },
       };
 
       const response = await mutateAsync(payload);
@@ -540,17 +544,17 @@ const defaultValues: Partial<CreateTransactionFormInput> = useMemo(() => {
       <form id="create-transaction-form" onSubmit={form.handleSubmit(handleSubmit)}>
         <div>
           <div className="flex justify-between mb-4 gap-2">
-            <Button variant="light"  className='w-24' onClick={onCancel}>
+            <Button variant="light" className="w-24" onClick={onCancel}>
               Cancel
             </Button>
             <div className="flex gap-2">
               {showPrevious && (
-                <Button variant="light" className='w-24' onClick={handlePrevious}>
+                <Button variant="light" className="w-24" onClick={handlePrevious}>
                   Previous
                 </Button>
               )}
               {showNext && (
-                <Button variant="secondary" onClick={handleNext} className='w-24'>
+                <Button variant="secondary" onClick={handleNext} className="w-24">
                   Next
                 </Button>
               )}

@@ -1,4 +1,3 @@
-
 import Spacer from '@/components/form/wrapper/spacer';
 import { currencyDetailsConfig } from './currency-details.config';
 import RateTable from '../../../../../../../rate-table/rate-table';
@@ -16,14 +15,18 @@ import { useGetCurrencyRates } from '@/hooks/useCurrencyRate';
 const CurrencyDetails = ({ setAccordionState }: CommonCreateTransactionProps) => {
   const [isSaving, setIsSaving] = useState(false);
   const [isEditing, setIsEditing] = useState(false);
-  const { control, formState: { errors }, trigger } = useFormContext();
+  const {
+    control,
+    formState: { errors },
+    trigger,
+  } = useFormContext();
   const { data: currencyRates, isLoading: currencyLoading } = useGetCurrencyRates();
-  
-  const currencyOptions = currencyRates?.reduce((acc: Record<string, { label: string }>, currency) => {
+
+  const currencyOptions =
+    currencyRates?.reduce((acc: Record<string, { label: string }>, currency) => {
       acc[currency.currency_code] = { label: currency.currency_code };
       return acc;
     }, {}) || {};
-
 
   const handleSave = async () => {
     const isValid = await trigger();
@@ -38,43 +41,63 @@ const CurrencyDetails = ({ setAccordionState }: CommonCreateTransactionProps) =>
       setIsSaving(false);
     }
   };
-   
+
   return (
     <Spacer>
       <FormFieldRow rowCols={2} wrapperClassName="flex-row md:!flex-nowrap items-start">
         <div className="flex flex-wrap w-1/2 gap-4">
-          <FormFieldRow rowCols={2} className='w-full'>
-            {( ['fx_currency','fx_amount'] as const ).map(name => {
-              const field = currencyDetailsConfig.find(f => f.name === name ) as FieldConfig;
+          <FormFieldRow rowCols={2} className="w-full">
+            {(['fx_currency', 'fx_amount'] as const).map((name) => {
+              const field = currencyDetailsConfig.find((f) => f.name === name) as FieldConfig;
               let fieldWithOptions = field;
               if (name === 'fx_currency') {
                 fieldWithOptions = { ...field, options: currencyOptions };
               }
-              return <FieldWrapper key={name}>{getController({ ...fieldWithOptions, name: `currencyDetails.${name}`, control, errors })}</FieldWrapper>;
+              return (
+                <FieldWrapper key={name}>
+                  {getController({ ...fieldWithOptions, name: `currencyDetails.${name}`, control, errors })}
+                </FieldWrapper>
+              );
             })}
           </FormFieldRow>
-          <FormFieldRow rowCols={2} className='w-full'>
-            {( ['settlement_rate','add_margin'] as const ).map(name => {
-              const field = currencyDetailsConfig.find(f => f.name === name ) as FieldConfig;
-              return <FieldWrapper key={name}>{getController({ ...field, name: `currencyDetails.${name}`, control, errors })}</FieldWrapper>;
+          <FormFieldRow rowCols={2} className="w-full">
+            {(['settlement_rate', 'add_margin'] as const).map((name) => {
+              const field = currencyDetailsConfig.find((f) => f.name === name) as FieldConfig;
+              return (
+                <FieldWrapper key={name}>
+                  {getController({ ...field, name: `currencyDetails.${name}`, control, errors })}
+                </FieldWrapper>
+              );
             })}
           </FormFieldRow>
-          <FormFieldRow rowCols={2} className='w-full'>
-            {( ['customer_rate','declared_education_loan_amount'] as const ).map(name => {
-              const field = currencyDetailsConfig.find(f => f.name === name ) as FieldConfig;
-              return <FieldWrapper key={name}>{getController({ ...field, name: `currencyDetails.${name}`, control, errors })}</FieldWrapper>;
+          <FormFieldRow rowCols={2} className="w-full">
+            {(['customer_rate', 'declared_education_loan_amount'] as const).map((name) => {
+              const field = currencyDetailsConfig.find((f) => f.name === name) as FieldConfig;
+              return (
+                <FieldWrapper key={name}>
+                  {getController({ ...field, name: `currencyDetails.${name}`, control, errors })}
+                </FieldWrapper>
+              );
             })}
           </FormFieldRow>
-           <FormFieldRow rowCols={2} className='w-full'>
-            {( ['previous_transaction_amount','declared_previous_amount'] as const ).map(name => {
-              const field = currencyDetailsConfig.find(f => f.name === name ) as FieldConfig;
-              return <FieldWrapper key={name}>{getController({ ...field, name: `currencyDetails.${name}`, control, errors })}</FieldWrapper>;
+          <FormFieldRow rowCols={2} className="w-full">
+            {(['previous_transaction_amount', 'declared_previous_amount'] as const).map((name) => {
+              const field = currencyDetailsConfig.find((f) => f.name === name) as FieldConfig;
+              return (
+                <FieldWrapper key={name}>
+                  {getController({ ...field, name: `currencyDetails.${name}`, control, errors })}
+                </FieldWrapper>
+              );
             })}
           </FormFieldRow>
-           <FormFieldRow rowCols={2} className='w-full'>
-            {( ['total_transaction_amount_tcs'] as const ).map(name => {
-              const field = currencyDetailsConfig.find(f => f.name === name ) as FieldConfig;
-              return <FieldWrapper key={name}>{getController({ ...field, name: `currencyDetails.${name}`, control, errors })}</FieldWrapper>;
+          <FormFieldRow rowCols={2} className="w-full">
+            {(['total_transaction_amount_tcs'] as const).map((name) => {
+              const field = currencyDetailsConfig.find((f) => f.name === name) as FieldConfig;
+              return (
+                <FieldWrapper key={name}>
+                  {getController({ ...field, name: `currencyDetails.${name}`, control, errors })}
+                </FieldWrapper>
+              );
             })}
           </FormFieldRow>
         </div>
@@ -87,11 +110,11 @@ const CurrencyDetails = ({ setAccordionState }: CommonCreateTransactionProps) =>
           />
         </div>
       </FormFieldRow>
-         <div className='flex justify-center items-center'>
-          <Button variant="secondary"  onClick={handleSave} disabled={isSaving} className='mx-2 w-24'>
-              {isSaving ? 'Saving...' : 'Save'}
-          </Button>
-        </div>
+      <div className="flex justify-center items-center">
+        <Button variant="secondary" onClick={handleSave} disabled={isSaving} className="mx-2 w-24">
+          {isSaving ? 'Saving...' : 'Save'}
+        </Button>
+      </div>
     </Spacer>
   );
 };

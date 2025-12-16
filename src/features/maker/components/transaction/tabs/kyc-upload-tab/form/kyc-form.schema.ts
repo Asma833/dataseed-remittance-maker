@@ -5,17 +5,18 @@ const acceptedFileTypes = ['application/pdf', 'image/jpeg', 'image/jpg', 'image/
 const fileValidation = z
   .any()
   .optional()
-  .refine((file) => {
-    if (!file || (file instanceof FileList && file.length === 0)) {
-      return true;
+  .refine(
+    (file) => {
+      if (!file || (file instanceof FileList && file.length === 0)) {
+        return true;
+      }
+      const selectedFile = file instanceof FileList ? file[0] : file;
+      return acceptedFileTypes.includes(selectedFile.type);
+    },
+    {
+      message: 'Only PDF, JPG, JPEG, PNG, or GIF files are allowed',
     }
-    const selectedFile = file instanceof FileList ? file[0] : file;
-    return acceptedFileTypes.includes(selectedFile.type);
-  }, {
-    message: 'Only PDF, JPG, JPEG, PNG, or GIF files are allowed',
-  });
-
-
+  );
 
 export const KycFormSchema = z.object({
   company_reference_number: z.string().optional(),

@@ -81,7 +81,7 @@ const CreateTransactions = () => {
       transactionDetails: {
         company_reference_number: transaction.company_ref_no || '',
         agent_reference_number: transaction.agent_ref_no || '',
-        ...(transaction.order_date && { order_date : new Date(transaction.order_date) }),
+        ...(transaction.order_date && { order_date: new Date(transaction.order_date) }),
         ...(transaction.expiry_date && { order_expiry: new Date(transaction.expiry_date) }),
         transaction_type: transaction.transaction_type || '',
         purpose: transaction.purpose || '',
@@ -117,7 +117,7 @@ const CreateTransactions = () => {
   return (
     <AccordionStateProvider>
       {/* {showForm ? ( */}
-        <CreateTransactionForm {...(initialData && { initialData })} onCancel={() => setShowForm(false)} />
+      <CreateTransactionForm {...(initialData && { initialData })} onCancel={() => setShowForm(false)} />
       {/* ) : (
         <TransactionTable onCreate={handleCreate} />
       )} */}

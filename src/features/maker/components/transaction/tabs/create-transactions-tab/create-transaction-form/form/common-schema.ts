@@ -7,7 +7,7 @@ import { transactionBasicDetailsSchema } from './form-sections/transaction-detai
 export const createTransactionSchema = z.object({
   currencyDetails: currencyDetailsSchema,
   beneficiaryDetails: beneficiaryDetailsSchema,
-  transactionDetails: transactionBasicDetailsSchema
+  transactionDetails: transactionBasicDetailsSchema,
 });
 
 export type CreateTransactionFormData = z.infer<typeof createTransactionSchema>;

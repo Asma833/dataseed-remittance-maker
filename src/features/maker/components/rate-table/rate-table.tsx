@@ -41,15 +41,11 @@ export default function RateTable({
       </TableBody>
       <TableFooter>
         <TableRow className="bg-gray-50/50">
-          <TableCell colSpan={3}>
-            Total Payable Amount
-          </TableCell>
+          <TableCell colSpan={3}>Total Payable Amount</TableCell>
           <TableCell className="text-right">{totalAmount}</TableCell>
         </TableRow>
-         <TableRow className="bg-gray-50/50">
-         <TableCell colSpan={3}>
-            Beneficiary Amount (In Fx Value)
-          </TableCell>
+        <TableRow className="bg-gray-50/50">
+          <TableCell colSpan={3}>Beneficiary Amount (In Fx Value)</TableCell>
           <TableCell className="text-right">{totalAmount}</TableCell>
         </TableRow>
       </TableFooter>

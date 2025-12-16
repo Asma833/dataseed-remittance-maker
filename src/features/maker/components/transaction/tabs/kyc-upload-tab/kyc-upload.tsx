@@ -1,7 +1,7 @@
-import { useState } from "react";
-import KYCTable from "./table/kyc-table";
-import KYCForm from "./form/kyc-form";
-import RejectionTable from "./table/rejection-table";
+import { useState } from 'react';
+import KYCTable from './table/kyc-table';
+import KYCForm from './form/kyc-form';
+import RejectionTable from './table/rejection-table';
 
 const KYCUpload = () => {
   const [showForm, setShowForm] = useState(false);

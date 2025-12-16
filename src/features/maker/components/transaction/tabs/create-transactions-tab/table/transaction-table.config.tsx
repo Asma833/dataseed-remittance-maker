@@ -1,7 +1,6 @@
 import { ActionButtons, StatusBadge, TableColumn } from '../../../../../../../components/table';
 import { TransactionData } from '@/features/maker/types/transaction.types';
 
-
 export const GetTransactionTableColumns = ({
   handleCreate,
   handleDownload,
@@ -87,14 +86,14 @@ export const GetTransactionTableColumns = ({
       header: 'Settlement Rate',
       accessorKey: 'settlement_rate',
       sortable: true,
-      filterable: true
+      filterable: true,
     },
     {
       id: 'customer_rate',
       header: 'Customer Rate',
       accessorKey: 'customer_rate',
       sortable: true,
-      filterable: true
+      filterable: true,
     },
     {
       id: 'transaction_amount',
@@ -114,7 +113,7 @@ export const GetTransactionTableColumns = ({
     {
       id: 'action',
       header: 'Action',
-      cell: ({ row, value }: { row: TransactionData; value: any; }) => (
+      cell: ({ row, value }: { row: TransactionData; value: any }) => (
         <ActionButtons
           row={row}
           {...(handleCreate && { onAdd: handleCreate })}

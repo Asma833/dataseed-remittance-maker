@@ -8,7 +8,7 @@ import { SearchInput } from './search-input';
 import { TableSearchFilterProps } from '../types/filter.types';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Button } from '@/components/ui/button';
-import  MuiDateRangePicker  from '@/components/form/controller/MuiDateRangePicker';
+import MuiDateRangePicker from '@/components/form/controller/MuiDateRangePicker';
 import { FormProvider, useForm } from 'react-hook-form';
 
 const CustomCalendarIcon = () => {
@@ -201,19 +201,22 @@ const TableSearchFilter = ({
   }, []);
 
   // Handle date range change from MuiDateRangePicker
-  const handleDateRangeChange = useCallback((value: { startDate?: string | null; endDate?: string | null }) => {
-    const newDateRange = {
-      from: value.startDate ? new Date(value.startDate) : undefined,
-      to: value.endDate ? new Date(value.endDate) : undefined,
-    };
-    setLocalDateRange(newDateRange);
-    
-    // Update form values - convert undefined to null for form compatibility
-    methods.setValue('dateRange', {
-      startDate: value.startDate ?? null,
-      endDate: value.endDate ?? null,
-    });
-  }, [methods]);
+  const handleDateRangeChange = useCallback(
+    (value: { startDate?: string | null; endDate?: string | null }) => {
+      const newDateRange = {
+        from: value.startDate ? new Date(value.startDate) : undefined,
+        to: value.endDate ? new Date(value.endDate) : undefined,
+      };
+      setLocalDateRange(newDateRange);
+
+      // Update form values - convert undefined to null for form compatibility
+      methods.setValue('dateRange', {
+        startDate: value.startDate ?? null,
+        endDate: value.endDate ?? null,
+      });
+    },
+    [methods]
+  );
 
   // Update form when local date range changes
   useEffect(() => {
@@ -326,41 +329,15 @@ const TableSearchFilter = ({
               </LocalizationProvider>
             )}
 
-          {status && status.options && (
-            <div className="flex items-start flex-col ">
-              <span className="text-sm whitespace-nowrap text-gray-500">{status.label || 'Status'}:</span>
-              <Select value={localStatus} onValueChange={handleStatusChange}>
-                <SelectTrigger className="w-[180px] bg-[--color-table-header-bg] text-[--color-foreground] border-none h-10">
-                  <SelectValue placeholder={status.placeholder || `Select ${status.label}`} />
-                </SelectTrigger>
-                <SelectContent>
-                  {statusOptionsWithKeys.map((option) => (
-                    <SelectItem key={option._key} value={option.value}>
-                      {option.label}
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
-            </div>
-          )}
-
-          {selectsWithKeys &&
-            selectsWithKeys.map((select) => (
-              <div key={select.id} className="flex items-start flex-col ">
-                <span className="text-sm whitespace-nowrap text-gray-500">{select.label}:</span>
-                <Select
-                  value={
-                    localCustomFilters[select.id] === ''
-                      ? (select.options as AugmentedOption[]).find((o) => o._isEmptySentinel)?.value || ''
-                      : localCustomFilters[select.id] || ''
-                  }
-                  onValueChange={(value) => handleSelectChange(select.id, value)}
-                >
-                  <SelectTrigger className="min-w-fit w-[180px] bg-[--color-table-header-bg] text-[--color-foreground] border-none h-10">
-                    <SelectValue placeholder={select.placeholder || `Select ${select.label}`} />
+            {status && status.options && (
+              <div className="flex items-start flex-col ">
+                <span className="text-sm whitespace-nowrap text-gray-500">{status.label || 'Status'}:</span>
+                <Select value={localStatus} onValueChange={handleStatusChange}>
+                  <SelectTrigger className="w-[180px] bg-[--color-table-header-bg] text-[--color-foreground] border-none h-10">
+                    <SelectValue placeholder={status.placeholder || `Select ${status.label}`} />
                   </SelectTrigger>
                   <SelectContent>
-                    {(select.options as AugmentedOption[]).map((option) => (
+                    {statusOptionsWithKeys.map((option) => (
                       <SelectItem key={option._key} value={option.value}>
                         {option.label}
                       </SelectItem>
@@ -368,42 +345,68 @@ const TableSearchFilter = ({
                   </SelectContent>
                 </Select>
               </div>
-            ))}
-          {filterConfig.renderFilterOptions.applyAction &&
-            filterConfig.renderFilterOptions.resetAction &&
-            (onFilter || onReset) && (
-              <div className="flex justify-end gap-2">
-                {onFilter && (
-                  <Button
-                    onClick={handleDynamicFilter}
-                    size="sm"
-                    variant="default"
-                    className="h-10"
-                    aria-label="Apply filters"
-                  >
-                    Apply Filters
-                  </Button>
-                )}
-                {onReset && (
-                  <Button
-                    onClick={handleDynamicReset}
-                    size="sm"
-                    variant="outline"
-                    className="h-10 flex gap-1"
-                    aria-label="Reset filters"
-                  >
-                    <RefreshCw size={16} />
-                    Reset
-                  </Button>
-                )}
-              </div>
             )}
+
+            {selectsWithKeys &&
+              selectsWithKeys.map((select) => (
+                <div key={select.id} className="flex items-start flex-col ">
+                  <span className="text-sm whitespace-nowrap text-gray-500">{select.label}:</span>
+                  <Select
+                    value={
+                      localCustomFilters[select.id] === ''
+                        ? (select.options as AugmentedOption[]).find((o) => o._isEmptySentinel)?.value || ''
+                        : localCustomFilters[select.id] || ''
+                    }
+                    onValueChange={(value) => handleSelectChange(select.id, value)}
+                  >
+                    <SelectTrigger className="min-w-fit w-[180px] bg-[--color-table-header-bg] text-[--color-foreground] border-none h-10">
+                      <SelectValue placeholder={select.placeholder || `Select ${select.label}`} />
+                    </SelectTrigger>
+                    <SelectContent>
+                      {(select.options as AugmentedOption[]).map((option) => (
+                        <SelectItem key={option._key} value={option.value}>
+                          {option.label}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                </div>
+              ))}
+            {filterConfig.renderFilterOptions.applyAction &&
+              filterConfig.renderFilterOptions.resetAction &&
+              (onFilter || onReset) && (
+                <div className="flex justify-end gap-2">
+                  {onFilter && (
+                    <Button
+                      onClick={handleDynamicFilter}
+                      size="sm"
+                      variant="default"
+                      className="h-10"
+                      aria-label="Apply filters"
+                    >
+                      Apply Filters
+                    </Button>
+                  )}
+                  {onReset && (
+                    <Button
+                      onClick={handleDynamicReset}
+                      size="sm"
+                      variant="outline"
+                      className="h-10 flex gap-1"
+                      aria-label="Reset filters"
+                    >
+                      <RefreshCw size={16} />
+                      Reset
+                    </Button>
+                  )}
+                </div>
+              )}
+          </div>
+          {search && (
+            <SearchInput value={localSearchValue} onChange={handleSearchInputChange} aria-label="Search table" />
+          )}
         </div>
-        {search && (
-          <SearchInput value={localSearchValue} onChange={handleSearchInputChange} aria-label="Search table" />
-        )}
       </div>
-    </div>
     </FormProvider>
   );
 };

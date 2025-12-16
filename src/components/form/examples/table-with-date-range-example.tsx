@@ -152,7 +152,7 @@
 //             Table with MuiDateRangePicker Example
 //           </h1>
 //           <p className="text-gray-600 mt-2">
-//             This example demonstrates how to use the MuiDateRangePicker component 
+//             This example demonstrates how to use the MuiDateRangePicker component
 //             for date range filtering in data tables.
 //           </p>
 //         </div>
@@ -181,7 +181,7 @@
 //   },
 // };`}
 //             </pre>
-            
+
 //             <p><strong>2. Pass the config to DataTable:</strong></p>
 //             <pre className="bg-gray-100 p-2 rounded text-xs overflow-x-auto">
 // {`<DataTable

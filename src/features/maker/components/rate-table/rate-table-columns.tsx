@@ -3,7 +3,6 @@ import { RateTableColumn } from '../transaction/tabs/create-transactions-tab/cre
 import { getController } from '@/components/form/utils/get-controller';
 import type { UseFormSetValue } from 'react-hook-form';
 
-
 export type ColumnKey = 'invoiceName' | 'niumRate' | 'agentMarkUp' | 'rate';
 
 export type ColumnKeyConfig = {
@@ -164,7 +163,8 @@ const GetRateTableColumns = ({
       cells: {
         invoiceName: () => <span className="text-left">{`Remittance Charges`}</span>,
         niumRate: () => getCellContent('remittance_charges', 'niumRate', `${id}.remittance_charges.company_rate`),
-        agentMarkUp: () => getCellContent('remittance_charges', 'agentMarkUp', `${id}.remittance_charges.agent_mark_up`),
+        agentMarkUp: () =>
+          getCellContent('remittance_charges', 'agentMarkUp', `${id}.remittance_charges.agent_mark_up`),
         rate: () => getCellContent('remittance_charges', 'rate', `${id}.remittance_charges.rate`),
       },
     },

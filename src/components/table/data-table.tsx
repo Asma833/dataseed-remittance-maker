@@ -322,15 +322,15 @@ export function DataTable<T>({
   // Handle date range change from MuiDateRangePicker
   const handleDateRangeChange = (value: { startDate?: string | null; endDate?: string | null }) => {
     const newDateRange: { from?: Date; to?: Date } = {};
-    
+
     if (value.startDate) {
       newDateRange.from = new Date(value.startDate);
     }
-    
+
     if (value.endDate) {
       newDateRange.to = new Date(value.endDate);
     }
-    
+
     setSelectedDateRange(newDateRange);
   };
 
@@ -338,15 +338,15 @@ export function DataTable<T>({
   const onSubmitDateRange = (data: any) => {
     if (data.dateRange) {
       const newDateRange: { from?: Date; to?: Date } = {};
-      
+
       if (data.dateRange.startDate) {
         newDateRange.from = new Date(data.dateRange.startDate);
       }
-      
+
       if (data.dateRange.endDate) {
         newDateRange.to = new Date(data.dateRange.endDate);
       }
-      
+
       setSelectedDateRange(newDateRange);
     }
   };
@@ -392,11 +392,11 @@ export function DataTable<T>({
 
       let hasError = false;
       if (!hasStartDate) {
-        methods.setError("dateRange.startDate", { message: "From date is required" });
+        methods.setError('dateRange.startDate', { message: 'From date is required' });
         hasError = true;
       }
       if (!hasEndDate) {
-        methods.setError("dateRange.endDate", { message: "To date is required" });
+        methods.setError('dateRange.endDate', { message: 'To date is required' });
         hasError = true;
       }
       if (hasError) {
@@ -521,316 +521,320 @@ export function DataTable<T>({
               <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4">
                 {/* Left side - Tab Filters and Filters */}
                 <div className="flex flex-wrap items-center gap-2 lg:gap-3">
-                {/* Tab Filters */}
-                {config.tabFilters?.enabled && (
-                  <div className="flex gap-1 pt-2">
-                    <DynamicTabs
-                      tabs={config.tabFilters.tabs}
-                      {...(config.tabFilters.defaultValue && { defaultValue: config.tabFilters.defaultValue })}
-                      {...(config.tabFilters.activeTab && { activeTab: config.tabFilters.activeTab })}
-                      {...(config.tabFilters.onTabChange && { onTabChange: config.tabFilters.onTabChange })}
-                    />
-                  </div>
-                )}
-                {/* Role Filter */}
-                {roleFilterConfig?.enabled && (
-                  <div className="flex flex-col gap-1">
-                    <p className="text-xs text-gray-600 px-1 h-5 flex items-center">
-                      Select {roleFilterConfig.columnName || 'Role'}
-                    </p>
-                    <Select value={selectedRoleFilter} onValueChange={(value) => setSelectedRoleFilter(value)}>
-                      <SelectTrigger className="w-full sm:w-40 bg-(--color-table-header-bg)">
-                        <SelectValue placeholder={roleFilterConfig.columnName || 'Role'} />
-                      </SelectTrigger>
-                      <SelectContent>
-                        <SelectItem value="all">All {roleFilterConfig.columnName || 'Role'}</SelectItem>
-                        {roleFilterConfig.options.map((option) => (
-                          <SelectItem key={option.value} value={option.value}>
-                            {option.label}
-                          </SelectItem>
-                        ))}
-                      </SelectContent>
-                    </Select>
-                  </div>
-                )}
-
-                {/* Status Filter */}
-                {statusFilterConfig?.enabled && (
-                  <div className="flex flex-col gap-1">
-                    <p className="text-xs text-gray-600 px-1 h-5 flex items-center">
-                      Select {statusFilterConfig.columnName || 'Status'}
-                    </p>
-                    <Select value={selectedStatusFilter} onValueChange={(value) => setSelectedStatusFilter(value)}>
-                      <SelectTrigger className="w-full sm:w-40 bg-(--color-table-header-bg)">
-                        <SelectValue placeholder={statusFilterConfig.columnName || 'Status'} />
-                      </SelectTrigger>
-                      <SelectContent>
-                        <SelectItem value="all">All {statusFilterConfig.columnName || 'Status'}</SelectItem>
-                        {statusFilterConfig.options.map((option) => (
-                          <SelectItem key={option.value} value={option.value}>
-                            {option.label}
-                          </SelectItem>
-                        ))}
-                      </SelectContent>
-                    </Select>
-                  </div>
-                )}
-
-                {/* Date Range Filter */}
-                {dateRangeFilterConfig?.enabled && dateRangeFilterConfig.useMuiDateRangePicker && (
-                  <div className="flex items-start flex-col gap-1">
-                    <LocalizationProvider dateAdapter={AdapterDateFns}>
-                      <MuiDateRangePicker
-                        name="dateRange"
-                        label="Date Range"
-                        startLabel="From Date"
-                        endLabel="To Date"
-                        className="w-auto"
-                        required={true}
+                  {/* Tab Filters */}
+                  {config.tabFilters?.enabled && (
+                    <div className="flex gap-1 pt-2">
+                      <DynamicTabs
+                        tabs={config.tabFilters.tabs}
+                        {...(config.tabFilters.defaultValue && { defaultValue: config.tabFilters.defaultValue })}
+                        {...(config.tabFilters.activeTab && { activeTab: config.tabFilters.activeTab })}
+                        {...(config.tabFilters.onTabChange && { onTabChange: config.tabFilters.onTabChange })}
                       />
-                    </LocalizationProvider>
-                  </div>
-                )}
-
-                {/* Custom Filters */}
-              
-                {config.filters.customFilters?.map(
-                  (filter) =>
-                    filter.enabled && (
-                      <div key={filter.columnId} className="flex flex-col gap-1">
-                        <p className="text-xs text-gray-600 px-1 h-5 flex items-center">{filter.columnName}</p>
-                        <Select
-                          value={selectedCustomFilters[filter.columnId] || 'all'}
-                          onValueChange={(value) =>
-                            setSelectedCustomFilters((prev) => ({ ...prev, [filter.columnId]: value }))
-                          }
-                        >
-                          <SelectTrigger className="w-full sm:w-40 bg-(--color-table-header-bg)">
-                            <SelectValue placeholder={filter.columnName} />
-                          </SelectTrigger>
-                          <SelectContent>
-                            <SelectItem value="all">All {filter.columnName}</SelectItem>
-                            {filter.options.map((option) => (
-                              <SelectItem key={option.value} value={option.value}>
-                                {option.label}
-                              </SelectItem>
-                            ))}
-                          </SelectContent>
-                        </Select>
-                      </div>
-                    )
-                )}
-
-                {/* Actions */}
-                {(statusFilterConfig?.enabled ||
-                  roleFilterConfig?.enabled ||
-                  dateRangeFilterConfig?.enabled ||
-                  (config.filters.customFilters && config.filters.customFilters.some((f) => f.enabled))) && (
-                  <div className="flex flex-col gap-1">
-                    {/* invisible label spacer to match the selects' label row */}
-                    <div className="h-1" />
-                    <div className="flex gap-2">
-                      <TooltipButton
-                        variant="outline"
-                        size="sm"
-                        onClick={applyFilters}
-                        className="h-9 w-10 p-0 bg-(--color-background-icon) hover:bg-(--color-background-icon)/80"
-                        tooltip="Apply Filters"
-                      >
-                        <ArrowRightIcon className="h-4 w-4 text-(--color-title)" />
-                      </TooltipButton>
-
-                      <TooltipButton
-                        variant="outline"
-                        size="sm"
-                        onClick={clearAllFilters}
-                        className="h-9 w-10 p-0 bg-(--color-background-icon) hover:bg-(--color-background-icon)/80"
-                        tooltip="Clear All Filters"
-                      >
-                        <RefreshCwIcon className="h-4 w-4 text-(--color-title)" />
-                      </TooltipButton>
                     </div>
-                  </div>
-                )}
-              </div>
+                  )}
+                  {/* Role Filter */}
+                  {roleFilterConfig?.enabled && (
+                    <div className="flex flex-col gap-1">
+                      <p className="text-xs text-gray-600 px-1 h-5 flex items-center">
+                        Select {roleFilterConfig.columnName || 'Role'}
+                      </p>
+                      <Select value={selectedRoleFilter} onValueChange={(value) => setSelectedRoleFilter(value)}>
+                        <SelectTrigger className="w-full sm:w-40 bg-(--color-table-header-bg)">
+                          <SelectValue placeholder={roleFilterConfig.columnName || 'Role'} />
+                        </SelectTrigger>
+                        <SelectContent>
+                          <SelectItem value="all">All {roleFilterConfig.columnName || 'Role'}</SelectItem>
+                          {roleFilterConfig.options.map((option) => (
+                            <SelectItem key={option.value} value={option.value}>
+                              {option.label}
+                            </SelectItem>
+                          ))}
+                        </SelectContent>
+                      </Select>
+                    </div>
+                  )}
 
-              {/* Right side - Search */}
-              <div className="flex items-center gap-2 lg:pt-4">
-                {config.search.rightElement && config.search.rightElement}
-                {/* Global Search */}
-                {config.search.enabled && (
-                  <div className="relative w-full sm:max-w-sm">
-                    <Input
-                      placeholder={config.search.placeholder}
-                      value={globalFilter}
-                      onChange={(e) => setGlobalFilter(e.target.value)}
-                      className="pl-3 pr-10 bg-(--color-table-header-bg)"
-                    />
-                    {globalFilter ? (
-                      <button
-                        onClick={() => setGlobalFilter('')}
-                        className="absolute right-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-(--color-title) hover:text-(--color-title)/70 transition-colors cursor-pointer"
-                        aria-label="Clear search"
-                      >
-                        <X className="h-4 w-4" />
-                      </button>
-                    ) : (
-                      <SearchIcon className="absolute right-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-(--color-title) pointer-events-none" />
-                    )}
-                  </div>
-                )}
-                {config.export?.enabled && (
-                  <TooltipButton
-                    variant="outline"
-                    size="sm"
-                    onClick={exportToCSV}
-                    className="h-9 w-9 sm:w-10 p-0 text-white bg-(--color-title) hover:bg-(--color-title) hover:opacity-90 hover:text-white transition-opacity shrink-0"
-                    tooltip="Download CSV"
-                  >
-                    <DownloadIcon className="h-4 w-4 text-white" />
-                  </TooltipButton>
-                )}
+                  {/* Status Filter */}
+                  {statusFilterConfig?.enabled && (
+                    <div className="flex flex-col gap-1">
+                      <p className="text-xs text-gray-600 px-1 h-5 flex items-center">
+                        Select {statusFilterConfig.columnName || 'Status'}
+                      </p>
+                      <Select value={selectedStatusFilter} onValueChange={(value) => setSelectedStatusFilter(value)}>
+                        <SelectTrigger className="w-full sm:w-40 bg-(--color-table-header-bg)">
+                          <SelectValue placeholder={statusFilterConfig.columnName || 'Status'} />
+                        </SelectTrigger>
+                        <SelectContent>
+                          <SelectItem value="all">All {statusFilterConfig.columnName || 'Status'}</SelectItem>
+                          {statusFilterConfig.options.map((option) => (
+                            <SelectItem key={option.value} value={option.value}>
+                              {option.label}
+                            </SelectItem>
+                          ))}
+                        </SelectContent>
+                      </Select>
+                    </div>
+                  )}
+
+                  {/* Date Range Filter */}
+                  {dateRangeFilterConfig?.enabled && dateRangeFilterConfig.useMuiDateRangePicker && (
+                    <div className="flex items-start flex-col gap-1">
+                      <LocalizationProvider dateAdapter={AdapterDateFns}>
+                        <MuiDateRangePicker
+                          name="dateRange"
+                          label="Date Range"
+                          startLabel="From Date"
+                          endLabel="To Date"
+                          className="w-auto"
+                          required={true}
+                        />
+                      </LocalizationProvider>
+                    </div>
+                  )}
+
+                  {/* Custom Filters */}
+
+                  {config.filters.customFilters?.map(
+                    (filter) =>
+                      filter.enabled && (
+                        <div key={filter.columnId} className="flex flex-col gap-1">
+                          <p className="text-xs text-gray-600 px-1 h-5 flex items-center">{filter.columnName}</p>
+                          <Select
+                            value={selectedCustomFilters[filter.columnId] || 'all'}
+                            onValueChange={(value) =>
+                              setSelectedCustomFilters((prev) => ({ ...prev, [filter.columnId]: value }))
+                            }
+                          >
+                            <SelectTrigger className="w-full sm:w-40 bg-(--color-table-header-bg)">
+                              <SelectValue placeholder={filter.columnName} />
+                            </SelectTrigger>
+                            <SelectContent>
+                              <SelectItem value="all">All {filter.columnName}</SelectItem>
+                              {filter.options.map((option) => (
+                                <SelectItem key={option.value} value={option.value}>
+                                  {option.label}
+                                </SelectItem>
+                              ))}
+                            </SelectContent>
+                          </Select>
+                        </div>
+                      )
+                  )}
+
+                  {/* Actions */}
+                  {(statusFilterConfig?.enabled ||
+                    roleFilterConfig?.enabled ||
+                    dateRangeFilterConfig?.enabled ||
+                    (config.filters.customFilters && config.filters.customFilters.some((f) => f.enabled))) && (
+                    <div className="flex flex-col gap-1">
+                      {/* invisible label spacer to match the selects' label row */}
+                      <div className="h-1" />
+                      <div className="flex gap-2">
+                        <TooltipButton
+                          variant="outline"
+                          size="sm"
+                          onClick={applyFilters}
+                          className="h-9 w-10 p-0 bg-(--color-background-icon) hover:bg-(--color-background-icon)/80"
+                          tooltip="Apply Filters"
+                        >
+                          <ArrowRightIcon className="h-4 w-4 text-(--color-title)" />
+                        </TooltipButton>
+
+                        <TooltipButton
+                          variant="outline"
+                          size="sm"
+                          onClick={clearAllFilters}
+                          className="h-9 w-10 p-0 bg-(--color-background-icon) hover:bg-(--color-background-icon)/80"
+                          tooltip="Clear All Filters"
+                        >
+                          <RefreshCwIcon className="h-4 w-4 text-(--color-title)" />
+                        </TooltipButton>
+                      </div>
+                    </div>
+                  )}
+                </div>
+
+                {/* Right side - Search */}
+                <div className="flex items-center gap-2 lg:pt-4">
+                  {config.search.rightElement && config.search.rightElement}
+                  {/* Global Search */}
+                  {config.search.enabled && (
+                    <div className="relative w-full sm:max-w-sm">
+                      <Input
+                        placeholder={config.search.placeholder}
+                        value={globalFilter}
+                        onChange={(e) => setGlobalFilter(e.target.value)}
+                        className="pl-3 pr-10 bg-(--color-table-header-bg)"
+                      />
+                      {globalFilter ? (
+                        <button
+                          onClick={() => setGlobalFilter('')}
+                          className="absolute right-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-(--color-title) hover:text-(--color-title)/70 transition-colors cursor-pointer"
+                          aria-label="Clear search"
+                        >
+                          <X className="h-4 w-4" />
+                        </button>
+                      ) : (
+                        <SearchIcon className="absolute right-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-(--color-title) pointer-events-none" />
+                      )}
+                    </div>
+                  )}
+                  {config.export?.enabled && (
+                    <TooltipButton
+                      variant="outline"
+                      size="sm"
+                      onClick={exportToCSV}
+                      className="h-9 w-9 sm:w-10 p-0 text-white bg-(--color-title) hover:bg-(--color-title) hover:opacity-90 hover:text-white transition-opacity shrink-0"
+                      tooltip="Download CSV"
+                    >
+                      <DownloadIcon className="h-4 w-4 text-white" />
+                    </TooltipButton>
+                  )}
+                </div>
               </div>
             </div>
-          </div>
-        )}
+          )}
 
-        {/* Table */}
-        <div className="rounded-md shadow-sm">
-          <Table className="border-collapse [&_th]:border [&_th]:border-white [&_th]:p-3 [&_th]:text-center [&_th]:bg-(--color-table-header-bg) [&_th]:text-(--color-table-header-text) [&_th]:font-semibold [&_th]:border-b-2 [&_th]:border-b-white [&_th]:text-[13px] [&_td]:border [&_td]:border-white [&_td]:p-3 [&_td]:text-center [&_td]:text-[13px] [&_tbody_tr:nth-child(even)]:bg-(--color-table-striped) [&_tbody_tr:nth-child(odd)]:bg-white [&_tbody_tr:hover]:bg-(--color-table-striped)">
-            <TableHeader>
-              {table.getHeaderGroups().map((headerGroup) => (
-                <TableRow key={headerGroup.id}>
-                  {headerGroup.headers.map((header) => (
-                    <TableHead
-                      key={header.id}
-                      className={cn(
-                        'select-none text-center truncate',
-                        // header.column.getCanSort() && 'cursor-pointer hover:bg-muted/50',
-                        header.column.columnDef.meta?.headerAlign === 'left' && 'text-left',
-                        header.column.columnDef.meta?.headerAlign === 'right' && 'text-right',
-                        header.column.columnDef.meta?.className
-                      )}
-                      style={{
-                        width: header.getSize() !== 150 ? header.getSize() : undefined,
-                      }}
-                      onClick={header.column.getToggleSortingHandler()}
-                    >
-                      <div className="flex items-center justify-center gap-2">
-                        {header.isPlaceholder ? null : flexRender(header.column.columnDef.header, header.getContext())}
-                        {header.column.getCanSort() && (
-                          <div className="flex flex-col">
-                            <ChevronUpIcon
-                              className={cn(
-                                'h-3 w-3',
-                                header.column.getIsSorted() === 'asc' ? 'text-foreground' : 'text-muted-foreground/30'
-                              )}
-                            />
-                            <ChevronDownIcon
-                              className={cn(
-                                'h-3 w-3 -mt-1',
-                                header.column.getIsSorted() === 'desc' ? 'text-foreground' : 'text-muted-foreground/30'
-                              )}
-                            />
-                          </div>
-                        )}
-                      </div>
-                    </TableHead>
-                  ))}
-                </TableRow>
-              ))}
-            </TableHeader>
-            <TableBody>
-              {config.loading ? (
-                <TableLoader columns={columns.length} />
-              ) : config.error ? (
-                <TableRow>
-                  <TableCell colSpan={columns.length} className="h-24 text-center">
-                    <div className="text-sm text-destructive">{config.error}</div>
-                  </TableCell>
-                </TableRow>
-              ) : table.getRowModel().rows?.length ? (
-                table.getRowModel().rows.map((row, index) => {
-                  // Add error handling for individual row rendering
-                  try {
-                    return (
-                      <TableRow
-                        key={row.id}
-                        data-state={row.getIsSelected() && 'selected'}
+          {/* Table */}
+          <div className="rounded-md shadow-sm">
+            <Table className="border-collapse [&_th]:border [&_th]:border-white [&_th]:p-3 [&_th]:text-center [&_th]:bg-(--color-table-header-bg) [&_th]:text-(--color-table-header-text) [&_th]:font-semibold [&_th]:border-b-2 [&_th]:border-b-white [&_th]:text-[13px] [&_td]:border [&_td]:border-white [&_td]:p-3 [&_td]:text-center [&_td]:text-[13px] [&_tbody_tr:nth-child(even)]:bg-(--color-table-striped) [&_tbody_tr:nth-child(odd)]:bg-white [&_tbody_tr:hover]:bg-(--color-table-striped)">
+              <TableHeader>
+                {table.getHeaderGroups().map((headerGroup) => (
+                  <TableRow key={headerGroup.id}>
+                    {headerGroup.headers.map((header) => (
+                      <TableHead
+                        key={header.id}
                         className={cn(
-                          config.hover && 'hover:bg-muted/50',
-                          config.striped && index % 2 === 0 && 'bg-muted/25',
-                          actions.onRowClick && 'cursor-pointer',
-                          config.compact && 'h-8'
+                          'select-none text-center truncate',
+                          // header.column.getCanSort() && 'cursor-pointer hover:bg-muted/50',
+                          header.column.columnDef.meta?.headerAlign === 'left' && 'text-left',
+                          header.column.columnDef.meta?.headerAlign === 'right' && 'text-right',
+                          header.column.columnDef.meta?.className
                         )}
-                        onClick={() => actions.onRowClick?.(row.original as T)}
+                        style={{
+                          width: header.getSize() !== 150 ? header.getSize() : undefined,
+                        }}
+                        onClick={header.column.getToggleSortingHandler()}
                       >
-                        {row.getVisibleCells().map((cell) => {
-                          // Add error handling for individual cell rendering
-                          try {
-                            return (
-                              <TableCell
-                                key={cell.id}
+                        <div className="flex items-center justify-center gap-2">
+                          {header.isPlaceholder
+                            ? null
+                            : flexRender(header.column.columnDef.header, header.getContext())}
+                          {header.column.getCanSort() && (
+                            <div className="flex flex-col">
+                              <ChevronUpIcon
                                 className={cn(
-                                  'truncate',
-                                  cell.column.columnDef.meta?.cellAlign === 'center' && 'text-center',
-                                  cell.column.columnDef.meta?.cellAlign === 'right' && 'text-right',
-                                  cell.column.columnDef.meta?.className,
-                                  config.compact && 'py-2'
+                                  'h-3 w-3',
+                                  header.column.getIsSorted() === 'asc' ? 'text-foreground' : 'text-muted-foreground/30'
                                 )}
-                              >
-                                {flexRender(cell.column.columnDef.cell, cell.getContext())}
-                              </TableCell>
-                            );
-                          } catch (cellError) {
-                            return (
-                              <TableCell
-                                key={cell.id}
+                              />
+                              <ChevronDownIcon
                                 className={cn(
-                                  'truncate',
-                                  cell.column.columnDef.meta?.cellAlign === 'center' && 'text-center',
-                                  cell.column.columnDef.meta?.cellAlign === 'right' && 'text-right',
-                                  cell.column.columnDef.meta?.className,
-                                  config.compact && 'py-2'
+                                  'h-3 w-3 -mt-1',
+                                  header.column.getIsSorted() === 'desc'
+                                    ? 'text-foreground'
+                                    : 'text-muted-foreground/30'
                                 )}
-                              >
-                                <span className="text-destructive text-xs">Error</span>
-                              </TableCell>
-                            );
-                          }
-                        })}
-                      </TableRow>
-                    );
-                  } catch (rowError) {
-                    return (
-                      <TableRow key={`error-${index}`}>
-                        <TableCell colSpan={columns.length} className="text-center text-destructive text-xs">
-                          Error rendering row
-                        </TableCell>
-                      </TableRow>
-                    );
-                  }
-                })
-              ) : (
-                <TableRow>
-                  <TableCell colSpan={columns.length} className="h-24 text-center">
-                    {safeData.data.length === 0 ? 'No data available.' : 'No results found.'}
-                  </TableCell>
-                </TableRow>
-              )}
-            </TableBody>
-          </Table>
-        </div>
+                              />
+                            </div>
+                          )}
+                        </div>
+                      </TableHead>
+                    ))}
+                  </TableRow>
+                ))}
+              </TableHeader>
+              <TableBody>
+                {config.loading ? (
+                  <TableLoader columns={columns.length} />
+                ) : config.error ? (
+                  <TableRow>
+                    <TableCell colSpan={columns.length} className="h-24 text-center">
+                      <div className="text-sm text-destructive">{config.error}</div>
+                    </TableCell>
+                  </TableRow>
+                ) : table.getRowModel().rows?.length ? (
+                  table.getRowModel().rows.map((row, index) => {
+                    // Add error handling for individual row rendering
+                    try {
+                      return (
+                        <TableRow
+                          key={row.id}
+                          data-state={row.getIsSelected() && 'selected'}
+                          className={cn(
+                            config.hover && 'hover:bg-muted/50',
+                            config.striped && index % 2 === 0 && 'bg-muted/25',
+                            actions.onRowClick && 'cursor-pointer',
+                            config.compact && 'h-8'
+                          )}
+                          onClick={() => actions.onRowClick?.(row.original as T)}
+                        >
+                          {row.getVisibleCells().map((cell) => {
+                            // Add error handling for individual cell rendering
+                            try {
+                              return (
+                                <TableCell
+                                  key={cell.id}
+                                  className={cn(
+                                    'truncate',
+                                    cell.column.columnDef.meta?.cellAlign === 'center' && 'text-center',
+                                    cell.column.columnDef.meta?.cellAlign === 'right' && 'text-right',
+                                    cell.column.columnDef.meta?.className,
+                                    config.compact && 'py-2'
+                                  )}
+                                >
+                                  {flexRender(cell.column.columnDef.cell, cell.getContext())}
+                                </TableCell>
+                              );
+                            } catch (cellError) {
+                              return (
+                                <TableCell
+                                  key={cell.id}
+                                  className={cn(
+                                    'truncate',
+                                    cell.column.columnDef.meta?.cellAlign === 'center' && 'text-center',
+                                    cell.column.columnDef.meta?.cellAlign === 'right' && 'text-right',
+                                    cell.column.columnDef.meta?.className,
+                                    config.compact && 'py-2'
+                                  )}
+                                >
+                                  <span className="text-destructive text-xs">Error</span>
+                                </TableCell>
+                              );
+                            }
+                          })}
+                        </TableRow>
+                      );
+                    } catch (rowError) {
+                      return (
+                        <TableRow key={`error-${index}`}>
+                          <TableCell colSpan={columns.length} className="text-center text-destructive text-xs">
+                            Error rendering row
+                          </TableCell>
+                        </TableRow>
+                      );
+                    }
+                  })
+                ) : (
+                  <TableRow>
+                    <TableCell colSpan={columns.length} className="h-24 text-center">
+                      {safeData.data.length === 0 ? 'No data available.' : 'No results found.'}
+                    </TableCell>
+                  </TableRow>
+                )}
+              </TableBody>
+            </Table>
+          </div>
 
-        {config.pagination.enabled && (
-          <Pagination
-            table={table}
-            showPageSizeSelector={config.pagination.showPageSizeSelector}
-            pageSizeOptions={config.pagination.pageSizeOptions}
-            rowsLabel="Rows per page:"
-          />
-        )}
-      </div>
+          {config.pagination.enabled && (
+            <Pagination
+              table={table}
+              showPageSizeSelector={config.pagination.showPageSizeSelector}
+              pageSizeOptions={config.pagination.pageSizeOptions}
+              rowsLabel="Rows per page:"
+            />
+          )}
+        </div>
       </FormProvider>
     );
   } catch (error) {
@@ -843,4 +847,3 @@ export function DataTable<T>({
     );
   }
 }
-

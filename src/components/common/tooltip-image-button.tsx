@@ -55,7 +55,9 @@ const TooltipImageButton = ({
           />
         </Button>
       </TooltipTrigger>
-      <TooltipContent className="bg-gray-400/20 backdrop-blur-sm border-0 px-3 py-2 text-xs font-medium rounded-md shadow-xl shadow-black/20">{tooltipText}</TooltipContent>
+      <TooltipContent className="bg-gray-400/20 backdrop-blur-sm border-0 px-3 py-2 text-xs font-medium rounded-md shadow-xl shadow-black/20">
+        {tooltipText}
+      </TooltipContent>
     </Tooltip>
   );
 };

@@ -10,18 +10,24 @@ import FieldWrapper from '../form/wrapper/field-wrapper';
 import { getController } from '../form/utils/get-controller';
 import { Button } from '../ui/button';
 
-const Payments = ({ setIsOpen = () => {} ,uploadScreen}: { setIsOpen: (isOpen: boolean) => void ,uploadScreen : boolean }) => {
+const Payments = ({
+  setIsOpen = () => {},
+  uploadScreen,
+}: {
+  setIsOpen: (isOpen: boolean) => void;
+  uploadScreen: boolean;
+}) => {
   const methods = useForm({
-  resolver: zodResolver(paymentsFormSchema),
-  defaultValues: {
-     paymentMethod: 'bank',
-     fileUpload: ''
-  }
-});
+    resolver: zodResolver(paymentsFormSchema),
+    defaultValues: {
+      paymentMethod: 'bank',
+      fileUpload: '',
+    },
+  });
   const {
     control,
     formState: { errors },
-    handleSubmit
+    handleSubmit,
   } = methods;
   const submit = async (data: any) => {
     // Validate the form before submitting
@@ -36,25 +42,25 @@ const Payments = ({ setIsOpen = () => {} ,uploadScreen}: { setIsOpen: (isOpen: b
         <FormContentWrapper className="rounded-lg w-full mr-auto bg-transparent">
           <Spacer>
             {uploadScreen && (
-                <FormFieldRow rowCols={1}>
-                  {( ['paymentMethod'] as const ).map(name => {
-                    const field = paymentsFormConfig.fields[name];
-                    return <FieldWrapper key={name}>{getController({ ...field, name, control, errors })}</FieldWrapper>;
-                  })}
-                </FormFieldRow>
+              <FormFieldRow rowCols={1}>
+                {(['paymentMethod'] as const).map((name) => {
+                  const field = paymentsFormConfig.fields[name];
+                  return <FieldWrapper key={name}>{getController({ ...field, name, control, errors })}</FieldWrapper>;
+                })}
+              </FormFieldRow>
             )}
-           
+
             <FormFieldRow rowCols={1}>
-              {( ['fileUpload'] as const ).map(name => {
+              {(['fileUpload'] as const).map((name) => {
                 const field = paymentsFormConfig.fields[name];
                 return <FieldWrapper key={name}>{getController({ ...field, name, control, errors })}</FieldWrapper>;
               })}
             </FormFieldRow>
             <div className="flex gap-2 justify-center">
-                <Button type="button" onClick={() => setIsOpen(false)} variant="light" className='px-5'>
+              <Button type="button" onClick={() => setIsOpen(false)} variant="light" className="px-5">
                 Cancel
               </Button>
-              <Button type="button" onClick={handleSubmit(submit)} variant="secondary" className='px-5'>
+              <Button type="button" onClick={handleSubmit(submit)} variant="secondary" className="px-5">
                 Submit
               </Button>
             </div>

@@ -20,7 +20,21 @@ interface FileUploadProps {
   required?: boolean;
 }
 
-const FileUploadWithView = ({ id, name, label, className, viewFile = true, handleFileChange: externalHandleFileChange, maxFiles, description, helpText, accept, multiple, disabled, required }: FileUploadProps) => {
+const FileUploadWithView = ({
+  id,
+  name,
+  label,
+  className,
+  viewFile = true,
+  handleFileChange: externalHandleFileChange,
+  maxFiles,
+  description,
+  helpText,
+  accept,
+  multiple,
+  disabled,
+  required,
+}: FileUploadProps) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const { watch } = useFormContext();

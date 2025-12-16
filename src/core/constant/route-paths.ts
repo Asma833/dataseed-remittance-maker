@@ -6,7 +6,7 @@ export const ROUTES = {
     RESET_LINK_CONFIRMATION: '/reset-link-confirmation',
     RESET_PASSWORD: '/reset-password',
   },
-  
+
   BRANCH_AGENT_MAKER: {
     CREATE_TRANSACTION: '/create-transaction',
     UPDATE_TRANSACTION: '/update-transaction',
@@ -21,7 +21,6 @@ export const ROUTES = {
       VIEW_ALL_TRANSACTIONS: '/transaction/view-all-transactions',
     },
   },
-  
 } as const;
 
 // Route prefixes for different user roles

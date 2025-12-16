@@ -1,4 +1,3 @@
-
 import Spacer from '@/components/form/wrapper/spacer';
 import { beneficiaryBank, beneficiaryDetailsConfig } from './beneficairy-details.config';
 import { CommonCreateTransactionProps } from '@/features/maker/types/create-transaction.types';
@@ -13,8 +12,12 @@ import { Button } from '@/components/ui/button';
 const BeneficiaryDetails = ({ setAccordionState }: CommonCreateTransactionProps) => {
   const [isSaving, setIsSaving] = useState(false);
   const [isEditing, setIsEditing] = useState(false);
-  const { control, formState: { errors }, trigger } = useFormContext();
-  const intermediaryBankDetails = useWatch({ name: "beneficiaryDetails.intermediaryBankDetails", defaultValue: "no" });
+  const {
+    control,
+    formState: { errors },
+    trigger,
+  } = useFormContext();
+  const intermediaryBankDetails = useWatch({ name: 'beneficiaryDetails.intermediaryBankDetails', defaultValue: 'no' });
 
   const handleSave = async () => {
     const isValid = await trigger();
@@ -23,9 +26,10 @@ const BeneficiaryDetails = ({ setAccordionState }: CommonCreateTransactionProps)
     }
     setIsSaving(true);
     try {
-      const formElement = typeof document !== 'undefined'
-        ? (document.getElementById('create-transaction-form') as HTMLFormElement | null)
-        : null;
+      const formElement =
+        typeof document !== 'undefined'
+          ? (document.getElementById('create-transaction-form') as HTMLFormElement | null)
+          : null;
       formElement?.requestSubmit();
     } finally {
       setIsSaving(false);
@@ -39,8 +43,28 @@ const BeneficiaryDetails = ({ setAccordionState }: CommonCreateTransactionProps)
   return (
     <Spacer>
       <FormFieldRow rowCols={4}>
-        {(['beneficiary_name', 'beneficiary_address', 'beneficiary_city','beneficiary_country'] as const).map(name => {
-          const field = beneficiaryDetailsConfig.find(f => f.name === name);
+        {(['beneficiary_name', 'beneficiary_address', 'beneficiary_city', 'beneficiary_country'] as const).map(
+          (name) => {
+            const field = beneficiaryDetailsConfig.find((f) => f.name === name);
+            if (!field) return null;
+            return (
+              <FieldWrapper key={name}>
+                {getController({ ...field, name: `beneficiaryDetails.${name}`, control, errors })}
+              </FieldWrapper>
+            );
+          }
+        )}
+      </FormFieldRow>
+      <FormFieldRow rowCols={4}>
+        {(
+          [
+            'beneficiary_account_number_iban_number',
+            'beneficiary_swift_code',
+            'beneficiary_bank_name',
+            'beneficiary_bank_address',
+          ] as const
+        ).map((name) => {
+          const field = beneficiaryDetailsConfig.find((f) => f.name === name);
           if (!field) return null;
           return (
             <FieldWrapper key={name}>
@@ -50,37 +74,33 @@ const BeneficiaryDetails = ({ setAccordionState }: CommonCreateTransactionProps)
         })}
       </FormFieldRow>
       <FormFieldRow rowCols={4}>
-        {(['beneficiary_account_number_iban_number', 'beneficiary_swift_code','beneficiary_bank_name', 'beneficiary_bank_address'] as const).map(name => {
-          const field = beneficiaryDetailsConfig.find(f => f.name === name);
+        {(
+          ['sort_bsb_aba_transit_code', 'nostro_charges', 'message_to_beneficiary_additional_information'] as const
+        ).map((name) => {
+          const field = beneficiaryDetailsConfig.find((f) => f.name === name);
           if (!field) return null;
           return (
-            <FieldWrapper key={name}>
+            <FieldWrapper
+              key={name}
+              className={name === 'message_to_beneficiary_additional_information' ? 'col-span-2' : ''}
+            >
               {getController({ ...field, name: `beneficiaryDetails.${name}`, control, errors })}
             </FieldWrapper>
           );
         })}
       </FormFieldRow>
       <FormFieldRow rowCols={4}>
-        {([ 'sort_bsb_aba_transit_code','nostro_charges', 'message_to_beneficiary_additional_information',] as const).map(name => {
-          const field = beneficiaryDetailsConfig.find(f => f.name === name);
-          if (!field) return null;
-          return (
-            <FieldWrapper key={name} className={name === 'message_to_beneficiary_additional_information' ? 'col-span-2' : ''}>
-              {getController({ ...field, name: `beneficiaryDetails.${name}`, control, errors })}
-            </FieldWrapper>
-          );
-        })}
-      </FormFieldRow>
-      <FormFieldRow rowCols={4}>
-        {(['student_name','student_passport_number', 'payment_instruction_number', 'university_name'] as const).map(name => {
-          const field = beneficiaryDetailsConfig.find(f => f.name === name);
-          if (!field) return null;
-          return (
-            <FieldWrapper key={name}>
-              {getController({ ...field, name: `beneficiaryDetails.${name}`, control, errors })}
-            </FieldWrapper>
-          );
-        })}
+        {(['student_name', 'student_passport_number', 'payment_instruction_number', 'university_name'] as const).map(
+          (name) => {
+            const field = beneficiaryDetailsConfig.find((f) => f.name === name);
+            if (!field) return null;
+            return (
+              <FieldWrapper key={name}>
+                {getController({ ...field, name: `beneficiaryDetails.${name}`, control, errors })}
+              </FieldWrapper>
+            );
+          }
+        )}
       </FormFieldRow>
       <div className="flex w-full items-start">
         <FieldWrapper className="w-1/4">
@@ -91,7 +111,7 @@ const BeneficiaryDetails = ({ setAccordionState }: CommonCreateTransactionProps)
               yes: { label: 'Yes' },
               no: { label: 'No' },
             }}
-            className='justify-start'
+            className="justify-start"
           />
         </FieldWrapper>
         {intermediaryBankDetails === 'yes' && (
@@ -116,8 +136,8 @@ const BeneficiaryDetails = ({ setAccordionState }: CommonCreateTransactionProps)
           </div>
         )}
       </div>
-      <div className='flex justify-center items-center'>
-        <Button variant='secondary' onClick={handleSave} disabled={isSaving} className='mx-2 w-24'>
+      <div className="flex justify-center items-center">
+        <Button variant="secondary" onClick={handleSave} disabled={isSaving} className="mx-2 w-24">
           {isSaving ? 'Saving...' : 'Save'}
         </Button>
         {/* <Button variant='light' onClick={handleEdit} className='w-24'  disabled={isEditing}>

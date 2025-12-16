@@ -23,7 +23,7 @@ export const ENDPOINT_MATCHING_RULES: EndpointRulesConfig = {
     matchType: 'exact-only' as const,
     description: 'Authentication logout endpoint',
   },
-  'login':{
+  login: {
     endpoint: API.AUTH.LOGIN,
     matchType: 'exact-only' as const,
     description: 'Login endpoint',
@@ -103,7 +103,7 @@ export const ENDPOINT_MATCHING_RULES: EndpointRulesConfig = {
     matchType: 'standard' as const,
     description: 'Update currency value',
   },
-  'transaction': {
+  transaction: {
     endpoint: API.PURPOSE.TRANSACTION_MAPPING,
     matchType: 'standard' as const,
     description: 'Create transaction',

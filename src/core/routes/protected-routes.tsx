@@ -73,14 +73,14 @@ export const ProtectedRoute: ProtectedRouteComponent = ({
   }
 
   if (!isAuthenticated || !user) {
-    return React.createElement(Navigate, { to: "/login", replace: true });
+    return React.createElement(Navigate, { to: '/login', replace: true });
   }
 
   // Check if user has required role
   const hasRequiredRole =
     requiredRoles.length === 0 || (user.roles && requiredRoles.includes(user.roles[0]?.role_name));
   if (!hasRequiredRole) {
-    return React.createElement(Navigate, { to: "/unauthorized", replace: true });
+    return React.createElement(Navigate, { to: '/unauthorized', replace: true });
   }
 
   return React.createElement(React.Fragment, null, children);

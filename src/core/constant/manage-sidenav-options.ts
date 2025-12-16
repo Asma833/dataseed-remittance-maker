@@ -31,7 +31,7 @@ export const SideNavOptions = {
             },
             {
               title: 'Payment Status',
-              path:  '/branch_agent_maker/transaction/payment',
+              path: '/branch_agent_maker/transaction/payment',
             },
             {
               title: 'View All Transactions',

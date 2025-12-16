@@ -1,4 +1,3 @@
-
 import { DialogWrapper } from '@/components/common/dialog-wrapper';
 import { TransactionCreatedDialogProps } from '../../types/create-transaction.types';
 

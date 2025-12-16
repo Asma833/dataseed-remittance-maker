@@ -67,7 +67,7 @@ export const generateRateTablePdf = (
     'Tnx Value',
     formatValue(invoiceRateTable.transactionValue.niumRate),
     formatValue(invoiceRateTable.transactionValue.agentMarkUp),
-    formatValue(invoiceRateTable.transactionValue.rate)
+    formatValue(invoiceRateTable.transactionValue.rate),
   ]);
 
   // Remittance Charges
@@ -75,7 +75,7 @@ export const generateRateTablePdf = (
     'Remittance Charges',
     formatValue(invoiceRateTable.remittanceCharges.niumRate),
     formatValue(invoiceRateTable.remittanceCharges.agentMarkUp),
-    formatValue(invoiceRateTable.remittanceCharges.rate)
+    formatValue(invoiceRateTable.remittanceCharges.rate),
   ]);
 
   // Nostro Charges
@@ -83,7 +83,7 @@ export const generateRateTablePdf = (
     'Nostro Charges: BEN/OUR',
     formatValue(invoiceRateTable.nostroCharges.niumRate),
     formatValue(invoiceRateTable.nostroCharges.agentMarkUp),
-    formatValue(invoiceRateTable.nostroCharges.rate)
+    formatValue(invoiceRateTable.nostroCharges.rate),
   ]);
 
   // Other Charges
@@ -91,45 +91,25 @@ export const generateRateTablePdf = (
     'Other Charges',
     formatValue(invoiceRateTable.otherCharges.niumRate),
     formatValue(invoiceRateTable.otherCharges.agentMarkUp),
-    formatValue(invoiceRateTable.otherCharges.rate)
+    formatValue(invoiceRateTable.otherCharges.rate),
   ]);
 
   // Transaction Amount
-  body.push([
-    'Transaction Amount',
-    '',
-    '',
-    formatValue(invoiceRateTable.transactionAmount.rate)
-  ]);
+  body.push(['Transaction Amount', '', '', formatValue(invoiceRateTable.transactionAmount.rate)]);
 
   // GST Amount
-  body.push([
-    'Total GST Amount\nCGST IGST/UTGST',
-    '',
-    '',
-    formatValue(invoiceRateTable.gstAmount.rate)
-  ]);
+  body.push(['Total GST Amount\nCGST IGST/UTGST', '', '', formatValue(invoiceRateTable.gstAmount.rate)]);
 
   // Total INR Amount
-  body.push([
-    'Total INR Amount',
-    '',
-    '',
-    formatValue(invoiceRateTable.totalInrAmount.rate)
-  ]);
+  body.push(['Total INR Amount', '', '', formatValue(invoiceRateTable.totalInrAmount.rate)]);
 
   // TCS
-  body.push([
-    'TCS',
-    '',
-    '',
-    formatValue(invoiceRateTable.tcs.rate)
-  ]);
+  body.push(['TCS', '', '', formatValue(invoiceRateTable.tcs.rate)]);
 
   // Footer
   const foot = [
     ['Total Payable Amount', '', '', totalAmount.toString()],
-    ['Beneficiary Amount (In Fx Value)', '', '', totalAmount.toString()]
+    ['Beneficiary Amount (In Fx Value)', '', '', totalAmount.toString()],
   ];
 
   // Add title
@@ -146,24 +126,24 @@ export const generateRateTablePdf = (
       fontSize: 8,
       cellPadding: 3,
       halign: 'center',
-      valign: 'middle'
+      valign: 'middle',
     },
     headStyles: {
       fillColor: [158, 158, 158],
       textColor: [255, 255, 255],
-      fontStyle: 'bold'
+      fontStyle: 'bold',
     },
     footStyles: {
       fillColor: [244, 244, 244],
-      fontStyle: 'bold'
+      fontStyle: 'bold',
     },
     columnStyles: {
       0: { halign: 'left', cellWidth: 60 },
       1: { halign: 'right', cellWidth: 30 },
       2: { halign: 'right', cellWidth: 40 },
-      3: { halign: 'right', cellWidth: 35 }
+      3: { halign: 'right', cellWidth: 35 },
     },
-    margin: { top: 30, left: 14, right: 14 }
+    margin: { top: 30, left: 14, right: 14 },
   });
 
   // Save the PDF

@@ -1,4 +1,4 @@
-import { FieldType } from "@/types/enums";
+import { FieldType } from '@/types/enums';
 
 const transactionBasicDetailsConfig = [
   {
@@ -24,12 +24,12 @@ const transactionBasicDetailsConfig = [
     disabled: true,
   },
   {
-   name: 'transaction_type',
-   label: 'Transaction Type',
-   type: FieldType.Select,
-   placeholder: 'Select Transaction Type',
-   required: false,
- },
+    name: 'transaction_type',
+    label: 'Transaction Type',
+    type: FieldType.Select,
+    placeholder: 'Select Transaction Type',
+    required: false,
+  },
   {
     name: 'purpose',
     label: 'Purpose',
@@ -115,31 +115,31 @@ const transactionBasicDetailsConfig = [
     required: false,
   },
   {
-      name:'source_of_funds',
-      label: 'Source of Funds',
-      type: FieldType.Select,
-      required: false,
-      placeholder: 'Select Source of Funds',
-      options: {
-        self: { label: 'Self' },
-        others: { label: 'Others' },
-      },
+    name: 'source_of_funds',
+    label: 'Source of Funds',
+    type: FieldType.Select,
+    required: false,
+    placeholder: 'Select Source of Funds',
+    options: {
+      self: { label: 'Self' },
+      others: { label: 'Others' },
+    },
   },
   {
-      name:'paid_by',
-      label: 'Paid By',
-      type: FieldType.Select,
-      required: false,
-      placeholder: 'Select Payment Method',
-      options: {
-        father: { label: 'Father' },
-        mother: { label: 'Mother' },
-        husband: { label: 'Husband' },
-        wife: { label: 'Wife' },
-        sister: { label: 'Sister' },
-        brother: { label: 'Brother' }
-      },
+    name: 'paid_by',
+    label: 'Paid By',
+    type: FieldType.Select,
+    required: false,
+    placeholder: 'Select Payment Method',
+    options: {
+      father: { label: 'Father' },
+      mother: { label: 'Mother' },
+      husband: { label: 'Husband' },
+      wife: { label: 'Wife' },
+      sister: { label: 'Sister' },
+      brother: { label: 'Brother' },
     },
+  },
   {
     name: 'payee_name',
     label: 'Payee Name As Per PAN',
@@ -230,7 +230,7 @@ const transactionBasicDetailsConfig = [
     type: FieldType.Text,
     placeholder: 'Enter Postal Code',
     required: true,
-  }
+  },
 ];
 
 export default transactionBasicDetailsConfig;

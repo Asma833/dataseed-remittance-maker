@@ -75,7 +75,7 @@ export const API = {
     GET_CURRENCY_RATES: (currencyCode: string) => `/currency-rate/${currencyCode}`,
   },
   REMITTANCE: {
-      CREATE_TRANSACTION: `/remittance/deals/complete`,
+    CREATE_TRANSACTION: `/remittance/deals/complete`,
   },
 } as const;
 

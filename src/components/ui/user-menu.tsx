@@ -61,7 +61,7 @@ export default function UserMenu() {
       <DropdownMenu>
         <DropdownMenuTrigger asChild>
           <Button variant="ghost" className="h-auto p-0 hover:bg-transparent relative cursor-pointer">
-            <Avatar >
+            <Avatar>
               <AvatarImage src="./avatar.jpg" alt="Profile image" />
               <AvatarFallback className="bg-[#ece7e7]">
                 <UserRoundIcon size={16} className="opacity-60" aria-hidden="true" />

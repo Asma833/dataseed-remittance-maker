@@ -32,8 +32,7 @@ export const MuiDateRangePicker = ({
 
   return (
     <FormItem className={cn(className, 'xs:w-40 sm:w-96')}>
-      <FormLabel className="text-[--color-form-label]">
-      </FormLabel>
+      <FormLabel className="text-[--color-form-label]"></FormLabel>
       <FormControl>
         <Controller
           name={name}
@@ -66,55 +65,55 @@ export const MuiDateRangePicker = ({
               size: 'small' as const,
               fullWidth: true,
               readOnly: true,
-              placeholder: 'DD/MM/YYYY'
+              placeholder: 'DD/MM/YYYY',
             };
 
             return (
               <LocalizationProvider dateAdapter={AdapterDateFns}>
                 <Box sx={{ width: '100%' }}>
                   <Grid container spacing={1}>
-                    <Grid size={{ xs: 10, sm: 6, md:6, lg:6}}>
-                       <FormLabel className="text-[--color-form-label] text-sm font-medium">
-                         {startLabel}
-                         {required && <span className="text-destructive ml-1">*</span>}
-                       </FormLabel>
-                       <DatePicker
-                         label=""
-                         value={startDate}
-                         onChange={handleStartDateChange}
-                         disabled={disabled}
-                         format="dd/MM/yyyy"
-                         {...(endDate && { maxDate: endDate })}
-                         slotProps={{
-                           textField: {
-                             ...commonTextFieldProps,
-                             error: !!(formState.errors[name] as any)?.startDate,
-                             helperText: (formState.errors[name] as any)?.startDate?.message || ' ',
-                           },
-                         }}
-                       />
-                     </Grid>
-                     <Grid size={{ xs: 10, sm: 6, md:6, lg:6 }}>
-                       <FormLabel className="text-[--color-form-label] text-sm font-medium">
-                         {endLabel}
-                         {required && <span className="text-destructive ml-1">*</span>}
-                       </FormLabel>
-                       <DatePicker
-                         label=""
-                         value={endDate}
-                         onChange={handleEndDateChange}
-                         disabled={disabled}
-                         format="dd/MM/yyyy"
-                         {...(startDate && { minDate: startDate })}
-                         slotProps={{
-                           textField: {
-                             ...commonTextFieldProps,
-                             error: !!(formState.errors[name] as any)?.endDate,
-                             helperText: (formState.errors[name] as any)?.endDate?.message || ' ',
-                           },
-                         }}
-                       />
-                     </Grid>
+                    <Grid size={{ xs: 10, sm: 6, md: 6, lg: 6 }}>
+                      <FormLabel className="text-[--color-form-label] text-sm font-medium">
+                        {startLabel}
+                        {required && <span className="text-destructive ml-1">*</span>}
+                      </FormLabel>
+                      <DatePicker
+                        label=""
+                        value={startDate}
+                        onChange={handleStartDateChange}
+                        disabled={disabled}
+                        format="dd/MM/yyyy"
+                        {...(endDate && { maxDate: endDate })}
+                        slotProps={{
+                          textField: {
+                            ...commonTextFieldProps,
+                            error: !!(formState.errors[name] as any)?.startDate,
+                            helperText: (formState.errors[name] as any)?.startDate?.message || ' ',
+                          },
+                        }}
+                      />
+                    </Grid>
+                    <Grid size={{ xs: 10, sm: 6, md: 6, lg: 6 }}>
+                      <FormLabel className="text-[--color-form-label] text-sm font-medium">
+                        {endLabel}
+                        {required && <span className="text-destructive ml-1">*</span>}
+                      </FormLabel>
+                      <DatePicker
+                        label=""
+                        value={endDate}
+                        onChange={handleEndDateChange}
+                        disabled={disabled}
+                        format="dd/MM/yyyy"
+                        {...(startDate && { minDate: startDate })}
+                        slotProps={{
+                          textField: {
+                            ...commonTextFieldProps,
+                            error: !!(formState.errors[name] as any)?.endDate,
+                            helperText: (formState.errors[name] as any)?.endDate?.message || ' ',
+                          },
+                        }}
+                      />
+                    </Grid>
                   </Grid>
                 </Box>
               </LocalizationProvider>

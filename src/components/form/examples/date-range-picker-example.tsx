@@ -87,18 +87,18 @@
 //         <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
 //           <div className="space-y-4">
 //             <FieldWrapper>
-//               {getController({ 
-//                 ...reportingPeriodField, 
-//                 control, 
-//                 errors 
+//               {getController({
+//                 ...reportingPeriodField,
+//                 control,
+//                 errors
 //               })}
 //             </FieldWrapper>
 
 //             <FieldWrapper>
-//               {getController({ 
-//                 ...vacationDatesField, 
-//                 control, 
-//                 errors 
+//               {getController({
+//                 ...vacationDatesField,
+//                 control,
+//                 errors
 //               })}
 //             </FieldWrapper>
 //           </div>
@@ -107,9 +107,9 @@
 //             <Button type="submit">
 //               Submit Form
 //             </Button>
-//             <Button 
-//               type="button" 
-//               variant="outline" 
+//             <Button
+//               type="button"
+//               variant="outline"
 //               onClick={() => form.reset()}
 //             >
 //               Reset

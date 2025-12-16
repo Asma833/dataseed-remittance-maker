@@ -13,8 +13,28 @@ interface SignLinkButtonProps {
   disabled?: boolean;
   className?: string;
   tooltipText?: string;
-  buttonType?: 'button' | 'copy_link' | 'refresh' | 'remove' | 'delete' | 'edit' | 'view' | 'add' | 'upload' | 'download';
-  buttonIconType?: 'button' | 'copy_link' | 'refresh' | 'remove' | 'delete' | 'edit' | 'view' | 'add' | 'upload' | 'download';
+  buttonType?:
+    | 'button'
+    | 'copy_link'
+    | 'refresh'
+    | 'remove'
+    | 'delete'
+    | 'edit'
+    | 'view'
+    | 'add'
+    | 'upload'
+    | 'download';
+  buttonIconType?:
+    | 'button'
+    | 'copy_link'
+    | 'refresh'
+    | 'remove'
+    | 'delete'
+    | 'edit'
+    | 'view'
+    | 'add'
+    | 'upload'
+    | 'download';
   onClick?: () => void;
   loading?: string | boolean;
   iconClassName?: string;
@@ -46,7 +66,7 @@ export const SignLinkButton: React.FC<SignLinkButtonProps> = ({
   const getIcon = () => {
     switch (buttonIconType) {
       case 'copy_link':
-        return <LinkIcon className={cn("cursor-pointer", iconClassName)} />;
+        return <LinkIcon className={cn('cursor-pointer', iconClassName)} />;
       case 'refresh':
         return (
           <RefreshCw
@@ -59,19 +79,19 @@ export const SignLinkButton: React.FC<SignLinkButtonProps> = ({
           />
         );
       case 'remove':
-        return <X className={cn("cursor-pointer", iconClassName)} />;
+        return <X className={cn('cursor-pointer', iconClassName)} />;
       case 'delete':
-        return <Delete className={cn("cursor-pointer", iconClassName)} />;
+        return <Delete className={cn('cursor-pointer', iconClassName)} />;
       case 'edit':
-        return <Edit className={cn("cursor-pointer", iconClassName)} />;
+        return <Edit className={cn('cursor-pointer', iconClassName)} />;
       case 'view':
-        return <Eye className={cn("cursor-pointer", iconClassName)} />;
+        return <Eye className={cn('cursor-pointer', iconClassName)} />;
       case 'add':
-        return <Plus className={cn("cursor-pointer", iconClassName)} />;
+        return <Plus className={cn('cursor-pointer', iconClassName)} />;
       case 'upload':
-        return <Upload className={cn("cursor-pointer", iconClassName)} />;
+        return <Upload className={cn('cursor-pointer', iconClassName)} />;
       case 'download':
-        return <Download className={cn("cursor-pointer", iconClassName)} />;
+        return <Download className={cn('cursor-pointer', iconClassName)} />;
       default:
         return null;
     }
@@ -94,7 +114,9 @@ export const SignLinkButton: React.FC<SignLinkButtonProps> = ({
           {getIcon()}
         </Button>
       </TooltipTrigger>
-      <TooltipContent className="bg-gray-400/20 backdrop-blur-sm border-0 px-3 py-2 text-xs font-medium rounded-md shadow-xl shadow-black/20">{tooltipText}</TooltipContent>
+      <TooltipContent className="bg-gray-400/20 backdrop-blur-sm border-0 px-3 py-2 text-xs font-medium rounded-md shadow-xl shadow-black/20">
+        {tooltipText}
+      </TooltipContent>
     </Tooltip>
   );
 };

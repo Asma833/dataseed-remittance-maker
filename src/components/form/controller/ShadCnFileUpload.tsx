@@ -54,7 +54,6 @@ export const ShadCnFileUpload = ({
           defaultValue={[]}
           render={({ field: { value, onChange }, fieldState: { error } }) => (
             <div className={cn('w-full flex flex-col gap-2', className)}>
-
               <label htmlFor={id}>
                 <div className="relative">
                   <input
@@ -79,7 +78,7 @@ export const ShadCnFileUpload = ({
                       handleChange(e);
                     }}
                     className="n-filetype-hidden"
-                    accept={accept || ".pdf,.jpg,.png"}
+                    accept={accept || '.pdf,.jpg,.png'}
                     disabled={disabled}
                   />
                   <Button

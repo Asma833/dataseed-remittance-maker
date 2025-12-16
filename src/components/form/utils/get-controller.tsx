@@ -81,7 +81,7 @@ export const getController = (field: any) => {
       );
     case FieldType.Fileupload_View:
     case 'fileupload_view':
-        return (
+      return (
         <FileUploadWithView
           {...baseProps}
           className={field.className}

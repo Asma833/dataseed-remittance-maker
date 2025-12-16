@@ -5,9 +5,7 @@ interface TableLoaderProps {
   columns: number;
 }
 
-export const TableLoader: React.FC<TableLoaderProps> = ({
-  columns
-}) => {
+export const TableLoader: React.FC<TableLoaderProps> = ({ columns }) => {
   return (
     <>
       {/* Render 5 skeleton rows */}
@@ -20,7 +18,7 @@ export const TableLoader: React.FC<TableLoaderProps> = ({
                   className="h-4 bg-gray-200 rounded-md"
                   style={{
                     width: colIndex === 0 ? '80%' : colIndex === columns - 1 ? '60%' : '70%',
-                    animationDelay: `${index * 0.1}s`
+                    animationDelay: `${index * 0.1}s`,
                   }}
                 ></div>
               </div>

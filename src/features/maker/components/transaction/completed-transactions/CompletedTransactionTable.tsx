@@ -9,7 +9,6 @@ import useGetCheckerOrders from '@/hooks/common/useGetCheckerOrders';
 import { useDynamicOptions } from '@/hooks/common/useDynamicOptions';
 import { TransactionTypeEnum } from '@/types/enums';
 
-
 const CompletedTransactionTable = () => {
   const {
     data: checkerOrdersData,

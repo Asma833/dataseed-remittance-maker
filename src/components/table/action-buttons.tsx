@@ -3,7 +3,16 @@ import { ActionButtonsProps } from './types';
 import { AiOutlineEye, AiOutlineDelete, AiOutlineStop } from 'react-icons/ai';
 import { FilePenLine, CirclePlus, Download, User, Link } from 'lucide-react';
 
-export function ActionButtons<T>({ row, onEdit, onDelete, onView, onInactivate,onAdd,onDownload,onCustomer }: ActionButtonsProps<T>) {
+export function ActionButtons<T>({
+  row,
+  onEdit,
+  onDelete,
+  onView,
+  onInactivate,
+  onAdd,
+  onDownload,
+  onCustomer,
+}: ActionButtonsProps<T>) {
   return (
     <div className="flex items-center justify-center gap-2">
       {onView && (
@@ -97,7 +106,7 @@ export function ActionButtons<T>({ row, onEdit, onDelete, onView, onInactivate,o
           <Download className="h-4 w-4" />
         </TooltipButton>
       )}
-        {onCustomer && (
+      {onCustomer && (
         <TooltipButton
           type="button"
           variant="ghost"

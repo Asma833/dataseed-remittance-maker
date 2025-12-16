@@ -1,4 +1,4 @@
-import { FieldType } from "@/types/enums";
+import { FieldType } from '@/types/enums';
 
 export type AccordionItem = {
   id: string;
@@ -18,7 +18,7 @@ export type AccordionState = {
   isBeneficiaryOpen: boolean;
   isEditMode: boolean;
 };
- export type FieldConfig = {
+export type FieldConfig = {
   name: string;
   label: string;
   type: FieldType;
