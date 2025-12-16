@@ -23,8 +23,10 @@ const BeneficiaryDetails = ({ setAccordionState }: CommonCreateTransactionProps)
     }
     setIsSaving(true);
     try {
-      // TODO: Implement actual save functionality, e.g., using useCreateTransaction hook
-      await new Promise((resolve) => setTimeout(resolve, 1000));
+      const formElement = typeof document !== 'undefined'
+        ? (document.getElementById('create-transaction-form') as HTMLFormElement | null)
+        : null;
+      formElement?.requestSubmit();
     } finally {
       setIsSaving(false);
     }
@@ -118,9 +120,9 @@ const BeneficiaryDetails = ({ setAccordionState }: CommonCreateTransactionProps)
         <Button variant='secondary' onClick={handleSave} disabled={isSaving} className='mx-2 w-24'>
           {isSaving ? 'Saving...' : 'Save'}
         </Button>
-        <Button variant='light' onClick={handleEdit} className='w-24'  disabled={isEditing}>
+        {/* <Button variant='light' onClick={handleEdit} className='w-24'  disabled={isEditing}>
           {isEditing ? 'Editing' : 'Edit'}
-        </Button>
+        </Button> */}
       </div>
     </Spacer>
   );

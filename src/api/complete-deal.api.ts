@@ -5,7 +5,7 @@ import { CompleteDealRequest, CompleteDealResponse } from '@/types/common/transa
 export const completeDealApi = {
   completeDeal: async (dealData:any): Promise<any> => {
     const { data } = await axiosInstance.post<any>(
-      API.REMITTANCE.DEALS.COMPLETE,
+      API.REMITTANCE.CREATE_TRANSACTION,
       dealData
     );
     return data;

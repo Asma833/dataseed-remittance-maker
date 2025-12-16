@@ -16,103 +16,204 @@ type Props = {
   initialData?: Partial<CreateTransactionFormInput>;
 };
 
+// const sampleInitialData: CreateTransactionFormInput = {
+//   currencyDetails: {
+//     fx_currency: 'PLN',
+//     fx_amount: '50000',
+//     settlement_rate: '75.5',
+//     add_margin: '500',
+//     customer_rate: '76',
+//     declared_education_loan_amount: '500000',
+//     previous_transaction_amount: '100000',
+//     declared_previous_amount: '50000',
+//     total_transaction_amount_tcs: '1500',
+//     invoiceRateTable: {
+//       transaction_value: {
+//         company_rate: '740000',
+//         agent_mark_up: '500',
+//         rate: '740500',
+//       },
+//       remittance_charges: {
+//         company_rate: '500',
+//         agent_mark_up: '50',
+//         rate: '550',
+//       },
+//       nostro_charges: {
+//         company_rate: '300',
+//         agent_mark_up: '30',
+//         rate: '330',
+//       },
+//       other_charges: {
+//         company_rate: '200',
+//         agent_mark_up: '20',
+//         rate: '220',
+//       },
+//       transaction_amount: {
+//         rate: '741600',
+//       },
+//       gst_amount: {
+//         rate: '133488',
+//       },
+//       total_inr_amount: {
+//         rate: '875088',
+//       },
+//       tcs: {
+//         rate: '1500',
+//       },
+//     },
+//   },
+//   beneficiaryDetails: {
+//     beneficiary_name: 'ASMA',
+//     beneficiary_address: 'University Road',
+//     beneficiary_city: 'New York',
+//     beneficiary_country: 'USA',
+//     beneficiary_account_number_iban_number: 'US1234567890',
+//     beneficiary_swift_code: 'ABCDUS33',
+//     beneficiary_bank_name: 'Bank of America',
+//     beneficiary_bank_address: 'New York Branch',
+//     sort_bsb_aba_transit_code: '021000021',
+//     nostro_charges: 'SHA',
+//     message_to_beneficiary_additional_information: 'Education fee payment',
+//     student_name: 'Student One',
+//     student_passport_number: 'N1234567',
+//     payment_instruction_number: 'PAY-INS-001',
+//     university_name: 'ABC University',
+//     intermediaryBankDetails: 'no',
+//     intermediary_bank_account_number: '',
+//     intermediary_bank_swift_code: '',
+//     intermediary_bank_name: '',
+//     intermediary_bank_address: '',
+//   },
+//   transactionDetails: {
+//     company_reference_number: 'COMP-REF-001',
+//     agent_reference_number: 'AGENT-REF-001',
+//     order_date: '2025-09-15T00:00:00.000Z',
+//     order_expiry: '2025-09-30T00:00:00.000Z',
+//     transaction_type: 'REMITTANCE',
+//     purpose: 'Education',
+//     fx_currency: 'USD',
+//     fx_amount: 10000,
+//     company_settlement_rate: 75.5,
+//     add_margin: 500,
+//     customer_rate: 76,
+//     nostro_charges: 300,
+//     applicant_name: 'John Doe',
+//     applicant_pan_number: 'ABCDE1234F',
+//     applicant_email: 'john.doe@email.com',
+//     applicant_mobile_number: '9876543210',
+//     source_of_funds: 'Self Income',
+//     paid_by: 'Self',
+//     payee_name: 'Jane Doe',
+//     payee_pan_number: 'FGHIJ5678K',
+//     applicant_id_document: 'Passport',
+//     passport_number: 'N1234567',
+//     place_of_issue: 'Chennai',
+//     applicant_address: '123 Main Street',
+//     applicant_city: 'Chennai',
+//     applicant_state: 'Tamil Nadu',
+//     applicant_country: 'India',
+//     postal_code: '600001',
+//   },
+// };
 const sampleInitialData: CreateTransactionFormInput = {
   currencyDetails: {
-    fx_currency: 'PLN',
-    fx_amount: '50000',
-    settlement_rate: '75.5',
-    add_margin: '500',
-    customer_rate: '76',
-    declared_education_loan_amount: '500000',
-    previous_transaction_amount: '100000',
-    declared_previous_amount: '50000',
-    total_transaction_amount_tcs: '1500',
+    fx_currency: '',
+    fx_amount: '',
+    settlement_rate: '',
+    add_margin: '',
+    customer_rate: '',
+    declared_education_loan_amount: '',
+    previous_transaction_amount: '',
+    declared_previous_amount: '',
+    total_transaction_amount_tcs: '',
     invoiceRateTable: {
       transaction_value: {
-        company_rate: '740000',
-        agent_mark_up: '500',
-        rate: '740500',
+        company_rate: '',
+        agent_mark_up: '',
+        rate: '',
       },
       remittance_charges: {
-        company_rate: '500',
-        agent_mark_up: '50',
-        rate: '550',
+        company_rate: '',
+        agent_mark_up: '',
+        rate: '',
       },
       nostro_charges: {
-        company_rate: '300',
-        agent_mark_up: '30',
-        rate: '330',
+        company_rate: '',
+        agent_mark_up: '',
+        rate: '',
       },
       other_charges: {
-        company_rate: '200',
-        agent_mark_up: '20',
-        rate: '220',
+        company_rate: '',
+        agent_mark_up: '',
+        rate: '',
       },
       transaction_amount: {
-        rate: '741600',
+        rate: '',
       },
       gst_amount: {
-        rate: '133488',
+        rate: '',
       },
       total_inr_amount: {
-        rate: '875088',
+        rate: '',
       },
       tcs: {
-        rate: '1500',
+        rate: '',
       },
     },
   },
+
   beneficiaryDetails: {
-    beneficiary_name: 'ASMA',
-    beneficiary_address: 'University Road',
-    beneficiary_city: 'New York',
-    beneficiary_country: 'USA',
-    beneficiary_account_number_iban_number: 'US1234567890',
-    beneficiary_swift_code: 'ABCDUS33',
-    beneficiary_bank_name: 'Bank of America',
-    beneficiary_bank_address: 'New York Branch',
-    sort_bsb_aba_transit_code: '021000021',
-    nostro_charges: 'SHA',
-    message_to_beneficiary_additional_information: 'Education fee payment',
-    student_name: 'Student One',
-    student_passport_number: 'N1234567',
-    payment_instruction_number: 'PAY-INS-001',
-    university_name: 'ABC University',
+    beneficiary_name: '',
+    beneficiary_address: '',
+    beneficiary_city: '',
+    beneficiary_country: '',
+    beneficiary_account_number_iban_number: '',
+    beneficiary_swift_code: '',
+    beneficiary_bank_name: '',
+    beneficiary_bank_address: '',
+    sort_bsb_aba_transit_code: '',
+    nostro_charges: '',
+    message_to_beneficiary_additional_information: '',
+    student_name: '',
+    student_passport_number: '',
+    payment_instruction_number: '',
+    university_name: '',
     intermediaryBankDetails: 'no',
     intermediary_bank_account_number: '',
     intermediary_bank_swift_code: '',
     intermediary_bank_name: '',
     intermediary_bank_address: '',
   },
+
   transactionDetails: {
-    company_reference_number: 'COMP-REF-001',
-    agent_reference_number: 'AGENT-REF-001',
-    order_date: '2025-09-15T00:00:00.000Z',
-    order_expiry: '2025-09-30T00:00:00.000Z',
-    transaction_type: 'REMITTANCE',
-    purpose: 'Education',
-    fx_currency: 'USD',
-    fx_amount: 10000,
-    company_settlement_rate: 75.5,
-    add_margin: 500,
-    customer_rate: 76,
-    nostro_charges: 300,
-    applicant_name: 'John Doe',
-    applicant_pan_number: 'ABCDE1234F',
-    applicant_email: 'john.doe@email.com',
-    applicant_mobile_number: '9876543210',
-    source_of_funds: 'Self Income',
-    paid_by: 'Self',
-    payee_name: 'Jane Doe',
-    payee_pan_number: 'FGHIJ5678K',
-    applicant_id_document: 'Passport',
-    passport_number: 'N1234567',
-    place_of_issue: 'Chennai',
-    applicant_address: '123 Main Street',
-    applicant_city: 'Chennai',
-    applicant_state: 'Tamil Nadu',
-    applicant_country: 'India',
-    postal_code: '600001',
+    company_reference_number: '',
+    agent_reference_number: '',
+    order_date: '',
+    order_expiry: '',
+    transaction_type: '',
+    purpose: '',
+    fx_currency: '',
+    fx_amount: '',
+    company_settlement_rate: '',
+    add_margin: '',
+    customer_rate: '',
+    nostro_charges: '',
+    applicant_name: '',
+    applicant_pan_number: '',
+    applicant_email: '',
+    applicant_mobile_number: '',
+    source_of_funds: '',
+    paid_by: '',
+    payee_name: '',
+    payee_pan_number: '',
+    applicant_id_document: '',
+    passport_number: '',
+    place_of_issue: '',
+    applicant_address: '',
+    applicant_city: '',
+    applicant_state: '',
+    applicant_country: '',
+    postal_code: '',
   },
 };
 
@@ -126,7 +227,7 @@ const defaultValues: Partial<CreateTransactionFormInput> = useMemo(() => {
     const sourceData = initialData ?? sampleInitialData;
     return {
       currencyDetails: {
-        fx_currency: sourceData.currencyDetails?.fx_currency || '-',
+        fx_currency: sourceData?.currencyDetails?.fx_currency || '-',
         fx_amount: sourceData.currencyDetails?.fx_amount || '-',
         settlement_rate: sourceData.currencyDetails?.settlement_rate || '',
         add_margin: sourceData.currencyDetails?.add_margin || '',
@@ -226,13 +327,13 @@ const defaultValues: Partial<CreateTransactionFormInput> = useMemo(() => {
   }, [initialData]);
   const form = useForm<CreateTransactionFormInput, unknown, CreateTransactionFormData>({
     resolver: zodResolver(createTransactionSchema),
-    defaultValues,
+    defaultValues ,
     mode: 'onSubmit', // Trigger validation on change
   });
 
-  useEffect(() => {
-    form.reset(initialData ?? sampleInitialData);
-  }, [initialData, form]);
+  // useEffect(() => {
+  //   form.reset(initialData ?? sampleInitialData);
+  // }, [initialData, form]);
 
   const handlePrevious = () => {
     if (currentTab === 'panel2') {
@@ -404,7 +505,7 @@ const defaultValues: Partial<CreateTransactionFormInput> = useMemo(() => {
 
   return (
     <FormProvider {...form}>
-      <form onSubmit={form.handleSubmit(handleSubmit)}>
+      <form id="create-transaction-form" onSubmit={form.handleSubmit(handleSubmit)}>
         <div>
           <div className="flex justify-between mb-4 gap-2">
             <Button variant="light"  className='w-24' onClick={onCancel}>
@@ -419,16 +520,6 @@ const defaultValues: Partial<CreateTransactionFormInput> = useMemo(() => {
               {showNext && (
                 <Button variant="secondary" onClick={handleNext} className='w-24'>
                   Next
-                </Button>
-              )}
-              {showSubmit && (
-                <Button
-                  variant="default"
-                  className='w-24'
-                  disabled={isSubmitting}
-                  type="submit"
-                >
-                  {isSubmitting ? 'Submitting...' : 'Submit'}
                 </Button>
               )}
             </div>
