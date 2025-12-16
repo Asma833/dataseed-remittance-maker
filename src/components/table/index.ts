@@ -1,6 +1,5 @@
 // Main components
 export { DataTable } from './data-table';
-export { UserManagementTable } from './user-management-table';
 export { StatusBadge } from './status-badge';
 export { ActionButtons } from './action-buttons';
 
