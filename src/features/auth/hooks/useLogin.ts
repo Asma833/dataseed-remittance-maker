@@ -15,6 +15,13 @@ export const useLogin = () => {
   const { mutate, isPending, error } = useMutation<LoginResponse, Error, LoginCredentials>({
     mutationFn: authApi.loginUser,
     onSuccess: (data) => {
+      // Check user role
+      const roleName = data.user.roles[0].role_name;
+      if (roleName !== 'branch_agent_maker') {
+        toast.error('Invalid credentials');
+        return;
+      }
+
       // Store user info in Redux
       dispatch(
         setCredentials({
@@ -25,8 +32,7 @@ export const useLogin = () => {
       );
 
       // Redirect user to correct route based on role
-      const roleName = data.user.roles[0].role_name as UserRole;
-      const defaultRoute = DEFAULT_ROUTES[roleName];
+      const defaultRoute = DEFAULT_ROUTES[roleName as UserRole];
       if (defaultRoute) {
         toast.success('Login successful');
         navigate(defaultRoute);
