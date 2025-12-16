@@ -28,6 +28,12 @@ interface PaymentData {
   payment_screenshot: string | null;
   is_esign_required: boolean;
   is_v_kyc_required: boolean;
+  fx_currency: number | string;
+  fx_amount:number | string;
+  settlement_rate:number | string;
+  customer_rate:number | string;
+  transaction_amount:number | string;
+
 }
 
 const dummyPaymentTableData: PaymentData[] = [
@@ -51,6 +57,12 @@ const dummyPaymentTableData: PaymentData[] = [
     payment_screenshot: null,
     is_esign_required: true,
     is_v_kyc_required: true,
+    fx_currency:1000,
+    fx_amount:500,
+    settlement_rate:40000,
+    customer_rate:50000,
+    transaction_amount:100000
+
   },
 ];
 
