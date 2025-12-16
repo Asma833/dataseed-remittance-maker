@@ -63,7 +63,7 @@ export const transactionBasicDetailsSchema = z.object({
     .optional()
     .or(z.literal('')),
   applicant_pan_number: z.string()
-    .regex(PAN_REGEX, 'Invalid PAN format')
+    .regex(PAN_REGEX, 'Invalid PAN format,(e.g,ABCDE1234F)')
     .length(10, 'PAN must be 10 characters')
     .optional()
     .or(z.literal('')),
@@ -98,7 +98,7 @@ export const transactionBasicDetailsSchema = z.object({
     .optional()
     .or(z.literal('')),
   payee_pan_number: z.string()
-    .regex(PAN_REGEX, 'Invalid PAN format')
+    .regex(PAN_REGEX, 'Invalid PAN format,(e.g,QRJYE1234F)')
     .length(10, 'PAN must be 10 characters')
     .optional()
     .or(z.literal('')),
