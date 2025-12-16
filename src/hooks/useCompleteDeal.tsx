@@ -1,7 +1,7 @@
 import { toast } from 'sonner';
 import { useMutation } from '@tanstack/react-query';
 import { completeDealApi } from '@/api/complete-deal.api';
-import { CompleteDealRequest, CompleteDealResponse } from '@/types/common/complete-deal.types';
+import { CompleteDealRequest, CompleteDealResponse } from '@/types/common/transaction.types';
 import { useQueryInvalidator } from '@/hooks/useQueryInvalidator';
 
 export const useCompleteDeal = () => {

@@ -107,7 +107,12 @@ export const ENDPOINT_MATCHING_RULES: EndpointRulesConfig = {
     endpoint: API.PURPOSE.TRANSACTION_MAPPING,
     matchType: 'standard' as const,
     description: 'Create transaction',
-  }
+  },
+  'complete-deal': {
+    endpoint: API.REMITTANCE.CREATE_TRANSACTION,
+    matchType: 'standard' as const,
+    description: 'Complete deal',
+  },
 } as const;
 
 /**

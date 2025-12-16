@@ -3,13 +3,13 @@ import CreateTransactionForm from './create-transaction-form/form/create-transac
 import { AccordionStateProvider } from './create-transaction-form/context/accordion-control-context';
 import TransactionTable from './table/transaction-table';
 import { TransactionData } from '@/features/maker/types/transaction.types';
-import { CreateTransactionFormData } from './create-transaction-form/form/common-schema';
+import { CreateTransactionFormInput } from './create-transaction-form/form/common-schema';
 
 const CreateTransactions = () => {
   const [showForm, setShowForm] = useState(false);
-  const [initialData, setInitialData] = useState<Partial<CreateTransactionFormData> | undefined>();
+  const [initialData, setInitialData] = useState<Partial<CreateTransactionFormInput> | undefined>();
 
-  const mapTransactionToFormData = (transaction: TransactionData): Partial<CreateTransactionFormData> => {
+  const mapTransactionToFormData = (transaction: TransactionData): Partial<CreateTransactionFormInput> => {
     return {
       currencyDetails: {
         fx_currency: transaction.fx_currency || '',
