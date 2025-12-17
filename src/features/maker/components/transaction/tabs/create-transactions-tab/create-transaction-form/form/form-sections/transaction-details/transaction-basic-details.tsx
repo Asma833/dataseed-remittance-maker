@@ -94,13 +94,11 @@ console.log(selectedMapping,"selectedMapping")
       <FormContentWrapper className="rounded-lg w-full mr-auto bg-transparent">
         <Spacer>
           <FormFieldRow rowCols={4}>
-            {(['company_reference_number', 'agent_reference_number','purpose', 'fx_currency'] as const).map(
+            {(['company_reference_number', 'agent_reference_number', 'fx_currency'] as const).map(
               (name) => {
                 const field = transactionBasicDetailsConfig.find((f) => f.name === name) as FieldConfig;
                  let fieldWithOptions = field;
-                  if (name === 'purpose') {
-                    fieldWithOptions = { ...field, options: filteredPurposeOptions };
-                  } else if (name === 'fx_currency') {
+                  if (name === 'fx_currency') {
                     fieldWithOptions = { ...field, options: currenyCodeType };
                   }
                 return (
@@ -122,11 +120,15 @@ console.log(selectedMapping,"selectedMapping")
             })}
           </FormFieldRow>
           <FormFieldRow rowCols={4}>
-            {(['nostro_charges'] as const).map((name) => {
+            {(['nostro_charges','purpose'] as const).map((name) => {
               const field = transactionBasicDetailsConfig.find((f) => f.name === name) as FieldConfig;
+              let fieldWithOptions = field;
+               if (name === 'purpose') {
+                    fieldWithOptions = { ...field, options: filteredPurposeOptions };
+                  }
               return (
                 <FieldWrapper key={name}>
-                  {getController({ ...field, name: `transactionDetails.${name}`, control, errors })}
+                  {getController({ ...fieldWithOptions, name: `transactionDetails.${name}`, control, errors })}
                 </FieldWrapper>
               );
             })}
