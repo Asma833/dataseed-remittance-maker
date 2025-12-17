@@ -374,11 +374,9 @@ const CreateTransactionForm = ({ onCancel, onSubmit, initialData }: Props) => {
           amount: 875088,
         },
       };
-
-      // const response = await mutateAsync(payload);
-      // onSubmit?.(data);
-      // form.reset(initialData ?? sampleInitialData);
-      console.log(payload,"payload")
+      const response = await mutateAsync(payload);
+      onSubmit?.(data);
+      form.reset(initialData ?? sampleInitialData);
     } catch (error) {
       console.error('Error creating transaction:', error);
 
