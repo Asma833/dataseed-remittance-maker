@@ -5,8 +5,6 @@ import FormFieldRow from '@/components/form/wrapper/form-field-row';
 import FieldWrapper from '@/components/form/wrapper/field-wrapper';
 import { getController } from '@/components/form/utils/get-controller';
 import transactionBasicDetailsConfig from './transaction-basic-details.config';
-import useGetPurposes from '@/hooks/useGetPurposes';
-import useGetTransactionType from '@/hooks/useGetTransactionType';
 import { useFormContext, useWatch } from 'react-hook-form';
 import { useGetCurrencyRates } from '@/hooks/useCurrencyRate';
 import { FieldConfig } from '../../../types/createTransactionForm.types';
