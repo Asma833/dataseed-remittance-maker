@@ -63,13 +63,6 @@ export const beneficiaryDetailsConfig = [
     required: true,
   },
   {
-    name: 'nostro_charges',
-    label: 'Nostro Charges',
-    type: 'text',
-    placeholder: 'Enter Nostro Charges',
-    required: true,
-  },
-  {
     name: 'message_to_beneficiary_additional_information',
     label: 'Message to Beneficiary / Additional Information',
     type: 'text',

@@ -16,21 +16,6 @@ const transactionBasicDetailsConfig = [
     required: false,
   },
   {
-    name: 'order_date',
-    label: 'Order Date',
-    type: FieldType.Date,
-    placeholder: 'Select Order Date',
-    required: false,
-    disabled: true,
-  },
-  {
-    name: 'transaction_type',
-    label: 'Transaction Type',
-    type: FieldType.Select,
-    placeholder: 'Select Transaction Type',
-    required: false,
-  },
-  {
     name: 'purpose',
     label: 'Purpose',
     type: FieldType.Select,
@@ -75,8 +60,12 @@ const transactionBasicDetailsConfig = [
   {
     name: 'nostro_charges',
     label: 'Nostro Charges',
-    type: FieldType.Number,
-    placeholder: 'Enter Nostro Charges',
+    type: FieldType.Select,
+    placeholder: 'Select Nostro Charges',
+    options: {
+      ben: { label: 'BEN' },
+      our: { label: 'OUR' },
+    },
     required: false,
   },
   {

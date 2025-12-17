@@ -20,16 +20,6 @@ export const transactionBasicDetailsSchema = z
       .max(50, 'Company reference number too long')
       .optional()
       .or(z.literal('')),
-    order_date: z.coerce.date().optional().refine((val) => !val || val <= new Date(), 'Order date cannot be in the future'),
-    // order_expiry: z.coerce.date()
-    //   .min(new Date(), 'Deal expiry must be in the future')
-    //   .optional(),
-    transaction_type: z
-      .string()
-      .regex(NO_LEADING_HYPHEN_OR_SPACE, 'Transaction type cannot start with hyphen or space')
-      .max(100, 'Transaction type too long')
-      .optional()
-      .or(z.literal('')),
     purpose: z.string().max(100, 'Purpose too long').optional().or(z.literal('')),
     fx_currency: z
       .string()

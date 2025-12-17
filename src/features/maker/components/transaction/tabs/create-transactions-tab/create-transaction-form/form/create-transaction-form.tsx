@@ -72,7 +72,6 @@ const sampleInitialData: CreateTransactionFormInput = {
     beneficiary_bank_name: 'Bank of America',
     beneficiary_bank_address: 'New York Branch',
     sort_bsb_aba_transit_code: '021000021',
-    nostro_charges: 'SHA',
     message_to_beneficiary_additional_information: 'Education fee payment',
     student_name: 'Student One',
     student_passport_number: 'N1234567',
@@ -87,8 +86,6 @@ const sampleInitialData: CreateTransactionFormInput = {
   transactionDetails: {
     company_reference_number: 'COMP-REF-001',
     agent_reference_number: 'AGENT-REF-001',
-    order_date: new Date(),
-    transaction_type: 'REMITTANCE',
     purpose: 'Education',
     fx_currency: 'USD',
     fx_amount: 10000,
@@ -430,7 +427,7 @@ const CreateTransactionForm = ({ onCancel, onSubmit, initialData }: Props) => {
           beneficiary_bank_name: normalizeString(data.beneficiaryDetails.beneficiary_bank_name),
           beneficiary_bank_address: normalizeString(data.beneficiaryDetails.beneficiary_bank_address),
           sort_bsb_aba_transit_code: normalizeString(data.beneficiaryDetails.sort_bsb_aba_transit_code),
-          nostro_charges: normalizeString(data.beneficiaryDetails.nostro_charges),
+          nostro_charges:"",
           message_to_beneficiary_additional_information: normalizeString(
             data.beneficiaryDetails.message_to_beneficiary_additional_information
           ),
@@ -447,9 +444,7 @@ const CreateTransactionForm = ({ onCancel, onSubmit, initialData }: Props) => {
         transactionDetails: {
           company_reference_number: normalizeString(data.transactionDetails.company_reference_number),
           agent_reference_number: normalizeString(data.transactionDetails.agent_reference_number),
-          order_date: data.transactionDetails.order_date
-            ? data.transactionDetails.order_date.toISOString()
-            : new Date().toISOString(),
+          order_date: new Date().toISOString(),
           order_expiry: new Date().toISOString(),
           transaction_type: 'REMITTANCE',
           purpose: normalizeString(data.transactionDetails.purpose),

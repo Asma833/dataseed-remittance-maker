@@ -41,10 +41,6 @@ export const beneficiaryDetailsSchema = z
       .string()
       .min(1, 'SORT/BSB/ABA/TRANSIT Code is required')
       .regex(alphanumericRegex, 'Only alphanumeric characters allowed, no spaces or hyphens'),
-    nostro_charges: z
-      .string()
-      .min(1, 'Nostro charges is required')
-      .regex(alphanumericRegex, 'Only alphanumeric characters allowed, no spaces or hyphens'),
     message_to_beneficiary_additional_information: z
       .string()
       .min(1, 'Message to beneficiary / additional information is required')
