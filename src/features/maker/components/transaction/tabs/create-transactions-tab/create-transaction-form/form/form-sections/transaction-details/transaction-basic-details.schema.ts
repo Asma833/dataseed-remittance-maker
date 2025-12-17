@@ -21,6 +21,8 @@ export const transactionBasicDetailsSchema = z
       .optional()
       .or(z.literal('')),
     purpose: z.string().max(100, 'Purpose too long').optional().or(z.literal('')),
+    transaction_purpose_map_id:z.string().optional(),
+    transaction_type: z.string().optional().or(z.literal('')),
     fx_currency: z
       .string()
       .regex(CURRENCY_CODE_REGEX, 'Invalid currency code (must be 3 uppercase letters)')
@@ -137,10 +139,6 @@ export const transactionBasicDetailsSchema = z
       .length(6, 'Postal code must be 6 digits'),
   })
   .refine((data) => {
-    // Additional cross-field validations if needed, e.g., deal_expiry > order_date
-    // if (data.order_date && data.order_expiry && data.order_expiry <= data.order_date) {
-    //   return false;
-    // }
     if (
       data.passport_issued_date &&
       data.passport_expiry_date &&

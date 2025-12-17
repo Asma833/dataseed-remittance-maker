@@ -68,6 +68,7 @@ export interface TransactionDetails {
   order_expiry: string;
   transaction_type: string;
   purpose: string;
+  transaction_purpose_map_id: string;
   fx_currency: string;
   fx_amount: number;
   company_settlement_rate: number;

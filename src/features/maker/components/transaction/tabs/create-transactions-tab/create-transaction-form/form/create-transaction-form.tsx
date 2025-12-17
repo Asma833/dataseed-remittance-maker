@@ -86,6 +86,7 @@ const sampleInitialData: CreateTransactionFormInput = {
     company_reference_number: 'COMP-REF-001',
     agent_reference_number: 'AGENT-REF-001',
     purpose: 'Education',
+    transaction_purpose_map_id: '1',
     fx_currency: 'USD',
     fx_amount: 10000,
     company_settlement_rate: 75.5,
@@ -194,6 +195,7 @@ const CreateTransactionForm = ({ onCancel, onSubmit, initialData }: Props) => {
         order_expiry: new Date(),
         transaction_type: '',
         purpose: '',
+        transaction_purpose_map_id: '',
         fx_currency: '',
         fx_amount: 0,
         company_settlement_rate: 0,
@@ -340,6 +342,7 @@ const CreateTransactionForm = ({ onCancel, onSubmit, initialData }: Props) => {
           order_expiry: new Date().toISOString(),
           transaction_type: 'REMITTANCE',
           purpose: normalizeString(data.transactionDetails.purpose),
+          transaction_purpose_map_id: normalizeString(data.transactionDetails.transaction_purpose_map_id),
           fx_currency: normalizeString(data.transactionDetails.fx_currency),
           fx_amount: safeNumber(data.transactionDetails.fx_amount),
           company_settlement_rate: safeNumber(data.transactionDetails.company_settlement_rate),
@@ -372,9 +375,10 @@ const CreateTransactionForm = ({ onCancel, onSubmit, initialData }: Props) => {
         },
       };
 
-      const response = await mutateAsync(payload);
-      onSubmit?.(data);
-      form.reset(initialData ?? sampleInitialData);
+      // const response = await mutateAsync(payload);
+      // onSubmit?.(data);
+      // form.reset(initialData ?? sampleInitialData);
+      console.log(payload,"payload")
     } catch (error) {
       console.error('Error creating transaction:', error);
 

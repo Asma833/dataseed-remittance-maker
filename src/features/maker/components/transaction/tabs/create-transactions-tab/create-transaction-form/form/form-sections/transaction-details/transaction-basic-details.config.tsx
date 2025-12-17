@@ -23,6 +23,13 @@ const transactionBasicDetailsConfig = [
     required: false,
   },
   {
+    name: 'transaction_purpose_map_id',
+    label: '',
+    type: FieldType.Text,
+    placeholder: '',
+    required: false,
+  },
+  {
     name: 'fx_currency',
     label: 'FX Currency',
     type: FieldType.Select,
