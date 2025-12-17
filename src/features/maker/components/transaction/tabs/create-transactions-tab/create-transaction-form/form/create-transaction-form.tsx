@@ -8,6 +8,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { createTransactionSchema, CreateTransactionFormData, CreateTransactionFormInput } from './common-schema';
 import { useCompleteTransaction } from '@/hooks/useCompleteTransaction';
 import type { CompleteTransactionRequest } from '@/types/common/transaction.types';
+import { safeNumber, safeString, normalizeString } from '@/utils/form-helpers';
 
 type Props = {
   onCancel?: () => void;
@@ -246,19 +247,6 @@ const CreateTransactionForm = ({ onCancel, onSubmit, initialData }: Props) => {
   const handleSubmit = async (data: CreateTransactionFormData) => {
     setIsSubmitting(true);
     try {
-      // Helper to safely convert user input to number
-      const safeNumber = (value: string | number | undefined): number => {
-        if (value === undefined || value === null || value === '') return 0;
-        const num = typeof value === 'string' ? Number(value) : value;
-        return isNaN(num as number) ? 0 : (num as number);
-      };
-
-      const safeString = (value: string | undefined): string | undefined => {
-        const str = value?.trim();
-        return str || undefined;
-      };
-
-      const normalizeString = (value: string | undefined): string => value?.trim() || '';
 
       const requiredBeneficiaryFields = [
         'beneficiary_name',
