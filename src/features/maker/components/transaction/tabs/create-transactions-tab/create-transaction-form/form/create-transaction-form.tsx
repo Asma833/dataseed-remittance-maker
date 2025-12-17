@@ -139,7 +139,7 @@ const CreateTransactionForm = ({ onCancel, onSubmit, initialData }: Props) => {
           company_settlement_rate: safeNumber(data.transactionDetails.company_settlement_rate),
           add_margin: safeNumber(data.transactionDetails.add_margin),
           customer_rate: safeNumber(data.transactionDetails.customer_rate),
-          nostro_charges: normalizeString(data.transactionDetails.nostro_charges?.toString()),
+          nostro_charges:safeNumber(data.transactionDetails?.nostro_charges),
           applicant_name: normalizeString(data.transactionDetails.applicant_name),
           applicant_pan_number: normalizeString(data.transactionDetails.applicant_pan_number),
           applicant_email: normalizeString(data.transactionDetails.applicant_email),

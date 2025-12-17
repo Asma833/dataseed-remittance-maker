@@ -74,7 +74,7 @@ export interface TransactionDetails {
   company_settlement_rate: number;
   add_margin: number;
   customer_rate: number;
-  nostro_charges: string;
+  nostro_charges: number;
   applicant_name: string;
   applicant_pan_number: string;
   applicant_email: string;
