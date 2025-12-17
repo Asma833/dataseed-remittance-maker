@@ -77,7 +77,7 @@ export const sampleInitialData: CreateTransactionFormInput = {
     company_settlement_rate: 75.5,
     add_margin: 500,
     customer_rate: 76,
-    nostro_charges: 300,
+    nostro_charges: 'ben',
     applicant_name: 'John Doe',
     applicant_pan_number: 'ABCDE1234F',
     applicant_email: 'john.doe@email.com',

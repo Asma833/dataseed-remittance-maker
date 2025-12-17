@@ -30,7 +30,7 @@ export const ShadCnNumber = ({
 
   return (
     <FormItem className={className}>
-      <FormLabel className="text-[var(--color-form-label)]">
+      <FormLabel className="text-[--color-form-label]">
         {label}
         {required && <span className="text-destructive ml-1">*</span>}
       </FormLabel>
@@ -43,7 +43,7 @@ export const ShadCnNumber = ({
             <div>
               <ShadCnFormInput
                 {...field}
-                type="number"
+                type="text"
                 placeholder={placeholder}
                 className={cn(
                   'form-input shadow-none focus-visible:ring-0',
@@ -52,11 +52,12 @@ export const ShadCnNumber = ({
                 value={(forcedValue !== undefined ? forcedValue : value) || ''}
                 onChange={(e) => {
                   const val = e.target.value;
-                  onChange(val === '' ? '' : val);
+                  // Allow only numbers and decimal point
+                  if (/^[0-9]*\.?[0-9]*$/.test(val) || val === '') {
+                    onChange(val === '' ? '' : val);
+                  }
                 }}
                 disabled={disabled}
-                min={min}
-                step={step}
               />
               {error && <p className="text-sm text-destructive mt-1">{error.message}</p>}
             </div>

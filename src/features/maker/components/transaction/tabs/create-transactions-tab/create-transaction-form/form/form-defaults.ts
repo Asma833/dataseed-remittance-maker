@@ -81,7 +81,7 @@ export const getFormDefaultValues = (initialData?: Partial<CreateTransactionForm
       company_settlement_rate: 0,
       add_margin: 0,
       customer_rate: 0,
-      nostro_charges: 0,
+      nostro_charges: '',
       applicant_name: '',
       applicant_pan_number: '',
       applicant_email: '',

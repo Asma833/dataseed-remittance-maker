@@ -32,11 +32,7 @@ export const transactionBasicDetailsSchema = z
     company_settlement_rate: z.coerce.number().min(0, 'Rate must be positive').max(999999, 'Rate too large').optional(),
     add_margin: z.coerce.number().min(0, 'Add margin must be positive').max(999999, 'Rate too large').optional(),
     customer_rate: z.coerce.number().min(0, 'Customer rate must be positive').max(999999, 'Rate too large').optional(),
-    nostro_charges: z.coerce
-      .number()
-      .min(0, 'Nostro charges must be positive')
-      .max(999999, 'Rate too large')
-      .optional(),
+    nostro_charges: z.string().optional(),
     applicant_name: z
       .string()
       .min(2, 'Name too short')
