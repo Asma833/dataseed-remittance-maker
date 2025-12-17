@@ -1,8 +1,8 @@
 import { toast } from 'sonner';
 import { useMutation } from '@tanstack/react-query';
 import { completeTransactionApi } from '@/api/complete-transaction.api';
-import { CompleteTransactionRequest, CompleteTransactionResponse } from '@/types/common/transaction.types';
 import { useQueryInvalidator } from '@/hooks/useQueryInvalidator';
+import { CompleteTransactionRequest, CompleteTransactionResponse } from '../types/transaction.types';
 
 export const useCompleteTransaction = () => {
   const { invalidateMultipleQueries } = useQueryInvalidator();

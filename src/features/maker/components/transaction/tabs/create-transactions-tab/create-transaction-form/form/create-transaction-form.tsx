@@ -6,111 +6,16 @@ import { useAccordionStateProvider } from '../context/accordion-control-context'
 import { useForm, FormProvider } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { createTransactionSchema, CreateTransactionFormData, CreateTransactionFormInput } from './common-schema';
-import { useCompleteTransaction } from '@/hooks/useCompleteTransaction';
-import type { CompleteTransactionRequest } from '@/types/common/transaction.types';
 import { safeNumber, safeString, normalizeString } from '@/utils/form-helpers';
+import { useCompleteTransaction } from '../hooks/useCompleteTransaction';
+import { CompleteTransactionRequest } from '../types/transaction.types';
+import { sampleInitialData } from './sample-initial-data';
+import { getFormDefaultValues } from './form-defaults';
 
 type Props = {
   onCancel?: () => void;
   onSubmit?: (data: CreateTransactionFormData) => void;
   initialData?: Partial<CreateTransactionFormInput>;
-};
-
-const sampleInitialData: CreateTransactionFormInput = {
-  currencyDetails: {
-    fx_currency: 'PLN',
-    fx_amount: '50000',
-    settlement_rate: '75.5',
-    add_margin: '500',
-    customer_rate: '76',
-    declared_education_loan_amount: '500000',
-    previous_transaction_amount: '100000',
-    declared_previous_amount: '50000',
-    total_transaction_amount_tcs: '1500',
-    invoiceRateTable: {
-      transaction_value: {
-        company_rate: '740000',
-        agent_mark_up: '500',
-        rate: '740500',
-      },
-      remittance_charges: {
-        company_rate: '500',
-        agent_mark_up: '50',
-        rate: '550',
-      },
-      nostro_charges: {
-        company_rate: '300',
-        agent_mark_up: '30',
-        rate: '330',
-      },
-      other_charges: {
-        company_rate: '200',
-        agent_mark_up: '20',
-        rate: '220',
-      },
-      transaction_amount: {
-        rate: '741600',
-      },
-      gst_amount: {
-        rate: '133488',
-      },
-      total_inr_amount: {
-        rate: '875088',
-      },
-      tcs: {
-        rate: '1500',
-      },
-    },
-  },
-  beneficiaryDetails: {
-    beneficiary_name: 'ASMA',
-    beneficiary_address: 'University Road',
-    beneficiary_city: 'New York',
-    beneficiary_country: 'USA',
-    beneficiary_account_number_iban_number: 'US1234567890',
-    beneficiary_swift_code: 'ABCDUS33',
-    beneficiary_bank_name: 'Bank of America',
-    beneficiary_bank_address: 'New York Branch',
-    sort_bsb_aba_transit_code: '021000021',
-    message_to_beneficiary_additional_information: 'Education fee payment',
-    student_name: 'Student One',
-    student_passport_number: 'N1234567',
-    payment_instruction_number: 'PAYINS001',
-    university_name: 'ABC University',
-    intermediaryBankDetails: 'no',
-    intermediary_bank_account_number: '',
-    intermediary_bank_swift_code: '',
-    intermediary_bank_name: '',
-    intermediary_bank_address: '',
-  },
-  transactionDetails: {
-    company_reference_number: 'COMP-REF-001',
-    agent_reference_number: 'AGENT-REF-001',
-    purpose: 'Education',
-    transaction_purpose_map_id: '1',
-    fx_currency: 'USD',
-    fx_amount: 10000,
-    company_settlement_rate: 75.5,
-    add_margin: 500,
-    customer_rate: 76,
-    nostro_charges: 300,
-    applicant_name: 'John Doe',
-    applicant_pan_number: 'ABCDE1234F',
-    applicant_email: 'john.doe@email.com',
-    applicant_mobile_number: '9876543210',
-    source_of_funds: 'Self Income',
-    paid_by: 'Self',
-    payee_name: 'Jane Doe',
-    payee_pan_number: 'FGHIJ5678K',
-    applicant_id_document: 'Passport',
-    passport_number: 'N1234567',
-    place_of_issue: 'Chennai',
-    applicant_address: '123 Main Street',
-    applicant_city: 'Chennai',
-    applicant_state: 'Tamil Nadu',
-    applicant_country: 'India',
-    postal_code: '600001',
-  },
 };
 
 const CreateTransactionForm = ({ onCancel, onSubmit, initialData }: Props) => {
@@ -119,109 +24,7 @@ const CreateTransactionForm = ({ onCancel, onSubmit, initialData }: Props) => {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const { mutateAsync } = useCompleteTransaction();
 
-  const defaultValues: Partial<CreateTransactionFormInput> = useMemo(() => {
-    const sourceData = initialData ?? sampleInitialData;
-    return {
-      currencyDetails: {
-        fx_currency: sourceData?.currencyDetails?.fx_currency || '-',
-        fx_amount: sourceData.currencyDetails?.fx_amount || '-',
-        settlement_rate: sourceData.currencyDetails?.settlement_rate || '',
-        add_margin: sourceData.currencyDetails?.add_margin || '',
-        customer_rate: sourceData.currencyDetails?.customer_rate || '',
-        declared_education_loan_amount: sourceData.currencyDetails?.declared_education_loan_amount || '',
-        previous_transaction_amount: sourceData.currencyDetails?.previous_transaction_amount || '',
-        declared_previous_amount: sourceData.currencyDetails?.declared_previous_amount || '',
-        total_transaction_amount_tcs: sourceData.currencyDetails?.total_transaction_amount_tcs || '',
-        invoiceRateTable: sourceData.currencyDetails?.invoiceRateTable || {
-          transaction_value: {
-            company_rate: '',
-            agent_mark_up: '',
-            rate: '',
-          },
-          remittance_charges: {
-            company_rate: '',
-            agent_mark_up: '',
-            rate: '',
-          },
-          nostro_charges: {
-            company_rate: '',
-            agent_mark_up: '',
-            rate: '',
-          },
-          other_charges: {
-            company_rate: '',
-            agent_mark_up: '',
-            rate: '',
-          },
-          transaction_amount: {
-            rate: '',
-          },
-          gst_amount: {
-            rate: '',
-          },
-          total_inr_amount: {
-            rate: '',
-          },
-          tcs: {
-            rate: '',
-          },
-        },
-      },
-      beneficiaryDetails: sourceData.beneficiaryDetails || {
-        beneficiary_name: '',
-        beneficiary_address: '',
-        beneficiary_city: '',
-        beneficiary_country: '',
-        beneficiary_account_number_iban_number: '',
-        beneficiary_swift_code: '',
-        beneficiary_bank_name: '',
-        beneficiary_bank_address: '',
-        sort_bsb_aba_transit_code: '',
-        nostro_charges: '',
-        message_to_beneficiary_additional_information: '',
-        student_name: '',
-        student_passport_number: '',
-        payment_instruction_number: '',
-        university_name: '',
-        intermediaryBankDetails: 'no',
-        intermediary_bank_account_number: '',
-        intermediary_bank_swift_code: '',
-        intermediary_bank_name: '',
-        intermediary_bank_address: '',
-      },
-      transactionDetails: sourceData.transactionDetails || {
-        company_reference_number: '-',
-        agent_reference_number: '-',
-        order_date: new Date(),
-        order_expiry: new Date(),
-        transaction_type: '',
-        purpose: '',
-        transaction_purpose_map_id: '',
-        fx_currency: '',
-        fx_amount: 0,
-        company_settlement_rate: 0,
-        add_margin: 0,
-        customer_rate: 0,
-        nostro_charges: 0,
-        applicant_name: '',
-        applicant_pan_number: '',
-        applicant_email: '',
-        applicant_mobile_number: '',
-        source_of_funds: '',
-        paid_by: '',
-        payee_name: '',
-        payee_pan_number: '',
-        applicant_id_document: '',
-        passport_number: '',
-        place_of_issue: '',
-        applicant_address: '',
-        applicant_city: '',
-        applicant_state: '',
-        applicant_country: '',
-        postal_code: '',
-      },
-    };
-  }, [initialData]);
+  const defaultValues = useMemo(() => getFormDefaultValues(initialData), [initialData]);
   const form = useForm<CreateTransactionFormInput, unknown, CreateTransactionFormData>({
     resolver: zodResolver(createTransactionSchema),
     defaultValues,

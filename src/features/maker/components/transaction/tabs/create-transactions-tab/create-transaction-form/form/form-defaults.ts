@@ -1,0 +1,103 @@
+import { CreateTransactionFormInput } from './common-schema';
+import { sampleInitialData } from './sample-initial-data';
+
+export const getFormDefaultValues = (initialData?: Partial<CreateTransactionFormInput>): Partial<CreateTransactionFormInput> => {
+  const sourceData = initialData ?? sampleInitialData;
+  return {
+    currencyDetails: {
+      fx_currency: sourceData?.currencyDetails?.fx_currency || '-',
+      fx_amount: sourceData.currencyDetails?.fx_amount || '-',
+      settlement_rate: sourceData.currencyDetails?.settlement_rate || '',
+      add_margin: sourceData.currencyDetails?.add_margin || '',
+      customer_rate: sourceData.currencyDetails?.customer_rate || '',
+      declared_education_loan_amount: sourceData.currencyDetails?.declared_education_loan_amount || '',
+      previous_transaction_amount: sourceData.currencyDetails?.previous_transaction_amount || '',
+      declared_previous_amount: sourceData.currencyDetails?.declared_previous_amount || '',
+      total_transaction_amount_tcs: sourceData.currencyDetails?.total_transaction_amount_tcs || '',
+      invoiceRateTable: sourceData.currencyDetails?.invoiceRateTable || {
+        transaction_value: {
+          company_rate: '',
+          agent_mark_up: '',
+          rate: '',
+        },
+        remittance_charges: {
+          company_rate: '',
+          agent_mark_up: '',
+          rate: '',
+        },
+        nostro_charges: {
+          company_rate: '',
+          agent_mark_up: '',
+          rate: '',
+        },
+        other_charges: {
+          company_rate: '',
+          agent_mark_up: '',
+          rate: '',
+        },
+        transaction_amount: {
+          rate: '',
+        },
+        gst_amount: {
+          rate: '',
+        },
+        total_inr_amount: {
+          rate: '',
+        },
+        tcs: {
+          rate: '',
+        },
+      },
+    },
+    beneficiaryDetails: sourceData.beneficiaryDetails || {
+      beneficiary_name: '',
+      beneficiary_address: '',
+      beneficiary_city: '',
+      beneficiary_country: '',
+      beneficiary_account_number_iban_number: '',
+      beneficiary_swift_code: '',
+      beneficiary_bank_name: '',
+      beneficiary_bank_address: '',
+      sort_bsb_aba_transit_code: '',
+      message_to_beneficiary_additional_information: '',
+      student_name: '',
+      student_passport_number: '',
+      payment_instruction_number: '',
+      university_name: '',
+      intermediaryBankDetails: 'no',
+      intermediary_bank_account_number: '',
+      intermediary_bank_swift_code: '',
+      intermediary_bank_name: '',
+      intermediary_bank_address: '',
+    },
+    transactionDetails: sourceData.transactionDetails || {
+      company_reference_number: '-',
+      agent_reference_number: '-',
+      transaction_type: '',
+      purpose: '',
+      transaction_purpose_map_id: '',
+      fx_currency: '',
+      fx_amount: 0,
+      company_settlement_rate: 0,
+      add_margin: 0,
+      customer_rate: 0,
+      nostro_charges: 0,
+      applicant_name: '',
+      applicant_pan_number: '',
+      applicant_email: '',
+      applicant_mobile_number: '',
+      source_of_funds: '',
+      paid_by: '',
+      payee_name: '',
+      payee_pan_number: '',
+      applicant_id_document: '',
+      passport_number: '',
+      place_of_issue: '',
+      applicant_address: '',
+      applicant_city: '',
+      applicant_state: '',
+      applicant_country: '',
+      postal_code: '',
+    },
+  };
+};
