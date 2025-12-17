@@ -17,9 +17,7 @@ import { useMemo, useEffect } from 'react';
 import { TransactionPurposeMap } from '@/types/common/transaction-form.types';
 
 const TransactionBasicDetails = ({ setAccordionState }: CommonCreateTransactionProps) => {
-  const { purposeTypes, loading: purposeLoading } = useGetPurposes();
   const { data: currencyCode, isLoading: currencyLoading } = useGetCurrencyRates();
-  const { transactionTypes, loading: transactionTypeLoading } = useGetTransactionType();
    const {
     data: mappedPurposeTransactionTypesData,
     isLoading: userLoading,
@@ -37,10 +35,6 @@ const TransactionBasicDetails = ({ setAccordionState }: CommonCreateTransactionP
   } = useFormContext();
   const sourceOfFunds = useWatch({ control, name: 'transactionDetails.source_of_funds' });
 
-  const purposeOptions = purposeTypes.reduce((acc: Record<string, { label: string }>, { text }) => {
-    acc[text] = { label: text };
-    return acc;
-  }, {});
   const selectedTransactionTypeId = "3f9fbf53-057f-4cf7-90f5-5035edd2e158";
   // Filter purpose types based on selected transaction type
   const purposeTypesForSelectedTransaction = selectedTransactionTypeId
@@ -76,7 +70,6 @@ const TransactionBasicDetails = ({ setAccordionState }: CommonCreateTransactionP
       (item) => item.transactionType.id === selectedTransactionType && item.purpose.id === selectedPurposeType
     );
   }, [selectedTransactionType, selectedPurposeType, mappedPurposeTransactionTypesData]);
-console.log(selectedMapping,"selectedMapping")
 
   useEffect(() => {
     if (selectedMapping?.id) {
