@@ -5,7 +5,7 @@ import { getTabsFromRoute } from '@/utils/routeUtils';
 export const makerComponents = {
   TransactionPage: lazy(() => import('@/features/maker/pages/transaction/remittance/page')),
   CreateTransactions: lazy(
-    () => import('@/features/maker/components/transaction/tabs/create-transactions-tab/create-transactions')
+    () => import('@/features/maker/components/transaction/tabs/create-transactions-tab/transactions')
   ),
   KYCUpload: lazy(() => import('@/features/maker/components/transaction/tabs/kyc-upload-tab/kyc-upload')),
   PaymentStatus: lazy(() => import('@/features/maker/components/transaction/tabs/payment-tab/payment-table')),
