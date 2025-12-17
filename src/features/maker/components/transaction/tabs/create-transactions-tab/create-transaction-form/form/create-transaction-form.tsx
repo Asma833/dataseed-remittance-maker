@@ -373,8 +373,6 @@ const CreateTransactionForm = ({ onCancel, onSubmit, initialData }: Props) => {
       };
 
       const response = await mutateAsync(payload);
-
-      console.log('Transaction created:', response);
       onSubmit?.(data);
       form.reset(initialData ?? sampleInitialData);
     } catch (error) {
