@@ -5,6 +5,7 @@ const MOBILE_REGEX = /^[6-9]\d{9}$/;
 const CURRENCY_CODE_REGEX = /^[A-Z]{3}$/;
 const POSTAL_CODE_REGEX = /^\d{6}$/; // Indian PIN code
 const NO_LEADING_HYPHEN_OR_SPACE = /^[^-\s].*/; // No leading hyphen or space
+const NO_NUMBERS_REGEX = /^[a-zA-Z\s-]+$/; // No numbers allowed
 
 export const transactionBasicDetailsSchema = z
   .object({
@@ -16,8 +17,8 @@ export const transactionBasicDetailsSchema = z
       .or(z.literal('')),
     agent_reference_number: z
       .string()
-      .regex(NO_LEADING_HYPHEN_OR_SPACE, 'Company reference number cannot start with hyphen or space')
-      .max(50, 'Company reference number too long')
+      .regex(NO_LEADING_HYPHEN_OR_SPACE, 'Agent reference number cannot start with hyphen or space')
+      .max(50, 'Agent reference number too long')
       .optional()
       .or(z.literal('')),
     purpose: z.string().max(100, 'Purpose too long').optional().or(z.literal('')),
@@ -32,7 +33,7 @@ export const transactionBasicDetailsSchema = z
     company_settlement_rate: z.coerce.number().min(0, 'Rate must be positive').max(999999, 'Rate too large').optional(),
     add_margin: z.coerce.number().min(0, 'Add margin must be positive').max(999999, 'Rate too large').optional(),
     customer_rate: z.coerce.number().min(0, 'Customer rate must be positive').max(999999, 'Rate too large').optional(),
-    nostro_charges: z.string().optional(),
+    nostro_charges: z.coerce.number().optional(),
     applicant_name: z
       .string()
       .min(2, 'Name too short')
@@ -42,7 +43,7 @@ export const transactionBasicDetailsSchema = z
       .or(z.literal('')),
     applicant_pan_number: z
       .string()
-      .regex(PAN_REGEX, 'Invalid PAN format,(e.g,ABCDE1234F)')
+      .regex(PAN_REGEX, 'Invalid PAN format (e.g., ABCDE1234F)')
       .length(10, 'PAN must be 10 characters')
       .optional()
       .or(z.literal('')),
@@ -79,7 +80,7 @@ export const transactionBasicDetailsSchema = z
       .or(z.literal('')),
     payee_pan_number: z
       .string()
-      .regex(PAN_REGEX, 'Invalid PAN format,(e.g,QRJYE1234F)')
+      .regex(PAN_REGEX, 'Invalid PAN format (e.g., QRJYE1234F)')
       .length(10, 'PAN must be 10 characters')
       .optional()
       .or(z.literal('')),
@@ -117,32 +118,23 @@ export const transactionBasicDetailsSchema = z
       .string()
       .nonempty('Applicant city is required')
       .max(50, 'City too long')
-      .regex(NO_LEADING_HYPHEN_OR_SPACE, 'City cannot start with hyphen or space'),
+      .regex(NO_LEADING_HYPHEN_OR_SPACE, 'City cannot start with hyphen or space')
+      .regex(NO_NUMBERS_REGEX, 'City cannot contain numbers'),
     applicant_state: z
       .string()
       .nonempty('Applicant state is required')
       .max(50, 'State too long')
-      .regex(NO_LEADING_HYPHEN_OR_SPACE, 'State cannot start with hyphen or space'),
+      .regex(NO_LEADING_HYPHEN_OR_SPACE, 'State cannot start with hyphen or space')
+      .regex(NO_NUMBERS_REGEX, 'State cannot contain numbers'),
     applicant_country: z
       .string()
       .nonempty('Applicant country is required')
       .max(50, 'Country too long')
-      .regex(NO_LEADING_HYPHEN_OR_SPACE, 'Country cannot start with hyphen or space'),
-    postal_code: z
-      .string()
+      .regex(NO_LEADING_HYPHEN_OR_SPACE, 'Country cannot start with hyphen or space')
+      .regex(NO_NUMBERS_REGEX, 'Country cannot contain numbers'),
+    postal_code: z.string()
       .nonempty('Postal code is required')
-      .regex(POSTAL_CODE_REGEX, 'Invalid postal code (must be 6 digits)')
-      .length(6, 'Postal code must be 6 digits'),
-  })
-  .refine((data) => {
-    if (
-      data.passport_issued_date &&
-      data.passport_expiry_date &&
-      data.passport_expiry_date <= data.passport_issued_date
-    ) {
-      return false;
-    }
-    return true;
+      .regex(POSTAL_CODE_REGEX, 'Postal code must be 6 digits')
   })
   .refine(
     (data) => {

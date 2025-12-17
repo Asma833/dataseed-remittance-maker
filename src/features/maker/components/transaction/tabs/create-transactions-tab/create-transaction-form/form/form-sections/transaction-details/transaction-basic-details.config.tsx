@@ -67,12 +67,8 @@ const transactionBasicDetailsConfig = [
   {
     name: 'nostro_charges',
     label: 'Nostro Charges',
-    type: FieldType.Select,
-    placeholder: 'Select Nostro Charges',
-    options: {
-      ben: { label: 'BEN' },
-      our: { label: 'OUR' },
-    },
+    type: FieldType.Number,
+    placeholder: 'Enter Nostro Charges',
     required: false,
   },
   {
@@ -223,7 +219,7 @@ const transactionBasicDetailsConfig = [
   {
     name: 'postal_code',
     label: 'Postal Code',
-    type: FieldType.Text,
+    type: FieldType.Number,
     placeholder: 'Enter Postal Code',
     required: true,
   },
