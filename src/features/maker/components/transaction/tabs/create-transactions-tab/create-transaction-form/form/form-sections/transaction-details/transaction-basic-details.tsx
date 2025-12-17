@@ -1,12 +1,10 @@
 import { FormContentWrapper } from '@/components/form/wrapper/form-content-wrapper';
 import Spacer from '@/components/form/wrapper/spacer';
-
 import { CommonCreateTransactionProps } from '@/features/maker/types/create-transaction.types';
 import FormFieldRow from '@/components/form/wrapper/form-field-row';
 import FieldWrapper from '@/components/form/wrapper/field-wrapper';
 import { getController } from '@/components/form/utils/get-controller';
 import transactionBasicDetailsConfig from './transaction-basic-details.config';
-import { FieldType } from '@/types/enums';
 import useGetPurposes from '@/hooks/useGetPurposes';
 import useGetTransactionType from '@/hooks/useGetTransactionType';
 import { useFormContext, useWatch } from 'react-hook-form';
@@ -60,7 +58,7 @@ const TransactionBasicDetails = ({ setAccordionState }: CommonCreateTransactionP
                   } 
                 return (
                   <FieldWrapper key={name}>
-                    {getController({ ...field, name: `transactionDetails.${name}`, control, errors })}
+                    {getController({ ...fieldWithOptions, name: `transactionDetails.${name}`, control, errors })}
                   </FieldWrapper>
                 );
               }
@@ -77,7 +75,7 @@ const TransactionBasicDetails = ({ setAccordionState }: CommonCreateTransactionP
             })}
           </FormFieldRow>
           <FormFieldRow rowCols={4}>
-            {(['nostro_charges','company_settlement_rate', 'add_margin', 'customer_rate'] as const).map((name) => {
+            {(['nostro_charges'] as const).map((name) => {
               const field = transactionBasicDetailsConfig.find((f) => f.name === name) as FieldConfig;
               return (
                 <FieldWrapper key={name}>

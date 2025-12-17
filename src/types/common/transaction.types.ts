@@ -100,14 +100,14 @@ export interface PaymentDetails {
   amount: number;
 }
 
-export interface CompleteDealRequest {
+export interface CompleteTransactionRequest {
   currencyDetails: CurrencyDetails;
   beneficiaryDetails: BeneficiaryDetails;
   transactionDetails: TransactionDetails;
   paymentDetails: PaymentDetails;
 }
 
-export interface CompleteDealResponse {
+export interface CompleteTransactionResponse {
   success: boolean;
   message: string;
   // Add other fields if known

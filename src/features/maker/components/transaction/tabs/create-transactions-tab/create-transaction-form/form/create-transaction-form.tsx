@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from 'react';
+import { useMemo, useState } from 'react';
 import CreateTransactionsAccordion from '../components/create-transactions-accordion';
 import { accordionItems } from '../config/accordion-config';
 import { Button } from '@/components/ui/button';
@@ -6,9 +6,8 @@ import { useAccordionStateProvider } from '../context/accordion-control-context'
 import { useForm, FormProvider } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { createTransactionSchema, CreateTransactionFormData, CreateTransactionFormInput } from './common-schema';
-//import { createTransaction } from '@/features/maker/api/transactionApi';
-import { useCompleteDeal } from '@/hooks/useCompleteDeal';
-import type { CompleteDealRequest } from '@/types/common/transaction.types';
+import { useCompleteTransaction } from '@/hooks/useCompleteTransaction';
+import type { CompleteTransactionRequest } from '@/types/common/transaction.types';
 
 type Props = {
   onCancel?: () => void;
@@ -112,113 +111,11 @@ const sampleInitialData: CreateTransactionFormInput = {
   },
 };
 
-// const sampleInitialData: CreateTransactionFormInput = {
-//   currencyDetails: {
-//     fx_currency: '',
-//     fx_amount: '',
-//     settlement_rate: '',
-//     add_margin: '',
-//     customer_rate: '',
-//     declared_education_loan_amount: '',
-//     previous_transaction_amount: '',
-//     declared_previous_amount: '',
-//     total_transaction_amount_tcs: '',
-    
-//     invoiceRateTable: {
-//       transaction_value: {
-//         company_rate: '740000',
-//         agent_mark_up: '500',
-//         rate: '740500',
-//       },
-//       remittance_charges: {
-//         company_rate: '500',
-//         agent_mark_up: '50',
-//         rate: '550',
-//       },
-//       nostro_charges: {
-//         company_rate: '300',
-//         agent_mark_up: '30',
-//         rate: '330',
-//       },
-//       other_charges: {
-//         company_rate: '200',
-//         agent_mark_up: '20',
-//         rate: '220',
-//       },
-//       transaction_amount: {
-//         rate: '741600',
-//       },
-//       gst_amount: {
-//         rate: '133488',
-//       },
-//       total_inr_amount: {
-//         rate: '875088',
-//       },
-//       tcs: {
-//         rate: '1500',
-//       },
-//     },
-//   },
-
-//   beneficiaryDetails: {
-//     beneficiary_name: '',
-//     beneficiary_address: '',
-//     beneficiary_city: '',
-//     beneficiary_country: '',
-//     beneficiary_account_number_iban_number: '',
-//     beneficiary_swift_code: '',
-//     beneficiary_bank_name: '',
-//     beneficiary_bank_address: '',
-//     sort_bsb_aba_transit_code: '',
-//     nostro_charges: '',
-//     message_to_beneficiary_additional_information: '',
-//     student_name: '',
-//     student_passport_number: '',
-//     payment_instruction_number: '',
-//     university_name: '',
-//     intermediaryBankDetails: 'no',
-//     intermediary_bank_account_number: '',
-//     intermediary_bank_swift_code: '',
-//     intermediary_bank_name: '',
-//     intermediary_bank_address: '',
-//   },
-
-//   transactionDetails: {
-//     company_reference_number: '',
-//     agent_reference_number: '',
-//     order_date: '',
-//     // order_expiry: '',
-//     transaction_type: '',
-//     purpose: '',
-//     fx_currency: '',
-//     fx_amount: '',
-//     company_settlement_rate: '',
-//     add_margin: '',
-//     customer_rate: '',
-//     nostro_charges: '',
-//     applicant_name: '',
-//     applicant_pan_number: '',
-//     applicant_email: '',
-//     applicant_mobile_number: '',
-//     source_of_funds: '',
-//     paid_by: '',
-//     payee_name: '',
-//     payee_pan_number: '',
-//     applicant_id_document: '',
-//     passport_number: '',
-//     place_of_issue: '',
-//     applicant_address: '',
-//     applicant_city: '',
-//     applicant_state: '',
-//     applicant_country: '',
-//     postal_code: '',
-//   },
-// };
 const CreateTransactionForm = ({ onCancel, onSubmit, initialData }: Props) => {
   const { accordionState, setAccordionState } = useAccordionStateProvider();
   const currentTab = accordionState.currentActiveTab;
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const { mutateAsync } = useCompleteDeal();
+  const { mutateAsync } = useCompleteTransaction();
 
   const defaultValues: Partial<CreateTransactionFormInput> = useMemo(() => {
     const sourceData = initialData ?? sampleInitialData;
@@ -325,12 +222,8 @@ const CreateTransactionForm = ({ onCancel, onSubmit, initialData }: Props) => {
   const form = useForm<CreateTransactionFormInput, unknown, CreateTransactionFormData>({
     resolver: zodResolver(createTransactionSchema),
     defaultValues,
-    mode: 'onSubmit', // Trigger validation on change
+    mode: 'onChange', // Trigger validation on change
   });
-
-  // useEffect(() => {
-  //   form.reset(initialData ?? sampleInitialData);
-  // }, [initialData, form]);
 
   const handlePrevious = () => {
     if (currentTab === 'panel2') {
@@ -375,7 +268,6 @@ const CreateTransactionForm = ({ onCancel, onSubmit, initialData }: Props) => {
         'beneficiary_bank_name',
         'beneficiary_bank_address',
         'sort_bsb_aba_transit_code',
-        'nostro_charges',
         'message_to_beneficiary_additional_information',
       ];
 
@@ -393,7 +285,7 @@ const CreateTransactionForm = ({ onCancel, onSubmit, initialData }: Props) => {
         rate: safeNumber(group.rate),
       });
 
-      const payload: CompleteDealRequest = {
+      const payload: CompleteTransactionRequest = {
         currencyDetails: {
           fx_currency: normalizeString(data.currencyDetails.fx_currency),
           fx_amount: safeNumber(data.currencyDetails.fx_amount),
