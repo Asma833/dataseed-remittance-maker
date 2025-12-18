@@ -3,11 +3,9 @@ import {
   useReactTable,
   getCoreRowModel,
   getPaginationRowModel,
-  getSortedRowModel,
   getFilteredRowModel,
   ColumnDef,
   flexRender,
-  SortingState,
   ColumnFiltersState,
   PaginationState,
   RowData,
@@ -23,8 +21,6 @@ declare module '@tanstack/react-table' {
   }
 }
 import {
-  ChevronUpIcon,
-  ChevronDownIcon,
   ArrowRightIcon,
   RefreshCwIcon,
   SearchIcon,
@@ -120,7 +116,6 @@ export function DataTable<T>({
       pagination: { ...defaultTableConfig.pagination, ...configOverride.pagination },
       search: { ...defaultTableConfig.search, ...configOverride.search },
       filters: { ...defaultTableConfig.filters, ...configOverride.filters },
-      sorting: { ...defaultTableConfig.sorting, ...configOverride.sorting },
       rowSelection: { ...defaultTableConfig.rowSelection, ...configOverride.rowSelection },
     }),
     [configOverride]
@@ -142,7 +137,6 @@ export function DataTable<T>({
   });
 
   // Table state
-  const [sorting, setSorting] = useState<SortingState>([]);
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
   const [globalFilter, setGlobalFilter] = useState('');
   const [selectedStatusFilter, setSelectedStatusFilter] = useState<string>('all');
@@ -181,7 +175,6 @@ export function DataTable<T>({
           id: col.id,
           header: col.header,
           accessorKey: col.accessorKey as string,
-          enableSorting: col.sortable ?? config.sorting.enabled,
           enableColumnFilter: col.filterable ?? config.filters.columnFilters,
           enableHiding: col.enableHiding ?? true,
         };
@@ -210,7 +203,7 @@ export function DataTable<T>({
 
         return { ...baseDef, ...optionalDef };
       }),
-    [columns, config.sorting.enabled, config.filters.columnFilters]
+    [columns, config.filters.columnFilters]
   );
 
   // Calculate total data for static pagination with manual filtering
@@ -319,37 +312,7 @@ export function DataTable<T>({
     });
   };
 
-  // Handle date range change from MuiDateRangePicker
-  const handleDateRangeChange = (value: { startDate?: string | null; endDate?: string | null }) => {
-    const newDateRange: { from?: Date; to?: Date } = {};
-
-    if (value.startDate) {
-      newDateRange.from = new Date(value.startDate);
-    }
-
-    if (value.endDate) {
-      newDateRange.to = new Date(value.endDate);
-    }
-
-    setSelectedDateRange(newDateRange);
-  };
-
-  // Handle form submission for date range
-  const onSubmitDateRange = (data: any) => {
-    if (data.dateRange) {
-      const newDateRange: { from?: Date; to?: Date } = {};
-
-      if (data.dateRange.startDate) {
-        newDateRange.from = new Date(data.dateRange.startDate);
-      }
-
-      if (data.dateRange.endDate) {
-        newDateRange.to = new Date(data.dateRange.endDate);
-      }
-
-      setSelectedDateRange(newDateRange);
-    }
-  };
+  
 
   // Helper function to clear all filters
   const clearAllFilters = () => {
@@ -442,29 +405,21 @@ export function DataTable<T>({
     data: Array.isArray(tableData) ? tableData : [],
     columns: tanstackColumns,
     state: {
-      sorting,
       columnFilters,
       globalFilter,
       pagination,
     },
-    onSortingChange: setSorting,
     onColumnFiltersChange: setColumnFilters,
     onGlobalFilterChange: setGlobalFilter,
     onPaginationChange: setPagination,
     getCoreRowModel: getCoreRowModel(),
-    enableMultiSort: config.sorting.multiSort,
     manualPagination: config.paginationMode === 'dynamic',
-    manualSorting: config.sorting.sortMode === 'dynamic',
     manualFiltering: config.filters.filterMode === 'dynamic',
     pageCount: config.paginationMode === 'dynamic' ? safeData.pageCount : undefined,
   };
 
   if (config.pagination.enabled) {
     tableOptions.getPaginationRowModel = getPaginationRowModel();
-  }
-
-  if (config.sorting.enabled) {
-    tableOptions.getSortedRowModel = getSortedRowModel();
   }
 
   if (config.filters.enabled) {
@@ -481,14 +436,6 @@ export function DataTable<T>({
       }
     } catch (error) {}
   }, [pagination, config.paginationMode, actions]);
-
-  useEffect(() => {
-    try {
-      if (config.sorting.sortMode === 'dynamic' && actions.onSortingChange) {
-        actions.onSortingChange(sorting);
-      }
-    } catch (error) {}
-  }, [sorting, config.sorting.sortMode, actions]);
 
   useEffect(() => {
     try {
@@ -706,7 +653,6 @@ export function DataTable<T>({
                         key={header.id}
                         className={cn(
                           'select-none text-center truncate',
-                          // header.column.getCanSort() && 'cursor-pointer hover:bg-muted/50',
                           header.column.columnDef.meta?.headerAlign === 'left' && 'text-left',
                           header.column.columnDef.meta?.headerAlign === 'right' && 'text-right',
                           header.column.columnDef.meta?.className
@@ -714,30 +660,11 @@ export function DataTable<T>({
                         style={{
                           width: header.getSize() !== 150 ? header.getSize() : undefined,
                         }}
-                        onClick={header.column.getToggleSortingHandler()}
                       >
                         <div className="flex items-center justify-center gap-2">
                           {header.isPlaceholder
                             ? null
                             : flexRender(header.column.columnDef.header, header.getContext())}
-                          {header.column.getCanSort() && (
-                            <div className="flex flex-col">
-                              <ChevronUpIcon
-                                className={cn(
-                                  'h-3 w-3',
-                                  header.column.getIsSorted() === 'asc' ? 'text-foreground' : 'text-muted-foreground/30'
-                                )}
-                              />
-                              <ChevronDownIcon
-                                className={cn(
-                                  'h-3 w-3 -mt-1',
-                                  header.column.getIsSorted() === 'desc'
-                                    ? 'text-foreground'
-                                    : 'text-muted-foreground/30'
-                                )}
-                              />
-                            </div>
-                          )}
                         </div>
                       </TableHead>
                     ))}
