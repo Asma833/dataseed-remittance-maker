@@ -84,6 +84,7 @@ export type DialogWrapperProps = {
   description?: string;
   showFooter?: boolean;
   showHeader?: boolean;
+  showCloseButton?: boolean;
   isLoading?: boolean;
   iconType?: IconType;
   triggerBtnClassName?: string;

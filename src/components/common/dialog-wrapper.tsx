@@ -24,6 +24,7 @@ export function DialogWrapper({
   description,
   showFooter = true,
   showHeader = true,
+  showCloseButton = true,
   isLoading,
   iconType = 'default',
   triggerBtnClassName,
@@ -54,13 +55,7 @@ export function DialogWrapper({
       )}
 
       <DialogContent className={cn('sm:max-w-[80%] md:max-w-[50%] w-full max-h-[90%] overflow-auto', className)}>
-        {/* <button
-          className="absolute top-3 right-3 p-2 rounded-full hover:bg-gray-100 transition"
-          onClick={() => setIsOpen(false)}
-        >
-          <X className="w-7 h-7 text-custom-primary hover:opacity-95 outline-none font-bold" />
-        </button>{' '} */}
-        <DialogCloseButton onClick={() => setIsOpen(false)} />
+        {showCloseButton && <DialogCloseButton onClick={() => setIsOpen(false)} />}
         {showHeader && (
           <DialogHeader>
             <DialogTitle>{title}</DialogTitle>

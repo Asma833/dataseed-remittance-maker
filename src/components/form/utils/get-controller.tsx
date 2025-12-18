@@ -15,6 +15,7 @@ import { ShadCnFileUploadWithButton } from '../controller/ShadCnFileUploadWithBu
 import FileUploadWithView from '../controller/FileUploadWithView';
 import { MuiDateRangePicker } from '../controller/MuiDateRangePicker';
 import { FieldType } from '@/types/enums';
+import FileUploadWithOutView from '../controller/FileUploadWithOutView';
 
 export const getController = (field: any) => {
   const baseProps = {
@@ -83,6 +84,19 @@ export const getController = (field: any) => {
     case 'fileupload_view':
       return (
         <FileUploadWithView
+          {...baseProps}
+          className={field.className}
+          maxFiles={field.maxFiles}
+          description={field.description}
+          helpText={field.helpText}
+          accept={field.accept}
+          multiple={field.maxFiles > 1}
+          viewFile={field.viewFile}
+        />
+      );
+      case 'fileuploadwithoutview':
+      return (
+        <FileUploadWithOutView
           {...baseProps}
           className={field.className}
           maxFiles={field.maxFiles}

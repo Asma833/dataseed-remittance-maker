@@ -50,10 +50,10 @@ const Payments = ({
               </FormFieldRow>
             )}
 
-            <FormFieldRow rowCols={1}>
+            <FormFieldRow rowCols={1} className='w-full'>
               {(['fileUpload'] as const).map((name) => {
                 const field = paymentsFormConfig.fields[name];
-                return <FieldWrapper key={name}>{getController({ ...field, name, control, errors })}</FieldWrapper>;
+                return <FieldWrapper key={name} className='w-full'>{getController({ ...field, name, control, errors })}</FieldWrapper>;
               })}
             </FormFieldRow>
             <div className="flex gap-2 justify-center">

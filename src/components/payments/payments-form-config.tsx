@@ -13,7 +13,7 @@ const paymentsFormConfig = {
       isMulti: false,
     },
     fileUpload: {
-      type: FieldType.Fileupload_View,
+      type: FieldType.FileUploadWithOutView,
       label: 'For Bank Transfer Upload Screenshot',
       required: true,
       placeholder: 'Upload Payment Receipt',

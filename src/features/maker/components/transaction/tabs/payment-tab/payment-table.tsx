@@ -30,7 +30,7 @@ const PaymentStatus = () => {
           applicant_pan: transaction?.kyc_details?.applicant_pan || '-',
           transaction_type: deal.transaction_type || '-',
           kyc_type: '-',
-          kyc_status:transaction?.kyc_status,
+          kyc_status: transaction?.kyc_status || '-',
           purpose: transaction?.purpose || '-',
           payment_status: payment.payment_status || '-',
           payment_link: null,
@@ -40,7 +40,6 @@ const PaymentStatus = () => {
           settlement_rate: deal.settlement_rate || '-',
           customer_rate: deal.customer_rate || '-',
           transaction_amount: transaction?.transaction_amount || '-',
-          rejection_reason:deal.rejection_reason || '-'
         } as PaymentData;
       })
     );
@@ -85,6 +84,7 @@ const PaymentStatus = () => {
           title="Upload Payment Screen Shot"
           isOpen={isModalOpen}
           setIsOpen={setIsModalOpen}
+          showCloseButton={false}
           renderContent={<Payments setIsOpen={setIsModalOpen} uploadScreen={false} />}
         />
       )}
