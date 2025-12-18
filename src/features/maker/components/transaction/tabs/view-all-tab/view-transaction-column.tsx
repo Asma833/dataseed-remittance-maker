@@ -1,35 +1,9 @@
-import { useState } from 'react';
 import { formatDateWithFallback } from '@/utils/formatDateWithFallback';
 import { SignLinkButton } from '@/components/cell/table/SignLinkButton';
-import VKycStatusCell from '@/components/cell/table/VKycStatusCell';
-import EsignStatusCell from '@/components/cell/table/EsignStatusCell';
 import PaymentStatusCell from '@/components/cell/table/PaymentStatusCell';
 import KycStatusCell from '@/components/cell/table/KycStatusCell';
+import { PaymentData } from '../../types/payment.types';
 
-interface PaymentData {
-  ref_no: string;
-  order_id?: string;
-  agent_ref_no: string;
-  created_date: string;
-  expiry_date: string;
-  applicant_name: string;
-  applicant_pan: string;
-  transaction_type: string;
-  purpose: string;
-  kyc_type: string;
-  kyc_status: string;
-  e_sign_status: string;
-  e_sign_link: string | null;
-  e_sign_link_status?: string;
-  v_kyc_status: string;
-  v_kyc_link: string | null;
-  payment_status: string;
-  payment_link: string | null;
-  payment_screenshot: string | null;
-  is_esign_required: boolean;
-  is_v_kyc_required: boolean;
-  merged_document?: any;
-}
 
 export const GetViewAllTransactionTableColumns = () => {
   return [
