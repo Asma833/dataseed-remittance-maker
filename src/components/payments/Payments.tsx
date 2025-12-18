@@ -15,10 +15,12 @@ const Payments = ({
   setIsOpen = () => {},
   uploadScreen,
   data,
+  onSubmit,
 }: {
   setIsOpen: (isOpen: boolean) => void;
   uploadScreen: boolean;
   data: PaymentData;
+  onSubmit?: (file: File) => Promise<void>;
 }) => {
   const methods = useForm({
     resolver: zodResolver(paymentsFormSchema),
@@ -31,11 +33,18 @@ const Payments = ({
     control,
     formState: { errors },
     handleSubmit,
+    watch,
   } = methods;
-  const submit = async (data: any) => {
+
+  const fileUpload = watch('fileUpload');
+
+  const submit = async (formData: any) => {
     // Validate the form before submitting
     const isValid = await methods.trigger();
     if (isValid) {
+      if (onSubmit && fileUpload && fileUpload[0] && fileUpload[0].file) {
+        await onSubmit(fileUpload[0].file);
+      }
       setIsOpen(false);
     }
   };

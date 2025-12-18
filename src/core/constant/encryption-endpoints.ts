@@ -113,6 +113,12 @@ export const ENDPOINT_MATCHING_RULES: EndpointRulesConfig = {
     matchType: 'standard' as const,
     description: 'Complete deal',
   },
+  'payment-screen-shot-upload':{
+    endpoint:  `/remittance/transactions/documents/payment/challan/`,
+    matchType: 'standard' as const,
+    description: 'Complete deal',
+  }
+ 
 } as const;
 
 /**

@@ -6,9 +6,8 @@ import Payments from '@/components/payments/Payments';
 import { DataTable } from '@/components/table/data-table';
 import { staticConfig } from '@/components/table/config';
 import { useGetPaymentDetails } from '../../hooks/useGetPaymentDetails';
+import { useUploadPaymentChallan } from '../../hooks/useUploadPaymentChallan';
 import { AllTransaction, PaymentData } from '../../types/payment.types';
-
-
 
 
 const PaymentStatus = () => {
@@ -16,6 +15,7 @@ const PaymentStatus = () => {
   const [selectedPayment, setSelectedPayment] = useState<PaymentData | null>(null);
 
   const { data, isLoading, error } = useGetPaymentDetails();
+  const { mutateAsync: uploadChallan } = useUploadPaymentChallan();
 
   const mappedData = useMemo(() => {
     if (!data || !Array.isArray(data)) return [];
@@ -23,6 +23,7 @@ const PaymentStatus = () => {
       deal.payment_records.map((payment) => {
         const transaction = deal.transactions[0]; // Assuming one transaction per deal
         return {
+          id: payment.id,
           ref_no: transaction?.transaction_id || '-',
           agent_ref_no: transaction?.agent_ref_number || '-',
           created_date: deal.created_at || '-',
@@ -49,6 +50,15 @@ const PaymentStatus = () => {
   const handlePayment = (rowData: PaymentData) => {
     setSelectedPayment(rowData);
     setIsModalOpen(true);
+  };
+
+  const handleUploadSubmit = async (file: File) => {
+    if (selectedPayment) {
+      await uploadChallan({
+        id: selectedPayment.id,
+        file,
+      });
+    }
   };
 
   const tableColumns = GetPaymentTableColumn({ handlePayment });
@@ -84,7 +94,7 @@ const PaymentStatus = () => {
           isOpen={isModalOpen}
           setIsOpen={setIsModalOpen}
           showCloseButton={false}
-          renderContent={<Payments setIsOpen={setIsModalOpen} uploadScreen={false} data={selectedPayment} />}
+          renderContent={<Payments setIsOpen={setIsModalOpen} uploadScreen={false} data={selectedPayment} onSubmit={handleUploadSubmit} />}
         />
       )}
     </div>

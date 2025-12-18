@@ -76,8 +76,8 @@ export const API = {
   },
   REMITTANCE: {
     CREATE_TRANSACTION: `/remittance/deals/complete`,
-    LIST:`/remittance/deals/`,
-    GET_DEALS: `/remittance/deals/`
+    GET_DEALS: `/remittance/deals/`,
+    UPLOAD_PAYMENT_CHALLAN: (id: string) => `/remittance/transactions/documents/payment/challan/${id}`,
   },
 } as const;
 

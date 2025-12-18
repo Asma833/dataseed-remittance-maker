@@ -114,6 +114,7 @@ export interface AllTransaction {
 }
 
 export interface PaymentData {
+  id: string;
   ref_no: string;
   agent_ref_no: string;
   created_date: string;
@@ -133,4 +134,15 @@ export interface PaymentData {
   customer_rate: string | number;
   transaction_amount: string | number;
   rejection_reason: string | null;
+}
+
+export interface UploadPaymentChallanRequest {
+  id: string;
+  file: File;
+}
+
+export interface UploadPaymentChallanResponse {
+  success: boolean;
+  message: string;
+  url?: string;
 }
