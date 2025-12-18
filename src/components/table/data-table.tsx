@@ -59,6 +59,16 @@ export function DataTable<T>({
   actions = {},
   className,
 }: DataTableProps<T>) {
+  // State for minimum loader display time
+  const [showLoader, setShowLoader] = useState(true);
+
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setShowLoader(false);
+    }, 3000); 
+    return () => clearTimeout(timer);
+  }, []);
+
   // Early error handling for invalid data
   if (!data) {
     return (
@@ -672,7 +682,7 @@ export function DataTable<T>({
                 ))}
               </TableHeader>
               <TableBody>
-                {config.loading ? (
+                {(config.loading || showLoader) ? (
                   <TableLoader columns={columns.length} />
                 ) : config.error ? (
                   <TableRow>
