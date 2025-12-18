@@ -12,10 +12,16 @@ export const paymentsFormSchema = z.object({
         return false; // File is required
       }
       // Check if the first item has a valid file
-      return files[0] && files[0].file instanceof File;
+      const file = files[0];
+      if (!(file && file.file instanceof File)) {
+        return false;
+      }
+      // Check file type
+      const allowedTypes = ['application/pdf', 'image/png', 'image/svg+xml', 'image/jpeg'];
+      return allowedTypes.includes(file.file.type);
     },
     {
-      message: 'File upload is required and must be a valid file',
+      message: 'File upload is required and must be a valid file (PDF, PNG, SVG, JPG, JPEG only)',
     }
   ),
 });
