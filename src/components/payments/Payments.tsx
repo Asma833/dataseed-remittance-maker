@@ -1,7 +1,6 @@
 import { zodResolver } from '@hookform/resolvers/zod';
 import paymentsFormConfig from './payments-form-config';
 import { FormProvider, useForm } from 'react-hook-form';
-
 import { paymentsFormSchema } from './payment-details.schema';
 import { FormContentWrapper } from '../form/wrapper/form-content-wrapper';
 import Spacer from '../form/wrapper/spacer';
