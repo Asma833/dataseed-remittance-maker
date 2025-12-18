@@ -42,6 +42,7 @@ const PaymentStatus = () => {
           settlement_rate: deal.settlement_rate || '-',
           customer_rate: deal.customer_rate || '-',
           transaction_amount: transaction?.transaction_amount || '-',
+          rejection_reason:deal.rejection_reason || '-'
         } as PaymentData;
       })
     );

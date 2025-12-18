@@ -67,25 +67,25 @@ export const GetPaymentTableColumn = ({ handlePayment }: { handlePayment: (rowDa
       meta: { className: 'min-w-0 p-2' },
       cell: ({ row }: { row: PaymentData }) => <PaymentStatusCell rowData={row} />,
     },
-    {
-      id: 'payment_link',
-      header: 'Payment Link',
-      accessorKey: 'payment_link',
-      meta: { className: 'min-w-0 p-2' },
-      cell: ({ row }: { row: PaymentData }) => {
-        const { ref_no, payment_link } = row;
-        return (
-          <SignLinkButton
-            id={ref_no}
-            copyLinkUrl={payment_link || ''}
-            toastInfoText="Payment link copied successfully!"
-            tooltipText="Copy payment link"
-            buttonType="copy_link"
-            buttonIconType="copy_link"
-          />
-        );
-      },
-    },
+    // {
+    //   id: 'payment_link',
+    //   header: 'Payment Link',
+    //   accessorKey: 'payment_link',
+    //   meta: { className: 'min-w-0 p-2' },
+    //   cell: ({ row }: { row: PaymentData }) => {
+    //     const { ref_no, payment_link } = row;
+    //     return (
+    //       <SignLinkButton
+    //         id={ref_no}
+    //         copyLinkUrl={payment_link || ''}
+    //         toastInfoText="Payment link copied successfully!"
+    //         tooltipText="Copy payment link"
+    //         buttonType="copy_link"
+    //         buttonIconType="copy_link"
+    //       />
+    //     );
+    //   },
+    // },
 
     {
       id: 'payment_screenshot',
