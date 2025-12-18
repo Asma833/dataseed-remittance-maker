@@ -43,6 +43,21 @@ export const ENDPOINT_MATCHING_RULES: EndpointRulesConfig = {
     matchType: 'exact-only' as const,
     description: 'Upload documents endpoint',
   },
+  'upload-transaction-documents-multipart': {
+    endpoint: API.REMITTANCE.TRANSACTIONS.DOCUMENTS.UPLOAD,
+    matchType: 'exact-only' as const,
+    description: 'Upload transaction documents (multipart) endpoint',
+  },
+  'transaction-documents-rejection-summary': {
+    endpoint: '/remittance/transactions/documents',
+    matchType: 'standard' as const,
+    description: 'Transaction documents rejection summary (by transaction id)',
+  },
+  'remittance-deals': {
+    endpoint: API.REMITTANCE.DEALS,
+    matchType: 'exact-only' as const,
+    description: 'Remittance deals endpoint',
+  },
   'trans-purpose-document': {
     endpoint: API.TRANSACTION_PURPOSE_MAP.CREATE,
     matchType: 'standard' as const,

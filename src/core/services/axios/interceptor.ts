@@ -41,6 +41,18 @@ export const setupInterceptors = (axiosInstance: AxiosInstance) => {
       // Apply encryption first
       const encryptedConfig = await encryptRequestInterceptor(config);
 
+      // If payload is FormData, remove any forced JSON content-type so the browser can set the boundary.
+      if (typeof FormData !== 'undefined' && encryptedConfig.data instanceof FormData) {
+        const headers: any = encryptedConfig.headers;
+        if (headers) {
+          if (typeof headers.delete === 'function') {
+            headers.delete('Content-Type');
+          } else {
+            delete headers['Content-Type'];
+          }
+        }
+      }
+
       // Then apply authentication
       const token = store.getState().auth.accessToken;
       if (token && encryptedConfig.headers) {

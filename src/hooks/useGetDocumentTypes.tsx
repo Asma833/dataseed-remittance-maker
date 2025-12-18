@@ -2,16 +2,21 @@ import { useQuery } from '@tanstack/react-query';
 import axiosInstance from '@/core/services/axios/axios-instance';
 import { API, HEADER_KEYS } from '@/core/constant/apis';
 
-export interface DocumentTypeItem {
+export interface TransactionPurposeDocument {
   id: string;
+  document_id: string;
   name: string;
+  display_name: string;
+  code: string;
+  is_back_required: boolean;
+  is_mandatory: boolean;
 }
 
 /**
  * Fetches document types from the API with proper headers
  * @returns Promise that resolves to an array of document types
  */
-const fetchDocumentTypes = async (id: any): Promise<DocumentTypeItem[]> => {
+const fetchDocumentTypes = async (id: string): Promise<TransactionPurposeDocument[]> => {
   try {
     const response = await axiosInstance.get(API.CONFIG.GET_DOCUMENT_TYPES(id), {
       headers: {
@@ -21,10 +26,11 @@ const fetchDocumentTypes = async (id: any): Promise<DocumentTypeItem[]> => {
       },
     });
 
-    // Check if response and response.data exist before returning
-    if (response && response.data) {
-      return Array.isArray(response.data) ? response.data : [];
-    }
+    // API shape: { statusCode, message, data: [...] }
+    // Some environments may return the array directly; support both.
+    const payload = response?.data;
+    if (Array.isArray(payload)) return payload;
+    if (Array.isArray(payload?.data)) return payload.data;
     return [];
   } catch (error) {
     console.error('Error fetching document types:', error);
@@ -39,7 +45,7 @@ const fetchDocumentTypes = async (id: any): Promise<DocumentTypeItem[]> => {
  * @returns Object containing found document type text and loading state
  */
 interface UseGetDocumentTypesOptions {
-  id?: string;
+  id?: string | undefined;
   enable?: boolean;
 }
 
@@ -50,19 +56,15 @@ const useGetDocumentTypes = ({ id, enable = true }: UseGetDocumentTypesOptions =
     error,
     isError,
     refetch,
-  } = useQuery<DocumentTypeItem[], Error, DocumentTypeItem[]>({
-    queryKey: ['documentTypes', id],
-    queryFn: ({ queryKey }) => fetchDocumentTypes(queryKey[1]),
+  } = useQuery<TransactionPurposeDocument[], Error, TransactionPurposeDocument[]>({
+    queryKey: ['transactionPurposeDocuments', id],
+    queryFn: ({ queryKey }) => fetchDocumentTypes(String(queryKey[1])),
     staleTime: 5 * 60 * 1000, // Cache data for 5 minutes
     retry: 1,
     enabled: enable,
   });
 
-  // Find the document type name if ID is provided
-  const documentType = id ? documentTypes.find((item) => item.id === id)?.name || null : null;
-
   return {
-    documentType,
     documentTypes,
     loading,
     error: isError ? error : null,

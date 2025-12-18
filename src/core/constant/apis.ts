@@ -74,6 +74,16 @@ export const API = {
     UPDATE_TIMEWISE: `/currency-rate/update-timewise`,
     GET_CURRENCY_RATES: (currencyCode: string) => `/currency-rate/${currencyCode}`,
   },
+
+  REMITTANCE: {
+    TRANSACTIONS: {
+      DOCUMENTS: {
+        UPLOAD: `/remittance/transactions/documents/upload`,
+        REJECTION: (transactionId: string) => `/remittance/transactions/documents/${transactionId}/rejection`,
+      },
+    },
+    DEALS: `/remittance/deals`,
+  },
 } as const;
 
 /**
