@@ -9,13 +9,16 @@ import FormFieldRow from '../form/wrapper/form-field-row';
 import FieldWrapper from '../form/wrapper/field-wrapper';
 import { getController } from '../form/utils/get-controller';
 import { Button } from '../ui/button';
+import { PaymentData } from '@/features/maker/components/transaction/types/payment.types';
 
 const Payments = ({
   setIsOpen = () => {},
   uploadScreen,
+  data,
 }: {
   setIsOpen: (isOpen: boolean) => void;
   uploadScreen: boolean;
+  data: PaymentData;
 }) => {
   const methods = useForm({
     resolver: zodResolver(paymentsFormSchema),
@@ -37,7 +40,21 @@ const Payments = ({
     }
   };
   return (
-    <>
+    <div className="space-y-0">
+      {data && (
+        <div className="mb-4 p-4 bg-gray-50 rounded-lg">
+          <div className="text-md font-semibold mb-2">Transaction Details</div>
+          <div className="grid grid-cols-2 gap-2 text-sm">
+            <div className='font-medium text-gray-600'>Transaction Ref No: {data.ref_no}</div>
+            <div className='font-medium text-gray-600'>Applicant Name: {data.applicant_name}</div>
+            <div className='font-medium text-gray-600'>Transaction Amount: {data.transaction_amount}</div>
+            <div className='font-medium text-gray-600'>Payment Status: {data.payment_status}</div>
+          </div>
+        </div>
+      )}
+      <div className="text-md font-semibold">Offline bank transfer</div>
+      <p className='text-sm my-0 text-gray-400'>Please upload screen shot for offline bank transfer</p>
+      <hr className='text-gray-400'/>
       <FormProvider {...methods}>
         <FormContentWrapper className="rounded-lg w-full mr-auto bg-transparent">
           <Spacer>
@@ -67,7 +84,7 @@ const Payments = ({
           </Spacer>
         </FormContentWrapper>
       </FormProvider>
-    </>
+    </div>
   );
 };
 

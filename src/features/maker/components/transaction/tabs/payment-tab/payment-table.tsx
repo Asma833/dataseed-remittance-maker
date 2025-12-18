@@ -13,6 +13,7 @@ import { AllTransaction, PaymentData } from '../../types/payment.types';
 
 const PaymentStatus = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [selectedPayment, setSelectedPayment] = useState<PaymentData | null>(null);
 
   const { data, isLoading, error } = useGetPaymentDetails();
 
@@ -45,10 +46,8 @@ const PaymentStatus = () => {
     );
   }, [data]);
 
-  const handlePayment = (rowData: Order) => {
-    if (rowData.nium_order_id) {
-      console.log(rowData.nium_order_id);
-    }
+  const handlePayment = (rowData: PaymentData) => {
+    setSelectedPayment(rowData);
     setIsModalOpen(true);
   };
 
@@ -79,13 +78,13 @@ const PaymentStatus = () => {
         config={tableConfig}
         actions={tableActions}
       />
-      {isModalOpen && (
+      {isModalOpen && selectedPayment && (
         <DialogWrapper
           title="Upload Payment Screen Shot"
           isOpen={isModalOpen}
           setIsOpen={setIsModalOpen}
           showCloseButton={false}
-          renderContent={<Payments setIsOpen={setIsModalOpen} uploadScreen={false} />}
+          renderContent={<Payments setIsOpen={setIsModalOpen} uploadScreen={false} data={selectedPayment} />}
         />
       )}
     </div>

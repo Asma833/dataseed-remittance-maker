@@ -14,17 +14,9 @@ const paymentsFormConfig = {
     },
     fileUpload: {
       type: FieldType.FileUploadWithOutView,
-      label: 'For Bank Transfer Upload Screenshot',
+      label: '',
       required: true,
       placeholder: 'Upload Payment Receipt',
-      validation: {
-        validate: (value: string) => {
-          if (!value || value.length === 0) {
-            return 'Payment receipt is required';
-          }
-          return true;
-        },
-      },
     },
   },
 };
