@@ -1,36 +1,12 @@
-import { useState } from 'react';
 import { SignLinkButton } from '@/components/cell/table/SignLinkButton';
 import KycStatusCell from '@/components/cell/table/KycStatusCell';
 import PaymentStatusCell from '@/components/cell/table/PaymentStatusCell';
 import { formatDateWithFallback } from '@/utils/formatDateWithFallback';
+import { PaymentData } from '../../types/payment.types';
 
-interface PaymentData {
-  ref_no: string;
-  order_id?: string;
-  agent_ref_no: string;
-  created_date: string;
-  expiry_date: string;
-  applicant_name: string;
-  applicant_pan: string;
-  transaction_type: string;
-  purpose: string;
-  kyc_type: string;
-  kyc_status: string;
-  e_sign_status: string;
-  e_sign_link: string | null;
-  e_sign_link_status?: string;
-  v_kyc_status: string;
-  v_kyc_link: string | null;
-  payment_status: string;
-  payment_link: string | null;
-  payment_screenshot: string | null;
-  is_esign_required: boolean;
-  is_v_kyc_required: boolean;
-  merged_document?: any;
-}
+
 
 export const GetPaymentTableColumn = ({ handlePayment }: { handlePayment: (rowData: any) => void }) => {
-  const [hasGeneratedLink, setHasGeneratedLink] = useState(false);
   return [
     { id: 'ref_no', header: 'Ref. No', accessorKey: 'ref_no', meta: { className: 'min-w-0 p-2' } },
     { id: 'agent_ref_no', header: 'Agent Ref. No', accessorKey: 'agent_ref_no', meta: { className: 'min-w-0 p-2' } },
@@ -129,7 +105,7 @@ export const GetPaymentTableColumn = ({ handlePayment }: { handlePayment: (rowDa
         />
       ),
     },
-    { id: 'comments', header: 'Comments', accessorKey: 'comments', meta: { className: 'min-w-0 p-2' } },
+    { id: 'rejection_reason', header: 'Comments', accessorKey: 'rejection_reason', meta: { className: 'min-w-0 p-2' } },
     {
       id: 'view_action',
       header: 'View',

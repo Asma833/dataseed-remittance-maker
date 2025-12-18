@@ -1,81 +1,50 @@
-import { useState } from 'react';
+import { useState, useMemo } from 'react';
 import { GetPaymentTableColumn } from './payment-table-column';
 import { DialogWrapper } from '@/components/common/dialog-wrapper';
 import { Order } from '@/types/common/updateIncident.types';
 import Payments from '@/components/payments/Payments';
 import { DataTable } from '@/components/table/data-table';
 import { staticConfig } from '@/components/table/config';
-import { useGetData } from '@/hooks/useGetData';
-import { API } from '@/core/constant/apis';
+import { useGetPaymentDetails } from '../../hooks/useGetPaymentDetails';
+import { AllTransaction, PaymentData } from '../../types/payment.types';
 
-interface PaymentData {
-  ref_no: string;
-  agent_ref_no: string;
-  created_date: string;
-  expiry_date: string;
-  applicant_name: string;
-  applicant_pan: string;
-  transaction_type: string;
-  purpose: string;
-  kyc_type: string;
-  kyc_status: string;
-  e_sign_status: string;
-  e_sign_link: string | null;
-  v_kyc_status: string;
-  v_kyc_link: string | null;
-  payment_status: string;
-  payment_link: string | null;
-  payment_screenshot: string | null;
-  is_esign_required: boolean;
-  is_v_kyc_required: boolean;
-  fx_currency: number | string;
-  fx_amount:number | string;
-  settlement_rate:number | string;
-  customer_rate:number | string;
-  transaction_amount:number | string;
 
-}
 
-const dummyPaymentTableData: PaymentData[] = [
-  {
-    ref_no: 'NIUM123456',
-    agent_ref_no: 'AGENT7890',
-    created_date: '2024-06-01T12:30:00Z',
-    expiry_date: '2024-07-01T12:30:00Z',
-    applicant_name: 'John Doe',
-    applicant_pan: 'ABCDE1234F',
-    transaction_type: 'Remittance',
-    purpose: 'Family Maintenance',
-    kyc_type: 'Physical',
-    kyc_status: 'Completed',
-    e_sign_status: 'completed',
-    e_sign_link: 'https://esign.example.com/NIUM123456',
-    v_kyc_status: 'pending',
-    v_kyc_link: null,
-    payment_status: 'pending',
-    payment_link: 'https://payment.example.com/NIUM123456',
-    payment_screenshot: null,
-    is_esign_required: true,
-    is_v_kyc_required: true,
-    fx_currency:1000,
-    fx_amount:500,
-    settlement_rate:40000,
-    customer_rate:50000,
-    transaction_amount:100000
-
-  },
-];
 
 const PaymentStatus = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
 
-  const { data, isLoading, error } = useGetData({
-    endpoint: API.TRANSACTION.GET_PAYMENT_STATUS,
-    // id: requestId,
-    queryKey: ['get-payment-status'],
-    dataPath: 'data.submittedFeedback',
-    enabled: true,
-  });
+  const { data, isLoading, error } = useGetPaymentDetails();
+
+  const mappedData = useMemo(() => {
+    if (!data || !Array.isArray(data)) return [];
+    return (data as AllTransaction[]).flatMap((deal: AllTransaction) =>
+      deal.payment_records.map((payment) => {
+        const transaction = deal.transactions[0]; // Assuming one transaction per deal
+        return {
+          ref_no: transaction?.transaction_id || '-',
+          agent_ref_no: transaction?.agent_ref_number || '-',
+          created_date: deal.created_at || '-',
+          expiry_date: transaction?.order_expiry || '-',
+          applicant_name: transaction?.kyc_details?.applicant_name || '-',
+          applicant_pan: transaction?.kyc_details?.applicant_pan || '-',
+          transaction_type: deal.transaction_type || '-',
+          kyc_type: '-',
+          kyc_status:transaction?.kyc_status,
+          purpose: transaction?.purpose || '-',
+          payment_status: payment.payment_status || '-',
+          payment_link: null,
+          payment_screenshot: null,
+          fx_currency: transaction?.fx_currency || '-',
+          fx_amount: transaction?.fx_amount || '-',
+          settlement_rate: deal.settlement_rate || '-',
+          customer_rate: deal.customer_rate || '-',
+          transaction_amount: transaction?.transaction_amount || '-',
+          rejection_reason:deal.rejection_reason || '-'
+        } as PaymentData;
+      })
+    );
+  }, [data]);
 
   const handlePayment = (rowData: Order) => {
     if (rowData.nium_order_id) {
@@ -107,7 +76,7 @@ const PaymentStatus = () => {
     <div className="data-table-wrap">
       <DataTable
         columns={tableColumns}
-        data={dummyPaymentTableData ?? data ?? []}
+        data={mappedData ?? []}
         config={tableConfig}
         actions={tableActions}
       />

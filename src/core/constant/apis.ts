@@ -76,7 +76,8 @@ export const API = {
   },
   REMITTANCE: {
     CREATE_TRANSACTION: `/remittance/deals/complete`,
-    LIST:`/remittance/deals/`
+    LIST:`/remittance/deals/`,
+    GET_DEALS: `/remittance/deals/`
   },
 } as const;
 
