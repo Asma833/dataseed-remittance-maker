@@ -9,9 +9,9 @@ export const getFormDefaultValues = (initialData?: Partial<CreateTransactionForm
       settlement_rate: sourceData?.currencyDetails?.settlement_rate || '',
       add_margin: sourceData?.currencyDetails?.add_margin || '',
       customer_rate: sourceData?.currencyDetails?.customer_rate || '',
-      declared_education_loan_amount: sourceData?.currencyDetails?.declared_education_loan_amount || '',
-      previous_transaction_amount: sourceData?.currencyDetails?.previous_transaction_amount || '',
-      declared_previous_amount: sourceData?.currencyDetails?.declared_previous_amount || '',
+      declared_education_loan_amount: sourceData?.currencyDetails?.declared_education_loan_amount || 0,
+      previous_transaction_amount: sourceData?.currencyDetails?.previous_transaction_amount || 0,
+      declared_previous_amount: sourceData?.currencyDetails?.declared_previous_amount || 0,
       total_transaction_amount_tcs: sourceData?.currencyDetails?.total_transaction_amount_tcs || '',
       invoiceRateTable: sourceData?.currencyDetails?.invoiceRateTable || {
         transaction_value: {

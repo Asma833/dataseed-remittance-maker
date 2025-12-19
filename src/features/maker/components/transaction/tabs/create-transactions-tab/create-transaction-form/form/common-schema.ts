@@ -10,14 +10,14 @@ export const createTransactionSchema = z.object({
   transactionDetails: transactionBasicDetailsSchema,
 }).superRefine((data, ctx) => {
   if ((data.transactionDetails.purpose || '').toLowerCase() === 'education') {
-    if (!data.currencyDetails.declared_education_loan_amount || data.currencyDetails.declared_education_loan_amount.trim() === '') {
+    if (data.currencyDetails.declared_education_loan_amount == null || data.currencyDetails.declared_education_loan_amount <= 0) {
       ctx.addIssue({
         code: z.ZodIssueCode.custom,
         message: 'Declared Education Loan Amount is required',
         path: ['currencyDetails', 'declared_education_loan_amount'],
       });
     }
-    if (!data.currencyDetails.declared_previous_amount || data.currencyDetails.declared_previous_amount.trim() === '') {
+    if (data.currencyDetails.declared_previous_amount == null || data.currencyDetails.declared_previous_amount <= 0) {
       ctx.addIssue({
         code: z.ZodIssueCode.custom,
         message: 'Declared Previous Amount is required',

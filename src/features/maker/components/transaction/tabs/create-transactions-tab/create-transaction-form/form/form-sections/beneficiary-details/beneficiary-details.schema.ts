@@ -1,7 +1,17 @@
 import { z } from 'zod';
 
 const nameRegex = /^[A-Za-z][A-Za-z0-9\s-]*$/;
-const alphanumericRegex = /^[A-Za-z0-9]+$/;
+const alphanumericRegex = /^[A-Z0-9]+$/;
+
+function isValidIBAN(iban: string): boolean {
+  const ibanRegex = /^[A-Z]{2}[0-9]{2}[A-Z0-9]{1,30}$/;
+  if (!ibanRegex.test(iban)) return false;
+
+  const rearranged = iban.slice(4) + iban.slice(0, 4);
+  const numeric = rearranged.replace(/[A-Z]/g, (char) => (char.charCodeAt(0) - 55).toString());
+  const checksum = BigInt(numeric);
+  return checksum % 97n === 1n;
+}
 
 export const beneficiaryDetailsSchema = z
   .object({
@@ -24,7 +34,11 @@ export const beneficiaryDetailsSchema = z
     beneficiary_account_number_iban_number: z
       .string()
       .min(1, 'Beneficiary account number / IBAN number is required')
-      .regex(alphanumericRegex, 'Only alphanumeric characters allowed, no spaces or hyphens'),
+      .regex(alphanumericRegex, 'Only uppercase alphanumeric characters allowed, no spaces or hyphens')
+      .refine(
+        (val) => val.length < 15 ? val.length >= 8 && val.length <= 20 : isValidIBAN(val),
+        'Invalid account number or IBAN format'
+      ),
     beneficiary_swift_code: z
       .string()
       .min(1, 'Beneficiary swift code is required')

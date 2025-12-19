@@ -12,7 +12,7 @@ export const currencyDetailsConfig = [
   {
     name: 'fx_amount',
     label: 'FX Amount',
-    type: FieldType.Text,
+    type: FieldType.Number,
     placeholder: 'Enter FX Amount',
     required: true,
     disabled: true,
@@ -20,7 +20,7 @@ export const currencyDetailsConfig = [
   {
     name: 'settlement_rate',
     label: 'Settlement Rate',
-    type: FieldType.Text,
+    type: FieldType.Number,
     placeholder: 'Enter Settlement Rate',
     required: true,
     disabled: true,
@@ -28,7 +28,7 @@ export const currencyDetailsConfig = [
   {
     name: 'add_margin',
     label: 'Add Margin',
-    type: FieldType.Text,
+    type: FieldType.Number,
     placeholder: 'Enter Add Margin',
     required: true,
     disabled: true,
@@ -36,7 +36,7 @@ export const currencyDetailsConfig = [
   {
     name: 'customer_rate',
     label: 'Customer Rate',
-    type: FieldType.Text,
+    type: FieldType.Number,
     placeholder: 'Enter Customer Rate',
     required: true,
     disabled: true,
@@ -44,28 +44,28 @@ export const currencyDetailsConfig = [
   {
     name: 'declared_education_loan_amount',
     label: 'Declared Education Loan Amount',
-    type: FieldType.Text,
+    type: FieldType.Number,
     placeholder: 'Enter Declared Education Loan Amount',
     required: false,
   },
   {
     name: 'previous_transaction_amount',
     label: 'Previous Transaction Amount',
-    type: FieldType.Text,
+    type: FieldType.Number,
     placeholder: 'Enter Previous Transaction Amount',
     required: true,
   },
   {
     name: 'declared_previous_amount',
     label: 'Declared Previous Amount',
-    type: FieldType.Text,
+    type: FieldType.Number,
     placeholder: 'Enter Declared Previous Amount',
     required: false,
   },
   {
     name: 'total_transaction_amount_tcs',
     label: 'Total Transaction Amount (TCS)',
-    type: FieldType.Text,
+    type: FieldType.Number,
     placeholder: 'Enter Total Transaction Amount (TCS)',
     required: true,
   },
