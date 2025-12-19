@@ -2,7 +2,7 @@ import Spacer from '@/components/form/wrapper/spacer';
 import { currencyDetailsConfig } from './currency-details.config';
 import RateTable from '../../../../../../../rate-table/rate-table';
 import { CommonCreateTransactionProps } from '@/features/maker/types/create-transaction.types';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { useFormContext, useWatch } from 'react-hook-form';
 
 import FormFieldRow from '@/components/form/wrapper/form-field-row';
@@ -15,6 +15,7 @@ import { useGetCurrencyRates } from '@/hooks/useCurrencyRate';
 const CurrencyDetails = ({ setAccordionState }: CommonCreateTransactionProps) => {
   const [isSaving, setIsSaving] = useState(false);
   const [isEditing, setIsEditing] = useState(false);
+  const mountedRef = useRef(false);
   const {
     control,
     formState: { errors },
@@ -29,6 +30,13 @@ const CurrencyDetails = ({ setAccordionState }: CommonCreateTransactionProps) =>
       return acc;
     }, {}) || {};
 
+  useEffect(() => {
+    mountedRef.current = true;
+    return () => {
+      mountedRef.current = false;
+    };
+  }, []);
+
   // Watch values from TransactionBasicDetails
   const fxCurrency = useWatch({ control, name: 'transactionDetails.fx_currency' });
   const fxAmount = useWatch({ control, name: 'transactionDetails.fx_amount' });
@@ -36,6 +44,25 @@ const CurrencyDetails = ({ setAccordionState }: CommonCreateTransactionProps) =>
   const addMargin = useWatch({ control, name: 'transactionDetails.add_margin' });
   const customerRate = useWatch({ control, name: 'transactionDetails.customer_rate' });
   const purpose = useWatch({ control, name: 'transactionDetails.purpose' });
+
+  // Watch the entire invoiceRateTable to pass to RateTable
+  const invoiceRateTable = useWatch({ control, name: 'currencyDetails.invoiceRateTable' });
+
+  // Watch specific invoiceRateTable fields to avoid infinite loops
+  const remittanceCompanyRate = useWatch({ control, name: 'currencyDetails.invoiceRateTable.remittance_charges.company_rate' });
+  const remittanceAgentMarkUp = useWatch({ control, name: 'currencyDetails.invoiceRateTable.remittance_charges.agent_mark_up' });
+  const nostroCompanyRate = useWatch({ control, name: 'currencyDetails.invoiceRateTable.nostro_charges.company_rate' });
+  const nostroAgentMarkUp = useWatch({ control, name: 'currencyDetails.invoiceRateTable.nostro_charges.agent_mark_up' });
+  const otherCompanyRate = useWatch({ control, name: 'currencyDetails.invoiceRateTable.other_charges.company_rate' });
+  const otherAgentMarkUp = useWatch({ control, name: 'currencyDetails.invoiceRateTable.other_charges.agent_mark_up' });
+  const transactionValueRate = useWatch({ control, name: 'currencyDetails.invoiceRateTable.transaction_value.rate' });
+  const remittanceRate = useWatch({ control, name: 'currencyDetails.invoiceRateTable.remittance_charges.rate' });
+  const nostroRate = useWatch({ control, name: 'currencyDetails.invoiceRateTable.nostro_charges.rate' });
+  const otherRate = useWatch({ control, name: 'currencyDetails.invoiceRateTable.other_charges.rate' });
+  const transactionAmount = useWatch({ control, name: 'currencyDetails.invoiceRateTable.transaction_amount.rate' });
+  const gstAmount = useWatch({ control, name: 'currencyDetails.invoiceRateTable.gst_amount.rate' });
+  const tcsAmount = useWatch({ control, name: 'currencyDetails.invoiceRateTable.tcs.rate' });
+  const totalInrAmount = useWatch({ control, name: 'currencyDetails.invoiceRateTable.total_inr_amount.rate' });
 
   // Sync values from TransactionBasicDetails to CurrencyDetails
   useEffect(() => {
@@ -59,6 +86,10 @@ const CurrencyDetails = ({ setAccordionState }: CommonCreateTransactionProps) =>
   useEffect(() => {
     if (addMargin && !isNaN(Number(addMargin))) {
       setValue('currencyDetails.add_margin', addMargin, { shouldValidate: false, shouldDirty: false });
+      // Set agent mark up fields to add_margin
+      setValue('currencyDetails.invoiceRateTable.remittance_charges.agent_mark_up', addMargin, { shouldValidate: false, shouldDirty: false });
+      setValue('currencyDetails.invoiceRateTable.nostro_charges.agent_mark_up', addMargin, { shouldValidate: false, shouldDirty: false });
+      setValue('currencyDetails.invoiceRateTable.other_charges.agent_mark_up', addMargin, { shouldValidate: false, shouldDirty: false });
     }
   }, [addMargin, setValue]);
 
@@ -67,6 +98,54 @@ const CurrencyDetails = ({ setAccordionState }: CommonCreateTransactionProps) =>
       setValue('currencyDetails.customer_rate', customerRate, { shouldValidate: false, shouldDirty: false });
     }
   }, [customerRate, setValue]);
+
+  // Calculate invoiceRateTable rates
+  useEffect(() => {
+    if (mountedRef.current && fxAmount && customerRate) {
+      const transactionValueRate = Number(fxAmount) * Number(customerRate);
+      setValue('currencyDetails.invoiceRateTable.transaction_value.rate', transactionValueRate, { shouldValidate: false, shouldDirty: false });
+    }
+  }, [fxAmount, customerRate, setValue]);
+
+  useEffect(() => {
+    if (mountedRef.current && remittanceCompanyRate != null && remittanceAgentMarkUp != null) {
+      const rate = Number(remittanceCompanyRate) + Number(remittanceAgentMarkUp);
+      setValue('currencyDetails.invoiceRateTable.remittance_charges.rate', rate, { shouldValidate: false, shouldDirty: false });
+    }
+  }, [remittanceCompanyRate, remittanceAgentMarkUp, setValue]);
+
+  useEffect(() => {
+    if (mountedRef.current && nostroCompanyRate != null && nostroAgentMarkUp != null) {
+      const rate = Number(nostroCompanyRate) + Number(nostroAgentMarkUp);
+      setValue('currencyDetails.invoiceRateTable.nostro_charges.rate', rate, { shouldValidate: false, shouldDirty: false });
+    }
+  }, [nostroCompanyRate, nostroAgentMarkUp, setValue]);
+
+  useEffect(() => {
+    if (mountedRef.current && otherCompanyRate != null && otherAgentMarkUp != null) {
+      const rate = Number(otherCompanyRate) + Number(otherAgentMarkUp);
+      setValue('currencyDetails.invoiceRateTable.other_charges.rate', rate, { shouldValidate: false, shouldDirty: false });
+    }
+  }, [otherCompanyRate, otherAgentMarkUp, setValue]);
+
+  useEffect(() => {
+    if (mountedRef.current && transactionValueRate != null && remittanceRate != null && nostroRate != null && otherRate != null) {
+      const transactionAmt = Number(transactionValueRate) + Number(remittanceRate) + Number(nostroRate) + Number(otherRate);
+      setValue('currencyDetails.invoiceRateTable.transaction_amount.rate', transactionAmt, { shouldValidate: false, shouldDirty: false });
+    }
+  }, [transactionValueRate, remittanceRate, nostroRate, otherRate, setValue]);
+
+  useEffect(() => {
+    if (mountedRef.current) {
+      const totalInr = Number(transactionAmount || 0) + Number(gstAmount || 0) + Number(tcsAmount || 0);
+      setValue('currencyDetails.invoiceRateTable.total_inr_amount.rate', totalInr, { shouldValidate: false, shouldDirty: false });
+
+      // TODO: Fetch gst_amount and tcs from API based on totalInr and other params
+      // For now, set placeholders
+      setValue('currencyDetails.invoiceRateTable.gst_amount.rate', 0, { shouldValidate: false, shouldDirty: false });
+      setValue('currencyDetails.invoiceRateTable.tcs.rate', 0, { shouldValidate: false, shouldDirty: false });
+    }
+  }, [transactionAmount, gstAmount, tcsAmount, setValue]);
 
   const handleSave = async () => {
     const isValid = await trigger();
@@ -145,10 +224,11 @@ const CurrencyDetails = ({ setAccordionState }: CommonCreateTransactionProps) =>
         </div>
         <div className="flex flex-wrap w-1/2">
           <RateTable
-            id={'invoiceRateTable'}
+            id={'currencyDetails.invoiceRateTable'}
             mode={'edit'}
-            totalAmount={123}
-            editableFields={['remittanceCharges.agentMarkUp', 'nostroCharges.agentMarkUp', 'otherCharges.agentMarkUp']}
+            totalAmount={totalInrAmount || 0}
+            editableFields={['remittanceCharges.agent_mark_up', 'nostroCharges.agent_mark_up', 'otherCharges.agent_mark_up']}
+            invoiceData={invoiceRateTable}
           />
         </div>
       </FormFieldRow>

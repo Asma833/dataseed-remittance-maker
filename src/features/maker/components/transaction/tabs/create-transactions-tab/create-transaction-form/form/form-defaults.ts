@@ -15,36 +15,36 @@ export const getFormDefaultValues = (initialData?: Partial<CreateTransactionForm
     total_transaction_amount_tcs: '0',
     invoiceRateTable: {
       transaction_value: {
-        company_rate: '740000',
-        agent_mark_up: '500',
-        rate: '740500',
+        company_rate: '0',
+        agent_mark_up: '0',
+        rate: '0',
       },
       remittance_charges: {
-        company_rate: '500',
-        agent_mark_up: '50',
-        rate: '550',
+        company_rate: '0',
+        agent_mark_up: '0',
+        rate: '0',
       },
       nostro_charges: {
-        company_rate: '300',
-        agent_mark_up: '30',
-        rate: '330',
+        company_rate: '0',
+        agent_mark_up: '0',
+        rate: '0',
       },
       other_charges: {
-        company_rate: '200',
-        agent_mark_up: '20',
-        rate: '220',
+        company_rate: '0',
+        agent_mark_up: '0',
+        rate: '0',
       },
       transaction_amount: {
-        rate: '741600',
+        rate: '0',
       },
       gst_amount: {
-        rate: '133488',
+        rate: '0',
       },
       total_inr_amount: {
-        rate: '875088',
+        rate: '0',
       },
       tcs: {
-        rate: '1500',
+        rate: '0',
       },
     },
   },
