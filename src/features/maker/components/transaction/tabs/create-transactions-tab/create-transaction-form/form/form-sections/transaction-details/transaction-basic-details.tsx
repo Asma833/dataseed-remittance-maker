@@ -32,6 +32,8 @@ const TransactionBasicDetails = ({ setAccordionState }: CommonCreateTransactionP
     formState: { errors },
   } = useFormContext();
   const sourceOfFunds = useWatch({ control, name: 'transactionDetails.source_of_funds' });
+  const companySettlementRate = useWatch({ control, name: 'transactionDetails.company_settlement_rate' });
+  const addMargin = useWatch({ control, name: 'transactionDetails.add_margin' });
 
   const selectedTransactionTypeId = "3f9fbf53-057f-4cf7-90f5-5035edd2e158";
   // Filter purpose types based on selected transaction type
@@ -74,6 +76,13 @@ const TransactionBasicDetails = ({ setAccordionState }: CommonCreateTransactionP
       setValue('transactionDetails.transaction_purpose_map_id', selectedMapping.id);
     }
   }, [selectedMapping, setValue]);
+
+  useEffect(() => {
+    if (companySettlementRate != null && addMargin != null) {
+      const calculatedCustomerRate = Number(companySettlementRate || 0) + Number(addMargin || 0);
+      setValue('transactionDetails.customer_rate', calculatedCustomerRate);
+    }
+  }, [companySettlementRate, addMargin, setValue]);
   const currenyCodeType =
     currencyCode?.reduce((acc: Record<string, { label: string }>, currency) => {
       acc[currency.currency_code] = { label: currency.currency_code };
