@@ -2,6 +2,8 @@ import { z } from 'zod';
 
 const nameRegex = /^[A-Za-z][A-Za-z0-9\s-]*$/;
 const alphanumericRegex = /^[A-Z0-9]+$/;
+const addressRegex = /^[a-zA-Z0-9\s,-]+$/;
+const lettersOnlyRegex = /^[A-Za-z][A-Za-z\s]*$/;
 
 function isValidIBAN(iban: string): boolean {
   const ibanRegex = /^[A-Z]{2}[0-9]{2}[A-Z0-9]{1,30}$/;
@@ -22,15 +24,15 @@ export const beneficiaryDetailsSchema = z
     beneficiary_address: z
       .string()
       .min(1, 'Beneficiary address is required')
-      .regex(nameRegex, 'Beneficiary address cannot start with space or hyphen'),
+      .regex(addressRegex, 'Beneficiary address can only contain letters, numbers, spaces, commas, and hyphens'),
     beneficiary_city: z
       .string()
       .min(1, 'Beneficiary city is required')
-      .regex(nameRegex, 'Beneficiary city cannot start with space or hyphen'),
+      .regex(lettersOnlyRegex, 'Beneficiary city can only contain letters and spaces, and cannot start with space'),
     beneficiary_country: z
       .string()
       .min(1, 'Beneficiary country is required')
-      .regex(nameRegex, 'Beneficiary country cannot start with space or hyphen'),
+      .regex(lettersOnlyRegex, 'Beneficiary country can only contain letters and spaces, and cannot start with space'),
     beneficiary_account_number_iban_number: z
       .string()
       .min(1, 'Beneficiary account number / IBAN number is required')
@@ -58,7 +60,7 @@ export const beneficiaryDetailsSchema = z
     message_to_beneficiary_additional_information: z
       .string()
       .min(1, 'Message to beneficiary / additional information is required')
-      .regex(nameRegex, 'Message cannot start with space or hyphen'),
+      .regex(addressRegex, 'Message can only contain letters, numbers, spaces, commas, and hyphens'),
     student_name: z
       .string()
       .optional()
