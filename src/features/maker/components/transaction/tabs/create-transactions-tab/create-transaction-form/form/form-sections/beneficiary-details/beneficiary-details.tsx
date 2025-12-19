@@ -26,20 +26,12 @@ const BeneficiaryDetails = ({ setAccordionState }: CommonCreateTransactionProps)
     }
     setIsSaving(true);
     try {
-      const formElement =
-        typeof document !== 'undefined'
-          ? (document.getElementById('create-transaction-form') as HTMLFormElement | null)
-          : null;
-      formElement?.requestSubmit();
+      // TODO: Implement actual save functionality, e.g., using useCreateTransaction hook
+      await new Promise((resolve) => setTimeout(resolve, 1000));
     } finally {
       setIsSaving(false);
     }
   };
-
-  const handleEdit = () => {
-    setIsEditing(true);
-  };
-
   return (
     <Spacer>
       <FormFieldRow rowCols={4}>
