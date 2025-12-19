@@ -7,6 +7,7 @@ export const currencyDetailsConfig = [
     type: FieldType.Select,
     placeholder: 'Select FX Currency',
     required: true,
+    disabled: true,
   },
   {
     name: 'fx_amount',
@@ -14,6 +15,7 @@ export const currencyDetailsConfig = [
     type: FieldType.Text,
     placeholder: 'Enter FX Amount',
     required: true,
+    disabled: true,
   },
   {
     name: 'settlement_rate',
@@ -21,6 +23,7 @@ export const currencyDetailsConfig = [
     type: FieldType.Text,
     placeholder: 'Enter Settlement Rate',
     required: true,
+    disabled: true,
   },
   {
     name: 'add_margin',
@@ -28,6 +31,7 @@ export const currencyDetailsConfig = [
     type: FieldType.Text,
     placeholder: 'Enter Add Margin',
     required: true,
+    disabled: true,
   },
   {
     name: 'customer_rate',
@@ -35,6 +39,7 @@ export const currencyDetailsConfig = [
     type: FieldType.Text,
     placeholder: 'Enter Customer Rate',
     required: true,
+    disabled: true,
   },
   {
     name: 'declared_education_loan_amount',

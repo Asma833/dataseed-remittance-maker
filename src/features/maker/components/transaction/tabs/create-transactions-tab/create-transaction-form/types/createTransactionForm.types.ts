@@ -25,4 +25,5 @@ export type FieldConfig = {
   placeholder: string;
   required: boolean;
   options?: Record<string, { label: string }>;
+  disabled?: boolean;
 };

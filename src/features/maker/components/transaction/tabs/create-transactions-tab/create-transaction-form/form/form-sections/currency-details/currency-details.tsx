@@ -2,8 +2,8 @@ import Spacer from '@/components/form/wrapper/spacer';
 import { currencyDetailsConfig } from './currency-details.config';
 import RateTable from '../../../../../../../rate-table/rate-table';
 import { CommonCreateTransactionProps } from '@/features/maker/types/create-transaction.types';
-import { useState } from 'react';
-import { useFormContext } from 'react-hook-form';
+import { useState, useEffect } from 'react';
+import { useFormContext, useWatch } from 'react-hook-form';
 
 import FormFieldRow from '@/components/form/wrapper/form-field-row';
 import FieldWrapper from '@/components/form/wrapper/field-wrapper';
@@ -19,6 +19,7 @@ const CurrencyDetails = ({ setAccordionState }: CommonCreateTransactionProps) =>
     control,
     formState: { errors },
     trigger,
+    setValue,
   } = useFormContext();
   const { data: currencyRates, isLoading: currencyLoading } = useGetCurrencyRates();
 
@@ -27,6 +28,44 @@ const CurrencyDetails = ({ setAccordionState }: CommonCreateTransactionProps) =>
       acc[currency.currency_code] = { label: currency.currency_code };
       return acc;
     }, {}) || {};
+
+  // Watch values from TransactionBasicDetails
+  const fxCurrency = useWatch({ control, name: 'transactionDetails.fx_currency' });
+  const fxAmount = useWatch({ control, name: 'transactionDetails.fx_amount' });
+  const companySettlementRate = useWatch({ control, name: 'transactionDetails.company_settlement_rate' });
+  const addMargin = useWatch({ control, name: 'transactionDetails.add_margin' });
+  const customerRate = useWatch({ control, name: 'transactionDetails.customer_rate' });
+
+  // Sync values from TransactionBasicDetails to CurrencyDetails
+  useEffect(() => {
+    if (fxCurrency && typeof fxCurrency === 'string' && fxCurrency.trim().length >= 3 && currencyOptions[fxCurrency.trim()]) {
+      setValue('currencyDetails.fx_currency', fxCurrency.trim(), { shouldValidate: false, shouldDirty: false });
+    }
+  }, [fxCurrency, currencyOptions, setValue]);
+
+  useEffect(() => {
+    if (fxAmount && !isNaN(Number(fxAmount))) {
+      setValue('currencyDetails.fx_amount', fxAmount, { shouldValidate: false, shouldDirty: false });
+    }
+  }, [fxAmount, setValue]);
+
+  useEffect(() => {
+    if (companySettlementRate && !isNaN(Number(companySettlementRate))) {
+      setValue('currencyDetails.settlement_rate', companySettlementRate, { shouldValidate: false, shouldDirty: false });
+    }
+  }, [companySettlementRate, setValue]);
+
+  useEffect(() => {
+    if (addMargin && !isNaN(Number(addMargin))) {
+      setValue('currencyDetails.add_margin', addMargin, { shouldValidate: false, shouldDirty: false });
+    }
+  }, [addMargin, setValue]);
+
+  useEffect(() => {
+    if (customerRate && !isNaN(Number(customerRate))) {
+      setValue('currencyDetails.customer_rate', customerRate, { shouldValidate: false, shouldDirty: false });
+    }
+  }, [customerRate, setValue]);
 
   const handleSave = async () => {
     const isValid = await trigger();
