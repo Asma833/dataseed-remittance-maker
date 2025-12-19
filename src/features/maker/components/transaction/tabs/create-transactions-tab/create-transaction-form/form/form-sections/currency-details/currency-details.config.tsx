@@ -6,40 +6,35 @@ export const currencyDetailsConfig = [
     label: 'FX Currency',
     type: FieldType.Select,
     placeholder: 'Select FX Currency',
-    required: true,
-    disabled: true,
+    required: true
   },
   {
     name: 'fx_amount',
     label: 'FX Amount',
     type: FieldType.Number,
     placeholder: 'Enter FX Amount',
-    required: true,
-    disabled: true,
+    required: true
   },
   {
     name: 'settlement_rate',
     label: 'Settlement Rate',
     type: FieldType.Number,
     placeholder: 'Enter Settlement Rate',
-    required: true,
-    disabled: true,
+    required: true
   },
   {
     name: 'add_margin',
     label: 'Add Margin',
     type: FieldType.Number,
     placeholder: 'Enter Add Margin',
-    required: true,
-    disabled: true,
+    required: true
   },
   {
     name: 'customer_rate',
     label: 'Customer Rate',
     type: FieldType.Number,
     placeholder: 'Enter Customer Rate',
-    required: true,
-    disabled: true,
+    required: true
   },
   {
     name: 'declared_education_loan_amount',

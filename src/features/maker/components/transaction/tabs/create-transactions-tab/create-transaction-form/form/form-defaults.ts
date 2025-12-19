@@ -3,51 +3,96 @@ import { CreateTransactionFormInput } from './common-schema';
 export const getFormDefaultValues = (initialData?: Partial<CreateTransactionFormInput>): Partial<CreateTransactionFormInput> => {
   const sourceData = initialData;
   return {
-    currencyDetails: {
-      fx_currency: sourceData?.currencyDetails?.fx_currency || '',
-      fx_amount: sourceData?.currencyDetails?.fx_amount || '',
-      settlement_rate: sourceData?.currencyDetails?.settlement_rate || '',
-      add_margin: sourceData?.currencyDetails?.add_margin || '',
-      customer_rate: sourceData?.currencyDetails?.customer_rate || '',
-      declared_education_loan_amount: sourceData?.currencyDetails?.declared_education_loan_amount || 0,
-      previous_transaction_amount: sourceData?.currencyDetails?.previous_transaction_amount || 0,
-      declared_previous_amount: sourceData?.currencyDetails?.declared_previous_amount || 0,
-      total_transaction_amount_tcs: sourceData?.currencyDetails?.total_transaction_amount_tcs || '',
-      invoiceRateTable: sourceData?.currencyDetails?.invoiceRateTable || {
-        transaction_value: {
-          company_rate: '',
-          agent_mark_up: '',
-          rate: '',
-        },
-        remittance_charges: {
-          company_rate: '',
-          agent_mark_up: '',
-          rate: '',
-        },
-        nostro_charges: {
-          company_rate: '',
-          agent_mark_up: '',
-          rate: '',
-        },
-        other_charges: {
-          company_rate: '',
-          agent_mark_up: '',
-          rate: '',
-        },
-        transaction_amount: {
-          rate: '',
-        },
-        gst_amount: {
-          rate: '',
-        },
-        total_inr_amount: {
-          rate: '',
-        },
-        tcs: {
-          rate: '',
-        },
+   currencyDetails: {
+    fx_currency: '',
+    fx_amount: '0',
+    settlement_rate: '0',
+    add_margin: '0',
+    customer_rate: '0',
+    declared_education_loan_amount: '1',
+    previous_transaction_amount: '1',
+    declared_previous_amount: '1',
+    total_transaction_amount_tcs: '0',
+    invoiceRateTable: {
+      transaction_value: {
+        company_rate: '740000',
+        agent_mark_up: '500',
+        rate: '740500',
+      },
+      remittance_charges: {
+        company_rate: '500',
+        agent_mark_up: '50',
+        rate: '550',
+      },
+      nostro_charges: {
+        company_rate: '300',
+        agent_mark_up: '30',
+        rate: '330',
+      },
+      other_charges: {
+        company_rate: '200',
+        agent_mark_up: '20',
+        rate: '220',
+      },
+      transaction_amount: {
+        rate: '741600',
+      },
+      gst_amount: {
+        rate: '133488',
+      },
+      total_inr_amount: {
+        rate: '875088',
+      },
+      tcs: {
+        rate: '1500',
       },
     },
+  },
+  //   currencyDetails: {
+  //   fx_currency: '',
+  //   fx_amount: '0',
+  //   settlement_rate: '0',
+  //   add_margin: '0',
+  //   customer_rate: '0',
+  //   declared_education_loan_amount: '0',
+  //   previous_transaction_amount: '0',
+  //   declared_previous_amount: '0',
+  //   total_transaction_amount_tcs: '0',
+  //   invoiceRateTable: {
+  //     transaction_value: {
+  //       company_rate: '0',
+  //       agent_mark_up: '0',
+  //       rate: '0',
+  //     },
+  //     remittance_charges: {
+  //       company_rate: '0',
+  //       agent_mark_up: '0',
+  //       rate: '0',
+  //     },
+  //     nostro_charges: {
+  //       company_rate: '0',
+  //       agent_mark_up: '0',
+  //       rate: '0',
+  //     },
+  //     other_charges: {
+  //       company_rate: '0',
+  //       agent_mark_up: '0',
+  //       rate: '0',
+  //     },
+  //     transaction_amount: {
+  //       rate: '0',
+  //     },
+  //     gst_amount: {
+  //       rate: '0',
+  //     },
+  //     total_inr_amount: {
+  //       rate: '0',
+  //     },
+  //     tcs: {
+  //       rate: '0',
+  //     },
+  //   },
+  // },
     beneficiaryDetails: sourceData?.beneficiaryDetails || {
       beneficiary_name: '',
       beneficiary_address: '',
@@ -73,7 +118,7 @@ export const getFormDefaultValues = (initialData?: Partial<CreateTransactionForm
       company_reference_number: '-',
       agent_reference_number: '-',
       transaction_type: '',
-      purpose: '',
+      purpose: 'Education',
       transaction_purpose_map_id: '',
       fx_currency: '',
       fx_amount: 0,

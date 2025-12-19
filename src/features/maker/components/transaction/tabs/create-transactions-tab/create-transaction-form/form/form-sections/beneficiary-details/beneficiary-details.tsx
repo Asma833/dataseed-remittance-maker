@@ -8,6 +8,7 @@ import FormFieldRow from '@/components/form/wrapper/form-field-row';
 import FieldWrapper from '@/components/form/wrapper/field-wrapper';
 import { getController } from '@/components/form/utils/get-controller';
 import { Button } from '@/components/ui/button';
+import { toast } from 'sonner';
 
 const BeneficiaryDetails = ({ setAccordionState }: CommonCreateTransactionProps) => {
   const [isSaving, setIsSaving] = useState(false);
@@ -19,17 +20,29 @@ const BeneficiaryDetails = ({ setAccordionState }: CommonCreateTransactionProps)
   } = useFormContext();
   const intermediaryBankDetails = useWatch({ name: 'beneficiaryDetails.intermediaryBankDetails', defaultValue: 'no' });
 
+  const flattenErrors = (obj: any, prefix = ''): string[] => {
+    const keys: string[] = [];
+    for (const key in obj) {
+      if (obj[key] && typeof obj[key] === 'object' && obj[key].message) {
+        keys.push(prefix ? `${prefix}.${key}` : key);
+      } else if (obj[key] && typeof obj[key] === 'object') {
+        keys.push(...flattenErrors(obj[key], prefix ? `${prefix}.${key}` : key));
+      }
+    }
+    return keys;
+  };
+
   const handleSave = async () => {
     const isValid = await trigger();
     if (!isValid) {
+      const missingFields = flattenErrors(errors);
+      toast.error(`Missing required fields: ${missingFields.join(', ')}`);
       return;
     }
-    setIsSaving(true);
-    try {
-      // TODO: Implement actual save functionality, e.g., using useCreateTransaction hook
-      await new Promise((resolve) => setTimeout(resolve, 1000));
-    } finally {
-      setIsSaving(false);
+    // Submit the form to hit the API
+    const formElement = document.getElementById('create-transaction-form') as HTMLFormElement;
+    if (formElement) {
+      formElement.requestSubmit();
     }
   };
   return (

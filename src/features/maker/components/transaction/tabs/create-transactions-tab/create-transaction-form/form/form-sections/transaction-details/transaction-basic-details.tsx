@@ -40,7 +40,7 @@ const TransactionBasicDetails = ({ setAccordionState }: CommonCreateTransactionP
         ? (mappedPurposeTransactionTypesData as TransactionPurposeMap[])
             .filter((item) => item.transactionType.id === selectedTransactionTypeId)
             .map((item) => ({
-              value: item.purpose.id,
+              value: item.purpose.purpose_name,
               label: item.purpose.purpose_name,
               typeId: item.id,
             }))
@@ -65,7 +65,7 @@ const TransactionBasicDetails = ({ setAccordionState }: CommonCreateTransactionP
       return null;
     }
     return (mappedPurposeTransactionTypesData as TransactionPurposeMap[]).find(
-      (item) => item.transactionType.id === selectedTransactionType && item.purpose.id === selectedPurposeType
+      (item) => item.transactionType.id === selectedTransactionType && item.purpose.purpose_name === selectedPurposeType
     );
   }, [selectedTransactionType, selectedPurposeType, mappedPurposeTransactionTypesData]);
 
