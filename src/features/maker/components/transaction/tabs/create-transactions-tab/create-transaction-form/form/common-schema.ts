@@ -9,7 +9,7 @@ export const createTransactionSchema = z.object({
   beneficiaryDetails: beneficiaryDetailsSchema,
   transactionDetails: transactionBasicDetailsSchema,
 }).superRefine((data, ctx) => {
-  if (data.transactionDetails.purpose === 'Education') {
+  if ((data.transactionDetails.purpose || '').toLowerCase() === 'education') {
     if (!data.currencyDetails.declared_education_loan_amount || data.currencyDetails.declared_education_loan_amount.trim() === '') {
       ctx.addIssue({
         code: z.ZodIssueCode.custom,

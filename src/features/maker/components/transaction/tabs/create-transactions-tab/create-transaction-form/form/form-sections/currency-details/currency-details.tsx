@@ -111,23 +111,23 @@ const CurrencyDetails = ({ setAccordionState }: CommonCreateTransactionProps) =>
             })}
           </FormFieldRow>
           <FormFieldRow rowCols={2} className="w-full">
-            {(['customer_rate', ...(purpose === 'Education' ? ['declared_education_loan_amount'] : [])] as const).map((name) => {
+            {(['customer_rate', ...((purpose || '').toLowerCase() === 'education' ? ['declared_education_loan_amount'] : [])] as const).map((name) => {
               const field = currencyDetailsConfig.find((f) => f.name === name) as FieldConfig;
               const isConditionalField = name === 'declared_education_loan_amount';
               return (
                 <FieldWrapper key={name}>
-                  {getController({ ...field, required: isConditionalField ? purpose === 'Education' : field.required, name: `currencyDetails.${name}`, control, errors })}
+                  {getController({ ...field, required: isConditionalField ? (purpose || '').toLowerCase() === 'education' : field.required, name: `currencyDetails.${name}`, control, errors })}
                 </FieldWrapper>
               );
             })}
           </FormFieldRow>
           <FormFieldRow rowCols={2} className="w-full">
-            {(['previous_transaction_amount', ...(purpose === 'Education' ? ['declared_previous_amount'] : [])] as const).map((name) => {
+            {(['previous_transaction_amount', ...((purpose || '').toLowerCase() === 'education' ? ['declared_previous_amount'] : [])] as const).map((name) => {
               const field = currencyDetailsConfig.find((f) => f.name === name) as FieldConfig;
               const isConditionalField = name === 'declared_previous_amount';
               return (
                 <FieldWrapper key={name}>
-                  {getController({ ...field, required: isConditionalField ? purpose === 'Education' : field.required, name: `currencyDetails.${name}`, control, errors })}
+                  {getController({ ...field, required: isConditionalField ? (purpose || '').toLowerCase() === 'education' : field.required, name: `currencyDetails.${name}`, control, errors })}
                 </FieldWrapper>
               );
             })}
