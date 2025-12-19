@@ -9,7 +9,7 @@ import { createTransactionSchema, CreateTransactionFormData, CreateTransactionFo
 import { safeNumber, safeString, normalizeString } from '@/utils/form-helpers';
 import { useCompleteTransaction } from '../hooks/useCompleteTransaction';
 import { CompleteTransactionRequest } from '../types/transaction.types';
-import { sampleInitialData } from './sample-initial-data';
+// import { sampleInitialData } from './sample-initial-data';
 import { getFormDefaultValues } from './form-defaults';
 
 type Props = {
@@ -167,7 +167,7 @@ const CreateTransactionForm = ({ onCancel, onSubmit, initialData }: Props) => {
       };
       const response = await mutateAsync(payload);
       onSubmit?.(data);
-      form.reset(initialData ?? sampleInitialData);
+      form.reset(initialData || {});
     } catch (error) {
       console.error('Error creating transaction:', error);
 

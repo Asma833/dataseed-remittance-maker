@@ -1,20 +1,19 @@
 import { CreateTransactionFormInput } from './common-schema';
-import { sampleInitialData } from './sample-initial-data';
 
 export const getFormDefaultValues = (initialData?: Partial<CreateTransactionFormInput>): Partial<CreateTransactionFormInput> => {
-  const sourceData = initialData ?? sampleInitialData;
+  const sourceData = initialData;
   return {
     currencyDetails: {
-      fx_currency: sourceData?.currencyDetails?.fx_currency || '-',
-      fx_amount: sourceData.currencyDetails?.fx_amount || '-',
-      settlement_rate: sourceData.currencyDetails?.settlement_rate || '',
-      add_margin: sourceData.currencyDetails?.add_margin || '',
-      customer_rate: sourceData.currencyDetails?.customer_rate || '',
-      declared_education_loan_amount: sourceData.currencyDetails?.declared_education_loan_amount || '',
-      previous_transaction_amount: sourceData.currencyDetails?.previous_transaction_amount || '',
-      declared_previous_amount: sourceData.currencyDetails?.declared_previous_amount || '',
-      total_transaction_amount_tcs: sourceData.currencyDetails?.total_transaction_amount_tcs || '',
-      invoiceRateTable: sourceData.currencyDetails?.invoiceRateTable || {
+      fx_currency: sourceData?.currencyDetails?.fx_currency || '',
+      fx_amount: sourceData?.currencyDetails?.fx_amount || '',
+      settlement_rate: sourceData?.currencyDetails?.settlement_rate || '',
+      add_margin: sourceData?.currencyDetails?.add_margin || '',
+      customer_rate: sourceData?.currencyDetails?.customer_rate || '',
+      declared_education_loan_amount: sourceData?.currencyDetails?.declared_education_loan_amount || '',
+      previous_transaction_amount: sourceData?.currencyDetails?.previous_transaction_amount || '',
+      declared_previous_amount: sourceData?.currencyDetails?.declared_previous_amount || '',
+      total_transaction_amount_tcs: sourceData?.currencyDetails?.total_transaction_amount_tcs || '',
+      invoiceRateTable: sourceData?.currencyDetails?.invoiceRateTable || {
         transaction_value: {
           company_rate: '',
           agent_mark_up: '',
@@ -49,7 +48,7 @@ export const getFormDefaultValues = (initialData?: Partial<CreateTransactionForm
         },
       },
     },
-    beneficiaryDetails: sourceData.beneficiaryDetails || {
+    beneficiaryDetails: sourceData?.beneficiaryDetails || {
       beneficiary_name: '',
       beneficiary_address: '',
       beneficiary_city: '',
@@ -70,7 +69,7 @@ export const getFormDefaultValues = (initialData?: Partial<CreateTransactionForm
       intermediary_bank_name: '',
       intermediary_bank_address: '',
     },
-    transactionDetails: sourceData.transactionDetails || {
+    transactionDetails: sourceData?.transactionDetails || {
       company_reference_number: '-',
       agent_reference_number: '-',
       transaction_type: '',

@@ -21,7 +21,7 @@ export const transactionBasicDetailsSchema = z
       .max(50, 'Agent reference number too long')
       .optional()
       .or(z.literal('')),
-    purpose: z.string().max(100, 'Purpose too long').optional().or(z.literal('')),
+    purpose: z.string().min(1, 'Purpose is required'),
     transaction_purpose_map_id:z.string().optional(),
     transaction_type: z.string().optional().or(z.literal('')),
     fx_currency: z
