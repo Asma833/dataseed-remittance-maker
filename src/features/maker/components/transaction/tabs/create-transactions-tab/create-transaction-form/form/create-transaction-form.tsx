@@ -11,6 +11,7 @@ import { useCompleteTransaction } from '../hooks/useCompleteTransaction';
 import { CompleteTransactionRequest } from '../types/transaction.types';
 // import { sampleInitialData } from './sample-initial-data';
 import { getFormDefaultValues } from './form-defaults';
+import { panelFields } from './form-validation-fields';
 
 type Props = {
   onCancel?: () => void;
@@ -31,6 +32,7 @@ const CreateTransactionForm = ({ onCancel, onSubmit, initialData }: Props) => {
     mode: 'onChange', // Trigger validation on change
   });
 
+
   const handlePrevious = () => {
     if (currentTab === 'panel2') {
       setAccordionState({ currentActiveTab: 'panel1' });
@@ -39,11 +41,15 @@ const CreateTransactionForm = ({ onCancel, onSubmit, initialData }: Props) => {
     }
   };
 
-  const handleNext = () => {
-    if (currentTab === 'panel1') {
-      setAccordionState({ currentActiveTab: 'panel2' });
-    } else if (currentTab === 'panel2') {
-      setAccordionState({ currentActiveTab: 'panel3' });
+  const handleNext = async () => {
+    const fieldsToValidate = panelFields[currentTab as keyof typeof panelFields];
+    const isValid = await form.trigger(fieldsToValidate);
+    if (isValid) {
+      if (currentTab === 'panel1') {
+        setAccordionState({ currentActiveTab: 'panel2' });
+      } else if (currentTab === 'panel2') {
+        setAccordionState({ currentActiveTab: 'panel3' });
+      }
     }
   };
 

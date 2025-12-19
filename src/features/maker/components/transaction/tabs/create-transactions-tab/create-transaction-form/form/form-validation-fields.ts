@@ -1,0 +1,56 @@
+// Define field paths for each panel (only required fields)
+export const transactionDetailsFields = [
+  'transactionDetails.purpose',
+  'transactionDetails.passport_number',
+  'transactionDetails.applicant_address',
+  'transactionDetails.applicant_city',
+  'transactionDetails.applicant_state',
+  'transactionDetails.applicant_country',
+  'transactionDetails.postal_code',
+] as const;
+
+export const beneficiaryDetailsFields = [
+  'beneficiaryDetails.beneficiary_name',
+  'beneficiaryDetails.beneficiary_address',
+  'beneficiaryDetails.beneficiary_city',
+  'beneficiaryDetails.beneficiary_country',
+  'beneficiaryDetails.beneficiary_account_number_iban_number',
+  'beneficiaryDetails.beneficiary_swift_code',
+  'beneficiaryDetails.beneficiary_bank_name',
+  'beneficiaryDetails.beneficiary_bank_address',
+  'beneficiaryDetails.sort_bsb_aba_transit_code',
+  'beneficiaryDetails.message_to_beneficiary_additional_information',
+  'beneficiaryDetails.intermediaryBankDetails',
+] as const;
+
+export const currencyDetailsFields = [
+  'currencyDetails.fx_currency',
+  'currencyDetails.fx_amount',
+  'currencyDetails.settlement_rate',
+  'currencyDetails.add_margin',
+  'currencyDetails.customer_rate',
+  'currencyDetails.previous_transaction_amount',
+  'currencyDetails.total_transaction_amount_tcs',
+  'currencyDetails.invoiceRateTable.transaction_value.company_rate',
+  'currencyDetails.invoiceRateTable.transaction_value.agent_mark_up',
+  'currencyDetails.invoiceRateTable.transaction_value.rate',
+  'currencyDetails.invoiceRateTable.remittance_charges.company_rate',
+  'currencyDetails.invoiceRateTable.remittance_charges.agent_mark_up',
+  'currencyDetails.invoiceRateTable.remittance_charges.rate',
+  'currencyDetails.invoiceRateTable.nostro_charges.company_rate',
+  'currencyDetails.invoiceRateTable.nostro_charges.agent_mark_up',
+  'currencyDetails.invoiceRateTable.nostro_charges.rate',
+  'currencyDetails.invoiceRateTable.other_charges.company_rate',
+  'currencyDetails.invoiceRateTable.other_charges.agent_mark_up',
+  'currencyDetails.invoiceRateTable.other_charges.rate',
+  'currencyDetails.invoiceRateTable.transaction_amount.rate',
+  'currencyDetails.invoiceRateTable.gst_amount.rate',
+  'currencyDetails.invoiceRateTable.total_inr_amount.rate',
+  'currencyDetails.invoiceRateTable.tcs.rate',
+] as const;
+
+export const panelFields = {
+  panel1: transactionDetailsFields,
+  panel2: beneficiaryDetailsFields,
+  panel3: currencyDetailsFields,
+} as const;

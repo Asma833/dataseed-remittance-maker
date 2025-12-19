@@ -4,6 +4,7 @@ const PAN_REGEX = /^[A-Z]{5}[0-9]{4}[A-Z]{1}$/;
 const MOBILE_REGEX = /^[6-9]\d{9}$/;
 const CURRENCY_CODE_REGEX = /^[A-Z]{3}$/;
 const POSTAL_CODE_REGEX = /^\d{6}$/; // Indian PIN code
+const INDIAN_PASSPORT_REGEX = /^[A-Z][0-9]{7}$/; // Indian passport: 1 letter + 7 digits
 const NO_LEADING_HYPHEN_OR_SPACE = /^[^-\s].*/; // No leading hyphen or space
 const NO_NUMBERS_REGEX = /^[a-zA-Z\s-]+$/; // No numbers allowed
 
@@ -98,9 +99,8 @@ export const transactionBasicDetailsSchema = z
     passport_number: z
       .string()
       .nonempty('Passport number is required')
-      .min(5, 'Passport number too short')
-      .max(20, 'Passport number too long')
-      .regex(NO_LEADING_HYPHEN_OR_SPACE, 'Passport number cannot start with hyphen or space'),
+      .regex(INDIAN_PASSPORT_REGEX, 'Invalid passport format (e.g., A1234567)')
+      .length(8, 'Indian passport number must be exactly 8 characters'),
     passport_issued_date: z.coerce.date().max(new Date(), 'Issued date cannot be in the future').optional(),
     passport_expiry_date: z.coerce.date().min(new Date(), 'Expiry date must be in the future').optional(),
     place_of_issue: z
