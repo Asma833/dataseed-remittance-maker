@@ -14,7 +14,7 @@ const ViewAllTransactions = () => {
     return (data as AllTransaction[]).flatMap((deal: AllTransaction) =>
       deal.transactions.map((transaction) => ({
         id: transaction.id || '-',
-        ref_no: transaction.transaction_id || '-',
+        ref_no: transaction.company_ref_number || '-',
         agent_ref_no: transaction.agent_ref_number || '-',
         created_date: transaction.order_date || deal.created_at || '-',
         expiry_date: transaction.order_expiry || '-',

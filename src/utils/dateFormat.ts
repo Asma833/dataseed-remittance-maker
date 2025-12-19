@@ -17,6 +17,14 @@ export const formatDate = (dateStr?: string | null): string => {
   const date = dayjs(dateStr);
   if (date.isValid()) return date.format('DD/MM/YYYY');
 
+  // Try parsing as YYYY-MM-DD format explicitly
+  const ymdMatch = dateStr.match(/^(\d{4})-(\d{2})-(\d{2})$/);
+  if (ymdMatch) {
+    const [, year, month, day] = ymdMatch;
+    const parsedDate = dayjs(`${year}-${month}-${day}`);
+    if (parsedDate.isValid()) return parsedDate.format('DD/MM/YYYY');
+  }
+
   // Fallback using native Date object (covers cases like "07/10/2025")
   const nativeDate = new Date(dateStr);
   if (!isNaN(nativeDate.getTime())) {

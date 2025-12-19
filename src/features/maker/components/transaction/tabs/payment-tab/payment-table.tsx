@@ -24,7 +24,7 @@ const PaymentStatus = () => {
         const transaction = deal.transactions[0]; // Assuming one transaction per deal
         return {
           id: payment.id,
-          ref_no: transaction?.transaction_id || '-',
+          ref_no: transaction?.company_ref_number || '-',
           agent_ref_no: transaction?.agent_ref_number || '-',
           created_date: deal.created_at || '-',
           expiry_date: transaction?.order_expiry || '-',

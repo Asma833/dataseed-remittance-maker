@@ -13,11 +13,16 @@ export const GetPaymentTableColumn = ({ handlePayment }: { handlePayment: (rowDa
     {
       id: 'order_date',
       header: 'Order Date',
-      accessorKey: 'order_date',
+      accessorKey: 'created_date',
       meta: { className: 'min-w-0 p-2' },
       cell: ({ row }: { row: PaymentData }) => <span>{formatDateWithFallback(row.created_date)}</span>,
     },
-    { id: 'expiry_date', header: 'Expiry Date', accessorKey: 'expiry_date', meta: { className: 'min-w-0 p-2' } },
+    { id: 'expiry_date',
+       header: 'Expiry Date', 
+       accessorKey: 'expiry_date', 
+       meta: { className: 'min-w-0 p-2' },
+       cell: ({ row }: { row: PaymentData }) => <span>{formatDateWithFallback(row.expiry_date)}</span>, 
+    },
     {
       id: 'applicant_name',
       header: 'Applicant Name',
@@ -36,8 +41,18 @@ export const GetPaymentTableColumn = ({ handlePayment }: { handlePayment: (rowDa
       accessorKey: 'transaction_type',
       meta: { className: 'min-w-0 p-2' },
     },
-    { id: 'purpose', header: 'Purpose', accessorKey: 'purpose', meta: { className: 'min-w-0 p-2' } },
-    { id: 'kyc_type', header: 'KYC Type', accessorKey: 'kyc_type', meta: { className: 'min-w-0 p-2' } },
+    { 
+      id: 'purpose', 
+      header: 'Purpose', 
+      accessorKey: 'purpose', 
+      meta: { className: 'min-w-0 p-2' } 
+    },
+    { 
+      id: 'kyc_type', 
+      header: 'KYC Type', 
+      accessorKey: 'kyc_type', 
+      meta: { className: 'min-w-0 p-2' } 
+    },
     {
       id: 'kyc_status',
       header: 'KYC Status',

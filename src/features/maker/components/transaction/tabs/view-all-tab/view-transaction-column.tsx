@@ -31,6 +31,7 @@ export const GetViewAllTransactionTableColumns = () => {
       header: 'Expiry Date',
       accessorKey: 'expiry_date',
       meta: { className: 'min-w-0 p-2' },
+      cell: ({ row }: { row: any }) => <span>{formatDateWithFallback(row.expiry_date)}</span>,
     },
 
     {
