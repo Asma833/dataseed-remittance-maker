@@ -8,6 +8,23 @@ export const createTransactionSchema = z.object({
   currencyDetails: currencyDetailsSchema,
   beneficiaryDetails: beneficiaryDetailsSchema,
   transactionDetails: transactionBasicDetailsSchema,
+}).superRefine((data, ctx) => {
+  if (data.transactionDetails.purpose === 'Education') {
+    if (!data.currencyDetails.declared_education_loan_amount || data.currencyDetails.declared_education_loan_amount.trim() === '') {
+      ctx.addIssue({
+        code: z.ZodIssueCode.custom,
+        message: 'Declared Education Loan Amount is required',
+        path: ['currencyDetails', 'declared_education_loan_amount'],
+      });
+    }
+    if (!data.currencyDetails.declared_previous_amount || data.currencyDetails.declared_previous_amount.trim() === '') {
+      ctx.addIssue({
+        code: z.ZodIssueCode.custom,
+        message: 'Declared Previous Amount is required',
+        path: ['currencyDetails', 'declared_previous_amount'],
+      });
+    }
+  }
 });
 
 export type CreateTransactionFormData = z.infer<typeof createTransactionSchema>;

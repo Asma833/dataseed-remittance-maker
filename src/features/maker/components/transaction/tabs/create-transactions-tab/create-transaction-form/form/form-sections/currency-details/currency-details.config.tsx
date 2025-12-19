@@ -46,7 +46,7 @@ export const currencyDetailsConfig = [
     label: 'Declared Education Loan Amount',
     type: FieldType.Text,
     placeholder: 'Enter Declared Education Loan Amount',
-    required: true,
+    required: false,
   },
   {
     name: 'previous_transaction_amount',
@@ -60,7 +60,7 @@ export const currencyDetailsConfig = [
     label: 'Declared Previous Amount',
     type: FieldType.Text,
     placeholder: 'Enter Declared Previous Amount',
-    required: true,
+    required: false,
   },
   {
     name: 'total_transaction_amount_tcs',

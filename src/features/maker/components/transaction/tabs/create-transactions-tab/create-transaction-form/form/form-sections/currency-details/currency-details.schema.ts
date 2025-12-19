@@ -25,7 +25,6 @@ export const currencyDetailsSchema = z.object({
     .regex(numberRegex, 'Customer Rate must be a valid number without spaces or hyphens'),
   declared_education_loan_amount: z
     .string()
-    .min(1, 'Declared Education Loan Amount is required')
     .regex(numberRegex, 'Declared Education Loan Amount must be a valid number without spaces or hyphens'),
   previous_transaction_amount: z
     .string()
@@ -33,7 +32,6 @@ export const currencyDetailsSchema = z.object({
     .regex(numberRegex, 'Previous Transaction Amount must be a valid number without spaces or hyphens'),
   declared_previous_amount: z
     .string()
-    .min(1, 'Declared Previous Amount is required')
     .regex(numberRegex, 'Declared Previous Amount must be a valid number without spaces or hyphens'),
   total_transaction_amount_tcs: z
     .string()
