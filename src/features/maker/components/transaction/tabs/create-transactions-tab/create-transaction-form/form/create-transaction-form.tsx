@@ -54,6 +54,7 @@ const CreateTransactionForm = ({ onCancel, onSubmit, initialData }: Props) => {
   };
 
   const handleSubmit = async (data: CreateTransactionFormData) => {
+    if (isSubmitting) return;
     setIsSubmitting(true);
     try {
 

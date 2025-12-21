@@ -32,7 +32,7 @@ export const GetRateTableColumns = ({
   };
 
   const valueMappings: Record<string, string> = {
-    niumRate: 'company_rate',
+    companyRate: 'company_settlement_rate',
     agentMarkUp: 'agent_mark_up',
     rate: 'rate',
   };
@@ -56,7 +56,7 @@ export const GetRateTableColumns = ({
       ...commonInputStyles(fieldPath),
     });
 
-  const getCellContent = (section: string, columnKey: 'niumRate' | 'agentMarkUp' | 'rate') => {
+  const getCellContent = (section: string, columnKey: 'companyRate' | 'agentMarkUp' | 'rate') => {
     const mappedSection = fieldMappings[section] || section;
     const mappedKey = valueMappings[columnKey] || columnKey;
     const fieldPath = `${id}.${mappedSection}.${mappedKey}`;
@@ -76,7 +76,7 @@ export const GetRateTableColumns = ({
       id: 'transaction_value',
       cells: {
         invoiceName: () => <span className="text-left">{`Transaction Value`}</span>,
-        niumRate: () => getCellContent('transaction_value', 'niumRate'),
+        companyRate: () => getCellContent('transaction_value', 'companyRate'),
         agentMarkUp: () => getCellContent('transaction_value', 'agentMarkUp'),
         rate: () => getCellContent('transaction_value', 'rate'),
       },
@@ -85,7 +85,7 @@ export const GetRateTableColumns = ({
       id: 'remittance_charges',
       cells: {
         invoiceName: () => <span className="text-left">{`Remittance Charges`}</span>,
-        niumRate: () => getCellContent('remittance_charges', 'niumRate'),
+        companyRate: () => getCellContent('remittance_charges', 'companyRate'),
         agentMarkUp: () => getCellContent('remittance_charges', 'agentMarkUp'),
         rate: () => getCellContent('remittance_charges', 'rate'),
       },
@@ -94,7 +94,7 @@ export const GetRateTableColumns = ({
       id: 'nostro_charges',
       cells: {
         invoiceName: () => <span className="text-left">{`Nostro Charges`}</span>,
-        niumRate: () => getCellContent('nostro_charges', 'niumRate'),
+        companyRate: () => getCellContent('nostro_charges', 'companyRate'),
         agentMarkUp: () => getCellContent('nostro_charges', 'agentMarkUp'),
         rate: () => getCellContent('nostro_charges', 'rate'),
       },
@@ -103,7 +103,7 @@ export const GetRateTableColumns = ({
       id: 'other_charges',
       cells: {
         invoiceName: () => <span className="text-left">{`Other Charges`}</span>,
-        niumRate: () => getCellContent('other_charges', 'niumRate'),
+        companyRate: () => getCellContent('other_charges', 'companyRate'),
         agentMarkUp: () => getCellContent('other_charges', 'agentMarkUp'),
         rate: () => getCellContent('other_charges', 'rate'),
       },

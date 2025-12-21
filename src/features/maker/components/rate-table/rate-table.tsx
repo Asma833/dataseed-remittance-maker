@@ -6,11 +6,11 @@ import { cn } from '@/utils/cn';
 import { useFormContext } from 'react-hook-form';
 import { useEffect, useRef } from 'react';
 
-type ColumnKey = 'invoiceName' | 'niumRate' | 'agentMarkUp' | 'rate';
+type ColumnKey = 'invoiceName' | 'companyRate' | 'agentMarkUp' | 'rate';
 
 const columnKeys: Record<ColumnKey, { label: string; className?: string }> = {
   invoiceName: { label: 'Particulars', className: 'text-left' },
-  niumRate: { label: 'Rate' },
+  companyRate: { label: 'Rate' },
   agentMarkUp: { label: 'Agent Mark Up' },
   rate: { label: 'Amount' },
 };
@@ -49,7 +49,7 @@ export default function RateTable({
       };
 
       const valueMappings: Record<string, string> = {
-        company_rate: 'niumRate',
+        company_settlement_rate: 'companyRate',
         agent_mark_up: 'agentMarkUp',
         rate: 'rate',
       };

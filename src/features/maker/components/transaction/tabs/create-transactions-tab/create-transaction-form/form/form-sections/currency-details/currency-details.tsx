@@ -87,6 +87,7 @@ const CurrencyDetails = ({ setAccordionState }: CommonCreateTransactionProps) =>
     if (addMargin && !isNaN(Number(addMargin))) {
       setValue('currencyDetails.add_margin', addMargin, { shouldValidate: false, shouldDirty: false });
       // Set agent mark up fields to add_margin
+      setValue('currencyDetails.invoiceRateTable.transaction_value.agent_mark_up', addMargin, { shouldValidate: false, shouldDirty: false });
       setValue('currencyDetails.invoiceRateTable.remittance_charges.agent_mark_up', addMargin, { shouldValidate: false, shouldDirty: false });
       setValue('currencyDetails.invoiceRateTable.nostro_charges.agent_mark_up', addMargin, { shouldValidate: false, shouldDirty: false });
       setValue('currencyDetails.invoiceRateTable.other_charges.agent_mark_up', addMargin, { shouldValidate: false, shouldDirty: false });
@@ -101,11 +102,11 @@ const CurrencyDetails = ({ setAccordionState }: CommonCreateTransactionProps) =>
 
   // Calculate invoiceRateTable rates
   useEffect(() => {
-    if (mountedRef.current && fxAmount && customerRate) {
-      const transactionValueRate = Number(fxAmount) * Number(customerRate);
+    if (mountedRef.current && fxAmount && companySettlementRate) {
+      const transactionValueRate = Number(fxAmount) * Number(companySettlementRate);
       setValue('currencyDetails.invoiceRateTable.transaction_value.rate', transactionValueRate, { shouldValidate: false, shouldDirty: false });
     }
-  }, [fxAmount, customerRate, setValue]);
+  }, [fxAmount, companySettlementRate, setValue]);
 
   useEffect(() => {
     if (mountedRef.current && remittanceCompanyRate != null && remittanceAgentMarkUp != null) {
@@ -227,7 +228,7 @@ const CurrencyDetails = ({ setAccordionState }: CommonCreateTransactionProps) =>
             id={'currencyDetails.invoiceRateTable'}
             mode={'edit'}
             totalAmount={totalInrAmount || 0}
-            editableFields={['remittanceCharges.agent_mark_up', 'nostroCharges.agent_mark_up', 'otherCharges.agent_mark_up']}
+            editableFields={['transactionValue.agent_mark_up', 'remittanceCharges.agent_mark_up', 'nostroCharges.agent_mark_up', 'otherCharges.agent_mark_up']}
             invoiceData={invoiceRateTable}
           />
         </div>
