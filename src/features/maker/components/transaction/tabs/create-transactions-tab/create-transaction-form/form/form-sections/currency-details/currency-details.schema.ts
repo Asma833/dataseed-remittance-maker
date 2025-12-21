@@ -13,19 +13,19 @@ export const currencyDetailsSchema = z.object({
     .number(),
   declared_education_loan_amount: z.coerce
     .number()
-    .min(0.01, 'Declared Education Loan Amount must be positive')
+    // .min(0.01, 'Declared Education Loan Amount must be positive')
     .optional(),
   previous_transaction_amount: z.coerce
-    .number()
-    .min(0.01, 'Previous Transaction Amount must be positive'),
+    .number(),
+    // .min(0.01, 'Previous Transaction Amount must be positive'),
   declared_previous_amount: z.coerce
     .number()
-    .min(0.01, 'Declared Previous Amount must be positive')
-    .max(999999999, 'Declared Previous Amount too large')
+    // .min(0.01, 'Declared Previous Amount must be positive')
+    // .max(999999999, 'Declared Previous Amount too large')
     .optional(),
   total_transaction_amount_tcs: z.coerce
-    .number()
-    .min(0.01, 'Total Transaction Amount (TCS) must be positive'),
+    .number(),
+   // .min(0.01, 'Total Transaction Amount (TCS) must be positive'),
   invoiceRateTable: z.object({
     transaction_value: z.object({
       company_rate: z.coerce
