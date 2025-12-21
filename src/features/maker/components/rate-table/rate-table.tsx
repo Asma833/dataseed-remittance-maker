@@ -41,19 +41,19 @@ export default function RateTable({
 
       // Map the data structure to match the form field names
       const fieldMappings: Record<string, string> = {
-        transaction_value: 'transactionValue',
-        remittance_charges: 'remittanceCharges',
-        nostro_charges: 'nostroCharges',
-        other_charges: 'otherCharges',
-        transaction_amount: 'transactionAmount',
-        gst_amount: 'gstAmount',
-        total_inr_amount: 'totalInrAmount',
+        transaction_value: 'transaction_value',
+        remittance_charges: 'remittance_charges',
+        nostro_charges: 'nostro_charges',
+        other_charges: 'other_charges',
+        transaction_amount: 'transaction_amount',
+        gst_amount: 'gst_amount',
+        total_inr_amount: 'total_inr_amount',
         tcs: 'tcs',
       };
 
       const valueMappings: Record<string, string> = {
-        company_settlement_rate: 'companyRate',
-        add_margin: 'agentMarkUp',
+        company_rate: 'companyRate',
+        agent_mark_up: 'agentMarkUp',
         rate: 'rate',
       };
 
@@ -81,7 +81,7 @@ export default function RateTable({
       const calculatedRate = settlementRate + margin;
       
       // Update the transaction_value.rate field
-      setValue(`${id}.transactionValue.rate`, calculatedRate, { shouldValidate: false, shouldDirty: false });
+      setValue(`${id}.transaction_value.rate`, calculatedRate, { shouldValidate: false, shouldDirty: false });
     }
   }, [companySettlementRate, addMargin, id, setValue]);
 

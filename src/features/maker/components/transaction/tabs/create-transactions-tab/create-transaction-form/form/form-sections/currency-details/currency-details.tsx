@@ -86,13 +86,13 @@ const CurrencyDetails = ({ setAccordionState }: CommonCreateTransactionProps) =>
   }, [companySettlementRate, setValue]);
 
   useEffect(() => {
-    if (addMargin && !isNaN(Number(addMargin))) {
+    if (addMargin != null && !isNaN(Number(addMargin))) {
       setValue('currencyDetails.add_margin', addMargin, { shouldValidate: false, shouldDirty: false });
       // Set agent_mark_up fields
-      setValue('currencyDetails.invoiceRateTable.transaction_value.agent_mark_up', addMargin, { shouldValidate: false, shouldDirty: false });
-      setValue('currencyDetails.invoiceRateTable.remittance_charges.agent_mark_up', addMargin, { shouldValidate: false, shouldDirty: false });
-      setValue('currencyDetails.invoiceRateTable.nostro_charges.agent_mark_up', addMargin, { shouldValidate: false, shouldDirty: false });
-      setValue('currencyDetails.invoiceRateTable.other_charges.agent_mark_up', addMargin, { shouldValidate: false, shouldDirty: false });
+      setValue('currencyDetails.invoiceRateTable.transaction_value.agent_mark_up', Number(addMargin), { shouldValidate: false, shouldDirty: false });
+      setValue('currencyDetails.invoiceRateTable.remittance_charges.agent_mark_up', Number(addMargin), { shouldValidate: false, shouldDirty: false });
+      setValue('currencyDetails.invoiceRateTable.nostro_charges.agent_mark_up', Number(addMargin), { shouldValidate: false, shouldDirty: false });
+      setValue('currencyDetails.invoiceRateTable.other_charges.agent_mark_up', Number(addMargin), { shouldValidate: false, shouldDirty: false });
     }
   }, [addMargin, setValue]);
 
@@ -243,7 +243,7 @@ const CurrencyDetails = ({ setAccordionState }: CommonCreateTransactionProps) =>
             id={'currencyDetails.invoiceRateTable'}
             mode={'edit'}
             totalAmount={totalInrAmount || 0}
-            editableFields={['transactionValue.agent_mark_up', 'remittanceCharges.agent_mark_up', 'nostroCharges.agent_mark_up', 'otherCharges.agent_mark_up']}
+            editableFields={['transaction_value.agent_mark_up', 'remittance_charges.agent_mark_up', 'nostro_charges.agent_mark_up', 'other_charges.agent_mark_up']}
             invoiceData={invoiceRateTable}
           />
         </div>

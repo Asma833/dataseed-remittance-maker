@@ -21,13 +21,13 @@ export const GetRateTableColumns = ({
   invoiceData?: any;
 }): Partial<RateTableColumn>[] => {
   const fieldMappings: Record<string, string> = {
-    transaction_value: 'transactionValue',
-    remittance_charges: 'remittanceCharges',
-    nostro_charges: 'nostroCharges',
-    other_charges: 'otherCharges',
-    transaction_amount: 'transactionAmount',
-    gst_amount: 'gstAmount',
-    total_inr_amount: 'totalInrAmount',
+    transaction_value: 'transaction_value',
+    remittance_charges: 'remittance_charges',
+    nostro_charges: 'nostro_charges',
+    other_charges: 'other_charges',
+    transaction_amount: 'transaction_amount',
+    gst_amount: 'gst_amount',
+    total_inr_amount: 'total_inr_amount',
     tcs: 'tcs',
   };
 
@@ -51,7 +51,7 @@ export const GetRateTableColumns = ({
   const getFormField = (fieldPath: string) =>
     getController({
       name: fieldPath,
-      type: 'text',
+      type: 'number',
       disabled: mode === 'view' || !editableFields.includes(fieldPath.replace(`${id}.`, '')),
       ...commonInputStyles(fieldPath),
     });
