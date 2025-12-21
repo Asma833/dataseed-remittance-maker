@@ -121,12 +121,14 @@ const CurrencyDetails = ({ setAccordionState }: CommonCreateTransactionProps) =>
     }
   }, [transactionValueCompanyRate, transactionValueAgentMarkUp, setValue]);
 
+ 
+  // Calculate remittance_charges.rate as company_rate + agent_mark_up
   useEffect(() => {
-    if (mountedRef.current) {
-      // Set remittance rate to static value
-      setValue('currencyDetails.invoiceRateTable.remittance_charges.rate', 10, { shouldValidate: false, shouldDirty: false });
+    if (mountedRef.current && remittanceCompanyRate != null && remittanceAgentMarkUp != null) {
+      const rate = Number(remittanceCompanyRate) + Number(remittanceAgentMarkUp);
+      setValue('currencyDetails.invoiceRateTable.remittance_charges.rate', rate, { shouldValidate: false, shouldDirty: false });
     }
-  }, [setValue]);
+  }, [remittanceCompanyRate, remittanceAgentMarkUp, setValue]);
 
   // Calculate nostro_charges.rate as company_rate + agent_mark_up
   useEffect(() => {
