@@ -57,28 +57,6 @@ const CreateTransactionForm = ({ onCancel, onSubmit, initialData }: Props) => {
     if (isSubmitting) return;
     setIsSubmitting(true);
     try {
-
-      const requiredBeneficiaryFields = [
-        'beneficiary_name',
-        'beneficiary_address',
-        'beneficiary_city',
-        'beneficiary_country',
-        'beneficiary_account_number_iban_number',
-        'beneficiary_swift_code',
-        'beneficiary_bank_name',
-        'beneficiary_bank_address',
-        'sort_bsb_aba_transit_code',
-        'message_to_beneficiary_additional_information',
-      ];
-
-      const missingFields = requiredBeneficiaryFields.filter(
-        (field) => !safeString(data.beneficiaryDetails?.[field as keyof typeof data.beneficiaryDetails])
-      );
-
-      if (missingFields.length > 0) {
-        throw new Error(`Required fields are missing: ${missingFields.join(', ')}`);
-      }
-
       const convertChargeGroup = (group: typeof data.currencyDetails.invoiceRateTable.transaction_value) => ({
         company_rate: safeNumber(group.company_rate),
         agent_mark_up: safeNumber(group.agent_mark_up),
@@ -188,7 +166,6 @@ const CreateTransactionForm = ({ onCancel, onSubmit, initialData }: Props) => {
 
   const showPrevious = currentTab !== 'panel1';
   const showNext = currentTab !== 'panel3';
-  const showSubmit = currentTab === 'panel3';
 
   return (
     <FormProvider {...form}>
