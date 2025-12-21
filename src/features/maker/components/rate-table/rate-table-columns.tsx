@@ -32,7 +32,7 @@ export const GetRateTableColumns = ({
   };
 
   const valueMappings: Record<string, string> = {
-    companyRate: 'company_settlement_rate',
+    companyRate: 'company_rate',
     agentMarkUp: 'agent_mark_up',
     rate: 'rate',
   };

@@ -57,11 +57,19 @@ const CreateTransactionForm = ({ onCancel, onSubmit, initialData }: Props) => {
     if (isSubmitting) return;
     setIsSubmitting(true);
     try {
-      const convertChargeGroup = (group: typeof data.currencyDetails.invoiceRateTable.transaction_value) => ({
-        company_rate: safeNumber(group.company_rate),
-        agent_mark_up: safeNumber(group.agent_mark_up),
-        rate: safeNumber(group.rate),
-      });
+      const convertChargeGroup = (group: typeof data.currencyDetails.invoiceRateTable.transaction_value) => {
+        // The input properties are expected to be company_rate and add_margin
+        // And the output should match the expected properties in transaction.types.ts
+        const companyRate = safeNumber(group.company_rate);
+        const addMargin = safeNumber(group.agent_mark_up);
+        
+        // Return the object with the correct property names
+        return {
+          company_rate: companyRate,
+          agent_mark_up: addMargin,
+          rate: Number(companyRate) + Number(addMargin), // Rate is calculated by adding the two values
+        };
+      };
 
       const payload: CompleteTransactionRequest = {
         currencyDetails: {

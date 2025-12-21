@@ -11,8 +11,8 @@ type ColumnKey = 'invoiceName' | 'companyRate' | 'agentMarkUp' | 'rate';
 
 const columnKeys: Record<ColumnKey, { label: string; className?: string }> = {
   invoiceName: { label: 'Particulars', className: 'text-left' },
-  companyRate: { label: 'Rate' },
-  agentMarkUp: { label: 'Agent Mark Up' },
+  companyRate: { label: 'Company Settlement Rate' },
+  agentMarkUp: { label: 'Add Margin' },
   rate: { label: 'Amount' },
 };
 
@@ -32,6 +32,7 @@ export default function RateTable({
   const { setValue } = useFormContext();
   const prevInvoiceDataRef = useRef<any>(null);
   const companySettlementRate = useWatch({ name: 'transactionDetails.company_settlement_rate' });
+  const addMargin = useWatch({ name: 'transactionDetails.add_margin' });
   
   // Reset form values when invoiceData changes
   useEffect(() => {
@@ -40,19 +41,19 @@ export default function RateTable({
 
       // Map the data structure to match the form field names
       const fieldMappings: Record<string, string> = {
-        transaction_value: 'transaction_value',
-        remittance_charges: 'remittance_charges',
-        nostro_charges: 'nostro_charges',
-        other_charges: 'other_charges',
-        transaction_amount: 'transaction_amount',
-        gst_amount: 'gst_amount',
-        total_inr_amount: 'total_inr_amount',
+        transaction_value: 'transactionValue',
+        remittance_charges: 'remittanceCharges',
+        nostro_charges: 'nostroCharges',
+        other_charges: 'otherCharges',
+        transaction_amount: 'transactionAmount',
+        gst_amount: 'gstAmount',
+        total_inr_amount: 'totalInrAmount',
         tcs: 'tcs',
       };
 
       const valueMappings: Record<string, string> = {
         company_settlement_rate: 'companyRate',
-        agent_mark_up: 'agentMarkUp',
+        add_margin: 'agentMarkUp',
         rate: 'rate',
       };
 
@@ -69,19 +70,20 @@ export default function RateTable({
           setValue(`${id}.${mappedSection}`, sectionData, { shouldValidate: false, shouldDirty: false });
         }
       });
-
-      // Set transaction_value.rate to company_settlement_rate
-      setValue(`${id}.transaction_value.rate`, companySettlementRate, { shouldValidate: false, shouldDirty: false });
     }
-  }, [invoiceData, id, setValue, companySettlementRate]);
+  }, [invoiceData, id, setValue]);
 
-  // Update transactionValue.rate when companySettlementRate changes
+  // Update rate calculation when companySettlementRate or addMargin changes
   useEffect(() => {
-    console.log(companySettlementRate,"companySettlementRate")
-    if (companySettlementRate !== undefined) {
-      setValue(`${id}.transactionValue.rate`, companySettlementRate, { shouldValidate: false, shouldDirty: false });
+    if (companySettlementRate !== undefined || addMargin !== undefined) {
+      const settlementRate = Number(companySettlementRate || 0);
+      const margin = Number(addMargin || 0);
+      const calculatedRate = settlementRate + margin;
+      
+      // Update the transaction_value.rate field
+      setValue(`${id}.transactionValue.rate`, calculatedRate, { shouldValidate: false, shouldDirty: false });
     }
-  }, [companySettlementRate, id, setValue]);
+  }, [companySettlementRate, addMargin, id, setValue]);
 
   const invoices = GetRateTableColumns({ id, mode, editableFields, invoiceData });
 
