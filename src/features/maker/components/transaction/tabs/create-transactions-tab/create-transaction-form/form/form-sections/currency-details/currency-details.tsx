@@ -49,6 +49,8 @@ const CurrencyDetails = ({ setAccordionState }: CommonCreateTransactionProps) =>
   const invoiceRateTable = useWatch({ control, name: 'currencyDetails.invoiceRateTable' });
 
   // Watch specific invoiceRateTable fields to avoid infinite loops
+  const transactionValueCompanyRate = useWatch({ control, name: 'currencyDetails.invoiceRateTable.transaction_value.company_rate' });
+  const transactionValueAgentMarkUp = useWatch({ control, name: 'currencyDetails.invoiceRateTable.transaction_value.agent_mark_up' });
   const remittanceCompanyRate = useWatch({ control, name: 'currencyDetails.invoiceRateTable.remittance_charges.company_rate' });
   const remittanceAgentMarkUp = useWatch({ control, name: 'currencyDetails.invoiceRateTable.remittance_charges.agent_mark_up' });
   const nostroCompanyRate = useWatch({ control, name: 'currencyDetails.invoiceRateTable.nostro_charges.company_rate' });
@@ -69,13 +71,13 @@ const CurrencyDetails = ({ setAccordionState }: CommonCreateTransactionProps) =>
     if (fxCurrency && typeof fxCurrency === 'string' && fxCurrency.trim().length >= 3 && currencyOptions[fxCurrency.trim()]) {
       setValue('currencyDetails.fx_currency', fxCurrency.trim(), { shouldValidate: false, shouldDirty: false });
     }
-  }, [fxCurrency, currencyOptions, setValue]);
+  }, [fxCurrency, currencyOptions]);
 
   useEffect(() => {
     if (fxAmount && !isNaN(Number(fxAmount))) {
       setValue('currencyDetails.fx_amount', fxAmount, { shouldValidate: false, shouldDirty: false });
     }
-  }, [fxAmount, setValue]);
+  }, [fxAmount]);
 
   useEffect(() => {
     if (companySettlementRate && !isNaN(Number(companySettlementRate))) {
@@ -92,49 +94,56 @@ const CurrencyDetails = ({ setAccordionState }: CommonCreateTransactionProps) =>
       setValue('currencyDetails.invoiceRateTable.nostro_charges.agent_mark_up', addMargin, { shouldValidate: false, shouldDirty: false });
       setValue('currencyDetails.invoiceRateTable.other_charges.agent_mark_up', addMargin, { shouldValidate: false, shouldDirty: false });
     }
-  }, [addMargin, setValue]);
+  }, [addMargin]);
 
   useEffect(() => {
     if (customerRate && !isNaN(Number(customerRate))) {
       setValue('currencyDetails.customer_rate', customerRate, { shouldValidate: false, shouldDirty: false });
     }
-  }, [customerRate, setValue]);
+  }, [customerRate]);
 
-  // Set transaction_value.rate and company_rate to companySettlementRate
+  // Set transaction_value.company_rate to companySettlementRate
   useEffect(() => {
     if (mountedRef.current && companySettlementRate) {
-      setValue('currencyDetails.invoiceRateTable.transaction_value.rate', Number(companySettlementRate), { shouldValidate: false, shouldDirty: false });
       setValue('currencyDetails.invoiceRateTable.transaction_value.company_rate', Number(companySettlementRate), { shouldValidate: false, shouldDirty: false });
     }
-  }, [companySettlementRate, setValue]);
+  }, [companySettlementRate]);
+
+  // Calculate transaction_value.rate as company_rate + agent_mark_up
+  useEffect(() => {
+    if (mountedRef.current && transactionValueCompanyRate != null && transactionValueAgentMarkUp != null) {
+      const rate = Number(transactionValueCompanyRate) + Number(transactionValueAgentMarkUp);
+      setValue('currencyDetails.invoiceRateTable.transaction_value.rate', rate, { shouldValidate: false, shouldDirty: false });
+    }
+  }, [transactionValueCompanyRate, transactionValueAgentMarkUp]);
 
   useEffect(() => {
-    if (mountedRef.current && remittanceCompanyRate != null && remittanceAgentMarkUp != null) {
-      const rate = Number(remittanceCompanyRate) + Number(remittanceAgentMarkUp);
-      setValue('currencyDetails.invoiceRateTable.remittance_charges.rate', rate, { shouldValidate: false, shouldDirty: false });
+    if (mountedRef.current) {
+      // Set remittance rate to static value
+      setValue('currencyDetails.invoiceRateTable.remittance_charges.rate', 10, { shouldValidate: false, shouldDirty: false });
     }
-  }, [remittanceCompanyRate, remittanceAgentMarkUp, setValue]);
+  }, [setValue]);
 
   useEffect(() => {
     if (mountedRef.current && nostroCompanyRate != null && nostroAgentMarkUp != null) {
       const rate = Number(nostroCompanyRate) + Number(nostroAgentMarkUp);
       setValue('currencyDetails.invoiceRateTable.nostro_charges.rate', rate, { shouldValidate: false, shouldDirty: false });
     }
-  }, [nostroCompanyRate, nostroAgentMarkUp, setValue]);
+  }, [nostroCompanyRate, nostroAgentMarkUp]);
 
   useEffect(() => {
     if (mountedRef.current && otherCompanyRate != null && otherAgentMarkUp != null) {
       const rate = Number(otherCompanyRate) + Number(otherAgentMarkUp);
       setValue('currencyDetails.invoiceRateTable.other_charges.rate', rate, { shouldValidate: false, shouldDirty: false });
     }
-  }, [otherCompanyRate, otherAgentMarkUp, setValue]);
+  }, [otherCompanyRate, otherAgentMarkUp]);
 
   useEffect(() => {
     if (mountedRef.current && transactionValueRate != null && remittanceRate != null && nostroRate != null && otherRate != null) {
       const transactionAmt = Number(transactionValueRate) + Number(remittanceRate) + Number(nostroRate) + Number(otherRate);
       setValue('currencyDetails.invoiceRateTable.transaction_amount.rate', transactionAmt, { shouldValidate: false, shouldDirty: false });
     }
-  }, [transactionValueRate, remittanceRate, nostroRate, otherRate, setValue]);
+  }, [transactionValueRate, remittanceRate, nostroRate, otherRate]);
 
   useEffect(() => {
     if (mountedRef.current) {
@@ -146,7 +155,7 @@ const CurrencyDetails = ({ setAccordionState }: CommonCreateTransactionProps) =>
       setValue('currencyDetails.invoiceRateTable.gst_amount.rate', 0, { shouldValidate: false, shouldDirty: false });
       setValue('currencyDetails.invoiceRateTable.tcs.rate', 0, { shouldValidate: false, shouldDirty: false });
     }
-  }, [transactionAmount, gstAmount, tcsAmount, setValue]);
+  }, [transactionAmount, gstAmount, tcsAmount]);
 
   const handleSave = async () => {
     const isValid = await trigger();
