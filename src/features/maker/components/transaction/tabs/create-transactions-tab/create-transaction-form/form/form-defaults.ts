@@ -48,7 +48,6 @@ export const getFormDefaultValues = (initialData?: Partial<CreateTransactionForm
       },
     },
     },
-  
     beneficiaryDetails: sourceData?.beneficiaryDetails || {
       beneficiary_name: '',
       beneficiary_address: '',
