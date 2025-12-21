@@ -14,7 +14,7 @@ export const GetViewAllTransactionTableColumns = () => {
       meta: { className: 'min-w-0 p-2' },
     },
     {
-      id: 'ref_no',
+      id: 'agent_ref_no',
       header: 'Agent Ref. No',
       accessorKey: 'agent_ref_no',
       meta: { className: 'min-w-0 p-2' },
