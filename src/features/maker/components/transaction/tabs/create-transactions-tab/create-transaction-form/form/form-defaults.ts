@@ -47,7 +47,7 @@ export const getFormDefaultValues = (initialData?: Partial<CreateTransactionForm
         rate: '0',
       },
     },
-  },
+    },
   
     beneficiaryDetails: sourceData?.beneficiaryDetails || {
       beneficiary_name: '',
@@ -74,7 +74,7 @@ export const getFormDefaultValues = (initialData?: Partial<CreateTransactionForm
       company_reference_number: '-',
       agent_reference_number: '-',
       transaction_type: '',
-      purpose: 'Education',
+      purpose: '',
       transaction_purpose_map_id: '',
       fx_currency: '',
       fx_amount: 0,
