@@ -5,6 +5,7 @@ import { GetRateTableColumns } from './rate-table-columns';
 import { cn } from '@/utils/cn';
 import { useFormContext } from 'react-hook-form';
 import { useEffect, useRef } from 'react';
+import { useWatch } from 'react-hook-form';
 
 type ColumnKey = 'invoiceName' | 'companyRate' | 'agentMarkUp' | 'rate';
 
@@ -30,7 +31,8 @@ export default function RateTable({
 }) {
   const { setValue } = useFormContext();
   const prevInvoiceDataRef = useRef<any>(null);
-
+  const companySettlementRate = useWatch({ name: 'transactionDetails.company_settlement_rate' });
+  
   // Reset form values when invoiceData changes
   useEffect(() => {
     if (invoiceData && JSON.stringify(invoiceData) !== JSON.stringify(prevInvoiceDataRef.current)) {
@@ -38,13 +40,13 @@ export default function RateTable({
 
       // Map the data structure to match the form field names
       const fieldMappings: Record<string, string> = {
-        transaction_value: 'transactionValue',
-        remittance_charges: 'remittanceCharges',
-        nostro_charges: 'nostroCharges',
-        other_charges: 'otherCharges',
-        transaction_amount: 'transactionAmount',
-        gst_amount: 'gstAmount',
-        total_inr_amount: 'totalInrAmount',
+        transaction_value: 'transaction_value',
+        remittance_charges: 'remittance_charges',
+        nostro_charges: 'nostro_charges',
+        other_charges: 'other_charges',
+        transaction_amount: 'transaction_amount',
+        gst_amount: 'gst_amount',
+        total_inr_amount: 'total_inr_amount',
         tcs: 'tcs',
       };
 
@@ -67,8 +69,19 @@ export default function RateTable({
           setValue(`${id}.${mappedSection}`, sectionData, { shouldValidate: false, shouldDirty: false });
         }
       });
+
+      // Set transaction_value.rate to company_settlement_rate
+      setValue(`${id}.transaction_value.rate`, companySettlementRate, { shouldValidate: false, shouldDirty: false });
     }
-  }, [invoiceData, id, setValue]);
+  }, [invoiceData, id, setValue, companySettlementRate]);
+
+  // Update transactionValue.rate when companySettlementRate changes
+  useEffect(() => {
+    console.log(companySettlementRate,"companySettlementRate")
+    if (companySettlementRate !== undefined) {
+      setValue(`${id}.transactionValue.rate`, companySettlementRate, { shouldValidate: false, shouldDirty: false });
+    }
+  }, [companySettlementRate, id, setValue]);
 
   const invoices = GetRateTableColumns({ id, mode, editableFields, invoiceData });
 

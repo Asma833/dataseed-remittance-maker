@@ -100,13 +100,13 @@ const CurrencyDetails = ({ setAccordionState }: CommonCreateTransactionProps) =>
     }
   }, [customerRate, setValue]);
 
-  // Calculate invoiceRateTable rates
+  // Set transaction_value.rate and company_rate to companySettlementRate
   useEffect(() => {
-    if (mountedRef.current && fxAmount && companySettlementRate) {
-      const transactionValueRate = Number(fxAmount) * Number(companySettlementRate);
-      setValue('currencyDetails.invoiceRateTable.transaction_value.rate', transactionValueRate, { shouldValidate: false, shouldDirty: false });
+    if (mountedRef.current && companySettlementRate) {
+      setValue('currencyDetails.invoiceRateTable.transaction_value.rate', Number(companySettlementRate), { shouldValidate: false, shouldDirty: false });
+      setValue('currencyDetails.invoiceRateTable.transaction_value.company_rate', Number(companySettlementRate), { shouldValidate: false, shouldDirty: false });
     }
-  }, [fxAmount, companySettlementRate, setValue]);
+  }, [companySettlementRate, setValue]);
 
   useEffect(() => {
     if (mountedRef.current && remittanceCompanyRate != null && remittanceAgentMarkUp != null) {
@@ -228,7 +228,7 @@ const CurrencyDetails = ({ setAccordionState }: CommonCreateTransactionProps) =>
             id={'currencyDetails.invoiceRateTable'}
             mode={'edit'}
             totalAmount={totalInrAmount || 0}
-            editableFields={['transactionValue.agent_mark_up', 'remittanceCharges.agent_mark_up', 'nostroCharges.agent_mark_up', 'otherCharges.agent_mark_up']}
+            editableFields={['transactionValue.company_rate', 'transactionValue.agent_mark_up', 'remittanceCharges.agent_mark_up', 'nostroCharges.agent_mark_up', 'otherCharges.agent_mark_up']}
             invoiceData={invoiceRateTable}
           />
         </div>

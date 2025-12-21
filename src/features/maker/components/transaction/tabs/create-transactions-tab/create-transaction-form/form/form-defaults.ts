@@ -70,8 +70,8 @@ export const getFormDefaultValues = (initialData?: Partial<CreateTransactionForm
       intermediary_bank_address: '',
     },
     transactionDetails: sourceData?.transactionDetails || {
-      company_reference_number: '-',
-      agent_reference_number: '-',
+      company_reference_number: '',
+      agent_reference_number: '',
       transaction_type: '',
       purpose: '',
       transaction_purpose_map_id: '',
