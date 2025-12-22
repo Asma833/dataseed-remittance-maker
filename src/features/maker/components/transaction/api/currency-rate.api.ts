@@ -11,6 +11,12 @@ export const updateTimewiseMargin = async (
   return response.data;
 };
 
+// Function to get all currency rates
+export const getAllCurrencyRates = async (marginType: 'number' | 'percentage' = 'number'): Promise<CurrencyRateResponse> => {
+  const response = await axiosInstance.get(`${API.CURRENCY_RATE.GET_ALL}&margin_type=${marginType}`);
+  return response.data;
+};
+
 // Function to get currency rates for a specific currency
 export const getCurrencyRates = async (currencyCode: string): Promise<CurrencyRateResponse> => {
   const response = await axiosInstance.get(API.CURRENCY_RATE.GET_CURRENCY_RATES(currencyCode));
