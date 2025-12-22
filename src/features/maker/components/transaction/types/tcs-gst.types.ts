@@ -17,6 +17,8 @@ export type GSTCalculationPayload = {
 };
 
 export type GSTCalculationResponse = {
-  gstAmount: number;
-  totalAmount: number;
+  statuscode: string;
+  responsecode: string;
+  responsemessage: string;
+  GST: string;
 };

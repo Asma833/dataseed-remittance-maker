@@ -11,6 +11,8 @@ import { getController } from '@/components/form/utils/get-controller';
 import { Button } from '@/components/ui/button';
 import { FieldConfig } from '../../../types/createTransactionForm.types';
 import { useGetCurrencyRates } from '@/hooks/useCurrencyRate';
+import { useGstCalculation } from '@/features/maker/components/transaction/hooks/useGstCalculation';
+
 
 const CurrencyDetails = ({ setAccordionState }: CommonCreateTransactionProps) => {
   const [isSaving, setIsSaving] = useState(false);
@@ -23,6 +25,7 @@ const CurrencyDetails = ({ setAccordionState }: CommonCreateTransactionProps) =>
     setValue,
   } = useFormContext();
   const { data: currencyRates, isLoading: currencyLoading } = useGetCurrencyRates();
+  const { calculateGst } = useGstCalculation();
 
   const currencyOptions =
     currencyRates?.reduce((acc: Record<string, { label: string }>, currency) => {
@@ -226,12 +229,41 @@ const CurrencyDetails = ({ setAccordionState }: CommonCreateTransactionProps) =>
         shouldDirty: false,
       });
 
-      // TODO: Fetch gst_amount and tcs from API based on totalInr and other params
-      // For now, set placeholders
-      setValue('currencyDetails.invoiceRateTable.gst_amount.rate', 0, { shouldValidate: false, shouldDirty: false });
+      // TODO: Fetch tcs from API based on totalInr and other params
+      // For now, set placeholder
       setValue('currencyDetails.invoiceRateTable.tcs.rate', 0, { shouldValidate: false, shouldDirty: false });
     }
   }, [transactionAmount, gstAmount, tcsAmount]);
+
+  // GST Calculation
+  useEffect(() => {
+    if (mountedRef.current && transactionAmount && transactionAmount > 0) {
+      const fetchGst = async () => {
+        try {
+          const response = await calculateGst({ txnAmount: transactionAmount.toString() });
+          if (response.statuscode === "200" && response.responsecode === "success") {
+            setValue('currencyDetails.invoiceRateTable.gst_amount.rate', Number(response.GST), {
+              shouldValidate: false,
+              shouldDirty: false,
+            });
+          } else {
+            console.error('GST calculation failed:', response.responsemessage);
+            setValue('currencyDetails.invoiceRateTable.gst_amount.rate', 0, {
+              shouldValidate: false,
+              shouldDirty: false,
+            });
+          }
+        } catch (err) {
+          console.error('Error calculating GST:', err);
+          setValue('currencyDetails.invoiceRateTable.gst_amount.rate', 0, {
+            shouldValidate: false,
+            shouldDirty: false,
+          });
+        }
+      };
+      fetchGst();
+    }
+  }, [transactionAmount, calculateGst, setValue]);
 
   const handleSave = async () => {
     const isValid = await trigger();
