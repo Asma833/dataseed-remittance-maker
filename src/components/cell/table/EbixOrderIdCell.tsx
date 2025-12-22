@@ -1,7 +1,7 @@
-import { EBIXOrderIDProps } from '@/types/common/updateIncident.types';
+import { EbixOrderIdProps } from '@/types/common/updateIncident.types';
 import { cn } from '@/utils/cn';
 
-const EBIXOrderID = ({ rowData, openModal, className = '' }: EBIXOrderIDProps) => {
+const EbixOrderId = ({ rowData, openModal, className = '' }: EbixOrderIdProps) => {
   const handleOpenModal = () => {
     if (openModal) {
       openModal(rowData);
@@ -21,4 +21,4 @@ const EBIXOrderID = ({ rowData, openModal, className = '' }: EBIXOrderIDProps) =
   );
 };
 
-export default EBIXOrderID;
+export default EbixOrderId;

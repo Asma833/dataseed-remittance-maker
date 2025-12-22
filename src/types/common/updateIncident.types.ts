@@ -250,7 +250,7 @@ export type TransactionType =
   | TransactionTypeEnum.PENDING
   | TransactionTypeEnum.REJECTED;
 
-export type EBIXOrderIDProps = {
+export type EbixOrderIdProps = {
   rowData: any;
   openModal?: (value: string) => void;
   className?: string;
