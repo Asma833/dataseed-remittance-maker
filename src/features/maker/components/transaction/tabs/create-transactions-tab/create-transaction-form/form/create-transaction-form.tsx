@@ -9,7 +9,6 @@ import { createTransactionSchema, CreateTransactionFormData, CreateTransactionFo
 import { safeNumber, safeString, normalizeString } from '@/utils/form-helpers';
 import { useCompleteTransaction } from '../hooks/useCompleteTransaction';
 import { CompleteTransactionRequest } from '../types/transaction.types';
-// import { sampleInitialData } from './sample-initial-data';
 import { getFormDefaultValues } from './form-defaults';
 import { panelFields } from './form-validation-fields';
 
