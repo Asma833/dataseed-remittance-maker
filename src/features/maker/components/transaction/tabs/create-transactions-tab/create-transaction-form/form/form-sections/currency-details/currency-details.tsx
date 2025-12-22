@@ -1,7 +1,7 @@
 import Spacer from '@/components/form/wrapper/spacer';
 import { currencyDetailsConfig } from './currency-details.config';
 import RateTable from '../../../../../../../rate-table/rate-table';
-import { CommonCreateTransactionProps } from '@/features/maker/types/create-transaction.types';
+import { CommonCreateTransactionProps } from '@/features/maker/components/transaction/types/create-transaction.types';
 import { useState, useEffect, useRef } from 'react';
 import { useFormContext, useWatch } from 'react-hook-form';
 

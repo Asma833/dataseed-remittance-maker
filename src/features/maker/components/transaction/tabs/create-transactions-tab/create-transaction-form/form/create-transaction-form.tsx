@@ -7,7 +7,7 @@ import { useForm, FormProvider } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { createTransactionSchema, CreateTransactionFormData, CreateTransactionFormInput } from './common-schema';
 import { safeNumber, safeString, normalizeString } from '@/utils/form-helpers';
-import { useCompleteTransaction } from '../hooks/useCompleteTransaction';
+import { useCompleteTransaction } from '../../../../hooks/useCompleteTransaction';
 import { CompleteTransactionRequest } from '../types/transaction.types';
 import { getFormDefaultValues } from './form-defaults';
 import { panelFields } from './form-validation-fields';

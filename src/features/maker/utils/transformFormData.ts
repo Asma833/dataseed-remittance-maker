@@ -1,6 +1,6 @@
 import { CreateTransactionFormData } from '../components/transaction/tabs/create-transactions-tab/create-transaction-form/form/common-schema';
-import { CreateTransactionRequest } from '../types/create-transaction.types';
-import { PartialUpdateOrderRequest } from '../types/update-order.types';
+import { CreateTransactionRequest } from '../components/transaction/types/create-transaction.types';
+import { PartialUpdateOrderRequest } from '../components/transaction/types/update-order.types';
 
 /**
  * Transform form data to API request format

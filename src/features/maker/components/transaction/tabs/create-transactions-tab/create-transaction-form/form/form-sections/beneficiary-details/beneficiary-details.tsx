@@ -1,6 +1,6 @@
 import Spacer from '@/components/form/wrapper/spacer';
 import { beneficiaryBank, beneficiaryDetailsConfig } from './beneficairy-details.config';
-import { CommonCreateTransactionProps } from '@/features/maker/types/create-transaction.types';
+import { CommonCreateTransactionProps } from '@/features/maker/components/transaction/types/create-transaction.types';
 import { useState } from 'react';
 import { useFormContext, useWatch } from 'react-hook-form';
 import { ShadCnRadioGroup } from '@/components/form/controller/ShadCnRadioGroup';

@@ -1,4 +1,4 @@
-import { AccordionState } from '../components/transaction/tabs/create-transactions-tab/create-transaction-form/types/createTransactionForm.types';
+import { AccordionState } from '../tabs/create-transactions-tab/create-transaction-form/types/createTransactionForm.types';
 
 export type CreateTransactionRequest = {
   partner_order_id: string;

@@ -1,4 +1,4 @@
-import { getCurrencyRates } from '@/features/maker/api/currency-rate.api';
+import { getCurrencyRates } from '@/features/maker/components/transaction/api/currency-rate.api';
 import { useQuery } from '@tanstack/react-query';
 
 // Hook to fetch all currency rates

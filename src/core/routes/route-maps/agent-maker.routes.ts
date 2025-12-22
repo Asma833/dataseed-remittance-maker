@@ -3,7 +3,7 @@ import { RouteConfig } from '@/types/route.types';
 import { getTabsFromRoute } from '@/utils/routeUtils';
 
 export const makerComponents = {
-  TransactionPage: lazy(() => import('@/features/maker/pages/transaction/remittance/page')),
+  TransactionPage: lazy(() => import('@/features/maker/components/transaction/page')),
   CreateTransactions: lazy(
     () => import('@/features/maker/components/transaction/tabs/create-transactions-tab/transactions')
   ),

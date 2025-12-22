@@ -1,6 +1,6 @@
 import { FormContentWrapper } from '@/components/form/wrapper/form-content-wrapper';
 import Spacer from '@/components/form/wrapper/spacer';
-import { CommonCreateTransactionProps } from '@/features/maker/types/create-transaction.types';
+import { CommonCreateTransactionProps } from '@/features/maker/components/transaction/types/create-transaction.types';
 import FormFieldRow from '@/components/form/wrapper/form-field-row';
 import FieldWrapper from '@/components/form/wrapper/field-wrapper';
 import { getController } from '@/components/form/utils/get-controller';
@@ -87,7 +87,7 @@ const TransactionBasicDetails = ({ setAccordionState }: CommonCreateTransactionP
     }
   }, [companySettlementRate, addMargin, setValue]);
   const currenyCodeType =
-    currencyCode?.reduce((acc: Record<string, { label: string }>, currency) => {
+    currencyCode?.reduce((acc: Record<string, { label: string }>, currency:any) => {
       acc[currency.currency_code] = { label: currency.currency_code };
       return acc;
     }, {}) || {};

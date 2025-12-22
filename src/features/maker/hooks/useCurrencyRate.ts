@@ -1,5 +1,5 @@
 import { useQuery } from '@tanstack/react-query';
-import { getCurrencyRates } from '../api/currency-rate.api';
+import { getCurrencyRates } from '../components/transaction/api/currency-rate.api';
 
 // Hook to fetch all currency rates
 export const useGetCurrencyRates = (marginType: 'number' | 'percentage' = 'number') => {
