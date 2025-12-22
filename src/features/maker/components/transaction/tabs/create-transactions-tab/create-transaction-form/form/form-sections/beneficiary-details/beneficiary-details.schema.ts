@@ -38,7 +38,7 @@ export const beneficiaryDetailsSchema = z
       .min(1, 'Beneficiary account number / IBAN number is required')
       .regex(alphanumericRegex, 'Only uppercase alphanumeric characters allowed, no spaces or hyphens')
       .refine(
-        (val) => val.length < 15 ? val.length >= 8 && val.length <= 20 : isValidIBAN(val),
+        (val) => (val.length < 15 ? val.length >= 8 && val.length <= 20 : isValidIBAN(val)),
         'Invalid account number or IBAN format'
       ),
     beneficiary_swift_code: z

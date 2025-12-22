@@ -27,7 +27,6 @@ const KYCTable = ({ onUploadClick }: { onUploadClick: (isReupload: boolean) => v
     );
   }, [data]);
 
-
   const columns = KycTableColumnsConfig({
     navigate,
     onUploadClick: (isReupload: boolean) => {

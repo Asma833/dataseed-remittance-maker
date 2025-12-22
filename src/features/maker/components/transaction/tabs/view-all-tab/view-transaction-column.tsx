@@ -4,7 +4,6 @@ import PaymentStatusCell from '@/components/cell/table/PaymentStatusCell';
 import KycStatusCell from '@/components/cell/table/KycStatusCell';
 import { PaymentData } from '../../types/payment.types';
 
-
 export const GetViewAllTransactionTableColumns = () => {
   return [
     {

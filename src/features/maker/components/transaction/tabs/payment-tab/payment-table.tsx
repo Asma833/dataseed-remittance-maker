@@ -9,7 +9,6 @@ import { useGetPaymentDetails } from '../../hooks/useGetPaymentDetails';
 import { useUploadPaymentChallan } from '../../hooks/useUploadPaymentChallan';
 import { AllTransaction, PaymentData } from '../../types/payment.types';
 
-
 const PaymentStatus = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedPayment, setSelectedPayment] = useState<PaymentData | null>(null);
@@ -42,7 +41,7 @@ const PaymentStatus = () => {
           settlement_rate: deal.settlement_rate || '-',
           customer_rate: deal.customer_rate || '-',
           transaction_amount: transaction?.transaction_amount || '-',
-          rejection_reason:deal.rejection_reason || '-'
+          rejection_reason: deal.rejection_reason || '-',
         } as PaymentData;
       })
     );
@@ -83,19 +82,21 @@ const PaymentStatus = () => {
 
   return (
     <div className="data-table-wrap">
-      <DataTable
-        columns={tableColumns}
-        data={mappedData ?? []}
-        config={tableConfig}
-        actions={tableActions}
-      />
+      <DataTable columns={tableColumns} data={mappedData ?? []} config={tableConfig} actions={tableActions} />
       {isModalOpen && selectedPayment && (
         <DialogWrapper
           title="Upload Payment Screen Shot"
           isOpen={isModalOpen}
           setIsOpen={setIsModalOpen}
           showCloseButton={false}
-          renderContent={<Payments setIsOpen={setIsModalOpen} uploadScreen={false} data={selectedPayment} onSubmit={handleUploadSubmit} />}
+          renderContent={
+            <Payments
+              setIsOpen={setIsModalOpen}
+              uploadScreen={false}
+              data={selectedPayment}
+              onSubmit={handleUploadSubmit}
+            />
+          }
         />
       )}
     </div>

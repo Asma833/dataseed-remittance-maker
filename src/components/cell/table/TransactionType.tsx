@@ -1,4 +1,4 @@
-import { OrderRowData } from "@/types/common/updateIncident.types";
+import { OrderRowData } from '@/types/common/updateIncident.types';
 
 const TransactionType = ({ rowData }: OrderRowData) => {
   const transactionTypeText = rowData?.transaction_type_name?.name || rowData?.transaction_type || 'N/A';

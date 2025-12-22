@@ -31,7 +31,6 @@ const CreateTransactionForm = ({ onCancel, onSubmit, initialData }: Props) => {
     mode: 'onChange', // Trigger validation on change
   });
 
-
   const handlePrevious = () => {
     if (currentTab === 'panel2') {
       setAccordionState({ currentActiveTab: 'panel1' });
@@ -61,7 +60,7 @@ const CreateTransactionForm = ({ onCancel, onSubmit, initialData }: Props) => {
         // And the output should match the expected properties in transaction.types.ts
         const companyRate = safeNumber(group.company_rate);
         const addMargin = safeNumber(group.agent_mark_up);
-        
+
         // Return the object with the correct property names
         return {
           company_rate: companyRate,
@@ -104,7 +103,7 @@ const CreateTransactionForm = ({ onCancel, onSubmit, initialData }: Props) => {
           beneficiary_bank_name: normalizeString(data.beneficiaryDetails.beneficiary_bank_name),
           beneficiary_bank_address: normalizeString(data.beneficiaryDetails.beneficiary_bank_address),
           sort_bsb_aba_transit_code: normalizeString(data.beneficiaryDetails.sort_bsb_aba_transit_code),
-          nostro_charges:"",
+          nostro_charges: '',
           message_to_beneficiary_additional_information: normalizeString(
             data.beneficiaryDetails.message_to_beneficiary_additional_information
           ),
@@ -131,7 +130,7 @@ const CreateTransactionForm = ({ onCancel, onSubmit, initialData }: Props) => {
           company_settlement_rate: safeNumber(data.transactionDetails.company_settlement_rate),
           add_margin: safeNumber(data.transactionDetails.add_margin),
           customer_rate: safeNumber(data.transactionDetails.customer_rate),
-          nostro_charges:safeNumber(data.transactionDetails?.nostro_charges),
+          nostro_charges: safeNumber(data.transactionDetails?.nostro_charges),
           applicant_name: normalizeString(data.transactionDetails.applicant_name),
           applicant_pan_number: normalizeString(data.transactionDetails.applicant_pan_number),
           applicant_email: normalizeString(data.transactionDetails.applicant_email),

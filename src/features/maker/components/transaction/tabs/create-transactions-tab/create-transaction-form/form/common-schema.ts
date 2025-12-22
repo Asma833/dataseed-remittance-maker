@@ -8,7 +8,7 @@ export const createTransactionSchema = z.object({
   currencyDetails: currencyDetailsSchema,
   beneficiaryDetails: beneficiaryDetailsSchema,
   transactionDetails: transactionBasicDetailsSchema,
-})
+});
 // .superRefine((data, ctx) => {
 //   if ((data.transactionDetails.purpose || '').toLowerCase() === 'education') {
 //     if (data.currencyDetails.declared_education_loan_amount == null || data.currencyDetails.declared_education_loan_amount <= 0) {

@@ -23,7 +23,7 @@ export const transactionBasicDetailsSchema = z
       .optional()
       .or(z.literal('')),
     purpose: z.string().min(1, 'Purpose is required'),
-    transaction_purpose_map_id:z.string().optional(),
+    transaction_purpose_map_id: z.string().optional(),
     transaction_type: z.string().optional().or(z.literal('')),
     fx_currency: z
       .string()
@@ -132,9 +132,10 @@ export const transactionBasicDetailsSchema = z
       .max(50, 'Country too long')
       .regex(NO_LEADING_HYPHEN_OR_SPACE, 'Country cannot start with hyphen or space')
       .regex(NO_NUMBERS_REGEX, 'Country cannot contain numbers'),
-    postal_code: z.string()
+    postal_code: z
+      .string()
       .nonempty('Postal code is required')
-      .regex(POSTAL_CODE_REGEX, 'Postal code must be 6 digits')
+      .regex(POSTAL_CODE_REGEX, 'Postal code must be 6 digits'),
   })
   .refine(
     (data) => {

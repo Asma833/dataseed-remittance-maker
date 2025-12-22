@@ -63,7 +63,7 @@ const transactionBasicDetailsConfig = [
     type: FieldType.Number,
     placeholder: 'Enter Customer Rate',
     required: false,
-    disabled:true
+    disabled: true,
   },
   {
     name: 'nostro_charges',

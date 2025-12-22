@@ -4,8 +4,6 @@ import PaymentStatusCell from '@/components/cell/table/PaymentStatusCell';
 import { formatDateWithFallback } from '@/utils/formatDateWithFallback';
 import { PaymentData } from '../../types/payment.types';
 
-
-
 export const GetPaymentTableColumn = ({ handlePayment }: { handlePayment: (rowData: any) => void }) => {
   return [
     { id: 'ref_no', header: 'Ref. No', accessorKey: 'ref_no', meta: { className: 'min-w-0 p-2' } },
@@ -17,11 +15,12 @@ export const GetPaymentTableColumn = ({ handlePayment }: { handlePayment: (rowDa
       meta: { className: 'min-w-0 p-2' },
       cell: ({ row }: { row: PaymentData }) => <span>{formatDateWithFallback(row.created_date)}</span>,
     },
-    { id: 'expiry_date',
-       header: 'Expiry Date', 
-       accessorKey: 'expiry_date', 
-       meta: { className: 'min-w-0 p-2' },
-       cell: ({ row }: { row: PaymentData }) => <span>{formatDateWithFallback(row.expiry_date)}</span>, 
+    {
+      id: 'expiry_date',
+      header: 'Expiry Date',
+      accessorKey: 'expiry_date',
+      meta: { className: 'min-w-0 p-2' },
+      cell: ({ row }: { row: PaymentData }) => <span>{formatDateWithFallback(row.expiry_date)}</span>,
     },
     {
       id: 'applicant_name',
@@ -41,17 +40,17 @@ export const GetPaymentTableColumn = ({ handlePayment }: { handlePayment: (rowDa
       accessorKey: 'transaction_type',
       meta: { className: 'min-w-0 p-2' },
     },
-    { 
-      id: 'purpose', 
-      header: 'Purpose', 
-      accessorKey: 'purpose', 
-      meta: { className: 'min-w-0 p-2' } 
+    {
+      id: 'purpose',
+      header: 'Purpose',
+      accessorKey: 'purpose',
+      meta: { className: 'min-w-0 p-2' },
     },
-    { 
-      id: 'kyc_type', 
-      header: 'KYC Type', 
-      accessorKey: 'kyc_type', 
-      meta: { className: 'min-w-0 p-2' } 
+    {
+      id: 'kyc_type',
+      header: 'KYC Type',
+      accessorKey: 'kyc_type',
+      meta: { className: 'min-w-0 p-2' },
     },
     {
       id: 'kyc_status',

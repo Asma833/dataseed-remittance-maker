@@ -1,52 +1,54 @@
 import { CreateTransactionFormInput } from './common-schema';
 
-export const getFormDefaultValues = (initialData?: Partial<CreateTransactionFormInput>): Partial<CreateTransactionFormInput> => {
+export const getFormDefaultValues = (
+  initialData?: Partial<CreateTransactionFormInput>
+): Partial<CreateTransactionFormInput> => {
   const sourceData = initialData;
   return {
-   currencyDetails: {
-    fx_currency: '',
-    fx_amount: '0',
-    settlement_rate: '0',
-    add_margin: '0',
-    customer_rate: '0',
-    declared_education_loan_amount: '1',
-    previous_transaction_amount: '1',
-    declared_previous_amount: '1',
-    total_transaction_amount_tcs: '0',
-    invoiceRateTable: {
-      transaction_value: {
-        company_rate: '0',
-        agent_mark_up: '0',
-        rate: '0',
+    currencyDetails: {
+      fx_currency: '',
+      fx_amount: '0',
+      settlement_rate: '0',
+      add_margin: '0',
+      customer_rate: '0',
+      declared_education_loan_amount: '1',
+      previous_transaction_amount: '1',
+      declared_previous_amount: '1',
+      total_transaction_amount_tcs: '0',
+      invoiceRateTable: {
+        transaction_value: {
+          company_rate: '0',
+          agent_mark_up: '0',
+          rate: '0',
+        },
+        remittance_charges: {
+          company_rate: '0',
+          agent_mark_up: '0',
+          rate: '0',
+        },
+        nostro_charges: {
+          company_rate: '0',
+          agent_mark_up: '0',
+          rate: '0',
+        },
+        other_charges: {
+          company_rate: '0',
+          agent_mark_up: '0',
+          rate: '0',
+        },
+        transaction_amount: {
+          rate: '0',
+        },
+        gst_amount: {
+          rate: '0',
+        },
+        total_inr_amount: {
+          rate: '0',
+        },
+        tcs: {
+          rate: '0',
+        },
       },
-      remittance_charges: {
-        company_rate: '0',
-        agent_mark_up: '0',
-        rate: '0',
-      },
-      nostro_charges: {
-        company_rate: '0',
-        agent_mark_up: '0',
-        rate: '0',
-      },
-      other_charges: {
-        company_rate: '0',
-        agent_mark_up: '0',
-        rate: '0',
-      },
-      transaction_amount: {
-        rate: '0',
-      },
-      gst_amount: {
-        rate: '0',
-      },
-      total_inr_amount: {
-        rate: '0',
-      },
-      tcs: {
-        rate: '0',
-      },
-    },
     },
     beneficiaryDetails: sourceData?.beneficiaryDetails || {
       beneficiary_name: '',

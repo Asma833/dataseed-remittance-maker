@@ -42,7 +42,7 @@ export enum FieldType {
   FileUpload = 'fileupload',
   Fileupload_View = 'fileupload_view',
   FileUploadWithButton = 'fileupload_with_button',
-  FileUploadWithOutView = 'fileuploadwithoutview'
+  FileUploadWithOutView = 'fileuploadwithoutview',
 }
 
 export enum TransactionMode {

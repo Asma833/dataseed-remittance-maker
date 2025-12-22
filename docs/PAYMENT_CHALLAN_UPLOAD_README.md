@@ -1,14 +1,17 @@
 # Payment Challan Upload Feature Documentation
 
 ## Overview
+
 This document outlines the implementation of the Payment Challan Upload feature, which allows users to upload payment screenshots for transactions in the Ebix Remittance Maker application.
 
 ## Tasks Completed
 
 ### Task 1: Remove Sorting from Data Table
+
 **Status:** ✅ Completed
 
 #### Changes Made:
+
 - **File:** `src/components/table/data-table.tsx`
 - **Removed:** All sorting-related functionality including imports, state management, UI elements, and API calls
 - **Specific Removals:**
@@ -19,14 +22,17 @@ This document outlines the implementation of the Payment Challan Upload feature,
   - Removed sorting-related useEffect hooks
 
 #### Impact:
+
 - Data tables no longer support column sorting
 - Cleaner, simplified table component
 - Reduced bundle size due to removed sorting dependencies
 
 ### Task 2: Payment Challan Upload API Integration
+
 **Status:** ✅ Completed
 
 #### API Endpoint
+
 ```
 POST /remittance/transactions/documents/payment/challan/{payment_record_id}
 Content-Type: multipart/form-data
@@ -36,9 +42,11 @@ Form Field: file (File object)
 #### Files Created/Modified:
 
 ##### 1. API Configuration (`src/core/constant/apis.ts`)
+
 - Added `UPLOAD_PAYMENT_CHALLAN: (id: string) => \`/remittance/transactions/documents/payment/challan/${id}\``
 
 ##### 2. API Service (`src/api/upload-payment-challan.api.ts`)
+
 ```typescript
 export interface UploadPaymentChallanRequest {
   id: string;
@@ -53,21 +61,25 @@ export interface UploadPaymentChallanResponse {
 ```
 
 ##### 3. React Hook (`src/features/maker/components/transaction/hooks/useUploadPaymentChallan.tsx`)
+
 - Uses React Query for API state management
 - Includes toast notifications for success/error feedback
 - Returns mutation object with loading states
 
 ##### 4. Type Definitions (`src/features/maker/components/transaction/types/payment.types.ts`)
+
 - Added `UploadPaymentChallanRequest` and `UploadPaymentChallanResponse` interfaces
 - Extended `PaymentData` interface to include `id` field
 
 ##### 5. Payment Status Component (`src/features/maker/components/transaction/tabs/payment-tab/payment-table.tsx`)
+
 - Integrated the upload hook
 - Added `handleUploadSubmit` function to handle file uploads
 - Passes `onSubmit` callback to Payments component
 - Includes payment record ID in mapped data
 
 ##### 6. Payments Form Component (`src/components/payments/Payments.tsx`)
+
 - Added optional `onSubmit` prop for file handling
 - Extracts File object from form data structure
 - Calls parent callback on successful form validation
@@ -75,6 +87,7 @@ export interface UploadPaymentChallanResponse {
 ## Architecture
 
 ### Component Hierarchy
+
 ```
 PaymentStatus (Parent)
 ├── DataTable
@@ -84,6 +97,7 @@ PaymentStatus (Parent)
 ```
 
 ### Data Flow
+
 1. User clicks payment row in table
 2. Modal opens with Payments component
 3. User selects file and submits form
@@ -94,6 +108,7 @@ PaymentStatus (Parent)
 8. Modal closes
 
 ### State Management
+
 - **Local State:** Form validation, modal open/close
 - **Server State:** API calls via React Query
 - **UI Feedback:** Toast notifications for user feedback
@@ -101,6 +116,7 @@ PaymentStatus (Parent)
 ## Usage
 
 ### Basic Usage
+
 ```tsx
 // In PaymentStatus component
 const { mutateAsync: uploadChallan } = useUploadPaymentChallan();
@@ -108,33 +124,33 @@ const { mutateAsync: uploadChallan } = useUploadPaymentChallan();
 const handleUpload = async (file: File) => {
   await uploadChallan({
     id: paymentRecordId,
-    file: file
+    file: file,
   });
 };
 ```
 
 ### Form Integration
+
 ```tsx
 // Payments component receives onSubmit prop
-<Payments
-  data={paymentData}
-  onSubmit={handleFileUpload}
-  setIsOpen={setModalOpen}
-/>
+<Payments data={paymentData} onSubmit={handleFileUpload} setIsOpen={setModalOpen} />
 ```
 
 ## Error Handling
+
 - Form validation for file type and presence
 - API error handling with user-friendly messages
 - Toast notifications for all outcomes
 - Console logging for debugging
 
 ## File Requirements
+
 - **Supported Types:** PDF, PNG, JPEG, JPG, SVG
 - **Upload Method:** Multipart/form-data
 - **Validation:** Client-side file type checking
 
 ## API Response Format
+
 ```json
 {
   "success": true,
@@ -144,12 +160,14 @@ const handleUpload = async (file: File) => {
 ```
 
 ## Testing
+
 - Verify file upload works with different file types
 - Test error scenarios (invalid files, network issues)
 - Confirm toast messages appear correctly
 - Ensure modal closes after successful upload
 
 ## Dependencies
+
 - React Query for API state management
 - React Hook Form for form handling
 - Zod for form validation
@@ -157,27 +175,31 @@ const handleUpload = async (file: File) => {
 - Axios for HTTP requests
 
 ## Security Considerations
+
 - File type validation on client and server
 - Proper headers for multipart uploads
 - API key and partner ID authentication
 - File size limits should be implemented server-side
 
 ## Future Enhancements
+
 - File preview before upload
 - Multiple file uploads
 - Progress indicators for large files
 - File compression/optimization
 - Upload history/audit trail</content>
-</xai:function_call">## Summary
+  </xai:function_call">## Summary
 
 I've created comprehensive documentation for both tasks completed:
 
 ### Task 1: Remove Sorting from Data Table ✅
+
 - Completely removed all sorting functionality from the data table component
 - Cleaned up imports, state, UI elements, and handlers
 - Simplified the table component
 
 ### Task 2: Payment Challan Upload API Integration ✅
+
 - Created full API integration for uploading payment screenshots
 - Implemented proper separation of concerns (API calls in parent component)
 - Added toast notifications in the hook
@@ -185,6 +207,7 @@ I've created comprehensive documentation for both tasks completed:
 - Maintained proper error handling and user feedback
 
 The documentation covers:
+
 - **Overview** of what was implemented
 - **Detailed file-by-file changes**
 - **Architecture** and data flow

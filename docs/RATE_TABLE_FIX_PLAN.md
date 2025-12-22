@@ -1,7 +1,9 @@
 # Rate Table Display and Edit Functionality Fix - Implementation Plan
 
 ## Overview
+
 This document outlines the plan to fix two issues in the rate table component:
+
 1. **company_rate** column not displaying values (should show `company_settlement_rate`)
 2. **agent_mark_up** fields should be editable and prefilled with `add_margin` value
 
@@ -29,7 +31,7 @@ const getCellContent = (section: string, columnKey: 'companyRate' | 'agentMarkUp
 
 ```typescript
 const valueMappings: Record<string, string> = {
-  companyRate: 'company_settlement_rate',  // ❌ This mapping is incorrect
+  companyRate: 'company_settlement_rate', // ❌ This mapping is incorrect
   agentMarkUp: 'add_margin',
   rate: 'rate',
 };
@@ -47,6 +49,7 @@ editableFields={['transactionValue.company_rate', 'transactionValue.add_margin',
 ```
 
 **Problem:** The field names use `add_margin` but the actual form field path uses `agent_mark_up` (based on the schema). There's a mismatch between:
+
 - Form field name: `agent_mark_up` (in schema)
 - Editable field name: `add_margin` (in editableFields array)
 
@@ -86,8 +89,8 @@ graph TD
    - **Line 34-38:** Update `valueMappings` object
    ```typescript
    const valueMappings: Record<string, string> = {
-     companyRate: 'company_rate',      // ✅ Changed from 'company_settlement_rate'
-     agentMarkUp: 'agent_mark_up',     // ✅ Changed from 'add_margin'
+     companyRate: 'company_rate', // ✅ Changed from 'company_settlement_rate'
+     agentMarkUp: 'agent_mark_up', // ✅ Changed from 'add_margin'
      rate: 'rate',
    };
    ```
@@ -124,10 +127,22 @@ useEffect(() => {
   if (addMargin && !isNaN(Number(addMargin))) {
     setValue('currencyDetails.add_margin', addMargin, { shouldValidate: false, shouldDirty: false });
     // Set add_margin fields
-    setValue('currencyDetails.invoiceRateTable.transaction_value.add_margin', addMargin, { shouldValidate: false, shouldDirty: false });
-    setValue('currencyDetails.invoiceRateTable.remittance_charges.add_margin', addMargin, { shouldValidate: false, shouldDirty: false });
-    setValue('currencyDetails.invoiceRateTable.nostro_charges.add_margin', addMargin, { shouldValidate: false, shouldDirty: false });
-    setValue('currencyDetails.invoiceRateTable.other_charges.add_margin', addMargin, { shouldValidate: false, shouldDirty: false });
+    setValue('currencyDetails.invoiceRateTable.transaction_value.add_margin', addMargin, {
+      shouldValidate: false,
+      shouldDirty: false,
+    });
+    setValue('currencyDetails.invoiceRateTable.remittance_charges.add_margin', addMargin, {
+      shouldValidate: false,
+      shouldDirty: false,
+    });
+    setValue('currencyDetails.invoiceRateTable.nostro_charges.add_margin', addMargin, {
+      shouldValidate: false,
+      shouldDirty: false,
+    });
+    setValue('currencyDetails.invoiceRateTable.other_charges.add_margin', addMargin, {
+      shouldValidate: false,
+      shouldDirty: false,
+    });
   }
 }, [addMargin, setValue]);
 ```
@@ -138,23 +153,40 @@ useEffect(() => {
 
 1. **File:** `src/features/maker/components/transaction/tabs/create-transactions-tab/create-transaction-form/form/form-sections/currency-details/currency-details.tsx`
    - **Line 88-97:** Update field names in setValue calls
+
    ```typescript
    useEffect(() => {
      if (addMargin && !isNaN(Number(addMargin))) {
        setValue('currencyDetails.add_margin', addMargin, { shouldValidate: false, shouldDirty: false });
        // Set agent_mark_up fields (corrected field names)
-       setValue('currencyDetails.invoiceRateTable.transaction_value.agent_mark_up', addMargin, { shouldValidate: false, shouldDirty: false });
-       setValue('currencyDetails.invoiceRateTable.remittance_charges.agent_mark_up', addMargin, { shouldValidate: false, shouldDirty: false });
-       setValue('currencyDetails.invoiceRateTable.nostro_charges.agent_mark_up', addMargin, { shouldValidate: false, shouldDirty: false });
-       setValue('currencyDetails.invoiceRateTable.other_charges.agent_mark_up', addMargin, { shouldValidate: false, shouldDirty: false });
+       setValue('currencyDetails.invoiceRateTable.transaction_value.agent_mark_up', addMargin, {
+         shouldValidate: false,
+         shouldDirty: false,
+       });
+       setValue('currencyDetails.invoiceRateTable.remittance_charges.agent_mark_up', addMargin, {
+         shouldValidate: false,
+         shouldDirty: false,
+       });
+       setValue('currencyDetails.invoiceRateTable.nostro_charges.agent_mark_up', addMargin, {
+         shouldValidate: false,
+         shouldDirty: false,
+       });
+       setValue('currencyDetails.invoiceRateTable.other_charges.agent_mark_up', addMargin, {
+         shouldValidate: false,
+         shouldDirty: false,
+       });
      }
    }, [addMargin, setValue]);
    ```
 
 2. **Line 52-59:** Update useWatch field names
    ```typescript
-   const transactionValueAgentMarkUp = useWatch({ name: 'currencyDetails.invoiceRateTable.transaction_value.agent_mark_up' });
-   const remittanceAgentMarkUp = useWatch({ name: 'currencyDetails.invoiceRateTable.remittance_charges.agent_mark_up' });
+   const transactionValueAgentMarkUp = useWatch({
+     name: 'currencyDetails.invoiceRateTable.transaction_value.agent_mark_up',
+   });
+   const remittanceAgentMarkUp = useWatch({
+     name: 'currencyDetails.invoiceRateTable.remittance_charges.agent_mark_up',
+   });
    const nostroAgentMarkUp = useWatch({ name: 'currencyDetails.invoiceRateTable.nostro_charges.agent_mark_up' });
    const otherAgentMarkUp = useWatch({ name: 'currencyDetails.invoiceRateTable.other_charges.agent_mark_up' });
    ```
@@ -162,21 +194,25 @@ useEffect(() => {
 ## Implementation Steps
 
 ### Step 1: Update rate-table-columns.tsx
+
 - [ ] Fix `valueMappings` object to use correct field names
 - [ ] Verify the `getCellContent` function properly reads from invoiceData
 
 ### Step 2: Update currency-details.tsx
+
 - [ ] Update `editableFields` array to use `agent_mark_up` instead of `add_margin`
 - [ ] Remove `transactionValue.company_rate` from editableFields
 - [ ] Update `useEffect` that syncs add_margin to use correct field names
 - [ ] Update `useWatch` hooks to watch correct field names
 
 ### Step 3: Verify Data Flow
+
 - [ ] Ensure `company_settlement_rate` from transactionDetails syncs to `company_rate` in invoiceRateTable
 - [ ] Ensure `add_margin` from transactionDetails syncs to `agent_mark_up` in invoiceRateTable
 - [ ] Verify rate calculation: `rate = company_rate + agent_mark_up`
 
 ### Step 4: Testing
+
 - [ ] Test that company_rate displays correctly in all rows
 - [ ] Test that agent_mark_up fields are editable
 - [ ] Test that agent_mark_up is prefilled with add_margin value
@@ -196,11 +232,13 @@ useEffect(() => {
 ## Expected Behavior After Fix
 
 ### Requirement 1: company_rate Display
+
 - ✅ company_rate column displays the value from `company_settlement_rate`
 - ✅ company_rate is read-only (not editable)
 - ✅ All rows (transaction_value, remittance_charges, nostro_charges, other_charges) show the same company_rate value
 
 ### Requirement 2: agent_mark_up Editable
+
 - ✅ agent_mark_up fields are editable in all rows
 - ✅ agent_mark_up is prefilled with the `add_margin` value from transactionDetails
 - ✅ Users can modify agent_mark_up independently for each row
@@ -209,11 +247,13 @@ useEffect(() => {
 ## Risk Assessment
 
 ### Low Risk
+
 - Changes are localized to specific components
 - No database schema changes required
 - No API changes required
 
 ### Potential Issues
+
 1. **Field Name Consistency**: Ensure all references use consistent field names throughout the codebase
 2. **Form Validation**: Verify that validation still works correctly after field name changes
 3. **Data Submission**: Ensure the form submission in [`create-transaction-form.tsx`](src/features/maker/components/transaction/tabs/create-transactions-tab/create-transaction-form/form/create-transaction-form.tsx:60-72) correctly maps the field names
@@ -221,6 +261,7 @@ useEffect(() => {
 ## Validation Checklist
 
 After implementation, verify:
+
 - [ ] company_rate displays correctly in rate table
 - [ ] company_rate is read-only
 - [ ] agent_mark_up fields are editable
@@ -233,7 +274,9 @@ After implementation, verify:
 ## Notes
 
 ### Field Naming Convention
+
 The codebase has inconsistent naming:
+
 - **API/Backend**: Uses snake_case (`company_settlement_rate`, `add_margin`)
 - **Form Schema**: Uses snake_case (`company_rate`, `agent_mark_up`)
 - **Display Labels**: Uses camelCase in mappings (`companyRate`, `agentMarkUp`)
@@ -241,4 +284,5 @@ The codebase has inconsistent naming:
 This plan maintains the existing schema field names and fixes the mapping inconsistencies.
 
 ### Future Improvements
+
 Consider standardizing field naming conventions across the entire application to prevent similar issues in the future.

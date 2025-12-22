@@ -94,7 +94,7 @@ export const getController = (field: any) => {
           viewFile={field.viewFile}
         />
       );
-      case 'fileuploadwithoutview':
+    case 'fileuploadwithoutview':
       return (
         <FileUploadWithOutView
           {...baseProps}

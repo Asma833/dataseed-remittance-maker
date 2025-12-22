@@ -19,7 +19,10 @@ interface FileUploadProps {
 
 const FileUploadWithOutView = ({ id, name, label, className }: FileUploadProps) => {
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
-  const { watch, formState: { errors } } = useFormContext();
+  const {
+    watch,
+    formState: { errors },
+  } = useFormContext();
 
   // Watch the form field to get the current file array
   const fileArray = watch(name) || [];
@@ -58,7 +61,6 @@ const FileUploadWithOutView = ({ id, name, label, className }: FileUploadProps) 
           <p className="text-sm text-destructive mt-1">{(errors[name] as FieldError)?.message}</p>
         )}
       </div>
-
     </div>
   );
 };

@@ -20,13 +20,7 @@ declare module '@tanstack/react-table' {
     className?: string;
   }
 }
-import {
-  ArrowRightIcon,
-  RefreshCwIcon,
-  SearchIcon,
-  DownloadIcon,
-  X,
-} from 'lucide-react';
+import { ArrowRightIcon, RefreshCwIcon, SearchIcon, DownloadIcon, X } from 'lucide-react';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
@@ -65,7 +59,7 @@ export function DataTable<T>({
   useEffect(() => {
     const timer = setTimeout(() => {
       setShowLoader(false);
-    }, 3000); 
+    }, 3000);
     return () => clearTimeout(timer);
   }, []);
 
@@ -321,8 +315,6 @@ export function DataTable<T>({
       includeHeaders: config.export?.includeHeaders ?? true,
     });
   };
-
-  
 
   // Helper function to clear all filters
   const clearAllFilters = () => {
@@ -682,7 +674,7 @@ export function DataTable<T>({
                 ))}
               </TableHeader>
               <TableBody>
-                {(config.loading || showLoader) ? (
+                {config.loading || showLoader ? (
                   <TableLoader columns={columns.length} />
                 ) : config.error ? (
                   <TableRow>

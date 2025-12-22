@@ -54,9 +54,7 @@ function SelectContent({
         {...props}
       >
         <SelectScrollUpButton />
-        <SelectPrimitive.Viewport
-          className={cn('p-1', position === 'popper' && 'h-[--radix-select-trigger-height]')}
-        >
+        <SelectPrimitive.Viewport className={cn('p-1', position === 'popper' && 'h-[--radix-select-trigger-height]')}>
           {children}
         </SelectPrimitive.Viewport>
         <SelectScrollDownButton />

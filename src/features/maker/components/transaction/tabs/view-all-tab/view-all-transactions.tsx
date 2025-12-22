@@ -5,7 +5,6 @@ import { useGetPaymentDetails } from '../../hooks/useGetPaymentDetails';
 import { AllTransaction } from '../../types/payment.types';
 import { useMemo } from 'react';
 
-
 const ViewAllTransactions = () => {
   const { data, isLoading, error } = useGetPaymentDetails();
 
@@ -73,12 +72,7 @@ const ViewAllTransactions = () => {
 
   return (
     <div className="data-table-wrap">
-      <DataTable
-        columns={tableColumns}
-        data={mappedData ?? []}
-        config={tableConfig}
-        actions={tableActions}
-      />
+      <DataTable columns={tableColumns} data={mappedData ?? []} config={tableConfig} actions={tableActions} />
     </div>
   );
 };

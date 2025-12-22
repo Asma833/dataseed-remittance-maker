@@ -6,20 +6,22 @@ import { CompleteTransactionRequest, CompleteTransactionResponse } from '../type
 
 export const useCompleteTransaction = () => {
   const { invalidateMultipleQueries } = useQueryInvalidator();
-  const { mutateAsync, isPending, error } = useMutation<CompleteTransactionResponse, Error, CompleteTransactionRequest>({
-    mutationFn: async (transactionData: CompleteTransactionRequest) => {
-      return await completeTransactionApi.createTransaction(transactionData);
-    },
-    onSuccess: (data) => {
-      toast.success(data.message || 'Transaction created successfully');
-      // Invalidate relevant queries if needed
-      const queriesToInvalidate = [['transactions'], ['deals']];
-      invalidateMultipleQueries(queriesToInvalidate, { exact: false, refetchType: 'all' });
-    },
-    onError: (error: Error) => {
-      toast.error(error.message || 'Failed to complete transaction');
-    },
-  });
+  const { mutateAsync, isPending, error } = useMutation<CompleteTransactionResponse, Error, CompleteTransactionRequest>(
+    {
+      mutationFn: async (transactionData: CompleteTransactionRequest) => {
+        return await completeTransactionApi.createTransaction(transactionData);
+      },
+      onSuccess: (data) => {
+        toast.success(data.message || 'Transaction created successfully');
+        // Invalidate relevant queries if needed
+        const queriesToInvalidate = [['transactions'], ['deals']];
+        invalidateMultipleQueries(queriesToInvalidate, { exact: false, refetchType: 'all' });
+      },
+      onError: (error: Error) => {
+        toast.error(error.message || 'Failed to complete transaction');
+      },
+    }
+  );
 
   return { mutateAsync, isCompleteTransactionLoading: isPending, error };
 };

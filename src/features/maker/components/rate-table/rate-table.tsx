@@ -33,7 +33,7 @@ export default function RateTable({
   const prevInvoiceDataRef = useRef<any>(null);
   const companySettlementRate = useWatch({ name: 'transactionDetails.company_settlement_rate' });
   const addMargin = useWatch({ name: 'transactionDetails.add_margin' });
-  
+
   // Reset form values when invoiceData changes
   useEffect(() => {
     if (invoiceData && JSON.stringify(invoiceData) !== JSON.stringify(prevInvoiceDataRef.current)) {
@@ -79,7 +79,7 @@ export default function RateTable({
       const settlementRate = Number(companySettlementRate || 0);
       const margin = Number(addMargin || 0);
       const calculatedRate = settlementRate + margin;
-      
+
       // Update the transaction_value.rate field
       setValue(`${id}.transaction_value.rate`, calculatedRate, { shouldValidate: false, shouldDirty: false });
     }

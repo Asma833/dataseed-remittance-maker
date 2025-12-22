@@ -1,6 +1,6 @@
-import { getController } from "@/components/form/utils/get-controller";
-import { RateTableColumn } from "../transaction/tabs/create-transactions-tab/create-transaction-form/types/rateTable.types";
-import { cn } from "@/utils/cn";
+import { getController } from '@/components/form/utils/get-controller';
+import { RateTableColumn } from '../transaction/tabs/create-transactions-tab/create-transaction-form/types/rateTable.types';
+import { cn } from '@/utils/cn';
 
 type CommonInputStyles = {
   className: string;
