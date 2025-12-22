@@ -16,7 +16,7 @@ export type TransactionCreatedDialogProps = {
   isDialogOpen: boolean;
   setIsDialogOpen: (open: boolean) => void;
   createdTransactionId: string;
-  niumForexOrderId: string;
+  EBIXForexOrderId: string;
   isSubmitting?: boolean;
 };
 

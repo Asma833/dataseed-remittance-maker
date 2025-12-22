@@ -45,8 +45,8 @@ export type TransactionOrderData = {
   v_kyc_comments?: string | null;
   incident_status?: boolean;
   incident_checker_comments?: string;
-  nium_order_id?: string;
-  nium_invoice_number?: string;
+  EBIX_order_id?: string;
+  EBIX_invoice_number?: string;
   date_of_departure?: string | null;
   incident_completion_date?: string;
   is_esign_regenerated?: boolean;

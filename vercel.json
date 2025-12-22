@@ -2,7 +2,7 @@
   "rewrites": [
     {
       "source": "/api/:path*",
-      "destination": "https://nium.thestorywallcafe.com/:path*"
+      "destination": "https://EBIX.thestorywallcafe.com/:path*"
     },
     {
       "source": "/((?!api).*)",

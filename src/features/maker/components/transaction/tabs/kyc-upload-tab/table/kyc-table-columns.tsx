@@ -97,7 +97,7 @@ export const KycTableColumnsConfig = ({
       meta: { className: 'min-w-0 p-2' },
       cell: (props: { row: any; value: any }) => (
         <SignLinkButton
-          id={props.row.nium_ref_no}
+          id={props.row.EBIX_ref_no}
           onClick={() => navigate(``)}
           tooltipText="View"
           buttonType="view"

@@ -1,7 +1,7 @@
-import { NiumOrderIDProps } from '@/types/common/updateIncident.types';
+import { EBIXOrderIDProps } from '@/types/common/updateIncident.types';
 import { cn } from '@/utils/cn';
 
-const NiumOrderID = ({ rowData, openModal, className = '' }: NiumOrderIDProps) => {
+const EBIXOrderID = ({ rowData, openModal, className = '' }: EBIXOrderIDProps) => {
   const handleOpenModal = () => {
     if (openModal) {
       openModal(rowData);
@@ -16,9 +16,9 @@ const NiumOrderID = ({ rowData, openModal, className = '' }: NiumOrderIDProps) =
       )}
       onClick={handleOpenModal}
     >
-      {rowData.nium_order_id}
+      {rowData.EBIX_order_id}
     </button>
   );
 };
 
-export default NiumOrderID;
+export default EBIXOrderID;

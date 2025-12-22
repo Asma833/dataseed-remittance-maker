@@ -1,6 +1,6 @@
-# NIUM Web Agent Portal
+# EBIX Web Agent Portal
 
-A modern React-based web portal for NIUM agents built with TypeScript and Vite.
+A modern React-based web portal for EBIX agents built with TypeScript and Vite.
 
 ## Features
 
@@ -136,8 +136,8 @@ VITE_ENV=development
 
 Contact the development team through:
 
-- Slack: #nium-support
-- Email: dev-support@nium.com
+- Slack: #EBIX-support
+- Email: dev-support@EBIX.com
 
 ## Expanding the ESLint configuration
 

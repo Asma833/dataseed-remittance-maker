@@ -40,7 +40,7 @@
           environment: '{{ env }}'
           lineofbusiness: 'send'
           product_segment: 'instarem'
-          created_by: 'tech@nium.com'
+          created_by: 'tech@EBIX.com'
       register: ecs_tg_new
     - debug: var=ecs_tg_new verbosity=2
 
@@ -89,7 +89,7 @@
         cluster: '{{ cluster_name }}'
         task_definition: '{{ td.taskdefinition.family }}:{{ td.taskdefinition.revision }}'
         desired_count: '{{desired_count}}'
-        role: ecsServiceRoleNiumforex
+        role: ecsServiceRoleEBIXforex
         placement_strategy:
           - type: spread
             field: attribute:ecs.availability-zone

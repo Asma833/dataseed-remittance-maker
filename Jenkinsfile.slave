@@ -16,8 +16,8 @@ pipeline {
         choice(name: 'ENV', choices: ['pre-prod','qa', 'development'], description: '')
         string(name: 'BRANCH', defaultValue: '')
         choice(name: 'AWS_ECR_ID', choices: ['187296086360'], description: '')
-        string(name: 'REPO', defaultValue: 'nium-forex-agent-portal-frontend.git')
-        string(name: 'APP_NAME', defaultValue: 'nium-forex-agent-portal-fe')
+        string(name: 'REPO', defaultValue: 'EBIX-forex-agent-portal-frontend.git')
+        string(name: 'APP_NAME', defaultValue: 'EBIX-forex-agent-portal-fe')
         booleanParam(name: 'SONAR', defaultValue: false)
     }
     stages {

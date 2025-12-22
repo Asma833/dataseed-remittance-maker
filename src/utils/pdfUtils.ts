@@ -4,22 +4,22 @@ import autoTable from 'jspdf-autotable';
 // Interface for the invoice rate table structure
 interface InvoiceRateTable {
   transactionValue: {
-    niumRate?: number | string;
+    EBIXRate?: number | string;
     agentMarkUp?: number | string;
     rate?: number | string;
   };
   remittanceCharges: {
-    niumRate?: string;
+    EBIXRate?: string;
     agentMarkUp?: string;
     rate?: string;
   };
   nostroCharges: {
-    niumRate?: string;
+    EBIXRate?: string;
     agentMarkUp?: string;
     rate?: string;
   };
   otherCharges: {
-    niumRate?: string;
+    EBIXRate?: string;
     agentMarkUp?: string;
     rate?: string;
   };
@@ -65,7 +65,7 @@ export const generateRateTablePdf = (
   // Transaction Value
   body.push([
     'Tnx Value',
-    formatValue(invoiceRateTable.transactionValue.niumRate),
+    formatValue(invoiceRateTable.transactionValue.EBIXRate),
     formatValue(invoiceRateTable.transactionValue.agentMarkUp),
     formatValue(invoiceRateTable.transactionValue.rate),
   ]);
@@ -73,7 +73,7 @@ export const generateRateTablePdf = (
   // Remittance Charges
   body.push([
     'Remittance Charges',
-    formatValue(invoiceRateTable.remittanceCharges.niumRate),
+    formatValue(invoiceRateTable.remittanceCharges.EBIXRate),
     formatValue(invoiceRateTable.remittanceCharges.agentMarkUp),
     formatValue(invoiceRateTable.remittanceCharges.rate),
   ]);
@@ -81,7 +81,7 @@ export const generateRateTablePdf = (
   // Nostro Charges
   body.push([
     'Nostro Charges: BEN/OUR',
-    formatValue(invoiceRateTable.nostroCharges.niumRate),
+    formatValue(invoiceRateTable.nostroCharges.EBIXRate),
     formatValue(invoiceRateTable.nostroCharges.agentMarkUp),
     formatValue(invoiceRateTable.nostroCharges.rate),
   ]);
@@ -89,7 +89,7 @@ export const generateRateTablePdf = (
   // Other Charges
   body.push([
     'Other Charges',
-    formatValue(invoiceRateTable.otherCharges.niumRate),
+    formatValue(invoiceRateTable.otherCharges.EBIXRate),
     formatValue(invoiceRateTable.otherCharges.agentMarkUp),
     formatValue(invoiceRateTable.otherCharges.rate),
   ]);

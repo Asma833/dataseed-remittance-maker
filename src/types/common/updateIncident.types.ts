@@ -17,12 +17,12 @@ export type UpdateIncidentRequest = {
     };
 
     // New fields based on the form we're using
-    niumId?: string;
+    EBIXId?: string;
     customerPan?: string;
     customerName?: string;
     bmfOrderRef?: string;
     purpose?: string;
-    niumInvoiceNumber?: string;
+    EBIXInvoiceNumber?: string;
   };
 };
 
@@ -195,8 +195,8 @@ export type Order = {
   v_kyc_comments?: string | null;
   incident_status?: string | null;
   incident_checker_comments?: string | null;
-  nium_order_id?: string;
-  nium_invoice_number?: string | null;
+  EBIX_order_id?: string;
+  EBIX_invoice_number?: string | null;
   date_of_departure?: string | null;
   incident_completion_date?: string | null;
   is_esign_regenerated?: boolean;
@@ -250,7 +250,7 @@ export type TransactionType =
   | TransactionTypeEnum.PENDING
   | TransactionTypeEnum.REJECTED;
 
-export type NiumOrderIDProps = {
+export type EBIXOrderIDProps = {
   rowData: any;
   openModal?: (value: string) => void;
   className?: string;

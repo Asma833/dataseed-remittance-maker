@@ -5,7 +5,7 @@ const TransactionCreatedDialog = ({
   isDialogOpen,
   setIsDialogOpen,
   createdTransactionId,
-  niumForexOrderId,
+  EBIXForexOrderId,
   isSubmitting = false,
 }: TransactionCreatedDialogProps) => {
   return (
@@ -21,8 +21,8 @@ const TransactionCreatedDialog = ({
               <span className="font-bold text-dark">{createdTransactionId}</span>
             </div>
             <div>
-              <span className="text-gray-600">Nium Forex Order ID: </span>
-              <span className="font-bold text-dark">{niumForexOrderId}</span>
+              <span className="text-gray-600">EBIX Forex Order ID: </span>
+              <span className="font-bold text-dark">{EBIXForexOrderId}</span>
             </div>
             <div className="text-green-600 font-medium mt-4">Order created successfully!</div>
           </div>
