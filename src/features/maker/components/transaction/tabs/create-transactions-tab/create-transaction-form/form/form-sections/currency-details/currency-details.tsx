@@ -4,7 +4,6 @@ import RateTable from '../../../../../../../rate-table/rate-table';
 import { CommonCreateTransactionProps } from '@/features/maker/components/transaction/types/create-transaction.types';
 import { useState, useEffect, useRef } from 'react';
 import { useFormContext, useWatch } from 'react-hook-form';
-
 import FormFieldRow from '@/components/form/wrapper/form-field-row';
 import FieldWrapper from '@/components/form/wrapper/field-wrapper';
 import { getController } from '@/components/form/utils/get-controller';
@@ -184,7 +183,7 @@ const CurrencyDetails = ({ setAccordionState }: CommonCreateTransactionProps) =>
   // Calculate transaction_value.rate as company_rate + agent_mark_up
   useEffect(() => {
     if (mountedRef.current && transactionValueCompanyRate != null && transactionValueAgentMarkUp != null) {
-      const rate = Number(transactionValueCompanyRate) + Number(transactionValueAgentMarkUp);
+      const rate = Number(fxAmount) * Number(transactionValueCompanyRate) + Number(transactionValueAgentMarkUp);
       setValue('currencyDetails.invoiceRateTable.transaction_value.rate', rate, {
         shouldValidate: false,
         shouldDirty: false,

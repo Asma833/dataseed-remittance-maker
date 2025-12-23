@@ -6,7 +6,8 @@ import FieldWrapper from '@/components/form/wrapper/field-wrapper';
 import { getController } from '@/components/form/utils/get-controller';
 import transactionBasicDetailsConfig from './transaction-basic-details.config';
 import { useFormContext, useWatch } from 'react-hook-form';
-import { useGetCurrencyRates } from '@/hooks/useCurrencyRate';
+import { useGetCurrencyRates as useGetAllCurrencyRates } from '@/hooks/useCurrencyRate';
+import { useGetCurrencyRates as useGetSpecificCurrencyRates } from '@/features/maker/components/transaction/hooks/useCurrencyRate';
 import { FieldConfig } from '../../../types/createTransactionForm.types';
 import { useGetData } from '@/hooks/useGetData';
 import { queryKeys } from '@/core/constant/query-keys';
@@ -15,7 +16,14 @@ import { useMemo, useEffect } from 'react';
 import { TransactionPurposeMap } from '@/types/common/transaction-form.types';
 
 const TransactionBasicDetails = ({ setAccordionState }: CommonCreateTransactionProps) => {
-  const { data: currencyCode, isLoading: currencyLoading } = useGetCurrencyRates();
+  const {
+    control,
+    setValue,
+    formState: { errors },
+  } = useFormContext();
+  const fxCurrency = useWatch({ control, name: 'transactionDetails.fx_currency' });
+  const { data: allCurrencyRates, isLoading: currencyLoading } = useGetAllCurrencyRates();
+  const { data: specificCurrencyRate } = useGetSpecificCurrencyRates(fxCurrency);
   const {
     data: mappedPurposeTransactionTypesData,
     isLoading: userLoading,
@@ -24,17 +32,12 @@ const TransactionBasicDetails = ({ setAccordionState }: CommonCreateTransactionP
   } = useGetData({
     endpoint: API.PURPOSE.TRANSACTION_MAPPING,
     queryKey: queryKeys.masters.documentMapping,
-    dataPath: 'data',
+    dataPath: 'data'
   });
-  const {
-    control,
-    setValue,
-    formState: { errors },
-  } = useFormContext();
   const sourceOfFunds = useWatch({ control, name: 'transactionDetails.source_of_funds' });
   const companySettlementRate = useWatch({ control, name: 'transactionDetails.company_settlement_rate' });
   const addMargin = useWatch({ control, name: 'transactionDetails.add_margin' });
-
+  const fxAmount = useWatch({ control, name: 'transactionDetails.fx_amount' });
   const selectedTransactionTypeId = '3f9fbf53-057f-4cf7-90f5-5035edd2e158';
   // Filter purpose types based on selected transaction type
   const purposeTypesForSelectedTransaction = selectedTransactionTypeId
@@ -81,13 +84,23 @@ const TransactionBasicDetails = ({ setAccordionState }: CommonCreateTransactionP
   }, [selectedMapping, setValue]);
 
   useEffect(() => {
+    if (fxCurrency && specificCurrencyRate) {
+      const rate = specificCurrencyRate;
+      const buyRate = Number(rate.card_buy_rate);
+      if (rate.currency_code === fxCurrency && !isNaN(buyRate) && buyRate > 0) {
+        setValue('transactionDetails.company_settlement_rate', buyRate);
+      }
+    }
+  }, [fxCurrency, specificCurrencyRate, setValue]);
+
+  useEffect(() => {
     if (companySettlementRate != null && addMargin != null) {
-      const calculatedCustomerRate = Number(companySettlementRate || 0) + Number(addMargin || 0);
+      const calculatedCustomerRate = Number(fxAmount) * Number(companySettlementRate || 0) + Number(addMargin || 0);
       setValue('transactionDetails.customer_rate', calculatedCustomerRate);
     }
   }, [companySettlementRate, addMargin, setValue]);
-  const currenyCodeType =
-    currencyCode?.reduce((acc: Record<string, { label: string }>, currency:any) => {
+  const currencyCodeType =
+    allCurrencyRates?.reduce((acc: Record<string, { label: string }>, currency) => {
       acc[currency.currency_code] = { label: currency.currency_code };
       return acc;
     }, {}) || {};
@@ -101,7 +114,7 @@ const TransactionBasicDetails = ({ setAccordionState }: CommonCreateTransactionP
               const field = transactionBasicDetailsConfig.find((f) => f.name === name) as FieldConfig;
               let fieldWithOptions = field;
               if (name === 'fx_currency') {
-                fieldWithOptions = { ...field, options: currenyCodeType };
+                fieldWithOptions = { ...field, options: currencyCodeType };
               }
               return (
                 <FieldWrapper key={name}>

@@ -1,6 +1,6 @@
 import axiosInstance from '@/core/services/axios/axios-instance';
 import { API } from '@/core/constant/apis';
-import { CurrencyRateResponse, UpdateTimewiseMarginPayload, UpdateTimewiseMarginResponse } from '@/features/maker/components/transaction/types/currency-rate.types';
+import { CurrencyRateResponse, CurrencyRatesResponse, UpdateTimewiseMarginPayload, UpdateTimewiseMarginResponse } from '@/features/maker/components/transaction/types/currency-rate.types';
 
 
 // Function to update timewise margin for a currency
@@ -12,7 +12,7 @@ export const updateTimewiseMargin = async (
 };
 
 // Function to get all currency rates
-export const getAllCurrencyRates = async (marginType: 'number' | 'percentage' = 'number'): Promise<CurrencyRateResponse> => {
+export const getAllCurrencyRates = async (marginType: 'number' | 'percentage' = 'number'): Promise<CurrencyRatesResponse> => {
   const response = await axiosInstance.get(`${API.CURRENCY_RATE.GET_ALL}&margin_type=${marginType}`);
   return response.data;
 };
