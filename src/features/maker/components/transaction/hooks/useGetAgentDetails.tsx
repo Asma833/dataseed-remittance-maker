@@ -2,7 +2,7 @@ import { useQuery } from '@tanstack/react-query';
 import { useSelector } from 'react-redux';
 import { RootState } from '@/store';
 import { getAgentDetails } from '../api/get-agent-by-id.api.';
-import { extractAgentMargins, ExtractedMargins } from '../utils/extract-agent-margins';
+import { extractAgentMargins, ExtractedMargins } from '../../../utils/extract-agent-margins';
 
 // Hook to fetch agent details using stored agent ID and extract margins for selected currency
 export const useGetAgentDetails = (selectedCurrency?: string) => {
