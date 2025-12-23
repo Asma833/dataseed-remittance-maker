@@ -1,5 +1,4 @@
 import React from 'react';
-import { Link } from 'react-router';
 import { useForm } from 'react-hook-form';
 import { Eye, EyeOff, Loader2 } from 'lucide-react';
 import { zodResolver } from '@hookform/resolvers/zod';
@@ -9,7 +8,6 @@ import { Input } from '@/components/ui/input';
 import { useLogin } from '../hooks/useLogin';
 import { loginSchema, LoginSchema } from '../schemas/login.schema';
 import logo from '@/assets/images/ebix-login-logo.svg';
-import mask from '@/assets/images/ebix-mask-group.svg';
 import { cn } from '@/utils/cn';
 
 const LoginForm = () => {

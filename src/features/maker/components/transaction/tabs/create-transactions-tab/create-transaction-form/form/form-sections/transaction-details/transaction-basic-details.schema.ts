@@ -27,27 +27,25 @@ export const transactionBasicDetailsSchema = z
     transaction_type: z.string().optional().or(z.literal('')),
     fx_currency: z
       .string()
-      .regex(CURRENCY_CODE_REGEX, 'Invalid currency code (must be 3 uppercase letters)')
-      .optional()
-      .or(z.literal('')),
-    fx_amount: z.coerce.number().min(0, 'Amount must be positive').max(999999999, 'Amount too large').optional(),
-    company_settlement_rate: z.coerce.number().min(0, 'Rate must be positive').max(999999, 'Rate too large').optional(),
-    add_margin: z.coerce.number().min(0, 'Add margin must be positive').max(999999, 'Rate too large').optional(),
-    customer_rate: z.coerce.number().min(0, 'Customer rate must be positive').max(999999, 'Rate too large').optional(),
-    nostro_charges: z.coerce.number().optional(),
+      .min(1, 'FX currency is required')
+      .regex(CURRENCY_CODE_REGEX, 'Invalid currency code (must be 3 uppercase letters)'),
+    fx_amount: z.coerce.number().min(0.01, 'FX amount is required and must be positive').max(999999999, 'Amount too large'),
+    company_settlement_rate: z.coerce.number().min(0.01, 'Company settlement rate is required and must be positive').max(999999, 'Rate too large'),
+    add_margin: z.coerce.number().min(0.01, 'Add margin is required and must be positive').max(999999, 'Rate too large'),
+    customer_rate: z.coerce.number(),
+    nostro_charges: z.coerce.number().min(0.01, 'Nostro charges is required and must be positive'),
     applicant_name: z
       .string()
-      .min(2, 'Name too short')
-      .max(100, 'Name too long')
-      .regex(NO_LEADING_HYPHEN_OR_SPACE, 'Name cannot start with hyphen or space')
+      .min(2, 'Applicant name too short')
+      .max(100, 'Applicant name too long')
+      .regex(NO_LEADING_HYPHEN_OR_SPACE, 'Applicant name cannot start with hyphen or space')
       .optional()
       .or(z.literal('')),
     applicant_pan_number: z
       .string()
+      .min(1, 'Applicant PAN number is required')
       .regex(PAN_REGEX, 'Invalid PAN format (e.g., ABCDE1234F)')
-      .length(10, 'PAN must be 10 characters')
-      .optional()
-      .or(z.literal('')),
+      .length(10, 'PAN must be 10 characters'),
     applicant_dob: z.coerce
       .date()
       .max(new Date(), 'Date of birth cannot be in the future')
@@ -62,9 +60,9 @@ export const transactionBasicDetailsSchema = z
       .or(z.literal('')),
     source_of_funds: z
       .string()
+      .min(1, 'Source of funds is required')
       .max(200, 'Description too long')
       .regex(NO_LEADING_HYPHEN_OR_SPACE, 'Description cannot start with hyphen or space')
-      .optional()
       .or(z.literal('')),
     paid_by: z
       .string()
@@ -74,15 +72,15 @@ export const transactionBasicDetailsSchema = z
       .or(z.literal('')),
     payee_name: z
       .string()
-      .min(2, 'Name too short')
-      .max(100, 'Name too long')
-      .regex(NO_LEADING_HYPHEN_OR_SPACE, 'Name cannot start with hyphen or space')
+      .min(2, 'Payee name too short')
+      .max(100, 'Payee name too long')
+      .regex(NO_LEADING_HYPHEN_OR_SPACE, 'Payee name cannot start with hyphen or space')
       .optional()
       .or(z.literal('')),
     payee_pan_number: z
       .string()
-      .regex(PAN_REGEX, 'Invalid PAN format (e.g., QRJYE1234F)')
-      .length(10, 'PAN must be 10 characters')
+      .regex(PAN_REGEX, 'Invalid PAN number format (e.g., QRJYE1234F)')
+      .length(10, 'PAN number must be 10 characters')
       .optional()
       .or(z.literal('')),
     payee_dob: z.coerce
