@@ -178,7 +178,7 @@ const TransactionBasicDetails = ({ setAccordionState }: CommonCreateTransactionP
               })}
             </FormFieldRow>
             <FormFieldRow rowCols={4}>
-              {(['passport_number', 'passport_issued_date', 'passport_expiry_date', 'place_of_issue'] as const).map(
+              {(['passport_number', 'passport_issue_date', 'passport_expiry_date', 'place_of_issue'] as const).map(
                 (name) => {
                   const field = transactionBasicDetailsConfig.find((f) => f.name === name) as FieldConfig;
                   return (

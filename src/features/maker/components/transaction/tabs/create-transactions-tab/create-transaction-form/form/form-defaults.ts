@@ -85,6 +85,8 @@ export const getFormDefaultValues = (
       nostro_charges: '',
       applicant_name: '',
       applicant_pan_number: '',
+      passport_issue_date:'',
+      passport_expiry_date:'',
       applicant_email: '',
       applicant_mobile_number: '',
       source_of_funds: '',

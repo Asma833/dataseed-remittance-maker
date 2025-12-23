@@ -29,11 +29,11 @@ export const transactionBasicDetailsSchema = z
       .string()
       .min(1, 'FX currency is required')
       .regex(CURRENCY_CODE_REGEX, 'Invalid currency code (must be 3 uppercase letters)'),
-    fx_amount: z.coerce.number().min(0.01, 'FX amount is required and must be positive').max(999999999, 'Amount too large'),
-    company_settlement_rate: z.coerce.number().min(0.01, 'Company settlement rate is required and must be positive').max(999999, 'Rate too large'),
-    add_margin: z.coerce.number().min(0.01, 'Add margin is required and must be positive').max(999999, 'Rate too large'),
+    fx_amount: z.coerce.number().min(1, 'FX amount is required and must be positive'),
+    company_settlement_rate: z.coerce.number().min(1, 'Company settlement rate is required and must be positive'),
+    add_margin: z.coerce.number().min(1, 'Add margin is required and must be positive'),
     customer_rate: z.coerce.number(),
-    nostro_charges: z.coerce.number().min(0.01, 'Nostro charges is required and must be positive'),
+    nostro_charges: z.coerce.number().min(1, 'Nostro charges is required and must be positive'),
     applicant_name: z
       .string()
       .min(2, 'Applicant name too short')
@@ -99,8 +99,8 @@ export const transactionBasicDetailsSchema = z
       .nonempty('Passport number is required')
       .regex(INDIAN_PASSPORT_REGEX, 'Invalid passport format (e.g., A1234567)')
       .length(8, 'Indian passport number must be exactly 8 characters'),
-    passport_issued_date: z.coerce.date().max(new Date(), 'Issued date cannot be in the future').optional(),
-    passport_expiry_date: z.coerce.date().min(new Date(), 'Expiry date must be in the future').optional(),
+    passport_issue_date: z.string().min(1, 'Passport issue date is required'),
+    passport_expiry_date: z.string().min(1, 'Passport expiry date is required'),
     place_of_issue: z
       .string()
       .max(100, 'Place too long')
@@ -138,16 +138,16 @@ export const transactionBasicDetailsSchema = z
   .refine(
     (data) => {
       if (
-        data.passport_issued_date &&
+        data.passport_issue_date &&
         data.passport_expiry_date &&
-        data.passport_expiry_date <= data.passport_issued_date
+        new Date(data.passport_expiry_date) <= new Date(data.passport_issue_date)
       ) {
         return false;
       }
       return true;
     },
     {
-      message: 'Expiry date must be after issued date',
+      message: 'Expiry date must be after issue date',
       path: ['passport_expiry_date'],
     }
   );

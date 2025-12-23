@@ -10,6 +10,8 @@ export const transactionDetailsFields = [
   'transactionDetails.applicant_pan_number',
   'transactionDetails.source_of_funds',
   'transactionDetails.passport_number',
+  'transactionDetails.passport_issue_date',
+  'transactionDetails.passport_expiry_date',
   'transactionDetails.applicant_name',
   'transactionDetails.applicant_address',
   'transactionDetails.applicant_city',

@@ -85,6 +85,8 @@ export interface TransactionDetails {
   payee_pan_number: string;
   applicant_id_document: string;
   passport_number: string;
+  passport_issue_date: string;
+  passport_expiry_date: string;
   place_of_issue: string;
   applicant_address: string;
   applicant_city: string;

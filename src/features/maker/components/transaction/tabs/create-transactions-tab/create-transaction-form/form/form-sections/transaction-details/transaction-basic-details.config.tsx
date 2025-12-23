@@ -169,18 +169,18 @@ const transactionBasicDetailsConfig = [
     required: true,
   },
   {
-    name: 'passport_issued_date',
+    name: 'passport_issue_date',
     label: 'Passport Issued Date',
     type: FieldType.Date,
     placeholder: 'Select Passport Issued Date',
-    required: false,
+    required: true,
   },
   {
     name: 'passport_expiry_date',
     label: 'Passport Expiry Date',
     type: FieldType.Date,
     placeholder: 'Select Passport Expiry Date',
-    required: false,
+    required: true,
   },
   {
     name: 'place_of_issue',

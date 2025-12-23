@@ -8,7 +8,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { createTransactionSchema, CreateTransactionFormData, CreateTransactionFormInput } from './common-schema';
 import { safeNumber, safeString, normalizeString } from '@/utils/form-helpers';
 import { useCompleteTransaction } from '../../../../hooks/useCompleteTransaction';
-import { CompleteTransactionRequest } from '../types/transaction.types';
+import { CompleteTransactionRequest, TransactionDetails } from '../types/transaction.types';
 import { getFormDefaultValues } from './form-defaults';
 import { panelFields } from './form-validation-fields';
 
@@ -142,12 +142,14 @@ const CreateTransactionForm = ({ onCancel, onSubmit, initialData }: Props) => {
           applicant_id_document: normalizeString(data.transactionDetails.applicant_id_document),
           passport_number: normalizeString(data.transactionDetails.passport_number),
           place_of_issue: normalizeString(data.transactionDetails.place_of_issue),
+          passport_issue_date: data.transactionDetails.passport_issue_date ? new Date(data.transactionDetails.passport_issue_date).toISOString() : '',
+          passport_expiry_date: data.transactionDetails.passport_expiry_date ? new Date(data.transactionDetails.passport_expiry_date).toISOString() : '',
           applicant_address: normalizeString(data.transactionDetails.applicant_address),
           applicant_city: normalizeString(data.transactionDetails.applicant_city),
           applicant_state: normalizeString(data.transactionDetails.applicant_state),
           applicant_country: normalizeString(data.transactionDetails.applicant_country),
           postal_code: normalizeString(String(data.transactionDetails.postal_code)),
-        },
+        } as TransactionDetails,
         paymentDetails: {
           payment_method: 'UPI',
           payment_reference: 'PAY-REF-001',
