@@ -3,7 +3,7 @@ import { currencyDetailsConfig } from './currency-details.config';
 import RateTable from '../../../../../../../rate-table/rate-table';
 import { CommonCreateTransactionProps } from '@/features/maker/components/transaction/types/create-transaction.types';
 import { useState, useEffect, useRef } from 'react';
-import { useFormContext, useWatch } from 'react-hook-form';
+import { useFormContext, useFormState, useWatch } from 'react-hook-form';
 import FormFieldRow from '@/components/form/wrapper/form-field-row';
 import FieldWrapper from '@/components/form/wrapper/field-wrapper';
 import { getController } from '@/components/form/utils/get-controller';
@@ -13,6 +13,7 @@ import { useGetCurrencyRates } from '@/hooks/useCurrencyRate';
 import { useGstCalculation } from '@/features/maker/components/transaction/hooks/useGstCalculation';
 import { useTcsCalculation } from '@/features/maker/components/transaction/hooks/useTcsCalculation';
 import { useGetAgentDetails } from '@/features/maker/components/transaction/hooks/useGetAgentDetails';
+import { toast } from 'sonner';
 
 
 const CurrencyDetails = ({ setAccordionState }: CommonCreateTransactionProps) => {
@@ -21,10 +22,10 @@ const CurrencyDetails = ({ setAccordionState }: CommonCreateTransactionProps) =>
   const mountedRef = useRef(false);
   const {
     control,
-    formState: { errors },
     trigger,
     setValue,
   } = useFormContext();
+  const { errors } = useFormState();
   const { data: currencyRates, isLoading: currencyLoading } = useGetCurrencyRates();
   const { calculateGst } = useGstCalculation();
   const { calculateTcs } = useTcsCalculation();
@@ -338,20 +339,51 @@ const CurrencyDetails = ({ setAccordionState }: CommonCreateTransactionProps) =>
       fetchTcs();
     }
   }, [transactionAmount, gstAmount, purpose, panNumber, sourceofFund, declarationAmt, calculateTcs, setValue]);
-
-   const handleSave = async () => {
+const flattenErrors = (obj: any, prefix = ''): string[] => {
+    const keys: string[] = [];
+    for (const key in obj) {
+      if (obj[key] && typeof obj[key] === 'object' && obj[key].message) {
+        keys.push(prefix ? `${prefix}.${key}` : key);
+      } else if (obj[key] && typeof obj[key] === 'object') {
+        keys.push(...flattenErrors(obj[key], prefix ? `${prefix}.${key}` : key));
+      }
+    }
+    return keys;
+  };
+const getFieldLabel = (key: string): string => {
+  const parts = key.split('.');
+  const fieldName = parts[parts.length - 1];
+  const config = currencyDetailsConfig;
+  const field = config.find((f) => f.name === fieldName);
+  return field?.label || key;
+};
+const handleSave = async () => {
     const isValid = await trigger();
     if (!isValid) {
+      const missingFields = flattenErrors(errors);
+      toast.error(`Missing required field: ${getFieldLabel(missingFields[0])}`);
       return;
     }
-    setIsSaving(true);
-    try {
-      // TODO: Implement actual save functionality, e.g., using useCreateTransaction hook
-      await new Promise((resolve) => setTimeout(resolve, 1000));
-    } finally {
-      setIsSaving(false);
+    // Submit the form to hit the API
+    const formElement = document.getElementById('create-transaction-form') as HTMLFormElement;
+    if (formElement) {
+      formElement.requestSubmit();
     }
   };
+
+  //  const handleSave = async () => {
+  //   const isValid = await trigger();
+  //   if (!isValid) {
+  //     return;
+  //   }
+  //   setIsSaving(true);
+  //   try {
+  //     // TODO: Implement actual save functionality, e.g., using useCreateTransaction hook
+  //     await new Promise((resolve) => setTimeout(resolve, 1000));
+  //   } finally {
+  //     setIsSaving(false);
+  //   }
+  // };
 
   return (
     <Spacer>

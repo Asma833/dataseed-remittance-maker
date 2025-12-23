@@ -2,7 +2,7 @@ import Spacer from '@/components/form/wrapper/spacer';
 import { beneficiaryBank, beneficiaryDetailsConfig } from './beneficairy-details.config';
 import { CommonCreateTransactionProps } from '@/features/maker/components/transaction/types/create-transaction.types';
 import { useState } from 'react';
-import { useFormContext, useWatch } from 'react-hook-form';
+import { useFormContext, useWatch, useFormState } from 'react-hook-form';
 import { ShadCnRadioGroup } from '@/components/form/controller/ShadCnRadioGroup';
 import FormFieldRow from '@/components/form/wrapper/form-field-row';
 import FieldWrapper from '@/components/form/wrapper/field-wrapper';
@@ -15,9 +15,9 @@ const BeneficiaryDetails = ({ setAccordionState }: CommonCreateTransactionProps)
   const [isEditing, setIsEditing] = useState(false);
   const {
     control,
-    formState: { errors },
     trigger,
   } = useFormContext();
+  const { errors } = useFormState();
   const intermediaryBankDetails = useWatch({ name: 'beneficiaryDetails.intermediaryBankDetails', defaultValue: 'no' });
 
   const flattenErrors = (obj: any, prefix = ''): string[] => {
@@ -31,12 +31,20 @@ const BeneficiaryDetails = ({ setAccordionState }: CommonCreateTransactionProps)
     }
     return keys;
   };
-
+  
+  const getFieldLabel = (key: string): string => {
+    const parts = key.split('.');
+    const fieldName = parts[parts.length - 1];
+    const config = [...beneficiaryDetailsConfig, ...beneficiaryBank];
+    const field = config.find((f) => f.name === fieldName);
+    return field?.label || key;
+  };
+  
   const handleSave = async () => {
     const isValid = await trigger();
     if (!isValid) {
       const missingFields = flattenErrors(errors);
-      toast.error(`Missing required fields: ${missingFields.join(', ')}`);
+      toast.error(`Missing required field: ${getFieldLabel(missingFields[0])}`);
       return;
     }
     // Submit the form to hit the API
