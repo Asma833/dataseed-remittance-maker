@@ -23,11 +23,13 @@ export const useLogin = () => {
       }
 
       // Store user info in Redux
+      const agentId = data.user.agent_users?.[0]?.agent_id || null;
       dispatch(
         setCredentials({
           user: data.user,
           accessToken: data.access_token,
           refreshToken: data.refresh_token,
+          agentId,
         })
       );
 
