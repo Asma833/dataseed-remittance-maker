@@ -99,8 +99,8 @@ export const transactionBasicDetailsSchema = z
       .nonempty('Passport number is required')
       .regex(INDIAN_PASSPORT_REGEX, 'Invalid passport format (e.g., A1234567)')
       .length(8, 'Indian passport number must be exactly 8 characters'),
-    passport_issue_date: z.string().min(1, 'Passport issue date is required'),
-    passport_expiry_date: z.string().min(1, 'Passport expiry date is required'),
+    passport_issue_date: z.string().min(1, 'Passport issue date is required').refine((val) => new Date(val) <= new Date(), 'Issue date cannot be in the future'),
+    passport_expiry_date: z.string().min(1, 'Passport expiry date is required').refine((val) => new Date(val) >= new Date(), 'Expiry date must be in the future'),
     place_of_issue: z
       .string()
       .max(100, 'Place too long')
