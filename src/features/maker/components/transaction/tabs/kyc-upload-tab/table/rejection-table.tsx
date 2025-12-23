@@ -1,31 +1,55 @@
-import { DataTable } from '@/components/table/data-table';
-import { RejectionTableColumnsConfig } from './rejection-table-columns';
+import { DataTable } from "@/components/table/data-table";
+import { RejectionTableColumnsConfig } from "./rejection-table-columns";
+import { useMemo } from 'react';
+import { useRejectionSummary } from '@/features/maker/hooks/useRejectionSummary';
+import { toast } from 'sonner';
 
 interface RejectionTableProps {
-  data?: any[];
+  transactionId?: string;
 }
 
-const RejectionTable = ({ data = [] }: RejectionTableProps) => {
-  const dummyRejectionData = [
-    {
-      user: 'John Doe',
-      document: 'Passport.pdf',
-      rejection_date: '2024-06-15T10:00:00Z',
-      reason: 'Document is blurry and unreadable',
-    },
-    {
-      user: 'John Doe',
-      document: 'Address Proof.pdf',
-      rejection_date: '2024-06-16T14:30:00Z',
-      reason: 'Address proof is expired',
-    },
-  ];
+const RejectionTable = ({ transactionId }: RejectionTableProps) => {
+  const { data, isLoading, isError, error } = useRejectionSummary(transactionId);
 
   const columns = RejectionTableColumnsConfig();
-  const tableData = data.length > 0 ? data : dummyRejectionData;
+
+  const tableData = useMemo(() => {
+    const documents = data?.documents ?? [];
+    return documents.flatMap((doc) => {
+      const latest = doc.history?.[0];
+      if (!latest) {
+        return [
+          {
+            user: '-',
+            document: doc.document_name,
+            rejection_date: '-',
+            reason: '-',
+          },
+        ];
+      }
+      return [
+        {
+          user: latest.rejected_by,
+          document: doc.document_name,
+          rejection_date: latest.created_at,
+          reason: latest.rejection_reason,
+        },
+      ];
+    });
+  }, [data]);
+
+  if (!transactionId) return null;
+
+  if (isError) {
+    console.error('Failed to load rejection summary:', error);
+    toast.error('Failed to load rejection summary');
+  }
 
   return (
     <div className="rejection-table-wrap">
+      {isLoading ? (
+        <div className="px-2">Loading rejection summary...</div>
+      ) : null}
       <DataTable
         columns={columns}
         data={tableData}

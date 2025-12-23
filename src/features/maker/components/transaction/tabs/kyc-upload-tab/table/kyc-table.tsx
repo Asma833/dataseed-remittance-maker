@@ -1,37 +1,21 @@
 import { DataTable } from '@/components/table/data-table';
 import { useNavigate } from 'react-router-dom';
 import { KycTableColumnsConfig } from './kyc-table-columns';
-import { useGetPaymentDetails } from '../../../hooks/useGetPaymentDetails';
-import { AllTransaction } from '../../../types/payment.types';
-import { useMemo } from 'react';
+import { useDeals } from '@/features/maker/hooks/useDeals';
+import { KYCStatusEnum } from '@/types/enums';
 
-const KYCTable = ({ onUploadClick }: { onUploadClick: (isReupload: boolean) => void }) => {
+const KYCTable = ({ onUploadClick }: { onUploadClick: (isReupload: boolean, transaction: any) => void }) => {
   const navigate = useNavigate();
-  const { data, isLoading } = useGetPaymentDetails();
-
-  const mappedData = useMemo(() => {
-    if (!data || !Array.isArray(data)) return [];
-    return (data as AllTransaction[]).flatMap((deal: AllTransaction) =>
-      deal.transactions.map((transaction) => ({
-        company_reference_no: transaction.company_ref_number || '-',
-        agent_reference_no: transaction.agent_ref_number || '-',
-        order_date: transaction.order_date || deal.created_at || '-',
-        expiry_date: transaction.order_expiry || '-',
-        applicant_name: transaction.kyc_details?.applicant_name || '-',
-        applicant_pan: transaction.kyc_details?.applicant_pan || '-',
-        transaction_type: deal.transaction_type || '-',
-        purpose: transaction.purpose || '-',
-        kyc_type: 'VKYC',
-        kyc_status: transaction.kyc_status || 'pending',
-      }))
-    );
-  }, [data]);
+  const { data: deals, isLoading, isError } = useDeals();
 
   const columns = KycTableColumnsConfig({
     navigate,
-    onUploadClick: (isReupload: boolean) => {
-      // Pass the isReupload to parent
-      onUploadClick(isReupload);
+    onUploadClick: (status: string, transaction: any) => {
+      // isReupload is true if status is REJECTED
+      const isReupload = status === KYCStatusEnum.REJECTED;
+
+      console.log('🚀 ~ KYCTable ~ isReupload:', isReupload);
+      onUploadClick(true, transaction);
     },
   });
 
@@ -39,9 +23,8 @@ const KYCTable = ({ onUploadClick }: { onUploadClick: (isReupload: boolean) => v
     <div className="data-table-wrap">
       <DataTable
         columns={columns}
-        data={mappedData ?? []}
+        data={deals || []}
         config={{
-          loading: isLoading,
           search: { enabled: true, searchMode: 'static' },
           pagination: {
             enabled: true,
@@ -57,11 +40,12 @@ const KYCTable = ({ onUploadClick }: { onUploadClick: (isReupload: boolean) => v
             globalFilter: true,
             dateRangeFilter: {
               enabled: true,
-              columnId: 'order_date',
+              columnId: 'created_at',
               useMuiDateRangePicker: true,
             },
           },
-          export: { enabled: true, fileName: 'kyc-details.csv' },
+          export: { enabled: true, fileName: 'deals.csv' },
+          loading: isLoading,
         }}
       />
     </div>
