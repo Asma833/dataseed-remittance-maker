@@ -12,6 +12,7 @@ import { Button } from '@/components/ui/button';
 import { FieldConfig } from '../../../types/createTransactionForm.types';
 import { useGetCurrencyRates } from '@/hooks/useCurrencyRate';
 import { useGstCalculation } from '@/features/maker/components/transaction/hooks/useGstCalculation';
+import { useTcsCalculation } from '@/features/maker/components/transaction/hooks/useTcsCalculation';
 
 
 const CurrencyDetails = ({ setAccordionState }: CommonCreateTransactionProps) => {
@@ -26,6 +27,7 @@ const CurrencyDetails = ({ setAccordionState }: CommonCreateTransactionProps) =>
   } = useFormContext();
   const { data: currencyRates, isLoading: currencyLoading } = useGetCurrencyRates();
   const { calculateGst } = useGstCalculation();
+  const { calculateTcs } = useTcsCalculation();
 
   const currencyOptions =
     currencyRates?.reduce((acc: Record<string, { label: string }>, currency) => {
@@ -47,6 +49,9 @@ const CurrencyDetails = ({ setAccordionState }: CommonCreateTransactionProps) =>
   const addMargin = useWatch({ control, name: 'transactionDetails.add_margin' });
   const customerRate = useWatch({ control, name: 'transactionDetails.customer_rate' });
   const purpose = useWatch({ control, name: 'transactionDetails.purpose' });
+  const panNumber = useWatch({ control, name: 'transactionDetails.applicant_pan_number' });
+  const sourceofFund = useWatch({ control, name: 'transactionDetails.source_of_funds' });
+  const declarationAmt = useWatch({ control, name: 'currencyDetails.declared_previous_amount' });
 
   // Watch the entire invoiceRateTable to pass to RateTable
   const invoiceRateTable = useWatch({ control, name: 'currencyDetails.invoiceRateTable' });
@@ -228,10 +233,6 @@ const CurrencyDetails = ({ setAccordionState }: CommonCreateTransactionProps) =>
         shouldValidate: false,
         shouldDirty: false,
       });
-
-      // TODO: Fetch tcs from API based on totalInr and other params
-      // For now, set placeholder
-      setValue('currencyDetails.invoiceRateTable.tcs.rate', 0, { shouldValidate: false, shouldDirty: false });
     }
   }, [transactionAmount, gstAmount, tcsAmount]);
 
@@ -265,7 +266,65 @@ const CurrencyDetails = ({ setAccordionState }: CommonCreateTransactionProps) =>
     }
   }, [transactionAmount, calculateGst, setValue]);
 
-  const handleSave = async () => {
+  // TCS Calculation
+  useEffect(() => {
+    const amountBeforeTcs = Number(transactionAmount || 0) + Number(gstAmount || 0);
+    const isEducation = (purpose || '').toLowerCase() === 'education';
+    console.log('TCS Debug:', { amountBeforeTcs, purpose, panNumber, sourceofFund, declarationAmt, isEducation });
+    if (
+      mountedRef.current &&
+      amountBeforeTcs > 0 &&
+      purpose &&
+      panNumber &&
+      sourceofFund &&
+      (!isEducation || declarationAmt)
+    ) {
+      const fetchTcs = async () => {
+        try {
+          const response = await calculateTcs({
+            purpose : "Personal Visit / Leisure Travel",
+            panNumber,
+            sourceofFund,
+            declarationAmt: isEducation ? declarationAmt : '',
+            txnAmount: amountBeforeTcs.toString(),
+          });
+          if (response.statuscode === "200" && response.responsecode === "success") {
+            setValue('currencyDetails.invoiceRateTable.tcs.rate', Number(response.TCS), {
+              shouldValidate: false,
+              shouldDirty: false,
+            });
+            setValue('currencyDetails.total_transaction_amount_tcs', Number(response.TCS), {
+              shouldValidate: false,
+              shouldDirty: false,
+            });
+          } else {
+            console.error('TCS calculation failed:', response.responsemessage);
+            setValue('currencyDetails.invoiceRateTable.tcs.rate', 0, {
+              shouldValidate: false,
+              shouldDirty: false,
+            });
+            setValue('currencyDetails.total_transaction_amount_tcs', 0, {
+              shouldValidate: false,
+              shouldDirty: false,
+            });
+          }
+        } catch (err) {
+          console.error('Error calculating TCS:', err);
+          setValue('currencyDetails.invoiceRateTable.tcs.rate', 0, {
+            shouldValidate: false,
+            shouldDirty: false,
+          });
+          setValue('currencyDetails.total_transaction_amount_tcs', 0, {
+            shouldValidate: false,
+            shouldDirty: false,
+          });
+        }
+      };
+      fetchTcs();
+    }
+  }, [transactionAmount, gstAmount, purpose, panNumber, sourceofFund, declarationAmt, calculateTcs, setValue]);
+
+   const handleSave = async () => {
     const isValid = await trigger();
     if (!isValid) {
       return;
@@ -387,3 +446,4 @@ const CurrencyDetails = ({ setAccordionState }: CommonCreateTransactionProps) =>
 };
 
 export default CurrencyDetails;
+

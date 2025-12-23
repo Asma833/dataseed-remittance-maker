@@ -8,8 +8,10 @@ export type TCSCalculationPayload = {
 };
 
 export type TCSCalculationResponse = {
-  tcsAmount: number;
-  totalAmount: number;
+  statuscode: string;
+  responsecode: string;
+  responsemessage: string;
+  TCS: string;
 };
 // Types for GST Calculation
 export type GSTCalculationPayload = {

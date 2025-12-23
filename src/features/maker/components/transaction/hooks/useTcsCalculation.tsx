@@ -8,5 +8,5 @@ export const useTcsCalculation = () => {
      mutationFn: tcsApi.calculateTcs,
   });
 
-  return { calculateTcs: mutateAsync, isCalculating: isPending, error, gstData: data };
+  return { calculateTcs: mutateAsync, isCalculating: isPending, error, tcsData: data };
 };

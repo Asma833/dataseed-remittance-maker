@@ -136,11 +136,10 @@ const TransactionBasicDetails = ({ setAccordionState }: CommonCreateTransactionP
           </FormFieldRow>
           <p className="font-semibold text-gray-600">KYC Details</p>
           <>
+       
             <FormFieldRow rowCols={4}>
-              {(['applicant_email', 'applicant_mobile_number', 'source_of_funds', 'paid_by'] as const).map((name) => {
-                if (name === 'paid_by' && sourceOfFunds !== 'others') {
-                  return null;
-                }
+              {(['applicant_email', 'applicant_mobile_number','applicant_pan_number', 'source_of_funds'] as const).map((name) => {
+                
                 const field = transactionBasicDetailsConfig.find((f) => f.name === name) as FieldConfig;
                 return (
                   <FieldWrapper key={name}>
@@ -150,9 +149,9 @@ const TransactionBasicDetails = ({ setAccordionState }: CommonCreateTransactionP
               })}
             </FormFieldRow>
             <FormFieldRow rowCols={4}>
-              {(['payee_name', 'payee_pan_number', 'payee_dob'] as const).map((name) => {
+              {(['paid_by','payee_name', 'payee_pan_number', 'payee_dob'] as const).map((name) => {
                 if (
-                  (name === 'payee_name' || name === 'payee_pan_number' || name === 'payee_dob') &&
+                  (name === 'paid_by' || name === 'payee_name' || name === 'payee_pan_number' || name === 'payee_dob') &&
                   sourceOfFunds !== 'others'
                 ) {
                   return null;
