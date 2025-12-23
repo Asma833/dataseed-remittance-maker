@@ -13,6 +13,7 @@ import { FieldConfig } from '../../../types/createTransactionForm.types';
 import { useGetCurrencyRates } from '@/hooks/useCurrencyRate';
 import { useGstCalculation } from '@/features/maker/components/transaction/hooks/useGstCalculation';
 import { useTcsCalculation } from '@/features/maker/components/transaction/hooks/useTcsCalculation';
+import { useGetAgentDetails } from '@/features/maker/components/transaction/hooks/useGetAgentDetails';
 
 
 const CurrencyDetails = ({ setAccordionState }: CommonCreateTransactionProps) => {
@@ -29,6 +30,9 @@ const CurrencyDetails = ({ setAccordionState }: CommonCreateTransactionProps) =>
   const { calculateGst } = useGstCalculation();
   const { calculateTcs } = useTcsCalculation();
 
+  const fxCurrency = useWatch({ control, name: 'transactionDetails.fx_currency' });
+  const { extractedMargins } = useGetAgentDetails(fxCurrency);
+  
   const currencyOptions =
     currencyRates?.reduce((acc: Record<string, { label: string }>, currency) => {
       acc[currency.currency_code] = { label: currency.currency_code };
@@ -43,7 +47,6 @@ const CurrencyDetails = ({ setAccordionState }: CommonCreateTransactionProps) =>
   }, []);
 
   // Watch values from TransactionBasicDetails
-  const fxCurrency = useWatch({ control, name: 'transactionDetails.fx_currency' });
   const fxAmount = useWatch({ control, name: 'transactionDetails.fx_amount' });
   const companySettlementRate = useWatch({ control, name: 'transactionDetails.company_settlement_rate' });
   const addMargin = useWatch({ control, name: 'transactionDetails.add_margin' });
@@ -149,20 +152,33 @@ const CurrencyDetails = ({ setAccordionState }: CommonCreateTransactionProps) =>
         shouldValidate: false,
         shouldDirty: false,
       });
-      setValue('currencyDetails.invoiceRateTable.remittance_charges.company_rate', Number(companySettlementRate), {
-        shouldValidate: false,
-        shouldDirty: false,
-      });
-      setValue('currencyDetails.invoiceRateTable.nostro_charges.company_rate', Number(companySettlementRate), {
-        shouldValidate: false,
-        shouldDirty: false,
-      });
-      setValue('currencyDetails.invoiceRateTable.other_charges.company_rate', Number(companySettlementRate), {
-        shouldValidate: false,
-        shouldDirty: false,
-      });
     }
   }, [companySettlementRate, setValue]);
+
+  // Set company rates from agent details
+
+  useEffect(() => {
+
+    if (mountedRef.current && extractedMargins) {
+
+      setValue('currencyDetails.invoiceRateTable.remittance_charges.company_rate', extractedMargins.productMargin, {
+        shouldValidate: false,
+        shouldDirty: false,
+      });
+
+      setValue('currencyDetails.invoiceRateTable.nostro_charges.company_rate', extractedMargins.nostroMargin, {
+        shouldValidate: false,
+        shouldDirty: false,
+      });
+
+      setValue('currencyDetails.invoiceRateTable.other_charges.company_rate', extractedMargins.otherChargesRate, {
+        shouldValidate: false,
+        shouldDirty: false,
+      });
+
+    }
+
+  }, [extractedMargins, setValue]);
 
   // Calculate transaction_value.rate as company_settlement_rate + add_margin
   // Calculate transaction_value.rate as company_rate + agent_mark_up
@@ -282,7 +298,7 @@ const CurrencyDetails = ({ setAccordionState }: CommonCreateTransactionProps) =>
       const fetchTcs = async () => {
         try {
           const response = await calculateTcs({
-            purpose : "Personal Visit / Leisure Travel",
+            purpose: "Private Visit",
             panNumber,
             sourceofFund,
             declarationAmt: isEducation ? declarationAmt : '',
