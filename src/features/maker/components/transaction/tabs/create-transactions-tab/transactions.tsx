@@ -8,7 +8,7 @@ const Transactions = () => {
 
   return (
     <AccordionStateProvider>
-      <CreateTransactionForm initialData={initialData} />
+      <CreateTransactionForm initialData={initialData} viewMode={!!initialData} />
     </AccordionStateProvider>
   );
 };

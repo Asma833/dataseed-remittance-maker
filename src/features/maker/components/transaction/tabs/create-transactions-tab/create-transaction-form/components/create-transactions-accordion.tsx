@@ -7,7 +7,7 @@ import Typography from '@mui/material/Typography';
 import { AccordionItem } from '../types/createTransactionForm.types';
 import { useAccordionStateProvider } from '../context/accordion-control-context';
 
-export default function CreateTransactionsAccordion({ accordionItems }: { accordionItems: AccordionItem[] }) {
+export default function CreateTransactionsAccordion({ accordionItems, viewMode }: { accordionItems: AccordionItem[], viewMode?: boolean }) {
   const { accordionState, setAccordionState } = useAccordionStateProvider();
   const [expanded, setExpanded] = useState<string | false>(accordionState.currentActiveTab);
   const handleChange = (panel: string) => (event: React.SyntheticEvent, isExpanded: boolean) => {
@@ -39,7 +39,7 @@ export default function CreateTransactionsAccordion({ accordionItems }: { accord
           </AccordionSummary>
           <AccordionDetails className="mt-4 bg-transparent text-foreground">
             {typeof item.content === 'function' ? (
-              item.content({ setAccordionState })
+              item.content({ setAccordionState, viewMode })
             ) : (
               <Typography>{item.content}</Typography>
             )}

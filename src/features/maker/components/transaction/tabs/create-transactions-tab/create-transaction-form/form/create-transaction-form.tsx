@@ -16,9 +16,10 @@ type Props = {
   onCancel?: () => void;
   onSubmit?: (data: CreateTransactionFormData) => void;
   initialData?: Partial<CreateTransactionFormInput>;
+  viewMode?: boolean;
 };
 
-const CreateTransactionForm = ({ onCancel, onSubmit, initialData }: Props) => {
+const CreateTransactionForm = ({ onCancel, onSubmit, initialData, viewMode }: Props) => {
   const { accordionState, setAccordionState } = useAccordionStateProvider();
   const currentTab = accordionState.currentActiveTab;
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -192,7 +193,7 @@ const CreateTransactionForm = ({ onCancel, onSubmit, initialData }: Props) => {
               )}
             </div>
           </div>
-          <CreateTransactionsAccordion accordionItems={accordionItems} />
+          <CreateTransactionsAccordion accordionItems={accordionItems} {...(viewMode !== undefined ? { viewMode } : {})} />
         </div>
       </form>
     </FormProvider>

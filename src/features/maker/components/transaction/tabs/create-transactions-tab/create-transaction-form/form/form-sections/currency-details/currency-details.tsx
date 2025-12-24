@@ -17,10 +17,11 @@ import { toast } from 'sonner';
 import { GenericDialog } from '@/components/ui/generic-dialog';
 import Payments from '@/components/payments/Payments';
 
-const CurrencyDetails = ({ setAccordionState }: CommonCreateTransactionProps) => {
+const CurrencyDetails = ({ setAccordionState, viewMode }: CommonCreateTransactionProps & { viewMode?: boolean }) => {
   const [isSaving, setIsSaving] = useState(false);
   const [isEditing, setIsEditing] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [selectedPayment, setSelectedPayment] = useState<any>(null);
   const mountedRef = useRef(false);
   const {
     control,
@@ -185,14 +186,14 @@ const CurrencyDetails = ({ setAccordionState }: CommonCreateTransactionProps) =>
   // Calculate transaction_value.rate as company_settlement_rate + add_margin
   // Calculate transaction_value.rate as company_rate + agent_mark_up
   useEffect(() => {
-    if (mountedRef.current && transactionValueCompanyRate != null && transactionValueAgentMarkUp != null) {
-      const rate = Number(fxAmount) * Number(transactionValueCompanyRate) + Number(transactionValueAgentMarkUp);
+    if (mountedRef.current && fxAmount && transactionValueCompanyRate != null && transactionValueAgentMarkUp != null) {
+      const rate = (Number(fxAmount) * Number(transactionValueCompanyRate)) + Number(transactionValueAgentMarkUp);
       setValue('currencyDetails.invoiceRateTable.transaction_value.rate', rate, {
         shouldValidate: false,
         shouldDirty: false,
       });
     }
-  }, [transactionValueCompanyRate, transactionValueAgentMarkUp, setValue]);
+  }, [fxAmount, transactionValueCompanyRate, transactionValueAgentMarkUp, setValue]);
 
   // Calculate remittance_charges.rate as company_rate + agent_mark_up
   useEffect(() => {
@@ -341,54 +342,59 @@ const CurrencyDetails = ({ setAccordionState }: CommonCreateTransactionProps) =>
       fetchTcs();
     }
   }, [transactionAmount, gstAmount, purpose, panNumber, sourceofFund, declarationAmt, calculateTcs, setValue]);
-const flattenErrors = (obj: any, prefix = ''): string[] => {
-    const keys: string[] = [];
-    for (const key in obj) {
-      if (obj[key] && typeof obj[key] === 'object' && obj[key].message) {
-        keys.push(prefix ? `${prefix}.${key}` : key);
-      } else if (obj[key] && typeof obj[key] === 'object') {
-        keys.push(...flattenErrors(obj[key], prefix ? `${prefix}.${key}` : key));
+  const flattenErrors = (obj: any, prefix = ''): string[] => {
+      const keys: string[] = [];
+      for (const key in obj) {
+        if (obj[key] && typeof obj[key] === 'object' && obj[key].message) {
+          keys.push(prefix ? `${prefix}.${key}` : key);
+        } else if (obj[key] && typeof obj[key] === 'object') {
+          keys.push(...flattenErrors(obj[key], prefix ? `${prefix}.${key}` : key));
+        }
       }
+      return keys;
+    };
+  const getFieldLabel = (key: string): string => {
+    const parts = key.split('.');
+    const fieldName = parts[parts.length - 1];
+    const config = currencyDetailsConfig;
+    const field = config.find((f) => f.name === fieldName);
+    return field?.label || key;
+  };
+  const handleSave = async () => {
+      const isValid = await trigger();
+      if (!isValid) {
+        const missingFields = flattenErrors(errors);
+        toast.error(`Missing required field: ${getFieldLabel(missingFields[0])}`);
+        return;
+      }
+      // Submit the form to hit the API
+      const formElement = document.getElementById('create-transaction-form') as HTMLFormElement;
+      if (formElement) {
+        formElement.requestSubmit();
+      }
+    };
+  const handleShareTransactionDetails = () => {
+      console.log('Share Transaction Details');
+    };
+    const handleCancel = () => {
+      console.log('Cancel');
+    };
+  const handlePayment = () => {
+      setSelectedPayment({ id: 'current-transaction', amount: totalInrAmount });
+      setIsModalOpen(true);
+    };
+  const handleUploadSubmit = async (file: File) => {
+    if (selectedPayment) {
+      await uploadChallan({
+        id: selectedPayment.id,
+        file,
+      });
     }
-    return keys;
   };
-const getFieldLabel = (key: string): string => {
-  const parts = key.split('.');
-  const fieldName = parts[parts.length - 1];
-  const config = currencyDetailsConfig;
-  const field = config.find((f) => f.name === fieldName);
-  return field?.label || key;
-};
-const handleSave = async () => {
-    const isValid = await trigger();
-    if (!isValid) {
-      const missingFields = flattenErrors(errors);
-      toast.error(`Missing required field: ${getFieldLabel(missingFields[0])}`);
-      return;
-    }
-    // Submit the form to hit the API
-    const formElement = document.getElementById('create-transaction-form') as HTMLFormElement;
-    if (formElement) {
-      formElement.requestSubmit();
-    }
+  const uploadChallan = async (params: { id: string; file: File }) => {
+    // Placeholder for upload challan logic
+    console.log('Upload challan', params);
   };
-const handleShareTransactionDetails = () => {
-    console.log('Share Transaction Details');
-  };
-  const handleCancel = () => {
-    console.log('Cancel');
-  };
-const handlePayment = () => {
-    setIsModalOpen(true);
-  };
-  //  const handleUploadSubmit = async (file: File) => {
-  //   if (selectedPayment) {
-  //     await uploadChallan({
-  //       id: selectedPayment.id,
-  //       file,
-  //     });
-  //   }
-  // };
   return (
     <>
     <Spacer>
@@ -489,31 +495,38 @@ const handlePayment = () => {
         </div>
       </FormFieldRow>
      
-      <div className="mt-16 flex flex-col items-center gap-10"> 
+      <div className="mt-16 flex flex-col items-center gap-10">
           <div className="flex justify-center gap-1 flex-wrap">
-              <Button type="button" onClick={handleCancel} variant="light"> 
-              Cancel 
-            </Button>
-            <Button variant="secondary" onClick={handleSave} disabled={isSaving} className="mx-2 w-24">
-              {isSaving ? 'Saving...' : 'Save'}
-            </Button>
-              <Button type="button" onClick={handleShareTransactionDetails} variant="secondary"> 
-              Share Transaction Details PDF 
-            </Button> 
-              <Button type="button" onClick={handlePayment} variant="secondary"> 
-              Payment 
-            </Button>
+         
+              <>
+                <Button type="button" onClick={handleCancel} variant="light">
+                  Cancel
+                </Button>
+                <Button variant="secondary" onClick={handleSave} disabled={isSaving} className="mx-2 w-24">
+                  {isSaving ? (viewMode ? 'Updating...' : 'Saving...') : (viewMode ? 'Update' : 'Save')}
+                </Button>
+              </>
+              {viewMode && (
+              <>
+                <Button type="button" onClick={handleShareTransactionDetails} variant="secondary">
+                  Share Transaction Details PDF
+                </Button>
+                <Button type="button" onClick={handlePayment} variant="secondary">
+                  Payment
+                </Button>
+              </>
+            ) }
           </div>
         </div>
     </Spacer>
-    {/* <GenericDialog open={isModalOpen} onOpenChange={setIsModalOpen} title="Payment" contentClassName='md:w-[40vw]'>
+    <GenericDialog open={isModalOpen} onOpenChange={setIsModalOpen} title="Payment" contentClassName='md:w-[40vw]'>
          <Payments
               setIsOpen={setIsModalOpen}
               uploadScreen={false}
               data={selectedPayment}
               onSubmit={handleUploadSubmit}
             />
-    </GenericDialog> */}
+    </GenericDialog>
     </>
   );
 };
