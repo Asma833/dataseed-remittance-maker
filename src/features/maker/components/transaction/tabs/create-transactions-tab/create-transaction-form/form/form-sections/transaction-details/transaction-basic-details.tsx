@@ -12,7 +12,8 @@ import { FieldConfig } from '../../../types/createTransactionForm.types';
 import { useGetData } from '@/hooks/useGetData';
 import { queryKeys } from '@/core/constant/query-keys';
 import { API } from '@/core/constant/apis';
-import { useMemo, useEffect } from 'react';
+import { useMemo, useEffect, useCallback } from 'react';
+import { debounce } from 'lodash';
 import { TransactionPurposeMap } from '@/types/common/transaction-form.types';
 
 const TransactionBasicDetails = ({ setAccordionState }: CommonCreateTransactionProps) => {
@@ -93,12 +94,25 @@ const TransactionBasicDetails = ({ setAccordionState }: CommonCreateTransactionP
     }
   }, [fxCurrency, specificCurrencyRate, setValue]);
 
-  useEffect(() => {
-    if (fxAmount != null && addMargin != null) {
-      const calculatedCustomerRate = (Number(fxAmount) * Number(companySettlementRate || 0)) + Number(addMargin || 0);
+  // Debounced calculation function
+  const debouncedCalculateCustomerRate = useCallback(
+    debounce((fxAmt: number, settlementRate: number, margin: number) => {
+      const calculatedCustomerRate = (Number(fxAmt) * Number(settlementRate || 0)) + Number(margin || 0);
       setValue('transactionDetails.customer_rate', calculatedCustomerRate);
+    }, 5000),
+    [setValue]
+  );
+
+  useEffect(() => {
+    if (fxAmount != null && companySettlementRate != null) {
+      debouncedCalculateCustomerRate(fxAmount, companySettlementRate, addMargin || 0);
     }
-  }, [companySettlementRate, addMargin, setValue]);
+    
+    // Cleanup function to cancel pending debounced calls
+    return () => {
+      debouncedCalculateCustomerRate.cancel();
+    };
+  }, [fxAmount, companySettlementRate, addMargin, debouncedCalculateCustomerRate]);
   const currencyCodeType =
     allCurrencyRates?.reduce((acc: Record<string, { label: string }>, currency) => {
       acc[currency.currency_code] = { label: currency.currency_code };

@@ -318,7 +318,7 @@ const CurrencyDetails = ({ setAccordionState, viewMode, paymentData }: CommonCre
       tcsTimeoutRef.current = setTimeout(async () => {
         try {
           const response = await calculateTcs({
-            purpose: purpose || "Private Visit",
+            purpose: "Personal Visit / Leisure Travel",
             panNumber,
             sourceofFund,
             declarationAmt: isEducation ? declarationAmt : '',
