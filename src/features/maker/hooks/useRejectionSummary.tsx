@@ -1,8 +1,8 @@
 import { useQuery } from '@tanstack/react-query';
-import { getRejectionSummary, RejectionSummaryResponse } from '@/features/maker/api/rejectionSummaryApi';
+import { getRejectionSummary } from '@/features/maker/api/rejectionSummaryApi';
 
 export function useRejectionSummary(transactionId?: string) {
-  return useQuery<RejectionSummaryResponse, Error>({
+  return useQuery<any, Error>({
     queryKey: ['rejection-summary', transactionId],
     queryFn: () => getRejectionSummary(String(transactionId)),
     enabled: Boolean(transactionId),

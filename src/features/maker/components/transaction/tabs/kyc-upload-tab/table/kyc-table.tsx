@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { KycTableColumnsConfig } from './kyc-table-columns';
 import { useDeals } from '@/features/maker/hooks/useDeals';
 import { KYCStatusEnum } from '@/types/enums';
+import { DealsResponse } from '../../../types/transaction.types';
 
 const KYCTable = ({ onUploadClick }: { onUploadClick: (isReupload: boolean, transaction: any) => void }) => {
   const navigate = useNavigate();
@@ -23,7 +24,7 @@ const KYCTable = ({ onUploadClick }: { onUploadClick: (isReupload: boolean, tran
     <div className="data-table-wrap">
       <DataTable
         columns={columns}
-        data={deals || []}
+        data={(deals as DealsResponse[]) ?? []}
         config={{
           search: { enabled: true, searchMode: 'static' },
           pagination: {
