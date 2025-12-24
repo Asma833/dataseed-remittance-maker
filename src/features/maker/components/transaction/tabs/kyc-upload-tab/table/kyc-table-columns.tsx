@@ -18,14 +18,22 @@ export const KycTableColumnsConfig = ({
       id: 'company_reference_no',
       header: 'Company Ref.No',
       meta: { className: 'min-w-0 p-2' },
-      cell: (props: { row: any }) => <span>{props.row.transactions?.[0]?.company_ref_number}</span>,
+      cell: (props: { row: any }) => (
+        <span>
+          {props.row.transactions?.[0]?.company_ref_number ? props.row.transactions?.[0]?.company_ref_number : '-'}
+        </span>
+      ),
     },
     {
       accessorKey: 'agent_reference_no',
       id: 'agent_reference_no',
       header: 'Agent Ref.No.',
       meta: { className: 'min-w-0 p-2' },
-      cell: (props: { row: any }) => <span>{props.row.transactions?.[0]?.agent_ref_number}</span>,
+      cell: (props: { row: any }) => (
+        <span>
+          {props.row.transactions?.[0]?.agent_ref_number ? props.row.transactions?.[0]?.agent_ref_number : '-'}
+        </span>
+      ),
     },
     {
       accessorKey: 'order_date',
