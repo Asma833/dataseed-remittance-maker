@@ -256,9 +256,15 @@ const CurrencyDetails = ({ setAccordionState, viewMode }: CommonCreateTransactio
   }, [transactionAmount, gstAmount, tcsAmount]);
 
   // GST Calculation
+  const gstTimeoutRef = useRef<NodeJS.Timeout | null>(null);
   useEffect(() => {
     if (mountedRef.current && transactionAmount && transactionAmount > 0) {
-      const fetchGst = async () => {
+      // Clear previous timeout
+      if (gstTimeoutRef.current) {
+        clearTimeout(gstTimeoutRef.current);
+      }
+      // Set new timeout for debounced call
+      gstTimeoutRef.current = setTimeout(async () => {
         try {
           const response = await calculateGst({ txnAmount: transactionAmount.toString() });
           if (response.statuscode === "200" && response.responsecode === "success") {
@@ -280,12 +286,17 @@ const CurrencyDetails = ({ setAccordionState, viewMode }: CommonCreateTransactio
             shouldDirty: false,
           });
         }
-      };
-      fetchGst();
+      }, 2000); // 2000ms debounce delay
     }
+    return () => {
+      if (gstTimeoutRef.current) {
+        clearTimeout(gstTimeoutRef.current);
+      }
+    };
   }, [transactionAmount, calculateGst, setValue]);
 
   // TCS Calculation
+  const tcsTimeoutRef = useRef<NodeJS.Timeout | null>(null);
   useEffect(() => {
     const amountBeforeTcs = Number(transactionAmount || 0) + Number(gstAmount || 0);
     const isEducation = (purpose || '').toLowerCase() === 'education';
@@ -298,7 +309,12 @@ const CurrencyDetails = ({ setAccordionState, viewMode }: CommonCreateTransactio
       sourceofFund &&
       (!isEducation || declarationAmt)
     ) {
-      const fetchTcs = async () => {
+      // Clear previous timeout
+      if (tcsTimeoutRef.current) {
+        clearTimeout(tcsTimeoutRef.current);
+      }
+      // Set new timeout for debounced call
+      tcsTimeoutRef.current = setTimeout(async () => {
         try {
           const response = await calculateTcs({
             purpose: "Private Visit",
@@ -338,9 +354,13 @@ const CurrencyDetails = ({ setAccordionState, viewMode }: CommonCreateTransactio
             shouldDirty: false,
           });
         }
-      };
-      fetchTcs();
+      }, 2000); // 2000ms debounce delay
     }
+    return () => {
+      if (tcsTimeoutRef.current) {
+        clearTimeout(tcsTimeoutRef.current);
+      }
+    };
   }, [transactionAmount, gstAmount, purpose, panNumber, sourceofFund, declarationAmt, calculateTcs, setValue]);
   const flattenErrors = (obj: any, prefix = ''): string[] => {
       const keys: string[] = [];
