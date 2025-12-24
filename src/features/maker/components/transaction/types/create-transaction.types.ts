@@ -26,3 +26,38 @@ export type CommonCreateTransactionProps = {
   viewMode?: boolean;
   paymentData?: PaymentData;
 };
+
+export interface InvoiceRateTable {
+  transaction_value: {
+    company_rate?: number | string;
+    agent_mark_up?: number | string;
+    rate?: number | string;
+  };
+  remittance_charges: {
+    company_rate?: string;
+    agent_mark_up?: string;
+    rate?: string;
+  };
+  nostro_charges: {
+    company_rate?: string;
+    agent_mark_up?: string;
+    rate?: string;
+  };
+  other_charges: {
+    company_rate?: string;
+    agent_mark_up?: string;
+    rate?: string;
+  };
+  transaction_amount: {
+    rate?: string;
+  };
+  gst_amount: {
+    rate?: string;
+  };
+  total_inr_amount: {
+    rate?: string;
+  };
+  tcs: {
+    rate?: string;
+  };
+}
