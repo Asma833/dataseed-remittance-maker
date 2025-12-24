@@ -24,7 +24,6 @@ export default function CreateTransactionsAccordion({ accordionItems }: { accord
         <Accordion
           key={item.id}
           expanded={expanded === item.id}
-          onChange={handleChange(item.id)}
           className="bg-background!"
           sx={{ boxShadow: 'none' }}
         >

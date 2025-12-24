@@ -11,9 +11,9 @@ export const getFormDefaultValues = (
       settlement_rate: '0',
       add_margin: '0',
       customer_rate: '0',
-      declared_education_loan_amount: '1',
-      previous_transaction_amount: '1',
-      declared_previous_amount: '1',
+      declared_education_loan_amount: '0',
+      previous_transaction_amount: '0',
+      declared_previous_amount: '0',
       total_transaction_amount_tcs: '0',
       invoiceRateTable: {
         transaction_value: {

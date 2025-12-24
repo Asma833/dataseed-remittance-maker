@@ -20,39 +20,39 @@ const BeneficiaryDetails = ({ setAccordionState }: CommonCreateTransactionProps)
   const { errors } = useFormState();
   const intermediaryBankDetails = useWatch({ name: 'beneficiaryDetails.intermediaryBankDetails', defaultValue: 'no' });
 
-  const flattenErrors = (obj: any, prefix = ''): string[] => {
-    const keys: string[] = [];
-    for (const key in obj) {
-      if (obj[key] && typeof obj[key] === 'object' && obj[key].message) {
-        keys.push(prefix ? `${prefix}.${key}` : key);
-      } else if (obj[key] && typeof obj[key] === 'object') {
-        keys.push(...flattenErrors(obj[key], prefix ? `${prefix}.${key}` : key));
-      }
-    }
-    return keys;
-  };
+  // const flattenErrors = (obj: any, prefix = ''): string[] => {
+  //   const keys: string[] = [];
+  //   for (const key in obj) {
+  //     if (obj[key] && typeof obj[key] === 'object' && obj[key].message) {
+  //       keys.push(prefix ? `${prefix}.${key}` : key);
+  //     } else if (obj[key] && typeof obj[key] === 'object') {
+  //       keys.push(...flattenErrors(obj[key], prefix ? `${prefix}.${key}` : key));
+  //     }
+  //   }
+  //   return keys;
+  // };
   
-  const getFieldLabel = (key: string): string => {
-    const parts = key.split('.');
-    const fieldName = parts[parts.length - 1];
-    const config = [...beneficiaryDetailsConfig, ...beneficiaryBank];
-    const field = config.find((f) => f.name === fieldName);
-    return field?.label || key;
-  };
+  // const getFieldLabel = (key: string): string => {
+  //   const parts = key.split('.');
+  //   const fieldName = parts[parts.length - 1];
+  //   const config = [...beneficiaryDetailsConfig, ...beneficiaryBank];
+  //   const field = config.find((f) => f.name === fieldName);
+  //   return field?.label || key;
+  // };
   
-  const handleSave = async () => {
-    const isValid = await trigger();
-    if (!isValid) {
-      const missingFields = flattenErrors(errors);
-      toast.error(`Missing required field: ${getFieldLabel(missingFields[0])}`);
-      return;
-    }
-    // Submit the form to hit the API
-    const formElement = document.getElementById('create-transaction-form') as HTMLFormElement;
-    if (formElement) {
-      formElement.requestSubmit();
-    }
-  };
+  // const handleSave = async () => {
+  //   const isValid = await trigger();
+  //   if (!isValid) {
+  //     const missingFields = flattenErrors(errors);
+  //     toast.error(`Missing required field: ${getFieldLabel(missingFields[0])}`);
+  //     return;
+  //   }
+  //   // Submit the form to hit the API
+  //   const formElement = document.getElementById('create-transaction-form') as HTMLFormElement;
+  //   if (formElement) {
+  //     formElement.requestSubmit();
+  //   }
+  // };
   return (
     <Spacer>
       <FormFieldRow rowCols={4}>
@@ -150,9 +150,9 @@ const BeneficiaryDetails = ({ setAccordionState }: CommonCreateTransactionProps)
         )}
       </div>
       <div className="flex justify-center items-center">
-        <Button variant="secondary" onClick={handleSave} disabled={isSaving} className="mx-2 w-24">
+        {/* <Button variant="secondary" onClick={handleSave} disabled={isSaving} className="mx-2 w-24">
           {isSaving ? 'Saving...' : 'Save'}
-        </Button>
+        </Button> */}
         {/* <Button variant='light' onClick={handleEdit} className='w-24'  disabled={isEditing}>
           {isEditing ? 'Editing' : 'Edit'}
         </Button> */}
