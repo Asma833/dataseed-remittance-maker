@@ -46,6 +46,7 @@ const PaymentStatus = () => {
           rejection_reason: deal.rejection_reason || '-',
           margin_amount: deal.margin_amount || '-',
           transaction: transaction,
+          transaction_id:transaction?.transaction_id
         } as PaymentData;
       })
     );
@@ -59,7 +60,6 @@ const PaymentStatus = () => {
   const handleViewTransaction = (rowData:any) => {
     const transaction = rowData.transaction;
     const kyc = transaction.kyc_details;
-    console.log(rowData.margin_amount, 'rowData+++++++++++++++++++++')
     const initialData = {
       transactionDetails: {
         company_reference_number: transaction.company_ref_number || '',
@@ -157,6 +157,7 @@ const PaymentStatus = () => {
           },
         },
       },
+      paymentDetails: rowData,
     };
     navigate('../create-transactions', { state: { initialData } });
   };

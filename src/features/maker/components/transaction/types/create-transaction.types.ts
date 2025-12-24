@@ -1,4 +1,5 @@
 import { AccordionState } from '../tabs/create-transactions-tab/create-transaction-form/types/createTransactionForm.types';
+import { PaymentData } from './payment.types';
 
 export type CreateTransactionRequest = {
   partner_order_id: string;
@@ -22,4 +23,6 @@ export type TransactionCreatedDialogProps = {
 
 export type CommonCreateTransactionProps = {
   setAccordionState: (state: Partial<AccordionState>) => void;
+  viewMode?: boolean;
+  paymentData?: PaymentData;
 };

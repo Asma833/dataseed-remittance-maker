@@ -16,10 +16,10 @@ import { useGetAgentDetails } from '@/features/maker/components/transaction/hook
 import { toast } from 'sonner';
 import { GenericDialog } from '@/components/ui/generic-dialog';
 import Payments from '@/components/payments/Payments';
+import { useUploadPaymentChallan } from '@/features/maker/components/transaction/hooks/useUploadPaymentChallan';
 
-const CurrencyDetails = ({ setAccordionState, viewMode }: CommonCreateTransactionProps & { viewMode?: boolean }) => {
+const CurrencyDetails = ({ setAccordionState, viewMode, paymentData }: CommonCreateTransactionProps) => {
   const [isSaving, setIsSaving] = useState(false);
-  const [isEditing, setIsEditing] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedPayment, setSelectedPayment] = useState<any>(null);
   const mountedRef = useRef(false);
@@ -35,6 +35,7 @@ const CurrencyDetails = ({ setAccordionState, viewMode }: CommonCreateTransactio
 
   const fxCurrency = useWatch({ control, name: 'transactionDetails.fx_currency' });
   const { extractedMargins } = useGetAgentDetails(fxCurrency);
+  const { mutateAsync: uploadChallan } = useUploadPaymentChallan();
   
   const currencyOptions =
     currencyRates?.reduce((acc: Record<string, { label: string }>, currency) => {
@@ -300,7 +301,6 @@ const CurrencyDetails = ({ setAccordionState, viewMode }: CommonCreateTransactio
   useEffect(() => {
     const amountBeforeTcs = Number(transactionAmount || 0) + Number(gstAmount || 0);
     const isEducation = (purpose || '').toLowerCase() === 'education';
-    console.log('TCS Debug:', { amountBeforeTcs, purpose, panNumber, sourceofFund, declarationAmt, isEducation });
     if (
       mountedRef.current &&
       amountBeforeTcs > 0 &&
@@ -400,9 +400,9 @@ const CurrencyDetails = ({ setAccordionState, viewMode }: CommonCreateTransactio
       console.log('Cancel');
     };
   const handlePayment = () => {
-      setSelectedPayment({ id: 'current-transaction', amount: totalInrAmount });
-      setIsModalOpen(true);
-    };
+    setSelectedPayment(paymentData);
+    setIsModalOpen(true);
+  };
   const handleUploadSubmit = async (file: File) => {
     if (selectedPayment) {
       await uploadChallan({
@@ -410,10 +410,6 @@ const CurrencyDetails = ({ setAccordionState, viewMode }: CommonCreateTransactio
         file,
       });
     }
-  };
-  const uploadChallan = async (params: { id: string; file: File }) => {
-    // Placeholder for upload challan logic
-    console.log('Upload challan', params);
   };
   return (
     <>

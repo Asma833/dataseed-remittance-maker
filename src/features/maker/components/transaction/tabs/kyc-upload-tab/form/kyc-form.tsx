@@ -38,7 +38,6 @@ const KYCForm = ({ onFormSubmit }: { onFormSubmit: () => void }) => {
 
   const handleKycSubmit = handleSubmit(async (formdata: FieldValues) => {
     // Handle form submission logic here
-    console.log('Form submitted:', formdata);
     onFormSubmit();
   });
 

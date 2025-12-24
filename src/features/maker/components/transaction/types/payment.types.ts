@@ -95,6 +95,7 @@ export interface PaymentRecord {
 export interface AllTransaction {
   id: string;
   temp_id: string;
+  transaction_id:string;
   deal_code: string | null;
   transaction_type: string;
   currency_code: string;
@@ -116,6 +117,7 @@ export interface AllTransaction {
 export interface PaymentData {
   id: string;
   ref_no: string;
+  transaction_id:string;
   agent_ref_no: string;
   created_date: string;
   expiry_date: string;

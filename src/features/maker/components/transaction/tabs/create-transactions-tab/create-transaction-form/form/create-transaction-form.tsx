@@ -8,14 +8,16 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { createTransactionSchema, CreateTransactionFormData, CreateTransactionFormInput } from './common-schema';
 import { safeNumber, safeString, normalizeString } from '@/utils/form-helpers';
 import { useCompleteTransaction } from '../../../../hooks/useCompleteTransaction';
-import { CompleteTransactionRequest, TransactionDetails } from '../types/transaction.types';
+import { CompleteTransactionRequest, TransactionDetails, PaymentDetails } from '../types/transaction.types';
+
 import { getFormDefaultValues } from './form-defaults';
 import { panelFields } from './form-validation-fields';
+import { PaymentData } from '../../../../types/payment.types';
 
 type Props = {
   onCancel?: () => void;
   onSubmit?: (data: CreateTransactionFormData) => void;
-  initialData?: Partial<CreateTransactionFormInput>;
+  initialData?: Partial<CreateTransactionFormInput & { paymentDetails?: PaymentData }>;
   viewMode?: boolean;
 };
 
@@ -174,7 +176,7 @@ const CreateTransactionForm = ({ onCancel, onSubmit, initialData, viewMode }: Pr
 
   const showPrevious = currentTab !== 'panel1';
   const showNext = currentTab !== 'panel3';
-
+  
   return (
     <FormProvider {...form}>
       <form id="create-transaction-form" onSubmit={form.handleSubmit(handleSubmit)}>
@@ -193,7 +195,7 @@ const CreateTransactionForm = ({ onCancel, onSubmit, initialData, viewMode }: Pr
               )}
             </div>
           </div>
-          <CreateTransactionsAccordion accordionItems={accordionItems} {...(viewMode !== undefined ? { viewMode } : {})} />
+          <CreateTransactionsAccordion accordionItems={accordionItems} {...(viewMode !== undefined ? { viewMode } : {})} {...(initialData?.paymentDetails ? { paymentData: initialData.paymentDetails } : {})} />
         </div>
       </form>
     </FormProvider>
