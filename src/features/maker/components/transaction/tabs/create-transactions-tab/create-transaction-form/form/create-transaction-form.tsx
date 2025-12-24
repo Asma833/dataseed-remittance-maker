@@ -159,7 +159,7 @@ const CreateTransactionForm = ({ onCancel, onSubmit, initialData }: Props) => {
         },
       };
       const response = await mutateAsync(payload);
-      form.reset(initialData || {});
+      // form.reset(initialData || {});
     } catch (error) {
       console.error('Error creating transaction:', error);
 
@@ -178,10 +178,7 @@ const CreateTransactionForm = ({ onCancel, onSubmit, initialData }: Props) => {
     <FormProvider {...form}>
       <form id="create-transaction-form" onSubmit={form.handleSubmit(handleSubmit)}>
         <div>
-          <div className="flex justify-between mb-4 gap-2">
-            <Button variant="light" className="w-24" onClick={onCancel} type="button">
-              Cancel
-            </Button>
+          <div className="flex justify-end mb-4 gap-2">
             <div className="flex gap-2">
               {showPrevious && (
                 <Button variant="light" className="w-24" onClick={handlePrevious} type="button">

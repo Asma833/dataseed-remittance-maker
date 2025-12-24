@@ -94,8 +94,8 @@ const TransactionBasicDetails = ({ setAccordionState }: CommonCreateTransactionP
   }, [fxCurrency, specificCurrencyRate, setValue]);
 
   useEffect(() => {
-    if (companySettlementRate != null && addMargin != null) {
-      const calculatedCustomerRate = Number(fxAmount) * Number(companySettlementRate || 0) + Number(addMargin || 0);
+    if (fxAmount != null && addMargin != null) {
+      const calculatedCustomerRate = (Number(fxAmount) * Number(companySettlementRate || 0)) + Number(addMargin || 0);
       setValue('transactionDetails.customer_rate', calculatedCustomerRate);
     }
   }, [companySettlementRate, addMargin, setValue]);

@@ -14,11 +14,13 @@ import { useGstCalculation } from '@/features/maker/components/transaction/hooks
 import { useTcsCalculation } from '@/features/maker/components/transaction/hooks/useTcsCalculation';
 import { useGetAgentDetails } from '@/features/maker/components/transaction/hooks/useGetAgentDetails';
 import { toast } from 'sonner';
-
+import { GenericDialog } from '@/components/ui/generic-dialog';
+import Payments from '@/components/payments/Payments';
 
 const CurrencyDetails = ({ setAccordionState }: CommonCreateTransactionProps) => {
   const [isSaving, setIsSaving] = useState(false);
   const [isEditing, setIsEditing] = useState(false);
+  const [isModalOpen, setIsModalOpen] = useState(false);
   const mountedRef = useRef(false);
   const {
     control,
@@ -377,9 +379,18 @@ const handleShareTransactionDetails = () => {
     console.log('Cancel');
   };
 const handlePayment = () => {
-  console.log('Payment');
-};
+    setIsModalOpen(true);
+  };
+  //  const handleUploadSubmit = async (file: File) => {
+  //   if (selectedPayment) {
+  //     await uploadChallan({
+  //       id: selectedPayment.id,
+  //       file,
+  //     });
+  //   }
+  // };
   return (
+    <>
     <Spacer>
       <FormFieldRow rowCols={2} wrapperClassName="flex-row md:!flex-nowrap items-start">
         <div className="flex flex-wrap w-1/2 gap-4">
@@ -495,6 +506,15 @@ const handlePayment = () => {
           </div>
         </div>
     </Spacer>
+    {/* <GenericDialog open={isModalOpen} onOpenChange={setIsModalOpen} title="Payment" contentClassName='md:w-[40vw]'>
+         <Payments
+              setIsOpen={setIsModalOpen}
+              uploadScreen={false}
+              data={selectedPayment}
+              onSubmit={handleUploadSubmit}
+            />
+    </GenericDialog> */}
+    </>
   );
 };
 
