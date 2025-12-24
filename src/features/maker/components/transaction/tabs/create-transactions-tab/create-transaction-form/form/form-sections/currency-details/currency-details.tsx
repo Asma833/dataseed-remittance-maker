@@ -370,21 +370,15 @@ const handleSave = async () => {
       formElement.requestSubmit();
     }
   };
-
-  //  const handleSave = async () => {
-  //   const isValid = await trigger();
-  //   if (!isValid) {
-  //     return;
-  //   }
-  //   setIsSaving(true);
-  //   try {
-  //     // TODO: Implement actual save functionality, e.g., using useCreateTransaction hook
-  //     await new Promise((resolve) => setTimeout(resolve, 1000));
-  //   } finally {
-  //     setIsSaving(false);
-  //   }
-  // };
-
+const handleShareTransactionDetails = () => {
+    console.log('Share Transaction Details');
+  };
+  const handleCancel = () => {
+    console.log('Cancel');
+  };
+const handlePayment = () => {
+  console.log('Payment');
+};
   return (
     <Spacer>
       <FormFieldRow rowCols={2} wrapperClassName="flex-row md:!flex-nowrap items-start">
@@ -483,11 +477,23 @@ const handleSave = async () => {
           />
         </div>
       </FormFieldRow>
-      <div className="flex justify-center items-center">
-        <Button variant="secondary" onClick={handleSave} disabled={isSaving} className="mx-2 w-24">
-          {isSaving ? 'Saving...' : 'Save'}
-        </Button>
-      </div>
+     
+      <div className="mt-16 flex flex-col items-center gap-10"> 
+          <div className="flex justify-center gap-1 flex-wrap">
+              <Button type="button" onClick={handleCancel} variant="light"> 
+              Cancel 
+            </Button>
+            <Button variant="secondary" onClick={handleSave} disabled={isSaving} className="mx-2 w-24">
+              {isSaving ? 'Saving...' : 'Save'}
+            </Button>
+              <Button type="button" onClick={handleShareTransactionDetails} variant="secondary"> 
+              Share Transaction Details PDF 
+            </Button> 
+              <Button type="button" onClick={handlePayment} variant="secondary"> 
+              Payment 
+            </Button>
+          </div>
+        </div>
     </Spacer>
   );
 };
