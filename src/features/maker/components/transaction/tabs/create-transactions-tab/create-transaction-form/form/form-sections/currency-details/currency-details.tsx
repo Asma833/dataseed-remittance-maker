@@ -17,6 +17,8 @@ import { toast } from 'sonner';
 import { GenericDialog } from '@/components/ui/generic-dialog';
 import Payments from '@/components/payments/Payments';
 import { useUploadPaymentChallan } from '@/features/maker/components/transaction/hooks/useUploadPaymentChallan';
+import jsPDF from 'jspdf';
+import autoTable from 'jspdf-autotable';
 
 const CurrencyDetails = ({ setAccordionState, viewMode, paymentData }: CommonCreateTransactionProps) => {
   const [isSaving, setIsSaving] = useState(false);
@@ -317,7 +319,7 @@ const CurrencyDetails = ({ setAccordionState, viewMode, paymentData }: CommonCre
       tcsTimeoutRef.current = setTimeout(async () => {
         try {
           const response = await calculateTcs({
-            purpose: "Private Visit",
+            purpose: purpose || "Private Visit",
             panNumber,
             sourceofFund,
             declarationAmt: isEducation ? declarationAmt : '',
@@ -394,10 +396,44 @@ const CurrencyDetails = ({ setAccordionState, viewMode, paymentData }: CommonCre
       }
     };
   const handleShareTransactionDetails = () => {
-      console.log('Share Transaction Details');
-    };
+    if (!invoiceRateTable) {
+      toast.error('No rate table data available');
+      return;
+    }
+
+    const doc = new jsPDF();
+
+    // Add title
+    doc.setFontSize(18);
+    doc.text('Transaction Rate Details', 14, 20);
+
+    // Prepare table data
+    const tableData = [
+      ['Transaction Value', invoiceRateTable.transaction_value?.company_rate || 0, invoiceRateTable.transaction_value?.agent_mark_up || 0, invoiceRateTable.transaction_value?.rate || 0],
+      ['Remittance Charges', invoiceRateTable.remittance_charges?.company_rate || 0, invoiceRateTable.remittance_charges?.agent_mark_up || 0, invoiceRateTable.remittance_charges?.rate || 0],
+      ['Nostro Charges', invoiceRateTable.nostro_charges?.company_rate || 0, invoiceRateTable.nostro_charges?.agent_mark_up || 0, invoiceRateTable.nostro_charges?.rate || 0],
+      ['Other Charges', invoiceRateTable.other_charges?.company_rate || 0, invoiceRateTable.other_charges?.agent_mark_up || 0, invoiceRateTable.other_charges?.rate || 0],
+      ['Transaction Amount', '', '', invoiceRateTable.transaction_amount?.rate || 0],
+      ['GST Amount', '', '', invoiceRateTable.gst_amount?.rate || 0],
+      ['TCS', '', '', invoiceRateTable.tcs?.rate || 0],
+      ['Total INR Amount', '', '', invoiceRateTable.total_inr_amount?.rate || 0],
+    ];
+
+    // Add table
+    autoTable(doc, {
+      head: [['Description', 'Company Rate', 'Agent Mark Up', 'Total Rate']],
+      body: tableData,
+      startY: 30,
+      styles: { fontSize: 10 },
+      headStyles: { fillColor: [41, 128, 185] },
+    });
+
+    // Save the PDF
+    doc.save('transaction-rate-details.pdf');
+    toast.success('PDF downloaded successfully');
+  };
     const handleCancel = () => {
-      console.log('Cancel');
+      // Handle cancel action
     };
   const handlePayment = () => {
     setSelectedPayment(paymentData);
