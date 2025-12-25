@@ -35,6 +35,14 @@ export interface KycDetails {
   paid_by: string | null;
   created_at: string;
   updated_at: string;
+  passport_issue_date: string | null;
+  passport_expiry_date: string | null;
+  beneficiary_name: string | null;
+  intermediary_bank_details: string | null;
+  intermediary_bank_account_number: string | null;
+  intermediary_bank_swift_code: string | null;
+  intermediary_bank_name: string | null;
+  intermediary_bank_address: string | null;
 }
 
 export interface Transaction {
@@ -68,6 +76,7 @@ export interface Transaction {
   agent_markup_remittance_charges?: string | null;
   agent_markup_nostro_charges?: string | null;
   agent_markup_other_charges?: string | null;
+  swift_copy: string | null;
   kyc_details: KycDetails | null;
 }
 
@@ -148,3 +157,4 @@ export interface UploadPaymentChallanResponse {
   message: string;
   url?: string;
 }
+
