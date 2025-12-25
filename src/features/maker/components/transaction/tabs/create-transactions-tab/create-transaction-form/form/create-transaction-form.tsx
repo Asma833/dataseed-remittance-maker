@@ -8,6 +8,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { createTransactionSchema, CreateTransactionFormData, CreateTransactionFormInput } from './common-schema';
 import { safeNumber, safeString, normalizeString } from '@/utils/form-helpers';
 import { useCompleteTransaction } from '../../../../hooks/useCompleteTransaction';
+import { useUpdateTransaction } from '../../../../hooks/useUpdateTransaction';
 import { CompleteTransactionRequest, TransactionDetails, PaymentDetails } from '../types/transaction.types';
 
 import { getFormDefaultValues } from './form-defaults';
@@ -17,7 +18,7 @@ import { PaymentData } from '../../../../types/payment.types';
 type Props = {
   onCancel?: () => void;
   onSubmit?: (data: CreateTransactionFormData) => void;
-  initialData?: Partial<CreateTransactionFormInput & { paymentDetails?: PaymentData }>;
+  initialData?: Partial<CreateTransactionFormInput & { paymentDetails?: PaymentData; id?: string }>;
   viewMode?: boolean;
 };
 
@@ -25,7 +26,8 @@ const CreateTransactionForm = ({ onCancel, onSubmit, initialData, viewMode }: Pr
   const { accordionState, setAccordionState } = useAccordionStateProvider();
   const currentTab = accordionState.currentActiveTab;
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const { mutateAsync } = useCompleteTransaction();
+  const { mutateAsync: createTransaction } = useCompleteTransaction();
+  const { mutateAsync: updateTransaction } = useUpdateTransaction();
 
   const defaultValues = useMemo(() => getFormDefaultValues(initialData), [initialData]);
   const form = useForm<CreateTransactionFormInput, unknown, CreateTransactionFormData>({
@@ -161,7 +163,21 @@ const CreateTransactionForm = ({ onCancel, onSubmit, initialData, viewMode }: Pr
           amount: 875088,
         },
       };
-      const response = await mutateAsync(payload);
+
+      let response;
+      if (viewMode) {
+        // Update mode
+
+        const transactionId = initialData?.id;
+        console.log(transactionId,"transactionId++++++++++++++++++")
+        if (!transactionId) {
+          throw new Error('Transaction ID is required for update');
+        }
+        response = await updateTransaction({ id: transactionId, data: payload });
+      } else {
+        // Create mode
+        response = await createTransaction(payload);
+      }
       // form.reset(initialData || {});
     } catch (error) {
       console.error('Error creating transaction:', error);

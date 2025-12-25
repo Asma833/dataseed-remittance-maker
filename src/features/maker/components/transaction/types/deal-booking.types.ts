@@ -29,9 +29,9 @@ export interface DealBookingResponse {
   // Add other response fields as needed
 }
 
-export interface CompleteDealRequest {
-  // No body required, id is in path
-}
+import { CompleteTransactionRequest } from '../tabs/create-transactions-tab/create-transaction-form/types/transaction.types';
+
+export type CompleteDealRequest = CompleteTransactionRequest;
 
 export interface CompleteDealResponse {
   success: boolean;

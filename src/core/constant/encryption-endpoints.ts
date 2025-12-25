@@ -127,6 +127,11 @@ export const ENDPOINT_MATCHING_RULES: EndpointRulesConfig = {
     endpoint: API.REMITTANCE.TCS_CALCULATION,
     matchType: 'standard' as const,
     description: 'Tcs Calculation',
+  },
+  'update-transaction':{
+    endpoint: `/remittance/deals/`,
+    matchType: 'standard' as const,
+    description: 'Update Transaction',
   }
 } as const;
 
