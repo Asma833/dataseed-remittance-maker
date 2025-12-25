@@ -2,7 +2,6 @@ import { useState, useMemo } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { GetPaymentTableColumn } from './payment-table-column';
 import { DialogWrapper } from '@/components/common/dialog-wrapper';
-import { Order } from '@/types/common/updateIncident.types';
 import Payments from '@/components/payments/Payments';
 import { DataTable } from '@/components/table/data-table';
 import { staticConfig } from '@/components/table/config';
@@ -60,7 +59,6 @@ const PaymentStatus = () => {
 
   const handleViewTransaction = (rowData:any) => {
     const transaction = rowData.transaction;
-    console.log(rowData?.id,"rowData======================")
     const kyc = transaction.kyc_details;
     const initialData = {
       id: rowData?.id,

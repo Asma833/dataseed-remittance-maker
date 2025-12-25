@@ -169,7 +169,6 @@ const CreateTransactionForm = ({ onCancel, onSubmit, initialData, viewMode }: Pr
         // Update mode
 
         const transactionId = initialData?.id;
-        console.log(transactionId,"transactionId++++++++++++++++++")
         if (!transactionId) {
           throw new Error('Transaction ID is required for update');
         }
