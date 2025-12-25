@@ -23,8 +23,7 @@ const PaymentStatus = () => {
       deal.payment_records.map((payment) => {
         const transaction = deal.transactions[0]; // Assuming one transaction per deal
         return {
-          id: deal.id,
-          payment_id: payment.id || '-',
+          id: payment.id,
           ref_no: transaction?.company_ref_number || '-',
           agent_ref_no: transaction?.agent_ref_number || '-',
           created_date: deal.created_at || '-',
@@ -63,7 +62,6 @@ const PaymentStatus = () => {
     const initialData = {
       id: rowData?.id,
       transactionDetails: {
-        id:rowData?.id,
         company_reference_number: transaction.company_ref_number || '',
         agent_reference_number: transaction.agent_ref_number || '',
         purpose: transaction.purpose || '',
