@@ -1,8 +1,9 @@
 import { DataTable } from "@/components/table/data-table";
 import { RejectionTableColumnsConfig } from "./rejection-table-columns";
 import { useMemo } from 'react';
-import { useRejectionSummary } from '@/features/maker/hooks/useRejectionSummary';
+
 import { toast } from 'sonner';
+import { useRejectionSummary } from "../../../hooks/useRejectionSummary";
 
 interface RejectionTableProps {
   transactionId?: string;
@@ -15,7 +16,7 @@ const RejectionTable = ({ transactionId }: RejectionTableProps) => {
 
   const tableData = useMemo(() => {
     const documents = data?.documents ?? [];
-    return documents.flatMap((doc) => {
+    return documents.flatMap((doc:any) => {
       const latest = doc.history?.[0];
       if (!latest) {
         return [
