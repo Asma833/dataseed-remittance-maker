@@ -321,7 +321,7 @@ const CurrencyDetails = ({ setAccordionState, viewMode, paymentData }: CommonCre
             purpose: "Personal Visit / Leisure Travel",
             panNumber,
             sourceofFund,
-            declarationAmt: isEducation ? declarationAmt : '',
+            declarationAmt: isEducation ? declarationAmt : "0",
             txnAmount: amountBeforeTcs.toString(),
           });
           if (response.statuscode === "200" && response.responsecode === "success") {

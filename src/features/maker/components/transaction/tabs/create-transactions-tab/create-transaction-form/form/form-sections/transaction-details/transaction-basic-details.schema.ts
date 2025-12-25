@@ -30,7 +30,7 @@ export const transactionBasicDetailsSchema = z
       .min(1, 'FX currency is required')
       .regex(CURRENCY_CODE_REGEX, 'Invalid currency code (must be 3 uppercase letters)'),
     fx_amount: z.coerce.number().min(1, 'FX amount is required'),
-    company_settlement_rate: z.coerce.number().positive('Company settlement rate must be positive'),
+    company_settlement_rate: z.coerce.number().min(1,'Company settlement rate is required'),
     add_margin: z.coerce.number().min(1, 'Add margin is required'),
     customer_rate: z.coerce.number(),
     nostro_charges: z.coerce.number().min(1, 'Nostro charges is required'),
@@ -49,7 +49,6 @@ export const transactionBasicDetailsSchema = z
     applicant_dob: z.coerce
       .date()
       .max(new Date(), 'Date of birth cannot be in the future')
-      .refine((date) => new Date().getFullYear() - date.getFullYear() >= 18, 'Must be at least 18 years old')
       .optional(),
     applicant_email: z.string().email('Invalid email format').max(100, 'Email too long').optional().or(z.literal('')),
     applicant_mobile_number: z
