@@ -1,6 +1,6 @@
 
 
-import { Transaction, PaymentRecord, KycDetails } from '../types/payment.types';
+import { Transaction, PaymentRecord } from '../types/payment.types';
 
 interface DealBookingData {
   id: string;
