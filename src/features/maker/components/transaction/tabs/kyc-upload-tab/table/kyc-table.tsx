@@ -2,14 +2,29 @@ import { DataTable } from '@/components/table/data-table';
 import { useNavigate } from 'react-router-dom';
 import { KycTableColumnsConfig } from './kyc-table-columns';
 import { useGetPaymentDetails } from '../../../hooks/useGetPaymentDetails';
-import { AllTransaction } from '../../../types/payment.types';
+import { AllTransaction, PaymentData } from '../../../types/payment.types';
 import { useMemo } from 'react';
+import { mapRowDataToInitialData } from '../../../utils/transaction-utils';
+
+type KycTableRow = {
+  company_reference_no: string;
+  agent_reference_no: string;
+  order_date: string;
+  expiry_date: string;
+  applicant_name: string;
+  applicant_pan: string;
+  transaction_type: string;
+  purpose: string;
+  kyc_type: string;
+  kyc_status: string;
+  deal: AllTransaction;
+};
 
 const KYCTable = ({ onUploadClick }: { onUploadClick: (isReupload: boolean) => void }) => {
   const navigate = useNavigate();
   const { data, isLoading } = useGetPaymentDetails();
 
-  const mappedData = useMemo(() => {
+  const mappedData: KycTableRow[] = useMemo(() => {
     if (!data || !Array.isArray(data)) return [];
     return (data as AllTransaction[]).flatMap((deal: AllTransaction) =>
       deal.transactions.map((transaction) => ({
@@ -23,16 +38,21 @@ const KYCTable = ({ onUploadClick }: { onUploadClick: (isReupload: boolean) => v
         purpose: transaction.purpose || '-',
         kyc_type: 'VKYC',
         kyc_status: transaction.kyc_status || 'pending',
+        deal,
       }))
     );
   }, [data]);
-
+const handleViewTransaction = (rowData: AllTransaction)=> {
+    const initialData = mapRowDataToInitialData(rowData);
+    return navigate('../create-transactions', { state: { initialData } });
+  };
   const columns = KycTableColumnsConfig({
     navigate,
     onUploadClick: (isReupload: boolean) => {
       // Pass the isReupload to parent
       onUploadClick(isReupload);
     },
+    handleViewTransaction
   });
 
   return (

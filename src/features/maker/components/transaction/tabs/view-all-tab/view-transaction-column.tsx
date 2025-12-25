@@ -114,7 +114,7 @@ export const GetViewAllTransactionTableColumns = () => {
       meta: { className: 'min-w-0 p-2' },
       cell: ({ row }: { row: any }) => (
         <SignLinkButton
-          id={row.company_reference_no}
+          id={row.ref_no}
           onClick={() => {}}
           tooltipText="Download Swift Copy"
           buttonType="download"

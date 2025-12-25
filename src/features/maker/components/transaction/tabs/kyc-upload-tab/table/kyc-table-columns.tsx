@@ -6,13 +6,31 @@ import TooltipImageButton from '@/components/common/tooltip-image-button';
 import Reupload from '@/assets/icons/re-upload.svg';
 import upload from '@/assets/icons/upload.svg';
 import { SignLinkButton } from '@/components/cell/table/SignLinkButton';
+import { AllTransaction } from '../../../types/payment.types';
+import { Order } from '@/components/cell/types/updateIncident.types';
+
+type KycTableRow = {
+  company_reference_no: string;
+  agent_reference_no: string;
+  order_date: string;
+  expiry_date: string;
+  applicant_name: string;
+  applicant_pan: string;
+  transaction_type: string;
+  purpose: string;
+  kyc_type: string;
+  kyc_status: string;
+  deal: AllTransaction;
+};
 
 export const KycTableColumnsConfig = ({
   navigate,
   onUploadClick,
+  handleViewTransaction
 }: {
   navigate: (url: string) => void;
   onUploadClick: (isReupload: boolean) => void;
+  handleViewTransaction: (rowData: any) => void;
 }) => {
   return [
     {
@@ -87,7 +105,7 @@ export const KycTableColumnsConfig = ({
       id: 'kyc_status',
       header: 'KYC Status',
       meta: { className: 'min-w-0 p-2' },
-      cell: (props: { row: any; value: any }) => <KycStatusCell rowData={props.row} />,
+      cell: (props: { row: any; value: any }) => <KycStatusCell rowData={{ kyc_status: props.row.kyc_status } as Order} />,
     },
 
     {
@@ -95,10 +113,10 @@ export const KycTableColumnsConfig = ({
       id: 'view_action',
       header: 'View',
       meta: { className: 'min-w-0 p-2' },
-      cell: (props: { row: any; value: any }) => (
+      cell: ({ row }: { row: KycTableRow }) => (
         <SignLinkButton
-          id={props.row.EBIX_ref_no}
-          onClick={() => navigate(``)}
+          id={row.deal.id}
+          onClick={() => handleViewTransaction(row.deal)}
           tooltipText="View"
           buttonType="view"
           buttonIconType="view"

@@ -1,8 +1,13 @@
 
 
 
-export const mapRowDataToInitialData = (rowData:any) => {
-  const transaction = rowData.transactions[0];
+import { CreateTransactionFormInput } from '../tabs/create-transactions-tab/create-transaction-form/form/common-schema';
+import { PaymentData, AllTransaction } from '../types/payment.types';
+
+type InitialData = Partial<CreateTransactionFormInput & { paymentDetails?: PaymentData | AllTransaction; id?: string }>;
+
+export const mapRowDataToInitialData = (rowData: any): InitialData => {
+  const transaction = rowData.transactions ? rowData.transactions[0] : rowData.transaction;
   const kyc = transaction.kyc_details;
   return {
     id: rowData?.id,
@@ -59,7 +64,7 @@ export const mapRowDataToInitialData = (rowData:any) => {
       fx_currency: transaction.fx_currency || '',
       fx_amount: transaction.fx_amount || '',
       settlement_rate: rowData.settlement_rate || '',
-      add_margin: rowData.margin_amount,
+      add_margin: rowData.margin_amount || '',
       customer_rate: rowData.customer_rate || '',
       declared_education_loan_amount: kyc?.declared_education_loan_amount || '',
       previous_transaction_amount: kyc?.previous_transaction_amount || '',

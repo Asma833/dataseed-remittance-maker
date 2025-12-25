@@ -1,18 +1,37 @@
+import { useMemo } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { GetViewAllTransactionTableColumns } from './view-transaction-column';
 import { DataTable } from '@/components/table/data-table';
 import { staticConfig } from '@/components/table/config';
 import { useGetPaymentDetails } from '../../hooks/useGetPaymentDetails';
-import { AllTransaction } from '../../types/payment.types';
-import { useMemo } from 'react';
+import { AllTransaction, PaymentData } from '../../types/payment.types';
+import { mapRowDataToInitialData } from '../../utils/transaction-utils';
+
+interface ViewAllTransactionData extends PaymentData {
+  order_date: string;
+  fx_rate: string;
+  e_sign_status: string;
+  e_sign_link: string | null;
+  kyc_upload_status: string;
+  v_kyc_status: string;
+  v_kyc_link: string | null;
+  completion_date: string | null;
+  swift_copy: string | null;
+  is_esign_required: boolean;
+  is_v_kyc_required: boolean;
+  transaction_status: string;
+}
 
 const ViewAllTransactions = () => {
   const { data, isLoading, error } = useGetPaymentDetails();
+  const navigate = useNavigate();
 
-  const mappedData = useMemo(() => {
+  const mappedData: ViewAllTransactionData[] = useMemo(() => {
     if (!data || !Array.isArray(data)) return [];
     return (data as AllTransaction[]).flatMap((deal: AllTransaction) =>
-      deal.transactions.map((transaction) => ({
+      deal.transactions.map((transaction): ViewAllTransactionData => ({
         id: transaction.id || '-',
+        transaction_id: transaction.transaction_id || '-',
         ref_no: transaction.company_ref_number || '-',
         agent_ref_no: transaction.agent_ref_number || '-',
         created_date: transaction.order_date || deal.created_at || '-',
@@ -48,7 +67,7 @@ const ViewAllTransactions = () => {
       }))
     );
   }, [data]);
-
+  
   // Table columns
   const tableColumns = GetViewAllTransactionTableColumns();
 
@@ -69,7 +88,7 @@ const ViewAllTransactions = () => {
 
   // Table actions
   const tableActions = {};
-
+   
   return (
     <div className="data-table-wrap">
       <DataTable columns={tableColumns} data={mappedData ?? []} config={tableConfig} actions={tableActions} />
