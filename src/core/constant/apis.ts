@@ -82,7 +82,8 @@ export const API = {
     GST_CALCULATION:`/remittance/deals/gst-tcs`,
     TCS_CALCULATION:`/remittance/deals/new-tcs`,
     GET_AGENT_BY_ID:(id: string) =>`/agents/${id}`,
-    DOCUMENTS_REJECTION: (id: string) => `/remittance/transactions/documents/${id}/rejection`
+    DOCUMENTS_REJECTION: (id: string) => `/remittance/transactions/documents/${id}/rejection`,
+    DOCUMENTS_UPLOAD: `/remittance/transactions/documents/upload`,
   },
 } as const;
 
