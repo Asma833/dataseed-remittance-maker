@@ -57,9 +57,9 @@ const PaymentStatus = () => {
     setIsModalOpen(true);
   };
 
-  const handleViewTransaction = (rowData: PaymentData) => {
+  const handleViewTransaction = (rowData: PaymentData)=> {
     const initialData = mapRowDataToInitialData(rowData);
-    navigate('../create-transactions', { state: { initialData } });
+    return navigate('../create-transactions', { state: { initialData } });
   };
 
   const handleUploadSubmit = async (file: File) => {
