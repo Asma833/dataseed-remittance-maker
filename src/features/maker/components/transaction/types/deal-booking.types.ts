@@ -28,3 +28,12 @@ export interface DealBookingResponse {
   status: string;
   // Add other response fields as needed
 }
+
+export interface CompleteDealRequest {
+  // No body required, id is in path
+}
+
+export interface CompleteDealResponse {
+  success: boolean;
+  message: string;
+}

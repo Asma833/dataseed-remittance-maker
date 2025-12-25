@@ -77,6 +77,7 @@ export const API = {
   REMITTANCE: {
     CREATE_TRANSACTION: `/remittance/deals/complete`,
     GET_TRANSACTION: `/remittance/deals/`,
+    COMPLETE_DEAL: (id: string) => `/remittance/deals/${id}/complete`,
     UPLOAD_PAYMENT_CHALLAN: (id: string) => `/remittance/transactions/documents/payment/challan/${id}`,
     GST_CALCULATION:`/remittance/deals/gst-tcs`,
     TCS_CALCULATION:`/remittance/deals/new-tcs`,
