@@ -9,7 +9,7 @@ export const GetPaymentTableColumn = ({ handlePayment, handleViewTransaction }: 
     { id: 'ref_no', header: 'Ref. No', accessorKey: 'ref_no', meta: { className: 'min-w-0 p-2' } },
     { id: 'agent_ref_no', header: 'Agent Ref. No', accessorKey: 'agent_ref_no', meta: { className: 'min-w-0 p-2' } },
     {
-      id: 'order_date',
+      id: 'created_date',
       header: 'Order Date',
       accessorKey: 'created_date',
       meta: { className: 'min-w-0 p-2' },

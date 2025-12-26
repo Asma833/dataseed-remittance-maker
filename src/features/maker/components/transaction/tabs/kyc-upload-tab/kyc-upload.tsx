@@ -6,9 +6,11 @@ import RejectionTable from './table/rejection-table';
 const KYCUpload = () => {
   const [showForm, setShowForm] = useState(false);
   const [isReupload, setIsReupload] = useState(false);
+  const [transaction, setTransaction] = useState<any>(null);
 
-  const handleUploadClick = (reupload: boolean) => {
+  const handleUploadClick = (reupload: boolean, transaction: any) => {
     setIsReupload(reupload);
+    setTransaction(transaction);
     setShowForm(true);
   };
 
@@ -16,7 +18,7 @@ const KYCUpload = () => {
     <>
       {showForm ? (
         <>
-          <KYCForm onFormSubmit={() => setShowForm(false)} />
+          <KYCForm onFormSubmit={() => setShowForm(false)} onCancel={() => setShowForm(false)} transaction={transaction} />
           {isReupload && <RejectionTable />}
         </>
       ) : (

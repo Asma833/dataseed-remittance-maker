@@ -81,7 +81,7 @@ const PaymentStatus = () => {
       ...staticConfig.filters!,
       dateRangeFilter: {
         enabled: true,
-        columnId: 'created_at',
+        columnId: 'created_date',
         useMuiDateRangePicker: true,
       },
     },

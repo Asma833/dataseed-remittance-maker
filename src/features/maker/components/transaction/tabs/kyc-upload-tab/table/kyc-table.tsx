@@ -2,10 +2,11 @@ import { DataTable } from '@/components/table/data-table';
 import { useNavigate } from 'react-router-dom';
 import { KycTableColumnsConfig } from './kyc-table-columns';
 import { useGetPaymentDetails } from '../../../hooks/useGetPaymentDetails';
+import { AllTransaction } from '../../../types/payment.types';
 
 const KYCTable = ({ onUploadClick }: { onUploadClick: (isReupload: boolean, transaction: any) => void }) => {
   const navigate = useNavigate();
-  const { data: kycData, isLoading, } = useGetPaymentDetails();
+  const { data: kycData, isLoading, } = useGetPaymentDetails<AllTransaction[]>();
 
   const columns = KycTableColumnsConfig({
     navigate,
