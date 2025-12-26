@@ -43,7 +43,7 @@ const RejectionTable = ({ transactionId }: RejectionTableProps) => {
 
   if (isError) {
     console.error('Failed to load rejection summary:', error);
-    toast.error('Failed to load rejection summary');
+   // toast.error('Failed to load rejection summary');
   }
 
   return (
