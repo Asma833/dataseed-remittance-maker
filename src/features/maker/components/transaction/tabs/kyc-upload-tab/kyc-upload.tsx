@@ -3,8 +3,10 @@ import KYCTable from './table/kyc-table';
 import KYCForm from './form/kyc-form';
 import RejectionTable from './table/rejection-table';
 import { DealsResponseTransaction } from '../../types/transaction.types';
-import { DocumentItem, HistoryItem } from '../../types/rejection-doc-summary.types';
+import { FlattenedDocumentItem } from '../../types/rejection-doc-summary.types';
 import { useRejectionSummary } from '../../hooks/useRejectionSummary';
+import { TransactionStatusEnum } from '@/types/enums';
+import { RejectedDocument, RejectionHistoryItem } from '../../api/rejectionSummaryApi';
 
 const KYCUpload = () => {
   const [showForm, setShowForm] = useState(false);
@@ -14,17 +16,26 @@ const KYCUpload = () => {
   const { data: rejectionSumData, isLoading, isError, error } = useRejectionSummary(transaction?.id);
 
   // Flattening function - memoized to prevent infinite loop
-  const flattenedRejectionResData = useMemo(() => {
-    return rejectionSumData?.documents?.flatMap((doc: DocumentItem) => {
-      return (doc.history ?? []).map((hist: HistoryItem) => ({
-        key: `${doc.document_id}-${hist.created_at}`,
-        document_id: doc.document_id,
-        document_name: doc.document_name,
-        rejected_by: hist.rejected_by,
-        rejection_reason: hist.rejection_reason,
-        remarks: hist.remarks,
-        rejection_date: hist.created_at,
-      }));
+  const flattenedRejectionResData = useMemo((): FlattenedDocumentItem[] => {
+    if (!rejectionSumData?.documents) return [];
+    
+    return rejectionSumData.documents.flatMap((doc: RejectedDocument) => {
+      return (doc.history ?? []).map((hist: RejectionHistoryItem): FlattenedDocumentItem => {
+        const item: FlattenedDocumentItem = {
+          document_id: doc.id,
+          document_name: doc.document_name,
+          rejected_by: hist.rejected_by,
+          rejection_reason: hist.rejection_reason,
+          created_at: hist.created_at,
+        };
+        
+        // Only add remarks if it exists to avoid undefined assignment
+        if (hist.remarks !== undefined) {
+          item.remarks = hist.remarks;
+        }
+        
+        return item;
+      });
     });
   }, [rejectionSumData]);
 
@@ -42,7 +53,7 @@ const KYCUpload = () => {
             transaction={transaction ?? ({} as DealsResponseTransaction)}
             onFormSubmit={() => setShowForm(false)}
             onCancel={() => setShowForm(false)}
-            rejectedDocuments={flattenedRejectionResData ?? []}
+            rejectedDocuments={flattenedRejectionResData}
             isRejected={isRejected}
           />
           {isRejected && transaction?.id && (
