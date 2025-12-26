@@ -61,8 +61,7 @@ export const transactionBasicDetailsSchema = z
       .string()
       .min(1, 'Source of funds is required')
       .max(200, 'Description too long')
-      .regex(NO_LEADING_HYPHEN_OR_SPACE, 'Description cannot start with hyphen or space')
-      .or(z.literal('')),
+      .regex(NO_LEADING_HYPHEN_OR_SPACE, 'Description cannot start with hyphen or space'),
     paid_by: z
       .string()
       .max(100, 'Paid by too long')
