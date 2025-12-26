@@ -38,6 +38,8 @@ const KYCForm = ({
 
   const handleUploadOnFileChange = useCallback(
     async ({ file, documentId }: { file: File; documentId: string }) => {
+      console.log('handleUploadOnFileChange called with:', { file: file.name, documentId });
+      
       if (!transaction?.id) {
         toast.error('Missing transaction id. Please reopen the KYC upload form from the table.');
         return;
@@ -70,6 +72,7 @@ const KYCForm = ({
         required: Boolean(doc.is_mandatory),
         placeholder: 'Upload Document',
         documentId: doc.document_id,
+        accept: '.pdf,.jpg,.jpeg,.png',
       };
 
       const documentId = doc.document_id || doc.id;
