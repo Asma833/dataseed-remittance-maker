@@ -59,7 +59,7 @@ export function DataTable<T>({
   useEffect(() => {
     const timer = setTimeout(() => {
       setShowLoader(false);
-    }, 3000);
+    }, 1500);
     return () => clearTimeout(timer);
   }, []);
 
