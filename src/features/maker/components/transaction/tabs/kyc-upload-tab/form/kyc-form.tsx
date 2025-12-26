@@ -148,7 +148,7 @@ const KYCForm = ({
             ) : dynamicDocumentFields.length > 0 ? (
               <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 px-1">
                 {dynamicDocumentFields.map((field: any) => {
-                  const hasDocumentId = rejectedDocuments.find((doc) => doc.document_id === field.documentId);
+                  const hasDocumentId = rejectedDocuments?.find((doc) => doc.document_id === field.documentId);
 
                   if (isRejected) {
                     return (
