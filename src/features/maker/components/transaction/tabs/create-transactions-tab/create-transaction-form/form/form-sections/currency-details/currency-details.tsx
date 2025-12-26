@@ -1,6 +1,7 @@
 import Spacer from '@/components/form/wrapper/spacer';
 import { currencyDetailsConfig } from './currency-details.config';
 import RateTable from '../../../../../../../rate-table/rate-table';
+import { useNavigate } from 'react-router-dom';
 import { CommonCreateTransactionProps } from '@/features/maker/components/transaction/types/create-transaction.types';
 import { useState, useEffect, useRef } from 'react';
 import { useFormContext, useFormState, useWatch } from 'react-hook-form';
@@ -24,10 +25,12 @@ const CurrencyDetails = ({ setAccordionState, viewMode, paymentData }: CommonCre
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedPayment, setSelectedPayment] = useState<any>(null);
   const mountedRef = useRef(false);
+  const navigate = useNavigate();
   const {
     control,
     trigger,
     setValue,
+    reset,
   } = useFormContext();
   const { errors } = useFormState();
   const { data: currencyRates, isLoading: currencyLoading } = useGetCurrencyRates();
@@ -392,7 +395,12 @@ const CurrencyDetails = ({ setAccordionState, viewMode, paymentData }: CommonCre
     toast.success('PDF downloaded successfully');
   };
     const handleCancel = () => {
-      // Handle cancel action
+      // Reset the form to its initial state
+      reset();
+      // Reset accordion to first panel if setAccordionState is available
+      if (setAccordionState) {
+        setAccordionState({ currentActiveTab: 'panel1' });
+      }
     };
   const handlePayment = () => {
     setSelectedPayment(paymentData);
@@ -406,6 +414,11 @@ const CurrencyDetails = ({ setAccordionState, viewMode, paymentData }: CommonCre
       });
     }
   };
+  const handleBack = () => {
+    navigate(-1);
+  };
+  
+
   return (
     <>
     <Spacer>
@@ -510,19 +523,29 @@ const CurrencyDetails = ({ setAccordionState, viewMode, paymentData }: CommonCre
           <div className="flex justify-center gap-1 flex-wrap">
          
               <>
+               {viewMode && (
+              <Button type="button" onClick={handleBack} variant="light">
+                  Back
+                </Button>
+                )}
+                 {!viewMode && (
                 <Button type="button" onClick={handleCancel} variant="light">
                   Cancel
                 </Button>
+                 )}
                 <Button variant="secondary" onClick={handleSave} disabled={isSaving} className="mx-2 w-24">
                   {isSaving ? (viewMode ? 'Updating...' : 'Saving...') : (viewMode ? 'Update' : 'Save')}
                 </Button>
               </>
               {viewMode && (
               <>
-                <Button type="button" onClick={handleShareTransactionDetails} variant="secondary">
+              <Button type="button" onClick={handleBack} variant="light">
+                  Back
+                </Button>
+                <Button type="button" onClick={handleShareTransactionDetails} variant="secondary" className="mx-2">
                   Share Transaction Details PDF
                 </Button>
-                <Button type="button" onClick={handlePayment} variant="secondary">
+                <Button type="button" onClick={handlePayment} variant="secondary" className="mx-2">
                   Payment
                 </Button>
               </>
