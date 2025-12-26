@@ -36,7 +36,7 @@ export function ConfirmationAlert({
         </AlertDialogHeader>
         <AlertDialogFooter>
           <AlertDialogCancel>NO</AlertDialogCancel>
-          <AlertDialogAction onClick={onConfirm} disabled={isLoading}>
+          <AlertDialogAction onClick={onConfirm} disabled={isLoading} >
             {isLoading ? 'Loading...' : 'YES'}
           </AlertDialogAction>
         </AlertDialogFooter>
