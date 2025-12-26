@@ -12,11 +12,10 @@ import { kycDocumentsConfig } from './kyc-form.config';
 import { KycFormSchema } from './kyc-form.schema';
 import useGetDocumentTypes from '@/hooks/useGetDocumentTypes';
 import { FieldType } from '@/types/enums';
-
-import { FlattenedDocumentItem } from '../../../types/rejection-doc-summary.types';
 import { ArrowLeft } from 'lucide-react';
 import { DealsResponseTransaction } from '../../../types/transaction.types';
 import { uploadTransactionDocument } from '../../../api/kycDocuments.api';
+import { FlattenedDocumentItem } from '../../../types/rejection-doc-summary.types';
 
 const KYCForm = ({
   transaction,
@@ -39,6 +38,7 @@ const KYCForm = ({
 
   const handleUploadOnFileChange = useCallback(
     async ({ file, documentId }: { file: File; documentId: string }) => {
+      
       if (!transaction?.id) {
         toast.error('Missing transaction id. Please reopen the KYC upload form from the table.');
         return;
@@ -71,6 +71,7 @@ const KYCForm = ({
         required: Boolean(doc.is_mandatory),
         placeholder: 'Upload Document',
         documentId: doc.document_id,
+        accept: '.pdf,.jpg,.jpeg,.png',
       };
 
       const documentId = doc.document_id || doc.id;
@@ -102,7 +103,6 @@ const KYCForm = ({
       ];
     });
   }, [documentTypes, handleUploadOnFileChange]);
-  console.log('Dynamic Document Fields:', dynamicDocumentFields);
 
   const methods = useForm({
     resolver: zodResolver(KycFormSchema),
@@ -121,7 +121,6 @@ const KYCForm = ({
 
   const handleKycSubmit = handleSubmit(async (formdata: FieldValues) => {
     // Handle form submission logic here
-    console.log('Form submitted:', formdata);
     onFormSubmit();
   });
 
@@ -149,7 +148,7 @@ const KYCForm = ({
             ) : dynamicDocumentFields.length > 0 ? (
               <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 px-1">
                 {dynamicDocumentFields.map((field: any) => {
-                  const hasDocumentId = rejectedDocuments.find((doc) => doc.document_id === field.documentId);
+                  const hasDocumentId = rejectedDocuments?.find((doc) => doc.document_id === field.documentId);
 
                   if (isRejected) {
                     return (

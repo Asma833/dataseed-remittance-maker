@@ -4,8 +4,7 @@ import KYCForm from './form/kyc-form';
 import RejectionTable from './table/rejection-table';
 import { DealsResponseTransaction } from '../../types/transaction.types';
 import { DocumentItem, HistoryItem } from '../../types/rejection-doc-summary.types';
-import { useRejectionSummary } from '@/features/maker/hooks/useRejectionSummary';
-import { TransactionStatusEnum } from '@/types/enums';
+import { useRejectionSummary } from '../../hooks/useRejectionSummary';
 
 const KYCUpload = () => {
   const [showForm, setShowForm] = useState(false);

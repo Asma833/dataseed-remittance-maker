@@ -3,14 +3,14 @@ import { formatDateWithFallback } from '@/utils/formatDateWithFallback';
 export const RejectionTableColumnsConfig = () => {
   return [
     {
-      accessorKey: 'rejected_by',
-      id: 'rejected_by',
+      accessorKey: 'user',
+      id: 'user',
       header: 'User',
       meta: { className: 'min-w-0 p-2' },
     },
     {
-      accessorKey: 'document_name',
-      id: 'document_name',
+      accessorKey: 'document',
+      id: 'document',
       header: 'Document',
       meta: { className: 'min-w-0 p-2' },
     },
@@ -22,10 +22,10 @@ export const RejectionTableColumnsConfig = () => {
       cell: (props: { row: any; value: any }) => <span>{formatDateWithFallback(props.row.rejection_date)}</span>,
     },
     {
-      accessorKey: 'rejection_reason',
-      id: 'rejection_reason',
+      accessorKey: 'reason',
+      id: 'reason',
       header: 'Reason',
-      meta: { className: 'min-w-0 p-2 text-red-500' },
+      meta: { className: 'min-w-0 p-2' },
     },
   ];
 };
