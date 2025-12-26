@@ -29,7 +29,7 @@ export const API = {
     GET_CONFIG: `/config`,
     GET_PURPOSE_TYPES: `/config?type=purpose_type`,
     GET_TRANSACTION_TYPES: `/config?type=transaction_type`,
-    GET_DOCUMENT_TYPES: (id: string) => `trans-purpose-document/${id}/documents`,
+    GET_DOCUMENT_TYPES: (id: string, transactionId?: string) => `trans-purpose-document/${id}/documents${transactionId ? `?transaction_id=${transactionId}` : ''}`,
   },
   DOCUMENTS: {
     UPLOAD: `/documents/upload`,

@@ -24,15 +24,14 @@ const KYCForm = ({
   onCancel: () => void;
   transaction?: any;
 }) => {
-  const { documentTypes = [], loading } = useGetDocumentTypes(
-    transaction?.transaction_purpose_map_id
-      ? { id: '58efd638-7dcf-44f3-aff5-de5e034c3286', enable: true }
-      : // ? { id: transaction.transaction_purpose_map_id, enable: true }
-        { enable: false }
-  );
+  const { documentTypes = [], loading } = useGetDocumentTypes({
+    id: transaction?.transaction_purpose_map_id,
+    transactionId: transaction?.id,
+    enable: !!transaction?.transaction_purpose_map_id,
+  });
 
   const handleUploadOnFileChange = useCallback(
-    async ({ file, documentType, documentName }: { file: File; documentType: string; documentName: string }) => {
+    async ({ file, documentId }: { file: File; documentId: string }) => {
       if (!transaction?.id) {
         toast.error('Missing transaction id. Please reopen the KYC upload form from the table.');
         return;
@@ -42,8 +41,7 @@ const KYCForm = ({
         await uploadTransactionDocument({
           file,
           transaction_id: transaction.id,
-          document_type: documentType,
-          document_name: documentName,
+          document_id: documentId,
           remarks: '',
         });
         toast.success('Document uploaded successfully');
@@ -65,9 +63,10 @@ const KYCForm = ({
         type: FieldType.Fileupload_View,
         required: Boolean(doc.is_mandatory),
         placeholder: 'Upload Document',
+        accept: '*/*',
       };
 
-      const documentType = doc.code || doc.name;
+      const documentId = doc.code || doc.id;
 
       if (doc.is_back_required) {
         return [
@@ -76,14 +75,14 @@ const KYCForm = ({
             label: `${label} (Front)`,
             ...base,
             onFileSelected: (file: File) =>
-              handleUploadOnFileChange({ file, documentType, documentName: `${label} (Front)` }),
+              handleUploadOnFileChange({ file, documentId }),
           },
           {
             name: `document_${doc.id}_back`,
             label: `${label} (Back)`,
             ...base,
             onFileSelected: (file: File) =>
-              handleUploadOnFileChange({ file, documentType, documentName: `${label} (Back)` }),
+              handleUploadOnFileChange({ file, documentId }),
           },
         ];
       }
@@ -93,7 +92,7 @@ const KYCForm = ({
           name: `document_${doc.id}`,
           label,
           ...base,
-          onFileSelected: (file: File) => handleUploadOnFileChange({ file, documentType, documentName: label }),
+          onFileSelected: (file: File) => handleUploadOnFileChange({ file, documentId }),
         },
       ];
     });
@@ -147,7 +146,7 @@ const KYCForm = ({
                 ))}
               </div>
             ) : (
-              <div className="border-dotted border-2 border-gray-300 p-5 bg-gray-100">
+              <div className="border-2 border-gray-300 p-5 bg-gray-100">
                 No documents found for transaction id {transaction?.id}.
               </div>
             )}
