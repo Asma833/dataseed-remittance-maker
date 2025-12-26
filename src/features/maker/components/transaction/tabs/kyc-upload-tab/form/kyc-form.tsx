@@ -38,7 +38,6 @@ const KYCForm = ({
 
   const handleUploadOnFileChange = useCallback(
     async ({ file, documentId }: { file: File; documentId: string }) => {
-      console.log('handleUploadOnFileChange called with:', { file: file.name, documentId });
       
       if (!transaction?.id) {
         toast.error('Missing transaction id. Please reopen the KYC upload form from the table.');
@@ -104,7 +103,6 @@ const KYCForm = ({
       ];
     });
   }, [documentTypes, handleUploadOnFileChange]);
-  console.log('Dynamic Document Fields:', dynamicDocumentFields);
 
   const methods = useForm({
     resolver: zodResolver(KycFormSchema),
@@ -123,7 +121,6 @@ const KYCForm = ({
 
   const handleKycSubmit = handleSubmit(async (formdata: FieldValues) => {
     // Handle form submission logic here
-    console.log('Form submitted:', formdata);
     onFormSubmit();
   });
 
