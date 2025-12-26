@@ -7,10 +7,12 @@ import { PaymentData, AllTransaction } from '../types/payment.types';
 type InitialData = Partial<CreateTransactionFormInput & { paymentDetails?: PaymentData | AllTransaction; id?: string }>;
 
 export const mapRowDataToInitialData = (rowData: any): InitialData => {
-  const transaction = rowData.transactions ? rowData.transactions[0] : rowData.transaction;
-  const kyc = transaction.kyc_details;
+  // Handle the case where data is wrapped in a 'row' property
+  const actualRowData = rowData.row || rowData;
+  const transaction = actualRowData.transactions ? actualRowData.transactions[0] : actualRowData.transaction;
+  const kyc = transaction?.kyc_details;
   return {
-    id: rowData?.id,
+    id: actualRowData?.id,
     transactionDetails: {
       company_reference_number: transaction.company_ref_number || '',
       agent_reference_number: transaction.agent_ref_number || '',
@@ -18,9 +20,9 @@ export const mapRowDataToInitialData = (rowData: any): InitialData => {
       transaction_purpose_map_id: transaction.transaction_purpose_map_id || '',
       fx_currency: transaction.fx_currency || '',
       fx_amount: transaction.fx_amount || '',
-      company_settlement_rate: rowData.settlement_rate || '',
-      add_margin: rowData?.margin_amount || '',
-      customer_rate: rowData.customer_rate || '',
+      company_settlement_rate: actualRowData.settlement_rate || '',
+      add_margin: actualRowData?.margin_amount || '',
+      customer_rate: actualRowData.customer_rate || '',
       nostro_charges: transaction.nostro_charges_amount || '',
       applicant_name: kyc?.applicant_name || '',
       applicant_pan_number: kyc?.applicant_pan || '',
@@ -52,7 +54,7 @@ export const mapRowDataToInitialData = (rowData: any): InitialData => {
       sort_bsb_aba_transit_code: kyc?.sort_bsb_aba_transit_code || '',
       message_to_beneficiary_additional_information: kyc?.message_to_beneficiary || '',
       student_name: kyc?.student_name || '',
-      student_passport_number: kyc?.student_passport_number || '',
+      student_passport_number: kyc?.student_passport_number || kyc?.passport_number || '',
       university_name: kyc?.university_name || '',
       intermediaryBankDetails: kyc?.intermediary_bank_details || '',
       intermediary_bank_account_number: kyc?.intermediary_bank_account_number || '',
@@ -63,9 +65,9 @@ export const mapRowDataToInitialData = (rowData: any): InitialData => {
     currencyDetails: {
       fx_currency: transaction.fx_currency || '',
       fx_amount: transaction.fx_amount || '',
-      settlement_rate: rowData.settlement_rate || '',
-      add_margin: rowData.margin_amount || '',
-      customer_rate: rowData.customer_rate || '',
+      settlement_rate: actualRowData.settlement_rate || '',
+      add_margin: actualRowData.margin_amount || '',
+      customer_rate: actualRowData.customer_rate || '',
       declared_education_loan_amount: kyc?.declared_education_loan_amount || '',
       previous_transaction_amount: kyc?.previous_transaction_amount || '',
       declared_previous_amount: kyc?.declared_previous_amount || '',
@@ -105,6 +107,6 @@ export const mapRowDataToInitialData = (rowData: any): InitialData => {
         },
       },
     },
-    paymentDetails: rowData,
+    paymentDetails: actualRowData,
   };
 };
