@@ -541,14 +541,32 @@ const CurrencyDetails = ({ setAccordionState, viewMode, paymentData }: CommonCre
                    description="Are you sure you want to cancel? All unsaved changes will be lost."
                    onConfirm={handleCancelConfirm}
                  >
-                   <Button type="button" variant="light">
+                   <Button type="button" variant="light" className="mx-2">
                      Cancel
                    </Button>
                  </ConfirmationAlert>
                  )}
-                <Button variant="secondary" onClick={handleSave} disabled={isSaving} className="mx-2 w-24">
-                  {isSaving ? (viewMode ? 'Updating...' : 'Saving...') : (viewMode ? 'Update' : 'Save')}
-                </Button>
+                {viewMode ? (
+                  <ConfirmationAlert
+                    title="Update Transaction"
+                    description="Are you sure you want to update this transaction?"
+                    onConfirm={handleSave}
+                  >
+                    <Button variant="secondary" disabled={isSaving} className="mx-2 w-24">
+                      {isSaving ? 'Updating...' : 'Update'}
+                    </Button>
+                  </ConfirmationAlert>
+                ) : (
+                  <ConfirmationAlert
+                    title="Save Transaction"
+                    description="Are you sure you want to save this transaction?"
+                    onConfirm={handleSave}
+                  >
+                    <Button variant="secondary" disabled={isSaving} className="mx-2 w-24">
+                      {isSaving ? 'Saving...' : 'Save'}
+                    </Button>
+                  </ConfirmationAlert>
+                )}
               </>
               {viewMode && (
               <>
@@ -557,11 +575,11 @@ const CurrencyDetails = ({ setAccordionState, viewMode, paymentData }: CommonCre
                   description="Are you sure you want to download the PDF?"
                   onConfirm={handleShareTransactionDetails}
                 >
-                  <Button type="button" variant="secondary" className="mx-2">
+                  <Button type="button" variant="secondary" className="mr-2">
                     Share Transaction Details PDF
                   </Button>
                 </ConfirmationAlert>
-                <Button type="button" onClick={handlePayment} variant="secondary" className="mx-2">
+                <Button type="button" onClick={handlePayment} variant="secondary">
                   Payment
                 </Button>
               </>
