@@ -23,25 +23,6 @@ export const kycDocumentsConfig = {
       required: true,
       disabled: true,
       placeholder: 'Enter Applicant Name',
-    },
-    // kycType: {
-    //   label: 'Select KYC Type',
-    //   type: FieldType.Select,
-    //   required: true,
-    //   placeholder: 'Choose KYC Type',
-    //   options: {
-    //     full_kyc: { label: 'Full KYC' },
-    //     limited_kyc: { label: 'Limited KYC' },
-    //     video_kyc: { label: 'Video KYC' },
-    //   },
-    //   isMulti: false,
-    //   className: 'mt-4',
-    // },
-    // viewA2Form: {
-    //   label: 'View A2 Form',
-    //   type: FieldType.Fileupload_View,
-    //   required: false,
-    //   className: 'col-span-2',
-    // },
+    }
   },
 };
