@@ -1,31 +1,30 @@
 import { DataTable } from '@/components/table/data-table';
 import { useNavigate } from 'react-router-dom';
 import { KycTableColumnsConfig } from './kyc-table-columns';
-import { useGetPaymentDetails } from '../../../hooks/useGetPaymentDetails';
-import { AllTransaction } from '../../../types/payment.types';
-import { mapRowDataToInitialData } from '../../../utils/transaction-utils';
+import { useDeals } from '@/features/maker/hooks/useDeals';
+import { KYCStatusEnum } from '@/types/enums';
+
 
 const KYCTable = ({ onUploadClick }: { onUploadClick: (isReupload: boolean, transaction: any) => void }) => {
   const navigate = useNavigate();
-  const { data: kycData, isLoading, } = useGetPaymentDetails<AllTransaction[]>();
-const handleViewTransaction = (rowData:any)=> {
-  console.log("rowData",rowData)
-  const initialData = mapRowDataToInitialData(rowData);
-  return navigate('../create-transactions', { state: { initialData } });
-  };
+  const { data: deals, isLoading, isError } = useDeals();
+
   const columns = KycTableColumnsConfig({
     navigate,
     onUploadClick: (status: string, transaction: any) => {
+      // isReupload is true if status is REJECTED
+      const isReupload = status === KYCStatusEnum.REJECTED;
+
+      console.log('🚀 ~ KYCTable ~ isReupload:', isReupload);
       onUploadClick(true, transaction);
     },
-    handleViewTransaction
   });
-  
+
   return (
     <div className="data-table-wrap">
       <DataTable
         columns={columns}
-        data={kycData || []}
+        data={deals ?? []}
         config={{
           search: { enabled: true, searchMode: 'static' },
           pagination: {
@@ -46,7 +45,7 @@ const handleViewTransaction = (rowData:any)=> {
               useMuiDateRangePicker: true,
             },
           },
-          export: { enabled: true, fileName: 'kyc-details.csv' },
+          export: { enabled: true, fileName: 'deals.csv' },
           loading: isLoading,
         }}
       />
