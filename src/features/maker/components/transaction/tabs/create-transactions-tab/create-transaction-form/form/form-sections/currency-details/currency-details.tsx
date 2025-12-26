@@ -129,18 +129,6 @@ const CurrencyDetails = ({ setAccordionState, viewMode, paymentData }: CommonCre
         shouldValidate: false,
         shouldDirty: false,
       });
-      setValue('currencyDetails.invoiceRateTable.remittance_charges.agent_mark_up', Number(addMargin), {
-        shouldValidate: false,
-        shouldDirty: false,
-      });
-      setValue('currencyDetails.invoiceRateTable.nostro_charges.agent_mark_up', Number(addMargin), {
-        shouldValidate: false,
-        shouldDirty: false,
-      });
-      setValue('currencyDetails.invoiceRateTable.other_charges.agent_mark_up', Number(addMargin), {
-        shouldValidate: false,
-        shouldDirty: false,
-      });
     }
   }, [addMargin, setValue]);
 
