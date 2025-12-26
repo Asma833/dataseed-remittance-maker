@@ -12,11 +12,10 @@ import { kycDocumentsConfig } from './kyc-form.config';
 import { KycFormSchema } from './kyc-form.schema';
 import useGetDocumentTypes from '@/hooks/useGetDocumentTypes';
 import { FieldType } from '@/types/enums';
-// import { uploadTransactionDocument } from '@/features/maker/api/kycDocumentsApi';
-// import { FlattenedDocumentItem } from '../../../types/rejection-doc-summary.types';
 import { ArrowLeft } from 'lucide-react';
 import { DealsResponseTransaction } from '../../../types/transaction.types';
 import { uploadTransactionDocument } from '../../../api/kycDocuments.api';
+import { FlattenedDocumentItem } from '../../../types/rejection-doc-summary.types';
 
 const KYCForm = ({
   transaction,
