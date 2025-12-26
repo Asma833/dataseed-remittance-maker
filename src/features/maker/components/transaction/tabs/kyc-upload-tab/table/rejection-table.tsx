@@ -2,7 +2,6 @@ import { DataTable } from "@/components/table/data-table";
 import { RejectionTableColumnsConfig } from "./rejection-table-columns";
 import { useMemo } from 'react';
 
-import { toast } from 'sonner';
 import { useRejectionSummary } from "../../../hooks/useRejectionSummary";
 
 interface RejectionTableProps {
@@ -41,20 +40,19 @@ const RejectionTable = ({ transactionId }: RejectionTableProps) => {
 
   if (!transactionId) return null;
 
+  // Log error for debugging but let DataTable handle the display
   if (isError) {
     console.error('Failed to load rejection summary:', error);
-   // toast.error('Failed to load rejection summary');
   }
 
   return (
     <div className="rejection-table-wrap">
-      {isLoading ? (
-        <div className="px-2">Loading rejection summary...</div>
-      ) : null}
       <DataTable
         columns={columns}
         data={tableData}
         config={{
+          loading: isLoading,
+          error: isError ? (error?.message || 'Failed to load rejection summary') : null,
           search: { enabled: false, searchMode: "static" },
           pagination: { enabled: false, pageSize: 10, pageSizeOptions: [5, 10, 20, 50, 100], showPageSizeSelector: true },
           sorting: { enabled: true, multiSort: false, sortMode: "static" },
