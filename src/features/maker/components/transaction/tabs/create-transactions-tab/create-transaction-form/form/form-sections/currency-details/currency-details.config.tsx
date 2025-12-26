@@ -54,7 +54,7 @@ export const currencyDetailsConfig = [
     type: FieldType.Number,
     placeholder: 'Enter Previous Transaction Amount',
     required: false,
-    disabled:true
+    disabled: true,
   },
   {
     name: 'declared_previous_amount',

@@ -18,7 +18,15 @@ interface FileUploadProps {
   onFileSelected?: (file: File) => void;
 }
 
-const FileUploadWithView = ({ id, name, label, className, accept, viewFile = true, onFileSelected }: FileUploadProps) => {
+const FileUploadWithView = ({
+  id,
+  name,
+  label,
+  className,
+  accept,
+  viewFile = true,
+  onFileSelected,
+}: FileUploadProps) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const { watch } = useFormContext();

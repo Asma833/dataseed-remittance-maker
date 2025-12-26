@@ -1,6 +1,3 @@
-
-
-
 import { CreateTransactionFormInput } from '../tabs/create-transactions-tab/create-transaction-form/form/common-schema';
 import { PaymentData, AllTransaction } from '../types/payment.types';
 

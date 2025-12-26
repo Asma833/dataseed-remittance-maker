@@ -13,10 +13,7 @@ import { toast } from 'sonner';
 const BeneficiaryDetails = ({ setAccordionState }: CommonCreateTransactionProps) => {
   const [isSaving, setIsSaving] = useState(false);
   const [isEditing, setIsEditing] = useState(false);
-  const {
-    control,
-    trigger,
-  } = useFormContext();
+  const { control, trigger } = useFormContext();
   const { errors } = useFormState();
   const intermediaryBankDetails = useWatch({ name: 'beneficiaryDetails.intermediaryBankDetails', defaultValue: 'no' });
 
@@ -31,7 +28,7 @@ const BeneficiaryDetails = ({ setAccordionState }: CommonCreateTransactionProps)
   //   }
   //   return keys;
   // };
-  
+
   // const getFieldLabel = (key: string): string => {
   //   const parts = key.split('.');
   //   const fieldName = parts[parts.length - 1];
@@ -39,7 +36,7 @@ const BeneficiaryDetails = ({ setAccordionState }: CommonCreateTransactionProps)
   //   const field = config.find((f) => f.name === fieldName);
   //   return field?.label || key;
   // };
-  
+
   // const handleSave = async () => {
   //   const isValid = await trigger();
   //   if (!isValid) {

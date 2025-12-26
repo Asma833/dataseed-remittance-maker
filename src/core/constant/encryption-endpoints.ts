@@ -118,21 +118,21 @@ export const ENDPOINT_MATCHING_RULES: EndpointRulesConfig = {
     matchType: 'standard' as const,
     description: 'Complete deal',
   },
-  'GST':{
+  GST: {
     endpoint: API.REMITTANCE.GST_CALCULATION,
     matchType: 'standard' as const,
     description: 'Gst Calculation',
   },
-  'TCS':{
+  TCS: {
     endpoint: API.REMITTANCE.TCS_CALCULATION,
     matchType: 'standard' as const,
     description: 'Tcs Calculation',
   },
-  'update-transaction':{
+  'update-transaction': {
     endpoint: `/remittance/deals/`,
     matchType: 'standard' as const,
     description: 'Update Transaction',
-  }
+  },
 } as const;
 
 /**

@@ -25,10 +25,7 @@ export interface ExtractedMargins {
   otherChargesRate: number;
 }
 
-export const extractAgentMargins = (
-  agentDetails: AgentDetails,
-  selectedCurrency: string
-): ExtractedMargins => {
+export const extractAgentMargins = (agentDetails: AgentDetails, selectedCurrency: string): ExtractedMargins => {
   const { commission } = agentDetails;
 
   // Extract nostro margin

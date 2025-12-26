@@ -4,7 +4,13 @@ import PaymentStatusCell from '@/components/cell/table/PaymentStatusCell';
 import { formatDateWithFallback } from '@/utils/formatDateWithFallback';
 import { PaymentData } from '../../types/payment.types';
 
-export const GetPaymentTableColumn = ({ handlePayment, handleViewTransaction }: { handlePayment: (rowData: PaymentData) => void, handleViewTransaction: (rowData: PaymentData) => void }) => {
+export const GetPaymentTableColumn = ({
+  handlePayment,
+  handleViewTransaction,
+}: {
+  handlePayment: (rowData: PaymentData) => void;
+  handleViewTransaction: (rowData: PaymentData) => void;
+}) => {
   return [
     { id: 'ref_no', header: 'Ref. No', accessorKey: 'ref_no', meta: { className: 'min-w-0 p-2' } },
     { id: 'agent_ref_no', header: 'Agent Ref. No', accessorKey: 'agent_ref_no', meta: { className: 'min-w-0 p-2' } },

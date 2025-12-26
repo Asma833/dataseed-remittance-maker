@@ -147,8 +147,12 @@ const CreateTransactionForm = ({ onCancel, onSubmit, initialData, viewMode }: Pr
           applicant_id_document: normalizeString(data.transactionDetails.applicant_id_document),
           passport_number: normalizeString(data.transactionDetails.passport_number),
           place_of_issue: normalizeString(data.transactionDetails.place_of_issue),
-          passport_issue_date: data.transactionDetails.passport_issue_date ? new Date(data.transactionDetails.passport_issue_date).toISOString() : '',
-          passport_expiry_date: data.transactionDetails.passport_expiry_date ? new Date(data.transactionDetails.passport_expiry_date).toISOString() : '',
+          passport_issue_date: data.transactionDetails.passport_issue_date
+            ? new Date(data.transactionDetails.passport_issue_date).toISOString()
+            : '',
+          passport_expiry_date: data.transactionDetails.passport_expiry_date
+            ? new Date(data.transactionDetails.passport_expiry_date).toISOString()
+            : '',
           applicant_address: normalizeString(data.transactionDetails.applicant_address),
           applicant_city: normalizeString(data.transactionDetails.applicant_city),
           applicant_state: normalizeString(data.transactionDetails.applicant_state),
@@ -191,7 +195,7 @@ const CreateTransactionForm = ({ onCancel, onSubmit, initialData, viewMode }: Pr
 
   const showPrevious = currentTab !== 'panel1';
   const showNext = currentTab !== 'panel3';
-  
+
   return (
     <FormProvider {...form}>
       <form id="create-transaction-form" onSubmit={form.handleSubmit(handleSubmit)}>
@@ -210,7 +214,11 @@ const CreateTransactionForm = ({ onCancel, onSubmit, initialData, viewMode }: Pr
               )}
             </div>
           </div>
-          <CreateTransactionsAccordion accordionItems={accordionItems} {...(viewMode !== undefined ? { viewMode } : {})} {...(initialData?.paymentDetails ? { paymentData: initialData.paymentDetails } : {})} />
+          <CreateTransactionsAccordion
+            accordionItems={accordionItems}
+            {...(viewMode !== undefined ? { viewMode } : {})}
+            {...(initialData?.paymentDetails ? { paymentData: initialData.paymentDetails } : {})}
+          />
         </div>
       </form>
     </FormProvider>

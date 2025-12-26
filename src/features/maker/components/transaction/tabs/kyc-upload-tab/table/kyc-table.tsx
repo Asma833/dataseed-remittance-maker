@@ -7,21 +7,21 @@ import { mapRowDataToInitialData } from '../../../utils/transaction-utils';
 
 const KYCTable = ({ onUploadClick }: { onUploadClick: (isReupload: boolean, transaction: any) => void }) => {
   const navigate = useNavigate();
-  const { data: kycData, isLoading, } = useGetPaymentDetails<AllTransaction[]>();
+  const { data: kycData, isLoading } = useGetPaymentDetails<AllTransaction[]>();
 
-  const handleViewTransaction = (rowData:any)=> {
-  console.log("rowData",rowData)
-  const initialData = mapRowDataToInitialData(rowData);
-  return navigate('../create-transactions', { state: { initialData } });
+  const handleViewTransaction = (rowData: any) => {
+    console.log('rowData', rowData);
+    const initialData = mapRowDataToInitialData(rowData);
+    return navigate('../create-transactions', { state: { initialData } });
   };
   const columns = KycTableColumnsConfig({
     navigate,
     onUploadClick: (status: string, transaction: any) => {
       onUploadClick(true, transaction);
     },
-    handleViewTransaction
+    handleViewTransaction,
   });
-  
+
   return (
     <div className="data-table-wrap">
       <DataTable

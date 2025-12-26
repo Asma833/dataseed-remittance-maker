@@ -1,6 +1,9 @@
 import axiosInstance from '@/core/services/axios/axios-instance';
 import { API } from '@/core/constant/apis';
-import { GSTCalculationPayload, GSTCalculationResponse } from '@/features/maker/components/transaction/types/tcs-gst.types';
+import {
+  GSTCalculationPayload,
+  GSTCalculationResponse,
+} from '@/features/maker/components/transaction/types/tcs-gst.types';
 
 export const gstApi = {
   calculateGst: async (payload: GSTCalculationPayload): Promise<GSTCalculationResponse> => {

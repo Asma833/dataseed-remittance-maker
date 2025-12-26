@@ -46,7 +46,7 @@ const PaymentStatus = () => {
           rejection_reason: deal.rejection_reason || '-',
           margin_amount: deal.margin_amount || '-',
           transaction: transaction,
-          transaction_id:transaction?.transaction_id
+          transaction_id: transaction?.transaction_id,
         } as PaymentData;
       })
     );
@@ -57,7 +57,7 @@ const PaymentStatus = () => {
     setIsModalOpen(true);
   };
 
-  const handleViewTransaction = (rowData: PaymentData)=> {
+  const handleViewTransaction = (rowData: PaymentData) => {
     const initialData = mapRowDataToInitialData(rowData);
     return navigate('../create-transactions', { state: { initialData } });
   };

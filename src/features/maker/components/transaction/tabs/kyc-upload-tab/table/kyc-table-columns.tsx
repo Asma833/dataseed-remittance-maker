@@ -8,7 +8,7 @@ import { SignLinkButton } from '@/components/cell/table/SignLinkButton';
 export const KycTableColumnsConfig = ({
   navigate,
   onUploadClick,
-  handleViewTransaction
+  handleViewTransaction,
 }: {
   navigate: (url: string) => void;
   onUploadClick: (status: string, transaction: any) => void;
@@ -106,15 +106,15 @@ export const KycTableColumnsConfig = ({
       id: 'view_action',
       header: 'View',
       meta: { className: 'min-w-0 p-2' },
-        cell: (row:any ) => (
-          <SignLinkButton
-            id={row?.transactions?.[0]?.id}
-            onClick={() => handleViewTransaction(row)}
-            tooltipText="View"
-            buttonType="view"
-            buttonIconType="view"
-          />
-       ),
+      cell: (row: any) => (
+        <SignLinkButton
+          id={row?.transactions?.[0]?.id}
+          onClick={() => handleViewTransaction(row)}
+          tooltipText="View"
+          buttonType="view"
+          buttonIconType="view"
+        />
+      ),
     },
   ];
 };

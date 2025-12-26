@@ -39,7 +39,7 @@ const authSlice = createSlice({
       state.user = user;
       state.accessToken = accessToken;
       state.refreshToken = refreshToken;
-      state.agentId = agentId || (user.agent_users?.[0]?.agent_id || null);
+      state.agentId = agentId || user.agent_users?.[0]?.agent_id || null;
       state.isAuthenticated = true;
     },
     updateAccessToken: (state, action: PayloadAction<string>) => {

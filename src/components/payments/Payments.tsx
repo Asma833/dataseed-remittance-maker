@@ -49,10 +49,7 @@ const Payments = ({
   };
   return (
     <div className="space-y-0">
-      {data && (
-        <div className="font-medium text-sm text-gray-600 pb-2">Transaction Id: {data.transaction_id}</div>
-       
-      )}
+      {data && <div className="font-medium text-sm text-gray-600 pb-2">Transaction Id: {data.transaction_id}</div>}
       <div className="text-md font-semibold">Offline bank transfer</div>
       <p className="text-sm my-0 text-gray-400">Please upload screen shot for offline bank transfer</p>
       <hr className="text-gray-400" />

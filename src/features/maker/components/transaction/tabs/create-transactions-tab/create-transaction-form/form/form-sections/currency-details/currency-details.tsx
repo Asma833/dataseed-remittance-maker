@@ -27,12 +27,7 @@ const CurrencyDetails = ({ setAccordionState, viewMode, paymentData }: CommonCre
   const [selectedPayment, setSelectedPayment] = useState<any>(null);
   const mountedRef = useRef(false);
   const navigate = useNavigate();
-  const {
-    control,
-    trigger,
-    setValue,
-    reset,
-  } = useFormContext();
+  const { control, trigger, setValue, reset } = useFormContext();
   const { errors } = useFormState();
   const { data: currencyRates, isLoading: currencyLoading } = useGetCurrencyRates();
   const { calculateGst } = useGstCalculation();
@@ -41,7 +36,7 @@ const CurrencyDetails = ({ setAccordionState, viewMode, paymentData }: CommonCre
   const fxCurrency = useWatch({ control, name: 'transactionDetails.fx_currency' });
   const { extractedMargins } = useGetAgentDetails(fxCurrency);
   const { mutateAsync: uploadChallan } = useUploadPaymentChallan();
-  
+
   const currencyOptions =
     currencyRates?.reduce((acc: Record<string, { label: string }>, currency) => {
       acc[currency.currency_code] = { label: currency.currency_code };
@@ -155,9 +150,7 @@ const CurrencyDetails = ({ setAccordionState, viewMode, paymentData }: CommonCre
   // Set company rates from agent details
 
   useEffect(() => {
-
     if (mountedRef.current && extractedMargins) {
-
       setValue('currencyDetails.invoiceRateTable.remittance_charges.company_rate', extractedMargins.productMargin, {
         shouldValidate: false,
         shouldDirty: false,
@@ -172,16 +165,14 @@ const CurrencyDetails = ({ setAccordionState, viewMode, paymentData }: CommonCre
         shouldValidate: false,
         shouldDirty: false,
       });
-
     }
-
   }, [extractedMargins, setValue]);
 
   // Calculate transaction_value.rate as company_settlement_rate + add_margin
   // Calculate transaction_value.rate as company_rate + agent_mark_up
   useEffect(() => {
     if (mountedRef.current && fxAmount && transactionValueCompanyRate != null && transactionValueAgentMarkUp != null) {
-      const rate = (Number(fxAmount) * Number(transactionValueCompanyRate)) + Number(transactionValueAgentMarkUp);
+      const rate = Number(fxAmount) * Number(transactionValueCompanyRate) + Number(transactionValueAgentMarkUp);
       setValue('currencyDetails.invoiceRateTable.transaction_value.rate', rate, {
         shouldValidate: false,
         shouldDirty: false,
@@ -261,7 +252,7 @@ const CurrencyDetails = ({ setAccordionState, viewMode, paymentData }: CommonCre
       gstTimeoutRef.current = setTimeout(async () => {
         try {
           const response = await calculateGst({ txnAmount: transactionAmount.toString() });
-          if (response.statuscode === "200" && response.responsecode === "success") {
+          if (response.statuscode === '200' && response.responsecode === 'success') {
             setValue('currencyDetails.invoiceRateTable.gst_amount.rate', Number(response.GST), {
               shouldValidate: false,
               shouldDirty: false,
@@ -310,13 +301,13 @@ const CurrencyDetails = ({ setAccordionState, viewMode, paymentData }: CommonCre
       tcsTimeoutRef.current = setTimeout(async () => {
         try {
           const response = await calculateTcs({
-            purpose: "Personal Visit / Leisure Travel",
+            purpose: 'Personal Visit / Leisure Travel',
             panNumber,
             sourceofFund,
-            declarationAmt: isEducation ? declarationAmt : "0",
+            declarationAmt: isEducation ? declarationAmt : '0',
             txnAmount: amountBeforeTcs.toString(),
           });
-          if (response.statuscode === "200" && response.responsecode === "success") {
+          if (response.statuscode === '200' && response.responsecode === 'success') {
             setValue('currencyDetails.invoiceRateTable.tcs.rate', Number(response.TCS), {
               shouldValidate: false,
               shouldDirty: false,
@@ -356,16 +347,16 @@ const CurrencyDetails = ({ setAccordionState, viewMode, paymentData }: CommonCre
     };
   }, [transactionAmount, gstAmount, purpose, panNumber, sourceofFund, declarationAmt, calculateTcs, setValue]);
   const flattenErrors = (obj: any, prefix = ''): string[] => {
-      const keys: string[] = [];
-      for (const key in obj) {
-        if (obj[key] && typeof obj[key] === 'object' && obj[key].message) {
-          keys.push(prefix ? `${prefix}.${key}` : key);
-        } else if (obj[key] && typeof obj[key] === 'object') {
-          keys.push(...flattenErrors(obj[key], prefix ? `${prefix}.${key}` : key));
-        }
+    const keys: string[] = [];
+    for (const key in obj) {
+      if (obj[key] && typeof obj[key] === 'object' && obj[key].message) {
+        keys.push(prefix ? `${prefix}.${key}` : key);
+      } else if (obj[key] && typeof obj[key] === 'object') {
+        keys.push(...flattenErrors(obj[key], prefix ? `${prefix}.${key}` : key));
       }
-      return keys;
-    };
+    }
+    return keys;
+  };
   const getFieldLabel = (key: string): string => {
     const parts = key.split('.');
     const fieldName = parts[parts.length - 1];
@@ -374,18 +365,18 @@ const CurrencyDetails = ({ setAccordionState, viewMode, paymentData }: CommonCre
     return field?.label || key;
   };
   const handleSave = async () => {
-      const isValid = await trigger();
-      if (!isValid) {
-        const missingFields = flattenErrors(errors);
-        toast.error(`Missing required field: ${getFieldLabel(missingFields[0])}`);
-        return;
-      }
-      // Submit the form to hit the API
-      const formElement = document.getElementById('create-transaction-form') as HTMLFormElement;
-      if (formElement) {
-        formElement.requestSubmit();
-      }
-    };
+    const isValid = await trigger();
+    if (!isValid) {
+      const missingFields = flattenErrors(errors);
+      toast.error(`Missing required field: ${getFieldLabel(missingFields[0])}`);
+      return;
+    }
+    // Submit the form to hit the API
+    const formElement = document.getElementById('create-transaction-form') as HTMLFormElement;
+    if (formElement) {
+      formElement.requestSubmit();
+    }
+  };
   const handleShareTransactionDetails = () => {
     if (!invoiceRateTable) {
       toast.error('No rate table data available');
@@ -395,14 +386,14 @@ const CurrencyDetails = ({ setAccordionState, viewMode, paymentData }: CommonCre
     generateRateTablePdf(invoiceRateTable, totalInrAmount || 0, 'transaction-rate-details');
     toast.success('PDF downloaded successfully');
   };
-    const handleCancelConfirm = () => {
-      // Reset the form to its initial state
-      reset();
-      // Reset accordion to first panel if setAccordionState is available
-      if (setAccordionState) {
-        setAccordionState({ currentActiveTab: 'panel1' });
-      }
-    };
+  const handleCancelConfirm = () => {
+    // Reset the form to its initial state
+    reset();
+    // Reset accordion to first panel if setAccordionState is available
+    if (setAccordionState) {
+      setAccordionState({ currentActiveTab: 'panel1' });
+    }
+  };
   const handlePayment = () => {
     setSelectedPayment(paymentData);
     setIsModalOpen(true);
@@ -418,157 +409,155 @@ const CurrencyDetails = ({ setAccordionState, viewMode, paymentData }: CommonCre
   const handleBack = () => {
     navigate(-1);
   };
-  
 
   return (
     <>
-    <Spacer>
-      <FormFieldRow rowCols={2} wrapperClassName="flex-row md:!flex-nowrap items-start">
-        <div className="flex flex-wrap w-1/2 gap-4">
-          <FormFieldRow rowCols={2} className="w-full">
-            {(['fx_currency', 'fx_amount'] as const).map((name) => {
-              const field = currencyDetailsConfig.find((f) => f.name === name) as FieldConfig;
-              let fieldWithOptions = field;
-              if (name === 'fx_currency') {
-                fieldWithOptions = { ...field, options: currencyOptions };
-              }
-              return (
-                <FieldWrapper key={name}>
-                  {getController({ ...fieldWithOptions, name: `currencyDetails.${name}`, control, errors })}
-                </FieldWrapper>
-              );
-            })}
-          </FormFieldRow>
-          <FormFieldRow rowCols={2} className="w-full">
-            {(['settlement_rate', 'add_margin'] as const).map((name) => {
-              const field = currencyDetailsConfig.find((f) => f.name === name) as FieldConfig;
-              return (
-                <FieldWrapper key={name}>
-                  {getController({ ...field, name: `currencyDetails.${name}`, control, errors })}
-                </FieldWrapper>
-              );
-            })}
-          </FormFieldRow>
-          <FormFieldRow rowCols={2} className="w-full">
-            {(
-              [
-                'customer_rate',
-                ...((purpose || '').toLowerCase() === 'education' ? ['declared_education_loan_amount'] : []),
-              ] as const
-            ).map((name) => {
-              const field = currencyDetailsConfig.find((f) => f.name === name) as FieldConfig;
-              const isConditionalField = name === 'declared_education_loan_amount';
-              return (
-                <FieldWrapper key={name}>
-                  {getController({
-                    ...field,
-                    required: isConditionalField ? (purpose || '').toLowerCase() === 'education' : field.required,
-                    name: `currencyDetails.${name}`,
-                    control,
-                    errors,
-                  })}
-                </FieldWrapper>
-              );
-            })}
-          </FormFieldRow>
-          <FormFieldRow rowCols={2} className="w-full">
-            {(
-              [
-                'previous_transaction_amount',
-                ...((purpose || '').toLowerCase() === 'education' ? ['declared_previous_amount'] : []),
-              ] as const
-            ).map((name) => {
-              const field = currencyDetailsConfig.find((f) => f.name === name) as FieldConfig;
-              const isConditionalField = name === 'declared_previous_amount';
-              return (
-                <FieldWrapper key={name}>
-                  {getController({
-                    ...field,
-                    required: isConditionalField ? (purpose || '').toLowerCase() === 'education' : field.required,
-                    name: `currencyDetails.${name}`,
-                    control,
-                    errors,
-                  })}
-                </FieldWrapper>
-              );
-            })}
-          </FormFieldRow>
-          <FormFieldRow rowCols={2} className="w-full">
-            {(['total_transaction_amount_tcs'] as const).map((name) => {
-              const field = currencyDetailsConfig.find((f) => f.name === name) as FieldConfig;
-              return (
-                <FieldWrapper key={name}>
-                  {getController({ ...field, name: `currencyDetails.${name}`, control, errors })}
-                </FieldWrapper>
-              );
-            })}
-          </FormFieldRow>
-        </div>
-        <div className="flex flex-wrap w-1/2">
-          <RateTable
-            id={'currencyDetails.invoiceRateTable'}
-            mode={'edit'}
-            totalAmount={totalInrAmount || 0}
-            editableFields={[
-              'transaction_value.agent_mark_up',
-              'remittance_charges.agent_mark_up',
-              'nostro_charges.agent_mark_up',
-              'other_charges.agent_mark_up',
-            ]}
-            invoiceData={invoiceRateTable}
-          />
-        </div>
-      </FormFieldRow>
-     
-      <div className="mt-16 flex flex-col items-center gap-10">
+      <Spacer>
+        <FormFieldRow rowCols={2} wrapperClassName="flex-row md:!flex-nowrap items-start">
+          <div className="flex flex-wrap w-1/2 gap-4">
+            <FormFieldRow rowCols={2} className="w-full">
+              {(['fx_currency', 'fx_amount'] as const).map((name) => {
+                const field = currencyDetailsConfig.find((f) => f.name === name) as FieldConfig;
+                let fieldWithOptions = field;
+                if (name === 'fx_currency') {
+                  fieldWithOptions = { ...field, options: currencyOptions };
+                }
+                return (
+                  <FieldWrapper key={name}>
+                    {getController({ ...fieldWithOptions, name: `currencyDetails.${name}`, control, errors })}
+                  </FieldWrapper>
+                );
+              })}
+            </FormFieldRow>
+            <FormFieldRow rowCols={2} className="w-full">
+              {(['settlement_rate', 'add_margin'] as const).map((name) => {
+                const field = currencyDetailsConfig.find((f) => f.name === name) as FieldConfig;
+                return (
+                  <FieldWrapper key={name}>
+                    {getController({ ...field, name: `currencyDetails.${name}`, control, errors })}
+                  </FieldWrapper>
+                );
+              })}
+            </FormFieldRow>
+            <FormFieldRow rowCols={2} className="w-full">
+              {(
+                [
+                  'customer_rate',
+                  ...((purpose || '').toLowerCase() === 'education' ? ['declared_education_loan_amount'] : []),
+                ] as const
+              ).map((name) => {
+                const field = currencyDetailsConfig.find((f) => f.name === name) as FieldConfig;
+                const isConditionalField = name === 'declared_education_loan_amount';
+                return (
+                  <FieldWrapper key={name}>
+                    {getController({
+                      ...field,
+                      required: isConditionalField ? (purpose || '').toLowerCase() === 'education' : field.required,
+                      name: `currencyDetails.${name}`,
+                      control,
+                      errors,
+                    })}
+                  </FieldWrapper>
+                );
+              })}
+            </FormFieldRow>
+            <FormFieldRow rowCols={2} className="w-full">
+              {(
+                [
+                  'previous_transaction_amount',
+                  ...((purpose || '').toLowerCase() === 'education' ? ['declared_previous_amount'] : []),
+                ] as const
+              ).map((name) => {
+                const field = currencyDetailsConfig.find((f) => f.name === name) as FieldConfig;
+                const isConditionalField = name === 'declared_previous_amount';
+                return (
+                  <FieldWrapper key={name}>
+                    {getController({
+                      ...field,
+                      required: isConditionalField ? (purpose || '').toLowerCase() === 'education' : field.required,
+                      name: `currencyDetails.${name}`,
+                      control,
+                      errors,
+                    })}
+                  </FieldWrapper>
+                );
+              })}
+            </FormFieldRow>
+            <FormFieldRow rowCols={2} className="w-full">
+              {(['total_transaction_amount_tcs'] as const).map((name) => {
+                const field = currencyDetailsConfig.find((f) => f.name === name) as FieldConfig;
+                return (
+                  <FieldWrapper key={name}>
+                    {getController({ ...field, name: `currencyDetails.${name}`, control, errors })}
+                  </FieldWrapper>
+                );
+              })}
+            </FormFieldRow>
+          </div>
+          <div className="flex flex-wrap w-1/2">
+            <RateTable
+              id={'currencyDetails.invoiceRateTable'}
+              mode={'edit'}
+              totalAmount={totalInrAmount || 0}
+              editableFields={[
+                'transaction_value.agent_mark_up',
+                'remittance_charges.agent_mark_up',
+                'nostro_charges.agent_mark_up',
+                'other_charges.agent_mark_up',
+              ]}
+              invoiceData={invoiceRateTable}
+            />
+          </div>
+        </FormFieldRow>
+
+        <div className="mt-16 flex flex-col items-center gap-10">
           <div className="flex justify-center gap-1 flex-wrap">
-         
-              <>
-               {viewMode && (
-               <ConfirmationAlert
-                 title="Go Back"
-                 description="Are you sure you want to go back? Any unsaved changes will be lost."
-                 onConfirm={handleBack}
-               >
-                 <Button type="button" variant="light">
-                   Back
-                 </Button>
-               </ConfirmationAlert>
-                 )}
-                 {!viewMode && (
-                 <ConfirmationAlert
-                   title="Cancel Transaction"
-                   description="Are you sure you want to cancel? All unsaved changes will be lost."
-                   onConfirm={handleCancelConfirm}
-                 >
-                   <Button type="button" variant="light" className="mx-2">
-                     Cancel
-                   </Button>
-                 </ConfirmationAlert>
-                 )}
-                {viewMode ? (
-                  <ConfirmationAlert
-                    title="Update Transaction"
-                    description="Are you sure you want to update this transaction?"
-                    onConfirm={handleSave}
-                  >
-                    <Button variant="secondary" disabled={isSaving} className="mx-2 w-24">
-                      {isSaving ? 'Updating...' : 'Update'}
-                    </Button>
-                  </ConfirmationAlert>
-                ) : (
-                  <ConfirmationAlert
-                    title="Save Transaction"
-                    description="Are you sure you want to save this transaction?"
-                    onConfirm={handleSave}
-                  >
-                    <Button variant="secondary" disabled={isSaving} className="mx-2 w-24">
-                      {isSaving ? 'Saving...' : 'Save'}
-                    </Button>
-                  </ConfirmationAlert>
-                )}
-              </>
+            <>
               {viewMode && (
+                <ConfirmationAlert
+                  title="Go Back"
+                  description="Are you sure you want to go back? Any unsaved changes will be lost."
+                  onConfirm={handleBack}
+                >
+                  <Button type="button" variant="light">
+                    Back
+                  </Button>
+                </ConfirmationAlert>
+              )}
+              {!viewMode && (
+                <ConfirmationAlert
+                  title="Cancel Transaction"
+                  description="Are you sure you want to cancel? All unsaved changes will be lost."
+                  onConfirm={handleCancelConfirm}
+                >
+                  <Button type="button" variant="light" className="mx-2">
+                    Cancel
+                  </Button>
+                </ConfirmationAlert>
+              )}
+              {viewMode ? (
+                <ConfirmationAlert
+                  title="Update Transaction"
+                  description="Are you sure you want to update this transaction?"
+                  onConfirm={handleSave}
+                >
+                  <Button variant="secondary" disabled={isSaving} className="mx-2 w-24">
+                    {isSaving ? 'Updating...' : 'Update'}
+                  </Button>
+                </ConfirmationAlert>
+              ) : (
+                <ConfirmationAlert
+                  title="Save Transaction"
+                  description="Are you sure you want to save this transaction?"
+                  onConfirm={handleSave}
+                >
+                  <Button variant="secondary" disabled={isSaving} className="mx-2 w-24">
+                    {isSaving ? 'Saving...' : 'Save'}
+                  </Button>
+                </ConfirmationAlert>
+              )}
+            </>
+            {viewMode && (
               <>
                 <ConfirmationAlert
                   title="Share Transaction Details"
@@ -583,21 +572,20 @@ const CurrencyDetails = ({ setAccordionState, viewMode, paymentData }: CommonCre
                   Payment
                 </Button>
               </>
-            ) }
+            )}
           </div>
         </div>
-    </Spacer>
-    <GenericDialog open={isModalOpen} onOpenChange={setIsModalOpen} title="Payment" contentClassName='md:w-[40vw]'>
-         <Payments
-              setIsOpen={setIsModalOpen}
-              uploadScreen={false}
-              data={selectedPayment}
-              onSubmit={handleUploadSubmit}
-            />
-    </GenericDialog>
+      </Spacer>
+      <GenericDialog open={isModalOpen} onOpenChange={setIsModalOpen} title="Payment" contentClassName="md:w-[40vw]">
+        <Payments
+          setIsOpen={setIsModalOpen}
+          uploadScreen={false}
+          data={selectedPayment}
+          onSubmit={handleUploadSubmit}
+        />
+      </GenericDialog>
     </>
   );
 };
 
 export default CurrencyDetails;
-

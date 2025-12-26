@@ -33,7 +33,7 @@ const TransactionBasicDetails = ({ setAccordionState }: CommonCreateTransactionP
   } = useGetData({
     endpoint: API.PURPOSE.TRANSACTION_MAPPING,
     queryKey: queryKeys.masters.documentMapping,
-    dataPath: 'data'
+    dataPath: 'data',
   });
   const sourceOfFunds = useWatch({ control, name: 'transactionDetails.source_of_funds' });
   const companySettlementRate = useWatch({ control, name: 'transactionDetails.company_settlement_rate' });
@@ -97,7 +97,7 @@ const TransactionBasicDetails = ({ setAccordionState }: CommonCreateTransactionP
   // Debounced calculation function
   const debouncedCalculateCustomerRate = useCallback(
     debounce((fxAmt: number, settlementRate: number, margin: number) => {
-      const calculatedCustomerRate = (Number(fxAmt) * Number(settlementRate || 0)) + Number(margin || 0);
+      const calculatedCustomerRate = Number(fxAmt) * Number(settlementRate || 0) + Number(margin || 0);
       setValue('transactionDetails.customer_rate', calculatedCustomerRate);
     }, 5000),
     [setValue]
@@ -107,7 +107,7 @@ const TransactionBasicDetails = ({ setAccordionState }: CommonCreateTransactionP
     if (fxAmount != null && companySettlementRate != null) {
       debouncedCalculateCustomerRate(fxAmount, companySettlementRate, addMargin || 0);
     }
-    
+
     // Cleanup function to cancel pending debounced calls
     return () => {
       debouncedCalculateCustomerRate.cancel();
@@ -163,22 +163,25 @@ const TransactionBasicDetails = ({ setAccordionState }: CommonCreateTransactionP
           </FormFieldRow>
           <p className="font-semibold text-gray-600">KYC Details</p>
           <>
-       
             <FormFieldRow rowCols={4}>
-              {(['applicant_email', 'applicant_mobile_number','applicant_pan_number', 'source_of_funds'] as const).map((name) => {
-                
-                const field = transactionBasicDetailsConfig.find((f) => f.name === name) as FieldConfig;
-                return (
-                  <FieldWrapper key={name}>
-                    {getController({ ...field, name: `transactionDetails.${name}`, control, errors })}
-                  </FieldWrapper>
-                );
-              })}
+              {(['applicant_email', 'applicant_mobile_number', 'applicant_pan_number', 'source_of_funds'] as const).map(
+                (name) => {
+                  const field = transactionBasicDetailsConfig.find((f) => f.name === name) as FieldConfig;
+                  return (
+                    <FieldWrapper key={name}>
+                      {getController({ ...field, name: `transactionDetails.${name}`, control, errors })}
+                    </FieldWrapper>
+                  );
+                }
+              )}
             </FormFieldRow>
             <FormFieldRow rowCols={4}>
-              {(['paid_by','payee_name', 'payee_pan_number', 'payee_dob'] as const).map((name) => {
+              {(['paid_by', 'payee_name', 'payee_pan_number', 'payee_dob'] as const).map((name) => {
                 if (
-                  (name === 'paid_by' || name === 'payee_name' || name === 'payee_pan_number' || name === 'payee_dob') &&
+                  (name === 'paid_by' ||
+                    name === 'payee_name' ||
+                    name === 'payee_pan_number' ||
+                    name === 'payee_dob') &&
                   sourceOfFunds !== 'others'
                 ) {
                   return null;

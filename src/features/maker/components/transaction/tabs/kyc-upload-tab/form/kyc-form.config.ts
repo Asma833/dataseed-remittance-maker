@@ -23,6 +23,6 @@ export const kycDocumentsConfig = {
       required: true,
       disabled: true,
       placeholder: 'Enter Applicant Name',
-    }
+    },
   },
 };

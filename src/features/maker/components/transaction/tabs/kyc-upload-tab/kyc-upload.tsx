@@ -18,7 +18,7 @@ const KYCUpload = () => {
   // Flattening function - memoized to prevent infinite loop
   const flattenedRejectionResData = useMemo((): FlattenedDocumentItem[] => {
     if (!rejectionSumData?.documents) return [];
-    
+
     return rejectionSumData.documents.flatMap((doc: RejectedDocument) => {
       return (doc.history ?? []).map((hist: RejectionHistoryItem): FlattenedDocumentItem => {
         const item: FlattenedDocumentItem = {
@@ -28,12 +28,12 @@ const KYCUpload = () => {
           rejection_reason: hist.rejection_reason,
           created_at: hist.created_at,
         };
-        
+
         // Only add remarks if it exists to avoid undefined assignment
         if (hist.remarks !== undefined) {
           item.remarks = hist.remarks;
         }
-        
+
         return item;
       });
     });

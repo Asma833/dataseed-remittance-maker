@@ -7,7 +7,15 @@ import Typography from '@mui/material/Typography';
 import { AccordionItem } from '../types/createTransactionForm.types';
 import { useAccordionStateProvider } from '../context/accordion-control-context';
 
-export default function CreateTransactionsAccordion({ accordionItems, viewMode, paymentData }: { accordionItems: AccordionItem[], viewMode?: boolean, paymentData?: any }) {
+export default function CreateTransactionsAccordion({
+  accordionItems,
+  viewMode,
+  paymentData,
+}: {
+  accordionItems: AccordionItem[];
+  viewMode?: boolean;
+  paymentData?: any;
+}) {
   const { accordionState, setAccordionState } = useAccordionStateProvider();
   const [expanded, setExpanded] = useState<string | false>(accordionState.currentActiveTab);
   const handleChange = (panel: string) => (event: React.SyntheticEvent, isExpanded: boolean) => {
@@ -21,12 +29,7 @@ export default function CreateTransactionsAccordion({ accordionItems, viewMode, 
   return (
     <div>
       {accordionItems.map((item) => (
-        <Accordion
-          key={item.id}
-          expanded={expanded === item.id}
-          className="bg-background!"
-          sx={{ boxShadow: 'none' }}
-        >
+        <Accordion key={item.id} expanded={expanded === item.id} className="bg-background!" sx={{ boxShadow: 'none' }}>
           <AccordionSummary
             expandIcon={<ChevronDown />}
             aria-controls={`${item.id}bh-content`}

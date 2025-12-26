@@ -46,10 +46,7 @@ export const transactionBasicDetailsSchema = z
       .min(1, 'Applicant PAN number is required')
       .regex(PAN_REGEX, 'Invalid PAN format (e.g., ABCDE1234F)')
       .length(10, 'PAN must be 10 characters'),
-    applicant_dob: z.coerce
-      .date()
-      .max(new Date(), 'Date of birth cannot be in the future')
-      .optional(),
+    applicant_dob: z.coerce.date().max(new Date(), 'Date of birth cannot be in the future').optional(),
     applicant_email: z.string().email('Invalid email format').max(100, 'Email too long').optional().or(z.literal('')),
     applicant_mobile_number: z
       .string()
@@ -97,8 +94,14 @@ export const transactionBasicDetailsSchema = z
       .nonempty('Passport number is required')
       .regex(INDIAN_PASSPORT_REGEX, 'Invalid passport format (e.g., A1234567)')
       .length(8, 'Indian passport number must be exactly 8 characters'),
-    passport_issue_date: z.string().min(1, 'Passport issue date is required').refine((val) => new Date(val) <= new Date(), 'Issue date cannot be in the future'),
-    passport_expiry_date: z.string().min(1, 'Passport expiry date is required').refine((val) => new Date(val) >= new Date(), 'Expiry date must be in the future'),
+    passport_issue_date: z
+      .string()
+      .min(1, 'Passport issue date is required')
+      .refine((val) => new Date(val) <= new Date(), 'Issue date cannot be in the future'),
+    passport_expiry_date: z
+      .string()
+      .min(1, 'Passport expiry date is required')
+      .refine((val) => new Date(val) >= new Date(), 'Expiry date must be in the future'),
     place_of_issue: z
       .string()
       .max(100, 'Place too long')

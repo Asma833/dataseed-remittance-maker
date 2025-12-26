@@ -12,7 +12,7 @@ type ColumnKey = 'invoiceName' | 'companyRate' | 'agentMarkUp' | 'rate';
 const columnKeys: Record<ColumnKey, { label: string; className?: string }> = {
   invoiceName: { label: 'Particulars', className: 'text-left' },
   companyRate: { label: 'Rate', className: 'text-left' },
-  agentMarkUp: { label: 'Add Margin',className: 'text-center'  },
+  agentMarkUp: { label: 'Add Margin', className: 'text-center' },
   rate: { label: 'Amount', className: 'text-right' },
 };
 
