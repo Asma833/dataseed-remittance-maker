@@ -1,18 +1,19 @@
 import { DataTable } from '@/components/table/data-table';
 import { useNavigate } from 'react-router-dom';
 import { KycTableColumnsConfig } from './kyc-table-columns';
-import { useDeals } from '@/features/maker/hooks/useDeals';
-import { KYCStatusEnum } from '@/types/enums';
+import { useGetPaymentDetails } from '../../../hooks/useGetPaymentDetails';
+
+//import { KYCStatusEnum } from '@/types/enums';
 
 const KYCTable = ({ onUploadClick }: { onUploadClick: (isReupload: boolean, transaction: any) => void }) => {
   const navigate = useNavigate();
-  const { data: deals, isLoading, isError } = useDeals();
+  const { data: deals, isLoading, } = useGetPaymentDetails();
 
   const columns = KycTableColumnsConfig({
     navigate,
     onUploadClick: (status: string, transaction: any) => {
       // isReupload is true if status is REJECTED
-      const isReupload = status === KYCStatusEnum.REJECTED;
+     // const isReupload = status === KYCStatusEnum.REJECTED;
       onUploadClick(true, transaction);
     },
   });
