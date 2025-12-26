@@ -19,6 +19,7 @@ import { GenericDialog } from '@/components/ui/generic-dialog';
 import Payments from '@/components/payments/Payments';
 import { useUploadPaymentChallan } from '@/features/maker/components/transaction/hooks/useUploadPaymentChallan';
 import { generateRateTablePdf } from '@/utils/pdfUtils';
+import { ConfirmationAlert } from '@/components/common/confirmation-alert';
 
 const CurrencyDetails = ({ setAccordionState, viewMode, paymentData }: CommonCreateTransactionProps) => {
   const [isSaving, setIsSaving] = useState(false);
@@ -394,7 +395,7 @@ const CurrencyDetails = ({ setAccordionState, viewMode, paymentData }: CommonCre
     generateRateTablePdf(invoiceRateTable, totalInrAmount || 0, 'transaction-rate-details');
     toast.success('PDF downloaded successfully');
   };
-    const handleCancel = () => {
+    const handleCancelConfirm = () => {
       // Reset the form to its initial state
       reset();
       // Reset accordion to first panel if setAccordionState is available
@@ -524,14 +525,26 @@ const CurrencyDetails = ({ setAccordionState, viewMode, paymentData }: CommonCre
          
               <>
                {viewMode && (
-              <Button type="button" onClick={handleBack} variant="light">
-                  Back
-                </Button>
-                )}
+               <ConfirmationAlert
+                 title="Go Back"
+                 description="Are you sure you want to go back? Any unsaved changes will be lost."
+                 onConfirm={handleBack}
+               >
+                 <Button type="button" variant="light">
+                   Back
+                 </Button>
+               </ConfirmationAlert>
+                 )}
                  {!viewMode && (
-                <Button type="button" onClick={handleCancel} variant="light">
-                  Cancel
-                </Button>
+                 <ConfirmationAlert
+                   title="Cancel Transaction"
+                   description="Are you sure you want to cancel? All unsaved changes will be lost."
+                   onConfirm={handleCancelConfirm}
+                 >
+                   <Button type="button" variant="light">
+                     Cancel
+                   </Button>
+                 </ConfirmationAlert>
                  )}
                 <Button variant="secondary" onClick={handleSave} disabled={isSaving} className="mx-2 w-24">
                   {isSaving ? (viewMode ? 'Updating...' : 'Saving...') : (viewMode ? 'Update' : 'Save')}
@@ -539,12 +552,15 @@ const CurrencyDetails = ({ setAccordionState, viewMode, paymentData }: CommonCre
               </>
               {viewMode && (
               <>
-              <Button type="button" onClick={handleBack} variant="light">
-                  Back
-                </Button>
-                <Button type="button" onClick={handleShareTransactionDetails} variant="secondary" className="mx-2">
-                  Share Transaction Details PDF
-                </Button>
+                <ConfirmationAlert
+                  title="Share Transaction Details"
+                  description="Are you sure you want to download the PDF?"
+                  onConfirm={handleShareTransactionDetails}
+                >
+                  <Button type="button" variant="secondary" className="mx-2">
+                    Share Transaction Details PDF
+                  </Button>
+                </ConfirmationAlert>
                 <Button type="button" onClick={handlePayment} variant="secondary" className="mx-2">
                   Payment
                 </Button>

@@ -29,15 +29,15 @@ export function ConfirmationAlert({
   return (
     <AlertDialog>
       <AlertDialogTrigger asChild>{children}</AlertDialogTrigger>
-      <AlertDialogContent className="bg-card max-w-sm sm:max-w-md z-[99999]">
+      <AlertDialogContent className="bg-card max-w-sm sm:max-w-md z-99999">
         <AlertDialogHeader>
           <AlertDialogTitle>{title}</AlertDialogTitle>
           <AlertDialogDescription>{description}</AlertDialogDescription>
         </AlertDialogHeader>
         <AlertDialogFooter>
-          <AlertDialogCancel>Cancel</AlertDialogCancel>
+          <AlertDialogCancel>NO</AlertDialogCancel>
           <AlertDialogAction onClick={onConfirm} disabled={isLoading}>
-            {isLoading ? 'Loading...' : 'Continue'}
+            {isLoading ? 'Loading...' : 'YES'}
           </AlertDialogAction>
         </AlertDialogFooter>
       </AlertDialogContent>
