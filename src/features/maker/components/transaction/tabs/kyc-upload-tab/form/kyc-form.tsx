@@ -101,7 +101,6 @@ const KYCForm = ({
       ];
     });
   }, [documentTypes, handleUploadOnFileChange]);
-  console.log('Dynamic Document Fields:', dynamicDocumentFields);
 
   const methods = useForm({
     resolver: zodResolver(KycFormSchema),
@@ -120,7 +119,6 @@ const KYCForm = ({
 
   const handleKycSubmit = handleSubmit(async (formdata: FieldValues) => {
     // Handle form submission logic here
-    console.log('Form submitted:', formdata);
     onFormSubmit();
   });
 
@@ -147,8 +145,8 @@ const KYCForm = ({
               <div className="px-2">Loading documents...</div>
             ) : dynamicDocumentFields.length > 0 ? (
               <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 px-1">
-                {dynamicDocumentFields.map((field: any) => {
-                  const hasDocumentId = rejectedDocuments.find((doc) => doc.document_id === field.documentId);
+                {dynamicDocumentFields?.map((field: any) => {
+                  const hasDocumentId = rejectedDocuments && rejectedDocuments?.find((doc) => doc.document_id === field.documentId) || "";
 
                   if (isRejected) {
                     return (
@@ -157,7 +155,7 @@ const KYCForm = ({
                           <FieldWrapper
                             error={hasDocumentId ? `Rejection Reason: ${hasDocumentId.rejection_reason}` : ''}
                           >
-                            {getController({ ...field, control, errors })}
+                            {getController({ ...field, required: true, control, errors })}
                           </FieldWrapper>
                         </div>
                       )

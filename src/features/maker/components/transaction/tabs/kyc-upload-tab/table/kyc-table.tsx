@@ -15,7 +15,6 @@ const KYCTable = ({ onUploadClick }: { onUploadClick: (isReupload: boolean, tran
       // isReupload is true if status is REJECTED
       const isReupload = status === KYCStatusEnum.REJECTED;
 
-      console.log('🚀 ~ KYCTable ~ isReupload:', isReupload);
       onUploadClick(true, transaction);
     },
   });

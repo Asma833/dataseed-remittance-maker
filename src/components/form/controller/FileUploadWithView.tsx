@@ -3,11 +3,13 @@ import { Eye, X } from 'lucide-react';
 import { FileUpload } from './FileUpload';
 import { useFormContext } from 'react-hook-form';
 import '../styles/form-layout.css';
+import { FormLabel } from '@/components/ui/form';
 
 interface FileUploadProps {
   id?: string;
   name: string;
   label: string;
+  required?: boolean;
   className?: string;
   maxFiles?: number;
   description?: string;
@@ -18,7 +20,15 @@ interface FileUploadProps {
   onFileSelected?: (file: File) => void;
 }
 
-const FileUploadWithView = ({ id, name, label, className, viewFile = true, onFileSelected }: FileUploadProps) => {
+const FileUploadWithView = ({
+  id,
+  name,
+  label,
+  required = true,
+  className,
+  viewFile = true,
+  onFileSelected,
+}: FileUploadProps) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const { watch } = useFormContext();
@@ -89,7 +99,10 @@ const FileUploadWithView = ({ id, name, label, className, viewFile = true, onFil
   return (
     <div className="flex">
       <div className="flex flex-col w-full">
-        <span className="fileupload-label text-sm mb-2">{label}</span>
+        <FormLabel className="text-[var(--color-form-label)]">
+          {label}
+          {required && <span className="text-destructive ml-1">*</span>}
+        </FormLabel>
         <div className="flex w-full gap-2">
           <FileUpload
             id={id || name}

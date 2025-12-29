@@ -11,6 +11,12 @@ const KYCUpload = () => {
   const [showForm, setShowForm] = useState(false);
   const [isReupload, setIsReupload] = useState(false);
   const [transaction, setTransaction] = useState<DealsResponseTransaction>();
+
+  // const dummyTransaction = {
+  //   ...transaction,
+  //   transaction_status: 'REJECTED',
+  // };
+
   const isRejected = transaction?.transaction_status === TransactionStatusEnum.REJECTED;
   const { data: rejectionSumData, isLoading, isError, error } = useRejectionSummary(transaction?.id);
 
