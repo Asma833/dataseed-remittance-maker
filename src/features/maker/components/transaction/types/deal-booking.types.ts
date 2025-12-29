@@ -28,3 +28,12 @@ export interface DealBookingResponse {
   status: string;
   // Add other response fields as needed
 }
+
+import { CompleteTransactionRequest } from '../tabs/create-transactions-tab/create-transaction-form/types/transaction.types';
+
+export type CompleteDealRequest = CompleteTransactionRequest;
+
+export interface CompleteDealResponse {
+  success: boolean;
+  message: string;
+}

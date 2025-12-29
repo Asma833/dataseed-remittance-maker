@@ -1,7 +1,7 @@
 import { NavLink, Outlet, useLocation } from 'react-router-dom';
-import { cn } from '@/utils/cn';
-import CreateTransactions from '../../../components/transaction/tabs/create-transactions-tab/transactions';
 import { getTransactionTabs } from '@/core/routes/route-maps/agent-maker.routes';
+import { cn } from '@/utils/cn';
+import CreateTransactions from '@/features/maker/pages/transaction/remittance/page';
 
 const TransactionPage = () => {
   const location = useLocation();

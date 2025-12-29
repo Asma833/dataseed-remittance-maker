@@ -1,7 +1,8 @@
 import { useMutation } from '@tanstack/react-query';
-import { uploadPaymentChallanApi } from '@/api/upload-payment-challan.api';
+
 import { UploadPaymentChallanRequest, UploadPaymentChallanResponse } from '../types/payment.types';
 import { toast } from 'sonner';
+import { uploadPaymentChallanApi } from '../api/upload-payment-challan.api';
 
 /**
  * Hook for uploading payment challan

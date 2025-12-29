@@ -107,22 +107,22 @@ export const GetViewAllTransactionTableColumns = () => {
       accessorKey: 'transaction_status',
       meta: { className: 'min-w-0 p-2' },
     },
-    {
-      id: 'swift_copy',
-      header: 'Swift Copy',
-      accessorKey: 'swift_copy',
-      meta: { className: 'min-w-0 p-2' },
-      cell: ({ row }: { row: any }) => (
-        <SignLinkButton
-          id={row.company_reference_no}
-          onClick={() => {}}
-          tooltipText="Download Swift Copy"
-          buttonType="download"
-          buttonIconType="download"
-          iconClassName="text-primary group-hover:text-white group-disabled:text-gray-400"
-          className="group"
-        />
-      ),
-    },
+    // {
+    //   id: 'swift_copy',
+    //   header: 'Swift Copy',
+    //   accessorKey: 'swift_copy',
+    //   meta: { className: 'min-w-0 p-2' },
+    //   cell: ({ row }: { row: any }) => (
+    //     <SignLinkButton
+    //       id={row.ref_no}
+    //       onClick={() => {}}
+    //       tooltipText="Download Swift Copy"
+    //       buttonType="download"
+    //       buttonIconType="download"
+    //       iconClassName="text-primary group-hover:text-white group-disabled:text-gray-400"
+    //       className="group"
+    //     />
+    //   ),
+    // },
   ];
 };

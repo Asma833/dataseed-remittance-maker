@@ -22,6 +22,9 @@ export interface User {
     name: string;
   } | null;
   bankAccount: any | null;
+  agent_users: {
+    agent_id: string;
+  }[];
 }
 
 export interface LoginResponse {

@@ -22,7 +22,7 @@ export interface RejectionSummaryResponse {
 }
 
 export async function getRejectionSummary(transactionId: string): Promise<RejectionSummaryResponse> {
-  const response = await axiosInstance.get(API.REMITTANCE.TRANSACTIONS.DOCUMENTS.REJECTION(transactionId), {
+  const response = await axiosInstance.get(API.REMITTANCE.DOCUMENTS_REJECTION(transactionId), {
     skipEncryption: true,
     headers: {
       accept: 'application/json',

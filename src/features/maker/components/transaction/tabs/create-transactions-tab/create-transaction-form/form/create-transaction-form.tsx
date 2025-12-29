@@ -7,22 +7,27 @@ import { useForm, FormProvider } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { createTransactionSchema, CreateTransactionFormData, CreateTransactionFormInput } from './common-schema';
 import { safeNumber, safeString, normalizeString } from '@/utils/form-helpers';
-import { useCompleteTransaction } from '../hooks/useCompleteTransaction';
-import { CompleteTransactionRequest } from '../types/transaction.types';
+import { useCompleteTransaction } from '../../../../hooks/useCompleteTransaction';
+import { useUpdateTransaction } from '../../../../hooks/useUpdateTransaction';
+import { CompleteTransactionRequest, TransactionDetails, PaymentDetails } from '../types/transaction.types';
+
 import { getFormDefaultValues } from './form-defaults';
 import { panelFields } from './form-validation-fields';
+import { PaymentData } from '../../../../types/payment.types';
 
 type Props = {
   onCancel?: () => void;
   onSubmit?: (data: CreateTransactionFormData) => void;
-  initialData?: Partial<CreateTransactionFormInput>;
+  initialData?: Partial<CreateTransactionFormInput & { paymentDetails?: PaymentData; id?: string }>;
+  viewMode?: boolean;
 };
 
-const CreateTransactionForm = ({ onCancel, onSubmit, initialData }: Props) => {
+const CreateTransactionForm = ({ onCancel, onSubmit, initialData, viewMode }: Props) => {
   const { accordionState, setAccordionState } = useAccordionStateProvider();
   const currentTab = accordionState.currentActiveTab;
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const { mutateAsync } = useCompleteTransaction();
+  const { mutateAsync: createTransaction } = useCompleteTransaction();
+  const { mutateAsync: updateTransaction } = useUpdateTransaction();
 
   const defaultValues = useMemo(() => getFormDefaultValues(initialData), [initialData]);
   const form = useForm<CreateTransactionFormInput, unknown, CreateTransactionFormData>({
@@ -142,12 +147,18 @@ const CreateTransactionForm = ({ onCancel, onSubmit, initialData }: Props) => {
           applicant_id_document: normalizeString(data.transactionDetails.applicant_id_document),
           passport_number: normalizeString(data.transactionDetails.passport_number),
           place_of_issue: normalizeString(data.transactionDetails.place_of_issue),
+          passport_issue_date: data.transactionDetails.passport_issue_date
+            ? new Date(data.transactionDetails.passport_issue_date).toISOString()
+            : '',
+          passport_expiry_date: data.transactionDetails.passport_expiry_date
+            ? new Date(data.transactionDetails.passport_expiry_date).toISOString()
+            : '',
           applicant_address: normalizeString(data.transactionDetails.applicant_address),
           applicant_city: normalizeString(data.transactionDetails.applicant_city),
           applicant_state: normalizeString(data.transactionDetails.applicant_state),
           applicant_country: normalizeString(data.transactionDetails.applicant_country),
           postal_code: normalizeString(String(data.transactionDetails.postal_code)),
-        },
+        } as TransactionDetails,
         paymentDetails: {
           payment_method: 'UPI',
           payment_reference: 'PAY-REF-001',
@@ -156,9 +167,21 @@ const CreateTransactionForm = ({ onCancel, onSubmit, initialData }: Props) => {
           amount: 875088,
         },
       };
-      const response = await mutateAsync(payload);
-      // onSubmit?.(data);
-      form.reset(initialData || {});
+
+      let response;
+      if (viewMode) {
+        // Update mode
+
+        const transactionId = initialData?.id;
+        if (!transactionId) {
+          throw new Error('Transaction ID is required for update');
+        }
+        response = await updateTransaction({ id: transactionId, data: payload });
+      } else {
+        // Create mode
+        response = await createTransaction(payload);
+      }
+      // form.reset(initialData || {});
     } catch (error) {
       console.error('Error creating transaction:', error);
 
@@ -177,10 +200,7 @@ const CreateTransactionForm = ({ onCancel, onSubmit, initialData }: Props) => {
     <FormProvider {...form}>
       <form id="create-transaction-form" onSubmit={form.handleSubmit(handleSubmit)}>
         <div>
-          <div className="flex justify-between mb-4 gap-2">
-            <Button variant="light" className="w-24" onClick={onCancel} type="button">
-              Cancel
-            </Button>
+          <div className="flex justify-end mb-4 gap-2">
             <div className="flex gap-2">
               {showPrevious && (
                 <Button variant="light" className="w-24" onClick={handlePrevious} type="button">
@@ -194,7 +214,11 @@ const CreateTransactionForm = ({ onCancel, onSubmit, initialData }: Props) => {
               )}
             </div>
           </div>
-          <CreateTransactionsAccordion accordionItems={accordionItems} />
+          <CreateTransactionsAccordion
+            accordionItems={accordionItems}
+            {...(viewMode !== undefined ? { viewMode } : {})}
+            {...(initialData?.paymentDetails ? { paymentData: initialData.paymentDetails } : {})}
+          />
         </div>
       </form>
     </FormProvider>

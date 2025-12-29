@@ -1,7 +1,18 @@
 // Define field paths for each panel (only required fields)
 export const transactionDetailsFields = [
   'transactionDetails.purpose',
+  'transactionDetails.fx_currency',
+  'transactionDetails.fx_amount',
+  'transactionDetails.company_settlement_rate',
+  'transactionDetails.add_margin',
+  'transactionDetails.customer_rate',
+  'transactionDetails.nostro_charges',
+  'transactionDetails.applicant_pan_number',
+  'transactionDetails.source_of_funds',
   'transactionDetails.passport_number',
+  'transactionDetails.passport_issue_date',
+  'transactionDetails.passport_expiry_date',
+  'transactionDetails.applicant_name',
   'transactionDetails.applicant_address',
   'transactionDetails.applicant_city',
   'transactionDetails.applicant_state',

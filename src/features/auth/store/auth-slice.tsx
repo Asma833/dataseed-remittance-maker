@@ -10,6 +10,7 @@ export interface AuthState {
   refreshToken: string | null;
   isAuthenticated: boolean;
   isLoading: boolean;
+  agentId: string | null;
 }
 
 const initialState: AuthState = {
@@ -18,6 +19,7 @@ const initialState: AuthState = {
   refreshToken: null,
   isAuthenticated: false,
   isLoading: false,
+  agentId: null,
 };
 
 const authSlice = createSlice({
@@ -30,12 +32,14 @@ const authSlice = createSlice({
         user: User;
         accessToken: string;
         refreshToken: string;
+        agentId?: string | null;
       }>
     ) => {
-      const { user, accessToken, refreshToken } = action.payload;
+      const { user, accessToken, refreshToken, agentId } = action.payload;
       state.user = user;
       state.accessToken = accessToken;
       state.refreshToken = refreshToken;
+      state.agentId = agentId || user.agent_users?.[0]?.agent_id || null;
       state.isAuthenticated = true;
     },
     updateAccessToken: (state, action: PayloadAction<string>) => {
@@ -45,6 +49,7 @@ const authSlice = createSlice({
       state.user = null;
       state.accessToken = null;
       state.refreshToken = null;
+      state.agentId = null;
       state.isAuthenticated = false;
     },
     setLoading: (state, action: PayloadAction<boolean>) => {
@@ -56,6 +61,7 @@ const authSlice = createSlice({
       state.user = null;
       state.accessToken = null;
       state.refreshToken = null;
+      state.agentId = null;
       state.isAuthenticated = false;
     });
   },

@@ -29,7 +29,8 @@ export const API = {
     GET_CONFIG: `/config`,
     GET_PURPOSE_TYPES: `/config?type=purpose_type`,
     GET_TRANSACTION_TYPES: `/config?type=transaction_type`,
-    GET_DOCUMENT_TYPES: (id: string) => `trans-purpose-document/${id}/documents`,
+    GET_DOCUMENT_TYPES: (id: string, transactionId?: string) =>
+      `trans-purpose-document/${id}/documents${transactionId ? `?transaction_id=${transactionId}` : ''}`,
   },
   DOCUMENTS: {
     UPLOAD: `/documents/upload`,
@@ -78,6 +79,7 @@ export const API = {
   REMITTANCE: {
     CREATE_TRANSACTION: `/remittance/deals/complete`,
     GET_TRANSACTION: `/remittance/deals/`,
+    COMPLETE_DEAL: (id: string) => `/remittance/deals/${id}/complete`,
     UPLOAD_PAYMENT_CHALLAN: (id: string) => `/remittance/transactions/documents/payment/challan/${id}`,
     TRANSACTIONS: {
       DOCUMENTS: {
@@ -86,6 +88,11 @@ export const API = {
       },
     },
     DEALS: `/remittance/deals`,
+    GST_CALCULATION: `/remittance/deals/gst-tcs`,
+    TCS_CALCULATION: `/remittance/deals/new-tcs`,
+    GET_AGENT_BY_ID: (id: string) => `/agents/${id}`,
+    DOCUMENTS_REJECTION: (id: string) => `/remittance/transactions/documents/${id}/rejection`,
+    DOCUMENTS_UPLOAD: `/remittance/transactions/documents/upload`,
   },
 } as const;
 

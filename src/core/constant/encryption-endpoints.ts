@@ -126,12 +126,27 @@ export const ENDPOINT_MATCHING_RULES: EndpointRulesConfig = {
   'complete-deal': {
     endpoint: API.REMITTANCE.CREATE_TRANSACTION,
     matchType: 'standard' as const,
-    description: 'Complete deal',
+    description: 'Complete Transaction',
   },
   'payment-screen-shot-upload': {
     endpoint: `/remittance/transactions/documents/payment/challan/`,
     matchType: 'standard' as const,
     description: 'Complete deal',
+  },
+  GST: {
+    endpoint: API.REMITTANCE.GST_CALCULATION,
+    matchType: 'standard' as const,
+    description: 'Gst Calculation',
+  },
+  TCS: {
+    endpoint: API.REMITTANCE.TCS_CALCULATION,
+    matchType: 'standard' as const,
+    description: 'Tcs Calculation',
+  },
+  'update-transaction': {
+    endpoint: `/remittance/deals/`,
+    matchType: 'standard' as const,
+    description: 'Update Transaction',
   },
 } as const;
 

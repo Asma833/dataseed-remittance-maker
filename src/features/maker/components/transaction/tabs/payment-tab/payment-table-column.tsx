@@ -4,12 +4,18 @@ import PaymentStatusCell from '@/components/cell/table/PaymentStatusCell';
 import { formatDateWithFallback } from '@/utils/formatDateWithFallback';
 import { PaymentData } from '../../types/payment.types';
 
-export const GetPaymentTableColumn = ({ handlePayment }: { handlePayment: (rowData: any) => void }) => {
+export const GetPaymentTableColumn = ({
+  handlePayment,
+  handleViewTransaction,
+}: {
+  handlePayment: (rowData: PaymentData) => void;
+  handleViewTransaction: (rowData: PaymentData) => void;
+}) => {
   return [
     { id: 'ref_no', header: 'Ref. No', accessorKey: 'ref_no', meta: { className: 'min-w-0 p-2' } },
     { id: 'agent_ref_no', header: 'Agent Ref. No', accessorKey: 'agent_ref_no', meta: { className: 'min-w-0 p-2' } },
     {
-      id: 'order_date',
+      id: 'created_date',
       header: 'Order Date',
       accessorKey: 'created_date',
       meta: { className: 'min-w-0 p-2' },
@@ -128,7 +134,7 @@ export const GetPaymentTableColumn = ({ handlePayment }: { handlePayment: (rowDa
       cell: ({ row }: { row: PaymentData }) => (
         <SignLinkButton
           id={row.ref_no}
-          // onClick={() => }
+          onClick={() => handleViewTransaction(row)}
           tooltipText="View"
           buttonType="view"
           buttonIconType="view"

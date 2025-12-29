@@ -27,32 +27,26 @@ export const transactionBasicDetailsSchema = z
     transaction_type: z.string().optional().or(z.literal('')),
     fx_currency: z
       .string()
-      .regex(CURRENCY_CODE_REGEX, 'Invalid currency code (must be 3 uppercase letters)')
-      .optional()
-      .or(z.literal('')),
-    fx_amount: z.coerce.number().min(0, 'Amount must be positive').max(999999999, 'Amount too large').optional(),
-    company_settlement_rate: z.coerce.number().min(0, 'Rate must be positive').max(999999, 'Rate too large').optional(),
-    add_margin: z.coerce.number().min(0, 'Add margin must be positive').max(999999, 'Rate too large').optional(),
-    customer_rate: z.coerce.number().min(0, 'Customer rate must be positive').max(999999, 'Rate too large').optional(),
-    nostro_charges: z.coerce.number().optional(),
+      .min(1, 'FX currency is required')
+      .regex(CURRENCY_CODE_REGEX, 'Invalid currency code (must be 3 uppercase letters)'),
+    fx_amount: z.coerce.number().min(1, 'FX amount is required'),
+    company_settlement_rate: z.coerce.number().gt(0, 'Company settlement rate is required'),
+    add_margin: z.coerce.number().min(1, 'Add margin is required'),
+    customer_rate: z.coerce.number(),
+    nostro_charges: z.coerce.number().min(1, 'Nostro charges is required'),
     applicant_name: z
       .string()
-      .min(2, 'Name too short')
-      .max(100, 'Name too long')
-      .regex(NO_LEADING_HYPHEN_OR_SPACE, 'Name cannot start with hyphen or space')
+      .min(2, 'Applicant name too short')
+      .max(100, 'Applicant name too long')
+      .regex(NO_LEADING_HYPHEN_OR_SPACE, 'Applicant name cannot start with hyphen or space')
       .optional()
       .or(z.literal('')),
     applicant_pan_number: z
       .string()
+      .min(1, 'Applicant PAN number is required')
       .regex(PAN_REGEX, 'Invalid PAN format (e.g., ABCDE1234F)')
-      .length(10, 'PAN must be 10 characters')
-      .optional()
-      .or(z.literal('')),
-    applicant_dob: z.coerce
-      .date()
-      .max(new Date(), 'Date of birth cannot be in the future')
-      .refine((date) => new Date().getFullYear() - date.getFullYear() >= 18, 'Must be at least 18 years old')
-      .optional(),
+      .length(10, 'PAN must be 10 characters'),
+    applicant_dob: z.coerce.date().max(new Date(), 'Date of birth cannot be in the future').optional(),
     applicant_email: z.string().email('Invalid email format').max(100, 'Email too long').optional().or(z.literal('')),
     applicant_mobile_number: z
       .string()
@@ -62,10 +56,9 @@ export const transactionBasicDetailsSchema = z
       .or(z.literal('')),
     source_of_funds: z
       .string()
+      .min(1, 'Source of funds is required')
       .max(200, 'Description too long')
-      .regex(NO_LEADING_HYPHEN_OR_SPACE, 'Description cannot start with hyphen or space')
-      .optional()
-      .or(z.literal('')),
+      .regex(NO_LEADING_HYPHEN_OR_SPACE, 'Description cannot start with hyphen or space'),
     paid_by: z
       .string()
       .max(100, 'Paid by too long')
@@ -74,15 +67,15 @@ export const transactionBasicDetailsSchema = z
       .or(z.literal('')),
     payee_name: z
       .string()
-      .min(2, 'Name too short')
-      .max(100, 'Name too long')
-      .regex(NO_LEADING_HYPHEN_OR_SPACE, 'Name cannot start with hyphen or space')
+      .min(2, 'Payee name too short')
+      .max(100, 'Payee name too long')
+      .regex(NO_LEADING_HYPHEN_OR_SPACE, 'Payee name cannot start with hyphen or space')
       .optional()
       .or(z.literal('')),
     payee_pan_number: z
       .string()
-      .regex(PAN_REGEX, 'Invalid PAN format (e.g., QRJYE1234F)')
-      .length(10, 'PAN must be 10 characters')
+      .regex(PAN_REGEX, 'Invalid PAN number format (e.g., QRJYE1234F)')
+      .length(10, 'PAN number must be 10 characters')
       .optional()
       .or(z.literal('')),
     payee_dob: z.coerce
@@ -101,8 +94,14 @@ export const transactionBasicDetailsSchema = z
       .nonempty('Passport number is required')
       .regex(INDIAN_PASSPORT_REGEX, 'Invalid passport format (e.g., A1234567)')
       .length(8, 'Indian passport number must be exactly 8 characters'),
-    passport_issued_date: z.coerce.date().max(new Date(), 'Issued date cannot be in the future').optional(),
-    passport_expiry_date: z.coerce.date().min(new Date(), 'Expiry date must be in the future').optional(),
+    passport_issue_date: z
+      .string()
+      .min(1, 'Passport issue date is required')
+      .refine((val) => new Date(val) <= new Date(), 'Issue date cannot be in the future'),
+    passport_expiry_date: z
+      .string()
+      .min(1, 'Passport expiry date is required')
+      .refine((val) => new Date(val) >= new Date(), 'Expiry date must be in the future'),
     place_of_issue: z
       .string()
       .max(100, 'Place too long')
@@ -140,16 +139,16 @@ export const transactionBasicDetailsSchema = z
   .refine(
     (data) => {
       if (
-        data.passport_issued_date &&
+        data.passport_issue_date &&
         data.passport_expiry_date &&
-        data.passport_expiry_date <= data.passport_issued_date
+        new Date(data.passport_expiry_date) <= new Date(data.passport_issue_date)
       ) {
         return false;
       }
       return true;
     },
     {
-      message: 'Expiry date must be after issued date',
+      message: 'Expiry date must be after issue date',
       path: ['passport_expiry_date'],
     }
   );

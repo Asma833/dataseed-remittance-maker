@@ -1,8 +1,8 @@
 import Spacer from '@/components/form/wrapper/spacer';
 import { beneficiaryBank, beneficiaryDetailsConfig } from './beneficairy-details.config';
-import { CommonCreateTransactionProps } from '@/features/maker/types/create-transaction.types';
+import { CommonCreateTransactionProps } from '@/features/maker/components/transaction/types/create-transaction.types';
 import { useState } from 'react';
-import { useFormContext, useWatch } from 'react-hook-form';
+import { useFormContext, useWatch, useFormState } from 'react-hook-form';
 import { ShadCnRadioGroup } from '@/components/form/controller/ShadCnRadioGroup';
 import FormFieldRow from '@/components/form/wrapper/form-field-row';
 import FieldWrapper from '@/components/form/wrapper/field-wrapper';
@@ -13,38 +13,43 @@ import { toast } from 'sonner';
 const BeneficiaryDetails = ({ setAccordionState }: CommonCreateTransactionProps) => {
   const [isSaving, setIsSaving] = useState(false);
   const [isEditing, setIsEditing] = useState(false);
-  const {
-    control,
-    formState: { errors },
-    trigger,
-  } = useFormContext();
+  const { control, trigger } = useFormContext();
+  const { errors } = useFormState();
   const intermediaryBankDetails = useWatch({ name: 'beneficiaryDetails.intermediaryBankDetails', defaultValue: 'no' });
 
-  const flattenErrors = (obj: any, prefix = ''): string[] => {
-    const keys: string[] = [];
-    for (const key in obj) {
-      if (obj[key] && typeof obj[key] === 'object' && obj[key].message) {
-        keys.push(prefix ? `${prefix}.${key}` : key);
-      } else if (obj[key] && typeof obj[key] === 'object') {
-        keys.push(...flattenErrors(obj[key], prefix ? `${prefix}.${key}` : key));
-      }
-    }
-    return keys;
-  };
+  // const flattenErrors = (obj: any, prefix = ''): string[] => {
+  //   const keys: string[] = [];
+  //   for (const key in obj) {
+  //     if (obj[key] && typeof obj[key] === 'object' && obj[key].message) {
+  //       keys.push(prefix ? `${prefix}.${key}` : key);
+  //     } else if (obj[key] && typeof obj[key] === 'object') {
+  //       keys.push(...flattenErrors(obj[key], prefix ? `${prefix}.${key}` : key));
+  //     }
+  //   }
+  //   return keys;
+  // };
 
-  const handleSave = async () => {
-    const isValid = await trigger();
-    if (!isValid) {
-      const missingFields = flattenErrors(errors);
-      toast.error(`Missing required fields: ${missingFields.join(', ')}`);
-      return;
-    }
-    // Submit the form to hit the API
-    const formElement = document.getElementById('create-transaction-form') as HTMLFormElement;
-    if (formElement) {
-      formElement.requestSubmit();
-    }
-  };
+  // const getFieldLabel = (key: string): string => {
+  //   const parts = key.split('.');
+  //   const fieldName = parts[parts.length - 1];
+  //   const config = [...beneficiaryDetailsConfig, ...beneficiaryBank];
+  //   const field = config.find((f) => f.name === fieldName);
+  //   return field?.label || key;
+  // };
+
+  // const handleSave = async () => {
+  //   const isValid = await trigger();
+  //   if (!isValid) {
+  //     const missingFields = flattenErrors(errors);
+  //     toast.error(`Missing required field: ${getFieldLabel(missingFields[0])}`);
+  //     return;
+  //   }
+  //   // Submit the form to hit the API
+  //   const formElement = document.getElementById('create-transaction-form') as HTMLFormElement;
+  //   if (formElement) {
+  //     formElement.requestSubmit();
+  //   }
+  // };
   return (
     <Spacer>
       <FormFieldRow rowCols={4}>
@@ -142,9 +147,9 @@ const BeneficiaryDetails = ({ setAccordionState }: CommonCreateTransactionProps)
         )}
       </div>
       <div className="flex justify-center items-center">
-        <Button variant="secondary" onClick={handleSave} disabled={isSaving} className="mx-2 w-24">
+        {/* <Button variant="secondary" onClick={handleSave} disabled={isSaving} className="mx-2 w-24">
           {isSaving ? 'Saving...' : 'Save'}
-        </Button>
+        </Button> */}
         {/* <Button variant='light' onClick={handleEdit} className='w-24'  disabled={isEditing}>
           {isEditing ? 'Editing' : 'Edit'}
         </Button> */}

@@ -1,43 +1,16 @@
-import { DataTable } from "@/components/table/data-table";
-import { RejectionTableColumnsConfig } from "./rejection-table-columns";
-import { useMemo } from 'react';
-import { useRejectionSummary } from '@/features/maker/hooks/useRejectionSummary';
 import { toast } from 'sonner';
+import { DataTable } from '@/components/table/data-table';
+import { RejectionTableColumnsConfig } from './rejection-table-columns';
+import { RejectionTableProps } from '../../../types/rejection-doc-summary.types';
 
-interface RejectionTableProps {
-  transactionId?: string;
-}
-
-const RejectionTable = ({ transactionId }: RejectionTableProps) => {
-  const { data, isLoading, isError, error } = useRejectionSummary(transactionId);
-
+const RejectionTable = ({
+  transactionId,
+  flattenedRejectionResData,
+  isLoading,
+  isError,
+  error,
+}: RejectionTableProps) => {
   const columns = RejectionTableColumnsConfig();
-
-  const tableData = useMemo(() => {
-    const documents = data?.documents ?? [];
-    return documents.flatMap((doc) => {
-      const latest = doc.history?.[0];
-      if (!latest) {
-        return [
-          {
-            user: '-',
-            document: doc.document_name,
-            rejection_date: '-',
-            reason: '-',
-          },
-        ];
-      }
-      return [
-        {
-          user: latest.rejected_by,
-          document: doc.document_name,
-          rejection_date: latest.created_at,
-          reason: latest.rejection_reason,
-        },
-      ];
-    });
-  }, [data]);
-
   if (!transactionId) return null;
 
   if (isError) {
@@ -47,12 +20,11 @@ const RejectionTable = ({ transactionId }: RejectionTableProps) => {
 
   return (
     <div className="rejection-table-wrap">
-      {isLoading ? (
-        <div className="px-2">Loading rejection summary...</div>
-      ) : null}
+      <h3 className="font-bold mt-5">Rejection Summary</h3>
+      {/*{isLoading ? <div className="px-2">Loading rejection summary...</div> : null}*/}
       <DataTable
         columns={columns}
-        data={tableData}
+        data={flattenedRejectionResData ?? []}
         config={{
           search: { enabled: false, searchMode: 'static' },
           pagination: {
@@ -69,6 +41,7 @@ const RejectionTable = ({ transactionId }: RejectionTableProps) => {
             globalFilter: true,
           },
           export: { enabled: false },
+          loading: isLoading,
         }}
       />
     </div>

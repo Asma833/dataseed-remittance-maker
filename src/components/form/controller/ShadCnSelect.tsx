@@ -240,9 +240,7 @@ export const ShadCnSelect = ({
                       'aria-invalid:focus-visible:ring-destructive/20 dark:aria-invalid:focus-visible:ring-destructive/40 aria-invalid:focus-visible:border-destructive'
                     )}
                   >
-                    <SelectValue placeholder={placeholder}>
-                      {getDisplayValue((forcedValue ? forcedValue : value) || '') || undefined}
-                    </SelectValue>
+                    <SelectValue placeholder={placeholder} />
                   </SelectTrigger>
                   <SelectContent>
                     {isArrayOptions

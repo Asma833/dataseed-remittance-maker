@@ -10,15 +10,19 @@ export interface TransactionPurposeDocument {
   code: string;
   is_back_required: boolean;
   is_mandatory: boolean;
+  document_url: string | null;
 }
 
 /**
  * Fetches document types from the API with proper headers
  * @returns Promise that resolves to an array of document types
  */
-const fetchDocumentTypes = async (id: string): Promise<TransactionPurposeDocument[]> => {
+const fetchDocumentTypes = async (
+  document_map_id: string,
+  transaction_id?: string
+): Promise<TransactionPurposeDocument[]> => {
   try {
-    const response = await axiosInstance.get(API.CONFIG.GET_DOCUMENT_TYPES(id), {
+    const response = await axiosInstance.get(API.CONFIG.GET_DOCUMENT_TYPES(document_map_id, transaction_id ?? ''), {
       headers: {
         accept: 'application/json',
         api_key: HEADER_KEYS.API_KEY,
@@ -45,11 +49,12 @@ const fetchDocumentTypes = async (id: string): Promise<TransactionPurposeDocumen
  * @returns Object containing found document type text and loading state
  */
 interface UseGetDocumentTypesOptions {
-  id?: string | undefined;
+  document_map_id?: string | undefined;
+  transaction_id?: string | undefined;
   enable?: boolean;
 }
 
-const useGetDocumentTypes = ({ id, enable = true }: UseGetDocumentTypesOptions = {}) => {
+const useGetDocumentTypes = ({ document_map_id, transaction_id, enable = true }: UseGetDocumentTypesOptions = {}) => {
   const {
     data: documentTypes = [],
     isLoading: loading,
@@ -57,11 +62,11 @@ const useGetDocumentTypes = ({ id, enable = true }: UseGetDocumentTypesOptions =
     isError,
     refetch,
   } = useQuery<TransactionPurposeDocument[], Error, TransactionPurposeDocument[]>({
-    queryKey: ['transactionPurposeDocuments', id],
-    queryFn: ({ queryKey }) => fetchDocumentTypes(String(queryKey[1])),
+    queryKey: ['transactionPurposeDocuments', document_map_id, transaction_id],
+    queryFn: ({ queryKey }) => fetchDocumentTypes(String(queryKey[1]), queryKey[2] as string | undefined),
     staleTime: 5 * 60 * 1000, // Cache data for 5 minutes
     retry: 1,
-    enabled: enable,
+    enabled: enable && !!document_map_id,
   });
 
   return {

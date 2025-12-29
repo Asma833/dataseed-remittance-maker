@@ -18,7 +18,15 @@ interface FileUploadProps {
   onFileSelected?: (file: File) => void;
 }
 
-const FileUploadWithView = ({ id, name, label, className, viewFile = true, onFileSelected }: FileUploadProps) => {
+const FileUploadWithView = ({
+  id,
+  name,
+  label,
+  className,
+  accept,
+  viewFile = true,
+  onFileSelected,
+}: FileUploadProps) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const { watch } = useFormContext();
@@ -39,7 +47,9 @@ const FileUploadWithView = ({ id, name, label, className, viewFile = true, onFil
     if (e && e.target.files?.[0]) {
       const file = e.target.files[0];
       setSelectedFile(file);
-      onFileSelected?.(file);
+      if (onFileSelected) {
+        onFileSelected(file);
+      }
     }
   };
 
@@ -95,6 +105,7 @@ const FileUploadWithView = ({ id, name, label, className, viewFile = true, onFil
             id={id || name}
             name={name}
             label={label}
+            {...(accept && { accept })}
             handleFileChange={handleFileChange}
             className="p-0 flex-1 border-none bg-[#f1f1f1]"
             styleType="fileUploadWithView"

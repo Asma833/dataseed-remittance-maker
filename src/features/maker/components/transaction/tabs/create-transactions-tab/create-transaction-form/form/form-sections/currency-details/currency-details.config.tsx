@@ -53,7 +53,8 @@ export const currencyDetailsConfig = [
     label: 'Previous Transaction Amount',
     type: FieldType.Number,
     placeholder: 'Enter Previous Transaction Amount',
-    required: true,
+    required: false,
+    disabled: true,
   },
   {
     name: 'declared_previous_amount',
@@ -67,6 +68,6 @@ export const currencyDetailsConfig = [
     label: 'Total Transaction Amount (TCS)',
     type: FieldType.Number,
     placeholder: 'Enter Total Transaction Amount (TCS)',
-    required: true,
+    required: false,
   },
 ];

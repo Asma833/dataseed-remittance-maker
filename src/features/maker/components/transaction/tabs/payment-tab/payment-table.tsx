@@ -1,17 +1,19 @@
 import { useState, useMemo } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { GetPaymentTableColumn } from './payment-table-column';
 import { DialogWrapper } from '@/components/common/dialog-wrapper';
-import { Order } from '@/types/common/updateIncident.types';
 import Payments from '@/components/payments/Payments';
 import { DataTable } from '@/components/table/data-table';
 import { staticConfig } from '@/components/table/config';
 import { useGetPaymentDetails } from '../../hooks/useGetPaymentDetails';
 import { useUploadPaymentChallan } from '../../hooks/useUploadPaymentChallan';
 import { AllTransaction, PaymentData } from '../../types/payment.types';
+import { mapRowDataToInitialData } from '../../utils/transaction-utils';
 
 const PaymentStatus = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedPayment, setSelectedPayment] = useState<PaymentData | null>(null);
+  const navigate = useNavigate();
 
   const { data, isLoading, error } = useGetPaymentDetails();
   const { mutateAsync: uploadChallan } = useUploadPaymentChallan();
@@ -42,6 +44,9 @@ const PaymentStatus = () => {
           customer_rate: deal.customer_rate || '-',
           transaction_amount: transaction?.transaction_amount || '-',
           rejection_reason: deal.rejection_reason || '-',
+          margin_amount: deal.margin_amount || '-',
+          transaction: transaction,
+          transaction_id: transaction?.transaction_id,
         } as PaymentData;
       })
     );
@@ -50,6 +55,11 @@ const PaymentStatus = () => {
   const handlePayment = (rowData: PaymentData) => {
     setSelectedPayment(rowData);
     setIsModalOpen(true);
+  };
+
+  const handleViewTransaction = (rowData: PaymentData) => {
+    const initialData = mapRowDataToInitialData(rowData);
+    return navigate('../create-transactions', { state: { initialData } });
   };
 
   const handleUploadSubmit = async (file: File) => {
@@ -61,7 +71,7 @@ const PaymentStatus = () => {
     }
   };
 
-  const tableColumns = GetPaymentTableColumn({ handlePayment });
+  const tableColumns = GetPaymentTableColumn({ handlePayment, handleViewTransaction });
 
   const tableConfig = {
     ...staticConfig,
@@ -71,7 +81,7 @@ const PaymentStatus = () => {
       ...staticConfig.filters!,
       dateRangeFilter: {
         enabled: true,
-        columnId: 'order_date',
+        columnId: 'created_date',
         useMuiDateRangePicker: true,
       },
     },
