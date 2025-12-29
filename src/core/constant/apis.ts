@@ -29,8 +29,8 @@ export const API = {
     GET_CONFIG: `/config`,
     GET_PURPOSE_TYPES: `/config?type=purpose_type`,
     GET_TRANSACTION_TYPES: `/config?type=transaction_type`,
-    GET_DOCUMENT_TYPES: (id: string, transactionId?: string) =>
-      `trans-purpose-document/${id}/documents${transactionId ? `?transaction_id=${transactionId}` : ''}`,
+    GET_DOCUMENT_TYPES: (document_map_id: string, transaction_id: string) =>
+      `trans-purpose-document/${document_map_id}/documents${transaction_id ? `?transaction_id=${transaction_id}` : ''}`,
   },
   DOCUMENTS: {
     UPLOAD: `/documents/upload`,

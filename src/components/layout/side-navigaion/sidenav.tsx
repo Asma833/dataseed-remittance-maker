@@ -92,7 +92,7 @@ const Sidebar: React.FC<SidebarProps> = ({
                     'flex items-center my-1 w-full cursor-pointer transition-colors text-sm px-2',
                     parentActive ? parentActiveClass : 'hover:bg-muted/20 rounded-3xl',
                     collapsed ? 'gap-0 justify-center py-3' : 'gap-3 py-2 justify-between',
-                    item.disabled && 'opacity-50 cursor-not-allowed'
+                    item.disabled && 'opacity-80 cursor-not-allowed'
                   )}
                   title={item.title}
                 >

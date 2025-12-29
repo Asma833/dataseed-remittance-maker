@@ -4,7 +4,7 @@ import { cn } from '@/utils/cn';
 import { useState } from 'react';
 
 interface TooltipImageButtonProps {
-  onClick: (e: React.MouseEvent<HTMLButtonElement>) => void;
+  onClick?: (e: React.MouseEvent<HTMLButtonElement>) => void;
   src: string;
   alt?: string;
   tooltipText: string;
@@ -30,7 +30,7 @@ const TooltipImageButton = ({
         <Button
           onClick={(e) => {
             e.stopPropagation();
-            onClick(e);
+            onClick?.(e);
           }}
           onMouseEnter={() => setIsHovered(true)}
           onMouseLeave={() => setIsHovered(false)}
