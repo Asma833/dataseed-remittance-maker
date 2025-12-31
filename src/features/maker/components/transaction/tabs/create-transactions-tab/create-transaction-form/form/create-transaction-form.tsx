@@ -1,19 +1,20 @@
 import { useMemo, useState } from 'react';
 import CreateTransactionsAccordion from '../components/create-transactions-accordion';
 import { accordionItems } from '../config/accordion-config';
+import { useNavigate } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { useAccordionStateProvider } from '../context/accordion-control-context';
 import { useForm, FormProvider } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { createTransactionSchema, CreateTransactionFormData, CreateTransactionFormInput } from './common-schema';
-import { safeNumber, safeString, normalizeString } from '@/utils/form-helpers';
+import { safeNumber, normalizeString } from '@/utils/form-helpers';
 import { useCompleteTransaction } from '../../../../hooks/useCompleteTransaction';
 import { useUpdateTransaction } from '../../../../hooks/useUpdateTransaction';
-import { CompleteTransactionRequest, TransactionDetails, PaymentDetails } from '../types/transaction.types';
-
+import { CompleteTransactionRequest, TransactionDetails } from '../types/transaction.types';
 import { getFormDefaultValues } from './form-defaults';
 import { panelFields } from './form-validation-fields';
 import { PaymentData } from '../../../../types/payment.types';
+
 
 type Props = {
   onCancel?: () => void;
@@ -28,6 +29,7 @@ const CreateTransactionForm = ({ onCancel, onSubmit, initialData, viewMode }: Pr
   const [isSubmitting, setIsSubmitting] = useState(false);
   const { mutateAsync: createTransaction } = useCompleteTransaction();
   const { mutateAsync: updateTransaction } = useUpdateTransaction();
+  const navigate = useNavigate();
 
   const defaultValues = useMemo(() => getFormDefaultValues(initialData), [initialData]);
   const form = useForm<CreateTransactionFormInput, unknown, CreateTransactionFormData>({
@@ -168,19 +170,19 @@ const CreateTransactionForm = ({ onCancel, onSubmit, initialData, viewMode }: Pr
         },
       };
 
-      let response;
+      
       if (viewMode) {
         // Update mode
-
         const transactionId = initialData?.deal_booking_id;
-        console.log(transactionId,"transactionId+++++++++++++++++")
         if (!transactionId) {
           throw new Error('Deal Booking ID is required for update');
         }
-        response = await updateTransaction({ id: transactionId, data: payload });
+        const response = await updateTransaction({ id: transactionId, data: payload });
       } else {
         // Create mode
-        response = await createTransaction(payload);
+        const response = await createTransaction(payload);
+        form.reset(initialData || {});
+        navigate(-1);
       }
       // form.reset(initialData || {});
     } catch (error) {
