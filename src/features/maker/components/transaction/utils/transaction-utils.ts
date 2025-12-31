@@ -7,9 +7,10 @@ export const mapRowDataToInitialData = (rowData: any): InitialData => {
   // Handle the case where data is wrapped in a 'row' property
   const actualRowData = rowData.row || rowData;
   const transaction = actualRowData.transactions ? actualRowData.transactions[0] : actualRowData.transaction;
+  console.log(transaction,"transaction======================")
   const kyc = transaction?.kyc_details;
   return {
-    deal_booking_id: actualRowData?.deal_booking_id,
+    deal_booking_id: transaction?.deal_booking_id,
     transactionDetails: {
       company_reference_number: transaction.company_ref_number || '',
       agent_reference_number: transaction.agent_ref_number || '',

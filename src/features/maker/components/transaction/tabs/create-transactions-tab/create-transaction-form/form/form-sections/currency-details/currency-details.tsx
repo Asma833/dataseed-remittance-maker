@@ -499,7 +499,6 @@ const CurrencyDetails = ({ setAccordionState, viewMode, paymentData }: CommonCre
               mode={'edit'}
               totalAmount={totalInrAmount || 0}
               editableFields={[
-                'transaction_value.agent_mark_up',
                 'remittance_charges.agent_mark_up',
                 'nostro_charges.agent_mark_up',
                 'other_charges.agent_mark_up',
