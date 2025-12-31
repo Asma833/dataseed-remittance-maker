@@ -19,7 +19,7 @@ const transactionBasicDetailsConfig = [
     name: 'purpose',
     label: 'Purpose',
     type: FieldType.Select,
-    placeholder: 'Enter Purpose',
+    placeholder: 'Select Purpose',
     required: true,
   },
   {
@@ -48,7 +48,7 @@ const transactionBasicDetailsConfig = [
     label: 'Company Settlement Rate',
     type: FieldType.Number,
     placeholder: 'Enter Company Settlement Rate',
-    required: true,
+    disabled:true
   },
   {
     name: 'add_margin',
@@ -68,9 +68,13 @@ const transactionBasicDetailsConfig = [
   {
     name: 'nostro_charges',
     label: 'Nostro Charges',
-    type: FieldType.Number,
-    placeholder: 'Enter Nostro Charges',
+    type: FieldType.Select,
+    placeholder: 'Select Nostro Charges',
     required: true,
+     options: {
+      BEN: { label: 'BEN' },
+      OUR: { label: 'OUR' },
+    },
   },
   {
     name: 'applicant_name',

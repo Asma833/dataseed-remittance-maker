@@ -96,16 +96,16 @@ const TransactionBasicDetails = ({ setAccordionState }: CommonCreateTransactionP
 
   // Debounced calculation function
   const debouncedCalculateCustomerRate = useCallback(
-    debounce((fxAmt: number, settlementRate: number, margin: number) => {
-      const calculatedCustomerRate = Number(fxAmt) * Number(settlementRate || 0) + Number(margin || 0);
+    debounce((settlementRate: number, margin: number) => {
+      const calculatedCustomerRate = Number(settlementRate || 0) + Number(margin || 0);
       setValue('transactionDetails.customer_rate', calculatedCustomerRate);
-    }, 5000),
+    }, 3000),
     [setValue]
   );
 
   useEffect(() => {
     if (fxAmount != null && companySettlementRate != null) {
-      debouncedCalculateCustomerRate(fxAmount, companySettlementRate, addMargin || 0);
+      debouncedCalculateCustomerRate(companySettlementRate, addMargin || 0);
     }
 
     // Cleanup function to cancel pending debounced calls
