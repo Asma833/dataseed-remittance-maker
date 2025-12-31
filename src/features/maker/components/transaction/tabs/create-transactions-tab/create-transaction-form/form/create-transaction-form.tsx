@@ -173,8 +173,9 @@ const CreateTransactionForm = ({ onCancel, onSubmit, initialData, viewMode }: Pr
         // Update mode
 
         const transactionId = initialData?.deal_booking_id;
+        console.log(transactionId,"transactionId+++++++++++++++++")
         if (!transactionId) {
-          throw new Error('Transaction ID is required for update');
+          throw new Error('Deal Booking ID is required for update');
         }
         response = await updateTransaction({ id: transactionId, data: payload });
       } else {

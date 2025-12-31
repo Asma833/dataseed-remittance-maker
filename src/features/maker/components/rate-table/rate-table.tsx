@@ -79,7 +79,6 @@ export default function RateTable({
       const settlementRate = Number(companySettlementRate || 0);
       const margin = Number(addMargin || 0);
       const calculatedRate = settlementRate + margin;
-
       // Update the transaction_value.rate field
       setValue(`${id}.transaction_value.rate`, calculatedRate, { shouldValidate: false, shouldDirty: false });
     }

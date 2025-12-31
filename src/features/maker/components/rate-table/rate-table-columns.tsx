@@ -78,7 +78,7 @@ export const GetRateTableColumns = ({
       cells: {
         invoiceName: () => <span className="text-left">{`Transaction Value`}</span>,
         companyRate: () => getCellContent('transaction_value', 'companyRate'),
-        agentMarkUp: () => getCellContent('transaction_value', 'agentMarkUp'),
+        // agentMarkUp: () => getCellContent('transaction_value', 'agentMarkUp'),
         rate: () => getCellContent('transaction_value', 'rate'),
       },
     },

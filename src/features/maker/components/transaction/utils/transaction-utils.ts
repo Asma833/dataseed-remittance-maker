@@ -1,7 +1,7 @@
 import { CreateTransactionFormInput } from '../tabs/create-transactions-tab/create-transaction-form/form/common-schema';
 import { PaymentData, AllTransaction } from '../types/payment.types';
 
-type InitialData = Partial<CreateTransactionFormInput & { paymentDetails?: PaymentData | AllTransaction; id?: string }>;
+type InitialData = Partial<CreateTransactionFormInput & { paymentDetails?: PaymentData | AllTransaction; deal_booking_id?: string }>;
 
 export const mapRowDataToInitialData = (rowData: any): InitialData => {
   // Handle the case where data is wrapped in a 'row' property
@@ -9,7 +9,7 @@ export const mapRowDataToInitialData = (rowData: any): InitialData => {
   const transaction = actualRowData.transactions ? actualRowData.transactions[0] : actualRowData.transaction;
   const kyc = transaction?.kyc_details;
   return {
-    id: actualRowData?.id,
+    deal_booking_id: actualRowData?.deal_booking_id,
     transactionDetails: {
       company_reference_number: transaction.company_ref_number || '',
       agent_reference_number: transaction.agent_ref_number || '',
