@@ -140,7 +140,7 @@ const CurrencyDetails = ({ setAccordionState, viewMode, paymentData }: CommonCre
   // Set transaction_value.company_rate to customerRate
   useEffect(() => {
     if (mountedRef.current && customerRate) {
-      setValue('currencyDetails.invoiceRateTable.transaction_value.company_rate', Number(customerRate), {
+      setValue('currencyDetails.invoiceRateTable.transaction_value.company_rate', customerRate, {
         shouldValidate: false,
         shouldDirty: false,
       });

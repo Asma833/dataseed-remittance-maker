@@ -1,5 +1,6 @@
 import { useState, useMemo } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { useQueryClient } from '@tanstack/react-query';
 import { GetPaymentTableColumn } from './payment-table-column';
 import { DialogWrapper } from '@/components/common/dialog-wrapper';
 import Payments from '@/components/payments/Payments';
@@ -8,12 +9,15 @@ import { staticConfig } from '@/components/table/config';
 import { useGetPaymentDetails } from '../../hooks/useGetPaymentDetails';
 import { useUploadPaymentChallan } from '../../hooks/useUploadPaymentChallan';
 import { AllTransaction, PaymentData } from '../../types/payment.types';
-import { mapRowDataToInitialData } from '../../utils/transaction-utils';
+import { mapRowDataToInitialData, mapDealDetailsApiToFormInput } from '../../utils/transaction-utils';
+import axiosInstance from '@/core/services/axios/axios-instance';
+import { API } from '@/core/constant/apis';
 
 const PaymentStatus = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedPayment, setSelectedPayment] = useState<PaymentData | null>(null);
   const navigate = useNavigate();
+  const queryClient = useQueryClient();
 
   const { data, isLoading, error } = useGetPaymentDetails();
   const { mutateAsync: uploadChallan } = useUploadPaymentChallan();
@@ -58,9 +62,35 @@ const PaymentStatus = () => {
     setIsModalOpen(true);
   };
 
-  const handleViewTransaction = (rowData: PaymentData) => {
-    const initialData = mapRowDataToInitialData(rowData);
-    return navigate('../create-transactions', { state: { initialData } });
+  const handleViewTransaction = async (rowData: PaymentData) => {
+    // if (!rowData.deal_booking_id) {
+    //   const initialData = mapRowDataToInitialData(rowData);
+    //   return navigate('../create-transactions', { state: { initialData } });
+    // }
+    // try {
+      const dealDetails = await queryClient.fetchQuery({
+        queryKey: ['deal-details', rowData.deal_booking_id],
+        queryFn: async () => {
+          const response = await axiosInstance.get(API.REMITTANCE.GET_DEAL_DETAILS(rowData.deal_booking_id));
+          return response.data;
+        }
+      });
+      if (dealDetails) {
+        const initialData = mapDealDetailsApiToFormInput(dealDetails, rowData.deal_booking_id);
+        return navigate('../create-transactions', { state: { initialData } });
+      } 
+    //}
+      // else {
+      //   // Fallback to old method
+      //   const initialData = mapRowDataToInitialData(rowData);
+      //   return navigate('../create-transactions', { state: { initialData } });
+      // }
+    // } catch (error) {
+    //   console.error('Error fetching deal details:', error);
+    //   // Fallback to old method
+    //   const initialData = mapRowDataToInitialData(rowData);
+    //   return navigate('../create-transactions', { state: { initialData } });
+    // }
   };
 
   const handleUploadSubmit = async (file: File) => {
