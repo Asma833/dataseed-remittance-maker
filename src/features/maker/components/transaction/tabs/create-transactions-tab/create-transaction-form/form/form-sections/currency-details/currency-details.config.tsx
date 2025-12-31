@@ -69,5 +69,6 @@ export const currencyDetailsConfig = [
     type: FieldType.Number,
     placeholder: 'Enter Total Transaction Amount (TCS)',
     required: false,
+    disabled: true,
   },
 ];

@@ -62,19 +62,19 @@ const CreateTransactionForm = ({ onCancel, onSubmit, initialData, viewMode }: Pr
     if (isSubmitting) return;
     setIsSubmitting(true);
     try {
-      const convertChargeGroup = (group: typeof data.currencyDetails.invoiceRateTable.transaction_value) => {
-        // The input properties are expected to be company_rate and add_margin
-        // And the output should match the expected properties in transaction.types.ts
-        const companyRate = safeNumber(group.company_rate);
-        const addMargin = safeNumber(group.agent_mark_up);
+      // const convertChargeGroup = (group: typeof data.currencyDetails.invoiceRateTable.transaction_value) => {
+      //   // The input properties are expected to be company_rate and add_margin
+      //   // And the output should match the expected properties in transaction.types.ts
+      //   const companyRate = safeNumber(group.company_rate);
+      //   const addMargin = safeNumber(group.agent_mark_up);
 
-        // Return the object with the correct property names
-        return {
-          company_rate: companyRate,
-          agent_mark_up: addMargin,
-          rate: Number(companyRate) + Number(addMargin), // Rate is calculated by adding the two values
-        };
-      };
+      //   // Return the object with the correct property names
+      //   return {
+      //     company_rate: companyRate,
+      //     agent_mark_up: addMargin,
+      //     rate: Number(companyRate) + Number(addMargin), // Rate is calculated by adding the two values
+      //   };
+      // };
 
       const payload: CompleteTransactionRequest = {
         currencyDetails: {
@@ -88,10 +88,10 @@ const CreateTransactionForm = ({ onCancel, onSubmit, initialData, viewMode }: Pr
           declared_previous_amount: safeNumber(data.currencyDetails.declared_previous_amount),
           total_transaction_amount_tcs: safeNumber(data.currencyDetails.total_transaction_amount_tcs),
           invoiceRateTable: {
-            transaction_value: convertChargeGroup(data.currencyDetails.invoiceRateTable.transaction_value),
-            remittance_charges: convertChargeGroup(data.currencyDetails.invoiceRateTable.remittance_charges),
-            nostro_charges: convertChargeGroup(data.currencyDetails.invoiceRateTable.nostro_charges),
-            other_charges: convertChargeGroup(data.currencyDetails.invoiceRateTable.other_charges),
+            transaction_value: data.currencyDetails.invoiceRateTable.transaction_value,
+            remittance_charges: data.currencyDetails.invoiceRateTable.remittance_charges,
+            nostro_charges: data.currencyDetails.invoiceRateTable.nostro_charges,
+            other_charges: data.currencyDetails.invoiceRateTable.other_charges,
             transaction_amount: safeNumber(data.currencyDetails.invoiceRateTable.transaction_amount.rate),
             gst_amount: safeNumber(data.currencyDetails.invoiceRateTable.gst_amount.rate),
             total_inr_amount: safeNumber(data.currencyDetails.invoiceRateTable.total_inr_amount.rate),
