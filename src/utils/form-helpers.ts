@@ -25,3 +25,20 @@ export const safeString = (value: string | undefined): string | undefined => {
  * @returns The trimmed string or empty string
  */
 export const normalizeString = (value: string | undefined): string => value?.trim() || '';
+
+/**
+ * Formats a number or string to INR format with 2 decimal places.
+ * @param value - The value to format
+ * @returns The formatted string or empty string if invalid
+ */
+export const formatINR = (value?: number | string): string => {
+  if (value === null || value === undefined || value === '') return '';
+
+  const number = typeof value === 'string' ? Number(value) : value;
+  if (isNaN(number)) return '';
+
+  return new Intl.NumberFormat('en-IN', {
+    minimumFractionDigits: 2,
+    maximumFractionDigits: 2,
+  }).format(number);
+};

@@ -2,6 +2,7 @@ import { Controller, useFormContext } from 'react-hook-form';
 import { ShadCnFormInput } from './ShadCnFormInput';
 import { FormItem, FormLabel, FormControl, FormMessage } from '@/components/ui/form';
 import { cn } from '@/utils/cn';
+import { NumericFormat } from 'react-number-format';
 
 interface ShadCnNumberProps {
   name: string;
@@ -14,6 +15,17 @@ interface ShadCnNumberProps {
   step?: number | string;
   placeholder?: string;
 }
+
+const currencyFields = [
+  'settlement_rate',
+  'add_margin',
+  'customer_rate',
+  'declared_education_loan_amount',
+  'previous_transaction_amount',
+  'declared_previous_amount',
+  'total_transaction_amount_tcs',
+  'company_settlement_rate'
+];
 
 export const ShadCnNumber = ({
   name,
@@ -28,6 +40,8 @@ export const ShadCnNumber = ({
 }: ShadCnNumberProps) => {
   const { control } = useFormContext();
 
+  const isCurrencyField = currencyFields.some((field) => name.endsWith(`.${field}`));
+
   return (
     <FormItem className={className}>
       <FormLabel className="text-[--color-form-label]">
@@ -41,24 +55,50 @@ export const ShadCnNumber = ({
           defaultValue=""
           render={({ field: { value, onChange, ...field }, fieldState: { error } }) => (
             <div>
-              <ShadCnFormInput
-                {...field}
-                type="text"
-                placeholder={placeholder}
-                className={cn(
-                  'form-input shadow-none focus-visible:ring-0',
-                  error && 'border-destructive focus:ring-destructive'
-                )}
-                value={(forcedValue !== undefined ? forcedValue : value) || ''}
-                onChange={(e) => {
-                  const val = e.target.value;
-                  // Allow only numbers and decimal point
-                  if (/^[0-9]*\.?[0-9]*$/.test(val) || val === '') {
-                    onChange(val === '' ? '' : val);
-                  }
-                }}
-                disabled={disabled}
-              />
+              {isCurrencyField ? (
+                <NumericFormat
+                  {...field}
+                  thousandSeparator={true}
+                  thousandsGroupStyle="lakh"
+                  decimalSeparator="."
+                  decimalScale={2}
+                  fixedDecimalScale={true}
+                  allowNegative={false}
+                  prefix=""
+                  placeholder={placeholder}
+                  className={cn(
+                        'form-input flex h-9 w-full border border-input bg-transparent px-3 py-1 text-sm transition-colors file:border-0 file:bg-transparent file:text-sm file:font-medium file:text-foreground placeholder:text-muted-foreground focus-visible:outline-none disabled:cursor-not-allowed disabled:opacity-50 truncate',
+                          'aria-invalid:focus-visible:border-destructive',
+                    error && 'border-destructive focus:ring-destructive'
+                  )}
+                  value={forcedValue !== undefined ? forcedValue : value || ''}
+                  onValueChange={(values) => {
+                    const { floatValue } = values;
+                    onChange(floatValue || '');
+                  }}
+                  disabled={disabled}
+                />
+              ) : (
+                <ShadCnFormInput
+                  {...field}
+                  type="text"
+                  placeholder={placeholder}
+                  className={cn(
+                    'form-input flex h-9 w-full border border-input bg-transparent px-3 py-1 text-sm transition-colors file:border-0 file:bg-transparent file:text-sm file:font-medium file:text-foreground placeholder:text-muted-foreground focus-visible:outline-none disabled:cursor-not-allowed disabled:opacity-50 truncate',
+                    'aria-invalid:focus-visible:border-destructive'
+                  )}
+                   
+                  value={(forcedValue !== undefined ? forcedValue : value) || ''}
+                  onChange={(e) => {
+                    const val = e.target.value;
+                    // Allow only numbers and decimal point
+                    if (/^[0-9]*\.?[0-9]*$/.test(val) || val === '') {
+                      onChange(val === '' ? '' : val);
+                    }
+                  }}
+                  disabled={disabled}
+                />
+              )}
               {error && <p className="text-sm text-destructive mt-1">{error.message}</p>}
             </div>
           )}

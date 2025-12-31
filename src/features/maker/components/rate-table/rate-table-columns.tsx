@@ -1,6 +1,7 @@
 import { getController } from '@/components/form/utils/get-controller';
 import { RateTableColumn } from '../transaction/tabs/create-transactions-tab/create-transaction-form/types/rateTable.types';
 import { cn } from '@/utils/cn';
+import { formatINR } from '@/utils/form-helpers';
 
 type CommonInputStyles = {
   className: string;
@@ -67,7 +68,7 @@ export const GetRateTableColumns = ({
     } else {
       const dataKey = valueMappings[columnKey] || columnKey;
       const value = invoiceData?.[section]?.[dataKey] ?? 0;
-      return <span className="text-right">{value}</span>;
+      return <span className="text-right">{formatINR(value)}</span>;
     }
   };
 

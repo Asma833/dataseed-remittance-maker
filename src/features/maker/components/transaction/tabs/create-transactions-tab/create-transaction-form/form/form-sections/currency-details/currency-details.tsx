@@ -137,18 +137,17 @@ const CurrencyDetails = ({ setAccordionState, viewMode, paymentData }: CommonCre
     }
   }, [customerRate]);
 
-  // Set transaction_value.company_rate to companySettlementRate
+  // Set transaction_value.company_rate to customerRate
   useEffect(() => {
-    if (mountedRef.current && companySettlementRate) {
-      setValue('currencyDetails.invoiceRateTable.transaction_value.company_rate', Number(companySettlementRate), {
+    if (mountedRef.current && customerRate) {
+      setValue('currencyDetails.invoiceRateTable.transaction_value.company_rate', Number(customerRate), {
         shouldValidate: false,
         shouldDirty: false,
       });
     }
-  }, [companySettlementRate, setValue]);
+  }, [customerRate, setValue]);
 
   // Set company rates from agent details
-
   useEffect(() => {
     if (mountedRef.current && extractedMargins) {
       setValue('currencyDetails.invoiceRateTable.remittance_charges.company_rate', extractedMargins.productMargin, {
@@ -172,7 +171,7 @@ const CurrencyDetails = ({ setAccordionState, viewMode, paymentData }: CommonCre
   // Calculate transaction_value.rate as company_rate + agent_mark_up
   useEffect(() => {
     if (mountedRef.current && fxAmount && transactionValueCompanyRate != null && transactionValueAgentMarkUp != null) {
-      const rate = Number(fxAmount) * Number(transactionValueCompanyRate) + Number(transactionValueAgentMarkUp);
+      const rate =  Number(transactionValueCompanyRate) + Number(transactionValueAgentMarkUp) * Number(fxAmount);
       setValue('currencyDetails.invoiceRateTable.transaction_value.rate', rate, {
         shouldValidate: false,
         shouldDirty: false,
