@@ -413,7 +413,7 @@ const CurrencyDetails = ({ setAccordionState, viewMode, paymentData }: CommonCre
     <>
       <Spacer>
         <FormFieldRow rowCols={2} wrapperClassName="flex-row md:!flex-nowrap items-start">
-          <div className="flex flex-wrap w-1/2 gap-4">
+          <div className="flex flex-wrap md:w-full lg:w-1/2 gap-4">
             <FormFieldRow rowCols={2} className="w-full">
               {(['fx_currency', 'fx_amount'] as const).map((name) => {
                 const field = currencyDetailsConfig.find((f) => f.name === name) as FieldConfig;
@@ -493,7 +493,7 @@ const CurrencyDetails = ({ setAccordionState, viewMode, paymentData }: CommonCre
               })}
             </FormFieldRow>
           </div>
-          <div className="flex flex-wrap w-1/2">
+          <div className="flex flex-wrap md:w-full lg:w-1/2">
             <RateTable
               id={'currencyDetails.invoiceRateTable'}
               mode={'edit'}

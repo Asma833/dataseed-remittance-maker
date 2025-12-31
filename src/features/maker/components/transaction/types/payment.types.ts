@@ -109,6 +109,7 @@ export interface AllTransaction {
   transaction_type: string;
   currency_code: string;
   deal_amount: string;
+  deal_booking_id:string;
   margin_amount: string;
   settlement_rate: string;
   customer_rate: string;
@@ -127,6 +128,7 @@ export interface PaymentData {
   id: string;
   ref_no: string;
   transaction_id: string;
+  deal_booking_id:string;
   agent_ref_no: string;
   created_date: string;
   expiry_date: string;

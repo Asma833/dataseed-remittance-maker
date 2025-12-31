@@ -47,6 +47,7 @@ const PaymentStatus = () => {
           margin_amount: deal.margin_amount || '-',
           transaction: transaction,
           transaction_id: transaction?.transaction_id,
+          deal_booking_id:transaction?.deal_booking_id
         } as PaymentData;
       })
     );

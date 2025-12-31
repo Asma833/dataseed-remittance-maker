@@ -18,7 +18,7 @@ import { PaymentData } from '../../../../types/payment.types';
 type Props = {
   onCancel?: () => void;
   onSubmit?: (data: CreateTransactionFormData) => void;
-  initialData?: Partial<CreateTransactionFormInput & { paymentDetails?: PaymentData; id?: string }>;
+  initialData?: Partial<CreateTransactionFormInput & { paymentDetails?: PaymentData; deal_booking_id?: string }>;
   viewMode?: boolean;
 };
 
@@ -172,7 +172,7 @@ const CreateTransactionForm = ({ onCancel, onSubmit, initialData, viewMode }: Pr
       if (viewMode) {
         // Update mode
 
-        const transactionId = initialData?.id;
+        const transactionId = initialData?.deal_booking_id;
         if (!transactionId) {
           throw new Error('Transaction ID is required for update');
         }
