@@ -16,6 +16,9 @@ interface AgentDetails {
     other_charges: {
       rate: number;
     };
+    tt_charges:{
+      rate: number;
+    }
   };
 }
 
@@ -35,11 +38,11 @@ export const extractAgentMargins = (agentDetails: AgentDetails, selectedCurrency
   const nostroMargin = nostroCurrency ? nostroCurrency.margin : commission.nostro_charges.all_currency_margin;
 
   // Extract product margin
-  const productCurrency = commission.product_margin.currency_list.find(
-    (item) => item.currency_code === selectedCurrency
-  );
-  const productMargin = productCurrency ? productCurrency.margin : commission.product_margin.all_currency_margin;
-
+  // const productCurrency = commission.product_margin.currency_list.find(
+  //   (item) => item.currency_code === selectedCurrency
+  // );
+  // const productMargin = productCurrency ? productCurrency.margin : commission.product_margin.all_currency_margin;
+  const productMargin = commission.tt_charges.rate
   // Extract other charges rate
   const otherChargesRate = commission.other_charges.rate;
 
