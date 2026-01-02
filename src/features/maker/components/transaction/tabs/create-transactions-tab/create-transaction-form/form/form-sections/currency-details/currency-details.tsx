@@ -61,6 +61,16 @@ const CurrencyDetails = ({ setAccordionState, viewMode, paymentData }: CommonCre
     };
   }, []);
 
+  // Ensure total_transaction_amount_tcs is set to '0' if not present, invalid, or 0
+  // useEffect(() => {
+  //   if (mountedRef.current) {
+  //     const currentValue = getValues('currencyDetails.total_transaction_amount_tcs');
+  //     if (currentValue == null || currentValue === '' || isNaN(Number(currentValue)) || currentValue === 0) {
+  //       setValue('currencyDetails.total_transaction_amount_tcs', '0', { shouldValidate: false, shouldDirty: false });
+  //     }
+  //   }
+  // }, []);
+
   // Watch values from TransactionBasicDetails
   const fxAmount = useWatch({ control, name: 'transactionDetails.fx_amount' });
   const companySettlementRate = useWatch({ control, name: 'transactionDetails.company_settlement_rate' });
@@ -315,7 +325,7 @@ const CurrencyDetails = ({ setAccordionState, viewMode, paymentData }: CommonCre
       tcsTimeoutRef.current = setTimeout(async () => {
         try {
           const response = await calculateTcs({
-            purpose: purpose || 'Personal Visit / Leisure Travel',
+            purpose: 'Personal Visit / Leisure Travel',
             panNumber,
             sourceofFund,
             declarationAmt: isEducation ? declarationAmt : '0',
@@ -326,31 +336,19 @@ const CurrencyDetails = ({ setAccordionState, viewMode, paymentData }: CommonCre
               shouldValidate: false,
               shouldDirty: false,
             });
-            setValue('currencyDetails.total_transaction_amount_tcs', Number(response.TCS), {
+            setValue('currencyDetails.total_transaction_amount_tcs', Number(response.TCS) || '0',{
               shouldValidate: false,
               shouldDirty: false,
             });
           } else {
-            console.error('TCS calculation failed:', response.responsemessage);
-            setValue('currencyDetails.invoiceRateTable.tcs.rate', 0, {
-              shouldValidate: false,
-              shouldDirty: false,
-            });
-            setValue('currencyDetails.total_transaction_amount_tcs', 0, {
-              shouldValidate: false,
-              shouldDirty: false,
-            });
+            console.error('TCS calculation failed:','currencyDetails.total_transaction_amount_tcs', response.responsemessage);
+            setValue('currencyDetails.invoiceRateTable.tcs.rate', '0');
+            setValue('currencyDetails.total_transaction_amount_tcs', '0');
           }
         } catch (err) {
           console.error('Error calculating TCS:', err);
-          setValue('currencyDetails.invoiceRateTable.tcs.rate', 0, {
-            shouldValidate: false,
-            shouldDirty: false,
-          });
-          setValue('currencyDetails.total_transaction_amount_tcs', 0, {
-            shouldValidate: false,
-            shouldDirty: false,
-          });
+          setValue('currencyDetails.invoiceRateTable.tcs.rate', 0);
+          setValue('currencyDetails.total_transaction_amount_tcs', '0');
         }
       }, 2000); // 2000ms debounce delay
     }

@@ -9,6 +9,7 @@ export const getFormDefaultValues = (
   // Otherwise use default values
   const currencyDetails = sourceData?.currencyDetails ? {
     ...sourceData.currencyDetails,
+    total_transaction_amount_tcs: sourceData.currencyDetails.total_transaction_amount_tcs ?? '0',
     // Ensure invoiceRateTable is properly structured
     invoiceRateTable: sourceData.currencyDetails.invoiceRateTable ? {
       ...sourceData.currencyDetails.invoiceRateTable,

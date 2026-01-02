@@ -111,7 +111,7 @@ type InitialData = Partial<CreateTransactionFormInput & { paymentDetails?: { pay
 // };
 
 export const mapDealDetailsApiToFormInput = (apiResponse: DealDetailsApiResponse, dealBookingId: string): InitialData => {
-  console.log(apiResponse,apiResponse.currencyDetails.invoiceRateTable.transaction_value.rate,"apiResponse+++++++")
+  console.log(apiResponse.currencyDetails.total_transaction_amount_tcs,"apiResponse+++++++")
   return {
     deal_booking_id: dealBookingId,
     currencyDetails: {
@@ -120,10 +120,10 @@ export const mapDealDetailsApiToFormInput = (apiResponse: DealDetailsApiResponse
       settlement_rate: apiResponse.currencyDetails.settlement_rate || '',
       add_margin: apiResponse.currencyDetails.add_margin || '',
       customer_rate: apiResponse.currencyDetails.customer_rate || '',
-      declared_education_loan_amount: apiResponse.currencyDetails.declared_education_loan_amount || '',
-      previous_transaction_amount: apiResponse.currencyDetails.previous_transaction_amount || '',
-      declared_previous_amount: apiResponse.currencyDetails.declared_previous_amount || '',
-      total_transaction_amount_tcs: apiResponse.currencyDetails.total_transaction_amount_tcs || '',
+      declared_education_loan_amount: apiResponse.currencyDetails.declared_education_loan_amount || '0',
+      previous_transaction_amount: apiResponse.currencyDetails.previous_transaction_amount || '0',
+      declared_previous_amount: apiResponse.currencyDetails.declared_previous_amount || '0',
+      total_transaction_amount_tcs: apiResponse.currencyDetails.invoiceRateTable.tcs || '0',
       invoiceRateTable: {
         transaction_value: {
           company_rate: apiResponse.currencyDetails.invoiceRateTable.transaction_value.company_rate || '',
@@ -146,16 +146,16 @@ export const mapDealDetailsApiToFormInput = (apiResponse: DealDetailsApiResponse
           rate: apiResponse.currencyDetails.invoiceRateTable.other_charges.rate.toString() || '',
         },
         transaction_amount: {
-          rate: apiResponse.currencyDetails.invoiceRateTable.transaction_amount || '',
+          rate: apiResponse.currencyDetails.invoiceRateTable.transaction_amount || '0',
         },
         gst_amount: {
-          rate: apiResponse.currencyDetails.invoiceRateTable.gst_amount || '',
+          rate: apiResponse.currencyDetails.invoiceRateTable.gst_amount || '0',
         },
         total_inr_amount: {
-          rate: apiResponse.currencyDetails.invoiceRateTable.total_inr_amount || '',
+          rate: apiResponse.currencyDetails.invoiceRateTable.total_inr_amount || '0',
         },
         tcs: {
-          rate: apiResponse.currencyDetails.invoiceRateTable.tcs || '',
+          rate: apiResponse.currencyDetails.invoiceRateTable.tcs || '0',
         },
       },
     },
