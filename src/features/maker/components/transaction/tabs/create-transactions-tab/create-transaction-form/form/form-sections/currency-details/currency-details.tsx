@@ -107,6 +107,14 @@ const CurrencyDetails = ({ setAccordionState, viewMode, paymentData }: CommonCre
   const tcsAmount = useWatch({ control, name: 'currencyDetails.invoiceRateTable.tcs.rate' });
   const totalInrAmount = useWatch({ control, name: 'currencyDetails.invoiceRateTable.total_inr_amount.rate' });
 
+  // Calculate beneficiary amount: nostro_charges.rate - (transaction_amount.rate / customer_rate)
+  const beneficiaryAmount = useMemo(() => {
+    if (nostroRate != null && transactionAmount != null && customerRate != null && customerRate !== 0) {
+      return (Number(transactionAmount) - Number(nostroRate)) / Number(customerRate);
+    }
+    return 0;
+  }, [nostroRate, transactionAmount, customerRate]);
+
 
   // Sync values from TransactionBasicDetails to CurrencyDetails
   useEffect(() => {
@@ -502,6 +510,7 @@ const CurrencyDetails = ({ setAccordionState, viewMode, paymentData }: CommonCre
               id={'currencyDetails.invoiceRateTable'}
               mode={'edit'}
               totalAmount={totalInrAmount || 0}
+              beneficiaryAmount={beneficiaryAmount}
               editableFields={[
                 'remittance_charges.agent_mark_up',
                 'nostro_charges.agent_mark_up',

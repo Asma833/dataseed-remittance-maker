@@ -22,12 +22,14 @@ export default function RateTable({
   mode = 'edit',
   editableFields = [] as string[],
   totalAmount,
+  beneficiaryAmount,
   invoiceData,
 }: {
   id: string;
   mode?: 'edit' | 'view';
   editableFields?: string[];
   totalAmount?: number;
+  beneficiaryAmount?: number;
   invoiceData?: any;
 }) {
   const { setValue } = useFormContext();
@@ -116,7 +118,7 @@ export default function RateTable({
         </TableRow>
         <TableRow className="bg-gray-50/50">
           <TableCell colSpan={3}>Beneficiary Amount (In Fx Value)</TableCell>
-          <TableCell className="text-right">{formatINR(totalAmount)}</TableCell>
+          <TableCell className="text-right">{formatINR(beneficiaryAmount)}</TableCell>
         </TableRow>
       </TableFooter>
     </Table>
