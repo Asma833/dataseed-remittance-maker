@@ -20,21 +20,29 @@ import Payments from '@/components/payments/Payments';
 import { useUploadPaymentChallan } from '@/features/maker/components/transaction/hooks/useUploadPaymentChallan';
 import { generateRateTablePdf } from '@/utils/pdfUtils';
 import { ConfirmationAlert } from '@/components/common/confirmation-alert';
+import { formatINR } from '@/utils/form-helpers';
 
 const CurrencyDetails = ({ setAccordionState, viewMode, paymentData }: CommonCreateTransactionProps) => {
+  // Add console log for debugging
+  console.log('CurrencyDetails render - viewMode:', viewMode, 'paymentData:', paymentData);
   const [isSaving, setIsSaving] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedPayment, setSelectedPayment] = useState<any>(null);
   const mountedRef = useRef(false);
   const navigate = useNavigate();
-  const { control, trigger, setValue, reset } = useFormContext();
+  const { control, trigger, setValue, reset, getValues } = useFormContext();
   const { errors } = useFormState();
   const { data: currencyRates, isLoading: currencyLoading } = useGetCurrencyRates();
   const { calculateGst } = useGstCalculation();
   const { calculateTcs } = useTcsCalculation();
 
   const fxCurrency = useWatch({ control, name: 'transactionDetails.fx_currency' });
-  const { extractedMargins } = useGetAgentDetails(fxCurrency);
+  
+  // Get the entire form data to pass to useGetAgentDetails in view mode
+  const formData = getValues();
+  
+  // Pass viewMode and form data to useGetAgentDetails
+  const { extractedMargins } = useGetAgentDetails(fxCurrency, viewMode, formData);
   const { mutateAsync: uploadChallan } = useUploadPaymentChallan();
 
   const currencyOptions =
@@ -96,6 +104,7 @@ const CurrencyDetails = ({ setAccordionState, viewMode, paymentData }: CommonCre
   const tcsAmount = useWatch({ control, name: 'currencyDetails.invoiceRateTable.tcs.rate' });
   const totalInrAmount = useWatch({ control, name: 'currencyDetails.invoiceRateTable.total_inr_amount.rate' });
 
+
   // Sync values from TransactionBasicDetails to CurrencyDetails
   useEffect(() => {
     if (
@@ -147,31 +156,38 @@ const CurrencyDetails = ({ setAccordionState, viewMode, paymentData }: CommonCre
     }
   }, [customerRate, setValue]);
 
-  // Set company rates from agent details
+  // Set company rates from agent details or from view mode data
   useEffect(() => {
     if (mountedRef.current && extractedMargins) {
-      setValue('currencyDetails.invoiceRateTable.remittance_charges.company_rate', extractedMargins.productMargin, {
-        shouldValidate: false,
-        shouldDirty: false,
-      });
+      // Only set these values if they're not already set in view mode
+      if (!viewMode || !invoiceRateTable.remittance_charges.company_rate) {
+        setValue('currencyDetails.invoiceRateTable.remittance_charges.company_rate', extractedMargins.productMargin, {
+          shouldValidate: false,
+          shouldDirty: false,
+        });
+      }
 
-      setValue('currencyDetails.invoiceRateTable.nostro_charges.company_rate', extractedMargins.nostroMargin, {
-        shouldValidate: false,
-        shouldDirty: false,
-      });
+      if (!viewMode || !invoiceRateTable.nostro_charges.company_rate) {
+        setValue('currencyDetails.invoiceRateTable.nostro_charges.company_rate', extractedMargins.nostroMargin, {
+          shouldValidate: false,
+          shouldDirty: false,
+        });
+      }
 
-      setValue('currencyDetails.invoiceRateTable.other_charges.company_rate', extractedMargins.otherChargesRate, {
-        shouldValidate: false,
-        shouldDirty: false,
-      });
+      if (!viewMode || !invoiceRateTable.other_charges.company_rate) {
+        setValue('currencyDetails.invoiceRateTable.other_charges.company_rate', extractedMargins.otherChargesRate, {
+          shouldValidate: false,
+          shouldDirty: false,
+        });
+      }
     }
-  }, [extractedMargins, setValue]);
+  }, [extractedMargins, setValue, viewMode, invoiceRateTable]);
 
   // Calculate transaction_value.rate as company_settlement_rate + add_margin
   // Calculate transaction_value.rate as company_rate + agent_mark_up
   useEffect(() => {
     if (mountedRef.current && fxAmount && transactionValueCompanyRate != null && transactionValueAgentMarkUp != null) {
-      const rate =  Number(transactionValueCompanyRate) + Number(transactionValueAgentMarkUp) * Number(fxAmount);
+      const rate = Number(transactionValueCompanyRate)  * Number(fxAmount) ;
       setValue('currencyDetails.invoiceRateTable.transaction_value.rate', rate, {
         shouldValidate: false,
         shouldDirty: false,
@@ -238,6 +254,78 @@ const CurrencyDetails = ({ setAccordionState, viewMode, paymentData }: CommonCre
       });
     }
   }, [transactionAmount, gstAmount, tcsAmount]);
+  
+  // Special effect for view mode to ensure invoice table data is properly populated
+  // This effect runs only once when the component mounts in view mode
+  useEffect(() => {
+    if (viewMode && mountedRef.current && invoiceRateTable) {
+      // In view mode, we want to make sure the invoice table data is preserved
+      // This ensures that the data from mapDealDetailsApiToFormInput is not overwritten
+      console.log('View mode effect - preserving invoice table data', invoiceRateTable);
+      
+      // Create a local copy of the data to avoid dependency issues
+      const tableData = { ...invoiceRateTable };
+      
+      // We don't need to set these values if they're already set correctly
+      // This is just a safeguard to ensure the data is consistent
+      if (tableData.transaction_value && tableData.transaction_value.rate) {
+        setValue('currencyDetails.invoiceRateTable.transaction_value.rate', tableData.transaction_value.rate, {
+          shouldValidate: false,
+          shouldDirty: false,
+        });
+      }
+      
+      if (tableData.remittance_charges && tableData.remittance_charges.rate) {
+        setValue('currencyDetails.invoiceRateTable.remittance_charges.rate', tableData.remittance_charges.rate, {
+          shouldValidate: false,
+          shouldDirty: false,
+        });
+      }
+      
+      if (tableData.nostro_charges && tableData.nostro_charges.rate) {
+        setValue('currencyDetails.invoiceRateTable.nostro_charges.rate', tableData.nostro_charges.rate, {
+          shouldValidate: false,
+          shouldDirty: false,
+        });
+      }
+      
+      if (tableData.other_charges && tableData.other_charges.rate) {
+        setValue('currencyDetails.invoiceRateTable.other_charges.rate', tableData.other_charges.rate, {
+          shouldValidate: false,
+          shouldDirty: false,
+        });
+      }
+      
+      if (tableData.transaction_amount && tableData.transaction_amount.rate) {
+        setValue('currencyDetails.invoiceRateTable.transaction_amount.rate', tableData.transaction_amount.rate, {
+          shouldValidate: false,
+          shouldDirty: false,
+        });
+      }
+      
+      if (tableData.gst_amount && tableData.gst_amount.rate) {
+        setValue('currencyDetails.invoiceRateTable.gst_amount.rate', tableData.gst_amount.rate, {
+          shouldValidate: false,
+          shouldDirty: false,
+        });
+      }
+      
+      if (tableData.tcs && tableData.tcs.rate) {
+        setValue('currencyDetails.invoiceRateTable.tcs.rate', tableData.tcs.rate, {
+          shouldValidate: false,
+          shouldDirty: false,
+        });
+      }
+      
+      if (tableData.total_inr_amount && tableData.total_inr_amount.rate) {
+        setValue('currencyDetails.invoiceRateTable.total_inr_amount.rate', tableData.total_inr_amount.rate, {
+          shouldValidate: false,
+          shouldDirty: false,
+        });
+      }
+    }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [viewMode]); // Only depend on viewMode to prevent infinite loops
 
   // GST Calculation
   const gstTimeoutRef = useRef<NodeJS.Timeout | null>(null);
@@ -300,7 +388,7 @@ const CurrencyDetails = ({ setAccordionState, viewMode, paymentData }: CommonCre
       tcsTimeoutRef.current = setTimeout(async () => {
         try {
           const response = await calculateTcs({
-            purpose: 'Personal Visit / Leisure Travel',
+            purpose: purpose || 'Personal Visit / Leisure Travel',
             panNumber,
             sourceofFund,
             declarationAmt: isEducation ? declarationAmt : '0',

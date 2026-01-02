@@ -9,7 +9,7 @@ import { staticConfig } from '@/components/table/config';
 import { useGetPaymentDetails } from '../../hooks/useGetPaymentDetails';
 import { useUploadPaymentChallan } from '../../hooks/useUploadPaymentChallan';
 import { AllTransaction, PaymentData } from '../../types/payment.types';
-import { mapRowDataToInitialData, mapDealDetailsApiToFormInput } from '../../utils/transaction-utils';
+import { mapDealDetailsApiToFormInput } from '../../utils/transaction-utils';
 import axiosInstance from '@/core/services/axios/axios-instance';
 import { API } from '@/core/constant/apis';
 
@@ -67,7 +67,7 @@ const PaymentStatus = () => {
     //   const initialData = mapRowDataToInitialData(rowData);
     //   return navigate('../create-transactions', { state: { initialData } });
     // }
-    // try {
+    try {
       const dealDetails = await queryClient.fetchQuery({
         queryKey: ['deal-details', rowData.deal_booking_id],
         queryFn: async () => {
@@ -79,18 +79,11 @@ const PaymentStatus = () => {
         const initialData = mapDealDetailsApiToFormInput(dealDetails, rowData.deal_booking_id);
         return navigate('../create-transactions', { state: { initialData } });
       } 
-    //}
-      // else {
-      //   // Fallback to old method
-      //   const initialData = mapRowDataToInitialData(rowData);
-      //   return navigate('../create-transactions', { state: { initialData } });
-      // }
-    // } catch (error) {
-    //   console.error('Error fetching deal details:', error);
-    //   // Fallback to old method
-    //   const initialData = mapRowDataToInitialData(rowData);
-    //   return navigate('../create-transactions', { state: { initialData } });
-    // }
+      
+    } catch (error) {
+      console.error('Error fetching deal details:', error);
+      // Fallback to old method
+    }
   };
 
   const handleUploadSubmit = async (file: File) => {

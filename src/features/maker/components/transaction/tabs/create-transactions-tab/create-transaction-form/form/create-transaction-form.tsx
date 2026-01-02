@@ -31,7 +31,14 @@ const CreateTransactionForm = ({ onCancel, onSubmit, initialData, viewMode }: Pr
   const { mutateAsync: updateTransaction } = useUpdateTransaction();
   const navigate = useNavigate();
 
-  const defaultValues = useMemo(() => getFormDefaultValues(initialData), [initialData]);
+  // Enhanced defaultValues to ensure view mode data is properly handled
+  const defaultValues = useMemo(() => {
+    // If in view mode, make sure we preserve the initialData structure
+    if (viewMode && initialData) {
+      return getFormDefaultValues(initialData);
+    }
+    return getFormDefaultValues(initialData);
+  }, [initialData, viewMode]);
   const form = useForm<CreateTransactionFormInput, unknown, CreateTransactionFormData>({
     resolver: zodResolver(createTransactionSchema),
     defaultValues,
@@ -89,6 +96,7 @@ const CreateTransactionForm = ({ onCancel, onSubmit, initialData, viewMode }: Pr
           total_transaction_amount_tcs: safeNumber(data.currencyDetails.total_transaction_amount_tcs),
           invoiceRateTable: {
             transaction_value: data.currencyDetails.invoiceRateTable.transaction_value,
+            
             remittance_charges: data.currencyDetails.invoiceRateTable.remittance_charges,
             nostro_charges: data.currencyDetails.invoiceRateTable.nostro_charges,
             other_charges: data.currencyDetails.invoiceRateTable.other_charges,
