@@ -6,6 +6,7 @@ import { cn } from '@/utils/cn';
 import { useFormContext } from 'react-hook-form';
 import { useEffect, useRef } from 'react';
 import { useWatch } from 'react-hook-form';
+import { formatINR } from '@/utils/form-helpers';
 
 type ColumnKey = 'invoiceName' | 'companyRate' | 'agentMarkUp' | 'rate';
 
@@ -111,11 +112,11 @@ export default function RateTable({
       <TableFooter>
         <TableRow className="bg-gray-50/50">
           <TableCell colSpan={3}>Total Payable Amount</TableCell>
-          <TableCell className="text-right">{totalAmount}</TableCell>
+          <TableCell className="text-right">{formatINR(totalAmount)}</TableCell>
         </TableRow>
         <TableRow className="bg-gray-50/50">
           <TableCell colSpan={3}>Beneficiary Amount (In Fx Value)</TableCell>
-          <TableCell className="text-right">{totalAmount}</TableCell>
+          <TableCell className="text-right">{formatINR(totalAmount)}</TableCell>
         </TableRow>
       </TableFooter>
     </Table>

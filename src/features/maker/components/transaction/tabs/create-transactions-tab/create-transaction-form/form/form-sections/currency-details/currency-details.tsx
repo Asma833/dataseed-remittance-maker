@@ -348,6 +348,7 @@ const CurrencyDetails = ({ setAccordionState, viewMode, paymentData }: CommonCre
       }
     };
   }, [transactionAmount, gstAmount, purpose, panNumber, sourceofFund, declarationAmt, calculateTcs, setValue]);
+ 
   const flattenErrors = (obj: any, prefix = ''): string[] => {
     const keys: string[] = [];
     for (const key in obj) {
