@@ -20,27 +20,25 @@ export const useGetAgentDetails = (selectedCurrency?: string, viewMode?: boolean
   // Use useMemo to calculate extracted margins - this prevents infinite loops
   const extractedMargins = useMemo(() => {
     // In view mode, use the data from dealData if available
-    if (viewMode && dealData && dealData.commission) {
+    if (viewMode && dealData && dealData.currencyDetails?.invoiceRateTable) {
       try {
         // Extract margins from the deal data
-        console.log('useGetAgentDetails: Using deal data in view mode');
-
+        console.log('useGetAgentDetails: Using deal data in view mode',dealData.currencyDetails?.invoiceRateTable);
+        
         // Create a local copy to avoid reference issues
-        const commission = dealData.commission;
-
-        return {
-          nostroMargin: commission.nostro_charges?.all_currency_margin || 0,
-          productMargin: commission.tt_charges?.rate || 0,
-          otherChargesRate: commission.other_charges?.rate || 0,
-        };
+        const invoiceTable = dealData.currencyDetails.invoiceRateTable;
+        
+        const margins = {
+          nostroMargin: invoiceTable.nostro_charges?.company_rate || '0',
+          productMargin: invoiceTable.remittance_charges?.company_rate || '0',
+          otherChargesRate: invoiceTable.other_charges?.company_rate || '0',
+        }; console.log('useGetAgentDetails: Extracted margins from deal data', margins);
+        return margins;
       } catch (error) {
         console.error('Error extracting margins from deal data:', error);
-        return {
-          nostroMargin: 0,
-          productMargin: 0,
-          otherChargesRate: 0
-        };
+        return null;
       }
+    
     }
     // Otherwise use the agent details API data
     else if (query.data && selectedCurrency) {
