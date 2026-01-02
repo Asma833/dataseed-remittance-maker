@@ -12,7 +12,7 @@ import { FieldConfig } from '../../../types/createTransactionForm.types';
 import { useGetData } from '@/hooks/useGetData';
 import { queryKeys } from '@/core/constant/query-keys';
 import { API } from '@/core/constant/apis';
-import { useMemo, useEffect, useCallback } from 'react';
+import { useMemo, useEffect, useCallback, useRef } from 'react';
 import { debounce } from 'lodash';
 import { TransactionPurposeMap } from '@/types/common/transaction-form.types';
 
@@ -22,9 +22,14 @@ const TransactionBasicDetails = ({ setAccordionState }: CommonCreateTransactionP
     setValue,
     formState: { errors },
   } = useFormContext();
+  // Add a ref to track previous settlement rate to prevent unnecessary updates
+  const prevSettlementRateRef = useRef<number | null>(null);
   const fxCurrency = useWatch({ control, name: 'transactionDetails.fx_currency' });
   const { data: allCurrencyRates, isLoading: currencyLoading } = useGetAllCurrencyRates();
-  const { data: specificCurrencyRate } = useGetSpecificCurrencyRates(fxCurrency);
+  // Only fetch specific currency rates if fxCurrency is a non-empty string
+  const { data: specificCurrencyRate } = useGetSpecificCurrencyRates(
+    fxCurrency && typeof fxCurrency === 'string' && fxCurrency.trim() ? fxCurrency.trim() : ''
+  );
   const {
     data: mappedPurposeTransactionTypesData,
     isLoading: userLoading,
@@ -85,11 +90,19 @@ const TransactionBasicDetails = ({ setAccordionState }: CommonCreateTransactionP
   }, [selectedMapping, setValue]);
 
   useEffect(() => {
-    if (fxCurrency && specificCurrencyRate) {
+    if (fxCurrency && specificCurrencyRate && typeof fxCurrency === 'string') {
       const rate = specificCurrencyRate;
       const buyRate = Number(rate.card_buy_rate);
-      if (rate.currency_code === fxCurrency && !isNaN(buyRate) && buyRate > 0) {
-        setValue('transactionDetails.company_settlement_rate', buyRate);
+      // Only update if the currency codes match, the rate is valid, and different from previous value
+      if (rate.currency_code === fxCurrency.trim() && !isNaN(buyRate) && buyRate > 0 &&
+          prevSettlementRateRef.current !== buyRate) {
+        // Update the ref with the new value
+        prevSettlementRateRef.current = buyRate;
+        // Set the value with options to prevent unnecessary validation/marking as dirty
+        setValue('transactionDetails.company_settlement_rate', buyRate, {
+          shouldValidate: false,
+          shouldDirty: false
+        });
       }
     }
   }, [fxCurrency, specificCurrencyRate, setValue]);
@@ -98,14 +111,37 @@ const TransactionBasicDetails = ({ setAccordionState }: CommonCreateTransactionP
   const debouncedCalculateCustomerRate = useCallback(
     debounce((settlementRate: number, margin: number) => {
       const calculatedCustomerRate = Number(settlementRate || 0) + Number(margin || 0);
-      setValue('transactionDetails.customer_rate', calculatedCustomerRate);
-    }, 3000),
+      setValue('transactionDetails.customer_rate', calculatedCustomerRate, {
+        shouldValidate: false,
+        shouldDirty: false
+      });
+    }, 1000), // Reduced debounce time for better responsiveness
     [setValue]
   );
 
+  // Add a ref to track previous customer rate calculation
+  const prevCustomerRateParamsRef = useRef<{settlementRate: number | null, margin: number | null}>({
+    settlementRate: null,
+    margin: null
+  });
+
   useEffect(() => {
     if (fxAmount != null && companySettlementRate != null) {
-      debouncedCalculateCustomerRate(companySettlementRate, addMargin || 0);
+      const margin = addMargin || 0;
+      
+      // Only recalculate if the values have changed
+      if (prevCustomerRateParamsRef.current.settlementRate !== companySettlementRate ||
+          prevCustomerRateParamsRef.current.margin !== margin) {
+        
+        // Update the ref with new values
+        prevCustomerRateParamsRef.current = {
+          settlementRate: companySettlementRate,
+          margin: margin
+        };
+        
+        // Use the debounced function to calculate and set the customer rate
+        debouncedCalculateCustomerRate(companySettlementRate, margin);
+      }
     }
 
     // Cleanup function to cancel pending debounced calls
