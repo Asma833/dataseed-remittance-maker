@@ -3,16 +3,16 @@ import { useNavigate } from 'react-router-dom';
 import { KycTableColumnsConfig } from './kyc-table-columns';
 import { useGetPaymentDetails } from '../../../hooks/useGetPaymentDetails';
 import { AllTransaction } from '../../../types/payment.types';
-import { mapRowDataToInitialData } from '../../../utils/transaction-utils';
+import { mapDealDetailsApiToFormInput } from '../../../utils/transaction-utils';
 
 const KYCTable = ({ onUploadClick }: { onUploadClick: (isReupload: boolean, transaction: any) => void }) => {
   const navigate = useNavigate();
   const { data: kycData, isLoading } = useGetPaymentDetails<AllTransaction[]>();
 
   const handleViewTransaction = (rowData: any) => {
-    console.log('rowData', rowData);
-    const initialData = mapRowDataToInitialData(rowData);
-    return navigate('../create-transactions', { state: { initialData } });
+
+    // const initialData = mapDealDetailsApiToFormInput(rowData);
+    // return navigate('../create-transactions', { state: { initialData } });
   };
   const columns = KycTableColumnsConfig({
     navigate,

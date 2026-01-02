@@ -23,8 +23,7 @@ export const useGetAgentDetails = (selectedCurrency?: string, viewMode?: boolean
     if (viewMode && dealData && dealData.currencyDetails?.invoiceRateTable) {
       try {
         // Extract margins from the deal data
-       // console.log('useGetAgentDetails: Using deal data in view mode',dealData.currencyDetails?.invoiceRateTable);
-        
+       
         // Create a local copy to avoid reference issues
         const invoiceTable = dealData.currencyDetails.invoiceRateTable;
         
@@ -33,7 +32,6 @@ export const useGetAgentDetails = (selectedCurrency?: string, viewMode?: boolean
           productMargin: invoiceTable.remittance_charges?.company_rate || '0',
           otherChargesRate: invoiceTable.other_charges?.company_rate || '0',
         }; 
-        //console.log('useGetAgentDetails: Extracted margins from deal data', margins);
         return margins;
       } catch (error) {
         console.error('Error extracting margins from deal data:', error);
@@ -44,9 +42,7 @@ export const useGetAgentDetails = (selectedCurrency?: string, viewMode?: boolean
     // Otherwise use the agent details API data
     else if (query.data && selectedCurrency) {
       try {
-        // console.log('useGetAgentDetails: Using agent API data');
         const margins = extractAgentMargins(query.data, selectedCurrency);
-        // console.log('useGetAgentDetails: Extracted margins from API', margins);
         return margins;
       } catch (error) {
         console.error('Error extracting margins from API data:', error);

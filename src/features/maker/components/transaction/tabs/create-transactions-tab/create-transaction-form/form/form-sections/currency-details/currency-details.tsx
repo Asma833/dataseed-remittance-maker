@@ -61,16 +61,6 @@ const CurrencyDetails = ({ setAccordionState, viewMode, paymentData }: CommonCre
     };
   }, []);
 
-  // Ensure total_transaction_amount_tcs is set to '0' if not present, invalid, or 0
-  // useEffect(() => {
-  //   if (mountedRef.current) {
-  //     const currentValue = getValues('currencyDetails.total_transaction_amount_tcs');
-  //     if (currentValue == null || currentValue === '' || isNaN(Number(currentValue)) || currentValue === 0) {
-  //       setValue('currencyDetails.total_transaction_amount_tcs', '0', { shouldValidate: false, shouldDirty: false });
-  //     }
-  //   }
-  // }, []);
-
   // Watch values from TransactionBasicDetails
   const fxAmount = useWatch({ control, name: 'transactionDetails.fx_amount' });
   const companySettlementRate = useWatch({ control, name: 'transactionDetails.company_settlement_rate' });
