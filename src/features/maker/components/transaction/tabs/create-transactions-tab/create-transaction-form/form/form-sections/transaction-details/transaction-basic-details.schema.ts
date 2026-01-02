@@ -31,7 +31,7 @@ export const transactionBasicDetailsSchema = z
       .regex(CURRENCY_CODE_REGEX, 'Invalid currency code (must be 3 uppercase letters)'),
     fx_amount: z.coerce.number().min(1, 'FX amount is required'),
     company_settlement_rate: z.coerce.number(),
-    add_margin: z.coerce.number().min(1, 'Add margin is required'),
+    add_margin: z.coerce.number().min(0.01, 'Add margin must be at least 0.01'),
     customer_rate: z.coerce.number(),
     nostro_charges: z.string().min(1, 'Nostro charges is required'),
     applicant_name: z
