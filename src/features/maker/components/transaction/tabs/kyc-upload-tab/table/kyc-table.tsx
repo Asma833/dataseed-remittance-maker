@@ -1,22 +1,42 @@
-import { useMemo } from 'react';
+import { useMemo, useState, useEffect } from 'react';
 import { DataTable } from '@/components/table/data-table';
 import { useNavigate } from 'react-router-dom';
 import { KycTableColumnsConfig } from './kyc-table-columns';
 import { useGetPaymentDetails } from '../../../hooks/useGetPaymentDetails';
+import { useGetDealDetails } from '../../../hooks/useGetDealDetails';
 import { AllTransaction, PaymentData } from '../../../types/payment.types';
-import { mapAllTransactionsToTableRows } from '../../../utils/transaction-utils';
+import { mapAllTransactionsToTableRows, mapDealDetailsApiToFormInput } from '../../../utils/transaction-utils';
 
 const KYCTable = ({ onUploadClick }: { onUploadClick: (isReupload: boolean, transaction: any) => void }) => {
   const navigate = useNavigate();
+  const [selectedDealId, setSelectedDealId] = useState<string | null>(null);
+
   const { data: rawData, isLoading } = useGetPaymentDetails<AllTransaction[]>();
+  const { data: dealDetails, isLoading: isDealLoading } = useGetDealDetails(selectedDealId || undefined);
 
   const mappedData = useMemo(() => {
     return mapAllTransactionsToTableRows(rawData as AllTransaction[]);
   }, [rawData]);
 
   const handleViewTransaction = (rowData: PaymentData) => {
-    // Navigate or view logic if needed
+    if (rowData.deal_booking_id) {
+      setSelectedDealId(rowData.deal_booking_id);
+    }
   };
+
+  // Handle navigation when deal details are loaded
+  useEffect(() => {
+    if (dealDetails && selectedDealId && !isDealLoading) {
+      try {
+        const initialData = mapDealDetailsApiToFormInput(dealDetails, selectedDealId);
+        navigate('../create-transactions', { state: { initialData } });
+        setSelectedDealId(null); // Reset after navigation
+      } catch (error) {
+        console.error('Error processing deal details:', error);
+        setSelectedDealId(null);
+      }
+    }
+  }, [dealDetails, selectedDealId, isDealLoading, navigate]);
 
   const columns = KycTableColumnsConfig({
     navigate,
@@ -52,7 +72,7 @@ const KYCTable = ({ onUploadClick }: { onUploadClick: (isReupload: boolean, tran
             },
           },
           export: { enabled: true, fileName: 'kyc-details.csv' },
-          loading: isLoading,
+          loading: isLoading || isDealLoading,
         }}
       />
     </div>
