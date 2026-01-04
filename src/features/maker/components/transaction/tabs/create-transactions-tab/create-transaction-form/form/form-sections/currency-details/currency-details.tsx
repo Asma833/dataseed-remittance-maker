@@ -70,6 +70,8 @@ const CurrencyDetails = ({ setAccordionState, viewMode, paymentData }: CommonCre
   const panNumber = useWatch({ control, name: 'transactionDetails.applicant_pan_number' });
   const sourceofFund = useWatch({ control, name: 'transactionDetails.source_of_funds' });
   const declarationAmt = useWatch({ control, name: 'currencyDetails.declared_previous_amount' });
+  const previousTransactionAmt = useWatch({ control, name: 'currencyDetails.previous_transaction_amount' });
+  const totalTransactionAmountTcs = useWatch({ control, name: 'currencyDetails.total_transaction_amount_tcs' });
 
   // Watch the entire invoiceRateTable to pass to RateTable
   const invoiceRateTable = useWatch({ control, name: 'currencyDetails.invoiceRateTable' });
@@ -260,6 +262,18 @@ const CurrencyDetails = ({ setAccordionState, viewMode, paymentData }: CommonCre
       });
     }
   }, [transactionAmount, gstAmount, tcsAmount]);
+
+  // Calculate Total Transaction Amount (TCS)
+  useEffect(() => {
+    if (mountedRef.current) {
+      const totalTcsAmt =
+        Number(transactionValueRate || 0) + Number(previousTransactionAmt || 0) + Number(declarationAmt || 0);
+      setValue('currencyDetails.total_transaction_amount_tcs', totalTcsAmt, {
+        shouldValidate: false,
+        shouldDirty: false,
+      });
+    }
+  }, [transactionValueRate, previousTransactionAmt, declarationAmt, setValue]);
   
 
   // GST Calculation
@@ -305,11 +319,10 @@ const CurrencyDetails = ({ setAccordionState, viewMode, paymentData }: CommonCre
   // TCS Calculation
   const tcsTimeoutRef = useRef<NodeJS.Timeout | null>(null);
   useEffect(() => {
-    const amountBeforeTcs = Number(transactionAmount || 0) + Number(gstAmount || 0);
     const isEducation = (purpose || '').toLowerCase() === 'education';
     if (
       mountedRef.current &&
-      amountBeforeTcs > 0 &&
+      totalTransactionAmountTcs > 0 &&
       purpose &&
       panNumber &&
       sourceofFund &&
@@ -327,26 +340,20 @@ const CurrencyDetails = ({ setAccordionState, viewMode, paymentData }: CommonCre
             panNumber,
             sourceofFund,
             declarationAmt: isEducation ? declarationAmt : '0',
-            txnAmount: amountBeforeTcs.toString(),
+            txnAmount: totalTransactionAmountTcs.toString(),
           });
           if (response.statuscode === '200' && response.responsecode === 'success') {
             setValue('currencyDetails.invoiceRateTable.tcs.rate', Number(response.TCS), {
               shouldValidate: false,
               shouldDirty: false,
             });
-            setValue('currencyDetails.total_transaction_amount_tcs', Number(response.TCS) || '0',{
-              shouldValidate: false,
-              shouldDirty: false,
-            });
           } else {
-            console.error('TCS calculation failed:','currencyDetails.total_transaction_amount_tcs', response.responsemessage);
+            console.error('TCS calculation failed:', response.responsemessage);
             setValue('currencyDetails.invoiceRateTable.tcs.rate', '0');
-            setValue('currencyDetails.total_transaction_amount_tcs', '0');
           }
         } catch (err) {
           console.error('Error calculating TCS:', err);
           setValue('currencyDetails.invoiceRateTable.tcs.rate', 0);
-          setValue('currencyDetails.total_transaction_amount_tcs', '0');
         }
       }, 2000); // 2000ms debounce delay
     }
@@ -355,7 +362,7 @@ const CurrencyDetails = ({ setAccordionState, viewMode, paymentData }: CommonCre
         clearTimeout(tcsTimeoutRef.current);
       }
     };
-  }, [transactionAmount, gstAmount, purpose, panNumber, sourceofFund, declarationAmt, calculateTcs, setValue]);
+  }, [totalTransactionAmountTcs, purpose, panNumber, sourceofFund, declarationAmt, calculateTcs, setValue]);
  
   const flattenErrors = (obj: any, prefix = ''): string[] => {
     const keys: string[] = [];
