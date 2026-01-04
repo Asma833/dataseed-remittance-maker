@@ -162,7 +162,7 @@ export const getFormDefaultValues = (
       company_settlement_rate: 0,
       add_margin: 0,
       customer_rate: 0,
-      nostro_charges: '',
+      nostro_charges: (sourceData?.currencyDetails?.invoiceRateTable?.nostro_charges as { type?: string })?.type || '',
       applicant_name: '',
       applicant_pan_number: '',
       passport_issue_date: '',

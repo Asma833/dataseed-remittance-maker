@@ -98,7 +98,10 @@ const CreateTransactionForm = ({ onCancel, onSubmit, initialData, viewMode }: Pr
             transaction_value: data.currencyDetails.invoiceRateTable.transaction_value,
             
             remittance_charges: data.currencyDetails.invoiceRateTable.remittance_charges,
-            nostro_charges: data.currencyDetails.invoiceRateTable.nostro_charges,
+            nostro_charges: {
+              ...data.currencyDetails.invoiceRateTable.nostro_charges,
+              type: normalizeString(data.transactionDetails.nostro_charges),
+            },
             other_charges: data.currencyDetails.invoiceRateTable.other_charges,
             transaction_amount: safeNumber(data.currencyDetails.invoiceRateTable.transaction_amount.rate),
             gst_amount: safeNumber(data.currencyDetails.invoiceRateTable.gst_amount.rate),
@@ -145,7 +148,7 @@ const CreateTransactionForm = ({ onCancel, onSubmit, initialData, viewMode }: Pr
           company_settlement_rate: safeNumber(data.transactionDetails.company_settlement_rate),
           add_margin: safeNumber(data.transactionDetails.add_margin),
           customer_rate: safeNumber(data.transactionDetails.customer_rate),
-          nostro_charges: safeNumber(data.transactionDetails?.nostro_charges),
+          nostro_charges: safeNumber(data.currencyDetails.invoiceRateTable.nostro_charges.rate),
           applicant_name: normalizeString(data.transactionDetails.applicant_name),
           applicant_pan_number: normalizeString(data.transactionDetails.applicant_pan_number),
           applicant_email: normalizeString(data.transactionDetails.applicant_email),

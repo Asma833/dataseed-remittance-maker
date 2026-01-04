@@ -13,6 +13,7 @@ export interface InvoiceRateTable {
     company_rate: number;
     agent_mark_up: number;
     rate: number;
+    type?: string;
   };
   other_charges: {
     company_rate: number;

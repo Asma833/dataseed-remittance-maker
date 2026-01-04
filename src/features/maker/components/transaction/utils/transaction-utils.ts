@@ -123,7 +123,7 @@ export const mapDealDetailsApiToFormInput = (apiResponse: DealDetailsApiResponse
       company_settlement_rate: apiResponse.transactionDetails.company_settlement_rate || '',
       add_margin: apiResponse.transactionDetails.add_margin || '',
       customer_rate: apiResponse.transactionDetails.customer_rate || '',
-      nostro_charges: apiResponse.transactionDetails.nostro_charges || '',
+      nostro_charges: apiResponse.currencyDetails.invoiceRateTable.nostro_charges.type || '',
       applicant_name: apiResponse.transactionDetails.applicant_name || '',
       applicant_pan_number: apiResponse.transactionDetails.applicant_pan_number || '',
       applicant_email: apiResponse.transactionDetails.applicant_email || '',
