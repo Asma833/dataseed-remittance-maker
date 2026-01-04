@@ -418,8 +418,9 @@ const CurrencyDetails = ({ setAccordionState, viewMode, paymentData }: CommonCre
   };
   const handleUploadSubmit = async (file: File) => {
     if (selectedPayment) {
+      const paymentRecordId = selectedPayment?.raw_data?.deal.payment_records[0]?.id;
       await uploadChallan({
-        id: selectedPayment.id,
+        id: paymentRecordId || selectedPayment.id,
         file,
       });
     }

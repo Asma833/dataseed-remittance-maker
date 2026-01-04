@@ -29,6 +29,13 @@ const KYCTable = ({ onUploadClick }: { onUploadClick: (isReupload: boolean, tran
     if (dealDetails && selectedDealId && !isDealLoading) {
       try {
         const initialData = mapDealDetailsApiToFormInput(dealDetails, selectedDealId);
+
+        // Find the mapped row to pass the full data (including raw_data) to view mode
+        const rowData = mappedData.find((row) => row.deal_booking_id === selectedDealId);
+        if (rowData) {
+          initialData.paymentDetails = rowData;
+        }
+
         navigate('../create-transactions', { state: { initialData } });
         setSelectedDealId(null); // Reset after navigation
       } catch (error) {
@@ -36,7 +43,7 @@ const KYCTable = ({ onUploadClick }: { onUploadClick: (isReupload: boolean, tran
         setSelectedDealId(null);
       }
     }
-  }, [dealDetails, selectedDealId, isDealLoading, navigate]);
+  }, [dealDetails, selectedDealId, isDealLoading, navigate, mappedData]);
 
   const columns = KycTableColumnsConfig({
     navigate,

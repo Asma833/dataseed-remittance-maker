@@ -42,6 +42,7 @@ export interface InvoiceRateTable {
     company_rate?: string;
     agent_mark_up?: string;
     rate?: string;
+    type?: string;
   };
   other_charges: {
     company_rate?: string;
