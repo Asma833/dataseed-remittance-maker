@@ -1,19 +1,23 @@
+import { useMemo } from 'react';
 import { DataTable } from '@/components/table/data-table';
 import { useNavigate } from 'react-router-dom';
 import { KycTableColumnsConfig } from './kyc-table-columns';
 import { useGetPaymentDetails } from '../../../hooks/useGetPaymentDetails';
-import { AllTransaction } from '../../../types/payment.types';
-import { mapDealDetailsApiToFormInput } from '../../../utils/transaction-utils';
+import { AllTransaction, PaymentData } from '../../../types/payment.types';
+import { mapAllTransactionsToTableRows } from '../../../utils/transaction-utils';
 
 const KYCTable = ({ onUploadClick }: { onUploadClick: (isReupload: boolean, transaction: any) => void }) => {
   const navigate = useNavigate();
-  const { data: kycData, isLoading } = useGetPaymentDetails<AllTransaction[]>();
+  const { data: rawData, isLoading } = useGetPaymentDetails<AllTransaction[]>();
 
-  const handleViewTransaction = (rowData: any) => {
+  const mappedData = useMemo(() => {
+    return mapAllTransactionsToTableRows(rawData as AllTransaction[]);
+  }, [rawData]);
 
-    // const initialData = mapDealDetailsApiToFormInput(rowData);
-    // return navigate('../create-transactions', { state: { initialData } });
+  const handleViewTransaction = (rowData: PaymentData) => {
+    // Navigate or view logic if needed
   };
+
   const columns = KycTableColumnsConfig({
     navigate,
     onUploadClick: (status: string, transaction: any) => {
@@ -26,7 +30,7 @@ const KYCTable = ({ onUploadClick }: { onUploadClick: (isReupload: boolean, tran
     <div className="data-table-wrap">
       <DataTable
         columns={columns}
-        data={kycData || []}
+        data={mappedData || []}
         config={{
           search: { enabled: true, searchMode: 'static' },
           pagination: {
@@ -43,7 +47,7 @@ const KYCTable = ({ onUploadClick }: { onUploadClick: (isReupload: boolean, tran
             globalFilter: true,
             dateRangeFilter: {
               enabled: true,
-              columnId: 'transactions.0.order_date',
+              columnId: 'order_date',
               useMuiDateRangePicker: true,
             },
           },

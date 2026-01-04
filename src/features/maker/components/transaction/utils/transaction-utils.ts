@@ -5,6 +5,46 @@ import { DealDetailsApiResponse } from '../types/create-transaction.types';
 type InitialData = Partial<CreateTransactionFormInput & { paymentDetails?: { payment_method: string; } | PaymentData | AllTransaction; deal_booking_id?: string }>;
 
 
+export const mapAllTransactionsToTableRows = (data: AllTransaction[]): PaymentData[] => {
+  if (!data || !Array.isArray(data)) return [];
+
+  return data.flatMap((deal: AllTransaction) =>
+    deal.transactions.map((transaction): PaymentData => ({
+      id: transaction.id || '-',
+      transaction_id: transaction.transaction_id || '-',
+      deal_booking_id: transaction.deal_booking_id || deal.deal_booking_id || '-',
+      ref_no: transaction.company_ref_number || '-',
+      agent_ref_no: transaction.agent_ref_number || '-',
+      order_date: transaction.order_date || deal.created_at || '-',
+      expiry_date: transaction.order_expiry || '-',
+      applicant_name: transaction.kyc_details?.applicant_name || '-',
+      applicant_pan: transaction.kyc_details?.applicant_pan || '-',
+      transaction_type: deal.transaction_type || '-',
+      purpose: transaction.purpose || '-',
+      kyc_type: 'VKYC', // Default or derived
+      kyc_status: transaction.kyc_status || '-',
+      payment_status: deal.payment_records?.[0]?.payment_status || 'pending',
+      payment_link: null,
+      payment_screenshot: null,
+      fx_currency: transaction.fx_currency || '-',
+      fx_amount: transaction.fx_amount || '-',
+      fx_rate: deal.customer_rate || '-',
+      settlement_rate: deal.settlement_rate || '-',
+      customer_rate: deal.customer_rate || '-',
+      transaction_amount: transaction.transaction_amount || '-',
+      rejection_reason: deal.rejection_reason || '-',
+      kyc_upload_status: transaction.kyc_status === 'UPLOADED' || transaction.kyc_status === 'COMPLETED' ? 'Uploaded' : 'Pending',
+      completion_date: null,
+      swift_copy: transaction.swift_copy || null,
+      transaction_status: transaction.transaction_status || '-',
+      raw_data: {
+        deal,
+        transaction,
+      },
+    }))
+  );
+};
+
 export const mapDealDetailsApiToFormInput = (apiResponse: DealDetailsApiResponse, dealBookingId: string): InitialData => {
   return {
     deal_booking_id: dealBookingId,

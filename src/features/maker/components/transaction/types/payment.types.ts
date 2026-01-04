@@ -128,9 +128,9 @@ export interface PaymentData {
   id: string;
   ref_no: string;
   transaction_id: string;
-  deal_booking_id:string;
+  deal_booking_id: string;
   agent_ref_no: string;
-  created_date: string;
+  order_date: string;
   expiry_date: string;
   applicant_name: string;
   applicant_pan: string;
@@ -143,10 +143,19 @@ export interface PaymentData {
   payment_screenshot: string | null;
   fx_currency: string | number;
   fx_amount: string | number;
+  fx_rate: string | number;
   settlement_rate: string | number;
   customer_rate: string | number;
   transaction_amount: string | number;
   rejection_reason: string | null;
+  kyc_upload_status: string;
+  completion_date: string | null;
+  swift_copy: string | null;
+  transaction_status: string;
+  raw_data?: {
+    deal: AllTransaction;
+    transaction: Transaction;
+  };
 }
 
 export interface UploadPaymentChallanRequest {

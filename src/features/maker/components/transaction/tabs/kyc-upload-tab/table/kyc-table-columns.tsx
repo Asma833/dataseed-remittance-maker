@@ -4,6 +4,7 @@ import TooltipImageButton from '@/components/common/tooltip-image-button';
 import Reupload from '@/assets/icons/re-upload.svg';
 import upload from '@/assets/icons/upload.svg';
 import { SignLinkButton } from '@/components/cell/table/SignLinkButton';
+import { PaymentData } from '../../../types/payment.types';
 
 export const KycTableColumnsConfig = ({
   navigate,
@@ -16,46 +17,42 @@ export const KycTableColumnsConfig = ({
 }) => {
   return [
     {
-      accessorKey: 'company_reference_no',
-      id: 'company_reference_no',
+      accessorKey: 'ref_no',
+      id: 'ref_no',
       header: 'Company Ref.No',
       meta: { className: 'min-w-0 p-2' },
-      cell: (props: { row: any }) => <span>{props.row.transactions?.[0]?.company_ref_number}</span>,
     },
     {
-      accessorKey: 'agent_reference_no',
-      id: 'agent_reference_no',
+      accessorKey: 'agent_ref_no',
+      id: 'agent_ref_no',
       header: 'Agent Ref.No.',
       meta: { className: 'min-w-0 p-2' },
-      cell: (props: { row: any }) => <span>{props.row.transactions?.[0]?.agent_ref_number}</span>,
     },
     {
       accessorKey: 'order_date',
       id: 'order_date',
       header: 'Order Date',
       meta: { className: 'min-w-0 p-2' },
-      cell: (props: { row: any }) => <span>{formatDateWithFallback(props.row.transactions?.[0]?.order_date)}</span>,
+      cell: (props: { row: PaymentData }) => <span>{formatDateWithFallback(props.row.order_date)}</span>,
     },
     {
       accessorKey: 'expiry_date',
       id: 'expiry_date',
       header: 'Expiry Date',
       meta: { className: 'min-w-0 p-2' },
-      cell: (props: { row: any }) => <span>{formatDateWithFallback(props.row.transactions?.[0]?.order_expiry)}</span>,
+      cell: (props: { row: PaymentData }) => <span>{formatDateWithFallback(props.row.expiry_date)}</span>,
     },
     {
       accessorKey: 'applicant_name',
       id: 'applicant_name',
       header: 'Applicant Name',
       meta: { className: 'min-w-0 p-2' },
-      cell: (props: { row: any }) => <span>{props.row.transactions?.[0]?.kyc_details?.applicant_name}</span>,
     },
     {
       accessorKey: 'applicant_pan',
       id: 'applicant_pan',
       header: 'Applicant PAN Number',
       meta: { className: 'min-w-0 p-2' },
-      cell: (props: { row: any }) => <span>{props.row.transactions?.[0]?.kyc_details?.applicant_pan}</span>,
     },
     {
       accessorKey: 'transaction_type',
@@ -68,19 +65,17 @@ export const KycTableColumnsConfig = ({
       id: 'purpose',
       header: 'Purpose',
       meta: { className: 'min-w-0 p-2' },
-      cell: (props: { row: any }) => <span>{props.row.transactions?.[0]?.purpose}</span>,
     },
     {
       accessorKey: 'kyc_doc',
       id: 'kyc_doc',
       header: 'KYC Doc',
       meta: { className: 'min-w-0 p-2' },
-      cell: (props: { row: any; value: any }) => {
-        const isCompleted = props.row.transactions?.[0]?.kyc_status === 'COMPLETED';
-        const transaction = props.row.transactions?.[0];
+      cell: (props: { row: PaymentData; value: any }) => {
+        const isCompleted = props.row.kyc_status === 'COMPLETED';
         return (
           <TooltipImageButton
-            onClick={() => onUploadClick(props.row.transactions?.[0]?.kyc_status, transaction)}
+            onClick={() => onUploadClick(props.row.kyc_status, props.row.raw_data?.transaction)}
             src={isCompleted ? Reupload : upload}
             alt="Upload"
             tooltipText={isCompleted ? 'Reupload' : 'Upload'}
@@ -93,11 +88,8 @@ export const KycTableColumnsConfig = ({
       id: 'kyc_status',
       header: 'KYC Status',
       meta: { className: 'min-w-0 p-2' },
-      cell: (props: { row: any; value: any }) => {
-        if (!props.row.transactions || props.row.transactions.length === 0) {
-          return <span>N/A</span>;
-        }
-        return <KycStatusCell rowData={props.row.transactions?.[0]} />;
+      cell: (props: { row: PaymentData; value: any }) => {
+        return <KycStatusCell rowData={props.row} />;
       },
     },
 
@@ -106,9 +98,9 @@ export const KycTableColumnsConfig = ({
       id: 'view_action',
       header: 'View',
       meta: { className: 'min-w-0 p-2' },
-      cell: (row: any) => (
+      cell: ({ row }: { row: PaymentData }) => (
         <SignLinkButton
-          id={row?.transactions?.[0]?.id}
+          id={row.id}
           onClick={() => handleViewTransaction(row)}
           tooltipText="View"
           buttonType="view"
