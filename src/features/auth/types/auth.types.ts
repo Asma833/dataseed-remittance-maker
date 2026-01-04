@@ -7,23 +7,35 @@ export type UserRole = 'branch_agent_maker';
 export interface User {
   id: string;
   email: string;
+  full_name: string;
+  address_city?: string;
+  address_state?: string;
+  address_branch?: string;
+  phone_number?: string;
   is_active: boolean;
-  business_type: string;
-  createdAt: string;
-  updatedAt: string;
-  created_by: string;
-  updated_by: string;
+  is_blocked: boolean;
+  business_type?: string;
+  createdAt?: string;
+  updatedAt?: string;
+  created_at?: string;
+  updated_at?: string;
+  created_by?: string;
+  updated_by?: string;
   roles: {
     id: string;
     role_name: string;
   }[];
-  branch: {
+  branch?: {
     id: string;
     name: string;
   } | null;
-  bankAccount: any | null;
+  bankAccount?: any | null;
   agent_users: {
+    id: string;
     agent_id: string;
+    user_id: string;
+    role_id: string;
+    checker_list: any[];
   }[];
 }
 

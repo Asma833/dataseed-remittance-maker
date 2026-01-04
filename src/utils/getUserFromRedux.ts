@@ -24,6 +24,7 @@ interface Role {
 interface User {
   id: string;
   email: string;
+  full_name: string;
   hashed_key: string;
   is_active: boolean;
   business_type: string;
@@ -79,10 +80,14 @@ export const useCurrentUser = () => {
   const getBusinessType = (): string | undefined => {
     return user?.business_type;
   };
+  const getFullName = (): string | undefined => {
+    return user?.full_name;
+  };
   return {
     user,
     getUserHashedKey,
     getUserRole,
+    getFullName,
     getUserId,
     getUser,
     getUserEmail,

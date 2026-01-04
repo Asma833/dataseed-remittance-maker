@@ -29,8 +29,10 @@ import {
 import { logout } from '@/features/auth/store/auth-slice';
 import { ROUTES } from '@/core/constant/route-paths';
 import { clearAllQueryCache } from '@/core/services/query/query-cache-manager';
+import { useCurrentUser } from '@/utils/getUserFromRedux';
 
 export default function UserMenu() {
+  const { user } = useCurrentUser();
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const [isLogoutDialogOpen, setIsLogoutDialogOpen] = useState(false);
@@ -62,9 +64,13 @@ export default function UserMenu() {
         <DropdownMenuTrigger asChild>
           <Button variant="ghost" className="h-auto p-0 hover:bg-transparent relative cursor-pointer">
             <Avatar>
-              <AvatarImage src="./avatar.jpg" alt="Profile image" />
+              <AvatarImage src="./avatar.jpg" alt={user?.full_name || 'User profile'} />
               <AvatarFallback className="bg-[#ece7e7]">
-                <UserRoundIcon size={16} className="opacity-60" aria-hidden="true" />
+                {user?.full_name ? (
+                  <span className="text-xs font-bold">{user.full_name.charAt(0).toUpperCase()}</span>
+                ) : (
+                  <UserRoundIcon size={16} className="opacity-60" aria-hidden="true" />
+                )}
               </AvatarFallback>
             </Avatar>
             <span className="border-background absolute -end-0.5 -bottom-0.5 size-3 rounded-full border-2 bg-emerald-500">
@@ -74,18 +80,9 @@ export default function UserMenu() {
         </DropdownMenuTrigger>
         <DropdownMenuContent className="max-w-64" align="end">
           <DropdownMenuLabel className="flex min-w-0 flex-col">
-            <span className="text-foreground truncate text-sm font-medium">Keith Kennedy</span>
-            <span className="text-muted-foreground truncate text-xs font-normal">k.kennedy@originui.com</span>
+            <span className="text-foreground truncate text-sm font-medium">{user?.full_name || 'User'}</span>
+            <span className="text-muted-foreground truncate text-xs font-normal">{user?.email || ''}</span>
           </DropdownMenuLabel>
-          <DropdownMenuSeparator />
-          <DropdownMenuSeparator />
-          <DropdownMenuGroup>
-            <DropdownMenuItem className="cursor-pointer">
-              <UserPenIcon size={16} className="opacity-60" aria-hidden="true" />
-              <span>Profile</span>
-            </DropdownMenuItem>
-          </DropdownMenuGroup>
-          <DropdownMenuSeparator />
           <DropdownMenuItem
             className="cursor-pointer"
             onClick={(e) => {
