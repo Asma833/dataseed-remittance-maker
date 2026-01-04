@@ -43,7 +43,7 @@ const KYCTable = ({ onUploadClick }: { onUploadClick: (isReupload: boolean, tran
             globalFilter: true,
             dateRangeFilter: {
               enabled: true,
-              columnId: 'created_at',
+              columnId: 'transactions.0.order_date',
               useMuiDateRangePicker: true,
             },
           },

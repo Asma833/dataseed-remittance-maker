@@ -210,6 +210,13 @@ export function DataTable<T>({
     [columns, config.filters.columnFilters]
   );
 
+  // Helper function to get nested value from object using dot notation
+  const getNestedValue = (obj: any, path: string) => {
+    if (!path) return undefined;
+    const keys = path.split('.');
+    return keys.reduce((acc, key) => (acc && acc[key] !== undefined ? acc[key] : undefined), obj);
+  };
+
   // Calculate total data for static pagination with manual filtering
   const tableData = useMemo(() => {
     let filteredData = safeData.data || [];
@@ -253,7 +260,7 @@ export function DataTable<T>({
     if (dateRangeFilterConfig?.enabled && (appliedDateRange.from || appliedDateRange.to)) {
       const columnId = dateRangeFilterConfig?.columnId || 'createdAt';
       filteredData = filteredData.filter((item: any) => {
-        const itemValue = item[columnId];
+        const itemValue = getNestedValue(item, columnId);
         if (!itemValue) return false;
 
         const itemDate = new Date(itemValue);
@@ -384,7 +391,10 @@ export function DataTable<T>({
       }
 
       if (formValues.dateRange.endDate) {
-        newDateRange.to = new Date(formValues.dateRange.endDate);
+        const toDate = new Date(formValues.dateRange.endDate);
+        // Set to end of day to make it inclusive
+        toDate.setHours(23, 59, 59, 999);
+        newDateRange.to = toDate;
       }
 
       setSelectedDateRange(newDateRange);

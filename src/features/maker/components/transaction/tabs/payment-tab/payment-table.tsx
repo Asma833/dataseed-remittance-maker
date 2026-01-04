@@ -30,7 +30,7 @@ const PaymentStatus = () => {
           id: payment.id,
           ref_no: transaction?.company_ref_number || '-',
           agent_ref_no: transaction?.agent_ref_number || '-',
-          created_date: deal.created_at || '-',
+          created_date: transaction?.order_date || deal.created_at || '-',
           expiry_date: transaction?.order_expiry || '-',
           applicant_name: transaction?.kyc_details?.applicant_name || '-',
           applicant_pan: transaction?.kyc_details?.applicant_pan || '-',

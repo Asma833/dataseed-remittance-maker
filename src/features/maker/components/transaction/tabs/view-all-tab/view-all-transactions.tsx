@@ -5,26 +5,18 @@ import { DataTable } from '@/components/table/data-table';
 import { staticConfig } from '@/components/table/config';
 import { useGetPaymentDetails } from '../../hooks/useGetPaymentDetails';
 import { AllTransaction, PaymentData } from '../../types/payment.types';
-import { mapRowDataToInitialData } from '../../utils/transaction-utils';
 
 interface ViewAllTransactionData extends PaymentData {
   order_date: string;
   fx_rate: string;
-  e_sign_status: string;
-  e_sign_link: string | null;
   kyc_upload_status: string;
-  v_kyc_status: string;
-  v_kyc_link: string | null;
   completion_date: string | null;
   swift_copy: string | null;
-  is_esign_required: boolean;
-  is_v_kyc_required: boolean;
   transaction_status: string;
 }
 
 const ViewAllTransactions = () => {
   const { data, isLoading, error } = useGetPaymentDetails();
-  const navigate = useNavigate();
 
   const mappedData: ViewAllTransactionData[] = useMemo(() => {
     if (!data || !Array.isArray(data)) return [];
@@ -52,19 +44,13 @@ const ViewAllTransactions = () => {
           customer_rate: deal.customer_rate || '-',
           transaction_amount: transaction.transaction_amount || '-',
           rejection_reason: deal.rejection_reason || '-',
-          // Additional fields for view-all columns
           order_date: transaction.order_date || deal.created_at || '-',
           fx_rate: deal.customer_rate || '-',
-          e_sign_status: 'pending',
-          e_sign_link: null,
           kyc_upload_status: 'Uploaded',
-          v_kyc_status: 'pending',
-          v_kyc_link: null,
           completion_date: null,
           swift_copy: null,
-          is_esign_required: true,
-          is_v_kyc_required: true,
           transaction_status: transaction.transaction_status || '-',
+          deal_booking_id: transaction.deal_booking_id || deal.deal_booking_id || '-',
         })
       )
     );
