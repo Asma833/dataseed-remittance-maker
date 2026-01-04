@@ -118,7 +118,7 @@ export default function RateTable({
         </TableRow>
         <TableRow className="bg-gray-50/50">
           <TableCell colSpan={3}>Beneficiary Amount (In Fx Value)</TableCell>
-          <TableCell className="text-right">{formatINR(beneficiaryAmount)}</TableCell>
+          <TableCell className="text-right">{Number(beneficiaryAmount || 0).toFixed(2)}</TableCell>
         </TableRow>
       </TableFooter>
     </Table>
