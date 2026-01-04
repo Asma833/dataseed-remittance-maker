@@ -109,13 +109,25 @@ const CurrencyDetails = ({ setAccordionState, viewMode, paymentData }: CommonCre
   const tcsAmount = useWatch({ control, name: 'currencyDetails.invoiceRateTable.tcs.rate' });
   const totalInrAmount = useWatch({ control, name: 'currencyDetails.invoiceRateTable.total_inr_amount.rate' });
 
-  // Calculate beneficiary amount: nostro_charges.rate - (transaction_amount.rate / customer_rate)
+  const selectedNostroType = useWatch({ control, name: 'transactionDetails.nostro_charges' });
+  
+  // Calculate beneficiary amount synchronous with latest rates to avoid render cycle lag
   const beneficiaryAmount = useMemo(() => {
-    if (nostroRate != null && transactionAmount != null && customerRate != null && customerRate !== 0) {
-      return (Number(transactionAmount) - Number(nostroRate)) / Number(customerRate);
-    }
-    return 0;
-  }, [nostroRate, transactionAmount, customerRate]);
+    if (customerRate == null || Number(customerRate) === 0) return 0;
+
+    // Synchronously calculate derived rates for immediate sync
+    const currentNostroRate = Number(nostroCompanyRate || 0) + Number(nostroAgentMarkUp || 0);
+    // Note: transactionValueCompanyRate is synced to customerRate via useEffect, so we use customerRate directly for "latest"
+    const currentTransactionValueRate = Number(customerRate) * Number(fxAmount || 0);
+    
+    const adjustment = (selectedNostroType === 'BEN') ? currentNostroRate : 0;
+    
+    return (currentTransactionValueRate - adjustment) / Number(customerRate);
+  }, [
+    customerRate, fxAmount, 
+    nostroCompanyRate, nostroAgentMarkUp,
+    selectedNostroType
+  ]);
 
 
   // Sync values from TransactionBasicDetails to CurrencyDetails
