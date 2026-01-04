@@ -53,42 +53,47 @@ export const ShadCnNumber = ({
           name={name}
           control={control}
           defaultValue=""
-          render={({ field: { value, onChange, ...field }, fieldState: { error } }) => (
-            <div>
-              {isCurrencyField ? (
-                <NumericFormat
-                  {...field}
-                  thousandSeparator={true}
-                  thousandsGroupStyle="lakh"
-                  decimalSeparator="."
-                  decimalScale={2}
-                  fixedDecimalScale={true}
-                  allowNegative={false}
-                  prefix=""
-                  placeholder={placeholder}
-                   className={cn(
-                        'form-input flex h-9 w-full border border-input bg-transparent px-3 py-1 text-sm transition-colors file:border-0 file:bg-transparent file:text-sm file:font-medium file:text-foreground placeholder:text-muted-foreground focus-visible:outline-none disabled:cursor-not-allowed disabled:opacity-50 truncate text-right',
-                          'aria-invalid:focus-visible:border-destructive',
-                    error && 'border-destructive focus:ring-destructive'
-                  )}
-                  value={forcedValue !== undefined ? forcedValue : value || ''}
-                  onValueChange={(values) => {
-                    const { floatValue } = values;
-                    onChange(floatValue || '');
-                  }}
-                  disabled={disabled}
-                />
-              ) : (
-                <ShadCnFormInput
-                  {...field}
-                  type="text"
-                  placeholder={placeholder}
-                  className={cn(
-                    'form-input flex h-9 w-full border border-input bg-transparent px-3 py-1 text-sm transition-colors file:border-0 file:bg-transparent file:text-sm file:font-medium file:text-foreground placeholder:text-muted-foreground focus-visible:outline-none disabled:cursor-not-allowed disabled:opacity-50 truncate text-right',
-                    'aria-invalid:focus-visible:border-destructive'
-                  )}
-                   
-                  value={(forcedValue !== undefined ? forcedValue : value) || ''}
+          render={({ field: { value, onChange, ...field }, fieldState: { error } }) => {
+            const currentValue = (forcedValue !== undefined ? forcedValue : value);
+            const isValueEmpty = currentValue === '' || currentValue === null || currentValue === undefined;
+
+            return (
+              <div>
+                {isCurrencyField ? (
+                  <NumericFormat
+                    {...field}
+                    thousandSeparator={true}
+                    thousandsGroupStyle="lakh"
+                    decimalSeparator="."
+                    decimalScale={2}
+                    fixedDecimalScale={true}
+                    allowNegative={false}
+                    prefix=""
+                    placeholder={placeholder}
+                    className={cn(
+                      'form-input flex h-9 w-full border border-input bg-transparent px-3 py-1 text-sm transition-colors file:border-0 file:bg-transparent file:text-sm file:font-medium file:text-foreground placeholder:text-muted-foreground focus-visible:outline-none disabled:cursor-not-allowed disabled:opacity-50 truncate',
+                      isValueEmpty ? 'text-left' : 'text-right',
+                      'aria-invalid:focus-visible:border-destructive',
+                      error && 'border-destructive focus:ring-destructive'
+                    )}
+                    value={forcedValue !== undefined ? forcedValue : (value ?? '')}
+                    onValueChange={(values) => {
+                      const { floatValue } = values;
+                      onChange(floatValue !== undefined ? floatValue : '');
+                    }}
+                    disabled={disabled}
+                  />
+                ) : (
+                  <ShadCnFormInput
+                    {...field}
+                    type="text"
+                    placeholder={placeholder}
+                    className={cn(
+                      'form-input flex h-9 w-full border border-input bg-transparent px-3 py-1 text-sm transition-colors file:border-0 file:bg-transparent file:text-sm file:font-medium file:text-foreground placeholder:text-muted-foreground focus-visible:outline-none disabled:cursor-not-allowed disabled:opacity-50 truncate',
+                      isValueEmpty ? 'text-left' : 'text-right',
+                      'aria-invalid:focus-visible:border-destructive'
+                    )}
+                    value={currentValue ?? ''}
                   onChange={(e) => {
                     const val = e.target.value;
                     // Allow only numbers and decimal point
@@ -99,9 +104,10 @@ export const ShadCnNumber = ({
                   disabled={disabled}
                 />
               )}
-              {error && <p className="text-sm text-destructive mt-1">{error.message}</p>}
-            </div>
-          )}
+                {error && <p className="text-sm text-destructive mt-1">{error.message}</p>}
+              </div>
+            );
+          }}
         />
       </FormControl>
       <FormMessage />
