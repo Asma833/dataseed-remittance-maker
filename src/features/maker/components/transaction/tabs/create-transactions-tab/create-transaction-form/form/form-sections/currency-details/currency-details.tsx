@@ -71,7 +71,7 @@ const CurrencyDetails = ({ setAccordionState, viewMode, paymentData }: CommonCre
   const sourceofFund = useWatch({ control, name: 'transactionDetails.source_of_funds' });
   const declarationAmt = useWatch({ control, name: 'currencyDetails.declared_previous_amount' });
   const previousTransactionAmt = useWatch({ control, name: 'currencyDetails.previous_transaction_amount' });
-  const totalTransactionAmountTcs = useWatch({ control, name: 'currencyDetails.total_transaction_amount_tcs' });
+  const totalTcsAmt = useWatch({ control, name: 'currencyDetails.total_transaction_amount_tcs' });
 
   // Watch the entire invoiceRateTable to pass to RateTable
   const invoiceRateTable = useWatch({ control, name: 'currencyDetails.invoiceRateTable' });
@@ -278,9 +278,9 @@ const CurrencyDetails = ({ setAccordionState, viewMode, paymentData }: CommonCre
   // Calculate Total Transaction Amount (TCS)
   useEffect(() => {
     if (mountedRef.current) {
-      const totalTcsAmt =
+      const calculatedTotalTcsAmt =
         Number(transactionValueRate || 0) + Number(previousTransactionAmt || 0) + Number(declarationAmt || 0);
-      setValue('currencyDetails.total_transaction_amount_tcs', totalTcsAmt, {
+      setValue('currencyDetails.total_transaction_amount_tcs', calculatedTotalTcsAmt, {
         shouldValidate: false,
         shouldDirty: false,
       });
@@ -334,11 +334,11 @@ const CurrencyDetails = ({ setAccordionState, viewMode, paymentData }: CommonCre
     const isEducation = (purpose || '').toLowerCase() === 'education';
     if (
       mountedRef.current &&
-      totalTransactionAmountTcs > 0 &&
+      totalTcsAmt > 0 &&
       purpose &&
       panNumber &&
       sourceofFund &&
-      (!isEducation || declarationAmt)
+      (!isEducation || declarationAmt != null)
     ) {
       // Clear previous timeout
       if (tcsTimeoutRef.current) {
@@ -352,7 +352,7 @@ const CurrencyDetails = ({ setAccordionState, viewMode, paymentData }: CommonCre
             panNumber,
             sourceofFund,
             declarationAmt: isEducation ? declarationAmt : '0',
-            txnAmount: totalTransactionAmountTcs.toString(),
+            txnAmount: totalTcsAmt.toString(),
           });
           if (response.statuscode === '200' && response.responsecode === 'success') {
             setValue('currencyDetails.invoiceRateTable.tcs.rate', Number(response.TCS), {
@@ -374,7 +374,7 @@ const CurrencyDetails = ({ setAccordionState, viewMode, paymentData }: CommonCre
         clearTimeout(tcsTimeoutRef.current);
       }
     };
-  }, [totalTransactionAmountTcs, purpose, panNumber, sourceofFund, declarationAmt, calculateTcs, setValue]);
+  }, [totalTcsAmt, purpose, panNumber, sourceofFund, declarationAmt, calculateTcs, setValue]);
  
   const flattenErrors = (obj: any, prefix = ''): string[] => {
     const keys: string[] = [];
