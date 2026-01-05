@@ -54,7 +54,6 @@ export const useGetAgentDetails = (selectedCurrency?: string, viewMode?: boolean
       }
     }
     else {
-     // console.log('useGetAgentDetails: No data available, returning default values');
       return {
         nostroMargin: 0,
         productMargin: 0,

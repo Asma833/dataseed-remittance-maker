@@ -15,11 +15,11 @@ export const GetPaymentTableColumn = ({
     { id: 'ref_no', header: 'Ref. No', accessorKey: 'ref_no', meta: { className: 'min-w-0 p-2' } },
     { id: 'agent_ref_no', header: 'Agent Ref. No', accessorKey: 'agent_ref_no', meta: { className: 'min-w-0 p-2' } },
     {
-      id: 'created_date',
+      id: 'order_date',
       header: 'Order Date',
-      accessorKey: 'created_date',
+      accessorKey: 'order_date',
       meta: { className: 'min-w-0 p-2' },
-      cell: ({ row }: { row: PaymentData }) => <span>{formatDateWithFallback(row.created_date)}</span>,
+      cell: ({ row }: { row: PaymentData }) => <span>{formatDateWithFallback(row.order_date)}</span>,
     },
     {
       id: 'expiry_date',

@@ -59,7 +59,6 @@ const PaymentStatus = () => {
 
   const handleUploadSubmit = async (file: File) => {
     if (selectedPayment) {
-      console.log(selectedPayment.raw_data?.deal.payment_records[0]?.id,"selectedPayment")
       await uploadChallan({
         id: selectedPayment?.raw_data?.deal.payment_records[0]?.id || "",
         file,
