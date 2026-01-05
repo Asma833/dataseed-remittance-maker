@@ -1,5 +1,5 @@
 import { FieldValues, FormProvider, useForm } from 'react-hook-form';
-import { useCallback, useMemo } from 'react';
+import { useCallback, useEffect, useMemo } from 'react';
 import { FormContentWrapper } from '@/components/form/wrapper/form-content-wrapper';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { toast } from 'sonner';
@@ -115,8 +115,19 @@ const KYCForm = ({
   const {
     handleSubmit,
     control,
+    reset,
     formState: { errors },
   } = methods;
+
+  useEffect(() => {
+    if (transaction) {
+      reset({
+        company_reference_number: transaction.company_ref_number || '',
+        agent_reference_number: transaction.agent_ref_number || '',
+        applicant_name: transaction.kyc_details?.applicant_name || '',
+      });
+    }
+  }, [transaction, reset]);
 
   const handleKycSubmit = handleSubmit(async (formdata: FieldValues) => {
     // Handle form submission logic here
@@ -183,16 +194,14 @@ const KYCForm = ({
         </FormContentWrapper>
       </FormProvider>
 
-      {/*<div className="mt-16 flex flex-col items-center gap-6 px-4">
+     <div className="mt-16 flex flex-col items-center gap-6 px-4">
         <div className="w-full max-w-xl flex flex-col sm:flex-row sm:justify-center gap-3">
-          <Button type="button" onClick={onCancel} variant="light" className="w-full sm:w-auto px-10">
-            Back
-          </Button>
+          
           <Button type="button" onClick={handleKycSubmit} variant="secondary" className="w-full sm:w-auto px-10">
             Submit
           </Button>
         </div>
-      </div>*/}
+      </div>
     </>
   );
 };
