@@ -1,8 +1,8 @@
 import { z } from 'zod';
 
-const nameRegex = /^[A-Za-z][A-Za-z0-9\s-]*$/;
+const nameRegex = /^[a-zA-Z][a-zA-Z\s-]*$/;
 const alphanumericRegex = /^[A-Z0-9]+$/;
-const addressRegex = /^[a-zA-Z0-9\s,-]+$/;
+const addressRegex = /^[a-zA-Z0-9][a-zA-Z0-9\s,-]*$/;
 const lettersOnlyRegex = /^[A-Za-z][A-Za-z\s]*$/;
 
 function isValidIBAN(iban: string): boolean {
@@ -52,7 +52,7 @@ export const beneficiaryDetailsSchema = z
     beneficiary_bank_address: z
       .string()
       .min(1, 'Beneficiary bank address is required')
-      .regex(nameRegex, 'Beneficiary bank address cannot start with space or hyphen'),
+      .regex(addressRegex, 'Beneficiary bank address can only contain letters, numbers, spaces, commas, and hyphens'),
     sort_bsb_aba_transit_code: z
       .string()
       .min(1, 'SORT/BSB/ABA/TRANSIT Code is required')
@@ -105,7 +105,7 @@ export const beneficiaryDetailsSchema = z
     intermediary_bank_address: z
       .string()
       .optional()
-      .refine((val) => !val || val.match(nameRegex), 'Intermediary bank address cannot start with space or hyphen'),
+      .refine((val) => !val || val.match(addressRegex), 'Intermediary bank address can only contain letters, numbers, spaces, commas, and hyphens'),
   })
   .refine(
     (data) => {
