@@ -78,10 +78,7 @@ export const transactionBasicDetailsSchema = z
       .length(10, 'PAN number must be 10 characters')
       .optional()
       .or(z.literal('')),
-    payee_dob: z.coerce
-      .date()
-      .max(new Date(), 'Date of birth cannot be in the future')
-      .optional(),
+    payee_dob: z.coerce.date().max(new Date(), 'Date of birth cannot be in the future').optional(),
     applicant_id_document: z
       .string()
       .max(100, 'ID document too long')

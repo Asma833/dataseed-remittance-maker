@@ -94,14 +94,18 @@ const TransactionBasicDetails = ({ setAccordionState }: CommonCreateTransactionP
       const rate = specificCurrencyRate;
       const buyRate = Number(rate.card_buy_rate);
       // Only update if the currency codes match, the rate is valid, and different from previous value
-      if (rate.currency_code === fxCurrency.trim() && !isNaN(buyRate) && buyRate > 0 &&
-          prevSettlementRateRef.current !== buyRate) {
+      if (
+        rate.currency_code === fxCurrency.trim() &&
+        !isNaN(buyRate) &&
+        buyRate > 0 &&
+        prevSettlementRateRef.current !== buyRate
+      ) {
         // Update the ref with the new value
         prevSettlementRateRef.current = buyRate;
         // Set the value with options to prevent unnecessary validation/marking as dirty
         setValue('transactionDetails.company_settlement_rate', buyRate, {
           shouldValidate: false,
-          shouldDirty: false
+          shouldDirty: false,
         });
       }
     }
@@ -113,32 +117,33 @@ const TransactionBasicDetails = ({ setAccordionState }: CommonCreateTransactionP
       const calculatedCustomerRate = Number(settlementRate || 0) + Number(margin || 0);
       setValue('transactionDetails.customer_rate', calculatedCustomerRate, {
         shouldValidate: false,
-        shouldDirty: false
+        shouldDirty: false,
       });
     }, 1000), // Reduced debounce time for better responsiveness
     [setValue]
   );
 
   // Add a ref to track previous customer rate calculation
-  const prevCustomerRateParamsRef = useRef<{settlementRate: number | null, margin: number | null}>({
+  const prevCustomerRateParamsRef = useRef<{ settlementRate: number | null; margin: number | null }>({
     settlementRate: null,
-    margin: null
+    margin: null,
   });
 
   useEffect(() => {
     if (fxAmount != null && companySettlementRate != null) {
       const margin = addMargin || 0;
-      
+
       // Only recalculate if the values have changed
-      if (prevCustomerRateParamsRef.current.settlementRate !== companySettlementRate ||
-          prevCustomerRateParamsRef.current.margin !== margin) {
-        
+      if (
+        prevCustomerRateParamsRef.current.settlementRate !== companySettlementRate ||
+        prevCustomerRateParamsRef.current.margin !== margin
+      ) {
         // Update the ref with new values
         prevCustomerRateParamsRef.current = {
           settlementRate: companySettlementRate,
-          margin: margin
+          margin: margin,
         };
-        
+
         // Use the debounced function to calculate and set the customer rate
         debouncedCalculateCustomerRate(companySettlementRate, margin);
       }

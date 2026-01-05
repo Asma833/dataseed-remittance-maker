@@ -24,7 +24,7 @@ const currencyFields = [
   'previous_transaction_amount',
   'declared_previous_amount',
   'total_transaction_amount_tcs',
-  'company_settlement_rate'
+  'company_settlement_rate',
 ];
 
 export const ShadCnNumber = ({
@@ -54,7 +54,7 @@ export const ShadCnNumber = ({
           control={control}
           defaultValue=""
           render={({ field: { value, onChange, ...field }, fieldState: { error } }) => {
-            const currentValue = (forcedValue !== undefined ? forcedValue : value);
+            const currentValue = forcedValue !== undefined ? forcedValue : value;
             const isValueEmpty = currentValue === '' || currentValue === null || currentValue === undefined;
 
             return (
@@ -94,16 +94,16 @@ export const ShadCnNumber = ({
                       'aria-invalid:focus-visible:border-destructive'
                     )}
                     value={currentValue ?? ''}
-                  onChange={(e) => {
-                    const val = e.target.value;
-                    // Allow only numbers and decimal point
-                    if (/^[0-9]*\.?[0-9]*$/.test(val) || val === '') {
-                      onChange(val === '' ? '' : val);
-                    }
-                  }}
-                  disabled={disabled}
-                />
-              )}
+                    onChange={(e) => {
+                      const val = e.target.value;
+                      // Allow only numbers and decimal point
+                      if (/^[0-9]*\.?[0-9]*$/.test(val) || val === '') {
+                        onChange(val === '' ? '' : val);
+                      }
+                    }}
+                    disabled={disabled}
+                  />
+                )}
                 {error && <p className="text-sm text-destructive mt-1">{error.message}</p>}
               </div>
             );

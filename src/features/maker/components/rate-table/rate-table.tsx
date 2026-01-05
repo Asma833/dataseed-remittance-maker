@@ -58,7 +58,7 @@ export default function RateTable({
         company_rate: 'companyRate',
         agent_mark_up: 'agentMarkUp',
         rate: 'rate',
-      }; 
+      };
 
       Object.keys(invoiceData).forEach((section) => {
         const sectionData = invoiceData[section];

@@ -7,6 +7,7 @@ The View All Transactions feature provides a comprehensive dashboard for monitor
 ## Getting Started
 
 ### Accessing View All Transactions
+
 1. Log in to the EBIX Web Agent Portal
 2. Navigate to the "Transaction" section
 3. Click on the "View All Transactions" tab
@@ -21,16 +22,19 @@ The main dashboard displays all transactions in a comprehensive table with detai
 #### Key Information Categories:
 
 **Transaction Identifiers**
+
 - **Ref. No**: EBIX's company reference number
 - **Agent Ref. No**: Agent's reference number
 - **Order Date**: When the transaction was created
 - **Expiry Date**: Payment deadline
 
 **Customer Information**
+
 - **Applicant Name**: Name of the person sending money
 - **Applicant PAN Number**: Customer's Permanent Account Number
 
 **Transaction Details**
+
 - **Transaction Type**: Category of remittance transaction
 - **Purpose**: Reason for transfer (Personal, Education, Medical, etc.)
 - **FX Currency**: Foreign currency code
@@ -40,6 +44,7 @@ The main dashboard displays all transactions in a comprehensive table with detai
 - **Customer Rate**: Rate shown to customer
 
 **Status Information**
+
 - **KYC Status**: Document verification status
 - **Payment Status**: Payment processing status
 - **Transaction Status**: Overall transaction progress
@@ -47,6 +52,7 @@ The main dashboard displays all transactions in a comprehensive table with detai
 ## Transaction Status Types
 
 ### KYC Status Indicators
+
 - **Pending**: Documents awaiting upload
 - **Under Review**: Documents being verified
 - **Approved**: Documents verified successfully
@@ -56,10 +62,10 @@ The main dashboard displays all transactions in a comprehensive table with detai
 
 ### Transaction Status Indicators
 
-
 ## Advanced Search and Filtering
 
 ### Search Functionality
+
 - **Global Search**: Search across all visible columns
 - **Reference Search**: Find transactions by reference numbers
 - **Name Search**: Locate transactions by applicant name
@@ -68,26 +74,22 @@ The main dashboard displays all transactions in a comprehensive table with detai
 ### Advanced Filtering Options
 
 #### Date Range Filtering
+
 - **Order Date Filter**: Filter transactions by creation date
 - **Expiry Date Filter**: Find transactions by deadline
 - **Custom Ranges**: Select specific date periods
 - **Quick Filters**: Today, This Week, This Month
 
-
-
-
-
 ## Data Export and Reporting
 
 ### Export Capabilities
+
 - **CSV Export**: Download filtered data for external analysis
 - **Complete Dataset**: Export all visible columns
 - **Filtered Export**: Export only filtered results
 - **Custom Filename**: Automatic timestamp naming
 
-
 ## Transaction Analysis and Insights
-
 
 **Document Version**: 1.0
 **Last Updated**: December 26, 2025

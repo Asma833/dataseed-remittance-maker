@@ -15,7 +15,6 @@ import { getFormDefaultValues } from './form-defaults';
 import { panelFields } from './form-validation-fields';
 import { PaymentData } from '../../../../types/payment.types';
 
-
 type Props = {
   onCancel?: () => void;
   onSubmit?: (data: CreateTransactionFormData) => void;
@@ -96,7 +95,7 @@ const CreateTransactionForm = ({ onCancel, onSubmit, initialData, viewMode }: Pr
           total_transaction_amount_tcs: safeNumber(data.currencyDetails.total_transaction_amount_tcs),
           invoiceRateTable: {
             transaction_value: data.currencyDetails.invoiceRateTable.transaction_value,
-            
+
             remittance_charges: data.currencyDetails.invoiceRateTable.remittance_charges,
             nostro_charges: {
               ...data.currencyDetails.invoiceRateTable.nostro_charges,
@@ -181,7 +180,6 @@ const CreateTransactionForm = ({ onCancel, onSubmit, initialData, viewMode }: Pr
         },
       };
 
-      
       if (viewMode) {
         // Update mode
         const transactionId = initialData?.deal_booking_id;

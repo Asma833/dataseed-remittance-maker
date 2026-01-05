@@ -105,7 +105,10 @@ export const beneficiaryDetailsSchema = z
     intermediary_bank_address: z
       .string()
       .optional()
-      .refine((val) => !val || val.match(addressRegex), 'Intermediary bank address can only contain letters, numbers, spaces, commas, and hyphens'),
+      .refine(
+        (val) => !val || val.match(addressRegex),
+        'Intermediary bank address can only contain letters, numbers, spaces, commas, and hyphens'
+      ),
   })
   .refine(
     (data) => {

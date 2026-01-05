@@ -40,14 +40,14 @@ export const fieldLabelMap: Record<string, string> = {
 };
 
 export const getFieldLabel = (key: string): string => {
-    // Check if key exists in the map
-    if (fieldLabelMap[key]) {
-        return fieldLabelMap[key];
-    }
+  // Check if key exists in the map
+  if (fieldLabelMap[key]) {
+    return fieldLabelMap[key];
+  }
 
-    const parts = key.split('.');
-    const fieldName = parts[parts.length - 1];
-    const config = currencyDetailsConfig;
-    const field = config.find((f) => f.name === fieldName);
-    return field?.label || key;
+  const parts = key.split('.');
+  const fieldName = parts[parts.length - 1];
+  const config = currencyDetailsConfig;
+  const field = config.find((f) => f.name === fieldName);
+  return field?.label || key;
 };

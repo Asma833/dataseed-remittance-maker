@@ -48,7 +48,7 @@ const transactionBasicDetailsConfig = [
     label: 'Company Settlement Rate',
     type: FieldType.Number,
     placeholder: 'Enter Company Settlement Rate',
-    disabled:true
+    disabled: true,
   },
   {
     name: 'add_margin',
@@ -71,7 +71,7 @@ const transactionBasicDetailsConfig = [
     type: FieldType.Select,
     placeholder: 'Select Nostro Charges',
     required: true,
-     options: {
+    options: {
       BEN: { label: 'BEN' },
       OUR: { label: 'OUR' },
     },

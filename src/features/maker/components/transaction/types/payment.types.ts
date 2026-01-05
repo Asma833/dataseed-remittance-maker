@@ -109,7 +109,7 @@ export interface AllTransaction {
   transaction_type: string;
   currency_code: string;
   deal_amount: string;
-  deal_booking_id:string;
+  deal_booking_id: string;
   margin_amount: string;
   settlement_rate: string;
   customer_rate: string;

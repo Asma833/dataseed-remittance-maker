@@ -194,9 +194,8 @@ const KYCForm = ({
         </FormContentWrapper>
       </FormProvider>
 
-     <div className="mt-16 flex flex-col items-center gap-6 px-4">
+      <div className="mt-16 flex flex-col items-center gap-6 px-4">
         <div className="w-full max-w-xl flex flex-col sm:flex-row sm:justify-center gap-3">
-          
           <Button type="button" onClick={handleKycSubmit} variant="secondary" className="w-full sm:w-auto px-10">
             Submit
           </Button>

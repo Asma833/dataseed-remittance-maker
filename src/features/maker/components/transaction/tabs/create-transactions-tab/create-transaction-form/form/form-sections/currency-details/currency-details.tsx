@@ -35,7 +35,7 @@ const CurrencyDetails = ({ setAccordionState, viewMode, paymentData }: CommonCre
   const { calculateTcs } = useTcsCalculation();
 
   const fxCurrency = useWatch({ control, name: 'transactionDetails.fx_currency' });
-  
+
   // Get the form data only once during component initialization for view mode
   // This prevents infinite re-renders by not calling getValues() on every render
   const formData = useMemo(() => {
@@ -44,7 +44,7 @@ const CurrencyDetails = ({ setAccordionState, viewMode, paymentData }: CommonCre
     }
     return null;
   }, [viewMode]); // Remove getValues from dependencies to prevent infinite loops
-  
+
   // Pass viewMode and form data to useGetAgentDetails
   const { extractedMargins } = useGetAgentDetails(fxCurrency, viewMode, formData);
   const { mutateAsync: uploadChallan } = useUploadPaymentChallan();
@@ -111,7 +111,7 @@ const CurrencyDetails = ({ setAccordionState, viewMode, paymentData }: CommonCre
   const totalInrAmount = useWatch({ control, name: 'currencyDetails.invoiceRateTable.total_inr_amount.rate' });
 
   const selectedNostroType = useWatch({ control, name: 'transactionDetails.nostro_charges' });
-  
+
   // Calculate beneficiary amount synchronous with latest rates to avoid render cycle lag
   const beneficiaryAmount = useMemo(() => {
     if (customerRate == null || Number(customerRate) === 0) return 0;
@@ -120,16 +120,11 @@ const CurrencyDetails = ({ setAccordionState, viewMode, paymentData }: CommonCre
     const currentNostroRate = Number(nostroCompanyRate || 0) + Number(nostroAgentMarkUp || 0);
     // Note: transactionValueCompanyRate is synced to customerRate via useEffect, so we use customerRate directly for "latest"
     const currentTransactionValueRate = Number(customerRate) * Number(fxAmount || 0);
-    
-    const adjustment = (selectedNostroType === 'BEN') ? currentNostroRate : 0;
-    
-    return (currentTransactionValueRate - adjustment) / Number(customerRate);
-  }, [
-    customerRate, fxAmount, 
-    nostroCompanyRate, nostroAgentMarkUp,
-    selectedNostroType
-  ]);
 
+    const adjustment = selectedNostroType === 'BEN' ? currentNostroRate : 0;
+
+    return (currentTransactionValueRate - adjustment) / Number(customerRate);
+  }, [customerRate, fxAmount, nostroCompanyRate, nostroAgentMarkUp, selectedNostroType]);
 
   // Sync values from TransactionBasicDetails to CurrencyDetails
   useEffect(() => {
@@ -208,7 +203,7 @@ const CurrencyDetails = ({ setAccordionState, viewMode, paymentData }: CommonCre
   // Calculate transaction_value.rate as company_rate + agent_mark_up
   useEffect(() => {
     if (mountedRef.current && fxAmount && transactionValueCompanyRate != null && transactionValueAgentMarkUp != null) {
-      const rate = Number(transactionValueCompanyRate)  * Number(fxAmount) ;
+      const rate = Number(transactionValueCompanyRate) * Number(fxAmount);
       setValue('currencyDetails.invoiceRateTable.transaction_value.rate', rate, {
         shouldValidate: false,
         shouldDirty: false,
@@ -287,7 +282,6 @@ const CurrencyDetails = ({ setAccordionState, viewMode, paymentData }: CommonCre
       });
     }
   }, [transactionValueRate, previousTransactionAmt, declarationAmt, setValue]);
-  
 
   // GST Calculation
   const gstTimeoutRef = useRef<NodeJS.Timeout | null>(null);
@@ -376,7 +370,7 @@ const CurrencyDetails = ({ setAccordionState, viewMode, paymentData }: CommonCre
       }
     };
   }, [totalTcsAmt, purpose, panNumber, sourceofFund, declarationAmt, calculateTcs, setValue]);
- 
+
   const flattenErrors = (obj: any, prefix = ''): string[] => {
     const keys: string[] = [];
     for (const key in obj) {

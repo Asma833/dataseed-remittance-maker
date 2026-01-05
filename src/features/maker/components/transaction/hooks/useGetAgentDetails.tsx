@@ -23,21 +23,20 @@ export const useGetAgentDetails = (selectedCurrency?: string, viewMode?: boolean
     if (viewMode && dealData && dealData.currencyDetails?.invoiceRateTable) {
       try {
         // Extract margins from the deal data
-       
+
         // Create a local copy to avoid reference issues
         const invoiceTable = dealData.currencyDetails.invoiceRateTable;
-        
+
         const margins = {
           nostroMargin: invoiceTable.nostro_charges?.company_rate || '0',
           productMargin: invoiceTable.remittance_charges?.company_rate || '0',
           otherChargesRate: invoiceTable.other_charges?.company_rate || '0',
-        }; 
+        };
         return margins;
       } catch (error) {
         console.error('Error extracting margins from deal data:', error);
         return null;
       }
-    
     }
     // Otherwise use the agent details API data
     else if (query.data && selectedCurrency) {
@@ -49,15 +48,14 @@ export const useGetAgentDetails = (selectedCurrency?: string, viewMode?: boolean
         return {
           nostroMargin: 0,
           productMargin: 0,
-          otherChargesRate: 0
+          otherChargesRate: 0,
         };
       }
-    }
-    else {
+    } else {
       return {
         nostroMargin: 0,
         productMargin: 0,
-        otherChargesRate: 0
+        otherChargesRate: 0,
       };
     }
   }, [selectedCurrency, viewMode, dealData, query.data]);

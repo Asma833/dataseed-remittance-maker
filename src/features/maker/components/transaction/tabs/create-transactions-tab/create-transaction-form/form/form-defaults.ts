@@ -4,130 +4,134 @@ export const getFormDefaultValues = (
   initialData?: Partial<CreateTransactionFormInput>
 ): Partial<CreateTransactionFormInput> => {
   const sourceData = initialData;
-  
+
   // If we have initialData with currencyDetails, use that data
   // Otherwise use default values
-  const currencyDetails = sourceData?.currencyDetails ? {
-    ...sourceData.currencyDetails,
-    total_transaction_amount_tcs: sourceData.currencyDetails.total_transaction_amount_tcs ?? '0',
-    // Ensure invoiceRateTable is properly structured
-    invoiceRateTable: sourceData.currencyDetails.invoiceRateTable ? {
-      ...sourceData.currencyDetails.invoiceRateTable,
-      // Ensure each section of the invoice table is properly structured
-      transaction_value: sourceData.currencyDetails.invoiceRateTable.transaction_value || {
-        company_rate: '0',
-        agent_mark_up: '0',
-        rate: '0',
-      },
-      remittance_charges: sourceData.currencyDetails.invoiceRateTable.remittance_charges || {
-        company_rate: '0',
-        agent_mark_up: '0',
-        rate: '0',
-      },
-      nostro_charges: sourceData.currencyDetails.invoiceRateTable.nostro_charges || {
-        company_rate: '0',
-        agent_mark_up: '0',
-        rate: '0',
-      },
-      other_charges: sourceData.currencyDetails.invoiceRateTable.other_charges || {
-        company_rate: '0',
-        agent_mark_up: '0',
-        rate: '0',
-      },
-      transaction_amount: sourceData.currencyDetails.invoiceRateTable.transaction_amount || {
-        rate: '0',
-      },
-      gst_amount: sourceData.currencyDetails.invoiceRateTable.gst_amount || {
-        rate: '0',
-      },
-      total_inr_amount: sourceData.currencyDetails.invoiceRateTable.total_inr_amount || {
-        rate: '0',
-      },
-      tcs: sourceData.currencyDetails.invoiceRateTable.tcs || {
-        rate: '0',
-      },
-    } : {
-      // Default invoice table structure if not provided
-      transaction_value: {
-        company_rate: '0',
-        agent_mark_up: '0',
-        rate: '0',
-      },
-      remittance_charges: {
-        company_rate: '0',
-        agent_mark_up: '0',
-        rate: '0',
-      },
-      nostro_charges: {
-        company_rate: '0',
-        agent_mark_up: '0',
-        rate: '0',
-      },
-      other_charges: {
-        company_rate: '0',
-        agent_mark_up: '0',
-        rate: '0',
-      },
-      transaction_amount: {
-        rate: '0',
-      },
-      gst_amount: {
-        rate: '0',
-      },
-      total_inr_amount: {
-        rate: '0',
-      },
-      tcs: {
-        rate: '0',
-      },
-    }
-  } : {
-    // Default currency details if not provided
-    fx_currency: '',
-    fx_amount: '0',
-    settlement_rate: '0',
-    add_margin: '0',
-    customer_rate: '0',
-    declared_education_loan_amount: '0',
-    previous_transaction_amount: '0',
-    declared_previous_amount: '0',
-    total_transaction_amount_tcs: '0',
-    invoiceRateTable: {
-      transaction_value: {
-        company_rate: '0',
-        agent_mark_up: '0',
-        rate: '0',
-      },
-      remittance_charges: {
-        company_rate: '0',
-        agent_mark_up: '0',
-        rate: '0',
-      },
-      nostro_charges: {
-        company_rate: '0',
-        agent_mark_up: '0',
-        rate: '0',
-      },
-      other_charges: {
-        company_rate: '0',
-        agent_mark_up: '0',
-        rate: '0',
-      },
-      transaction_amount: {
-        rate: '0',
-      },
-      gst_amount: {
-        rate: '0',
-      },
-      total_inr_amount: {
-        rate: '0',
-      },
-      tcs: {
-        rate: '0',
-      },
-    },
-  };
-  
+  const currencyDetails = sourceData?.currencyDetails
+    ? {
+        ...sourceData.currencyDetails,
+        total_transaction_amount_tcs: sourceData.currencyDetails.total_transaction_amount_tcs ?? '0',
+        // Ensure invoiceRateTable is properly structured
+        invoiceRateTable: sourceData.currencyDetails.invoiceRateTable
+          ? {
+              ...sourceData.currencyDetails.invoiceRateTable,
+              // Ensure each section of the invoice table is properly structured
+              transaction_value: sourceData.currencyDetails.invoiceRateTable.transaction_value || {
+                company_rate: '0',
+                agent_mark_up: '0',
+                rate: '0',
+              },
+              remittance_charges: sourceData.currencyDetails.invoiceRateTable.remittance_charges || {
+                company_rate: '0',
+                agent_mark_up: '0',
+                rate: '0',
+              },
+              nostro_charges: sourceData.currencyDetails.invoiceRateTable.nostro_charges || {
+                company_rate: '0',
+                agent_mark_up: '0',
+                rate: '0',
+              },
+              other_charges: sourceData.currencyDetails.invoiceRateTable.other_charges || {
+                company_rate: '0',
+                agent_mark_up: '0',
+                rate: '0',
+              },
+              transaction_amount: sourceData.currencyDetails.invoiceRateTable.transaction_amount || {
+                rate: '0',
+              },
+              gst_amount: sourceData.currencyDetails.invoiceRateTable.gst_amount || {
+                rate: '0',
+              },
+              total_inr_amount: sourceData.currencyDetails.invoiceRateTable.total_inr_amount || {
+                rate: '0',
+              },
+              tcs: sourceData.currencyDetails.invoiceRateTable.tcs || {
+                rate: '0',
+              },
+            }
+          : {
+              // Default invoice table structure if not provided
+              transaction_value: {
+                company_rate: '0',
+                agent_mark_up: '0',
+                rate: '0',
+              },
+              remittance_charges: {
+                company_rate: '0',
+                agent_mark_up: '0',
+                rate: '0',
+              },
+              nostro_charges: {
+                company_rate: '0',
+                agent_mark_up: '0',
+                rate: '0',
+              },
+              other_charges: {
+                company_rate: '0',
+                agent_mark_up: '0',
+                rate: '0',
+              },
+              transaction_amount: {
+                rate: '0',
+              },
+              gst_amount: {
+                rate: '0',
+              },
+              total_inr_amount: {
+                rate: '0',
+              },
+              tcs: {
+                rate: '0',
+              },
+            },
+      }
+    : {
+        // Default currency details if not provided
+        fx_currency: '',
+        fx_amount: '0',
+        settlement_rate: '0',
+        add_margin: '0',
+        customer_rate: '0',
+        declared_education_loan_amount: '0',
+        previous_transaction_amount: '0',
+        declared_previous_amount: '0',
+        total_transaction_amount_tcs: '0',
+        invoiceRateTable: {
+          transaction_value: {
+            company_rate: '0',
+            agent_mark_up: '0',
+            rate: '0',
+          },
+          remittance_charges: {
+            company_rate: '0',
+            agent_mark_up: '0',
+            rate: '0',
+          },
+          nostro_charges: {
+            company_rate: '0',
+            agent_mark_up: '0',
+            rate: '0',
+          },
+          other_charges: {
+            company_rate: '0',
+            agent_mark_up: '0',
+            rate: '0',
+          },
+          transaction_amount: {
+            rate: '0',
+          },
+          gst_amount: {
+            rate: '0',
+          },
+          total_inr_amount: {
+            rate: '0',
+          },
+          tcs: {
+            rate: '0',
+          },
+        },
+      };
+
   return {
     currencyDetails,
     beneficiaryDetails: sourceData?.beneficiaryDetails || {

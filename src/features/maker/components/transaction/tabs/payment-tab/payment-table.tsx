@@ -41,7 +41,7 @@ const PaymentStatus = () => {
     if (dealDetails && selectedDealId && !isDealLoading) {
       try {
         const initialData = mapDealDetailsApiToFormInput(dealDetails, selectedDealId);
-        
+
         // Find the mapped row to pass the full data (including raw_data) to view mode
         const rowData = mappedData.find((row) => row.deal_booking_id === selectedDealId);
         if (rowData) {
@@ -60,7 +60,7 @@ const PaymentStatus = () => {
   const handleUploadSubmit = async (file: File) => {
     if (selectedPayment) {
       await uploadChallan({
-        id: selectedPayment?.raw_data?.deal.payment_records[0]?.id || "",
+        id: selectedPayment?.raw_data?.deal.payment_records[0]?.id || '',
         file,
       });
     }
