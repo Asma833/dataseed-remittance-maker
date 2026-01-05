@@ -20,6 +20,7 @@ import Payments from '@/components/payments/Payments';
 import { useUploadPaymentChallan } from '@/features/maker/components/transaction/hooks/useUploadPaymentChallan';
 import { generateRateTablePdf } from '@/utils/pdfUtils';
 import { ConfirmationAlert } from '@/components/common/confirmation-alert';
+import { getFieldLabel } from './currency-details.utils';
 
 const CurrencyDetails = ({ setAccordionState, viewMode, paymentData }: CommonCreateTransactionProps) => {
   const [isSaving, setIsSaving] = useState(false);
@@ -387,13 +388,7 @@ const CurrencyDetails = ({ setAccordionState, viewMode, paymentData }: CommonCre
     }
     return keys;
   };
-  const getFieldLabel = (key: string): string => {
-    const parts = key.split('.');
-    const fieldName = parts[parts.length - 1];
-    const config = currencyDetailsConfig;
-    const field = config.find((f) => f.name === fieldName);
-    return field?.label || key;
-  };
+
   const handleSave = async () => {
     const isValid = await trigger();
     if (!isValid) {
