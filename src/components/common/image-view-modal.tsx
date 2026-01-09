@@ -1,7 +1,7 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 import { Button } from '@/components/ui/button';
-import { ExternalLink, X } from 'lucide-react';
+import { ExternalLink, X, Loader2 } from 'lucide-react';
 
 interface ImageViewModalProps {
   isOpen: boolean;
@@ -18,6 +18,14 @@ export const ImageViewModal: React.FC<ImageViewModalProps> = ({
   title = 'Image View',
   alt = 'Image',
 }) => {
+  const [isLoading, setIsLoading] = useState(true);
+
+  useEffect(() => {
+    if (isOpen) {
+      setIsLoading(true);
+    }
+  }, [imageSrc, isOpen]);
+
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
       <DialogContent className="max-w-4xl max-h-[90vh] overflow-auto [&>button]:hidden">
@@ -40,16 +48,31 @@ export const ImageViewModal: React.FC<ImageViewModalProps> = ({
             </Button>
           </div>
         </DialogHeader>
-        <div className="flex justify-center">
-          <img
-            src={imageSrc}
-            alt={alt}
-            className="max-w-full max-h-[70vh] object-contain"
-            onError={(e) => {
-              console.error('Failed to load image:', imageSrc);
-              // Could show an error message here
-            }}
-          />
+        <div className="flex justify-center w-full min-h-[50vh] relative">
+          {isLoading && (
+            <div className="absolute inset-0 flex items-center justify-center">
+              <Loader2 className="h-8 w-8 animate-spin text-gray-500" />
+            </div>
+          )}
+          {imageSrc?.split('?')[0].toLowerCase().endsWith('.pdf') || (imageSrc?.startsWith('blob:') && title.toLowerCase().includes('.pdf')) ? (
+            <iframe
+              src={`${imageSrc}#toolbar=0&navpanes=0&scrollbar=0`}
+              className={`w-full h-[70vh] ${isLoading ? 'invisible' : 'visible'}`}
+              title={title}
+              onLoad={() => setIsLoading(false)}
+            />
+          ) : (
+            <img
+              src={imageSrc}
+              alt={alt}
+              className={`max-w-full max-h-[70vh] object-contain ${isLoading ? 'invisible' : 'visible'}`}
+              onLoad={() => setIsLoading(false)}
+              onError={(e) => {
+                console.error('Failed to load image:', imageSrc);
+                setIsLoading(false);
+              }}
+            />
+          )}
         </div>
       </DialogContent>
     </Dialog>

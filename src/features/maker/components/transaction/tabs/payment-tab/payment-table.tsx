@@ -10,6 +10,8 @@ import { useUploadPaymentChallan } from '../../hooks/useUploadPaymentChallan';
 import { useGetDealDetails } from '../../hooks/useGetDealDetails';
 import { AllTransaction, PaymentData } from '../../types/payment.types';
 import { mapDealDetailsApiToFormInput, mapAllTransactionsToTableRows } from '../../utils/transaction-utils';
+import { ImageViewModal } from '@/components/common/image-view-modal';
+import { useGetPresignedUrls } from '../../hooks/useGetPresignedUrls';
 
 const PaymentStatus = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -20,10 +22,28 @@ const PaymentStatus = () => {
   const { data, isLoading, error } = useGetPaymentDetails();
   const { mutateAsync: uploadChallan } = useUploadPaymentChallan();
   const { data: dealDetails, isLoading: isDealLoading } = useGetDealDetails(selectedDealId || undefined);
+  const { mutateAsync: getPresignedUrlsAsync } = useGetPresignedUrls();
+  
+  const [isImageModalOpen, setIsImageModalOpen] = useState(false);
+  const [modalImageSrc, setModalImageSrc] = useState('');
+  const [modalTitle, setModalTitle] = useState('');
 
   const mappedData = useMemo(() => {
     return mapAllTransactionsToTableRows(data as AllTransaction[]);
   }, [data]);
+
+   const handleViewScreenshot = async (s3Key: string, refNo: string) => {
+      try {
+        const response = await getPresignedUrlsAsync([s3Key]);
+        if (response?.urls?.[0]?.presigned_url) {
+          setModalImageSrc(response.urls[0].presigned_url);
+          setModalTitle(`Payment Screenshot`);
+          setIsImageModalOpen(true);
+        }
+      } catch (error) {
+        console.error('Failed to get presigned URL:', error);
+      }
+    };
 
   const handlePayment = (rowData: PaymentData) => {
     setSelectedPayment(rowData);
@@ -63,6 +83,7 @@ const PaymentStatus = () => {
         id: selectedPayment?.raw_data?.deal.payment_records[0]?.id || '',
         file,
       });
+      setIsModalOpen(false);
     }
   };
 
@@ -100,10 +121,18 @@ const PaymentStatus = () => {
               uploadScreen={false}
               data={selectedPayment}
               onSubmit={handleUploadSubmit}
+          onViewScreenshot={handleViewScreenshot}
             />
           }
+          className="md:max-w-[40%]"
         />
       )}
+       <ImageViewModal
+        isOpen={isImageModalOpen}
+        onClose={() => setIsImageModalOpen(false)}
+        imageSrc={modalImageSrc}
+        title={modalTitle}
+      />
     </div>
   );
 };

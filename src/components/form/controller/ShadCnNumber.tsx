@@ -19,6 +19,7 @@ interface ShadCnNumberProps {
 const currencyFields = [
   'settlement_rate',
   'add_margin',
+  'fx_amount',
   'customer_rate',
   'declared_education_loan_amount',
   'previous_transaction_amount',

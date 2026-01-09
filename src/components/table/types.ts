@@ -1,8 +1,10 @@
+import { Row } from '@tanstack/react-table';
+
 export interface TableColumn<T = any> {
   id: string;
   header: string;
   accessorKey?: keyof T | string;
-  cell?: (props: { row: T; value: any }) => React.ReactNode;
+  cell?: (props: { row: T; value: any; tableRow?: Row<T> }) => React.ReactNode;
   sortable?: boolean;
   filterable?: boolean;
   width?: number | string;
@@ -32,6 +34,7 @@ export interface TableConfig {
     placeholder?: string;
     searchMode: 'static' | 'dynamic';
     debounceMs?: number;
+    leftElement?: React.ReactNode;
     rightElement?: React.ReactNode;
   };
 
@@ -79,6 +82,7 @@ export interface TableConfig {
       columnId: string;
       columnName: string;
     }>;
+    customLeftElement?: React.ReactNode;
   };
 
   // Sorting settings

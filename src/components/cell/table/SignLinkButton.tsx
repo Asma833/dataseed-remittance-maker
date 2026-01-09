@@ -1,5 +1,5 @@
 import React from 'react';
-import { Delete, Download, Edit, Eye, LinkIcon, Plus, RefreshCw, Upload, X } from 'lucide-react';
+import { Delete, Download, Edit, Eye, FileText, LinkIcon, Plus, RefreshCw, Upload, X } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { copyToClipboard } from '@/utils/clipboard';
 import { cn } from '@/utils/cn';
@@ -23,6 +23,7 @@ interface SignLinkButtonProps {
     | 'view'
     | 'add'
     | 'upload'
+    | 'file_text'
     | 'download';
   buttonIconType?:
     | 'button'
@@ -34,6 +35,7 @@ interface SignLinkButtonProps {
     | 'view'
     | 'add'
     | 'upload'
+    | 'file_text'
     | 'download';
   onClick?: () => void;
   loading?: string | boolean;
@@ -90,6 +92,8 @@ export const SignLinkButton: React.FC<SignLinkButtonProps> = ({
         return <Plus className={cn('cursor-pointer', iconClassName)} />;
       case 'upload':
         return <Upload className={cn('cursor-pointer', iconClassName)} />;
+      case 'file_text':
+        return <FileText className={cn('cursor-pointer', iconClassName)} />;
       case 'download':
         return <Download className={cn('cursor-pointer', iconClassName)} />;
       default:

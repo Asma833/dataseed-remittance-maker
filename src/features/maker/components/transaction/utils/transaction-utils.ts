@@ -11,7 +11,6 @@ type InitialData = Partial<
 
 export const mapAllTransactionsToTableRows = (data: AllTransaction[]): PaymentData[] => {
   if (!data || !Array.isArray(data)) return [];
-
   return data.flatMap((deal: AllTransaction) =>
     deal.transactions.map(
       (transaction): PaymentData => ({
@@ -25,6 +24,7 @@ export const mapAllTransactionsToTableRows = (data: AllTransaction[]): PaymentDa
         applicant_name: transaction.kyc_details?.applicant_name || '-',
         applicant_pan: transaction.kyc_details?.applicant_pan || '-',
         transaction_type: deal.transaction_type || '-',
+        payment_challan_url: deal.payment_records?.[0]?.payment_challan_url || '',
         purpose: transaction.purpose || '-',
         kyc_type: 'VKYC', // Default or derived
         kyc_status: transaction.kyc_status || '-',

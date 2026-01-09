@@ -1,15 +1,16 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { TableRow, TableCell } from '@/components/ui/table';
 
 interface TableLoaderProps {
   columns: number;
+  rows?: number;
 }
 
-export const TableLoader: React.FC<TableLoaderProps> = ({ columns }) => {
+export const TableLoader: React.FC<TableLoaderProps> = ({ columns, rows = 3 }) => {
   return (
     <>
-      {/* Render 5 skeleton rows */}
-      {Array.from({ length: 5 }).map((_, index) => (
+      {/* Render skeleton rows based on rows prop */}
+      {Array.from({ length: rows }).map((_, index) => (
         <TableRow key={`skeleton-${index}`}>
           {Array.from({ length: columns }).map((_, colIndex) => (
             <TableCell key={`skeleton-cell-${index}-${colIndex}`} className="p-3">

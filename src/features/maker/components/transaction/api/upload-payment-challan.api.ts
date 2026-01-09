@@ -4,6 +4,7 @@ import {
   UploadPaymentChallanRequest,
   UploadPaymentChallanResponse,
 } from '@/features/maker/components/transaction/types/payment.types';
+import { GetPresignedUrlsResponse } from '../types/get-presigned.type';
 
 /**
  * Upload payment challan document
@@ -22,4 +23,11 @@ const uploadPaymentChallan = async (data: UploadPaymentChallanRequest): Promise<
 
 export const uploadPaymentChallanApi = {
   uploadPaymentChallan,
+};
+export const getPresignedUrls = async (s3Keys: string[]): Promise<GetPresignedUrlsResponse> => {
+  const response = await axiosInstance.post(API.DOCUMENTS.PRESIGNED_URLS, {
+    s3Keys,
+    expiresIn: 1800,
+  });
+  return response.data;
 };

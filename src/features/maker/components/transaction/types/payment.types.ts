@@ -135,6 +135,7 @@ export interface PaymentData {
   applicant_name: string;
   applicant_pan: string;
   transaction_type: string;
+  payment_challan_url:string;
   purpose: string;
   kyc_type: string;
   kyc_status: string;

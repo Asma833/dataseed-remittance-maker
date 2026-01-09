@@ -113,13 +113,13 @@ export const GetPaymentTableColumn = ({
       accessorKey: 'payment_screenshot',
       meta: { className: 'min-w-0 p-2' },
       cell: ({ row }: { row: PaymentData }) => (
+        console.log(row,"Row"),
         <SignLinkButton
           id={row.ref_no}
           onClick={() => handlePayment(row)}
           tooltipText="Upload Payment Screenshot"
-          buttonType="upload"
-          buttonIconType="upload"
-          disabled={row.payment_screenshot !== null}
+          buttonIconType={row.payment_challan_url ? "file_text" : "upload"}
+          buttonType={row.payment_challan_url ? "file_text" : "upload"}
           className="group"
           iconClassName="text-primary group-hover:text-white group-disabled:text-gray-400"
         />
