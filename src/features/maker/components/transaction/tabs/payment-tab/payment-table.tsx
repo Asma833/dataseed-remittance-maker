@@ -27,6 +27,8 @@ const PaymentStatus = () => {
   const [isImageModalOpen, setIsImageModalOpen] = useState(false);
   const [modalImageSrc, setModalImageSrc] = useState('');
   const [modalTitle, setModalTitle] = useState('');
+  const [localFile, setLocalFile] = useState<File | null>(null);
+  const [isPdf, setIsPdf] = useState(false);
 
   const mappedData = useMemo(() => {
     return mapAllTransactionsToTableRows(data as AllTransaction[]);
@@ -38,6 +40,7 @@ const PaymentStatus = () => {
         if (response?.urls?.[0]?.presigned_url) {
           setModalImageSrc(response.urls[0].presigned_url);
           setModalTitle(`Payment Screenshot`);
+          setIsPdf(false);
           setIsImageModalOpen(true);
         }
       } catch (error) {
@@ -45,7 +48,15 @@ const PaymentStatus = () => {
       }
     };
 
-  const handlePayment = (rowData: PaymentData) => {
+   const handleViewLocalFile = (file: File) => {
+     setLocalFile(file);
+     setModalImageSrc(URL.createObjectURL(file));
+     setModalTitle(`Payment Screenshot`);
+     setIsPdf(file.type === 'application/pdf');
+     setIsImageModalOpen(true);
+   };
+
+   const handlePayment = (rowData: PaymentData) => {
     setSelectedPayment(rowData);
     setIsModalOpen(true);
   };
@@ -121,18 +132,26 @@ const PaymentStatus = () => {
               uploadScreen={false}
               data={selectedPayment}
               onSubmit={handleUploadSubmit}
-          onViewScreenshot={handleViewScreenshot}
+              onViewScreenshot={handleViewScreenshot}
+              onViewLocalFile={handleViewLocalFile}
             />
           }
           className="md:max-w-[40%]"
         />
       )}
        <ImageViewModal
-        isOpen={isImageModalOpen}
-        onClose={() => setIsImageModalOpen(false)}
-        imageSrc={modalImageSrc}
-        title={modalTitle}
-      />
+         isOpen={isImageModalOpen}
+         onClose={() => {
+           setIsImageModalOpen(false);
+           if (localFile) {
+             URL.revokeObjectURL(modalImageSrc);
+             setLocalFile(null);
+           }
+         }}
+         imageSrc={modalImageSrc}
+         title={modalTitle}
+         isPdf={isPdf}
+       />
     </div>
   );
 };

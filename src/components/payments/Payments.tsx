@@ -18,12 +18,14 @@ const Payments = ({
   data,
   onSubmit,
   onViewScreenshot,
+  onViewLocalFile,
 }: {
   setIsOpen: (isOpen: boolean) => void;
   uploadScreen: boolean;
   data: PaymentData;
   onSubmit?: (file: File) => Promise<void>;
   onViewScreenshot?: (s3Key: string, refNo: string) => void;
+  onViewLocalFile?: (file: File) => void;
 }) => {
   const methods = useForm({
     resolver: zodResolver(paymentsFormSchema),
@@ -46,7 +48,7 @@ const Payments = ({
   useEffect(() => {
     if (data?.payment_challan_url && !fileUpload) {
       // Patch the URL directly to the file upload field
-      setValue('fileUpload', [{ file: null, url: data.payment_challan_url, name: data.payment_challan_url.split('/').pop() || 'payment-screenshot' }]);
+      setValue('fileUpload', [{ file: null, url: data.payment_challan_url, name: data.payment_challan_url }]);
     }
   }, [data?.payment_challan_url, fileUpload, setValue]);
 
@@ -84,26 +86,33 @@ const Payments = ({
                   {(['fileUpload'] as const).map((name) => {
                     const field = paymentsFormConfig.fields[name];
                     return (
-                      <FieldWrapper key={name} className="w-full !w-full">
+                      <FieldWrapper key={name} className="w-full!">
                         {getController({ ...field, name, control, errors })}
                       </FieldWrapper>
                     );
                   })}
                 </FormFieldRow>
               </div>
-              {data?.payment_challan_url && (
-                <div className="flex items-center">
-                  <Button
-                    type="button"
-                    variant="ghost"
-                    size="icon"
-                    onClick={() => onViewScreenshot?.(data.payment_challan_url!, data.ref_no)}
-                    title="View Payment Screenshot"
-                  >
-                    <Eye className="h-5 w-5 text-gray-500 hover:text-primary" />
-                  </Button>
-                </div>
-              )}
+              <div className="flex items-center">
+                <Button
+                  type="button"
+                  variant="ghost"
+                  size="icon"
+                  onClick={() => {
+                    if (fileUpload && fileUpload[0]?.file) {
+                      // Local file selected
+                      onViewLocalFile?.(fileUpload[0].file);
+                    } else if (data?.payment_challan_url) {
+                      // Uploaded file
+                      onViewScreenshot?.(data.payment_challan_url, data.ref_no);
+                    }
+                  }}
+                  title="View Payment Screenshot"
+                  disabled={!fileUpload || (!fileUpload[0]?.file && !data?.payment_challan_url)}
+                >
+                  <Eye className="h-5 w-5 text-gray-500 hover:text-primary" />
+                </Button>
+              </div>
             </div>
             <div className="flex gap-2 justify-center">
               <Button type="button" onClick={() => setIsOpen(false)} variant="light" className="px-5">
