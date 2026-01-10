@@ -18,7 +18,7 @@ const FieldWrapper = ({ id, children, className = '', flexdirection, error, ...p
         >
           {children}
         </div>
-        {error && <span className="text-sm text-[hsl(var(--destructive))] mt-1">{error}</span>}
+        {error && <span className="text-sm text-red-500 mt-1">{error}</span>}
       </div>
     </div>
   );

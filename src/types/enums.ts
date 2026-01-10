@@ -65,6 +65,8 @@ export enum KYCStatusEnum {
   PENDING = 'PENDING',
   COMPLETED = 'COMPLETED',
   REJECTED = 'REJECTED',
+  UPLOADED = 'UPLOADED',
+  UPLOADING = 'UPLOADING',
 }
 export enum TransactionStatusEnum {
   INITIATED = 'INITIATED',

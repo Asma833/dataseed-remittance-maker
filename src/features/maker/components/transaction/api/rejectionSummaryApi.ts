@@ -10,8 +10,10 @@ export interface RejectionHistoryItem {
 
 export interface RejectedDocument {
   id: string;
-  document_type: string;
+  document_id: string;
+  document_type?: string;
   document_name: string;
+  document_url?: string;
   verification_status: string;
   history: RejectionHistoryItem[];
 }

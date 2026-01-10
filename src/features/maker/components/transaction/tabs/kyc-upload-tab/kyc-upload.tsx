@@ -5,14 +5,17 @@ import RejectionTable from './table/rejection-table';
 import { DealsResponseTransaction } from '../../types/transaction.types';
 import { FlattenedDocumentItem } from '../../types/rejection-doc-summary.types';
 import { useRejectionSummary } from '../../hooks/useRejectionSummary';
-import { TransactionStatusEnum } from '@/types/enums';
+import { TransactionStatusEnum, KYCStatusEnum } from '@/types/enums';
 import { RejectedDocument, RejectionHistoryItem } from '../../api/rejectionSummaryApi';
 
 const KYCUpload = () => {
   const [showForm, setShowForm] = useState(false);
   const [isReupload, setIsReupload] = useState(false);
   const [transaction, setTransaction] = useState<DealsResponseTransaction>();
-  const isRejected = transaction?.transaction_status === TransactionStatusEnum.REJECTED;
+  const isRejected =
+    isReupload ||
+    transaction?.transaction_status === TransactionStatusEnum.REJECTED ||
+    transaction?.kyc_status === KYCStatusEnum.REJECTED;
   const { data: rejectionSumData, isLoading, isError, error } = useRejectionSummary(transaction?.id);
 
   // Flattening function - memoized to prevent infinite loop
@@ -22,7 +25,7 @@ const KYCUpload = () => {
     return rejectionSumData.documents.flatMap((doc: RejectedDocument) => {
       return (doc.history ?? []).map((hist: RejectionHistoryItem): FlattenedDocumentItem => {
         const item: FlattenedDocumentItem = {
-          document_id: doc.id,
+          document_id: doc.document_id,
           document_name: doc.document_name,
           rejected_by: hist.rejected_by,
           rejection_reason: hist.rejection_reason,
@@ -56,7 +59,7 @@ const KYCUpload = () => {
             rejectedDocuments={flattenedRejectionResData}
             isRejected={isRejected}
           />
-          {isRejected && transaction?.id && (
+          {transaction?.id && (
             <RejectionTable
               transactionId={transaction.id}
               isLoading={isLoading}

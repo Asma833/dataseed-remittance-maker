@@ -16,6 +16,7 @@ interface FileUpload {
   handleFileChange?: (e: ChangeEvent<HTMLInputElement> | null) => void;
   styleType?: 'default' | 'fileUploadWithView';
   defaultValue?: File | null;
+  disabled?: boolean;
 }
 
 export const FileUpload = ({
@@ -27,6 +28,7 @@ export const FileUpload = ({
   handleFileChange,
   styleType = 'default',
   defaultValue,
+  disabled,
 }: FileUpload) => {
   const { control } = useFormContext();
 
@@ -48,6 +50,7 @@ export const FileUpload = ({
               <input
                 id={id}
                 type="file"
+                disabled={disabled}
                 onChange={(e) => {
                   const file = e.target.files?.[0];
                   if (file) {
@@ -71,7 +74,11 @@ export const FileUpload = ({
               />
               <button
                 type="button"
-                className="bg-gray-150 w-full flex items-center text-gray-700 text-[13px] rounded border border-gray-300 hover:bg-gray-200 cursor-pointer"
+                disabled={disabled}
+                className={cn(
+                  'bg-gray-150 w-full flex items-center text-gray-700 text-[13px] rounded border border-gray-300 hover:bg-gray-200 cursor-pointer',
+                  disabled && 'opacity-50 cursor-not-allowed hover:bg-gray-150'
+                )}
               >
                 <span className="whitespace-nowrap font-semibold border-r border-gray-300 py-2 pr-3 pl-4">
                   Choose File

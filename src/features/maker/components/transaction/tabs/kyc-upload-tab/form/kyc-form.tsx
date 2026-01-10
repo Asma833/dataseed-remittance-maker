@@ -10,7 +10,7 @@ import { getController } from '@/components/form/utils/get-controller';
 import { Button } from '@/components/ui/button';
 import { kycDocumentsConfig } from './kyc-form.config';
 import { KycFormSchema } from './kyc-form.schema';
-import useGetDocumentTypes from '@/hooks/useGetDocumentTypes';
+import { useGetMappedDocuments } from '../../../hooks/useGetMappedDocuments';
 import { FieldType } from '@/types/enums';
 import { ArrowLeft } from 'lucide-react';
 import { DealsResponseTransaction } from '../../../types/transaction.types';
@@ -30,11 +30,12 @@ const KYCForm = ({
   rejectedDocuments: FlattenedDocumentItem[];
   isRejected: boolean;
 }) => {
-  const { documentTypes = [], loading } = useGetDocumentTypes(
-    transaction?.transaction_purpose_map_id
-      ? { document_map_id: transaction.transaction_purpose_map_id, transaction_id: transaction.id, enable: true }
-      : { enable: false }
+  const { data: mappedDocumentsResponse, isLoading: loading } = useGetMappedDocuments(
+    transaction?.transaction_purpose_map_id,
+    transaction?.id
   );
+
+  const documentTypes = mappedDocumentsResponse || [];
 
   const handleUploadOnFileChange = useCallback(
     async ({ file, documentId }: { file: File; documentId: string }) => {
@@ -159,27 +160,26 @@ const KYCForm = ({
               <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 px-1">
                 {dynamicDocumentFields.map((field: any) => {
                   const hasDocumentId = rejectedDocuments?.find((doc) => doc.document_id === field.documentId);
-
-                  if (isRejected) {
-                    return (
-                      hasDocumentId && (
-                        <div key={field.name}>
-                          <FieldWrapper
-                            error={hasDocumentId ? `Rejection Reason: ${hasDocumentId.rejection_reason}` : ''}
-                          >
-                            {getController({ ...field, control, errors })}
-                          </FieldWrapper>
-                        </div>
-                      )
-                    );
-                  }
+                  
+                  // If rejected, show error (remarks or reason)
+                  // If NOT rejected but transaction is rejected, disable the field
+                  // If not rejected transaction (normal flow), everything is enabled
+                  
+                  const isDisabled = isRejected && !hasDocumentId;
+                  const errorMessage = isRejected && hasDocumentId ? 
+                    (hasDocumentId.remarks || hasDocumentId.rejection_reason || 'Document Rejected') : '';
 
                   return (
                     <div key={field.name}>
                       <FieldWrapper
-                        error={isRejected && hasDocumentId ? `Rejection Reason: ${hasDocumentId.rejection_reason}` : ''}
+                        error={errorMessage}
                       >
-                        {getController({ ...field, control, errors })}
+                        {getController({ 
+                          ...field, 
+                          control, 
+                          errors,
+                          disabled: isDisabled 
+                        })}
                       </FieldWrapper>
                     </div>
                   );

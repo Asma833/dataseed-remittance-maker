@@ -48,7 +48,7 @@ const KYCTable = ({ onUploadClick }: { onUploadClick: (isReupload: boolean, tran
   const columns = KycTableColumnsConfig({
     navigate,
     onUploadClick: (status: string, transaction: any) => {
-      onUploadClick(true, transaction);
+      onUploadClick(status === 'REJECTED', transaction);
     },
     handleViewTransaction,
   });

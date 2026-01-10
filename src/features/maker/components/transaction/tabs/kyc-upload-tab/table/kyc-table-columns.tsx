@@ -1,4 +1,5 @@
 import { formatDateWithFallback } from '@/utils/formatDateWithFallback';
+import { KYCStatusEnum } from '@/types/enums';
 import KycStatusCell from '@/components/cell/table/KycStatusCell';
 import TooltipImageButton from '@/components/common/tooltip-image-button';
 import Reupload from '@/assets/icons/re-upload.svg';
@@ -72,13 +73,17 @@ export const KycTableColumnsConfig = ({
       header: 'KYC Doc',
       meta: { className: 'min-w-0 p-2' },
       cell: (props: { row: PaymentData; value: any }) => {
-        const isCompleted = props.row.kyc_status === 'COMPLETED';
+        const kycStatus = props.row.kyc_status;
+        const isReupload =
+          kycStatus === KYCStatusEnum.COMPLETED ||
+          kycStatus === KYCStatusEnum.REJECTED ||
+          kycStatus === KYCStatusEnum.UPLOADED;
         return (
           <TooltipImageButton
-            onClick={() => onUploadClick(props.row.kyc_status, props.row.raw_data?.transaction)}
-            src={isCompleted ? Reupload : upload}
+            onClick={() => onUploadClick(kycStatus, props.row.raw_data?.transaction)}
+            src={isReupload ? Reupload : upload}
             alt="Upload"
-            tooltipText={isCompleted ? 'Reupload' : 'Upload'}
+            tooltipText={isReupload ? 'Reupload' : 'Upload'}
           />
         );
       },
