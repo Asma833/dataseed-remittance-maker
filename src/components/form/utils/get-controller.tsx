@@ -93,6 +93,8 @@ export const getController = (field: any) => {
           multiple={field.maxFiles > 1}
           viewFile={field.viewFile}
           onFileSelected={field.onFileSelected}
+          documentUrl={field.documentUrl}
+          onView={field.onView}
         />
       );
     case 'fileuploadwithoutview':

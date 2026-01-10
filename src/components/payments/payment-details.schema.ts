@@ -1,4 +1,5 @@
 import { z } from 'zod';
+import { FileSize } from '@/types/enums';
 
 export const paymentsFormSchema = z.object({
   paymentMethod: z
@@ -17,8 +18,7 @@ export const paymentsFormSchema = z.object({
         return false;
       }
       // Check file size (max 1GB)
-      const maxSize = 1024 * 1024 * 1024; // 1GB in bytes
-      if (file.file.size > maxSize) {
+      if (file.file.size > FileSize.ONE_GB) {
         return false;
       }
       // Check file type

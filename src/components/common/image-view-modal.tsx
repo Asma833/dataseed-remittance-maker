@@ -62,12 +62,12 @@ export const ImageViewModal: React.FC<ImageViewModalProps> = ({
            )}
            {hasError ? (
              <div className="flex flex-col items-center justify-center h-[70vh] text-center">
-               <p className="text-gray-600 mb-4">Unable to display PDF in viewer.</p>
+               <p className="text-gray-600 mb-4">Unable to display the file in viewer.</p>
                <Button
                  variant="outline"
                  onClick={() => window.open(imageSrc, '_blank')}
                >
-                 Open PDF in New Tab
+                 Open in New Tab
                </Button>
              </div>
            ) : imageSrc?.split('?')[0].toLowerCase().endsWith('.pdf') ||
@@ -94,6 +94,7 @@ export const ImageViewModal: React.FC<ImageViewModalProps> = ({
                onError={(e) => {
                  console.error('Failed to load image:', imageSrc);
                  setIsLoading(false);
+                 setHasError(true);
                }}
              />
            )}

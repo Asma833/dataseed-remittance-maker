@@ -11,11 +11,10 @@ const RejectionTable = ({
   error,
 }: RejectionTableProps) => {
   const columns = RejectionTableColumnsConfig();
-  if (!transactionId) return null;
+  if (!transactionId || !flattenedRejectionResData || flattenedRejectionResData.length === 0) return null;
 
   if (isError) {
     console.error('Failed to load rejection summary:', error);
-    toast.error('Failed to load rejection summary');
   }
 
   return (

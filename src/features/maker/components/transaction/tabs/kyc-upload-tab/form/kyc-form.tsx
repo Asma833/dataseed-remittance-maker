@@ -1,7 +1,8 @@
 import { FieldValues, FormProvider, useForm } from 'react-hook-form';
-import { useCallback, useEffect, useMemo } from 'react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 import { FormContentWrapper } from '@/components/form/wrapper/form-content-wrapper';
 import { zodResolver } from '@hookform/resolvers/zod';
+import { z } from 'zod';
 import { toast } from 'sonner';
 // Components
 import Spacer from '@/components/form/wrapper/spacer';
@@ -11,11 +12,13 @@ import { Button } from '@/components/ui/button';
 import { kycDocumentsConfig } from './kyc-form.config';
 import { KycFormSchema } from './kyc-form.schema';
 import { useGetMappedDocuments } from '../../../hooks/useGetMappedDocuments';
-import { FieldType } from '@/types/enums';
+import { FieldType, KYCStatusEnum } from '@/types/enums';
 import { ArrowLeft } from 'lucide-react';
 import { DealsResponseTransaction } from '../../../types/transaction.types';
 import { uploadTransactionDocument } from '../../../api/kycDocuments.api';
 import { FlattenedDocumentItem } from '../../../types/rejection-doc-summary.types';
+import { useGetPresignedUrls } from '../../../hooks/useGetPresignedUrls';
+import { ImageViewModal } from '@/components/common/image-view-modal';
 
 const KYCForm = ({
   transaction,
@@ -36,6 +39,13 @@ const KYCForm = ({
   );
 
   const documentTypes = mappedDocumentsResponse || [];
+
+  const { mutateAsync: getPresignedUrlsAsync } = useGetPresignedUrls();
+
+  const [isImageModalOpen, setIsImageModalOpen] = useState(false);
+  const [modalImageSrc, setModalImageSrc] = useState('');
+  const [modalTitle, setModalTitle] = useState('');
+  const [isPdf, setIsPdf] = useState(false);
 
   const handleUploadOnFileChange = useCallback(
     async ({ file, documentId }: { file: File; documentId: string }) => {
@@ -63,6 +73,20 @@ const KYCForm = ({
     [transaction?.id]
   );
 
+  const handleViewDocument = async (s3Key: string, documentName: string) => {
+    try {
+      const response = await getPresignedUrlsAsync([s3Key]);
+      if (response?.urls?.[0]?.presigned_url) {
+        setModalImageSrc(response.urls[0].presigned_url);
+        setModalTitle(`${documentName}`);
+        setIsPdf(false);
+        setIsImageModalOpen(true);
+      }
+    } catch (error) {
+      console.error('Failed to get presigned URL:', error);
+    }
+  };
+
   const dynamicDocumentFields = useMemo(() => {
     return (documentTypes || []).flatMap((doc: any) => {
       const label = doc.display_name || doc.name;
@@ -71,7 +95,9 @@ const KYCForm = ({
         required: Boolean(doc.is_mandatory),
         placeholder: 'Upload Document',
         documentId: doc.document_id,
-        accept: '.pdf,.jpg,.jpeg,.png',
+        accept: '.pdf,.jpg,.jpeg,.png,.gif',
+        documentUrl: doc.document_url,
+        onView: doc.document_url ? () => handleViewDocument(doc.document_url, label) : undefined,
       };
 
       const documentId = doc.document_id || doc.id;
@@ -102,7 +128,26 @@ const KYCForm = ({
         },
       ];
     });
-  }, [documentTypes, handleUploadOnFileChange]);
+  }, [documentTypes, handleUploadOnFileChange, handleViewDocument]);
+
+  // Prepare default values for document fields with existing URLs
+  const documentDefaultValues = useMemo(() => {
+    const values: Record<string, any> = {};
+    if (documentTypes) {
+      documentTypes.forEach((doc: any) => {
+        if (doc.document_url) {
+          const documentId = doc.document_id || doc.id;
+          if (doc.is_back_required) {
+            values[`document_${doc.id}_front`] = [{ document_url: doc.document_url, name: doc.document_url }];
+            values[`document_${doc.id}_back`] = [{ document_url: doc.document_url, name: doc.document_url }];
+          } else {
+            values[`document_${doc.id}`] = [{ document_url: doc.document_url, name: doc.document_url }];
+          }
+        }
+      });
+    }
+    return values;
+  }, [documentTypes]);
 
   const methods = useForm({
     resolver: zodResolver(KycFormSchema),
@@ -110,7 +155,8 @@ const KYCForm = ({
       company_reference_number: transaction?.company_ref_number || '',
       agent_reference_number: transaction?.agent_ref_number || '',
       applicant_name: transaction?.kyc_details?.applicant_name || '',
-    },
+      ...documentDefaultValues,
+    } as z.infer<typeof KycFormSchema>,
   });
 
   const {
@@ -126,9 +172,10 @@ const KYCForm = ({
         company_reference_number: transaction.company_ref_number || '',
         agent_reference_number: transaction.agent_ref_number || '',
         applicant_name: transaction.kyc_details?.applicant_name || '',
-      });
+        ...documentDefaultValues,
+      } as z.infer<typeof KycFormSchema>);
     }
-  }, [transaction, reset]);
+  }, [transaction, reset, documentDefaultValues]);
 
   const handleKycSubmit = handleSubmit(async (formdata: FieldValues) => {
     // Handle form submission logic here
@@ -160,13 +207,14 @@ const KYCForm = ({
               <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 px-1">
                 {dynamicDocumentFields.map((field: any) => {
                   const hasDocumentId = rejectedDocuments?.find((doc) => doc.document_id === field.documentId);
-                  
+
                   // If rejected, show error (remarks or reason)
                   // If NOT rejected but transaction is rejected, disable the field
                   // If not rejected transaction (normal flow), everything is enabled
-                  
+
                   const isDisabled = isRejected && !hasDocumentId;
-                  const errorMessage = isRejected && hasDocumentId ? 
+                  const shouldShowRemarks = transaction?.kyc_status === KYCStatusEnum.UPLOADING || transaction?.kyc_status === KYCStatusEnum.REJECTED;
+                  const errorMessage = shouldShowRemarks && hasDocumentId ?
                     (hasDocumentId.remarks || hasDocumentId.rejection_reason || 'Document Rejected') : '';
 
                   return (
@@ -201,6 +249,13 @@ const KYCForm = ({
           </Button>
         </div>
       </div> */}
+      <ImageViewModal
+        isOpen={isImageModalOpen}
+        onClose={() => setIsImageModalOpen(false)}
+        imageSrc={modalImageSrc}
+        title={modalTitle}
+        isPdf={isPdf}
+      />
     </>
   );
 };
