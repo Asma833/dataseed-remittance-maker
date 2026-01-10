@@ -17,6 +17,7 @@ const paymentsFormConfig = {
       label: '',
       required: true,
       placeholder: 'Upload Payment Receipt',
+      accept: '.pdf,.jpg,.jpeg,.png',
     },
   },
 };

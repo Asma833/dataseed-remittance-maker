@@ -16,12 +16,17 @@ export const paymentsFormSchema = z.object({
       if (!(file && file.file instanceof File)) {
         return false;
       }
+      // Check file size (max 1GB)
+      const maxSize = 1024 * 1024 * 1024; // 1GB in bytes
+      if (file.file.size > maxSize) {
+        return false;
+      }
       // Check file type
-      const allowedTypes = ['application/pdf', 'image/png', 'image/svg+xml', 'image/jpeg'];
+      const allowedTypes = ['application/pdf', 'image/png', 'image/jpg', 'image/jpeg'];
       return allowedTypes.includes(file.file.type);
     },
     {
-      message: 'File upload is required and must be a valid file (PDF, PNG, SVG, JPG, JPEG only)',
+      message: 'File upload is required, must be a valid file (PDF, PNG, JPG, JPEG only), and file size must not exceed 1GB',
     }
   ),
 });

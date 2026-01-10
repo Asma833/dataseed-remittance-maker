@@ -70,7 +70,7 @@ export const FileUpload = ({
                   handleChange(e);
                 }}
                 className="n-filetype-hidden"
-                accept={accept || '.pdf,.jpg,.png'}
+                accept={accept || '.pdf,.jpg,.jpeg,.png'}
               />
               <button
                 type="button"

@@ -18,6 +18,8 @@ import { toast } from 'sonner';
 import { GenericDialog } from '@/components/ui/generic-dialog';
 import Payments from '@/components/payments/Payments';
 import { useUploadPaymentChallan } from '@/features/maker/components/transaction/hooks/useUploadPaymentChallan';
+import { ImageViewModal } from '@/components/common/image-view-modal';
+import { useGetPresignedUrls } from '@/features/maker/components/transaction/hooks/useGetPresignedUrls';
 import { generateRateTablePdf } from '@/utils/pdfUtils';
 import { ConfirmationAlert } from '@/components/common/confirmation-alert';
 import { getFieldLabel } from './currency-details.utils';
@@ -26,6 +28,11 @@ const CurrencyDetails = ({ setAccordionState, viewMode, paymentData }: CommonCre
   const [isSaving, setIsSaving] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedPayment, setSelectedPayment] = useState<any>(null);
+  const [isImageModalOpen, setIsImageModalOpen] = useState(false);
+  const [modalImageSrc, setModalImageSrc] = useState('');
+  const [modalTitle, setModalTitle] = useState('');
+  const [localFile, setLocalFile] = useState<File | null>(null);
+  const [isPdf, setIsPdf] = useState(false);
   const mountedRef = useRef(false);
   const navigate = useNavigate();
   const { control, trigger, setValue, reset, getValues } = useFormContext();
@@ -48,6 +55,7 @@ const CurrencyDetails = ({ setAccordionState, viewMode, paymentData }: CommonCre
   // Pass viewMode and form data to useGetAgentDetails
   const { extractedMargins } = useGetAgentDetails(fxCurrency, viewMode, formData);
   const { mutateAsync: uploadChallan } = useUploadPaymentChallan();
+  const { mutateAsync: getPresignedUrlsAsync } = useGetPresignedUrls();
 
   const currencyOptions =
     currencyRates?.reduce((acc: Record<string, { label: string }>, currency) => {
@@ -426,6 +434,28 @@ const CurrencyDetails = ({ setAccordionState, viewMode, paymentData }: CommonCre
       });
     }
   };
+
+  const handleViewScreenshot = async (s3Key: string, refNo: string) => {
+    try {
+      const response = await getPresignedUrlsAsync([s3Key]);
+      if (response?.urls?.[0]?.presigned_url) {
+        setModalImageSrc(response.urls[0].presigned_url);
+        setModalTitle('Payment Screenshot');
+        setIsPdf(false);
+        setIsImageModalOpen(true);
+      }
+    } catch (error) {
+      console.error('Failed to get presigned URL:', error);
+    }
+  };
+
+  const handleViewLocalFile = (file: File) => {
+    setLocalFile(file);
+    setModalImageSrc(URL.createObjectURL(file));
+    setModalTitle('Payment Screenshot');
+    setIsPdf(file.type === 'application/pdf');
+    setIsImageModalOpen(true);
+  };
   const handleBack = () => {
     navigate(-1);
   };
@@ -602,8 +632,23 @@ const CurrencyDetails = ({ setAccordionState, viewMode, paymentData }: CommonCre
           uploadScreen={false}
           data={selectedPayment}
           onSubmit={handleUploadSubmit}
+          onViewScreenshot={handleViewScreenshot}
+          onViewLocalFile={handleViewLocalFile}
         />
       </GenericDialog>
+      <ImageViewModal
+        isOpen={isImageModalOpen}
+        onClose={() => {
+          setIsImageModalOpen(false);
+          if (localFile) {
+            URL.revokeObjectURL(modalImageSrc);
+            setLocalFile(null);
+          }
+        }}
+        imageSrc={modalImageSrc}
+        title={modalTitle}
+        isPdf={isPdf}
+      />
     </>
   );
 };
