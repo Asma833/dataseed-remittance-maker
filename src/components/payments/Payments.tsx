@@ -80,7 +80,7 @@ const Payments = ({
               </FormFieldRow>
             )}
 
-            <div className="flex w-full items-center gap-2">
+            <div className="flex w-full gap-2">
               <div className="flex-1 min-w-0">
                 <FormFieldRow rowCols={1} className="w-full">
                   {(['fileUpload'] as const).map((name) => {
@@ -93,7 +93,7 @@ const Payments = ({
                   })}
                 </FormFieldRow>
               </div>
-              <div className="flex items-center">
+              <div className={`flex ${errors?.fileUpload ? 'items-start pt-2 h-fit' : 'items-center'}`}>
                 <Button
                   type="button"
                   variant="ghost"
