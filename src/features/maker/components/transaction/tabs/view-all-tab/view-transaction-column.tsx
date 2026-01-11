@@ -3,6 +3,11 @@ import { SignLinkButton } from '@/components/cell/table/SignLinkButton';
 import PaymentStatusCell from '@/components/cell/table/PaymentStatusCell';
 import KycStatusCell from '@/components/cell/table/KycStatusCell';
 import { PaymentData } from '../../types/payment.types';
+import { useState } from 'react';
+import { useGetPresignedUrls } from '../../hooks/useGetPresignedUrls';
+import { toast } from 'sonner';
+import { Button } from '@/components/ui/button';
+import { Loader2, Download } from 'lucide-react';
 
 export const GetViewAllTransactionTableColumns = () => {
   return [
@@ -102,27 +107,65 @@ export const GetViewAllTransactionTableColumns = () => {
       cell: ({ row }: { row: PaymentData }) => <KycStatusCell rowData={row} />,
     },
     {
+      id: 'swift_copy',
+      header: 'Swift Copy',
+      accessorKey: 'swift_copy',
+      meta: { className: 'min-w-0 p-2' },
+      cell: ({ row }: { row: any }) => <SwiftCopyDownloadCell row={row} />, // Render custom cell
+    },
+    {
       id: 'transaction_status',
       header: 'Transaction Status',
       accessorKey: 'transaction_status',
       meta: { className: 'min-w-0 p-2' },
     },
-    // {
-    //   id: 'swift_copy',
-    //   header: 'Swift Copy',
-    //   accessorKey: 'swift_copy',
-    //   meta: { className: 'min-w-0 p-2' },
-    //   cell: ({ row }: { row: any }) => (
-    //     <SignLinkButton
-    //       id={row.ref_no}
-    //       onClick={() => {}}
-    //       tooltipText="Download Swift Copy"
-    //       buttonType="download"
-    //       buttonIconType="download"
-    //       iconClassName="text-primary group-hover:text-white group-disabled:text-gray-400"
-    //       className="group"
-    //     />
-    //   ),
-    // },
   ];
 };
+
+const SwiftCopyDownloadCell = ({ row }: { row: PaymentData }) => {
+  const { mutateAsync: getPresignedUrls } = useGetPresignedUrls();
+  const [isLoading, setIsLoading] = useState(false);
+  const swiftCopy = row?.swift_copy;
+
+  const handleDownload = async () => {
+    if (!swiftCopy) return;
+    try {
+      setIsLoading(true);
+      const res = await getPresignedUrls([swiftCopy]);
+      const url = res?.urls?.[0]?.presigned_url;
+      if (!url) throw new Error('URL not found');
+
+      // Fallback to window.open since iframe download is blocked/silent for inline content
+      const link = document.createElement('a');
+      link.href = url;
+      link.download = swiftCopy.split('/').pop() || 'swift_copy';
+      link.target = '_blank';
+      link.rel = 'noopener noreferrer';
+      document.body.appendChild(link);
+      link.click();
+      link.remove();
+    } catch (err) {
+      console.error(err);
+      toast.error('Failed to download file');
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  if (!swiftCopy) return <div className="p-2">-</div>;
+
+  return (
+    <Button
+      variant="ghost"
+      size="icon"
+      onClick={handleDownload}
+      disabled={isLoading}
+      className="text-primary hover:text-primary/80"
+      title="Download Swift Copy"
+    >
+      {isLoading ? <Loader2 className="h-4 w-4 animate-spin" /> : <Download className="h-4 w-4" />}
+    </Button>
+  );
+};
+
+
