@@ -44,7 +44,7 @@ export const GetRateTableColumns = ({
         editable: mode === 'edit' && editableFields.includes(fieldPath.replace(`${id}.`, '')),
       }),
       inputProps: {
-        className: 'rateTableInputCell !h-[30px] !min-h-0 !text-right',
+        className: 'rateTableInputCell !h-[30px] !min-h-0 !text-right w-full min-w-[80px]',
       },
     };
   };

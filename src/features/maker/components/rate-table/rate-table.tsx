@@ -9,9 +9,9 @@ type ColumnKey = 'invoiceName' | 'companyRate' | 'agentMarkUp' | 'rate';
 
 const columnKeys: Record<ColumnKey, { label: string; className?: string }> = {
   invoiceName: { label: 'Particulars', className: 'text-left' },
-  companyRate: { label: 'Rate', className: 'text-center' },
-  agentMarkUp: { label: 'Add Margin', className: 'text-center' },
-  rate: { label: 'Amount', className: 'text-right' },
+  companyRate: { label: 'Rate', className: 'text-center min-w-[100px]' },
+  agentMarkUp: { label: 'Add Margin', className: 'text-center min-w-[120px]' },
+  rate: { label: 'Amount', className: 'text-right min-w-[150px]' },
 };
 
 export default function RateTable({
