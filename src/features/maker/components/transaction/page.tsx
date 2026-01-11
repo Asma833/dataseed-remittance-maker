@@ -30,15 +30,27 @@ const TransactionPage = () => {
           <NavLink
             key={tab.path}
             to={`/${baseRole}/transaction/${tab.path}`}
-            className={({ isActive }) =>
-              cn(
+            className={({ isActive }) => {
+              const isNestedActive =
+                (tab.path === 'payment' && location.pathname.includes('/payment/view-transactions')) ||
+                (tab.path === 'kyc' && location.pathname.includes('/kyc/view-transactions'));
+              const isTabActive = isActive || isNestedActive;
+
+              return cn(
                 'px-2 py-2 rounded-tl-md rounded-tr-md text-sm no-underline transition-colors flex flex-1 justify-center items-center hover:opacity-80',
-                isActive ? 'text-white font-bold' : 'bg-[#787878] text-white hover:bg-[#787878/80]'
-              )
-            }
-            style={({ isActive }) => ({
-              background: isActive ? 'linear-gradient(90deg, #85308E 0%, #D62058 100%)' : undefined,
-            })}
+                isTabActive ? 'text-white font-bold' : 'bg-[#787878] text-white hover:bg-[#787878/80]'
+              );
+            }}
+            style={({ isActive }) => {
+              const isNestedActive =
+                (tab.path === 'payment' && location.pathname.includes('/payment/view-transactions')) ||
+                (tab.path === 'kyc' && location.pathname.includes('/kyc/view-transactions'));
+              const isTabActive = isActive || isNestedActive;
+
+              return {
+                background: isTabActive ? 'linear-gradient(90deg, #85308E 0%, #D62058 100%)' : undefined,
+              };
+            }}
             end
           >
             {tab.label}

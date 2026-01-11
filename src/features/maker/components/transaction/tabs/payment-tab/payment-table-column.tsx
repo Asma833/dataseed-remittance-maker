@@ -113,7 +113,6 @@ export const GetPaymentTableColumn = ({
       accessorKey: 'payment_screenshot',
       meta: { className: 'min-w-0 p-2' },
       cell: ({ row }: { row: PaymentData }) => (
-        console.log(row,"Row"),
         <SignLinkButton
           id={row.ref_no}
           onClick={() => handlePayment(row)}

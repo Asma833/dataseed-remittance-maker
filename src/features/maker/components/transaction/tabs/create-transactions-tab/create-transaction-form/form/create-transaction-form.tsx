@@ -68,20 +68,6 @@ const CreateTransactionForm = ({ onCancel, onSubmit, initialData, viewMode }: Pr
     if (isSubmitting) return;
     setIsSubmitting(true);
     try {
-      // const convertChargeGroup = (group: typeof data.currencyDetails.invoiceRateTable.transaction_value) => {
-      //   // The input properties are expected to be company_rate and add_margin
-      //   // And the output should match the expected properties in transaction.types.ts
-      //   const companyRate = safeNumber(group.company_rate);
-      //   const addMargin = safeNumber(group.agent_mark_up);
-
-      //   // Return the object with the correct property names
-      //   return {
-      //     company_rate: companyRate,
-      //     agent_mark_up: addMargin,
-      //     rate: Number(companyRate) + Number(addMargin), // Rate is calculated by adding the two values
-      //   };
-      // };
-
       const payload: CompleteTransactionRequest = {
         currencyDetails: {
           fx_currency: normalizeString(data.currencyDetails.fx_currency),
@@ -193,7 +179,6 @@ const CreateTransactionForm = ({ onCancel, onSubmit, initialData, viewMode }: Pr
         form.reset(initialData || {});
         navigate(-1);
       }
-      // form.reset(initialData || {});
     } catch (error) {
       console.error('Error creating transaction:', error);
 
