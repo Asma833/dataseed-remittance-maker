@@ -1,11 +1,12 @@
-import { useMutation } from '@tanstack/react-query';
-import { GSTCalculationPayload, GSTCalculationResponse } from '../types/tcs-gst.types';
+import { useQuery } from '@tanstack/react-query';
+import { GSTCalculationResponse } from '../types/tcs-gst.types';
 import { gstApi } from '../api/gst.api';
 
-export const useGstCalculation = () => {
-  const { mutateAsync, isPending, error, data } = useMutation<GSTCalculationResponse, Error, GSTCalculationPayload>({
-    mutationFn: gstApi.calculateGst,
+export const useGstCalculation = (txnAmount?: string, enabled = true) => {
+  return useQuery<GSTCalculationResponse, Error>({
+    queryKey: ['gst-calculation', txnAmount],
+    queryFn: () => gstApi.calculateGst({ txnAmount: txnAmount || '0' }),
+    enabled: enabled && !!txnAmount && Number(txnAmount) > 0,
+    staleTime: 1000 * 60 * 5, // 5 minutes
   });
-
-  return { calculateGst: mutateAsync, isCalculating: isPending, error, gstData: data };
 };

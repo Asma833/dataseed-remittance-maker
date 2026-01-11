@@ -25,10 +25,12 @@ type Props = {
 const CreateTransactionForm = ({ onCancel, onSubmit, initialData, viewMode }: Props) => {
   const { accordionState, setAccordionState } = useAccordionStateProvider();
   const currentTab = accordionState.currentActiveTab;
+  const [isCreated, setIsCreated] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const navigate = useNavigate();
+
   const { mutateAsync: createTransaction } = useCompleteTransaction();
   const { mutateAsync: updateTransaction } = useUpdateTransaction();
-  const navigate = useNavigate();
 
   // Enhanced defaultValues to ensure view mode data is properly handled
   const defaultValues = useMemo(() => {
@@ -176,8 +178,15 @@ const CreateTransactionForm = ({ onCancel, onSubmit, initialData, viewMode }: Pr
       } else {
         // Create mode
         const response = await createTransaction(payload);
-        form.reset(initialData || {});
-        navigate(-1);
+        
+        // Construct initialData for view mode from response and current form data
+        const newInitialData = {
+          ...data,
+          deal_booking_id: (response as any).transaction.deal_booking_id,
+          paymentDetails: (response as any).payment_record,
+        };
+        form.reset(newInitialData);
+        setIsCreated(true);
       }
     } catch (error) {
       console.error('Error creating transaction:', error);
@@ -213,7 +222,7 @@ const CreateTransactionForm = ({ onCancel, onSubmit, initialData, viewMode }: Pr
           </div>
           <CreateTransactionsAccordion
             accordionItems={accordionItems}
-            {...(viewMode !== undefined ? { viewMode } : {})}
+            viewMode={viewMode || isCreated}
             {...(initialData?.paymentDetails ? { paymentData: initialData.paymentDetails } : {})}
           />
         </div>

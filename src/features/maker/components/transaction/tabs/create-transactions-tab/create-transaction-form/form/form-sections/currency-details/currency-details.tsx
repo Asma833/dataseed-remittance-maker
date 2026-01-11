@@ -23,8 +23,11 @@ import { useGetPresignedUrls } from '@/features/maker/components/transaction/hoo
 import { generateRateTablePdf } from '@/utils/pdfUtils';
 import { ConfirmationAlert } from '@/components/common/confirmation-alert';
 import { getFieldLabel } from './currency-details.utils';
+import { useAccordionStateProvider } from '../../../context/accordion-control-context';
+import { useDebounce } from '@/hooks/useDebounce';
 
 const CurrencyDetails = ({ setAccordionState, viewMode, paymentData }: CommonCreateTransactionProps) => {
+  const { accordionState } = useAccordionStateProvider();
   const [isSaving, setIsSaving] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedPayment, setSelectedPayment] = useState<any>(null);
@@ -38,10 +41,41 @@ const CurrencyDetails = ({ setAccordionState, viewMode, paymentData }: CommonCre
   const { control, trigger, setValue, reset, getValues } = useFormContext();
   const { errors } = useFormState();
   const { data: currencyRates, isLoading: currencyLoading } = useGetCurrencyRates();
-  const { calculateGst } = useGstCalculation();
-  const { calculateTcs } = useTcsCalculation();
 
   const fxCurrency = useWatch({ control, name: 'transactionDetails.fx_currency' });
+  const fxAmount = useWatch({ control, name: 'transactionDetails.fx_amount' });
+  const transactionAmount = useWatch({ control, name: 'currencyDetails.invoiceRateTable.transaction_amount.rate' });
+  const totalTcsAmt = useWatch({ control, name: 'currencyDetails.total_transaction_amount_tcs' });
+  const purpose = useWatch({ control, name: 'transactionDetails.purpose' });
+  const panNumber = useWatch({ control, name: 'transactionDetails.applicant_pan_number' });
+  const sourceofFund = useWatch({ control, name: 'transactionDetails.source_of_funds' });
+  const declarationAmt = useWatch({ control, name: 'currencyDetails.declared_previous_amount' });
+
+  // Debounced Values
+  const debouncedTransactionAmount = useDebounce(transactionAmount?.toString(), 1000);
+
+  const tcsPayload = useMemo(() => {
+     const isEducation = (purpose || '').toLowerCase() === 'education';
+     return {
+        purpose: 'Personal Visit / Leisure Travel',
+        panNumber,
+        sourceofFund,
+        declarationAmt: isEducation ? String(declarationAmt) : '0',
+        txnAmount: totalTcsAmt?.toString() || '0',
+     };
+  }, [purpose, panNumber, sourceofFund, declarationAmt, totalTcsAmt]);
+
+  const debouncedTcsPayload = useDebounce(tcsPayload, 1000);
+
+  const { data: gstData } = useGstCalculation(
+    debouncedTransactionAmount,
+    accordionState.currentActiveTab === 'panel3'
+  );
+
+  const { data: tcsData } = useTcsCalculation(
+    debouncedTcsPayload,
+    accordionState.currentActiveTab === 'panel3'
+  );
 
   // Get the form data only once during component initialization for view mode
   // This prevents infinite re-renders by not calling getValues() on every render
@@ -71,16 +105,11 @@ const CurrencyDetails = ({ setAccordionState, viewMode, paymentData }: CommonCre
   }, []);
 
   // Watch values from TransactionBasicDetails
-  const fxAmount = useWatch({ control, name: 'transactionDetails.fx_amount' });
   const companySettlementRate = useWatch({ control, name: 'transactionDetails.company_settlement_rate' });
   const addMargin = useWatch({ control, name: 'transactionDetails.add_margin' });
   const customerRate = useWatch({ control, name: 'transactionDetails.customer_rate' });
-  const purpose = useWatch({ control, name: 'transactionDetails.purpose' });
-  const panNumber = useWatch({ control, name: 'transactionDetails.applicant_pan_number' });
-  const sourceofFund = useWatch({ control, name: 'transactionDetails.source_of_funds' });
-  const declarationAmt = useWatch({ control, name: 'currencyDetails.declared_previous_amount' });
   const previousTransactionAmt = useWatch({ control, name: 'currencyDetails.previous_transaction_amount' });
-  const totalTcsAmt = useWatch({ control, name: 'currencyDetails.total_transaction_amount_tcs' });
+
 
   // Watch the entire invoiceRateTable to pass to RateTable
   const invoiceRateTable = useWatch({ control, name: 'currencyDetails.invoiceRateTable' });
@@ -113,7 +142,7 @@ const CurrencyDetails = ({ setAccordionState, viewMode, paymentData }: CommonCre
   const remittanceRate = useWatch({ control, name: 'currencyDetails.invoiceRateTable.remittance_charges.rate' });
   const nostroRate = useWatch({ control, name: 'currencyDetails.invoiceRateTable.nostro_charges.rate' });
   const otherRate = useWatch({ control, name: 'currencyDetails.invoiceRateTable.other_charges.rate' });
-  const transactionAmount = useWatch({ control, name: 'currencyDetails.invoiceRateTable.transaction_amount.rate' });
+
   const gstAmount = useWatch({ control, name: 'currencyDetails.invoiceRateTable.gst_amount.rate' });
   const tcsAmount = useWatch({ control, name: 'currencyDetails.invoiceRateTable.tcs.rate' });
   const totalInrAmount = useWatch({ control, name: 'currencyDetails.invoiceRateTable.total_inr_amount.rate' });
@@ -292,92 +321,38 @@ const CurrencyDetails = ({ setAccordionState, viewMode, paymentData }: CommonCre
   }, [transactionValueRate, previousTransactionAmt, declarationAmt, setValue]);
 
   // GST Calculation
-  const gstTimeoutRef = useRef<NodeJS.Timeout | null>(null);
+  // GST Calculation Effect
   useEffect(() => {
-    if (mountedRef.current && transactionAmount && transactionAmount > 0) {
-      // Clear previous timeout
-      if (gstTimeoutRef.current) {
-        clearTimeout(gstTimeoutRef.current);
+    if (mountedRef.current && gstData) {
+      if (gstData.statuscode === '200' && gstData.responsecode === 'success') {
+        setValue('currencyDetails.invoiceRateTable.gst_amount.rate', Number(gstData.GST), {
+          shouldValidate: false,
+          shouldDirty: false,
+        });
+      } else {
+        console.error('GST calculation failed:', gstData.responsemessage);
+        setValue('currencyDetails.invoiceRateTable.gst_amount.rate', 0, {
+          shouldValidate: false,
+          shouldDirty: false,
+        });
       }
-      // Set new timeout for debounced call
-      gstTimeoutRef.current = setTimeout(async () => {
-        try {
-          const response = await calculateGst({ txnAmount: transactionAmount.toString() });
-          if (response.statuscode === '200' && response.responsecode === 'success') {
-            setValue('currencyDetails.invoiceRateTable.gst_amount.rate', Number(response.GST), {
-              shouldValidate: false,
-              shouldDirty: false,
-            });
-          } else {
-            console.error('GST calculation failed:', response.responsemessage);
-            setValue('currencyDetails.invoiceRateTable.gst_amount.rate', 0, {
-              shouldValidate: false,
-              shouldDirty: false,
-            });
-          }
-        } catch (err) {
-          console.error('Error calculating GST:', err);
-          setValue('currencyDetails.invoiceRateTable.gst_amount.rate', 0, {
-            shouldValidate: false,
-            shouldDirty: false,
-          });
-        }
-      }, 2000); // 2000ms debounce delay
     }
-    return () => {
-      if (gstTimeoutRef.current) {
-        clearTimeout(gstTimeoutRef.current);
-      }
-    };
-  }, [transactionAmount, calculateGst, setValue]);
+  }, [gstData, setValue]);
 
-  // TCS Calculation
-  const tcsTimeoutRef = useRef<NodeJS.Timeout | null>(null);
+  // TCS Calculation Effect
   useEffect(() => {
-    const isEducation = (purpose || '').toLowerCase() === 'education';
-    if (
-      mountedRef.current &&
-      totalTcsAmt > 0 &&
-      purpose &&
-      panNumber &&
-      sourceofFund &&
-      (!isEducation || declarationAmt != null)
-    ) {
-      // Clear previous timeout
-      if (tcsTimeoutRef.current) {
-        clearTimeout(tcsTimeoutRef.current);
+    if (mountedRef.current && tcsData) {
+      if (tcsData.statuscode === '200' && tcsData.responsecode === 'success') {
+        setValue('currencyDetails.invoiceRateTable.tcs.rate', Number(tcsData.TCS), {
+          shouldValidate: false,
+          shouldDirty: false,
+        });
+      } else {
+         console.error('TCS calculation failed:', tcsData.responsemessage);
+         setValue('currencyDetails.invoiceRateTable.tcs.rate', 0);
       }
-      // Set new timeout for debounced call
-      tcsTimeoutRef.current = setTimeout(async () => {
-        try {
-          const response = await calculateTcs({
-            purpose: 'Personal Visit / Leisure Travel',
-            panNumber,
-            sourceofFund,
-            declarationAmt: isEducation ? String(declarationAmt) : '0',
-            txnAmount: totalTcsAmt.toString(),
-          });
-          if (response.statuscode === '200' && response.responsecode === 'success') {
-            setValue('currencyDetails.invoiceRateTable.tcs.rate', Number(response.TCS), {
-              shouldValidate: false,
-              shouldDirty: false,
-            });
-          } else {
-            console.error('TCS calculation failed:', response.responsemessage);
-            setValue('currencyDetails.invoiceRateTable.tcs.rate', '0');
-          }
-        } catch (err) {
-          console.error('Error calculating TCS:', err);
-          setValue('currencyDetails.invoiceRateTable.tcs.rate', 0);
-        }
-      }, 2000); // 2000ms debounce delay
     }
-    return () => {
-      if (tcsTimeoutRef.current) {
-        clearTimeout(tcsTimeoutRef.current);
-      }
-    };
-  }, [totalTcsAmt, purpose, panNumber, sourceofFund, declarationAmt, calculateTcs, setValue]);
+  }, [tcsData, setValue]);
 
   const flattenErrors = (obj: any, prefix = ''): string[] => {
     const keys: string[] = [];
