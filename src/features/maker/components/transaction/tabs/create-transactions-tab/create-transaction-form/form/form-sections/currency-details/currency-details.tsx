@@ -51,31 +51,7 @@ const CurrencyDetails = ({ setAccordionState, viewMode, paymentData }: CommonCre
   const sourceofFund = useWatch({ control, name: 'transactionDetails.source_of_funds' });
   const declarationAmt = useWatch({ control, name: 'currencyDetails.declared_previous_amount' });
 
-  // Debounced Values
-  const debouncedTransactionAmount = useDebounce(transactionAmount?.toString(), 1000);
 
-  const tcsPayload = useMemo(() => {
-     const isEducation = (purpose || '').toLowerCase() === 'education';
-     return {
-        purpose: 'Personal Visit / Leisure Travel',
-        panNumber,
-        sourceofFund,
-        declarationAmt: isEducation ? String(declarationAmt) : '0',
-        txnAmount: totalTcsAmt?.toString() || '0',
-     };
-  }, [purpose, panNumber, sourceofFund, declarationAmt, totalTcsAmt]);
-
-  const debouncedTcsPayload = useDebounce(tcsPayload, 1000);
-
-  const { data: gstData } = useGstCalculation(
-    debouncedTransactionAmount,
-    accordionState.currentActiveTab === 'panel3'
-  );
-
-  const { data: tcsData } = useTcsCalculation(
-    debouncedTcsPayload,
-    accordionState.currentActiveTab === 'panel3'
-  );
 
   // Get the form data only once during component initialization for view mode
   // This prevents infinite re-renders by not calling getValues() on every render
@@ -148,6 +124,48 @@ const CurrencyDetails = ({ setAccordionState, viewMode, paymentData }: CommonCre
   const totalInrAmount = useWatch({ control, name: 'currencyDetails.invoiceRateTable.total_inr_amount.rate' });
 
   const selectedNostroType = useWatch({ control, name: 'transactionDetails.nostro_charges' });
+
+  // Calculate Transaction Amount locally for API trigger to ensure stability
+  const calculatedTransactionAmount = useMemo(() => {
+    if (
+      transactionValueRate != null &&
+      remittanceRate != null &&
+      nostroRate != null &&
+      otherRate != null
+    ) {
+      return Number(transactionValueRate) + Number(remittanceRate) + Number(nostroRate) + Number(otherRate);
+    }
+    return 0;
+  }, [transactionValueRate, remittanceRate, nostroRate, otherRate]);
+
+  // Debounced Values
+  const debouncedTransactionAmount = useDebounce(calculatedTransactionAmount.toString(), 1000);
+
+  const tcsPayload = useMemo(() => {
+     const isEducation = (purpose || '').toLowerCase() === 'education';
+     const calculatedTotalTcsAmt =
+        Number(transactionValueRate || 0) + Number(previousTransactionAmt || 0) + Number(declarationAmt || 0);
+
+     return {
+        purpose: 'Personal Visit / Leisure Travel',
+        panNumber,
+        sourceofFund,
+        declarationAmt: isEducation ? String(declarationAmt) : '0',
+        txnAmount: calculatedTotalTcsAmt.toString(),
+     };
+  }, [purpose, panNumber, sourceofFund, declarationAmt, transactionValueRate, previousTransactionAmt]);
+
+  const debouncedTcsPayload = useDebounce(tcsPayload, 1000);
+
+  const { data: gstData } = useGstCalculation(
+    debouncedTransactionAmount,
+    accordionState.currentActiveTab === 'panel3'
+  );
+
+  const { data: tcsData } = useTcsCalculation(
+    debouncedTcsPayload,
+    accordionState.currentActiveTab === 'panel3'
+  );
 
   // Calculate beneficiary amount synchronous with latest rates to avoid render cycle lag
   const beneficiaryAmount = useMemo(() => {

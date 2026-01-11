@@ -75,8 +75,7 @@ export const ShadCnNumber = ({
                     prefix=""
                     placeholder={placeholder}
                     className={cn(
-                      'form-input flex h-9 w-full border border-input bg-transparent px-3 py-1 text-sm transition-colors file:border-0 file:bg-transparent file:text-sm file:font-medium file:text-foreground placeholder:text-muted-foreground focus-visible:outline-none disabled:cursor-not-allowed disabled:opacity-50 truncate',
-                      isValueEmpty ? 'text-left' : 'text-right',
+                      'form-input flex h-9 w-full border border-input bg-transparent px-3 py-1 text-sm transition-colors file:border-0 file:bg-transparent file:text-sm file:font-medium file:text-foreground placeholder:text-muted-foreground focus-visible:outline-none disabled:cursor-not-allowed disabled:opacity-50 truncate text-right',
                       'aria-invalid:focus-visible:border-destructive',
                       error && 'border-destructive focus:ring-destructive'
                     )}
