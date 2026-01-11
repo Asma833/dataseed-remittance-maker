@@ -20,7 +20,6 @@ export const kycDocumentsConfig = {
     applicant_name: {
       label: 'Applicant Name',
       type: FieldType.Text,
-      required: true,
       disabled: true,
       placeholder: 'Enter Applicant Name',
     },

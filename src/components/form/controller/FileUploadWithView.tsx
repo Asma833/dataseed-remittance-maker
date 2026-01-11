@@ -20,6 +20,7 @@ interface FileUploadProps {
   disabled?: boolean;
   documentUrl?: string;
   onView?: () => void;
+  required?: boolean;
 }
 
 const FileUploadWithView = ({
@@ -33,6 +34,7 @@ const FileUploadWithView = ({
   disabled,
   documentUrl,
   onView,
+  required,
 }: FileUploadProps) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
@@ -89,7 +91,9 @@ const FileUploadWithView = ({
   return (
     <div className="flex">
       <div className="flex flex-col w-full min-w-0">
-        <span className="fileupload-label text-sm mb-2">{label}</span>
+        <span className="fileupload-label text-sm mb-2">
+          {label} {required && <span className="text-red-500">*</span>}
+        </span>
         <div className="flex w-full gap-2">
           <FileUpload
             id={id || name}

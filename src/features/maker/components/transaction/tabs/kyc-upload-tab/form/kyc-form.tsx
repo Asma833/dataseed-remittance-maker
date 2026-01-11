@@ -1,5 +1,6 @@
 import { FieldValues, FormProvider, useForm } from 'react-hook-form';
-import { useCallback, useEffect, useMemo, useState } from 'react';
+import { useQueryClient } from '@tanstack/react-query';
+import { useCallback, useEffect, useMemo, useState, useRef } from 'react';
 import { FormContentWrapper } from '@/components/form/wrapper/form-content-wrapper';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
@@ -10,7 +11,7 @@ import FieldWrapper from '@/components/form/wrapper/field-wrapper';
 import { getController } from '@/components/form/utils/get-controller';
 import { Button } from '@/components/ui/button';
 import { kycDocumentsConfig } from './kyc-form.config';
-import { KycFormSchema } from './kyc-form.schema';
+import { createKycFormSchema } from './kyc-form.schema';
 import { useGetMappedDocuments } from '../../../hooks/useGetMappedDocuments';
 import { FieldType, KYCStatusEnum } from '@/types/enums';
 import { ArrowLeft } from 'lucide-react';
@@ -19,26 +20,27 @@ import { uploadTransactionDocument } from '../../../api/kycDocuments.api';
 import { FlattenedDocumentItem } from '../../../types/rejection-doc-summary.types';
 import { useGetPresignedUrls } from '../../../hooks/useGetPresignedUrls';
 import { ImageViewModal } from '@/components/common/image-view-modal';
+import { MappedDocument } from '../../../types/mapped-documents.types';
 
 const KYCForm = ({
   transaction,
-  onFormSubmit,
   onCancel,
   rejectedDocuments,
   isRejected = false,
+  onSuccess,
 }: {
-  onFormSubmit: () => void;
   onCancel: () => void;
   transaction: DealsResponseTransaction;
   rejectedDocuments: FlattenedDocumentItem[];
   isRejected: boolean;
+  onSuccess?: () => void;
 }) => {
   const { data: mappedDocumentsResponse, isLoading: loading } = useGetMappedDocuments(
     transaction?.transaction_purpose_map_id,
     transaction?.id
   );
 
-  const documentTypes = mappedDocumentsResponse || [];
+  const documentTypes: MappedDocument[] = mappedDocumentsResponse || [];
 
   const { mutateAsync: getPresignedUrlsAsync } = useGetPresignedUrls();
 
@@ -88,11 +90,11 @@ const KYCForm = ({
   };
 
   const dynamicDocumentFields = useMemo(() => {
-    return (documentTypes || []).flatMap((doc: any) => {
+    return (documentTypes || []).flatMap((doc: MappedDocument) => {
       const label = doc.display_name || doc.name;
       const base = {
         type: FieldType.Fileupload_View,
-        required: Boolean(doc.is_mandatory),
+        required: true,
         placeholder: 'Upload Document',
         documentId: doc.document_id,
         accept: '.pdf,.jpg,.jpeg,.png,.gif',
@@ -105,13 +107,13 @@ const KYCForm = ({
       if (doc.is_back_required) {
         return [
           {
-            name: `document_${doc.id}_front`,
+            name: `document_${documentId}_front`,
             label: `${label} (Front)`,
             ...base,
             onFileSelected: (file: File) => handleUploadOnFileChange({ file, documentId }),
           },
           {
-            name: `document_${doc.id}_back`,
+            name: `document_${documentId}_back`,
             label: `${label} (Back)`,
             ...base,
             onFileSelected: (file: File) => handleUploadOnFileChange({ file, documentId }),
@@ -121,7 +123,7 @@ const KYCForm = ({
 
       return [
         {
-          name: `document_${doc.id}`,
+          name: `document_${documentId}`,
           label,
           ...base,
           onFileSelected: (file: File) => handleUploadOnFileChange({ file, documentId }),
@@ -134,14 +136,14 @@ const KYCForm = ({
   const documentDefaultValues = useMemo(() => {
     const values: Record<string, any> = {};
     if (documentTypes) {
-      documentTypes.forEach((doc: any) => {
+      documentTypes.forEach((doc: MappedDocument) => {
         if (doc.document_url) {
           const documentId = doc.document_id || doc.id;
           if (doc.is_back_required) {
-            values[`document_${doc.id}_front`] = [{ document_url: doc.document_url, name: doc.document_url }];
-            values[`document_${doc.id}_back`] = [{ document_url: doc.document_url, name: doc.document_url }];
+            values[`document_${documentId}_front`] = [{ document_url: doc.document_url, name: doc.document_url }];
+            values[`document_${documentId}_back`] = [{ document_url: doc.document_url, name: doc.document_url }];
           } else {
-            values[`document_${doc.id}`] = [{ document_url: doc.document_url, name: doc.document_url }];
+            values[`document_${documentId}`] = [{ document_url: doc.document_url, name: doc.document_url }];
           }
         }
       });
@@ -149,14 +151,21 @@ const KYCForm = ({
     return values;
   }, [documentTypes]);
 
+  const formSchema = useMemo(() => createKycFormSchema(documentTypes), [documentTypes]);
+  const formSchemaRef = useRef(formSchema);
+
+  useEffect(() => {
+    formSchemaRef.current = formSchema;
+  }, [formSchema]);
+
   const methods = useForm({
-    resolver: zodResolver(KycFormSchema),
+    resolver: (values, context, options) => zodResolver(formSchemaRef.current)(values, context, options),
     defaultValues: {
       company_reference_number: transaction?.company_ref_number || '',
       agent_reference_number: transaction?.agent_ref_number || '',
       applicant_name: transaction?.kyc_details?.applicant_name || '',
       ...documentDefaultValues,
-    } as z.infer<typeof KycFormSchema>,
+    } as any, // Casting to any to avoid index signature operator incompatibility with strict types due to catchall
   });
 
   const {
@@ -173,14 +182,30 @@ const KYCForm = ({
         agent_reference_number: transaction.agent_ref_number || '',
         applicant_name: transaction.kyc_details?.applicant_name || '',
         ...documentDefaultValues,
-      } as z.infer<typeof KycFormSchema>);
+      } as any);
     }
   }, [transaction, reset, documentDefaultValues]);
 
-  const handleKycSubmit = handleSubmit(async (formdata: FieldValues) => {
-    // Handle form submission logic here
-    onFormSubmit();
-  });
+  const queryClient = useQueryClient();
+
+  const handleKycSubmit = handleSubmit(
+    async (formdata: FieldValues) => {
+      toast.success('KYC documents submitted successfully');
+      await queryClient.invalidateQueries({
+        queryKey: ['mapped-documents', transaction?.transaction_purpose_map_id, transaction?.id],
+      });
+      if (onSuccess) {
+        onSuccess();
+      }
+    },
+    (errors) => {
+      toast.error('Please complete all required fields');
+    }
+  );
+
+  const handleCancel = () => {
+    onCancel();
+  };
 
   return (
     <>
@@ -212,10 +237,10 @@ const KYCForm = ({
                   // If NOT rejected but transaction is rejected, disable the field
                   // If not rejected transaction (normal flow), everything is enabled
 
-                  const isDisabled = isRejected && !hasDocumentId;
+                  const isDisabled = (isRejected && transaction?.kyc_status !== KYCStatusEnum.UPLOADED) && !hasDocumentId && !!field.documentUrl;
                   const shouldShowRemarks = transaction?.kyc_status === KYCStatusEnum.UPLOADING || transaction?.kyc_status === KYCStatusEnum.REJECTED;
-                  const errorMessage = shouldShowRemarks && hasDocumentId ?
-                    (hasDocumentId.remarks || hasDocumentId.rejection_reason || 'Document Rejected') : '';
+                  const errorMessage = (shouldShowRemarks && hasDocumentId ?
+                    (hasDocumentId.remarks || hasDocumentId.rejection_reason || 'Document Rejected') : '') || (errors[field.name] as any)?.message;
 
                   return (
                     <div key={field.name}>
@@ -242,13 +267,16 @@ const KYCForm = ({
         </FormContentWrapper>
       </FormProvider>
 
-      {/* <div className="mt-16 flex flex-col items-center gap-6 px-4">
+      <div className="flex flex-col items-center gap-6 px-4">
         <div className="w-full max-w-xl flex flex-col sm:flex-row sm:justify-center gap-3">
+          <Button type="button" onClick={handleCancel} variant="light" className="w-full sm:w-auto px-10">
+            Cancel
+          </Button>
           <Button type="button" onClick={handleKycSubmit} variant="secondary" className="w-full sm:w-auto px-10">
             Submit
           </Button>
         </div>
-      </div> */}
+      </div>
       <ImageViewModal
         isOpen={isImageModalOpen}
         onClose={() => setIsImageModalOpen(false)}

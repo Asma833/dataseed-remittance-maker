@@ -7,7 +7,7 @@ export interface MappedDocument {
   is_back_required: boolean;
   is_mandatory: boolean;
   is_uploaded: boolean;
-  document_url: string | null;
+  document_url: string;
   trans_doc_id:string;
 }
 

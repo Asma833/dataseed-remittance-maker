@@ -54,8 +54,8 @@ const KYCUpload = () => {
         <>
           <KYCForm
             transaction={transaction ?? ({} as DealsResponseTransaction)}
-            onFormSubmit={() => setShowForm(false)}
             onCancel={() => setShowForm(false)}
+            onSuccess={() => setTransaction((prev) => (prev ? { ...prev, kyc_status: KYCStatusEnum.UPLOADED } : prev))}
             rejectedDocuments={flattenedRejectionResData}
             isRejected={isRejected}
           />
