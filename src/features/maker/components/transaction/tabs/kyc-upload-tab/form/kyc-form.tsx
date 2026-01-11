@@ -190,7 +190,7 @@ const KYCForm = ({
       <FormProvider {...methods}>
         <FormContentWrapper className="py-6 rounded-lg w-full mr-auto bg-transparent">
           <Spacer>
-            <div className="grid grid-cols-1 md:grid-col-2 lg:grid-cols-4 gap-4 px-1">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 px-1">
               {Object.entries(kycDocumentsConfig.fields)
                 .slice(0, 3)
                 .map(([name, field]) => (
@@ -204,7 +204,7 @@ const KYCForm = ({
             {loading ? (
               <div className="px-2">Loading documents...</div>
             ) : dynamicDocumentFields.length > 0 ? (
-              <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 px-1">
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-4 px-1">
                 {dynamicDocumentFields.map((field: any) => {
                   const hasDocumentId = rejectedDocuments?.find((doc) => doc.document_id === field.documentId);
 

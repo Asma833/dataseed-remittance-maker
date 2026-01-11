@@ -88,7 +88,7 @@ const FileUploadWithView = ({
 
   return (
     <div className="flex">
-      <div className="flex flex-col w-full">
+      <div className="flex flex-col w-full min-w-0">
         <span className="fileupload-label text-sm mb-2">{label}</span>
         <div className="flex w-full gap-2">
           <FileUpload
@@ -97,7 +97,7 @@ const FileUploadWithView = ({
             label={label}
             {...(accept && { accept })}
             handleFileChange={handleFileChange}
-            className="p-0 flex-1"
+            className="p-0 flex-1 min-w-0"
             styleType="fileUploadWithView"
             disabled={disabled ?? false}
           />
@@ -105,7 +105,7 @@ const FileUploadWithView = ({
             <button
               type="button"
               disabled={!selectedFile && !documentUrl && (!fileArray.length || !fileArray[0]?.document_url)}
-              className={`px-2 text-gray-500 disabled:text-gray-400 hover:text-gray-800 text-sm border-none bg-transparent rounded w-[60px] flex items-center justify-center gap-2 ${className}`}
+              className={`px-3 py-1 text-gray-500 disabled:text-gray-400 hover:text-gray-800 text-sm border-none bg-transparent rounded w-auto flex items-center justify-center gap-2 ${className}`}
               onClick={() => {
                 if (onView) {
                   onView();
