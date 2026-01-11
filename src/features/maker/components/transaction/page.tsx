@@ -24,7 +24,9 @@ const TransactionPage = () => {
     <div className="w-full">
       <div className="flex flex-col md:flex-row justify-between gap-2 px-4 md:px-6 text-center">
         {' '}
-        {transactionTabs.map((tab) => (
+        {transactionTabs
+          .filter((tab) => tab.label)
+          .map((tab) => (
           <NavLink
             key={tab.path}
             to={`/${baseRole}/transaction/${tab.path}`}

@@ -36,7 +36,7 @@ const KYCTable = ({ onUploadClick }: { onUploadClick: (isReupload: boolean, tran
           initialData.paymentDetails = rowData;
         }
 
-        navigate('../create-transactions', { state: { initialData } });
+        navigate('/branch_agent_maker/transaction/kyc/view-transactions', { state: { initialData } });
         setSelectedDealId(null); // Reset after navigation
       } catch (error) {
         console.error('Error processing deal details:', error);

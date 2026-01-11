@@ -47,6 +47,16 @@ export const agentMakerRoutes: RouteConfig[] = [
         element: makerComponents.ViewAllTransactions,
         permission: '',
       },
+      {
+        path: 'kyc/view-transactions',
+        element: makerComponents.CreateTransactions,
+        permission: '',
+      },
+      {
+        path: 'payment/view-transactions',
+        element: makerComponents.CreateTransactions,
+        permission: '',
+      },
     ],
   },
 ];

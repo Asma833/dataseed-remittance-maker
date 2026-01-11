@@ -78,8 +78,7 @@ const PaymentStatus = () => {
         if (rowData) {
           initialData.paymentDetails = rowData;
         }
-
-        navigate('../create-transactions', { state: { initialData } });
+        navigate('/branch_agent_maker/transaction/payment/view-transactions', { state: { initialData } });
         setSelectedDealId(null); // Reset after navigation
       } catch (error) {
         console.error('Error processing deal details:', error);
