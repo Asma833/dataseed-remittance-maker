@@ -11,6 +11,7 @@ import { InvoiceRateTable } from '@/features/maker/components/transaction/types/
 export const generateRateTablePdf = (
   invoiceRateTable: InvoiceRateTable,
   totalAmount: number,
+  beneficiaryAmount: number,
   filename: string = 'transaction-details'
 ) => {
   const doc = new jsPDF();
@@ -24,14 +25,15 @@ export const generateRateTablePdf = (
   // Helper to format value as string
   const formatValue = (value: number | string | undefined): string => {
     if (value === undefined || value === null || value === '') return '';
-    return typeof value === 'number' ? value.toString() : value.toString();
+    const num = Number(value);
+    return isNaN(num) ? value.toString() : num.toFixed(2);
   };
 
   // Transaction Value
   body.push([
     'Tnx Value',
     formatValue(invoiceRateTable.transaction_value.company_rate),
-    formatValue(invoiceRateTable.transaction_value.agent_mark_up),
+    '', // Agent Mark Up should be empty for first row
     formatValue(invoiceRateTable.transaction_value.rate),
   ]);
 
@@ -72,8 +74,8 @@ export const generateRateTablePdf = (
   body.push(['TCS', '', '', formatValue(invoiceRateTable.tcs.rate)]);
 
   // Add footer rows to body to make them look like regular rows
-  body.push(['Total Payable Amount', '', '', totalAmount.toString()]);
-  body.push(['Beneficiary Amount (In Fx Value)', '', '', totalAmount.toString()]);
+  body.push(['Total Payable Amount', '', '', formatValue(totalAmount)]);
+  body.push(['Beneficiary Amount (In Fx Value)', '', '', formatValue(beneficiaryAmount)]);
 
   // Add title
   doc.text('Transaction Details', 14, 20);
@@ -87,19 +89,20 @@ export const generateRateTablePdf = (
     styles: {
       fontSize: 8,
       cellPadding: 3,
-      halign: 'left',
+      halign: 'right', // Default to right align for values
       valign: 'middle',
     },
     headStyles: {
       fillColor: [0, 123, 255],
       textColor: [255, 255, 255],
       fontStyle: 'bold',
+      halign: 'center',
     },
     columnStyles: {
-      0: { halign: 'left', cellWidth: 60 },
-      1: { halign: 'left', cellWidth: 30 },
-      2: { halign: 'left', cellWidth: 40 },
-      3: { halign: 'left', cellWidth: 35 },
+      0: { halign: 'left', cellWidth: 60 }, // Particulars left align
+      1: { halign: 'right', cellWidth: 30 },
+      2: { halign: 'right', cellWidth: 40 },
+      3: { halign: 'right', cellWidth: 35 },
     },
     margin: { top: 30, left: 14, right: 14 },
   });

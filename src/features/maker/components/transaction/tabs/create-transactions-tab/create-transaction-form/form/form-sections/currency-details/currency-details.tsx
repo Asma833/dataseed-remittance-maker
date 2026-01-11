@@ -410,7 +410,7 @@ const CurrencyDetails = ({ setAccordionState, viewMode, paymentData }: CommonCre
       return;
     }
 
-    generateRateTablePdf(invoiceRateTable, totalInrAmount || 0, 'transaction-rate-details');
+    generateRateTablePdf(invoiceRateTable, totalInrAmount || 0, beneficiaryAmount || 0, 'transaction-rate-details');
     toast.success('PDF downloaded successfully');
   };
   const handleCancelConfirm = () => {
