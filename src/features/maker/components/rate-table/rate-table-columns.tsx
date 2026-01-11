@@ -40,7 +40,7 @@ export const GetRateTableColumns = ({
 
   const commonInputStyles = (fieldPath: string): CommonInputStyles => {
     return {
-      className: cn('rateTableInputCellWrap !h-[30px] !min-h-0', {
+      className: cn('rateTableInputCellWrap !h-[30px] !min-h-0 flex items-center justify-center', {
         editable: mode === 'edit' && editableFields.includes(fieldPath.replace(`${id}.`, '')),
       }),
       inputProps: {
@@ -68,7 +68,7 @@ export const GetRateTableColumns = ({
     } else {
       const dataKey = valueMappings[columnKey] || columnKey;
       const value = invoiceData?.[section]?.[dataKey] ?? 0;
-      return <span className="text-right">{formatINR(value)}</span>;
+      return <span className="!text-right">{formatINR(value)}</span>;
     }
   };
 

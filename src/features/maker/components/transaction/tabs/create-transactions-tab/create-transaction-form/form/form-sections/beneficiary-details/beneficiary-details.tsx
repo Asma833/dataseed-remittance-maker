@@ -52,7 +52,7 @@ const BeneficiaryDetails = ({ setAccordionState }: CommonCreateTransactionProps)
   // };
   return (
     <Spacer>
-      <FormFieldRow rowCols={4}>
+      <FormFieldRow wrapperClassName="xl:row-cols-4">
         {(['beneficiary_name', 'beneficiary_address', 'beneficiary_city', 'beneficiary_country'] as const).map(
           (name) => {
             const field = beneficiaryDetailsConfig.find((f) => f.name === name);
@@ -65,7 +65,7 @@ const BeneficiaryDetails = ({ setAccordionState }: CommonCreateTransactionProps)
           }
         )}
       </FormFieldRow>
-      <FormFieldRow rowCols={4}>
+      <FormFieldRow wrapperClassName="xl:row-cols-4">
         {(
           [
             'beneficiary_account_number_iban_number',
@@ -83,7 +83,7 @@ const BeneficiaryDetails = ({ setAccordionState }: CommonCreateTransactionProps)
           );
         })}
       </FormFieldRow>
-      <FormFieldRow rowCols={4}>
+      <FormFieldRow wrapperClassName="xl:row-cols-4">
         {(
           ['sort_bsb_aba_transit_code', 'nostro_charges', 'message_to_beneficiary_additional_information'] as const
         ).map((name) => {
@@ -99,7 +99,7 @@ const BeneficiaryDetails = ({ setAccordionState }: CommonCreateTransactionProps)
           );
         })}
       </FormFieldRow>
-      <FormFieldRow rowCols={4}>
+      <FormFieldRow wrapperClassName="xl:row-cols-4">
         {(['student_name', 'student_passport_number', 'payment_instruction_number', 'university_name'] as const).map(
           (name) => {
             const field = beneficiaryDetailsConfig.find((f) => f.name === name);
@@ -126,7 +126,7 @@ const BeneficiaryDetails = ({ setAccordionState }: CommonCreateTransactionProps)
         </FieldWrapper>
         {intermediaryBankDetails === 'yes' && (
           <div className="flex-1">
-            <FormFieldRow rowCols={3}>
+            <FormFieldRow wrapperClassName="xl:row-cols-3">
               {beneficiaryBank.map((item) => {
                 return (
                   <FieldWrapper key={item.name}>

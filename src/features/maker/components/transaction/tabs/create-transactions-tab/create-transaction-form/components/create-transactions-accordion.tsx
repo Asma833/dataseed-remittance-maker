@@ -29,12 +29,26 @@ export default function CreateTransactionsAccordion({
   return (
     <div>
       {accordionItems.map((item) => (
-        <Accordion key={item.id} expanded={expanded === item.id} className="bg-background!" sx={{ boxShadow: 'none' }}>
+        <Accordion
+          key={item.id}
+          expanded={expanded === item.id}
+          className="bg-background!"
+          sx={{
+            boxShadow: 'none',
+            border: 'none',
+            '&:before': { display: 'none !important', opacity: '0 !important', height: '0 !important' },
+            '&.MuiAccordion-root': { border: 'none !important', boxShadow: 'none !important' },
+          }}
+        >
           <AccordionSummary
             expandIcon={<ChevronDown />}
             aria-controls={`${item.id}bh-content`}
             id={`${item.id}bh-header`}
-            className="bg-transparent!"
+            sx={{
+              minHeight: 40,
+              '&.Mui-expanded': { minHeight: 40 },
+              '& .MuiAccordionSummary-content': { margin: '8px 0', '&.Mui-expanded': { margin: '8px 0' } },
+            }}
           >
             <Typography component="span" className="w-1/3 shrink-0 bg-transparent text-foreground">
               {item.title}

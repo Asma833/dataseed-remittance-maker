@@ -26,6 +26,9 @@ const currencyFields = [
   'declared_previous_amount',
   'total_transaction_amount_tcs',
   'company_settlement_rate',
+  'remittance_charges.agent_mark_up',
+  'nostro_charges.agent_mark_up',
+  'other_charges.agent_mark_up'
 ];
 
 export const ShadCnNumber = ({

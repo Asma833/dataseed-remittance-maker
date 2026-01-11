@@ -164,7 +164,7 @@ const TransactionBasicDetails = ({ setAccordionState }: CommonCreateTransactionP
     <Spacer>
       <FormContentWrapper className="rounded-lg w-full mr-auto bg-transparent">
         <Spacer>
-          <FormFieldRow rowCols={4}>
+          <FormFieldRow wrapperClassName="xl:row-cols-4">
             {(['company_reference_number', 'agent_reference_number', 'fx_currency'] as const).map((name) => {
               const field = transactionBasicDetailsConfig.find((f) => f.name === name) as FieldConfig;
               let fieldWithOptions = field;
@@ -178,7 +178,7 @@ const TransactionBasicDetails = ({ setAccordionState }: CommonCreateTransactionP
               );
             })}
           </FormFieldRow>
-          <FormFieldRow rowCols={4}>
+          <FormFieldRow wrapperClassName="xl:row-cols-4">
             {(['fx_amount', 'company_settlement_rate', 'add_margin', 'customer_rate'] as const).map((name) => {
               const field = transactionBasicDetailsConfig.find((f) => f.name === name) as FieldConfig;
               return (
@@ -188,7 +188,7 @@ const TransactionBasicDetails = ({ setAccordionState }: CommonCreateTransactionP
               );
             })}
           </FormFieldRow>
-          <FormFieldRow rowCols={4}>
+          <FormFieldRow wrapperClassName="xl:row-cols-4">
             {(['nostro_charges', 'purpose'] as const).map((name) => {
               const field = transactionBasicDetailsConfig.find((f) => f.name === name) as FieldConfig;
               let fieldWithOptions = field;
@@ -204,7 +204,7 @@ const TransactionBasicDetails = ({ setAccordionState }: CommonCreateTransactionP
           </FormFieldRow>
           <p className="font-semibold text-gray-600">KYC Details</p>
           <>
-            <FormFieldRow rowCols={4}>
+            <FormFieldRow wrapperClassName="xl:row-cols-4">
               {(['applicant_email', 'applicant_mobile_number', 'applicant_pan_number', 'source_of_funds'] as const).map(
                 (name) => {
                   const field = transactionBasicDetailsConfig.find((f) => f.name === name) as FieldConfig;
@@ -216,7 +216,7 @@ const TransactionBasicDetails = ({ setAccordionState }: CommonCreateTransactionP
                 }
               )}
             </FormFieldRow>
-            <FormFieldRow rowCols={4}>
+            <FormFieldRow wrapperClassName="xl:row-cols-4">
               {(['paid_by', 'payee_name', 'payee_pan_number', 'payee_dob'] as const).map((name) => {
                 if (
                   (name === 'paid_by' ||
@@ -235,7 +235,7 @@ const TransactionBasicDetails = ({ setAccordionState }: CommonCreateTransactionP
                 );
               })}
             </FormFieldRow>
-            <FormFieldRow rowCols={4}>
+            <FormFieldRow wrapperClassName="xl:row-cols-4">
               {(['passport_number', 'passport_issue_date', 'passport_expiry_date', 'place_of_issue'] as const).map(
                 (name) => {
                   const field = transactionBasicDetailsConfig.find((f) => f.name === name) as FieldConfig;
@@ -247,7 +247,7 @@ const TransactionBasicDetails = ({ setAccordionState }: CommonCreateTransactionP
                 }
               )}
             </FormFieldRow>
-            <FormFieldRow rowCols={4}>
+            <FormFieldRow wrapperClassName="xl:row-cols-4">
               {(['applicant_address', 'applicant_city', 'applicant_state', 'applicant_country'] as const).map(
                 (name) => {
                   const field = transactionBasicDetailsConfig.find((f) => f.name === name) as FieldConfig;
@@ -259,7 +259,7 @@ const TransactionBasicDetails = ({ setAccordionState }: CommonCreateTransactionP
                 }
               )}
             </FormFieldRow>
-            <FormFieldRow rowCols={4}>
+            <FormFieldRow wrapperClassName="xl:row-cols-4">
               {(['postal_code'] as const).map((name) => {
                 const field = transactionBasicDetailsConfig.find((f) => f.name === name) as FieldConfig;
                 return (

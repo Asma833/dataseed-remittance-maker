@@ -354,7 +354,7 @@ const CurrencyDetails = ({ setAccordionState, viewMode, paymentData }: CommonCre
             purpose: 'Personal Visit / Leisure Travel',
             panNumber,
             sourceofFund,
-            declarationAmt: isEducation ? declarationAmt : '0',
+            declarationAmt: isEducation ? String(declarationAmt) : '0',
             txnAmount: totalTcsAmt.toString(),
           });
           if (response.statuscode === '200' && response.responsecode === 'success') {
@@ -463,9 +463,9 @@ const CurrencyDetails = ({ setAccordionState, viewMode, paymentData }: CommonCre
   return (
     <>
       <Spacer>
-        <FormFieldRow rowCols={2} wrapperClassName="flex-row md:!flex-nowrap items-start">
-          <div className="flex flex-wrap md:w-full lg:w-1/2 gap-4">
-            <FormFieldRow rowCols={2} className="w-full">
+        <FormFieldRow rowCols={2} wrapperClassName="flex-row lg:!flex-nowrap items-start">
+          <div className="flex flex-wrap md:!w-full lg:w-1/2 gap-4">
+            <FormFieldRow rowCols={1} wrapperClassName="md:row-cols-1 lg:row-cols-1" className="w-full">
               {(['fx_currency', 'fx_amount'] as const).map((name) => {
                 const field = currencyDetailsConfig.find((f) => f.name === name) as FieldConfig;
                 let fieldWithOptions = field;
@@ -479,7 +479,7 @@ const CurrencyDetails = ({ setAccordionState, viewMode, paymentData }: CommonCre
                 );
               })}
             </FormFieldRow>
-            <FormFieldRow rowCols={2} className="w-full">
+            <FormFieldRow rowCols={1} wrapperClassName="md:row-cols-1 lg:row-cols-1" className="w-full">
               {(['settlement_rate', 'add_margin'] as const).map((name) => {
                 const field = currencyDetailsConfig.find((f) => f.name === name) as FieldConfig;
                 return (
@@ -489,7 +489,7 @@ const CurrencyDetails = ({ setAccordionState, viewMode, paymentData }: CommonCre
                 );
               })}
             </FormFieldRow>
-            <FormFieldRow rowCols={2} className="w-full">
+            <FormFieldRow rowCols={1} wrapperClassName="md:row-cols-1 lg:row-cols-1" className="w-full">
               {(
                 [
                   'customer_rate',
@@ -511,7 +511,7 @@ const CurrencyDetails = ({ setAccordionState, viewMode, paymentData }: CommonCre
                 );
               })}
             </FormFieldRow>
-            <FormFieldRow rowCols={2} className="w-full">
+            <FormFieldRow rowCols={1} wrapperClassName="md:row-cols-1 lg:row-cols-1" className="w-full">
               {(
                 [
                   'previous_transaction_amount',
@@ -533,7 +533,7 @@ const CurrencyDetails = ({ setAccordionState, viewMode, paymentData }: CommonCre
                 );
               })}
             </FormFieldRow>
-            <FormFieldRow rowCols={2} className="w-full">
+            <FormFieldRow rowCols={1} wrapperClassName="md:row-cols-1 lg:row-cols-1" className="w-full">
               {(['total_transaction_amount_tcs'] as const).map((name) => {
                 const field = currencyDetailsConfig.find((f) => f.name === name) as FieldConfig;
                 return (
@@ -544,7 +544,7 @@ const CurrencyDetails = ({ setAccordionState, viewMode, paymentData }: CommonCre
               })}
             </FormFieldRow>
           </div>
-          <div className="flex flex-wrap md:w-full lg:w-1/2">
+          <div className="flex flex-wrap md:!w-full lg:w-1/2">
             <RateTable
               id={'currencyDetails.invoiceRateTable'}
               mode={'edit'}

@@ -12,8 +12,8 @@ type ColumnKey = 'invoiceName' | 'companyRate' | 'agentMarkUp' | 'rate';
 
 const columnKeys: Record<ColumnKey, { label: string; className?: string }> = {
   invoiceName: { label: 'Particulars', className: 'text-left' },
-  companyRate: { label: 'Rate', className: 'text-right' },
-  agentMarkUp: { label: 'Add Margin', className: 'text-right' },
+  companyRate: { label: 'Rate', className: 'text-center' },
+  agentMarkUp: { label: 'Add Margin', className: 'text-center' },
   rate: { label: 'Amount', className: 'text-right' },
 };
 
@@ -104,7 +104,7 @@ export default function RateTable({
         {invoices.map((invoice: Partial<RateTableColumn>) => (
           <TableRow key={invoice.id}>
             {Object.keys(columnKeys).map((key) => (
-              <TableCell key={key} className={cn('text-right pb-5', columnKeys[key as ColumnKey]?.className)}>
+              <TableCell key={key} className={cn('text-right', columnKeys[key as ColumnKey]?.className)}>
                 {invoice.cells?.[key as ColumnKey]?.()}
               </TableCell>
             ))}

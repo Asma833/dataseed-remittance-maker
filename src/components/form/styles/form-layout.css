@@ -9,24 +9,31 @@
 .fieldWrapper {
   @apply flex;
 }
+
 .fieldWrapper .MuiFormGroup-root.MuiRadioGroup-root {
   @apply flex flex-row;
 }
+
 .formFieldRow.row-cols-100d2 .fieldWrapper {
   width: calc(50% - 15px);
 }
+
 .formFieldRow.row-cols-1 .fieldWrapper {
   width: calc(100% - 15px);
 }
+
 .formFieldRow.row-cols-2 .fieldWrapper {
   width: calc(50% - 15px);
 }
+
 .formFieldRow.row-cols-3 .fieldWrapper {
   width: calc(33.33% - 15px);
 }
+
 .formFieldRow.row-cols-4 .fieldWrapper {
   width: calc(25% - 20px);
 }
+
 .formFieldRow.row-cols-5 .fieldWrapper {
   width: calc(20% - 20px);
 }
@@ -34,9 +41,11 @@
 .fieldWrapper.col-span-2 {
   width: calc(50% - 20px) !important;
 }
+
 .formCard {
   @apply flex flex-col bg-[--card-bg] p-6 rounded-lg;
 }
+
 .formCardHeader {
   @apply flex items-center justify-between;
 }
@@ -53,6 +62,22 @@
   .formFieldRow .fieldWrapper {
     width: calc(50% - 15px);
   }
+
+  .formFieldRow.md\:row-cols-1 .fieldWrapper {
+    width: calc(100% - 15px);
+  }
+
+  .formFieldRow.md\:row-cols-2 .fieldWrapper {
+    width: calc(50% - 15px);
+  }
+
+  .formFieldRow.md\:row-cols-3 .fieldWrapper {
+    width: calc(33.33% - 15px);
+  }
+
+  .formFieldRow.md\:row-cols-4 .fieldWrapper {
+    width: calc(25% - 20px);
+  }
 }
 
 @media (max-width: 768px) {
@@ -65,16 +90,42 @@
   .formFieldRow.lg\:row-cols-1 .fieldWrapper {
     width: calc(100% - 15px);
   }
+
   .formFieldRow.lg\:row-cols-2 .fieldWrapper {
     width: calc(50% - 15px);
   }
+
   .formFieldRow.lg\:row-cols-3 .fieldWrapper {
     width: calc(33.33% - 15px);
   }
+
   .formFieldRow.lg\:row-cols-4 .fieldWrapper {
     width: calc(25% - 20px);
   }
+
   .formFieldRow.lg\:row-cols-5 .fieldWrapper {
+    width: calc(20% - 20px);
+  }
+}
+
+@media (min-width: 1280px) {
+  .formFieldRow.xl\:row-cols-1 .fieldWrapper {
+    width: calc(100% - 15px);
+  }
+
+  .formFieldRow.xl\:row-cols-2 .fieldWrapper {
+    width: calc(50% - 15px);
+  }
+
+  .formFieldRow.xl\:row-cols-3 .fieldWrapper {
+    width: calc(33.33% - 15px);
+  }
+
+  .formFieldRow.xl\:row-cols-4 .fieldWrapper {
+    width: calc(25% - 20px);
+  }
+
+  .formFieldRow.xl\:row-cols-5 .fieldWrapper {
     width: calc(20% - 20px);
   }
 }
