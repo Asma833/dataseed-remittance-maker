@@ -11,9 +11,11 @@ import { safeNumber, normalizeString } from '@/utils/form-helpers';
 import { useCompleteTransaction } from '../../../../hooks/useCompleteTransaction';
 import { useUpdateTransaction } from '../../../../hooks/useUpdateTransaction';
 import { CompleteTransactionRequest, TransactionDetails } from '../types/transaction.types';
+
 import { getFormDefaultValues } from './form-defaults';
 import { panelFields } from './form-validation-fields';
 import { PaymentData } from '../../../../types/payment.types';
+import { useQueryClient } from '@tanstack/react-query';
 
 type Props = {
   onCancel?: () => void;
@@ -30,6 +32,7 @@ const CreateTransactionForm = ({ onCancel, onSubmit, initialData, viewMode }: Pr
   const [latestPaymentData, setLatestPaymentData] = useState<any>(initialData?.paymentDetails);
   const [latestDealBookingId, setLatestDealBookingId] = useState<string | undefined>(initialData?.deal_booking_id);
   const navigate = useNavigate();
+  const queryClient = useQueryClient();
 
   const { mutateAsync: createTransaction } = useCompleteTransaction();
   const { mutateAsync: updateTransaction } = useUpdateTransaction();
@@ -177,8 +180,16 @@ const CreateTransactionForm = ({ onCancel, onSubmit, initialData, viewMode }: Pr
           throw new Error('Deal Booking ID is required for update');
         }
         const response = await updateTransaction({ id: transactionId, data: payload });
-        setLatestPaymentData((response as any).payment_record);
+        const updatedPaymentData = {
+          ...(response as any).payment_record,
+          transaction_id: (response as any).transaction?.transaction_id,
+        };
+        setLatestPaymentData(updatedPaymentData);
         setLatestDealBookingId((response as any).transaction.deal_booking_id);
+        
+        // Invalidate the query to fetch the latest data
+        await queryClient.invalidateQueries({ queryKey: ['deal-details', transactionId] });
+        
         form.reset(data);
       } else {
         // Create mode
@@ -188,11 +199,21 @@ const CreateTransactionForm = ({ onCancel, onSubmit, initialData, viewMode }: Pr
         const newInitialData = {
           ...data,
           deal_booking_id: (response as any).transaction.deal_booking_id,
-          paymentDetails: (response as any).payment_record,
+          paymentDetails: {
+             ...(response as any).payment_record,
+             transaction_id: (response as any).transaction?.transaction_id,
+          }
         };
         form.reset(newInitialData);
-        setLatestPaymentData((response as any).payment_record);
-        setLatestDealBookingId((response as any).transaction.deal_booking_id);
+        setLatestPaymentData(newInitialData.paymentDetails);
+        
+        const dealBookingId = (response as any).transaction.deal_booking_id;
+        setLatestDealBookingId(dealBookingId);
+
+         // Invalidate the query to fetch the latest data
+        if (dealBookingId) {
+             await queryClient.invalidateQueries({ queryKey: ['deal-details', dealBookingId] });
+        }
         setIsCreated(true);
       }
     } catch (error) {
