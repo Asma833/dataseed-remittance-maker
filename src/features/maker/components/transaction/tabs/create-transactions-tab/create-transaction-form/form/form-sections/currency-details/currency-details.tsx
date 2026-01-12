@@ -367,7 +367,10 @@ const CurrencyDetails = ({ setAccordionState, viewMode, paymentData }: CommonCre
         });
       } else {
          console.error('TCS calculation failed:', tcsData.responsemessage);
-         setValue('currencyDetails.invoiceRateTable.tcs.rate', 0);
+         setValue('currencyDetails.invoiceRateTable.tcs.rate', 0, {
+            shouldValidate: false,
+            shouldDirty: false,
+          });
       }
     }
   }, [tcsData, setValue]);

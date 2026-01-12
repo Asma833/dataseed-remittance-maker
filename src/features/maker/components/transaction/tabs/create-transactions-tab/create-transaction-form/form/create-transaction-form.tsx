@@ -1,4 +1,4 @@
-import { useMemo, useState } from 'react';
+import { useMemo, useState, useEffect } from 'react';
 import CreateTransactionsAccordion from '../components/create-transactions-accordion';
 import { accordionItems } from '../config/accordion-config';
 import { useNavigate } from 'react-router-dom';

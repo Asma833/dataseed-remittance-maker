@@ -7,7 +7,7 @@ const Transactions = () => {
   const initialData = location.state?.initialData;
 
   return (
-    <AccordionStateProvider>
+    <AccordionStateProvider key={initialData?.deal_booking_id || 'create'}>
       <CreateTransactionForm initialData={initialData} viewMode={!!initialData} />
     </AccordionStateProvider>
   );
