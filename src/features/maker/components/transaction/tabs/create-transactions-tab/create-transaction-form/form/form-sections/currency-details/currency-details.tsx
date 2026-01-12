@@ -39,7 +39,7 @@ const CurrencyDetails = ({ setAccordionState, viewMode, paymentData }: CommonCre
   const mountedRef = useRef(false);
   const navigate = useNavigate();
   const { control, trigger, setValue, reset, getValues } = useFormContext();
-  const { errors } = useFormState();
+  const { errors, isDirty, isValid } = useFormState();
   const { data: currencyRates, isLoading: currencyLoading } = useGetCurrencyRates();
 
   const fxCurrency = useWatch({ control, name: 'transactionDetails.fx_currency' });
@@ -587,7 +587,7 @@ const CurrencyDetails = ({ setAccordionState, viewMode, paymentData }: CommonCre
                   description="Are you sure you want to update this transaction?"
                   onConfirm={handleSave}
                 >
-                  <Button variant="secondary" disabled={isSaving} className="mx-2 w-24">
+                  <Button variant="secondary" disabled={isSaving || !isDirty || !isValid} className="mx-2 w-24">
                     {isSaving ? 'Updating...' : 'Update'}
                   </Button>
                 </ConfirmationAlert>
@@ -597,7 +597,7 @@ const CurrencyDetails = ({ setAccordionState, viewMode, paymentData }: CommonCre
                   description="Are you sure you want to save this transaction?"
                   onConfirm={handleSave}
                 >
-                  <Button variant="secondary" disabled={isSaving} className="mx-2 w-24">
+                  <Button variant="secondary" disabled={isSaving || !isValid} className="mx-2 w-24">
                     {isSaving ? 'Saving...' : 'Save'}
                   </Button>
                 </ConfirmationAlert>

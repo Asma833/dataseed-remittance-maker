@@ -1,4 +1,4 @@
-import { useMemo, useState, useEffect } from 'react';
+import { useMemo, useState } from 'react';
 import CreateTransactionsAccordion from '../components/create-transactions-accordion';
 import { accordionItems } from '../config/accordion-config';
 import { useNavigate } from 'react-router-dom';
@@ -175,6 +175,7 @@ const CreateTransactionForm = ({ onCancel, onSubmit, initialData, viewMode }: Pr
           throw new Error('Deal Booking ID is required for update');
         }
         const response = await updateTransaction({ id: transactionId, data: payload });
+        form.reset(data);
       } else {
         // Create mode
         const response = await createTransaction(payload);
