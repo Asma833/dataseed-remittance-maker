@@ -11,10 +11,12 @@ export default function CreateTransactionsAccordion({
   accordionItems,
   viewMode,
   paymentData,
+  dealBookingId,
 }: {
   accordionItems: AccordionItem[];
   viewMode?: boolean;
   paymentData?: any;
+  dealBookingId?: string | undefined;
 }) {
   const { accordionState, setAccordionState } = useAccordionStateProvider();
   const [expanded, setExpanded] = useState<string | false>(accordionState.currentActiveTab);
@@ -39,6 +41,7 @@ export default function CreateTransactionsAccordion({
             '&:before': { display: 'none !important', opacity: '0 !important', height: '0 !important' },
             '&.MuiAccordion-root': { border: 'none !important', boxShadow: 'none !important' },
           }}
+          TransitionProps={{ unmountOnExit: true }}
         >
           <AccordionSummary
             expandIcon={<ChevronDown />}
@@ -56,7 +59,7 @@ export default function CreateTransactionsAccordion({
           </AccordionSummary>
           <AccordionDetails className="mt-4 bg-transparent text-foreground">
             {typeof item.content === 'function' ? (
-              item.content({ setAccordionState, viewMode, paymentData })
+              item.content({ setAccordionState, viewMode, paymentData, dealBookingId })
             ) : (
               <Typography>{item.content}</Typography>
             )}

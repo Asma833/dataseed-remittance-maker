@@ -25,6 +25,7 @@ export type CommonCreateTransactionProps = {
   setAccordionState: (state: Partial<AccordionState>) => void;
   viewMode?: boolean;
   paymentData?: PaymentData;
+  dealBookingId?: string;
 };
 
 export interface InvoiceRateTable {

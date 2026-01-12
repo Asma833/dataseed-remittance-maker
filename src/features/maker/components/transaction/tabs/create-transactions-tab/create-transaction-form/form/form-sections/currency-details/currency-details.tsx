@@ -25,8 +25,9 @@ import { ConfirmationAlert } from '@/components/common/confirmation-alert';
 import { getFieldLabel } from './currency-details.utils';
 import { useAccordionStateProvider } from '../../../context/accordion-control-context';
 import { useDebounce } from '@/hooks/useDebounce';
+import { useGetDealDetails } from '@/features/maker/components/transaction/hooks/useGetPaymentDetails';
 
-const CurrencyDetails = ({ setAccordionState, viewMode, paymentData }: CommonCreateTransactionProps) => {
+const CurrencyDetails = ({ setAccordionState, viewMode, paymentData, dealBookingId }: CommonCreateTransactionProps) => {
   const { accordionState } = useAccordionStateProvider();
   const [isSaving, setIsSaving] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -39,8 +40,20 @@ const CurrencyDetails = ({ setAccordionState, viewMode, paymentData }: CommonCre
   const mountedRef = useRef(false);
   const navigate = useNavigate();
   const { control, trigger, setValue, reset, getValues } = useFormContext();
-  const { errors, isDirty, isValid } = useFormState();
+  const { errors, isDirty } = useFormState();
   const { data: currencyRates, isLoading: currencyLoading } = useGetCurrencyRates();
+
+  const { data: dealDetails, refetch: refetchDealDetails } = useGetDealDetails(dealBookingId || '');
+  
+  useEffect(() => {
+    if (dealDetails && dealDetails.paymentDetails) {
+        // Find payment record if structure matches or if dealDetails is directly useful
+         const paymentRecord = (dealDetails as any).payment_record || dealDetails.paymentDetails;
+         if(paymentRecord) {
+            setSelectedPayment(paymentRecord);
+         }
+    }
+  }, [dealDetails]);
 
   const fxCurrency = useWatch({ control, name: 'transactionDetails.fx_currency' });
   const fxAmount = useWatch({ control, name: 'transactionDetails.fx_amount' });
@@ -91,37 +104,22 @@ const CurrencyDetails = ({ setAccordionState, viewMode, paymentData }: CommonCre
   const invoiceRateTable = useWatch({ control, name: 'currencyDetails.invoiceRateTable' });
 
   // Watch specific invoiceRateTable fields to avoid infinite loops
-  const transactionValueCompanyRate = useWatch({
-    control,
-    name: 'currencyDetails.invoiceRateTable.transaction_value.company_rate',
-  });
-  const transactionValueAgentMarkUp = useWatch({
-    control,
-    name: 'currencyDetails.invoiceRateTable.transaction_value.agent_mark_up',
-  });
-  const remittanceCompanyRate = useWatch({
-    control,
-    name: 'currencyDetails.invoiceRateTable.remittance_charges.company_rate',
-  });
-  const remittanceAgentMarkUp = useWatch({
-    control,
-    name: 'currencyDetails.invoiceRateTable.remittance_charges.agent_mark_up',
-  });
-  const nostroCompanyRate = useWatch({ control, name: 'currencyDetails.invoiceRateTable.nostro_charges.company_rate' });
-  const nostroAgentMarkUp = useWatch({
-    control,
-    name: 'currencyDetails.invoiceRateTable.nostro_charges.agent_mark_up',
-  });
-  const otherCompanyRate = useWatch({ control, name: 'currencyDetails.invoiceRateTable.other_charges.company_rate' });
-  const otherAgentMarkUp = useWatch({ control, name: 'currencyDetails.invoiceRateTable.other_charges.agent_mark_up' });
-  const transactionValueRate = useWatch({ control, name: 'currencyDetails.invoiceRateTable.transaction_value.rate' });
-  const remittanceRate = useWatch({ control, name: 'currencyDetails.invoiceRateTable.remittance_charges.rate' });
-  const nostroRate = useWatch({ control, name: 'currencyDetails.invoiceRateTable.nostro_charges.rate' });
-  const otherRate = useWatch({ control, name: 'currencyDetails.invoiceRateTable.other_charges.rate' });
+  const transactionValueCompanyRate = invoiceRateTable?.transaction_value?.company_rate;
+  const transactionValueAgentMarkUp = invoiceRateTable?.transaction_value?.agent_mark_up;
+  const remittanceCompanyRate = invoiceRateTable?.remittance_charges?.company_rate;
+  const remittanceAgentMarkUp = invoiceRateTable?.remittance_charges?.agent_mark_up;
+  const nostroCompanyRate = invoiceRateTable?.nostro_charges?.company_rate;
+  const nostroAgentMarkUp = invoiceRateTable?.nostro_charges?.agent_mark_up;
+  const otherCompanyRate = invoiceRateTable?.other_charges?.company_rate;
+  const otherAgentMarkUp = invoiceRateTable?.other_charges?.agent_mark_up;
+  const transactionValueRate = invoiceRateTable?.transaction_value?.rate;
+  const remittanceRate = invoiceRateTable?.remittance_charges?.rate;
+  const nostroRate = invoiceRateTable?.nostro_charges?.rate;
+  const otherRate = invoiceRateTable?.other_charges?.rate;
 
-  const gstAmount = useWatch({ control, name: 'currencyDetails.invoiceRateTable.gst_amount.rate' });
-  const tcsAmount = useWatch({ control, name: 'currencyDetails.invoiceRateTable.tcs.rate' });
-  const totalInrAmount = useWatch({ control, name: 'currencyDetails.invoiceRateTable.total_inr_amount.rate' });
+  const gstAmount = invoiceRateTable?.gst_amount?.rate;
+  const tcsAmount = invoiceRateTable?.tcs?.rate;
+  const totalInrAmount = invoiceRateTable?.total_inr_amount?.rate;
 
   const selectedNostroType = useWatch({ control, name: 'transactionDetails.nostro_charges' });
 
@@ -428,6 +426,9 @@ const CurrencyDetails = ({ setAccordionState, viewMode, paymentData }: CommonCre
         id: paymentRecordId || selectedPayment.id,
         file,
       });
+
+      // Refetch transaction data to get updated payment info
+      await refetchDealDetails?.();
     }
   };
 
@@ -587,7 +588,7 @@ const CurrencyDetails = ({ setAccordionState, viewMode, paymentData }: CommonCre
                   description="Are you sure you want to update this transaction?"
                   onConfirm={handleSave}
                 >
-                  <Button variant="secondary" disabled={isSaving || !isDirty || !isValid} className="mx-2 w-24">
+                  <Button variant="secondary" disabled={isSaving || !isDirty} className="mx-2 w-24">
                     {isSaving ? 'Updating...' : 'Update'}
                   </Button>
                 </ConfirmationAlert>
@@ -597,7 +598,7 @@ const CurrencyDetails = ({ setAccordionState, viewMode, paymentData }: CommonCre
                   description="Are you sure you want to save this transaction?"
                   onConfirm={handleSave}
                 >
-                  <Button variant="secondary" disabled={isSaving || !isValid} className="mx-2 w-24">
+                  <Button variant="secondary" disabled={isSaving} className="mx-2 w-24">
                     {isSaving ? 'Saving...' : 'Save'}
                   </Button>
                 </ConfirmationAlert>

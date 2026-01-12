@@ -27,6 +27,8 @@ const CreateTransactionForm = ({ onCancel, onSubmit, initialData, viewMode }: Pr
   const currentTab = accordionState.currentActiveTab;
   const [isCreated, setIsCreated] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [latestPaymentData, setLatestPaymentData] = useState<any>(initialData?.paymentDetails);
+  const [latestDealBookingId, setLatestDealBookingId] = useState<string | undefined>(initialData?.deal_booking_id);
   const navigate = useNavigate();
 
   const { mutateAsync: createTransaction } = useCompleteTransaction();
@@ -43,7 +45,7 @@ const CreateTransactionForm = ({ onCancel, onSubmit, initialData, viewMode }: Pr
   const form = useForm<CreateTransactionFormInput, unknown, CreateTransactionFormData>({
     resolver: zodResolver(createTransactionSchema),
     defaultValues,
-    mode: 'onChange', // Trigger validation on change
+    mode: 'onChange', // Trigger validation on blur for better performance
   });
 
   const handlePrevious = () => {
@@ -175,6 +177,8 @@ const CreateTransactionForm = ({ onCancel, onSubmit, initialData, viewMode }: Pr
           throw new Error('Deal Booking ID is required for update');
         }
         const response = await updateTransaction({ id: transactionId, data: payload });
+        setLatestPaymentData((response as any).payment_record);
+        setLatestDealBookingId((response as any).transaction.deal_booking_id);
         form.reset(data);
       } else {
         // Create mode
@@ -187,6 +191,8 @@ const CreateTransactionForm = ({ onCancel, onSubmit, initialData, viewMode }: Pr
           paymentDetails: (response as any).payment_record,
         };
         form.reset(newInitialData);
+        setLatestPaymentData((response as any).payment_record);
+        setLatestDealBookingId((response as any).transaction.deal_booking_id);
         setIsCreated(true);
       }
     } catch (error) {
@@ -224,7 +230,8 @@ const CreateTransactionForm = ({ onCancel, onSubmit, initialData, viewMode }: Pr
           <CreateTransactionsAccordion
             accordionItems={accordionItems}
             viewMode={viewMode || isCreated}
-            {...(initialData?.paymentDetails ? { paymentData: initialData.paymentDetails } : {})}
+            {...(latestPaymentData ? { paymentData: latestPaymentData } : {})}
+            dealBookingId={latestDealBookingId}
           />
         </div>
       </form>
