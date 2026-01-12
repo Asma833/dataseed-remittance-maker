@@ -1,4 +1,5 @@
-import { useMemo, useState } from 'react';
+import { useMemo, useState, useEffect } from 'react';
+import { useLocation } from 'react-router-dom';
 import KYCTable from './table/kyc-table';
 import KYCForm from './form/kyc-form';
 import RejectionTable from './table/rejection-table';
@@ -42,11 +43,24 @@ const KYCUpload = () => {
     });
   }, [rejectionSumData]);
 
+
+  const location = useLocation();
+
   const handleUploadClick = (reupload: boolean, transaction: DealsResponseTransaction) => {
     setIsReupload(reupload);
     setTransaction(transaction);
     setShowForm(true);
   };
+
+  useEffect(() => {
+    if (location.state?.transaction) {
+      setTransaction(location.state.transaction);
+      setShowForm(true);
+      // Clear state to prevent reopening on generic re-renders (optional, but good practice if using replace)
+      window.history.replaceState({}, document.title);
+    }
+  }, [location.state]);
+
 
   return (
     <>

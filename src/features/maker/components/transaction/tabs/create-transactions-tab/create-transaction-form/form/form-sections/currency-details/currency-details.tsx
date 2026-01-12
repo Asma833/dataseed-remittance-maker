@@ -26,6 +26,7 @@ import { getFieldLabel } from './currency-details.utils';
 import { useAccordionStateProvider } from '../../../context/accordion-control-context';
 import { useDebounce } from '@/hooks/useDebounce';
 import { useGetDealDetails } from '@/features/maker/components/transaction/hooks/useGetPaymentDetails';
+import { KycSelectionDialog } from './kyc-selection-dialog';
 
 const CurrencyDetails = ({ setAccordionState, viewMode, paymentData, dealBookingId }: CommonCreateTransactionProps) => {
   const { accordionState } = useAccordionStateProvider();
@@ -37,6 +38,7 @@ const CurrencyDetails = ({ setAccordionState, viewMode, paymentData, dealBooking
   const [modalTitle, setModalTitle] = useState('');
   const [localFile, setLocalFile] = useState<File | null>(null);
   const [isPdf, setIsPdf] = useState(false);
+  const [isKycDialogOpen, setIsKycDialogOpen] = useState(false);
   const mountedRef = useRef(false);
   const navigate = useNavigate();
   const { control, trigger, setValue, reset, getValues } = useFormContext();
@@ -612,11 +614,14 @@ const CurrencyDetails = ({ setAccordionState, viewMode, paymentData, dealBooking
                   onConfirm={handleShareTransactionDetails}
                 >
                   <Button type="button" variant="secondary" className="mr-2">
-                    Share Transaction Details PDF
+                    Share Transaction Details
                   </Button>
                 </ConfirmationAlert>
-                <Button type="button" onClick={handlePayment} variant="secondary">
-                  Payment
+                <Button type="button" onClick={handlePayment} variant="secondary" className="mr-2">
+                  Offline Bank Transfer
+                </Button>
+                 <Button type="button" onClick={() => setIsKycDialogOpen(true)} variant="secondary" className="mr-2">
+                  KYC Upload
                 </Button>
               </>
             )}
@@ -645,6 +650,32 @@ const CurrencyDetails = ({ setAccordionState, viewMode, paymentData, dealBooking
         imageSrc={modalImageSrc}
         title={modalTitle}
         isPdf={isPdf}
+      />
+      <KycSelectionDialog
+        open={isKycDialogOpen}
+        onOpenChange={setIsKycDialogOpen}
+        transactionRefNo={
+          selectedPayment?.ref_no ||
+          paymentData?.ref_no ||
+          dealDetails?.transaction?.transaction_id ||
+          dealDetails?.transactionDetails?.company_reference_number ||
+          ''
+        }
+        onShareLink={(url) => {
+            console.log('Sharing link:', url);
+            toast.success('Link shared successfully');
+            setIsKycDialogOpen(false);
+        }}
+
+        onUploadNow={() => {
+            const transactionToPass = paymentData?.raw_data?.transaction;
+            if (transactionToPass) {
+                navigate('/branch_agent_maker/transaction/kyc', { state: { transaction: transactionToPass } });
+            } else {
+                 navigate('/branch_agent_maker/transaction/kyc');
+            }
+             setIsKycDialogOpen(false);
+        }}
       />
     </>
   );

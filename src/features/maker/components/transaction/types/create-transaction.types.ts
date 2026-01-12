@@ -159,4 +159,7 @@ export interface DealDetailsApiResponse {
   paymentDetails: {
     payment_method: string;
   };
+  transaction?: {
+    transaction_id: string;
+  };
 }
