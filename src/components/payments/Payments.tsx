@@ -63,11 +63,11 @@ const Payments = ({
     }
   };
   return (
-    <div className="space-y-0 overflow-hidden">
-      {data && <div className="font-medium text-sm text-gray-600 pb-2 truncate">Transaction Id: {data.transaction_id}</div>}
+    <div className="space-y-0 overflow-hidden pt-3">
+
       <div className="text-md font-semibold truncate">Offline bank transfer</div>
-      <p className="text-sm my-0 text-gray-400">Please upload screen shot for offline bank transfer</p>
-      <hr className="text-gray-400" />
+      <p className="text-sm my-0 text-gray-400 border-b border-gray-200 pb-2">Please upload screen shot for offline bank transfer</p>
+
       <FormProvider {...methods}>
         <FormContentWrapper className="rounded-lg w-full mr-auto bg-transparent">
           <Spacer>
@@ -93,7 +93,7 @@ const Payments = ({
                   })}
                 </FormFieldRow>
               </div>
-              <div className={`flex ${errors?.fileUpload ? 'items-start pt-2 h-fit' : 'items-center'}`}>
+              <div className={`flex ${errors?.fileUpload ? 'items-start pt-2 h-fit' : 'items-center pt-2'}`}>
                 <Button
                   type="button"
                   variant="ghost"
@@ -110,7 +110,7 @@ const Payments = ({
                   title="View Payment Screenshot"
                   disabled={!fileUpload || (!fileUpload[0]?.file && !data?.payment_challan_url)}
                 >
-                  <Eye className="h-5 w-5 text-gray-500 hover:text-primary" />
+                  <Eye className="h-8 w-8 text-gray-500 hover:text-primary" />
                 </Button>
               </div>
             </div>
@@ -118,7 +118,7 @@ const Payments = ({
               <Button type="button" onClick={() => setIsOpen(false)} variant="light" className="px-5">
                 Cancel
               </Button>
-              <Button type="button" onClick={handleSubmit(submit)} variant="secondary" className="px-5">
+              <Button type="button" onClick={handleSubmit(submit)} variant="secondary" className="px-5" disabled={!!data?.payment_challan_url || !!data?.dataValues?.payment_challan_url}>
                 Submit
               </Button>
             </div>

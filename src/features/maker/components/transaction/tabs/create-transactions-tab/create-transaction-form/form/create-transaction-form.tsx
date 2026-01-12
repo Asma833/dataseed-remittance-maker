@@ -29,7 +29,27 @@ const CreateTransactionForm = ({ onCancel, onSubmit, initialData, viewMode }: Pr
   const currentTab = accordionState.currentActiveTab;
   const [isCreated, setIsCreated] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const [latestPaymentData, setLatestPaymentData] = useState<any>(initialData?.paymentDetails);
+  const [latestPaymentData, setLatestPaymentData] = useState<any>(() => {
+    if (!initialData?.paymentDetails) return undefined;
+    
+    // Normalize initial payment data for view mode
+    const paymentRec = initialData.paymentDetails;
+    const transactionId = (initialData as any).transaction?.transaction_id || 
+                          (initialData as any).transactionDetails?.transaction_id || 
+                          (initialData as any).deal_booking_id; // Fallback
+
+    return {
+       ...paymentRec,
+       ...(paymentRec.dataValues || {}),
+       transaction_id: transactionId,
+       raw_data: {
+           transaction: (initialData as any).transaction || (initialData as any).transactionDetails,
+           deal: {
+               payment_records: [paymentRec]
+           }
+       }
+    };
+  });
   const [latestDealBookingId, setLatestDealBookingId] = useState<string | undefined>(initialData?.deal_booking_id);
   const navigate = useNavigate();
   const queryClient = useQueryClient();
@@ -180,9 +200,17 @@ const CreateTransactionForm = ({ onCancel, onSubmit, initialData, viewMode }: Pr
           throw new Error('Deal Booking ID is required for update');
         }
         const response = await updateTransaction({ id: transactionId, data: payload });
+        const rawPaymentRecord = (response as any).payment_record;
         const updatedPaymentData = {
-          ...(response as any).payment_record,
+          ...rawPaymentRecord,
+          ...(rawPaymentRecord?.dataValues || {}), // Flatten dataValues if present
           transaction_id: (response as any).transaction?.transaction_id,
+          raw_data: {
+             transaction: (response as any).transaction,
+              deal: {
+                payment_records: [rawPaymentRecord]
+             }
+          }
         };
         setLatestPaymentData(updatedPaymentData);
         setLatestDealBookingId((response as any).transaction.deal_booking_id);
@@ -195,13 +223,22 @@ const CreateTransactionForm = ({ onCancel, onSubmit, initialData, viewMode }: Pr
         // Create mode
         const response = await createTransaction(payload);
         
+        const rawPaymentRecord = (response as any).payment_record;
         // Construct initialData for view mode from response and current form data
         const newInitialData = {
           ...data,
           deal_booking_id: (response as any).transaction.deal_booking_id,
           paymentDetails: {
-             ...(response as any).payment_record,
+             ...rawPaymentRecord,
+             ...(rawPaymentRecord?.dataValues || {}), // Flatten dataValues if present
              transaction_id: (response as any).transaction?.transaction_id,
+             // Add raw_data structure to mimic DealDetailsApiResponse/PaymentData structure expected by CurrencyDetails
+             raw_data: {
+                 transaction: (response as any).transaction,
+                 deal: {
+                    payment_records: [rawPaymentRecord]
+                 }
+             }
           }
         };
         form.reset(newInitialData);

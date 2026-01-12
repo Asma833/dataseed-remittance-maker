@@ -40,29 +40,28 @@ export function KycSelectionDialog({
       <DialogContent className="sm:max-w-[500px] p-0 overflow-hidden gap-0">
         <div className="flex justify-between items-start p-6 pb-2">
             <div>
-                 <DialogTitle className="text-xl font-normal text-gray-900">Order is generated</DialogTitle>
+                 <DialogTitle >Order is generated</DialogTitle>
                  <p className="text-sm text-gray-500 mt-1">Tnx Reference No - {transactionRefNo}</p>
             </div>
             {/* Close button is automatically added by DialogContent usually, but matching specific design if needed */}
         </div>
         
-        <div className="px-6 py-4">
+        <div className="px-6 pb-4">
           <h3 className="font-semibold text-lg mb-2">KYC</h3>
-          <p className="text-sm text-gray-500 mb-4">Please select KYC Type</p>
-
+          <p className="text-sm text-gray-500 mb-4 border-b border-gray-200 pb-2">Please select KYC Type</p>
           <RadioGroup value={kycType} onValueChange={(v) => setKycType(v as 'online' | 'upload')} className="flex gap-6 mb-6">
             <div className="flex items-center space-x-2">
               <RadioGroupItem value="online" id="online" className="peer sr-only" disabled />
               <Label
                 htmlFor="online"
                 className={cn(
-                  "flex items-center gap-2 cursor-pointer text-gray-600 font-normal opacity-50 cursor-not-allowed",
-                   kycType === 'online' && "text-primary font-medium"
+                  "flex items-center gap-2 cursor-pointer text-black font-normal opacity-50 cursor-not-allowed",
+                   kycType === 'online' && "font-medium"
                 )}
               >
                 <div className={cn(
                     "w-5 h-5 rounded-full border border-gray-300 flex items-center justify-center",
-                    kycType === 'online' && "bg-[#5D2E8E] border-[#5D2E8E]"
+                    kycType === 'online' && "bg-primary border-primary"
                 )}>
                     {kycType === 'online' && <Check className="w-3 h-3 text-white" />}
                 </div>
@@ -75,13 +74,13 @@ export function KycSelectionDialog({
               <Label
                 htmlFor="upload"
                 className={cn(
-                  "flex items-center gap-2 cursor-pointer text-gray-600 font-normal",
-                   kycType === 'upload' && "text-primary font-medium"
+                  "flex items-center gap-2 cursor-pointer text-black font-normal",
+                   kycType === 'upload' && "font-medium"
                 )}
               >
                   <div className={cn(
                     "w-5 h-5 rounded-full border border-gray-300 flex items-center justify-center",
-                    kycType === 'upload' && "bg-[#5D2E8E] border-[#5D2E8E]"
+                    kycType === 'upload' && "bg-primary border-primary"
                 )}>
                     {kycType === 'upload' && <Check className="w-3 h-3 text-white" />}
                 </div>
@@ -105,10 +104,11 @@ export function KycSelectionDialog({
 
         <div className="flex justify-center p-6 pt-0">
           <Button 
-            className="bg-[#D81B60] hover:bg-[#ad144d] text-white rounded-md px-8 h-10 w-32"
+            className="hover:bg-[#ad144d] text-white rounded-md px-8 h-10 w-32"
+            variant="secondary"
             onClick={handleShare}
           >
-            {kycType === 'online' ? 'Share Link' : 'Proceed'}
+            {kycType === 'online' ? 'Share Link' : 'Upload Document'}
           </Button>
         </div>
       </DialogContent>

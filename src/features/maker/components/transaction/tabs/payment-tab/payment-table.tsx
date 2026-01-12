@@ -121,7 +121,7 @@ const PaymentStatus = () => {
       <DataTable columns={tableColumns} data={mappedData ?? []} config={tableConfig} actions={tableActions} />
       {isModalOpen && selectedPayment && (
         <DialogWrapper
-          title="Upload Payment Screen Shot"
+          title="Order is generated"
           isOpen={isModalOpen}
           setIsOpen={setIsModalOpen}
           showCloseButton={false}
@@ -135,7 +135,8 @@ const PaymentStatus = () => {
               onViewLocalFile={handleViewLocalFile}
             />
           }
-          className="md:max-w-[40%]"
+          description={`Tnx Reference No - ${selectedPayment?.transaction_id || ''}`}
+          className="md:max-w-[40%] gap-0 [&_[data-slot=alert-dialog-header]]:text-left"
         />
       )}
        <ImageViewModal
