@@ -54,7 +54,9 @@ const KYCUpload = () => {
 
   useEffect(() => {
     if (location.state?.transaction) {
-      setTransaction(location.state.transaction);
+      console.log('transaction', location.state.transaction);
+      const transaction = location.state.transaction.deal.payment_records[0].raw_data.transaction
+      setTransaction(transaction);
       setShowForm(true);
       // Clear state to prevent reopening on generic re-renders (optional, but good practice if using replace)
       window.history.replaceState({}, document.title);

@@ -172,19 +172,43 @@ const KYCForm = ({
     handleSubmit,
     control,
     reset,
+    getValues,
     formState: { errors },
   } = methods;
 
+  // Extract stable values for dependencies
+  const transactionId = transaction?.id;
+  const companyRef = transaction?.company_ref_number;
+  const agentRef = transaction?.agent_ref_number;
+  const applicantName = transaction?.kyc_details?.applicant_name;
+
   useEffect(() => {
-    if (transaction) {
-      reset({
-        company_reference_number: transaction.company_ref_number || '',
-        agent_reference_number: transaction.agent_ref_number || '',
-        applicant_name: transaction.kyc_details?.applicant_name || '',
+    if (transactionId) {
+      const newValues = {
+        company_reference_number: companyRef || '',
+        agent_reference_number: agentRef || '',
+        applicant_name: applicantName || '',
         ...documentDefaultValues,
-      } as any);
+      };
+
+      const currentValues = getValues();
+      
+      // Perform a check to avoid unnecessary resets (which cause infinite loops)
+      // We check specific fields because getValues() might return more data or structure diffs
+      const isDifferent = 
+          currentValues.company_reference_number !== newValues.company_reference_number ||
+          currentValues.agent_reference_number !== newValues.agent_reference_number ||
+          currentValues.applicant_name !== newValues.applicant_name ||
+          JSON.stringify(documentDefaultValues) !== JSON.stringify(Object.fromEntries(Object.entries(currentValues).filter(([k]) => k.startsWith('document_'))));
+
+      // Fallback: simplified deep compare if the above specific check is too complex to maintain
+      // const deepDifferent = JSON.stringify(currentValues) !== JSON.stringify({ ...currentValues, ...newValues });
+      
+      if (isDifferent) {
+         reset(newValues as any);
+      }
     }
-  }, [transaction, reset, documentDefaultValues]);
+  }, [transactionId, companyRef, agentRef, applicantName, documentDefaultValues, reset, getValues]);
 
   const queryClient = useQueryClient();
 

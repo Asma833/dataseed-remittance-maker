@@ -57,6 +57,8 @@ const CurrencyDetails = ({ setAccordionState, viewMode, paymentData, dealBooking
     }
   }, [dealDetails]);
 
+  console.log('selectedPayment', selectedPayment);
+
   const fxCurrency = useWatch({ control, name: 'transactionDetails.fx_currency' });
   const fxAmount = useWatch({ control, name: 'transactionDetails.fx_amount' });
   const transactionAmount = useWatch({ control, name: 'currencyDetails.invoiceRateTable.transaction_amount.rate' });
@@ -628,11 +630,17 @@ const CurrencyDetails = ({ setAccordionState, viewMode, paymentData, dealBooking
           </div>
         </div>
       </Spacer>
-      <GenericDialog open={isModalOpen} onOpenChange={setIsModalOpen} title="Payment" contentClassName="md:w-[40vw]">
+      <GenericDialog 
+        open={isModalOpen} 
+        onOpenChange={setIsModalOpen} 
+        title="Order is generated" 
+        description={`Tnx Reference No - ${dealDetails?.transaction?.transaction_id || (dealDetails?.transactionDetails as any)?.transaction_id || ''}`}
+        contentClassName="md:w-[40vw] gap-0 [&>div:first-child]:!text-left"
+      >
         <Payments
           setIsOpen={setIsModalOpen}
           uploadScreen={false}
-          data={selectedPayment}
+          data={selectedPayment || paymentData}
           onSubmit={handleUploadSubmit}
           onViewScreenshot={handleViewScreenshot}
           onViewLocalFile={handleViewLocalFile}
@@ -655,10 +663,8 @@ const CurrencyDetails = ({ setAccordionState, viewMode, paymentData, dealBooking
         open={isKycDialogOpen}
         onOpenChange={setIsKycDialogOpen}
         transactionRefNo={
-          selectedPayment?.ref_no ||
-          paymentData?.ref_no ||
           dealDetails?.transaction?.transaction_id ||
-          dealDetails?.transactionDetails?.company_reference_number ||
+          (dealDetails?.transactionDetails as any)?.transaction_id ||
           ''
         }
         onShareLink={(url) => {
@@ -668,8 +674,10 @@ const CurrencyDetails = ({ setAccordionState, viewMode, paymentData, dealBooking
         }}
 
         onUploadNow={() => {
-            const transactionToPass = paymentData?.raw_data?.transaction;
+            const transactionToPass = paymentData?.raw_data;
+            //const dealBookingId = paymentData?.dataValues?.deal_booking_id;
             if (transactionToPass) {
+              // console.log('transactionToPass', transactionToPass);
                 navigate('/branch_agent_maker/transaction/kyc', { state: { transaction: transactionToPass } });
             } else {
                  navigate('/branch_agent_maker/transaction/kyc');
