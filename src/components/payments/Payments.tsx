@@ -118,7 +118,7 @@ const Payments = ({
               <Button type="button" onClick={() => setIsOpen(false)} variant="light" className="px-5">
                 Cancel
               </Button>
-              <Button type="button" onClick={handleSubmit(submit)} variant="secondary" className="px-5" >
+              <Button type="button" onClick={handleSubmit(submit)} variant="secondary" className="px-5" disabled={!!data?.payment_challan_url && !fileUpload?.[0]?.file}>
                 Submit
               </Button>
             </div>
