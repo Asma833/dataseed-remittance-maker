@@ -49,8 +49,11 @@ const KYCForm = ({
   const [modalTitle, setModalTitle] = useState('');
   const [isPdf, setIsPdf] = useState(false);
 
+  const [localPreviews, setLocalPreviews] = useState<Record<string, { url: string; isPdf: boolean }>>({});
+  const queryClient = useQueryClient();
+
   const handleUploadOnFileChange = useCallback(
-    async ({ file, documentId }: { file: File; documentId: string }) => {
+    async ({ file, documentId, fieldKey }: { file: File; documentId: string; fieldKey?: string }) => {
       const transactionId = transaction?.id || transaction?.transaction_id;
       if (!transactionId) {
         toast.error('Missing transaction id. Please reopen the KYC upload form from the table.');
@@ -64,7 +67,16 @@ const KYCForm = ({
           document_id: documentId,
           remarks: '',
         });
-        toast.success('Document uploaded successfully');
+        
+        // Update local preview
+        if (fieldKey) {
+            const url = URL.createObjectURL(file);
+            const isPdf = file.type === 'application/pdf';
+            setLocalPreviews(prev => ({ ...prev, [fieldKey]: { url, isPdf } }));
+        }
+
+       // toast.success('Document uploaded successfully');
+
       } catch (error: any) {
         console.error('KYC document upload failed:', error);
         toast.error(
@@ -73,7 +85,7 @@ const KYCForm = ({
         );
       }
     },
-    [transaction?.id, transaction?.transaction_id]
+    [transaction?.id, transaction?.transaction_id, transaction?.transaction_purpose_map_id, queryClient]
   );
 
   const handleViewDocument = async (s3Key: string, documentName: string) => {
@@ -106,32 +118,72 @@ const KYCForm = ({
       const documentId = doc.document_id || doc.id;
 
       if (doc.is_back_required) {
+        const frontFieldName = `document_${documentId}_front`;
+        const backFieldName = `document_${documentId}_back`;
+
         return [
           {
-            name: `document_${documentId}_front`,
+            name: frontFieldName,
             label: `${label} (Front)`,
             ...base,
-            onFileSelected: (file: File) => handleUploadOnFileChange({ file, documentId }),
+            onView: (doc.document_url || localPreviews[frontFieldName]) 
+                ? () => {
+                   if (localPreviews[frontFieldName]) {
+                      setModalImageSrc(localPreviews[frontFieldName].url);
+                      setIsPdf(localPreviews[frontFieldName].isPdf);
+                      setModalTitle(`${label} (Front)`);
+                      setIsImageModalOpen(true);
+                   } else if (doc.document_url) {
+                       handleViewDocument(doc.document_url, `${label} (Front)`);
+                   }
+                }
+                : undefined,
+            onFileSelected: (file: File) => handleUploadOnFileChange({ file, documentId, fieldKey: frontFieldName }),
           },
           {
-            name: `document_${documentId}_back`,
+            name: backFieldName,
             label: `${label} (Back)`,
             ...base,
-            onFileSelected: (file: File) => handleUploadOnFileChange({ file, documentId }),
+            onView: (doc.document_url || localPreviews[backFieldName]) 
+                ? () => {
+                   if (localPreviews[backFieldName]) {
+                      setModalImageSrc(localPreviews[backFieldName].url);
+                      setIsPdf(localPreviews[backFieldName].isPdf);
+                      setModalTitle(`${label} (Back)`);
+                      setIsImageModalOpen(true);
+                   } else if (doc.document_url) {
+                       handleViewDocument(doc.document_url, `${label} (Back)`);
+                   }
+                }
+                : undefined,
+            onFileSelected: (file: File) => handleUploadOnFileChange({ file, documentId, fieldKey: backFieldName }),
           },
         ];
       }
 
+      const fieldName = `document_${documentId}`;
       return [
         {
-          name: `document_${documentId}`,
+          name: fieldName,
           label,
           ...base,
-          onFileSelected: (file: File) => handleUploadOnFileChange({ file, documentId }),
+          onView: (doc.document_url || localPreviews[fieldName]) 
+                ? () => {
+                   if (localPreviews[fieldName]) {
+                      setModalImageSrc(localPreviews[fieldName].url);
+                      setIsPdf(localPreviews[fieldName].isPdf);
+                      setModalTitle(label);
+                      setIsImageModalOpen(true);
+                   } else if (doc.document_url) {
+                       handleViewDocument(doc.document_url, label);
+                   }
+                }
+                : undefined,
+          onFileSelected: (file: File) => handleUploadOnFileChange({ file, documentId, fieldKey: fieldName }),
         },
       ];
     });
-  }, [documentTypes, handleUploadOnFileChange, handleViewDocument]);
+  }, [documentTypes, handleUploadOnFileChange, handleViewDocument, localPreviews]);
 
   // Prepare default values for document fields with existing URLs
   const documentDefaultValues = useMemo(() => {
@@ -211,7 +263,7 @@ const KYCForm = ({
     }
   }, [transactionId, companyRef, agentRef, applicantName, documentDefaultValues, reset, getValues]);
 
-  const queryClient = useQueryClient();
+
 
   const handleKycSubmit = handleSubmit(
     async (formdata: FieldValues) => {
