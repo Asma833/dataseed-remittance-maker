@@ -34,6 +34,12 @@ const CreateTransactionForm = ({ onCancel, onSubmit, initialData, viewMode }: Pr
     
     // Normalize initial payment data for view mode
     const paymentRec = initialData.paymentDetails;
+
+    // If raw_data already exists (e.g. passed from table view), preserve it
+    if ((paymentRec as any).raw_data) {
+        return paymentRec;
+    }
+
     const transactionId = (initialData as any).transaction?.transaction_id || 
                           (initialData as any).transactionDetails?.transaction_id || 
                           (initialData as any).deal_booking_id; // Fallback

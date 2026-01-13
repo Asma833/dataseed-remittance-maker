@@ -617,12 +617,12 @@ const CurrencyDetails = ({ setAccordionState, viewMode, paymentData, dealBooking
                     Share Transaction Details
                   </Button>
                 </ConfirmationAlert>
-                {/* <Button type="button" onClick={handlePayment} variant="secondary" className="mr-2">
+                <Button type="button" onClick={handlePayment} variant="secondary" className="mr-2">
                   Offline Bank Transfer
                 </Button>
                  <Button type="button" onClick={() => setIsKycDialogOpen(true)} variant="secondary" className="mr-2">
                   KYC Upload
-                </Button> */}
+                </Button>
               </>
             )}
           </div>
@@ -671,10 +671,19 @@ const CurrencyDetails = ({ setAccordionState, viewMode, paymentData, dealBooking
         }}
 
         onUploadNow={() => {
-            const transactionToPass = paymentData?.raw_data;
-            //const dealBookingId = paymentData?.dataValues?.deal_booking_id;
+            let transactionToPass: any = paymentData?.raw_data;
+
+            if (!transactionToPass) {
+                 if (dealDetails?.transaction) {
+                    transactionToPass = dealDetails.transaction;
+                 } else if ((dealDetails as any)?.transactionDetails) {
+                    transactionToPass = (dealDetails as any).transactionDetails;
+                 } else {
+                    transactionToPass = paymentData;
+                 }
+            }
+            
             if (transactionToPass) {
-              // console.log('transactionToPass', transactionToPass);
                 navigate('/branch_agent_maker/transaction/kyc', { state: { transaction: transactionToPass } });
             } else {
                  navigate('/branch_agent_maker/transaction/kyc');

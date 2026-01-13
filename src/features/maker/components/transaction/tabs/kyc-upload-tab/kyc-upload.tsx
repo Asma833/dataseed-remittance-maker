@@ -54,7 +54,15 @@ const KYCUpload = () => {
 
   useEffect(() => {
     if (location.state?.transaction) {
-      const transaction = location.state.transaction.deal.payment_records[0].raw_data.transaction
+      const stateTransaction = location.state.transaction;
+      // Handle legacy deep nesting if present, otherwise assume it's the transaction object directly
+      let transaction = stateTransaction;
+      if (stateTransaction?.deal?.payment_records?.[0]?.raw_data?.transaction) {
+         transaction = stateTransaction.deal.payment_records[0].raw_data.transaction;
+      } else if (stateTransaction?.transaction) {
+          // If transaction is nested directly (e.g. wrapper object)
+          transaction = stateTransaction.transaction;
+      }
       setTransaction(transaction);
       setShowForm(true);
       // Clear state to prevent reopening on generic re-renders (optional, but good practice if using replace)

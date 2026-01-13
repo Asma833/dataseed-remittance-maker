@@ -37,7 +37,7 @@ const KYCForm = ({
 }) => {
   const { data: mappedDocumentsResponse, isLoading: loading } = useGetMappedDocuments(
     transaction?.transaction_purpose_map_id,
-    transaction?.id
+    transaction?.id || transaction?.transaction_id
   );
 
   const documentTypes: MappedDocument[] = mappedDocumentsResponse || [];
@@ -51,7 +51,8 @@ const KYCForm = ({
 
   const handleUploadOnFileChange = useCallback(
     async ({ file, documentId }: { file: File; documentId: string }) => {
-      if (!transaction?.id) {
+      const transactionId = transaction?.id || transaction?.transaction_id;
+      if (!transactionId) {
         toast.error('Missing transaction id. Please reopen the KYC upload form from the table.');
         return;
       }
@@ -59,7 +60,7 @@ const KYCForm = ({
       try {
         await uploadTransactionDocument({
           file,
-          transaction_id: transaction.id,
+          transaction_id: transactionId,
           document_id: documentId,
           remarks: '',
         });
@@ -72,7 +73,7 @@ const KYCForm = ({
         );
       }
     },
-    [transaction?.id]
+    [transaction?.id, transaction?.transaction_id]
   );
 
   const handleViewDocument = async (s3Key: string, documentName: string) => {
@@ -177,7 +178,7 @@ const KYCForm = ({
   } = methods;
 
   // Extract stable values for dependencies
-  const transactionId = transaction?.id;
+  const transactionId = transaction?.id || transaction?.transaction_id;
   const companyRef = transaction?.company_ref_number;
   const agentRef = transaction?.agent_ref_number;
   const applicantName = transaction?.kyc_details?.applicant_name;
@@ -216,7 +217,7 @@ const KYCForm = ({
     async (formdata: FieldValues) => {
       toast.success('KYC documents submitted successfully');
       await queryClient.invalidateQueries({
-        queryKey: ['mapped-documents', transaction?.transaction_purpose_map_id, transaction?.id],
+        queryKey: ['mapped-documents', transaction?.transaction_purpose_map_id, transaction?.id || transaction?.transaction_id],
       });
       if (onSuccess) {
         onSuccess();
@@ -284,7 +285,7 @@ const KYCForm = ({
               </div>
             ) : (
               <div className="border-dotted border-2 border-gray-300 p-5 bg-gray-100">
-                No documents found for transaction id {transaction?.id}.
+                No documents found for transaction id {transaction?.id || transaction?.transaction_id}.
               </div>
             )}
           </Spacer>
