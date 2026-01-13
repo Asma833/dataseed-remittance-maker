@@ -40,7 +40,7 @@ const CreateTransactionForm = ({ onCancel, onSubmit, initialData, viewMode }: Pr
 
     return {
        ...paymentRec,
-       ...(paymentRec.dataValues || {}),
+       ...(paymentRec|| {}),
        transaction_id: transactionId,
        raw_data: {
            transaction: (initialData as any).transaction || (initialData as any).transactionDetails,
@@ -203,7 +203,7 @@ const CreateTransactionForm = ({ onCancel, onSubmit, initialData, viewMode }: Pr
         const rawPaymentRecord = (response as any).payment_record;
         const updatedPaymentData = {
           ...rawPaymentRecord,
-          ...(rawPaymentRecord?.dataValues || {}), // Flatten dataValues if present
+          ...(rawPaymentRecord || {}), // Flatten dataValues if present
           transaction_id: (response as any).transaction?.transaction_id,
           raw_data: {
              transaction: (response as any).transaction,
@@ -230,7 +230,7 @@ const CreateTransactionForm = ({ onCancel, onSubmit, initialData, viewMode }: Pr
           deal_booking_id: (response as any).transaction.deal_booking_id,
           paymentDetails: {
              ...rawPaymentRecord,
-             ...(rawPaymentRecord?.dataValues || {}), // Flatten dataValues if present
+             ...(rawPaymentRecord || {}), // Flatten dataValues if present
              transaction_id: (response as any).transaction?.transaction_id,
              // Add raw_data structure to mimic DealDetailsApiResponse/PaymentData structure expected by CurrencyDetails
              raw_data: {

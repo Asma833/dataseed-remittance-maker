@@ -157,9 +157,7 @@ export interface PaymentData {
     deal: AllTransaction;
     transaction: Transaction;
   };
-  dataValues?: {
-      payment_challan_url?: string | null;
-  };
+
 }
 
 export interface UploadPaymentChallanRequest {

@@ -42,7 +42,7 @@ const CurrencyDetails = ({ setAccordionState, viewMode, paymentData, dealBooking
   const mountedRef = useRef(false);
   const navigate = useNavigate();
   const { control, trigger, setValue, reset, getValues } = useFormContext();
-  const { errors, isDirty } = useFormState();
+  const { errors } = useFormState();
   const { data: currencyRates, isLoading: currencyLoading } = useGetCurrencyRates();
 
   const { data: dealDetails, refetch: refetchDealDetails } = useGetDealDetails(dealBookingId || '');
@@ -590,7 +590,7 @@ const CurrencyDetails = ({ setAccordionState, viewMode, paymentData, dealBooking
                   description="Are you sure you want to update this transaction?"
                   onConfirm={handleSave}
                 >
-                  <Button variant="secondary" disabled={isSaving || !isDirty} className="mx-2 w-24">
+                  <Button variant="secondary" disabled={isSaving} className="mx-2 w-24">
                     {isSaving ? 'Updating...' : 'Update'}
                   </Button>
                 </ConfirmationAlert>
@@ -617,10 +617,10 @@ const CurrencyDetails = ({ setAccordionState, viewMode, paymentData, dealBooking
                     Share Transaction Details
                   </Button>
                 </ConfirmationAlert>
-                <Button type="button" onClick={handlePayment} variant="secondary" className="mr-2">
+                {/* <Button type="button" onClick={handlePayment} variant="secondary" className="mr-2">
                   Offline Bank Transfer
                 </Button>
-                 {/* <Button type="button" onClick={() => setIsKycDialogOpen(true)} variant="secondary" className="mr-2">
+                 <Button type="button" onClick={() => setIsKycDialogOpen(true)} variant="secondary" className="mr-2">
                   KYC Upload
                 </Button> */}
               </>

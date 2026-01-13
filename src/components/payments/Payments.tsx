@@ -118,7 +118,7 @@ const Payments = ({
               <Button type="button" onClick={() => setIsOpen(false)} variant="light" className="px-5">
                 Cancel
               </Button>
-              <Button type="button" onClick={handleSubmit(submit)} variant="secondary" className="px-5" disabled={!!data?.payment_challan_url || !!data?.dataValues?.payment_challan_url}>
+              <Button type="button" onClick={handleSubmit(submit)} variant="secondary" className="px-5" >
                 Submit
               </Button>
             </div>
