@@ -54,7 +54,6 @@ const KYCUpload = () => {
 
   useEffect(() => {
     if (location.state?.transaction) {
-      console.log('transaction', location.state.transaction);
       const transaction = location.state.transaction.deal.payment_records[0].raw_data.transaction
       setTransaction(transaction);
       setShowForm(true);

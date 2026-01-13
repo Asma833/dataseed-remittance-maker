@@ -57,8 +57,6 @@ const CurrencyDetails = ({ setAccordionState, viewMode, paymentData, dealBooking
     }
   }, [dealDetails]);
 
-  console.log('selectedPayment', selectedPayment);
-
   const fxCurrency = useWatch({ control, name: 'transactionDetails.fx_currency' });
   const fxAmount = useWatch({ control, name: 'transactionDetails.fx_amount' });
   const transactionAmount = useWatch({ control, name: 'currencyDetails.invoiceRateTable.transaction_amount.rate' });
@@ -622,9 +620,9 @@ const CurrencyDetails = ({ setAccordionState, viewMode, paymentData, dealBooking
                 <Button type="button" onClick={handlePayment} variant="secondary" className="mr-2">
                   Offline Bank Transfer
                 </Button>
-                 <Button type="button" onClick={() => setIsKycDialogOpen(true)} variant="secondary" className="mr-2">
+                 {/* <Button type="button" onClick={() => setIsKycDialogOpen(true)} variant="secondary" className="mr-2">
                   KYC Upload
-                </Button>
+                </Button> */}
               </>
             )}
           </div>
@@ -668,7 +666,6 @@ const CurrencyDetails = ({ setAccordionState, viewMode, paymentData, dealBooking
           ''
         }
         onShareLink={(url) => {
-            console.log('Sharing link:', url);
             toast.success('Link shared successfully');
             setIsKycDialogOpen(false);
         }}
