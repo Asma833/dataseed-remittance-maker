@@ -20,6 +20,7 @@ const TransactionBasicDetails = ({ setAccordionState }: CommonCreateTransactionP
   const {
     control,
     setValue,
+    clearErrors,
     formState: { errors },
   } = useFormContext();
   // Add a ref to track previous settlement rate to prevent unnecessary updates
@@ -154,6 +155,24 @@ const TransactionBasicDetails = ({ setAccordionState }: CommonCreateTransactionP
       debouncedCalculateCustomerRate.cancel();
     };
   }, [fxAmount, companySettlementRate, addMargin, debouncedCalculateCustomerRate]);
+
+  // Clear payee fields when source_of_funds is not 'others'
+  useEffect(() => {
+    if (sourceOfFunds !== 'others') {
+      const options = { shouldValidate: false, shouldDirty: false };
+      setValue('transactionDetails.paid_by', '', options);
+      setValue('transactionDetails.payee_name', '', options);
+      setValue('transactionDetails.payee_pan_number', '', options);
+      setValue('transactionDetails.payee_dob', '', options);
+      
+      clearErrors([
+        'transactionDetails.paid_by', 
+        'transactionDetails.payee_name', 
+        'transactionDetails.payee_pan_number', 
+        'transactionDetails.payee_dob'
+      ]);
+    }
+  }, [sourceOfFunds, setValue, clearErrors]);
   const currencyCodeType =
     allCurrencyRates?.reduce((acc: Record<string, { label: string }>, currency) => {
       acc[currency.currency_code] = { label: currency.currency_code };
