@@ -156,7 +156,6 @@ export interface PaymentData {
   raw_data?: {
     deal: AllTransaction;
     transaction: Transaction;
-    transactions: Transaction[];
   };
   dataValues?: {
       payment_challan_url?: string | null;
