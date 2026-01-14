@@ -184,7 +184,7 @@ const TransactionBasicDetails = ({ setAccordionState }: CommonCreateTransactionP
       <FormContentWrapper className="rounded-lg w-full mr-auto bg-transparent">
         <Spacer>
           <FormFieldRow wrapperClassName="xl:row-cols-4">
-            {(['company_reference_number', 'agent_reference_number', 'fx_currency'] as const).map((name) => {
+            {(['agent_reference_number', 'fx_currency','fx_amount','company_settlement_rate' ] as const).map((name) => {
               const field = transactionBasicDetailsConfig.find((f) => f.name === name) as FieldConfig;
               let fieldWithOptions = field;
               if (name === 'fx_currency') {
@@ -198,17 +198,7 @@ const TransactionBasicDetails = ({ setAccordionState }: CommonCreateTransactionP
             })}
           </FormFieldRow>
           <FormFieldRow wrapperClassName="xl:row-cols-4">
-            {(['fx_amount', 'company_settlement_rate', 'add_margin', 'customer_rate'] as const).map((name) => {
-              const field = transactionBasicDetailsConfig.find((f) => f.name === name) as FieldConfig;
-              return (
-                <FieldWrapper key={name}>
-                  {getController({ ...field, name: `transactionDetails.${name}`, control, errors })}
-                </FieldWrapper>
-              );
-            })}
-          </FormFieldRow>
-          <FormFieldRow wrapperClassName="xl:row-cols-4">
-            {(['nostro_charges', 'purpose'] as const).map((name) => {
+            {(['add_margin', 'customer_rate','nostro_charges', 'purpose'] as const).map((name) => {
               const field = transactionBasicDetailsConfig.find((f) => f.name === name) as FieldConfig;
               let fieldWithOptions = field;
               if (name === 'purpose') {
@@ -221,6 +211,20 @@ const TransactionBasicDetails = ({ setAccordionState }: CommonCreateTransactionP
               );
             })}
           </FormFieldRow>
+          {/* <FormFieldRow wrapperClassName="xl:row-cols-4">
+            {(['nostro_charges', 'purpose'] as const).map((name) => {
+              const field = transactionBasicDetailsConfig.find((f) => f.name === name) as FieldConfig;
+              let fieldWithOptions = field;
+              if (name === 'purpose') {
+                fieldWithOptions = { ...field, options: filteredPurposeOptions };
+              }
+              return (
+                <FieldWrapper key={name}>
+                  {getController({ ...fieldWithOptions, name: `transactionDetails.${name}`, control, errors })}
+                </FieldWrapper>
+              );
+            })}
+          </FormFieldRow> */}
           <p className="font-semibold text-gray-600">KYC Details</p>
           <>
             <FormFieldRow wrapperClassName="xl:row-cols-4">

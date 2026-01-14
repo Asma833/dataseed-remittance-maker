@@ -7,7 +7,7 @@
 }
 
 .fieldWrapper {
-  @apply flex;
+  @apply flex min-w-0;
 }
 
 .fieldWrapper .MuiFormGroup-root.MuiRadioGroup-root {

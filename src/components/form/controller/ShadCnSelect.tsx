@@ -108,7 +108,7 @@ export const ShadCnSelect = ({
 
   return (
     <FormItem className={className}>
-      <FormLabel className="text-[--color-form-label]">
+      <FormLabel className="text-[var(--color-form-label)]">
         {label}
         {required && <span className="text-destructive ml-1">*</span>}
       </FormLabel>
@@ -161,13 +161,13 @@ export const ShadCnSelect = ({
                   {/* Select Trigger */}
                   <div
                     className={cn(
-                      'flex h-10 w-full items-center justify-between rounded-lg border border-input bg-background px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 hover:border-primary/50 transition-colors disabled:cursor-not-allowed disabled:opacity-50 form-input truncate',
+                      'flex h-10 w-full items-center justify-between rounded-lg border border-input bg-background px-3 py-2 text-sm ring-offset-background placeholder:text-[#a3a3a3] focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 hover:border-primary/50 transition-colors disabled:cursor-not-allowed disabled:opacity-50 form-input truncate',
                       disabled && 'cursor-not-allowed opacity-50',
                       error && 'border-destructive'
                     )}
                     onClick={() => !disabled && setIsOpen(!isOpen)}
                   >
-                    <span className="text-muted-foreground">
+                    <span className="text-[#a3a3a3]">
                       {selectedValues.length > 0
                         ? `${selectedValues.length} item${selectedValues.length > 1 ? 's' : ''} selected`
                         : placeholder || 'Select options'}
@@ -232,11 +232,11 @@ export const ShadCnSelect = ({
             control={control}
             defaultValue={defaultValue}
             render={({ field: { value, onChange }, fieldState: { error } }) => (
-              <div>
+              <div className="w-full min-w-0">
                 <Select value={(forcedValue ? forcedValue : value) || ''} onValueChange={onChange} disabled={disabled}>
                   <SelectTrigger
                     className={cn(
-                      'form-input shadow-none focus-visible:ring-0 truncate',
+                      'form-input shadow-none focus-visible:ring-0 w-full',
                       'aria-invalid:focus-visible:ring-destructive/20 dark:aria-invalid:focus-visible:ring-destructive/40 aria-invalid:focus-visible:border-destructive'
                     )}
                   >

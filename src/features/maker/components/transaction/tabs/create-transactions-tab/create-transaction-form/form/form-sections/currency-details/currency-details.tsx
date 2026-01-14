@@ -561,19 +561,9 @@ const CurrencyDetails = ({ setAccordionState, viewMode, paymentData, dealBooking
 
         <div className="mt-16 flex flex-col items-center gap-10">
           <div className="flex justify-center gap-1 flex-wrap">
-            <>
-              {viewMode && (
-                <ConfirmationAlert
-                  title="Go Back"
-                  description="Are you sure you want to go back? Any unsaved changes will be lost."
-                  onConfirm={handleBack}
-                >
-                  <Button type="button" variant="light">
-                    Back
-                  </Button>
-                </ConfirmationAlert>
-              )}
+          
               {!viewMode && (
+                <>
                 <ConfirmationAlert
                   title="Cancel Transaction"
                   description="Are you sure you want to cancel? All unsaved changes will be lost."
@@ -583,19 +573,7 @@ const CurrencyDetails = ({ setAccordionState, viewMode, paymentData, dealBooking
                     Cancel
                   </Button>
                 </ConfirmationAlert>
-              )}
-              {viewMode ? (
-                <ConfirmationAlert
-                  title="Update Transaction"
-                  description="Are you sure you want to update this transaction?"
-                  onConfirm={handleSave}
-                >
-                  <Button variant="secondary" disabled={isSaving} className="mx-2 w-24">
-                    {isSaving ? 'Updating...' : 'Update'}
-                  </Button>
-                </ConfirmationAlert>
-              ) : (
-                <ConfirmationAlert
+                 <ConfirmationAlert
                   title="Save Transaction"
                   description="Are you sure you want to save this transaction?"
                   onConfirm={handleSave}
@@ -604,19 +582,11 @@ const CurrencyDetails = ({ setAccordionState, viewMode, paymentData, dealBooking
                     {isSaving ? 'Saving...' : 'Save'}
                   </Button>
                 </ConfirmationAlert>
+                </>
               )}
-            </>
+             
             {viewMode && (
               <>
-                <ConfirmationAlert
-                  title="Share Transaction Details"
-                  description="Are you sure you want to download the PDF?"
-                  onConfirm={handleShareTransactionDetails}
-                >
-                  <Button type="button" variant="secondary" className="mr-2">
-                    Share Transaction Details
-                  </Button>
-                </ConfirmationAlert>
                 <Button type="button" onClick={handlePayment} variant="secondary" className="mr-2">
                   Offline Bank Transfer
                 </Button>

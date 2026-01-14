@@ -77,8 +77,8 @@ export const ShadCnDatePicker = ({
     [handleCalendarChange]
   );
   return (
-    <FormItem className={className}>
-      <FormLabel className="text-[--color-form-label]">
+    <FormItem className={cn('min-w-0', className)}>
+      <FormLabel className="text-[var(--color-form-label)]">
         {label}
         {required && <span className="text-destructive ml-1">*</span>}
       </FormLabel>
@@ -121,19 +121,19 @@ export const ShadCnDatePicker = ({
             }, [field.value, placeholder]);
 
             return (
-              <div>
+              <div className="min-w-0">
                 <Popover>
                   <PopoverTrigger asChild>
                     <button
                       type="button"
                       className={cn(
-                        'p-2 inline-flex items-center gap-2 whitespace-nowrap rounded-md text-sm font-medium transition-[color,box-shadow] disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg:not([class*="size-"])]:size-4 [&_svg]:shrink-0 outline-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] dark:bg-[--color-black] cursor-pointer border border-input bg-background shadow-xs hover:bg-accent hover:text-accent-foreground w-full justify-between text-left  form-input truncate',
-                        !field.value && 'text-muted-foreground',
+                        'p-2 inline-flex items-center gap-2 whitespace-nowrap rounded-md text-sm transition-[color,box-shadow] disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg:not([class*="size-"])]:size-4 [&_svg]:shrink-0 outline-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] dark:bg-[--color-black] cursor-pointer border border-input bg-background shadow-xs hover:bg-accent hover:text-accent-foreground w-full justify-between text-left  form-input truncate min-w-0',
+                        !field.value && 'text-[#a3a3a3]',
                         fieldState.error && 'border-destructive focus:ring-destructive'
                       )}
                       disabled={disabled}
                     >
-                      <span>{displayValue}</span>
+                      <span className="truncate flex-1">{displayValue}</span>
                       <CalendarIcon className="h-4 w-4" />
                     </button>
                   </PopoverTrigger>

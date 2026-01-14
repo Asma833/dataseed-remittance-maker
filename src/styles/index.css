@@ -27,6 +27,7 @@
   --color-primary-gradient-1: var(--color-primary);
   --color-primary-gradient-2: #4a00e0;
   --color-form-label: #585858;
+  --color-placeholder: #a3a3a3;
 
   /* Custom badge colors */
   --color-pending-badge-bg: #fde68a;
@@ -57,12 +58,15 @@
   --color-steps-secondary: linear-gradient(87.15deg, #8e2de2 2.58%, #4a00e0 97.85%);
   --color-steps-primary: linear-gradient(87.15deg, #00cd07 2.58%, #00811c 97.85%);
 }
+
 .setps-primary {
   background: var(--color-steps-secondary);
 }
+
 .setps-secondary {
   background: var(--color-steps-primary);
 }
+
 .dark {
   --background: oklch(0.145 0 0);
   --foreground: oklch(0.985 0 0);
@@ -101,9 +105,11 @@
   html {
     color-scheme: light;
   }
+
   * {
     border-color: var(--color-border);
   }
+
   body {
     color: var(--color-foreground);
     overflow: hidden;
@@ -115,6 +121,7 @@
   background-image: linear-gradient(to right, var(--color-primary-gradient-1), var(--color-primary-gradient-2));
   color: var(--color-white);
 }
+
 .sidemenu-active-menu,
 .submenu-item.active {
   background-color: #06060642;
@@ -147,6 +154,7 @@
   font-size: 0.875rem;
   line-height: 1.25rem;
 }
+
 .content-wrapper {
   width: 100%;
   display: flex;
@@ -167,6 +175,7 @@
     padding-right: 1.5rem;
   }
 }
+
 @media (min-width: 1024px) {
   .content-wrapper {
     padding-left: 1.5rem;
@@ -248,6 +257,7 @@
   padding-bottom: 0.25rem;
   border-radius: 9999px;
 }
+
 .status-badge.esign-rejected {
   background-color: var(--rejected-badge-bg);
   color: var(--badge-fg);
@@ -287,6 +297,7 @@
   padding-bottom: 0.25rem;
   border-radius: 9999px;
 }
+
 .status-badge.esign-expired {
   background-color: var(--rejected-badge-bg);
   color: var(--badge-fg);
@@ -296,6 +307,7 @@
   padding-bottom: 0.25rem;
   border-radius: 9999px;
 }
+
 /* VKYC status badges */
 .status-badge.vkyc-completed {
   background-color: var(--approved-badge-bg);
@@ -364,16 +376,20 @@
 .MuiPickersCalendarHeader-label {
   color: hsl(var(--foreground));
 }
+
 .light .MuiInputBase-input.Mui-disabled {
   background-color: rgb(230, 230, 230);
   -webkit-text-fill-color: rgb(0 0 0 / 72%);
 }
+
 .light .MuiInputBase-root.MuiOutlinedInput-root.Mui-disabled {
   background-color: rgb(230, 230, 230);
 }
+
 .dark .MuiInputBase-input.Mui-disabled {
   -webkit-text-fill-color: rgba(255, 255, 255, 0.72);
 }
+
 .MuiInputBase-root.MuiOutlinedInput-root.Mui-disabled {
   -webkit-text-fill-color: rgba(255, 255, 255, 0.72);
 }
@@ -381,9 +397,11 @@
 .MuiPickersArrowSwitcher-button {
   color: hsl(var(--muted-foreground));
 }
+
 .MuiButtonBase-root.MuiButton-root {
   border-radius: 6px;
 }
+
 .MuiButtonBase-root.MuiButton-root.MuiButton-contained {
   background: hsl(var(--primary));
 }
@@ -392,6 +410,7 @@
   display: flex;
   flex-direction: row;
 }
+
 .formFieldRow .items-direction-col .MuiFormGroup-root {
   display: flex;
   flex-direction: column;
@@ -407,9 +426,11 @@ fieldset.MuiOutlinedInput-notchedOutline {
   border-color: hsl(var(--border));
   color: hsl(var(--foreground));
 }
+
 fieldset.MuiOutlinedInput-notchedOutline:hover {
   border-color: hsl(var(--primary));
 }
+
 fieldset.MuiOutlinedInput-notchedOutline:focus {
   border-color: hsl(var(--primary));
 }
@@ -424,6 +445,7 @@ label.MuiFormLabel-root.MuiInputLabel-root:not(.MuiInputLabel-shrink) {
   align-items: center !important;
   justify-items: center !important;
 }
+
 .n-filetype-hidden {
   position: absolute;
   inset: 0;
@@ -442,12 +464,15 @@ label.MuiFormLabel-root.MuiInputLabel-root:not(.MuiInputLabel-shrink) {
 html[class='dark'] .MuiDateCalendar-root {
   color: white;
 }
+
 html[class='dark'] .MuiDateCalendar-root.MuiButtonBase-root.MuiPickersDay-root.MuiPickersDay-dayWithMargin {
   color: white;
 }
+
 body {
   background-color: #ededed !important;
 }
+
 /* Dark mode styles for MUI components */
 .dark .MuiDateCalendar-root {
   background-color: hsl(var(--background));
@@ -457,6 +482,7 @@ body {
 .dark .MuiPickersDay-root {
   color: hsl(var(--foreground));
 }
+
 .dark .MuiDayCalendar-weekDayLabel {
   color: hsl(var(--foreground));
 }
@@ -487,77 +513,92 @@ body {
 .dark .MuiList-root.MuiList-padding.MuiMenu-list {
   -webkit-text-fill-color: rgba(218, 218, 218, 0.72);
 }
+
 .dark [class*='MuiOutlinedInput'] {
   -webkit-text-fill-color: rgb(218, 218, 218);
   border-color: rgba(202, 202, 202, 0.692) !important;
 }
+
 .dark [class*='MuiInputLabel-root'] {
   -webkit-text-fill-color: rgb(218, 218, 218);
 }
+
 .table-border-b {
   border-bottom: 1px solid rgb(218, 218, 218);
 }
+
 .title-case {
   text-transform: capitalize;
 }
+
 .MuiPickersPopper-root.MuiPopper-root {
   z-index: 9999;
   pointer-events: all;
 }
+
 .MuiSvgIcon-root {
   width: 28px !important;
   height: 28px !important;
 }
+
 .p-dropdown-items-wrapper {
   max-width: 200px;
   font-size: 14px;
 }
+
 .form-input {
   border-radius: 10px;
   box-shadow: 0px 0px 4px 0px #0000006e;
 }
+
 .form-input:focus-visible {
   box-shadow: 0px 0px 4px 1px #7d22e24a;
 }
+
 .btn-light {
   background-color: var(--color-secondary);
   color: var(--color-secondary-foreground);
   border: none;
 }
+
 .btn-icon-primary {
   color: var(--color-icon-primary);
 }
+
 .form-bg {
   background-color: var(--form-background);
 }
+
 .bg-danger {
   background-color: var(--color-title);
 }
+
 .bg-gradient {
-  background: linear-gradient(
-    50.74deg,
-    #6e3494 0%,
-    #b11f82 10.44%,
-    #db1a57 20.4%,
-    #f26922 29.48%,
-    #f3ec26 38.31%,
-    #fcb921 45.75%,
-    #e775ae 53.26%,
-    #ee478e 61.47%,
-    #427bbf 66.35%,
-    #5ac5c4 71.69%
-  );
+  background: linear-gradient(50.74deg,
+      #6e3494 0%,
+      #b11f82 10.44%,
+      #db1a57 20.4%,
+      #f26922 29.48%,
+      #f3ec26 38.31%,
+      #fcb921 45.75%,
+      #e775ae 53.26%,
+      #ee478e 61.47%,
+      #427bbf 66.35%,
+      #5ac5c4 71.69%);
 }
+
 .login-form {
   background-color: #ededed;
   width: 70%;
   margin: auto;
 }
+
 .border-destructive {
   border: 0;
   box-shadow: 0px 0px 4px 1px #dc2626;
   /* Global table font size */
 }
+
 .css-cy7rkm-MuiAccordion-heading {
   all: revert !important;
   background: #d9d9d9 !important;

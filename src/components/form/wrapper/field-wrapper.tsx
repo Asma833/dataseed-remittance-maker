@@ -6,11 +6,11 @@ import '../styles/form-layout.css';
 const FieldWrapper = ({ id, children, className = '', flexdirection, error, ...props }: FieldWrapperPropsType) => {
   return (
     <div id={id} {...props} className={cn('fieldWrapper', className)}>
-      <div className="w-full flex flex-col">
+      <div className="w-full flex flex-col min-w-0">
         {props.label && <span className={cn('fieldWrapper-label text-sm mb-2', props.labelClass)}>{props.label}</span>}
         <div
           className={cn(
-            'flex',
+            'flex min-w-0',
             flexdirection ? 'md:flex-' + flexdirection : 'md:flex-col',
             props.childrenClass,
             'flex-col'

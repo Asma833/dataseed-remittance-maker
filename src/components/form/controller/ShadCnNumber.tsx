@@ -4,6 +4,8 @@ import { FormItem, FormLabel, FormControl, FormMessage } from '@/components/ui/f
 import { cn } from '@/utils/cn';
 import { NumericFormat } from 'react-number-format';
 
+import { Input } from '@/components/ui/input';
+
 interface ShadCnNumberProps {
   name: string;
   label: string;
@@ -28,7 +30,7 @@ const currencyFields = [
   'company_settlement_rate',
   'remittance_charges.agent_mark_up',
   'nostro_charges.agent_mark_up',
-  'other_charges.agent_mark_up'
+  'other_charges.agent_mark_up',
 ];
 
 export const ShadCnNumber = ({
@@ -44,11 +46,11 @@ export const ShadCnNumber = ({
 }: ShadCnNumberProps) => {
   const { control } = useFormContext();
 
-  const isCurrencyField = currencyFields.some((field) => name.endsWith(`.${field}`));
+  const isCurrencyField = currencyFields.some((field) => name === field || name.endsWith(`.${field}`));
 
   return (
     <FormItem className={className}>
-      <FormLabel className="text-[--color-form-label]">
+      <FormLabel className="text-[var(--color-form-label)]">
         {label}
         {required && <span className="text-destructive ml-1">*</span>}
       </FormLabel>
@@ -66,6 +68,7 @@ export const ShadCnNumber = ({
                 {isCurrencyField ? (
                   <NumericFormat
                     {...field}
+                    customInput={Input}
                     thousandSeparator={true}
                     thousandsGroupStyle="lakh"
                     decimalSeparator="."
@@ -75,7 +78,7 @@ export const ShadCnNumber = ({
                     prefix=""
                     placeholder={isCurrencyField ? '0.00' : placeholder}
                     className={cn(
-                      'form-input flex h-9 w-full border border-input bg-transparent px-3 py-1 text-sm transition-colors file:border-0 file:bg-transparent file:text-sm file:font-medium file:text-foreground placeholder:text-muted-foreground focus-visible:outline-none disabled:cursor-not-allowed disabled:opacity-50 truncate text-right',
+                      'form-input flex h-9 w-full border border-input bg-transparent px-3 py-1 text-sm transition-colors file:border-0 file:bg-transparent file:text-sm file:font-medium file:text-foreground placeholder:text-[#a3a3a3] focus-visible:outline-none disabled:cursor-not-allowed disabled:opacity-50 truncate text-right',
                       'aria-invalid:focus-visible:border-destructive',
                       error && 'border-destructive focus:ring-destructive'
                     )}
@@ -92,7 +95,7 @@ export const ShadCnNumber = ({
                     type="text"
                     placeholder={placeholder}
                     className={cn(
-                      'form-input flex h-9 w-full border border-input bg-transparent px-3 py-1 text-sm transition-colors file:border-0 file:bg-transparent file:text-sm file:font-medium file:text-foreground placeholder:text-muted-foreground focus-visible:outline-none disabled:cursor-not-allowed disabled:opacity-50 truncate',
+                      'form-input flex h-9 w-full border border-input bg-transparent px-3 py-1 text-sm transition-colors file:border-0 file:bg-transparent file:text-sm file:font-medium file:text-foreground placeholder:text-[#a3a3a3] focus-visible:outline-none disabled:cursor-not-allowed disabled:opacity-50 truncate',
                       'aria-invalid:focus-visible:border-destructive'
                     )}
                     value={currentValue ?? ''}
