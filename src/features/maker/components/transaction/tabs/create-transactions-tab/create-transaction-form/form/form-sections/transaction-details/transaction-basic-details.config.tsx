@@ -78,7 +78,7 @@ const transactionBasicDetailsConfig = [
   },
   {
     name: 'applicant_name',
-    label: 'Applicant Name',
+    label: 'Applicant Name As Per PAN',
     type: FieldType.Text,
     placeholder: 'Enter Applicant Name',
     required: false,
@@ -92,7 +92,7 @@ const transactionBasicDetailsConfig = [
   },
   {
     name: 'applicant_dob',
-    label: 'Applicant DOB',
+    label: 'Applicant DOB As Per PAN',
     type: FieldType.Date,
     placeholder: 'Select Applicant DOB',
     required: false,

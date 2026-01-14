@@ -4,7 +4,7 @@ export const currencyDetailsConfig = [
   {
     name: 'fx_currency',
     label: 'FX Currency',
-    type: FieldType.Combobox,
+    type: FieldType.Select,
     placeholder: 'Search/Select FX Currency',
     required: true,
     disabled: true,

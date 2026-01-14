@@ -168,6 +168,9 @@ const CreateTransactionForm = ({ onCancel, onSubmit, initialData, viewMode }: Pr
           customer_rate: safeNumber(data.transactionDetails.customer_rate),
           nostro_charges: safeNumber(data.currencyDetails.invoiceRateTable.nostro_charges.rate),
           applicant_name: normalizeString(data.transactionDetails.applicant_name),
+          applicant_dob: data.transactionDetails.applicant_dob
+            ? new Date(data.transactionDetails.applicant_dob).toISOString()
+            : '',
           applicant_pan_number: normalizeString(data.transactionDetails.applicant_pan_number),
           applicant_email: normalizeString(data.transactionDetails.applicant_email),
           applicant_mobile_number: normalizeString(data.transactionDetails.applicant_mobile_number),
