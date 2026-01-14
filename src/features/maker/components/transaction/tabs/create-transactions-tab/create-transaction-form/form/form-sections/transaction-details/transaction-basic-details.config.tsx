@@ -32,8 +32,8 @@ const transactionBasicDetailsConfig = [
   {
     name: 'fx_currency',
     label: 'FX Currency',
-    type: FieldType.Select,
-    placeholder: 'Select FX Currency',
+    type: FieldType.Combobox,
+    placeholder: 'Search/Select FX Currency',
     required: true,
   },
   {

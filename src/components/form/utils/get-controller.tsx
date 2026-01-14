@@ -10,6 +10,7 @@ import { ShadCnPhone } from '@/components/form/controller/ShadCnPhone';
 import { ShadCnIndianPhone } from '@/components/form/controller/ShadCnIndianPhone';
 import ShadCnPassword from '@/components/form/controller/ShadCnPassword';
 import { ShadCnTextArea } from '../controller/ShadCnTextArea';
+import { ShadCnCombobox } from '../controller/ShadCnCombobox';
 import { ShadCnFileUpload } from '../controller/ShadCnFileUpload';
 import { ShadCnFileUploadWithButton } from '../controller/ShadCnFileUploadWithButton';
 import FileUploadWithView from '../controller/FileUploadWithView';
@@ -141,6 +142,9 @@ export const getController = (field: any) => {
       return (
         <ShadCnSelect {...baseProps} options={field.options} placeholder={field.placeholder} isMulti={field.isMulti} />
       );
+    case FieldType.Combobox:
+    case 'combobox':
+      return <ShadCnCombobox {...baseProps} options={field.options} placeholder={field.placeholder} />;
     case FieldType.Date:
     case 'date':
       return <ShadCnDatePicker {...baseProps} placeholder={field.placeholder} />;
