@@ -3,6 +3,7 @@ import { KYCStatusEnum } from '@/types/enums';
 import KycStatusCell from '@/components/cell/table/KycStatusCell';
 import TooltipImageButton from '@/components/common/tooltip-image-button';
 import Reupload from '@/assets/icons/re-upload.svg';
+import TickIcon from '@/assets/icons/transaction-approved.svg';
 import upload from '@/assets/icons/upload.svg';
 import { SignLinkButton } from '@/components/cell/table/SignLinkButton';
 import { PaymentData } from '../../../types/payment.types';
@@ -74,16 +75,30 @@ export const KycTableColumnsConfig = ({
       meta: { className: 'min-w-0 p-2' },
       cell: (props: { row: PaymentData; value: any }) => {
         const kycStatus = props.row.kyc_status;
-        const isReupload =
-          kycStatus === KYCStatusEnum.COMPLETED ||
-          kycStatus === KYCStatusEnum.REJECTED ||
-          kycStatus === KYCStatusEnum.UPLOADED;
+        const isCompleted = kycStatus === KYCStatusEnum.COMPLETED || kycStatus === KYCStatusEnum.UPLOADED;
+        const isRejected = kycStatus === KYCStatusEnum.REJECTED;
+
+        let icon = upload;
+        let tooltipText = 'Upload';
+        let disabled = false;
+
+        if (isCompleted) {
+          icon = TickIcon;
+          tooltipText = 'Uploaded';
+          disabled = true;
+        } else if (isRejected) {
+          icon = Reupload;
+          tooltipText = 'Reupload';
+        }
+
         return (
           <TooltipImageButton
             onClick={() => onUploadClick(kycStatus, props.row.raw_data?.transaction)}
-            src={isReupload ? Reupload : upload}
-            alt="Upload"
-            tooltipText={isReupload ? 'Reupload' : 'Upload'}
+            src={icon}
+            alt={tooltipText}
+            tooltipText={tooltipText}
+            disabled={disabled}
+            imgClassName={isCompleted ? 'w-[22px] h-[22px]' : 'w-[16px] h-[16px]'}
           />
         );
       },

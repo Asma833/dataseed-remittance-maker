@@ -12,7 +12,7 @@ export const GetPaymentTableColumn = ({
   handleViewTransaction: (rowData: PaymentData) => void;
 }) => {
   return [
-    { id: 'ref_no', header: 'Ref. No', accessorKey: 'ref_no', meta: { className: 'min-w-0 p-2' } },
+    { id: 'ref_no', header: 'Company Ref. No', accessorKey: 'ref_no', meta: { className: 'min-w-0 p-2' } },
     { id: 'agent_ref_no', header: 'Agent Ref. No', accessorKey: 'agent_ref_no', meta: { className: 'min-w-0 p-2' } },
     {
       id: 'order_date',
@@ -112,17 +112,35 @@ export const GetPaymentTableColumn = ({
       header: 'Payment Screenshot',
       accessorKey: 'payment_screenshot',
       meta: { className: 'min-w-0 p-2' },
-      cell: ({ row }: { row: PaymentData }) => (
-        <SignLinkButton
-          id={row.ref_no}
-          onClick={() => handlePayment(row)}
-          tooltipText="Upload Payment Screenshot"
-          buttonIconType={row.payment_challan_url ? "file_text" : "upload"}
-          buttonType={row.payment_challan_url ? "file_text" : "upload"}
-          className="group"
-          iconClassName="text-primary group-hover:text-white group-disabled:text-gray-400"
-        />
-      ),
+      cell: ({ row }: { row: PaymentData }) => {
+        const paymentStatus = (row.payment_status || '').toUpperCase();
+        const hasChallan = !!row.payment_challan_url;
+
+        // Enable upload if it's FAILED, or if it's INITIATED but has no challan yet.
+        // Disable if challan is available and NOT failed.
+        const canUpload =
+          paymentStatus === 'FAILED' || (paymentStatus === 'INITIATED' && !hasChallan);
+
+        let tooltipText = 'Upload Payment Screenshot';
+        if (hasChallan) {
+          tooltipText = paymentStatus === 'FAILED' ? 'Re-upload Payment Screenshot' : 'Uploaded Payment Screenshot';
+        } else if (!canUpload) {
+          tooltipText = `Payment Status: ${row.payment_status || 'N/A'}`;
+        }
+
+        return (
+          <SignLinkButton
+            id={row.ref_no}
+            onClick={() => handlePayment(row)}
+            disabled={!canUpload}
+            tooltipText={tooltipText}
+            buttonIconType={hasChallan ? 'file_text' : 'upload'}
+            buttonType={hasChallan ? 'file_text' : 'upload'}
+            className="group"
+            iconClassName="text-primary group-hover:text-white group-disabled:text-gray-400"
+          />
+        );
+      },
     },
     { id: 'rejection_reason', header: 'Comments', accessorKey: 'rejection_reason', meta: { className: 'min-w-0 p-2' } },
     {

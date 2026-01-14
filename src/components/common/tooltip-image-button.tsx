@@ -11,6 +11,7 @@ interface TooltipImageButtonProps {
   disabled?: boolean;
   size?: 'sm' | 'default' | 'lg';
   className?: string;
+  imgClassName?: string;
 }
 
 const TooltipImageButton = ({
@@ -21,6 +22,7 @@ const TooltipImageButton = ({
   disabled = false,
   size = 'sm',
   className,
+  imgClassName,
 }: TooltipImageButtonProps) => {
   const [isHovered, setIsHovered] = useState(false);
 
@@ -38,7 +40,7 @@ const TooltipImageButton = ({
           size="sm"
           disabled={disabled}
           className={cn(
-            'text-foreground bg-transparent border-none shadow-none disabled:text-gray-500',
+            'text-foreground bg-transparent border-none shadow-none disabled:text-gray-500 disabled:pointer-events-auto disabled:cursor-default',
             'hover:bg-primary hover:text-white',
             className
           )}
@@ -46,7 +48,7 @@ const TooltipImageButton = ({
           <img
             src={src}
             alt={alt}
-            className="w-3 h-3 transition-all duration-200"
+            className={cn('w-3 h-3 transition-all duration-200', imgClassName)}
             style={{
               filter: isHovered
                 ? 'brightness(0) saturate(100%) invert(1) contrast(1.2) drop-shadow(0 0 0.5px white)'

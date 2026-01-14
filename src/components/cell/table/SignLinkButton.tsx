@@ -112,7 +112,7 @@ export const SignLinkButton: React.FC<SignLinkButtonProps> = ({
           className={cn(
             'text-foreground  bg-transparent border-none shadow-none',
             className,
-            'hover:bg-primary hover:text-white  disabled:text-gray-500'
+            'hover:bg-primary hover:text-white  disabled:text-gray-500 disabled:pointer-events-auto disabled:cursor-default'
           )}
         >
           {getIcon()}

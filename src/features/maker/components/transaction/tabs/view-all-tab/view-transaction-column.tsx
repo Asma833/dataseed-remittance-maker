@@ -8,12 +8,14 @@ import { useGetPresignedUrls } from '../../hooks/useGetPresignedUrls';
 import { toast } from 'sonner';
 import { Button } from '@/components/ui/button';
 import { Loader2, Download } from 'lucide-react';
+import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip';
+import { cn } from '@/utils/cn';
 
 export const GetViewAllTransactionTableColumns = () => {
   return [
     {
       id: 'ref_no',
-      header: 'Ref. No',
+      header: 'Company Ref. No',
       accessorKey: 'ref_no',
       meta: { className: 'min-w-0 p-2' },
     },
@@ -106,19 +108,73 @@ export const GetViewAllTransactionTableColumns = () => {
       meta: { className: 'min-w-0 p-2' },
       cell: ({ row }: { row: PaymentData }) => <KycStatusCell rowData={row} />,
     },
-    // {
-    //   id: 'swift_copy',
-    //   header: 'Swift Copy',
-    //   accessorKey: 'swift_copy',
-    //   meta: { className: 'min-w-0 p-2' },
-    //   cell: ({ row }: { row: any }) => <SwiftCopyDownloadCell row={row} />, // Render custom cell
-    // },
     {
       id: 'transaction_status',
       header: 'Transaction Status',
       accessorKey: 'transaction_status',
       meta: { className: 'min-w-0 p-2' },
     },
+    {
+      id: 'swift_copy',
+      header: 'Swift Copy',
+      accessorKey: 'swift_copy',
+      meta: { className: 'min-w-0 p-2' },
+      cell: ({ row }: { row: any }) => <SwiftCopyDownloadCell row={row} />, // Render custom cell
+    }
   ];
 };
+const SwiftCopyDownloadCell = ({ row }: { row: PaymentData }) => {
+  const { mutateAsync: getPresignedUrls } = useGetPresignedUrls();
+  const [isLoading, setIsLoading] = useState(false);
+  const swiftCopy = row?.swift_copy;
+
+  const handleDownload = async () => {
+    if (!swiftCopy) return;
+    try {
+      setIsLoading(true);
+      const res = await getPresignedUrls([swiftCopy]);
+      const url = res?.urls?.[0]?.presigned_url;
+      if (!url) throw new Error('URL not found');
+
+      // Fallback to window.open since iframe download is blocked/silent for inline content
+      const link = document.createElement('a');
+      link.href = url;
+      link.download = swiftCopy.split('/').pop() || 'swift_copy';
+      link.target = '_blank';
+      link.rel = 'noopener noreferrer';
+      document.body.appendChild(link);
+      link.click();
+      link.remove();
+    } catch (err) {
+      console.error(err);
+      toast.error('Failed to download file');
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  return (
+    <Tooltip>
+      <TooltipTrigger asChild>
+        <span className="inline-block">
+          <Button
+            variant="ghost"
+            size="icon"
+            onClick={handleDownload}
+            disabled={isLoading || !swiftCopy}
+            className={cn('text-primary hover:text-primary/80', !swiftCopy && 'text-gray-400 opacity-50')}
+            title={swiftCopy ? 'Download Swift Copy' : 'Swift Copy Not Available'}
+          >
+            {isLoading ? <Loader2 className="h-4 w-4 animate-spin" /> : <Download className="h-4 w-4" />}
+          </Button>
+        </span>
+      </TooltipTrigger>
+      <TooltipContent className="bg-gray-400/20 backdrop-blur-sm border-0 px-3 py-2 text-xs font-medium rounded-md shadow-xl shadow-black/20 text-foreground">
+        {swiftCopy ? 'Download Swift Copy' : 'Swift Copy Not Available'}
+      </TooltipContent>
+    </Tooltip>
+  );
+};
+
+
 
