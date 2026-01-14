@@ -22,7 +22,7 @@ const fileArrayValidation = z
       }
       for (const fileData of files) {
         if (fileData.file) {
-          if (fileData.file.size > FileSize.ONE_GB) {
+          if (fileData.file.size > FileSize.MAX_SIZE) {
             return false;
           }
           if (!acceptedFileTypes.includes(fileData.file.type)) {
@@ -33,7 +33,7 @@ const fileArrayValidation = z
       return true;
     },
     {
-      message: 'File size must not exceed 1GB and only PDF, JPG, JPEG, PNG, or GIF files are allowed',
+      message: 'File size must not exceed 2MB and only PDF, JPG, JPEG, PNG, or GIF files are allowed',
     }
   );
 

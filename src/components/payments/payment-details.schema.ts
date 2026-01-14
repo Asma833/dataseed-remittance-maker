@@ -18,7 +18,7 @@ export const paymentsFormSchema = z.object({
         return false;
       }
       // Check file size (max 1GB)
-      if (file.file.size > FileSize.ONE_GB) {
+      if (file.file.size > FileSize.MAX_SIZE) {
         return false;
       }
       // Check file type
@@ -26,7 +26,7 @@ export const paymentsFormSchema = z.object({
       return allowedTypes.includes(file.file.type);
     },
     {
-      message: 'File upload is required, must be a valid file (PDF, PNG, JPG, JPEG only), and file size must not exceed 1GB',
+      message: 'File upload is required, must be a valid file (PDF, PNG, JPG, JPEG only), and file size must not exceed 2MB',
     }
   ),
 });

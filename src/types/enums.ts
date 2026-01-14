@@ -45,6 +45,7 @@ export enum FieldType {
   Fileupload_View = 'fileupload_view',
   FileUploadWithButton = 'fileupload_with_button',
   FileUploadWithOutView = 'fileuploadwithoutview',
+  Combobox = 'combobox',
 }
 
 export enum TransactionMode {
@@ -76,5 +77,5 @@ export enum TransactionStatusEnum {
 }
 
 export enum FileSize {
-  ONE_GB = 1024 * 1024 * 1024,
+  MAX_SIZE = 2 * 1024 * 1024,
 }
