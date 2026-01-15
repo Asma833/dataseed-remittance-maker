@@ -121,9 +121,9 @@ export const GetPaymentTableColumn = ({
         const canUpload =
           paymentStatus === 'FAILED' || (paymentStatus === 'INITIATED' && !hasChallan);
 
-        let tooltipText = 'Upload Payment Screenshot';
+        let tooltipText = 'Upload';
         if (hasChallan) {
-          tooltipText = paymentStatus === 'FAILED' ? 'Re-upload Payment Screenshot' : 'Uploaded Payment Screenshot';
+          tooltipText = paymentStatus === 'FAILED' ? 'Re-upload' : 'Uploaded';
         } else if (!canUpload) {
           tooltipText = `Payment Status: ${row.payment_status || 'N/A'}`;
         }
