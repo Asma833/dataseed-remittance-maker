@@ -1,7 +1,7 @@
 import { formatDateWithFallback } from '@/utils/formatDateWithFallback';
 import { SignLinkButton } from '@/components/cell/table/SignLinkButton';
-import PaymentStatusCell from '@/components/cell/table/PaymentStatusCell';
-import KycStatusCell from '@/components/cell/table/KycStatusCell';
+import { StatusBadge } from '@/components/common/status-badge';
+import { AmountCell } from '@/components/common/amount-cell';
 import { PaymentData } from '../../types/payment.types';
 import { useState } from 'react';
 import { useGetPresignedUrls } from '../../hooks/useGetPresignedUrls';
@@ -75,44 +75,49 @@ export const GetViewAllTransactionTableColumns = () => {
       header: 'FX Amount',
       accessorKey: 'fx_amount',
       meta: { className: 'min-w-0 p-2' },
+      cell: ({ row }: { row: any }) => <AmountCell value={row.fx_amount} />,
     },
     {
       id: 'fx_rate',
       header: 'FX Rate',
       accessorKey: 'fx_rate',
       meta: { className: 'min-w-0 p-2' },
+      cell: ({ row }: { row: any }) => <AmountCell value={row.fx_rate} />,
     },
     {
       id: 'settlement_rate',
       header: 'Settlement Rate',
       accessorKey: 'settlement_rate',
       meta: { className: 'min-w-0 p-2' },
+      cell: ({ row }: { row: any }) => <AmountCell value={row.settlement_rate} />,
     },
     {
       id: 'customer_rate',
       header: 'Customer Rate',
       accessorKey: 'customer_rate',
       meta: { className: 'min-w-0 p-2' },
+      cell: ({ row }: { row: any }) => <AmountCell value={row.customer_rate} />,
     },
     {
       id: 'payment_status',
       header: 'Payment Status',
       accessorKey: 'payment_status',
       meta: { className: 'min-w-0 p-2' },
-      cell: ({ row }: { row: any }) => <PaymentStatusCell rowData={row} />,
+      cell: ({ row }: { row: any }) => <StatusBadge status={row.payment_status} />,
     },
     {
       id: 'kyc_status',
       header: 'KYC Status',
       accessorKey: 'kyc_status',
       meta: { className: 'min-w-0 p-2' },
-      cell: ({ row }: { row: PaymentData }) => <KycStatusCell rowData={row} />,
+      cell: ({ row }: { row: PaymentData }) => <StatusBadge status={row.kyc_status} />,
     },
     {
       id: 'transaction_status',
       header: 'Transaction Status',
       accessorKey: 'transaction_status',
       meta: { className: 'min-w-0 p-2' },
+      cell: ({ row }: { row: PaymentData }) => <StatusBadge status={row.transaction_status} />,
     },
     {
       id: 'swift_copy',

@@ -154,6 +154,8 @@ export const mapDealDetailsApiToFormInput = (
       applicant_state: apiResponse.transactionDetails.applicant_state || '',
       applicant_country: apiResponse.transactionDetails.applicant_country || '',
       postal_code: apiResponse.transactionDetails.postal_code || '',
+      applicant_dob: undefined,
+      payee_dob: undefined,
     },
     paymentDetails: apiResponse.paymentDetails || '',
   };

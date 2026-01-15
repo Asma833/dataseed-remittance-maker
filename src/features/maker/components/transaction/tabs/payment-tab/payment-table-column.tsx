@@ -1,6 +1,7 @@
 import { SignLinkButton } from '@/components/cell/table/SignLinkButton';
 import KycStatusCell from '@/components/cell/table/KycStatusCell';
-import PaymentStatusCell from '@/components/cell/table/PaymentStatusCell';
+import { StatusBadge } from '@/components/common/status-badge';
+import { AmountCell } from '@/components/common/amount-cell';
 import { formatDateWithFallback } from '@/utils/formatDateWithFallback';
 import { PaymentData } from '../../types/payment.types';
 
@@ -65,27 +66,46 @@ export const GetPaymentTableColumn = ({
       meta: { className: 'min-w-0 p-2' },
       cell: ({ row }: { row: PaymentData }) => <KycStatusCell rowData={row} />,
     },
-    { id: 'fx_currency', header: 'FX Currency', accessorKey: 'fx_currency', meta: { className: 'min-w-0 p-2' } },
-    { id: 'fx_amount', header: 'FX Amount', accessorKey: 'fx_amount', meta: { className: 'min-w-0 p-2' } },
+    {
+      id: 'fx_currency',
+      header: 'FX Currency',
+      accessorKey: 'fx_currency',
+      meta: { className: 'min-w-0 p-2' },
+    },
+    {
+      id: 'fx_amount',
+      header: 'FX Amount',
+      accessorKey: 'fx_amount',
+      meta: { className: 'min-w-0 p-2' },
+      cell: ({ row }: { row: PaymentData }) => <AmountCell value={row.fx_amount} />,
+    },
     {
       id: 'settlement_rate',
       header: 'Settlement Rate',
       accessorKey: 'settlement_rate',
       meta: { className: 'min-w-0 p-2' },
+      cell: ({ row }: { row: PaymentData }) => <AmountCell value={row.settlement_rate} />,
     },
-    { id: 'customer_rate', header: 'Customer Rate', accessorKey: 'customer_rate', meta: { className: 'min-w-0 p-2' } },
+    {
+      id: 'customer_rate',
+      header: 'Customer Rate',
+      accessorKey: 'customer_rate',
+      meta: { className: 'min-w-0 p-2' },
+      cell: ({ row }: { row: PaymentData }) => <AmountCell value={row.customer_rate} />,
+    },
     {
       id: 'transaction_amount',
       header: 'Transaction Amount',
       accessorKey: 'transaction_amount',
       meta: { className: 'min-w-0 p-2' },
+      cell: ({ row }: { row: PaymentData }) => <AmountCell value={row.transaction_amount} />,
     },
     {
       id: 'payment_status',
       header: 'Payment Status',
       accessorKey: 'payment_status',
       meta: { className: 'min-w-0 p-2' },
-      cell: ({ row }: { row: PaymentData }) => <PaymentStatusCell rowData={row} />,
+      cell: ({ row }: { row: PaymentData }) => <StatusBadge status={row.payment_status} />,
     },
     // {
     //   id: 'payment_link',

@@ -1,6 +1,6 @@
 import { formatDateWithFallback } from '@/utils/formatDateWithFallback';
 import { KYCStatusEnum } from '@/types/enums';
-import KycStatusCell from '@/components/cell/table/KycStatusCell';
+import { StatusBadge } from '@/components/common/status-badge';
 import TooltipImageButton from '@/components/common/tooltip-image-button';
 import Reupload from '@/assets/icons/re-upload.svg';
 import TickIcon from '@/assets/icons/transaction-approved.svg';
@@ -109,7 +109,7 @@ export const KycTableColumnsConfig = ({
       header: 'KYC Status',
       meta: { className: 'min-w-0 p-2' },
       cell: (props: { row: PaymentData; value: any }) => {
-        return <KycStatusCell rowData={props.row} />;
+        return <StatusBadge status={props.row.kyc_status} />;
       },
     },
 
