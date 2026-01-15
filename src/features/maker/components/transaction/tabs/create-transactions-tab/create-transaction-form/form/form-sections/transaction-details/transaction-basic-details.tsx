@@ -15,17 +15,32 @@ import { API } from '@/core/constant/apis';
 import { useMemo, useEffect, useCallback, useRef } from 'react';
 import { debounce } from 'lodash';
 import { TransactionPurposeMap } from '@/types/common/transaction-form.types';
+import { useDispatch } from 'react-redux';
+import { updateTransactionField } from '@/features/maker/store/transaction-form-slice';
 
 const TransactionBasicDetails = ({ setAccordionState }: CommonCreateTransactionProps) => {
+  const dispatch = useDispatch();
   const {
     control,
     setValue,
     clearErrors,
     formState: { errors },
   } = useFormContext();
+  
+  // Watch fields and sync to Redux for calculations in other tabs
+  const fxCurrency = useWatch({ control, name: 'transactionDetails.fx_currency' });
+  const fxAmount = useWatch({ control, name: 'transactionDetails.fx_amount' });
+  const companySettlementRate = useWatch({ control, name: 'transactionDetails.company_settlement_rate' });
+  const addMargin = useWatch({ control, name: 'transactionDetails.add_margin' });
+  const customerRate = useWatch({ control, name: 'transactionDetails.customer_rate' });
+  const panNumber = useWatch({ control, name: 'transactionDetails.applicant_pan_number' });
+  const sourceOfFunds = useWatch({ control, name: 'transactionDetails.source_of_funds' });
+  const purpose = useWatch({ control, name: 'transactionDetails.purpose' });
+  const nostroChargesType = useWatch({ control, name: 'transactionDetails.nostro_charges' });
+
   // Add a ref to track previous settlement rate to prevent unnecessary updates
   const prevSettlementRateRef = useRef<number | null>(null);
-  const fxCurrency = useWatch({ control, name: 'transactionDetails.fx_currency' });
+
   const { data: allCurrencyRates, isLoading: currencyLoading } = useGetAllCurrencyRates();
   // Only fetch specific currency rates if fxCurrency is a non-empty string
   const { data: specificCurrencyRate } = useGetSpecificCurrencyRates(
@@ -41,10 +56,21 @@ const TransactionBasicDetails = ({ setAccordionState }: CommonCreateTransactionP
     queryKey: queryKeys.masters.documentMapping,
     dataPath: 'data',
   });
-  const sourceOfFunds = useWatch({ control, name: 'transactionDetails.source_of_funds' });
-  const companySettlementRate = useWatch({ control, name: 'transactionDetails.company_settlement_rate' });
-  const addMargin = useWatch({ control, name: 'transactionDetails.add_margin' });
-  const fxAmount = useWatch({ control, name: 'transactionDetails.fx_amount' });
+
+  useEffect(() => {
+    dispatch(updateTransactionField({
+      fx_currency: typeof fxCurrency === 'string' ? fxCurrency.trim() : fxCurrency,
+      fx_amount: Number(fxAmount || 0),
+      company_settlement_rate: Number(companySettlementRate || 0),
+      add_margin: Number(addMargin || 0),
+      customer_rate: Number(customerRate || 0),
+      applicant_pan_number: panNumber,
+      source_of_funds: sourceOfFunds,
+      purpose: purpose,
+      nostro_charges: nostroChargesType || '',
+    }));
+  }, [fxCurrency, fxAmount, companySettlementRate, addMargin, customerRate, panNumber, sourceOfFunds, purpose, nostroChargesType, dispatch]);
+
   const selectedTransactionTypeId = '3f9fbf53-057f-4cf7-90f5-5035edd2e158';
   // Filter purpose types based on selected transaction type
   const purposeTypesForSelectedTransaction = selectedTransactionTypeId

@@ -3,10 +3,12 @@ import { persistStore, persistReducer, FLUSH, REHYDRATE, PAUSE, PERSIST, PURGE, 
 import storage from 'redux-persist/lib/storage';
 import authReducer from '@/features/auth/store/auth-slice';
 import type { AuthState } from '@/features/auth/store/auth-slice';
+import transactionFormReducer, { TransactionFormState } from '@/features/maker/store/transaction-form-slice';
 
 // Define RootState type
 export interface RootState {
   auth: AuthState;
+  transactionForm: TransactionFormState;
 }
 
 const persistConfig = {
@@ -17,6 +19,7 @@ const persistConfig = {
 
 const rootReducer = combineReducers({
   auth: authReducer,
+  transactionForm: transactionFormReducer,
 });
 
 const persistedReducer = persistReducer(persistConfig, rootReducer);

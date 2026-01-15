@@ -3,8 +3,10 @@ import { currencyDetailsConfig } from './currency-details.config';
 import RateTable from '../../../../../../../rate-table/rate-table';
 import { useNavigate } from 'react-router-dom';
 import { CommonCreateTransactionProps } from '@/features/maker/components/transaction/types/create-transaction.types';
-import { useState, useEffect, useRef, useMemo } from 'react';
+import { useState, useEffect, useRef, useMemo, memo } from 'react';
 import { useFormContext, useFormState, useWatch } from 'react-hook-form';
+import { useSelector } from 'react-redux';
+import { RootState } from '@/store';
 import FormFieldRow from '@/components/form/wrapper/form-field-row';
 import FieldWrapper from '@/components/form/wrapper/field-wrapper';
 import { getController } from '@/components/form/utils/get-controller';
@@ -57,13 +59,21 @@ const CurrencyDetails = ({ setAccordionState, viewMode, paymentData, dealBooking
     }
   }, [dealDetails]);
 
-  const fxCurrency = useWatch({ control, name: 'transactionDetails.fx_currency' });
-  const fxAmount = useWatch({ control, name: 'transactionDetails.fx_amount' });
+  const reduxState = useSelector((state: RootState) => state.transactionForm);
+  const { 
+    fx_currency: fxCurrency,
+    fx_amount: fxAmount, 
+    customer_rate: customerRate, 
+    add_margin: addMargin,
+    company_settlement_rate: companySettlementRate,
+    applicant_pan_number: panNumber,
+    source_of_funds: sourceofFund,
+    purpose,
+    nostro_charges: selectedNostroType 
+  } = reduxState;
+
   const transactionAmount = useWatch({ control, name: 'currencyDetails.invoiceRateTable.transaction_amount.rate' });
   const totalTcsAmt = useWatch({ control, name: 'currencyDetails.total_transaction_amount_tcs' });
-  const purpose = useWatch({ control, name: 'transactionDetails.purpose' });
-  const panNumber = useWatch({ control, name: 'transactionDetails.applicant_pan_number' });
-  const sourceofFund = useWatch({ control, name: 'transactionDetails.source_of_funds' });
   const declarationAmt = useWatch({ control, name: 'currencyDetails.declared_previous_amount' });
 
 
@@ -95,10 +105,6 @@ const CurrencyDetails = ({ setAccordionState, viewMode, paymentData, dealBooking
     };
   }, []);
 
-  // Watch values from TransactionBasicDetails
-  const companySettlementRate = useWatch({ control, name: 'transactionDetails.company_settlement_rate' });
-  const addMargin = useWatch({ control, name: 'transactionDetails.add_margin' });
-  const customerRate = useWatch({ control, name: 'transactionDetails.customer_rate' });
   const previousTransactionAmt = useWatch({ control, name: 'currencyDetails.previous_transaction_amount' });
 
 
@@ -123,7 +129,7 @@ const CurrencyDetails = ({ setAccordionState, viewMode, paymentData, dealBooking
   const tcsAmount = invoiceRateTable?.tcs?.rate;
   const totalInrAmount = invoiceRateTable?.total_inr_amount?.rate;
 
-  const selectedNostroType = useWatch({ control, name: 'transactionDetails.nostro_charges' });
+  // selectedNostroType is now from Redux
 
   // Calculate Transaction Amount locally for API trigger to ensure stability
   const calculatedTransactionAmount = useMemo(() => {
@@ -181,51 +187,19 @@ const CurrencyDetails = ({ setAccordionState, viewMode, paymentData, dealBooking
     return (currentTransactionValueRate - adjustment) / Number(customerRate);
   }, [customerRate, fxAmount, nostroCompanyRate, nostroAgentMarkUp, selectedNostroType]);
 
-  // Sync values from TransactionBasicDetails to CurrencyDetails
+  // Syncing is now handled by CalculationsSync sub-component to reduce re-renders
+  
+  // Explicitly sync fx_currency from form context (panel 1) to panel 3 on mount/change
+  // This helps when Redux sync might have slight lag or type mismatch
+  const watchedFxCurrency = useWatch({ control, name: 'transactionDetails.fx_currency' });
   useEffect(() => {
-    if (
-      fxCurrency &&
-      typeof fxCurrency === 'string' &&
-      fxCurrency.trim().length >= 3 &&
-      currencyOptions[fxCurrency.trim()] &&
-      mountedRef.current
-    ) {
-      setValue('currencyDetails.fx_currency', fxCurrency.trim(), { shouldValidate: false, shouldDirty: false });
+    if (watchedFxCurrency && typeof watchedFxCurrency === 'string') {
+      setValue('currencyDetails.fx_currency', watchedFxCurrency.trim(), { shouldValidate: false, shouldDirty: false });
     }
-  }, [fxCurrency, currencyOptions, setValue]);
+  }, [watchedFxCurrency, setValue]);
 
   useEffect(() => {
-    if (fxAmount && !isNaN(Number(fxAmount)) && mountedRef.current) {
-      setValue('currencyDetails.fx_amount', fxAmount, { shouldValidate: false, shouldDirty: false });
-    }
-  }, [fxAmount, setValue]);
-
-  useEffect(() => {
-    if (companySettlementRate && !isNaN(Number(companySettlementRate)) && mountedRef.current) {
-      setValue('currencyDetails.settlement_rate', companySettlementRate, { shouldValidate: false, shouldDirty: false });
-    }
-  }, [companySettlementRate, setValue]);
-
-  useEffect(() => {
-    if (addMargin != null && !isNaN(Number(addMargin)) && mountedRef.current) {
-      setValue('currencyDetails.add_margin', addMargin, { shouldValidate: false, shouldDirty: false });
-      // Set agent_mark_up fields
-      setValue('currencyDetails.invoiceRateTable.transaction_value.agent_mark_up', Number(addMargin), {
-        shouldValidate: false,
-        shouldDirty: false,
-      });
-    }
-  }, [addMargin, setValue]);
-
-  useEffect(() => {
-    if (customerRate && !isNaN(Number(customerRate)) && mountedRef.current) {
-      setValue('currencyDetails.customer_rate', customerRate, { shouldValidate: false, shouldDirty: false });
-    }
-  }, [customerRate, setValue]);
-
-  // Set transaction_value.company_rate to customerRate
-  useEffect(() => {
-    if (mountedRef.current && customerRate) {
+    if (customerRate) {
       setValue('currencyDetails.invoiceRateTable.transaction_value.company_rate', customerRate, {
         shouldValidate: false,
         shouldDirty: false,
@@ -233,9 +207,8 @@ const CurrencyDetails = ({ setAccordionState, viewMode, paymentData, dealBooking
     }
   }, [customerRate, setValue]);
 
-  // Set company rates from agent details or from view mode data
   useEffect(() => {
-    if (mountedRef.current && extractedMargins) {
+    if (extractedMargins) {
       // Set the company rates from extracted margins
       setValue('currencyDetails.invoiceRateTable.remittance_charges.company_rate', extractedMargins.productMargin, {
         shouldValidate: false,
@@ -254,10 +227,8 @@ const CurrencyDetails = ({ setAccordionState, viewMode, paymentData, dealBooking
     }
   }, [extractedMargins, setValue]);
 
-  // Calculate transaction_value.rate as company_settlement_rate + add_margin
-  // Calculate transaction_value.rate as company_rate + agent_mark_up
   useEffect(() => {
-    if (mountedRef.current && fxAmount && transactionValueCompanyRate != null && transactionValueAgentMarkUp != null) {
+    if (fxAmount && transactionValueCompanyRate != null && transactionValueAgentMarkUp != null) {
       const rate = Number(transactionValueCompanyRate) * Number(fxAmount);
       setValue('currencyDetails.invoiceRateTable.transaction_value.rate', rate, {
         shouldValidate: false,
@@ -266,9 +237,8 @@ const CurrencyDetails = ({ setAccordionState, viewMode, paymentData, dealBooking
     }
   }, [fxAmount, transactionValueCompanyRate, transactionValueAgentMarkUp, setValue]);
 
-  // Calculate remittance_charges.rate as company_rate + agent_mark_up
   useEffect(() => {
-    if (mountedRef.current && remittanceCompanyRate != null && remittanceAgentMarkUp != null) {
+    if (remittanceCompanyRate != null && remittanceAgentMarkUp != null) {
       const rate = Number(remittanceCompanyRate) + Number(remittanceAgentMarkUp);
       setValue('currencyDetails.invoiceRateTable.remittance_charges.rate', rate, {
         shouldValidate: false,
@@ -277,9 +247,8 @@ const CurrencyDetails = ({ setAccordionState, viewMode, paymentData, dealBooking
     }
   }, [remittanceCompanyRate, remittanceAgentMarkUp, setValue]);
 
-  // Calculate nostro_charges.rate as company_rate + agent_mark_up
   useEffect(() => {
-    if (mountedRef.current && nostroCompanyRate != null && nostroAgentMarkUp != null) {
+    if (nostroCompanyRate != null && nostroAgentMarkUp != null) {
       const rate = Number(nostroCompanyRate) + Number(nostroAgentMarkUp);
       setValue('currencyDetails.invoiceRateTable.nostro_charges.rate', rate, {
         shouldValidate: false,
@@ -288,9 +257,8 @@ const CurrencyDetails = ({ setAccordionState, viewMode, paymentData, dealBooking
     }
   }, [nostroCompanyRate, nostroAgentMarkUp, setValue]);
 
-  // Calculate other_charges.rate as company_rate + agent_mark_up
   useEffect(() => {
-    if (mountedRef.current && otherCompanyRate != null && otherAgentMarkUp != null) {
+    if (otherCompanyRate != null && otherAgentMarkUp != null) {
       const rate = Number(otherCompanyRate) + Number(otherAgentMarkUp);
       setValue('currencyDetails.invoiceRateTable.other_charges.rate', rate, {
         shouldValidate: false,
@@ -301,7 +269,6 @@ const CurrencyDetails = ({ setAccordionState, viewMode, paymentData, dealBooking
 
   useEffect(() => {
     if (
-      mountedRef.current &&
       transactionValueRate != null &&
       remittanceRate != null &&
       nostroRate != null &&
@@ -314,34 +281,30 @@ const CurrencyDetails = ({ setAccordionState, viewMode, paymentData, dealBooking
         shouldDirty: false,
       });
     }
-  }, [transactionValueRate, remittanceRate, nostroRate, otherRate]);
+  }, [transactionValueRate, remittanceRate, nostroRate, otherRate, setValue]);
 
   useEffect(() => {
-    if (mountedRef.current) {
-      const totalInr = Number(transactionAmount || 0) + Number(gstAmount || 0) + Number(tcsAmount || 0);
-      setValue('currencyDetails.invoiceRateTable.total_inr_amount.rate', totalInr, {
-        shouldValidate: false,
-        shouldDirty: false,
-      });
-    }
-  }, [transactionAmount, gstAmount, tcsAmount]);
+    const totalInr = Number(transactionAmount || 0) + Number(gstAmount || 0) + Number(tcsAmount || 0);
+    setValue('currencyDetails.invoiceRateTable.total_inr_amount.rate', totalInr, {
+      shouldValidate: false,
+      shouldDirty: false,
+    });
+  }, [transactionAmount, gstAmount, tcsAmount, setValue]);
 
   // Calculate Total Transaction Amount (TCS)
   useEffect(() => {
-    if (mountedRef.current) {
-      const calculatedTotalTcsAmt =
-        Number(transactionValueRate || 0) + Number(previousTransactionAmt || 0) + Number(declarationAmt || 0);
-      setValue('currencyDetails.total_transaction_amount_tcs', calculatedTotalTcsAmt, {
-        shouldValidate: false,
-        shouldDirty: false,
-      });
-    }
+    const calculatedTotalTcsAmt =
+      Number(transactionValueRate || 0) + Number(previousTransactionAmt || 0) + Number(declarationAmt || 0);
+    setValue('currencyDetails.total_transaction_amount_tcs', calculatedTotalTcsAmt, {
+      shouldValidate: false,
+      shouldDirty: false,
+    });
   }, [transactionValueRate, previousTransactionAmt, declarationAmt, setValue]);
 
   // GST Calculation
   // GST Calculation Effect
   useEffect(() => {
-    if (mountedRef.current && gstData) {
+    if (gstData) {
       if (gstData.statuscode === '200' && gstData.responsecode === 'success') {
         setValue('currencyDetails.invoiceRateTable.gst_amount.rate', Number(gstData.GST), {
           shouldValidate: false,
@@ -359,7 +322,7 @@ const CurrencyDetails = ({ setAccordionState, viewMode, paymentData, dealBooking
 
   // TCS Calculation Effect
   useEffect(() => {
-    if (mountedRef.current && tcsData) {
+    if (tcsData) {
       if (tcsData.statuscode === '200' && tcsData.responsecode === 'success') {
         setValue('currencyDetails.invoiceRateTable.tcs.rate', Number(tcsData.TCS), {
           shouldValidate: false,
@@ -389,9 +352,36 @@ const CurrencyDetails = ({ setAccordionState, viewMode, paymentData, dealBooking
 
   const handleSave = async () => {
     const isValid = await trigger();
+    console.log("Form trigger Result:", isValid);
+    console.log("Current Form Errors:", errors);
+    console.log("Current Form Values:", getValues());
+
     if (!isValid) {
       const missingFields = flattenErrors(errors);
-      toast.error(`Missing required field: ${getFieldLabel(missingFields[0])}`);
+      
+      if (missingFields.length > 0) {
+        toast.error(`Missing required field: ${getFieldLabel(missingFields[0])}`);
+      } else {
+        // Fallback: Manual check using Zod if RHF errors state is empty
+        try {
+          const { createTransactionSchema } = await import('../../common-schema');
+          const values = getValues();
+          const result = createTransactionSchema.safeParse(values);
+          
+          if (!result.success) {
+             const issues = (result.error as any).issues;
+             const manualMissingFields = issues.map((err: any) => err.path.join('.'));
+             console.log("Manual Validation Missing Fields:", manualMissingFields);
+             if (manualMissingFields.length > 0) {
+                toast.error(`Missing required field: ${getFieldLabel(manualMissingFields[0])}`);
+                return;
+             }
+          }
+        } catch (e) {
+          console.error("Manual validation error:", e);
+        }
+        toast.error('Please fill all required fields in all sections');
+      }
       return;
     }
     // Submit the form to hit the API
@@ -461,142 +451,151 @@ const CurrencyDetails = ({ setAccordionState, viewMode, paymentData, dealBooking
 
   return (
     <>
+      <CalculationsSync />
       <Spacer>
-        <FormFieldRow rowCols={2} wrapperClassName="flex-row lg:!flex-nowrap items-start">
-          <div className="flex flex-wrap md:!w-full lg:w-1/2 gap-4">
-            <FormFieldRow rowCols={1} wrapperClassName="md:row-cols-1 lg:row-cols-1" className="w-full">
-              {(['fx_currency', 'fx_amount'] as const).map((name) => {
-                const field = currencyDetailsConfig.find((f) => f.name === name) as FieldConfig;
-                let fieldWithOptions = field;
-                if (name === 'fx_currency') {
-                  fieldWithOptions = { ...field, options: currencyOptions };
-                }
-                return (
-                  <FieldWrapper key={name}>
-                    {getController({ ...fieldWithOptions, name: `currencyDetails.${name}`, control, errors })}
-                  </FieldWrapper>
-                );
-              })}
+        {(accordionState.currentActiveTab === 'panel3' || viewMode) ? (
+          <>
+            <FormFieldRow rowCols={2} wrapperClassName="flex-row lg:!flex-nowrap items-start">
+              <div className="flex flex-wrap md:!w-full lg:w-1/2 gap-4">
+                <FormFieldRow rowCols={1} wrapperClassName="md:row-cols-1 lg:row-cols-1" className="w-full">
+                  {(['fx_currency', 'fx_amount'] as const).map((name) => {
+                    const field = currencyDetailsConfig.find((f) => f.name === name) as FieldConfig;
+                    let fieldWithOptions = field;
+                    if (name === 'fx_currency') {
+                      fieldWithOptions = { ...field, type: 'combobox' as any, options: currencyOptions };
+                    }
+                    return (
+                      <FieldWrapper key={name}>
+                        {getController({ ...fieldWithOptions, name: `currencyDetails.${name}`, control, errors })}
+                      </FieldWrapper>
+                    );
+                  })}
+                </FormFieldRow>
+                <FormFieldRow rowCols={1} wrapperClassName="md:row-cols-1 lg:row-cols-1" className="w-full">
+                  {(['settlement_rate', 'add_margin'] as const).map((name) => {
+                    const field = currencyDetailsConfig.find((f) => f.name === name) as FieldConfig;
+                    return (
+                      <FieldWrapper key={name}>
+                        {getController({ ...field, name: `currencyDetails.${name}`, control, errors })}
+                      </FieldWrapper>
+                    );
+                  })}
+                </FormFieldRow>
+                <FormFieldRow rowCols={1} wrapperClassName="md:row-cols-1 lg:row-cols-1" className="w-full">
+                  {(
+                    [
+                      'customer_rate',
+                      ...((purpose || '').toLowerCase() === 'education' ? ['declared_education_loan_amount'] : []),
+                    ] as const
+                  ).map((name) => {
+                    const field = currencyDetailsConfig.find((f) => f.name === name) as FieldConfig;
+                    const isConditionalField = name === 'declared_education_loan_amount';
+                    return (
+                      <FieldWrapper key={name}>
+                        {getController({
+                          ...field,
+                          required: isConditionalField ? (purpose || '').toLowerCase() === 'education' : field.required,
+                          name: `currencyDetails.${name}`,
+                          control,
+                          errors,
+                        })}
+                      </FieldWrapper>
+                    );
+                  })}
+                </FormFieldRow>
+                <FormFieldRow rowCols={1} wrapperClassName="md:row-cols-1 lg:row-cols-1" className="w-full">
+                  {(
+                    [
+                      'previous_transaction_amount',
+                      ...((purpose || '').toLowerCase() === 'education' ? ['declared_previous_amount'] : []),
+                    ] as const
+                  ).map((name) => {
+                    const field = currencyDetailsConfig.find((f) => f.name === name) as FieldConfig;
+                    const isConditionalField = name === 'declared_previous_amount';
+                    return (
+                      <FieldWrapper key={name}>
+                        {getController({
+                          ...field,
+                          required: isConditionalField ? (purpose || '').toLowerCase() === 'education' : field.required,
+                          name: `currencyDetails.${name}`,
+                          control,
+                          errors,
+                        })}
+                      </FieldWrapper>
+                    );
+                  })}
+                </FormFieldRow>
+                <FormFieldRow rowCols={1} wrapperClassName="md:row-cols-1 lg:row-cols-1" className="w-full">
+                  {(['total_transaction_amount_tcs'] as const).map((name) => {
+                    const field = currencyDetailsConfig.find((f) => f.name === name) as FieldConfig;
+                    return (
+                      <FieldWrapper key={name}>
+                        {getController({ ...field, name: `currencyDetails.${name}`, control, errors })}
+                      </FieldWrapper>
+                    );
+                  })}
+                </FormFieldRow>
+              </div>
+              <div className="flex flex-wrap md:!w-full lg:w-1/2">
+                <RateTable
+                  id={'currencyDetails.invoiceRateTable'}
+                  mode={'edit'}
+                  totalAmount={totalInrAmount || 0}
+                  beneficiaryAmount={beneficiaryAmount}
+                  editableFields={[
+                    'remittance_charges.agent_mark_up',
+                    'nostro_charges.agent_mark_up',
+                    'other_charges.agent_mark_up',
+                  ]}
+                  invoiceData={invoiceRateTable}
+                />
+              </div>
             </FormFieldRow>
-            <FormFieldRow rowCols={1} wrapperClassName="md:row-cols-1 lg:row-cols-1" className="w-full">
-              {(['settlement_rate', 'add_margin'] as const).map((name) => {
-                const field = currencyDetailsConfig.find((f) => f.name === name) as FieldConfig;
-                return (
-                  <FieldWrapper key={name}>
-                    {getController({ ...field, name: `currencyDetails.${name}`, control, errors })}
-                  </FieldWrapper>
-                );
-              })}
-            </FormFieldRow>
-            <FormFieldRow rowCols={1} wrapperClassName="md:row-cols-1 lg:row-cols-1" className="w-full">
-              {(
-                [
-                  'customer_rate',
-                  ...((purpose || '').toLowerCase() === 'education' ? ['declared_education_loan_amount'] : []),
-                ] as const
-              ).map((name) => {
-                const field = currencyDetailsConfig.find((f) => f.name === name) as FieldConfig;
-                const isConditionalField = name === 'declared_education_loan_amount';
-                return (
-                  <FieldWrapper key={name}>
-                    {getController({
-                      ...field,
-                      required: isConditionalField ? (purpose || '').toLowerCase() === 'education' : field.required,
-                      name: `currencyDetails.${name}`,
-                      control,
-                      errors,
-                    })}
-                  </FieldWrapper>
-                );
-              })}
-            </FormFieldRow>
-            <FormFieldRow rowCols={1} wrapperClassName="md:row-cols-1 lg:row-cols-1" className="w-full">
-              {(
-                [
-                  'previous_transaction_amount',
-                  ...((purpose || '').toLowerCase() === 'education' ? ['declared_previous_amount'] : []),
-                ] as const
-              ).map((name) => {
-                const field = currencyDetailsConfig.find((f) => f.name === name) as FieldConfig;
-                const isConditionalField = name === 'declared_previous_amount';
-                return (
-                  <FieldWrapper key={name}>
-                    {getController({
-                      ...field,
-                      required: isConditionalField ? (purpose || '').toLowerCase() === 'education' : field.required,
-                      name: `currencyDetails.${name}`,
-                      control,
-                      errors,
-                    })}
-                  </FieldWrapper>
-                );
-              })}
-            </FormFieldRow>
-            <FormFieldRow rowCols={1} wrapperClassName="md:row-cols-1 lg:row-cols-1" className="w-full">
-              {(['total_transaction_amount_tcs'] as const).map((name) => {
-                const field = currencyDetailsConfig.find((f) => f.name === name) as FieldConfig;
-                return (
-                  <FieldWrapper key={name}>
-                    {getController({ ...field, name: `currencyDetails.${name}`, control, errors })}
-                  </FieldWrapper>
-                );
-              })}
-            </FormFieldRow>
-          </div>
-          <div className="flex flex-wrap md:!w-full lg:w-1/2">
-            <RateTable
-              id={'currencyDetails.invoiceRateTable'}
-              mode={'edit'}
-              totalAmount={totalInrAmount || 0}
-              beneficiaryAmount={beneficiaryAmount}
-              editableFields={[
-                'remittance_charges.agent_mark_up',
-                'nostro_charges.agent_mark_up',
-                'other_charges.agent_mark_up',
-              ]}
-              invoiceData={invoiceRateTable}
-            />
-          </div>
-        </FormFieldRow>
 
-        <div className="mt-16 flex flex-col items-center gap-10">
-          <div className="flex justify-center gap-1 flex-wrap">
-          
-              {!viewMode && (
-                <>
-                <ConfirmationAlert
-                  title="Cancel Transaction"
-                  description="Are you sure you want to cancel? All unsaved changes will be lost."
-                  onConfirm={handleCancelConfirm}
-                >
-                  <Button type="button" variant="light" className="mx-2">
-                    Cancel
-                  </Button>
-                </ConfirmationAlert>
-                 <ConfirmationAlert
-                  title="Save Transaction"
-                  description="Are you sure you want to save this transaction?"
-                  onConfirm={handleSave}
-                >
-                  <Button variant="secondary" disabled={isSaving} className="mx-2 w-24">
-                    {isSaving ? 'Saving...' : 'Save'}
-                  </Button>
-                </ConfirmationAlert>
-                </>
-              )}
-             
-            {viewMode && (
-              <>
-                <Button type="button" onClick={handlePayment} variant="secondary" className="mr-2">
-                  Offline Bank Transfer
-                </Button>
-                 <Button type="button" onClick={() => setIsKycDialogOpen(true)} variant="secondary" className="mr-2">
-                  KYC Upload
-                </Button>
-              </>
-            )}
+            <div className="mt-16 flex flex-col items-center gap-10">
+              <div className="flex justify-center gap-1 flex-wrap">
+              
+                  {!viewMode && (
+                    <>
+                    <ConfirmationAlert
+                      title="Cancel Transaction"
+                      description="Are you sure you want to cancel? All unsaved changes will be lost."
+                      onConfirm={handleCancelConfirm}
+                    >
+                      <Button type="button" variant="light" className="mx-2">
+                        Cancel
+                      </Button>
+                    </ConfirmationAlert>
+                     <ConfirmationAlert
+                      title="Save Transaction"
+                      description="Are you sure you want to save this transaction?"
+                      onConfirm={handleSave}
+                    >
+                      <Button variant="secondary" disabled={isSaving} className="mx-2 w-24">
+                        {isSaving ? 'Saving...' : 'Save'}
+                      </Button>
+                    </ConfirmationAlert>
+                    </>
+                  )}
+                 
+                {viewMode && (
+                  <>
+                    <Button type="button" onClick={handlePayment} variant="secondary" className="mr-2">
+                      Offline Bank Transfer
+                    </Button>
+                     <Button type="button" onClick={() => setIsKycDialogOpen(true)} variant="secondary" className="mr-2">
+                      KYC Upload
+                    </Button>
+                  </>
+                )}
+              </div>
+            </div>
+          </>
+        ) : (
+          <div className="p-4 text-center text-gray-400">
+            Please complete the previous sections to view currency details.
           </div>
-        </div>
+        )}
       </Spacer>
       <GenericDialog 
         open={isModalOpen} 
@@ -664,5 +663,51 @@ const CurrencyDetails = ({ setAccordionState, viewMode, paymentData, dealBooking
     </>
   );
 };
+
+const CalculationsSync = memo(() => {
+  const { setValue } = useFormContext();
+  const reduxState = useSelector((state: RootState) => state.transactionForm);
+  const mountedRef = useRef(false);
+
+  useEffect(() => {
+    mountedRef.current = true;
+    return () => {
+      mountedRef.current = false;
+    };
+  }, []);
+
+  const {
+    fx_currency: fxCurrency,
+    fx_amount: fxAmount,
+    company_settlement_rate: settlementRate,
+    customer_rate: customerRate,
+    add_margin: addMargin,
+  } = reduxState;
+
+  useEffect(() => {
+      if (fxCurrency && typeof fxCurrency === 'string') {
+        setValue('currencyDetails.fx_currency', fxCurrency.trim(), { shouldValidate: false, shouldDirty: false });
+      }
+      if (fxAmount != null) setValue('currencyDetails.fx_amount', fxAmount, { shouldValidate: false, shouldDirty: false });
+      if (settlementRate != null) setValue('currencyDetails.settlement_rate', settlementRate, { shouldValidate: false, shouldDirty: false });
+      
+      if (customerRate != null) {
+          setValue('currencyDetails.customer_rate', customerRate, { shouldValidate: false, shouldDirty: false });
+          setValue('currencyDetails.invoiceRateTable.transaction_value.company_rate', customerRate, { shouldValidate: false, shouldDirty: false });
+      }
+      
+      if (addMargin != null) {
+          setValue('currencyDetails.add_margin', addMargin, { shouldValidate: false, shouldDirty: false });
+          setValue('currencyDetails.invoiceRateTable.transaction_value.agent_mark_up', addMargin, { shouldValidate: false, shouldDirty: false });
+      }
+      
+      if (fxAmount && customerRate) {
+          const rate = Number(customerRate) * Number(fxAmount);
+          setValue('currencyDetails.invoiceRateTable.transaction_value.rate', rate, { shouldValidate: false, shouldDirty: false });
+      }
+  }, [fxCurrency, fxAmount, settlementRate, customerRate, addMargin, setValue]);
+
+  return null;
+});
 
 export default CurrencyDetails;
