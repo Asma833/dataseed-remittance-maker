@@ -15,11 +15,13 @@ export const GetRateTableColumns = ({
   mode = 'edit',
   editableFields = [] as string[],
   invoiceData,
+  nostroType,
 }: {
   id?: string;
   mode?: 'edit' | 'view';
   editableFields?: string[];
   invoiceData?: any;
+  nostroType?: string | undefined;
 }): Partial<RateTableColumn>[] => {
   const fieldMappings: Record<string, string> = {
     transaction_value: 'transaction_value',
@@ -94,7 +96,12 @@ export const GetRateTableColumns = ({
     {
       id: 'nostro_charges',
       cells: {
-        invoiceName: () => <span className="text-left">{`Nostro Charges`}</span>,
+        invoiceName: () => (
+          <span className="text-left">
+            {`Nostro Charges`}
+            {nostroType ? ` (${nostroType})` : ''}
+          </span>
+        ),
         companyRate: () => getCellContent('nostro_charges', 'companyRate'),
         agentMarkUp: () => getCellContent('nostro_charges', 'agentMarkUp'),
         rate: () => getCellContent('nostro_charges', 'rate'),

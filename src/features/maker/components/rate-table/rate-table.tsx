@@ -21,6 +21,7 @@ export default function RateTable({
   totalAmount,
   beneficiaryAmount,
   invoiceData,
+  nostroType,
 }: {
   id: string;
   mode?: 'edit' | 'view';
@@ -28,6 +29,7 @@ export default function RateTable({
   totalAmount?: number;
   beneficiaryAmount?: number;
   invoiceData?: any;
+  nostroType?: string | undefined;
 }) {
 
 
@@ -35,7 +37,7 @@ export default function RateTable({
   // Update rate calculation when companySettlementRate or addMargin changes
 
 
-  const invoices = GetRateTableColumns({ id, mode, editableFields, invoiceData });
+  const invoices = GetRateTableColumns({ id, mode, editableFields, invoiceData, nostroType });
 
   return (
     <Table>

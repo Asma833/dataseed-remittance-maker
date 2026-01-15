@@ -426,13 +426,31 @@ const CurrencyDetails = ({ setAccordionState, viewMode, paymentData, dealBooking
   };
   const handleUploadSubmit = async (file: File) => {
     if (selectedPayment) {
-      const paymentRecordId = selectedPayment?.raw_data?.deal.payment_records[0]?.id;
-      await uploadChallan({
+      const paymentRecordId = selectedPayment?.raw_data?.deal?.payment_records?.[0]?.id;
+      const response = await uploadChallan({
         id: paymentRecordId || selectedPayment.id,
         file,
       });
 
-      // Refetch transaction data to get updated payment info
+      if (response?.url) {
+        // Manually patch the URL to the selectedPayment state for immediate UI update
+        const updatedPayment = {
+          ...selectedPayment,
+          payment_challan_url: response.url,
+          raw_data: selectedPayment.raw_data ? {
+            ...selectedPayment.raw_data,
+            deal: {
+              ...selectedPayment.raw_data.deal,
+              payment_records: selectedPayment.raw_data.deal.payment_records.map((rec: any, idx: number) => 
+                idx === 0 ? { ...rec, payment_challan_url: response.url } : rec
+              )
+            }
+          } : selectedPayment.raw_data
+        };
+        setSelectedPayment(updatedPayment);
+      }
+
+      // Refetch transaction data to get updated payment info from server
       await refetchDealDetails?.();
     }
   };
@@ -553,7 +571,7 @@ const CurrencyDetails = ({ setAccordionState, viewMode, paymentData, dealBooking
                 <RateTable
                   id={'currencyDetails.invoiceRateTable'}
                   mode={'edit'}
-                  totalAmount={totalInrAmount || 0}
+                  totalAmount={transactionAmount}
                   beneficiaryAmount={beneficiaryAmount}
                   editableFields={[
                     'remittance_charges.agent_mark_up',
@@ -561,6 +579,7 @@ const CurrencyDetails = ({ setAccordionState, viewMode, paymentData, dealBooking
                     'other_charges.agent_mark_up',
                   ]}
                   invoiceData={invoiceRateTable}
+                  nostroType={selectedNostroType}
                 />
               </div>
             </FormFieldRow>
@@ -593,7 +612,13 @@ const CurrencyDetails = ({ setAccordionState, viewMode, paymentData, dealBooking
                  
                 {viewMode && (
                   <>
-                    <Button type="button" onClick={handlePayment} variant="secondary" className="mr-2">
+                    <Button 
+                      type="button" 
+                      onClick={handlePayment} 
+                      variant="secondary" 
+                      className="mr-2"
+                      disabled={!!(selectedPayment?.payment_challan_url || paymentData?.payment_challan_url)}
+                    >
                       Offline Bank Transfer
                     </Button>
                      <Button type="button" onClick={() => setIsKycDialogOpen(true)} variant="secondary" className="mr-2">
