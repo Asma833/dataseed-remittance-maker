@@ -69,7 +69,7 @@ const CurrencyDetails = ({ setAccordionState, viewMode, paymentData, dealBooking
     applicant_pan_number: panNumber,
     source_of_funds: sourceofFund,
     purpose,
-    nostro_charges: selectedNostroType 
+    nostro_charges: reduxNostroType 
   } = reduxState;
 
   const transactionAmount = useWatch({ control, name: 'currencyDetails.invoiceRateTable.transaction_amount.rate' });
@@ -129,7 +129,9 @@ const CurrencyDetails = ({ setAccordionState, viewMode, paymentData, dealBooking
   const tcsAmount = invoiceRateTable?.tcs?.rate;
   const totalInrAmount = invoiceRateTable?.total_inr_amount?.rate;
 
-  // selectedNostroType is now from Redux
+  // selectedNostroType is now from Redux with useWatch fallback for reliability (especially in view mode)
+  const watchedNostroType = useWatch({ control, name: 'transactionDetails.nostro_charges' });
+  const selectedNostroType = watchedNostroType || reduxNostroType;
 
   // Calculate Transaction Amount locally for API trigger to ensure stability
   const calculatedTransactionAmount = useMemo(() => {
@@ -139,10 +141,12 @@ const CurrencyDetails = ({ setAccordionState, viewMode, paymentData, dealBooking
       nostroRate != null &&
       otherRate != null
     ) {
-      return Number(transactionValueRate) + Number(remittanceRate) + Number(nostroRate) + Number(otherRate);
+      // BEN mode: Foreign charges (nostro) are not paid by the sender
+      const nostroPayable = selectedNostroType === 'BEN' ? 0 : Number(nostroRate);
+      return Number(transactionValueRate) + Number(remittanceRate) + nostroPayable + Number(otherRate);
     }
     return 0;
-  }, [transactionValueRate, remittanceRate, nostroRate, otherRate]);
+  }, [transactionValueRate, remittanceRate, nostroRate, otherRate, selectedNostroType]);
 
   // Debounced Values
   const debouncedTransactionAmount = useDebounce(calculatedTransactionAmount.toString(), 1000);
@@ -247,9 +251,13 @@ const CurrencyDetails = ({ setAccordionState, viewMode, paymentData, dealBooking
     }
   }, [remittanceCompanyRate, remittanceAgentMarkUp, setValue]);
 
+  // Calculate nostro_charges.rate as company_rate + agent_mark_up
   useEffect(() => {
     if (nostroCompanyRate != null && nostroAgentMarkUp != null) {
+      // In both BEN and OUR, we show the charge amount in the table for information
+      // But we control whether it's added to the total in the sum effects
       const rate = Number(nostroCompanyRate) + Number(nostroAgentMarkUp);
+      
       setValue('currencyDetails.invoiceRateTable.nostro_charges.rate', rate, {
         shouldValidate: false,
         shouldDirty: false,
@@ -274,14 +282,17 @@ const CurrencyDetails = ({ setAccordionState, viewMode, paymentData, dealBooking
       nostroRate != null &&
       otherRate != null
     ) {
+      // BEN mode: Foreign charges (nostro) are not paid by the sender
+      const nostroPayable = selectedNostroType === 'BEN' ? 0 : Number(nostroRate);
       const transactionAmt =
-        Number(transactionValueRate) + Number(remittanceRate) + Number(nostroRate) + Number(otherRate);
+        Number(transactionValueRate) + Number(remittanceRate) + nostroPayable + Number(otherRate);
+        
       setValue('currencyDetails.invoiceRateTable.transaction_amount.rate', transactionAmt, {
         shouldValidate: false,
         shouldDirty: false,
       });
     }
-  }, [transactionValueRate, remittanceRate, nostroRate, otherRate, setValue]);
+  }, [transactionValueRate, remittanceRate, nostroRate, otherRate, selectedNostroType, setValue]);
 
   useEffect(() => {
     const totalInr = Number(transactionAmount || 0) + Number(gstAmount || 0) + Number(tcsAmount || 0);
@@ -682,6 +693,7 @@ const CalculationsSync = memo(() => {
     company_settlement_rate: settlementRate,
     customer_rate: customerRate,
     add_margin: addMargin,
+    nostro_charges: selectedNostroType, // Add selectedNostroType from Redux
   } = reduxState;
 
   useEffect(() => {
@@ -689,11 +701,14 @@ const CalculationsSync = memo(() => {
         setValue('currencyDetails.fx_currency', fxCurrency.trim(), { shouldValidate: false, shouldDirty: false });
       }
       if (fxAmount != null) setValue('currencyDetails.fx_amount', fxAmount, { shouldValidate: false, shouldDirty: false });
-      if (settlementRate != null) setValue('currencyDetails.settlement_rate', settlementRate, { shouldValidate: false, shouldDirty: false });
+      if (settlementRate != null) {
+          setValue('currencyDetails.settlement_rate', settlementRate, { shouldValidate: false, shouldDirty: false });
+          // In the table, company_rate for transaction value should be the settlement rate
+          setValue('currencyDetails.invoiceRateTable.transaction_value.company_rate', settlementRate, { shouldValidate: false, shouldDirty: false });
+      }
       
       if (customerRate != null) {
           setValue('currencyDetails.customer_rate', customerRate, { shouldValidate: false, shouldDirty: false });
-          setValue('currencyDetails.invoiceRateTable.transaction_value.company_rate', customerRate, { shouldValidate: false, shouldDirty: false });
       }
       
       if (addMargin != null) {
@@ -703,9 +718,10 @@ const CalculationsSync = memo(() => {
       
       if (fxAmount && customerRate) {
           const rate = Number(customerRate) * Number(fxAmount);
+          // Correct path: transaction_value.rate (individual row) not transaction_amount.rate (total)
           setValue('currencyDetails.invoiceRateTable.transaction_value.rate', rate, { shouldValidate: false, shouldDirty: false });
       }
-  }, [fxCurrency, fxAmount, settlementRate, customerRate, addMargin, setValue]);
+  }, [fxCurrency, fxAmount, settlementRate, customerRate, addMargin, selectedNostroType, setValue]);
 
   return null;
 });
