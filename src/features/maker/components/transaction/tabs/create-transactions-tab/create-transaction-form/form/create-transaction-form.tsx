@@ -1,4 +1,4 @@
-import { useMemo, useState } from 'react';
+import { useMemo, useState, useEffect } from 'react';
 import CreateTransactionsAccordion from '../components/create-transactions-accordion';
 import { accordionItems } from '../config/accordion-config';
 import { useNavigate } from 'react-router-dom';
@@ -74,8 +74,15 @@ const CreateTransactionForm = ({ onCancel, onSubmit, initialData, viewMode }: Pr
   const form = useForm<CreateTransactionFormInput, unknown, CreateTransactionFormData>({
     resolver: zodResolver(createTransactionSchema),
     defaultValues,
-    mode: 'onChange', // Trigger validation on blur for better performance
+    mode: 'onChange',
   });
+
+  // Effect to reset form when initialData changes (critical for view mode)
+  useEffect(() => {
+    if (initialData) {
+      form.reset(getFormDefaultValues(initialData));
+    }
+  }, [initialData, form]);
 
   const handlePrevious = () => {
     if (currentTab === 'panel2') {
@@ -103,24 +110,37 @@ const CreateTransactionForm = ({ onCancel, onSubmit, initialData, viewMode }: Pr
     try {
       const payload: CompleteTransactionRequest = {
         currencyDetails: {
-          fx_currency: normalizeString(data.currencyDetails.fx_currency),
-          fx_amount: safeNumber(data.currencyDetails.fx_amount),
-          settlement_rate: safeNumber(data.currencyDetails.settlement_rate),
-          add_margin: safeNumber(data.currencyDetails.add_margin),
-          customer_rate: safeNumber(data.currencyDetails.customer_rate),
+          fx_currency: normalizeString(data.transactionDetails.fx_currency),
+          fx_amount: safeNumber(data.transactionDetails.fx_amount),
+          settlement_rate: safeNumber(data.transactionDetails.company_settlement_rate),
+          add_margin: safeNumber(data.transactionDetails.add_margin),
+          customer_rate: safeNumber(data.transactionDetails.customer_rate),
           declared_education_loan_amount: safeNumber(data.currencyDetails.declared_education_loan_amount),
           previous_transaction_amount: safeNumber(data.currencyDetails.previous_transaction_amount),
           declared_previous_amount: safeNumber(data.currencyDetails.declared_previous_amount),
           total_transaction_amount_tcs: safeNumber(data.currencyDetails.total_transaction_amount_tcs),
           invoiceRateTable: {
-            transaction_value: data.currencyDetails.invoiceRateTable.transaction_value,
-
-            remittance_charges: data.currencyDetails.invoiceRateTable.remittance_charges,
+            transaction_value: {
+              company_rate: safeNumber(data.currencyDetails.invoiceRateTable.transaction_value.company_rate),
+              agent_mark_up: safeNumber(data.currencyDetails.invoiceRateTable.transaction_value.agent_mark_up),
+              rate: safeNumber(data.currencyDetails.invoiceRateTable.transaction_value.rate),
+            },
+            remittance_charges: {
+              company_rate: safeNumber(data.currencyDetails.invoiceRateTable.remittance_charges.company_rate),
+              agent_mark_up: safeNumber(data.currencyDetails.invoiceRateTable.remittance_charges.agent_mark_up),
+              rate: safeNumber(data.currencyDetails.invoiceRateTable.remittance_charges.rate),
+            },
             nostro_charges: {
-              ...data.currencyDetails.invoiceRateTable.nostro_charges,
+              company_rate: safeNumber(data.currencyDetails.invoiceRateTable.nostro_charges.company_rate),
+              agent_mark_up: safeNumber(data.currencyDetails.invoiceRateTable.nostro_charges.agent_mark_up),
+              rate: safeNumber(data.currencyDetails.invoiceRateTable.nostro_charges.rate),
               type: normalizeString(data.transactionDetails.nostro_charges),
             },
-            other_charges: data.currencyDetails.invoiceRateTable.other_charges,
+            other_charges: {
+              company_rate: safeNumber(data.currencyDetails.invoiceRateTable.other_charges.company_rate),
+              agent_mark_up: safeNumber(data.currencyDetails.invoiceRateTable.other_charges.agent_mark_up),
+              rate: safeNumber(data.currencyDetails.invoiceRateTable.other_charges.rate),
+            },
             transaction_amount: safeNumber(data.currencyDetails.invoiceRateTable.transaction_amount.rate),
             gst_amount: safeNumber(data.currencyDetails.invoiceRateTable.gst_amount.rate),
             total_inr_amount: safeNumber(data.currencyDetails.invoiceRateTable.total_inr_amount.rate),
@@ -168,9 +188,6 @@ const CreateTransactionForm = ({ onCancel, onSubmit, initialData, viewMode }: Pr
           customer_rate: safeNumber(data.transactionDetails.customer_rate),
           nostro_charges: safeNumber(data.currencyDetails.invoiceRateTable.nostro_charges.rate),
           applicant_name: normalizeString(data.transactionDetails.applicant_name),
-          applicant_dob: data.transactionDetails.applicant_dob
-            ? new Date(data.transactionDetails.applicant_dob).toISOString()
-            : '',
           applicant_pan_number: normalizeString(data.transactionDetails.applicant_pan_number),
           applicant_email: normalizeString(data.transactionDetails.applicant_email),
           applicant_mobile_number: normalizeString(data.transactionDetails.applicant_mobile_number),

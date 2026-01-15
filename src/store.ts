@@ -3,20 +3,24 @@ import { persistStore, persistReducer, FLUSH, REHYDRATE, PAUSE, PERSIST, PURGE, 
 import storage from 'redux-persist/lib/storage';
 import authReducer from '@/features/auth/store/auth-slice';
 import type { AuthState } from '@/features/auth/store/auth-slice';
+import transactionFormReducer from '@/features/maker/store/transaction-form-slice';
+import type { TransactionFormState } from '@/features/maker/store/transaction-form-slice';
 
 // Define RootState type
 export interface RootState {
   auth: AuthState;
+  transactionForm: TransactionFormState;
 }
 
 const persistConfig = {
   key: 'root',
   storage,
-  whitelist: ['auth'],
+  whitelist: ['auth'], // Usually we don't want to persist form state across sessions
 };
 
 const rootReducer = combineReducers({
   auth: authReducer,
+  transactionForm: transactionFormReducer,
 });
 
 const persistedReducer = persistReducer(persistConfig, rootReducer);

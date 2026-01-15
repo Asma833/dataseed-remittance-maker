@@ -44,13 +44,16 @@ const Payments = ({
 
   const fileUpload = watch('fileUpload');
 
-  // Pre-populate file upload field if payment_challan_url exists
+  // Pre-populate form when data changes
   useEffect(() => {
-    if (data?.payment_challan_url && !fileUpload) {
-      // Patch the URL directly to the file upload field
-      setValue('fileUpload', [{ file: null, url: data.payment_challan_url, name: data.payment_challan_url }]);
+    if (data) {
+      const url = data.payment_challan_url || data.payment_screenshot;
+      methods.reset({
+        paymentMethod: 'bank',
+        fileUpload: url ? [{ file: null, url: url, name: url.split('/').pop() || 'Payment Screenshot' }] : [],
+      });
     }
-  }, [data?.payment_challan_url, fileUpload, setValue]);
+  }, [data, methods]);
 
   const submit = async (formData: any) => {
     // Validate the form before submitting
@@ -65,8 +68,18 @@ const Payments = ({
   return (
     <div className="space-y-0 overflow-hidden pt-3">
 
-      <div className="text-md font-semibold truncate">Offline bank transfer</div>
-      <p className="text-sm my-0 text-gray-400 border-b border-gray-200 pb-2">Please upload screen shot for offline bank transfer</p>
+      <div className="mb-4">
+        {(() => {
+          const transactionId = data?.transaction_id || data?.ref_no || data?.raw_data?.transaction?.transaction_id;
+          return transactionId ? (
+            <div className="text-sm text-gray-500 mb-4">Transaction Id: {transactionId}</div>
+          ) : null;
+        })()}
+        
+        <div className="text-md font-semibold truncate">Offline bank transfer</div>
+        <p className="text-sm my-0 text-gray-400">Please upload screen shot for offline bank transfer</p>
+        <div className="border-b border-gray-200 mt-2 mb-4" />
+      </div>
 
       <FormProvider {...methods}>
         <FormContentWrapper className="rounded-lg w-full mr-auto bg-transparent">

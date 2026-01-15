@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, memo } from 'react';
 import { ChevronDown } from 'lucide-react';
 import Accordion from '@mui/material/Accordion';
 import AccordionDetails from '@mui/material/AccordionDetails';
@@ -7,7 +7,7 @@ import Typography from '@mui/material/Typography';
 import { AccordionItem } from '../types/createTransactionForm.types';
 import { useAccordionStateProvider } from '../context/accordion-control-context';
 
-export default function CreateTransactionsAccordion({
+const CreateTransactionsAccordion = memo(({
   accordionItems,
   viewMode,
   paymentData,
@@ -17,7 +17,7 @@ export default function CreateTransactionsAccordion({
   viewMode?: boolean;
   paymentData?: any;
   dealBookingId?: string | undefined;
-}) {
+}) => {
   const { accordionState, setAccordionState } = useAccordionStateProvider();
   const [expanded, setExpanded] = useState<string | false>(accordionState.currentActiveTab);
   const handleChange = (panel: string) => (event: React.SyntheticEvent, isExpanded: boolean) => {
@@ -68,4 +68,6 @@ export default function CreateTransactionsAccordion({
       ))}
     </div>
   );
-}
+});
+
+export default CreateTransactionsAccordion;
