@@ -136,7 +136,7 @@ const PaymentStatus = () => {
             />
           }
           description={`Tnx Reference No - ${selectedPayment?.transaction_id || ''}`}
-          className="md:max-w-[40%] gap-0 [&_[data-slot=alert-dialog-header]]:text-left"
+          className="md:max-w-[550px] gap-0 [&_[data-slot=alert-dialog-header]]:text-left"
         />
       )}
        <ImageViewModal

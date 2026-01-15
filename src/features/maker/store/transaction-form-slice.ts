@@ -10,6 +10,7 @@ export interface TransactionFormState {
   source_of_funds: string;
   purpose: string;
   nostro_charges: string;
+  transaction_id: string; // Added transaction_id
 }
 
 const initialState: TransactionFormState = {
@@ -22,6 +23,7 @@ const initialState: TransactionFormState = {
   source_of_funds: '',
   purpose: '',
   nostro_charges: '',
+  transaction_id: '',
 };
 
 const transactionFormSlice = createSlice({

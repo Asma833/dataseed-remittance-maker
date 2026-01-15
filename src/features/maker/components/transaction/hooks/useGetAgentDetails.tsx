@@ -11,7 +11,12 @@ export const useGetAgentDetails = (selectedCurrency?: string, viewMode?: boolean
 
   const query = useQuery({
     queryKey: ['agentDetails', agentId],
-    queryFn: () => getAgentDetails(agentId!),
+    queryFn: async () => {
+        console.log('Fetching Agent Details for ID:', agentId);
+        const res = await getAgentDetails(agentId!);
+        console.log('Agent Details API Response:', res);
+        return res;
+    },
     enabled: !!agentId && !viewMode && !!selectedCurrency, // Only run query if agentId and currency are available and not in view mode
     staleTime: 5 * 60 * 1000, // 5 minutes
     retry: 1, // Limit retries to avoid excessive API calls
@@ -41,7 +46,20 @@ export const useGetAgentDetails = (selectedCurrency?: string, viewMode?: boolean
     // Otherwise use the agent details API data
     else if (query.data && selectedCurrency) {
       try {
-        const margins = extractAgentMargins(query.data, selectedCurrency);
+        const agentData = query.data.commission ? query.data : (query.data.data || query.data);
+        console.log('Agent Data for Extraction:', agentData, 'Selected Currency:', selectedCurrency);
+        
+        if (!agentData || !agentData.commission) {
+            console.warn('Agent details missing commission structure during extraction:', agentData);
+             return {
+                nostroMargin: 0,
+                productMargin: 0,
+                otherChargesRate: 0,
+              };
+        }
+
+        const margins = extractAgentMargins(agentData, selectedCurrency);
+        console.log('Extracted Margins Result:', margins);
         return margins;
       } catch (error) {
         console.error('Error extracting margins from API data:', error);

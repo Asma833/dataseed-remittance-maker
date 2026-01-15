@@ -43,7 +43,7 @@ const Payments = ({
   } = methods;
 
   const fileUpload = watch('fileUpload');
-
+  console.log(data,'Payment Data')
   // Pre-populate file upload field if payment_challan_url exists
   useEffect(() => {
     if (data?.payment_challan_url && !fileUpload) {
@@ -63,8 +63,7 @@ const Payments = ({
     }
   };
   return (
-    <div className="space-y-0 overflow-hidden pt-3">
-
+    <div className="space-y-0 overflow-hidden gap-0">
       <div className="text-md font-semibold truncate">Offline bank transfer</div>
       <p className="text-sm my-0 text-gray-400 border-b border-gray-200 pb-2">Please upload screen shot for offline bank transfer</p>
 

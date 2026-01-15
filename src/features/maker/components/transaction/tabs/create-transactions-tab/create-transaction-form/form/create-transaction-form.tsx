@@ -17,6 +17,10 @@ import { panelFields } from './form-validation-fields';
 import { PaymentData } from '../../../../types/payment.types';
 import { useQueryClient } from '@tanstack/react-query';
 
+import TransactionFormSync from './transaction-form-sync';
+import { store } from '@/store';
+import { updateTransactionField } from '@/features/maker/store/transaction-form-slice';
+
 type Props = {
   onCancel?: () => void;
   onSubmit?: (data: CreateTransactionFormData) => void;
@@ -227,6 +231,14 @@ const CreateTransactionForm = ({ onCancel, onSubmit, initialData, viewMode }: Pr
         // Invalidate the query to fetch the latest data
         await queryClient.invalidateQueries({ queryKey: ['deal-details', transactionId] });
         
+        await queryClient.invalidateQueries({ queryKey: ['deal-details', transactionId] });
+        
+        // Store transaction_id in Redux for dialogs
+         const validTransactionId = (response as any).transaction?.transaction_id;
+         if (validTransactionId) {
+              store.dispatch(updateTransactionField({ transaction_id: validTransactionId }));
+         }
+
         form.reset(data);
       } else {
         // Create mode
@@ -260,7 +272,12 @@ const CreateTransactionForm = ({ onCancel, onSubmit, initialData, viewMode }: Pr
         if (dealBookingId) {
              await queryClient.invalidateQueries({ queryKey: ['deal-details', dealBookingId] });
         }
-        setIsCreated(true);
+        // Store transaction_id in Redux for dialogs
+        // We must re-declare transactionId because it was scoped to the if-else block above or the response usage
+        const transactionId = (response as any).transaction?.transaction_id;
+         if (transactionId) {
+              store.dispatch(updateTransactionField({ transaction_id: transactionId }));
+         }
       }
     } catch (error) {
       console.error('Error creating transaction:', error);
@@ -279,6 +296,7 @@ const CreateTransactionForm = ({ onCancel, onSubmit, initialData, viewMode }: Pr
   return (
     <FormProvider {...form}>
       <form id="create-transaction-form" onSubmit={form.handleSubmit(handleSubmit)}>
+        <TransactionFormSync />
         <div>
           <div className="flex justify-end mb-4 gap-2">
             <div className="flex gap-2">

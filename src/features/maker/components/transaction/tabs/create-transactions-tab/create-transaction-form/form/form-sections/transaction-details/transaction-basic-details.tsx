@@ -12,31 +12,21 @@ import { FieldConfig } from '../../../types/createTransactionForm.types';
 import { useGetData } from '@/hooks/useGetData';
 import { queryKeys } from '@/core/constant/query-keys';
 import { API } from '@/core/constant/apis';
-import { useMemo, useEffect, useCallback, useRef } from 'react';
+import { useMemo, useEffect, useCallback, useRef, memo } from 'react';
 import { debounce } from 'lodash';
 import { TransactionPurposeMap } from '@/types/common/transaction-form.types';
-import { useDispatch } from 'react-redux';
-import { updateTransactionField } from '@/features/maker/store/transaction-form-slice';
 
-const TransactionBasicDetails = ({ setAccordionState }: CommonCreateTransactionProps) => {
-  const dispatch = useDispatch();
+const TransactionBasicDetails = memo(({ setAccordionState }: CommonCreateTransactionProps) => {
   const {
     control,
     setValue,
     clearErrors,
-    formState: { errors },
   } = useFormContext();
   
-  // Watch fields and sync to Redux for calculations in other tabs
+  // Watch necessary fields for rendering
   const fxCurrency = useWatch({ control, name: 'transactionDetails.fx_currency' });
-  const fxAmount = useWatch({ control, name: 'transactionDetails.fx_amount' });
-  const companySettlementRate = useWatch({ control, name: 'transactionDetails.company_settlement_rate' });
-  const addMargin = useWatch({ control, name: 'transactionDetails.add_margin' });
-  const customerRate = useWatch({ control, name: 'transactionDetails.customer_rate' });
-  const panNumber = useWatch({ control, name: 'transactionDetails.applicant_pan_number' });
   const sourceOfFunds = useWatch({ control, name: 'transactionDetails.source_of_funds' });
   const purpose = useWatch({ control, name: 'transactionDetails.purpose' });
-  const nostroChargesType = useWatch({ control, name: 'transactionDetails.nostro_charges' });
 
   // Add a ref to track previous settlement rate to prevent unnecessary updates
   const prevSettlementRateRef = useRef<number | null>(null);
@@ -57,19 +47,6 @@ const TransactionBasicDetails = ({ setAccordionState }: CommonCreateTransactionP
     dataPath: 'data',
   });
 
-  useEffect(() => {
-    dispatch(updateTransactionField({
-      fx_currency: typeof fxCurrency === 'string' ? fxCurrency.trim() : fxCurrency,
-      fx_amount: Number(fxAmount || 0),
-      company_settlement_rate: Number(companySettlementRate || 0),
-      add_margin: Number(addMargin || 0),
-      customer_rate: Number(customerRate || 0),
-      applicant_pan_number: panNumber,
-      source_of_funds: sourceOfFunds,
-      purpose: purpose,
-      nostro_charges: nostroChargesType || '',
-    }));
-  }, [fxCurrency, fxAmount, companySettlementRate, addMargin, customerRate, panNumber, sourceOfFunds, purpose, nostroChargesType, dispatch]);
 
   const selectedTransactionTypeId = '3f9fbf53-057f-4cf7-90f5-5035edd2e158';
   // Filter purpose types based on selected transaction type
@@ -115,90 +92,9 @@ const TransactionBasicDetails = ({ setAccordionState }: CommonCreateTransactionP
       setValue('transactionDetails.transaction_purpose_map_id', selectedMapping.id);
     }
   }, [selectedMapping, setValue]);
-
-  useEffect(() => {
-    if (fxCurrency && specificCurrencyRate && typeof fxCurrency === 'string') {
-      const rate = specificCurrencyRate;
-      const buyRate = Number(rate.card_buy_rate);
-      // Only update if the currency codes match, the rate is valid, and different from previous value
-      if (
-        rate.currency_code === fxCurrency.trim() &&
-        !isNaN(buyRate) &&
-        buyRate > 0 &&
-        prevSettlementRateRef.current !== buyRate
-      ) {
-        // Update the ref with the new value
-        prevSettlementRateRef.current = buyRate;
-        // Set the value with options to prevent unnecessary validation/marking as dirty
-        setValue('transactionDetails.company_settlement_rate', buyRate, {
-          shouldValidate: false,
-          shouldDirty: false,
-        });
-      }
-    }
-  }, [fxCurrency, specificCurrencyRate, setValue]);
-
-  // Debounced calculation function
-  const debouncedCalculateCustomerRate = useCallback(
-    debounce((settlementRate: number, margin: number) => {
-      const calculatedCustomerRate = Number(settlementRate || 0) + Number(margin || 0);
-      setValue('transactionDetails.customer_rate', calculatedCustomerRate, {
-        shouldValidate: false,
-        shouldDirty: false,
-      });
-    }, 1000), // Reduced debounce time for better responsiveness
-    [setValue]
-  );
-
-  // Add a ref to track previous customer rate calculation
-  const prevCustomerRateParamsRef = useRef<{ settlementRate: number | null; margin: number | null }>({
-    settlementRate: null,
-    margin: null,
-  });
-
-  useEffect(() => {
-    if (fxAmount != null && companySettlementRate != null) {
-      const margin = addMargin || 0;
-
-      // Only recalculate if the values have changed
-      if (
-        prevCustomerRateParamsRef.current.settlementRate !== companySettlementRate ||
-        prevCustomerRateParamsRef.current.margin !== margin
-      ) {
-        // Update the ref with new values
-        prevCustomerRateParamsRef.current = {
-          settlementRate: companySettlementRate,
-          margin: margin,
-        };
-
-        // Use the debounced function to calculate and set the customer rate
-        debouncedCalculateCustomerRate(companySettlementRate, margin);
-      }
-    }
-
-    // Cleanup function to cancel pending debounced calls
-    return () => {
-      debouncedCalculateCustomerRate.cancel();
-    };
-  }, [fxAmount, companySettlementRate, addMargin, debouncedCalculateCustomerRate]);
-
-  // Clear payee fields when source_of_funds is not 'others'
-  useEffect(() => {
-    if (sourceOfFunds !== 'others') {
-      const options = { shouldValidate: false, shouldDirty: false };
-      setValue('transactionDetails.paid_by', '', options);
-      setValue('transactionDetails.payee_name', '', options);
-      setValue('transactionDetails.payee_pan_number', '', options);
-      setValue('transactionDetails.payee_dob', '', options);
-      
-      clearErrors([
-        'transactionDetails.paid_by', 
-        'transactionDetails.payee_name', 
-        'transactionDetails.payee_pan_number', 
-        'transactionDetails.payee_dob'
-      ]);
-    }
-  }, [sourceOfFunds, setValue, clearErrors]);
+  
+  // NOTE: Company Settlement Rate Fetching logic moved to TransactionFormSync
+  // NOTE: Payee clearing logic moved to TransactionFormSync
   const currencyCodeType =
     allCurrencyRates?.reduce((acc: Record<string, { label: string }>, currency) => {
       acc[currency.currency_code] = { label: currency.currency_code };
@@ -218,7 +114,7 @@ const TransactionBasicDetails = ({ setAccordionState }: CommonCreateTransactionP
               }
               return (
                 <FieldWrapper key={name}>
-                  {getController({ ...fieldWithOptions, name: `transactionDetails.${name}`, control, errors })}
+                    {getController({ ...fieldWithOptions, name: `transactionDetails.${name}`, control })}
                 </FieldWrapper>
               );
             })}
@@ -232,7 +128,7 @@ const TransactionBasicDetails = ({ setAccordionState }: CommonCreateTransactionP
               }
               return (
                 <FieldWrapper key={name}>
-                  {getController({ ...fieldWithOptions, name: `transactionDetails.${name}`, control, errors })}
+                    {getController({ ...fieldWithOptions, name: `transactionDetails.${name}`, control })}
                 </FieldWrapper>
               );
             })}
@@ -245,7 +141,7 @@ const TransactionBasicDetails = ({ setAccordionState }: CommonCreateTransactionP
                   const field = transactionBasicDetailsConfig.find((f) => f.name === name) as FieldConfig;
                   return (
                     <FieldWrapper key={name}>
-                      {getController({ ...field, name: `transactionDetails.${name}`, control, errors })}
+                      {getController({ ...field, name: `transactionDetails.${name}`, control })}
                     </FieldWrapper>
                   );
                 }
@@ -257,7 +153,7 @@ const TransactionBasicDetails = ({ setAccordionState }: CommonCreateTransactionP
                   const field = transactionBasicDetailsConfig.find((f) => f.name === name) as FieldConfig;
                   return (
                     <FieldWrapper key={name}>
-                      {getController({ ...field, name: `transactionDetails.${name}`, control, errors })}
+                      {getController({ ...field, name: `transactionDetails.${name}`, control })}
                     </FieldWrapper>
                   );
                 }
@@ -277,7 +173,7 @@ const TransactionBasicDetails = ({ setAccordionState }: CommonCreateTransactionP
                 const field = transactionBasicDetailsConfig.find((f) => f.name === name) as FieldConfig;
                 return (
                   <FieldWrapper key={name}>
-                    {getController({ ...field, name: `transactionDetails.${name}`, control, errors })}
+                    {getController({ ...field, name: `transactionDetails.${name}`, control })}
                   </FieldWrapper>
                 );
               })}
@@ -288,7 +184,7 @@ const TransactionBasicDetails = ({ setAccordionState }: CommonCreateTransactionP
                   const field = transactionBasicDetailsConfig.find((f) => f.name === name) as FieldConfig;
                   return (
                     <FieldWrapper key={name}>
-                      {getController({ ...field, name: `transactionDetails.${name}`, control, errors })}
+                      {getController({ ...field, name: `transactionDetails.${name}`, control })}
                     </FieldWrapper>
                   );
                 }
@@ -300,7 +196,7 @@ const TransactionBasicDetails = ({ setAccordionState }: CommonCreateTransactionP
                   const field = transactionBasicDetailsConfig.find((f) => f.name === name) as FieldConfig;
                   return (
                     <FieldWrapper key={name}>
-                      {getController({ ...field, name: `transactionDetails.${name}`, control, errors })}
+                      {getController({ ...field, name: `transactionDetails.${name}`, control })}
                     </FieldWrapper>
                   );
                 }
@@ -311,7 +207,7 @@ const TransactionBasicDetails = ({ setAccordionState }: CommonCreateTransactionP
                 const field = transactionBasicDetailsConfig.find((f) => f.name === name) as FieldConfig;
                 return (
                   <FieldWrapper key={name}>
-                    {getController({ ...field, name: `transactionDetails.${name}`, control, errors })}
+                    {getController({ ...field, name: `transactionDetails.${name}`, control })}
                   </FieldWrapper>
                 );
               })}
@@ -321,6 +217,6 @@ const TransactionBasicDetails = ({ setAccordionState }: CommonCreateTransactionP
       </FormContentWrapper>
     </Spacer>
   );
-};
+});
 
 export default TransactionBasicDetails;

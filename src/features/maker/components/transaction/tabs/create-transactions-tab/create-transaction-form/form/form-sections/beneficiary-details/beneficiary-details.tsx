@@ -1,55 +1,43 @@
+import { memo } from 'react';
 import Spacer from '@/components/form/wrapper/spacer';
 import { beneficiaryBank, beneficiaryDetailsConfig } from './beneficairy-details.config';
 import { CommonCreateTransactionProps } from '@/features/maker/components/transaction/types/create-transaction.types';
-import { useState } from 'react';
-import { useFormContext, useWatch, useFormState } from 'react-hook-form';
+import { useFormContext, useWatch } from 'react-hook-form';
 import { ShadCnRadioGroup } from '@/components/form/controller/ShadCnRadioGroup';
 import FormFieldRow from '@/components/form/wrapper/form-field-row';
 import FieldWrapper from '@/components/form/wrapper/field-wrapper';
 import { getController } from '@/components/form/utils/get-controller';
-import { Button } from '@/components/ui/button';
-import { toast } from 'sonner';
 
-const BeneficiaryDetails = ({ setAccordionState }: CommonCreateTransactionProps) => {
-  const [isSaving, setIsSaving] = useState(false);
-  const [isEditing, setIsEditing] = useState(false);
-  const { control, trigger } = useFormContext();
-  const { errors } = useFormState();
-  const intermediaryBankDetails = useWatch({ name: 'beneficiaryDetails.intermediaryBankDetails', defaultValue: 'no' });
+const IntermediaryBankFields = memo(({ control }: { control: any }) => {
+  const intermediaryBankDetails = useWatch({ name: 'beneficiaryDetails.intermediaryBankDetails', defaultValue: 'no', control });
 
-  // const flattenErrors = (obj: any, prefix = ''): string[] => {
-  //   const keys: string[] = [];
-  //   for (const key in obj) {
-  //     if (obj[key] && typeof obj[key] === 'object' && obj[key].message) {
-  //       keys.push(prefix ? `${prefix}.${key}` : key);
-  //     } else if (obj[key] && typeof obj[key] === 'object') {
-  //       keys.push(...flattenErrors(obj[key], prefix ? `${prefix}.${key}` : key));
-  //     }
-  //   }
-  //   return keys;
-  // };
+  if (intermediaryBankDetails !== 'yes') return null;
 
-  // const getFieldLabel = (key: string): string => {
-  //   const parts = key.split('.');
-  //   const fieldName = parts[parts.length - 1];
-  //   const config = [...beneficiaryDetailsConfig, ...beneficiaryBank];
-  //   const field = config.find((f) => f.name === fieldName);
-  //   return field?.label || key;
-  // };
+  return (
+    <div className="flex-1">
+      <FormFieldRow wrapperClassName="xl:row-cols-3">
+        {beneficiaryBank.map((item) => {
+          return (
+            <FieldWrapper key={item.name}>
+              {getController({
+                name: `beneficiaryDetails.${item.name}`,
+                label: item.label,
+                type: item.type,
+                placeholder: item.placeholder,
+                required: item.required,
+                control,
+              })}
+            </FieldWrapper>
+          );
+        })}
+      </FormFieldRow>
+    </div>
+  );
+});
 
-  // const handleSave = async () => {
-  //   const isValid = await trigger();
-  //   if (!isValid) {
-  //     const missingFields = flattenErrors(errors);
-  //     toast.error(`Missing required field: ${getFieldLabel(missingFields[0])}`);
-  //     return;
-  //   }
-  //   // Submit the form to hit the API
-  //   const formElement = document.getElementById('create-transaction-form') as HTMLFormElement;
-  //   if (formElement) {
-  //     formElement.requestSubmit();
-  //   }
-  // };
+const BeneficiaryDetails = memo(({ setAccordionState }: CommonCreateTransactionProps) => {
+  const { control } = useFormContext();
+
   return (
     <Spacer>
       <FormFieldRow wrapperClassName="xl:row-cols-4">
@@ -59,7 +47,7 @@ const BeneficiaryDetails = ({ setAccordionState }: CommonCreateTransactionProps)
             if (!field) return null;
             return (
               <FieldWrapper key={name}>
-                {getController({ ...field, name: `beneficiaryDetails.${name}`, control, errors })}
+                {getController({ ...field, name: `beneficiaryDetails.${name}`, control })}
               </FieldWrapper>
             );
           }
@@ -78,7 +66,7 @@ const BeneficiaryDetails = ({ setAccordionState }: CommonCreateTransactionProps)
           if (!field) return null;
           return (
             <FieldWrapper key={name}>
-              {getController({ ...field, name: `beneficiaryDetails.${name}`, control, errors })}
+              {getController({ ...field, name: `beneficiaryDetails.${name}`, control })}
             </FieldWrapper>
           );
         })}
@@ -94,7 +82,7 @@ const BeneficiaryDetails = ({ setAccordionState }: CommonCreateTransactionProps)
               key={name}
               className={name === 'message_to_beneficiary_additional_information' ? 'col-span-2' : ''}
             >
-              {getController({ ...field, name: `beneficiaryDetails.${name}`, control, errors })}
+              {getController({ ...field, name: `beneficiaryDetails.${name}`, control })}
             </FieldWrapper>
           );
         })}
@@ -106,7 +94,7 @@ const BeneficiaryDetails = ({ setAccordionState }: CommonCreateTransactionProps)
             if (!field) return null;
             return (
               <FieldWrapper key={name}>
-                {getController({ ...field, name: `beneficiaryDetails.${name}`, control, errors })}
+                {getController({ ...field, name: `beneficiaryDetails.${name}`, control })}
               </FieldWrapper>
             );
           }
@@ -124,38 +112,10 @@ const BeneficiaryDetails = ({ setAccordionState }: CommonCreateTransactionProps)
             className="justify-start"
           />
         </FieldWrapper>
-        {intermediaryBankDetails === 'yes' && (
-          <div className="flex-1">
-            <FormFieldRow wrapperClassName="xl:row-cols-3">
-              {beneficiaryBank.map((item) => {
-                return (
-                  <FieldWrapper key={item.name}>
-                    {getController({
-                      name: `beneficiaryDetails.${item.name}`,
-                      label: item.label,
-                      type: item.type,
-                      placeholder: item.placeholder,
-                      required: item.required,
-                      control,
-                      errors,
-                    })}
-                  </FieldWrapper>
-                );
-              })}
-            </FormFieldRow>
-          </div>
-        )}
-      </div>
-      <div className="flex justify-center items-center">
-        {/* <Button variant="secondary" onClick={handleSave} disabled={isSaving} className="mx-2 w-24">
-          {isSaving ? 'Saving...' : 'Save'}
-        </Button> */}
-        {/* <Button variant='light' onClick={handleEdit} className='w-24'  disabled={isEditing}>
-          {isEditing ? 'Editing' : 'Edit'}
-        </Button> */}
+        <IntermediaryBankFields control={control} />
       </div>
     </Spacer>
   );
-};
+});
 
 export default BeneficiaryDetails;
