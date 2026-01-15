@@ -381,10 +381,12 @@ const CurrencyDetails = ({ setAccordionState, viewMode, paymentData, dealBooking
           
           if (!result.success) {
              const issues = (result.error as any).issues;
-             const manualMissingFields = issues.map((err: any) => err.path.join('.'));
-             console.log("Manual Validation Missing Fields:", manualMissingFields);
-             if (manualMissingFields.length > 0) {
-                toast.error(`Missing required field: ${getFieldLabel(manualMissingFields[0])}`);
+             if (issues.length > 0) {
+                const firstIssue = issues[0];
+                const fieldPath = firstIssue.path.join('.');
+                const label = getFieldLabel(fieldPath);
+                toast.error(`${label}: ${firstIssue.message}`);
+                console.log("Manual Validation Issues:", issues);
                 return;
              }
           }

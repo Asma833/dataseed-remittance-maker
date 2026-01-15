@@ -7,6 +7,10 @@ const POSTAL_CODE_REGEX = /^\d{6}$/; // Indian PIN code
 const INDIAN_PASSPORT_REGEX = /^[A-Z][0-9]{7}$/; // Indian passport: 1 letter + 7 digits
 const NO_LEADING_HYPHEN_OR_SPACE = /^[^-\s].*/; // No leading hyphen or space
 const NO_NUMBERS_REGEX = /^[a-zA-Z\s-]+$/; // No numbers allowed
+const OPTIONAL_DATE_SCHEMA = z.preprocess((arg) => {
+  if (typeof arg === 'string' && arg.length === 0) return undefined;
+  return arg;
+}, z.coerce.date().max(new Date(), 'Date of birth cannot be in the future').optional());
 
 export const transactionBasicDetailsSchema = z
   .object({
@@ -46,7 +50,7 @@ export const transactionBasicDetailsSchema = z
       .min(1, 'Applicant PAN number is required')
       .regex(PAN_REGEX, 'Invalid PAN format (e.g., ABCDE1234F)')
       .length(10, 'PAN must be 10 characters'),
-    applicant_dob: z.coerce.date().max(new Date(), 'Date of birth cannot be in the future').optional(),
+    applicant_dob: OPTIONAL_DATE_SCHEMA,
     applicant_email: z.string().email('Invalid email format').max(100, 'Email too long').optional().or(z.literal('')),
     applicant_mobile_number: z
       .string()
@@ -78,7 +82,7 @@ export const transactionBasicDetailsSchema = z
       .length(10, 'PAN number must be 10 characters')
       .optional()
       .or(z.literal('')),
-    payee_dob: z.coerce.date().max(new Date(), 'Date of birth cannot be in the future').optional(),
+    payee_dob: OPTIONAL_DATE_SCHEMA,
     applicant_id_document: z
       .string()
       .max(100, 'ID document too long')
