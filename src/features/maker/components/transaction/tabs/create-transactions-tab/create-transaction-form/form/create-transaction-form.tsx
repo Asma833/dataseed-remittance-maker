@@ -78,7 +78,7 @@ const CreateTransactionForm = ({ onCancel, onSubmit, initialData, viewMode }: Pr
   const form = useForm<CreateTransactionFormInput, unknown, CreateTransactionFormData>({
     resolver: zodResolver(createTransactionSchema),
     defaultValues,
-    mode: 'onChange', // Trigger validation on blur for better performance
+    mode: 'onBlur', // Trigger validation on blur for better performance
   });
 
   const handlePrevious = () => {
@@ -301,12 +301,12 @@ const CreateTransactionForm = ({ onCancel, onSubmit, initialData, viewMode }: Pr
           <div className="flex justify-end mb-4 gap-2">
             <div className="flex gap-2">
               {showPrevious && (
-                <Button variant="light" className="w-24" onClick={handlePrevious} type="button">
+                <Button variant="light" type="button" className="w-24" onClick={handlePrevious}>
                   Previous
                 </Button>
               )}
               {showNext && (
-                <Button variant="secondary" onClick={handleNext} className="w-24" type="button">
+                <Button variant="secondary" type="button" onClick={handleNext} className="w-24">
                   Next
                 </Button>
               )}

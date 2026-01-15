@@ -18,42 +18,63 @@ const TransactionFormSync = memo(() => {
   const { setValue, control } = useFormContext();
   const reduxState = useSelector((state: RootState) => state.transactionForm);
 
-  // 1. Watch individual fields from Transaction Details (Panel 1) to avoid object-level re-renders
-  const rawFxCurrency = useWatch({ control, name: 'transactionDetails.fx_currency' });
-  const rawFxAmount = useWatch({ control, name: 'transactionDetails.fx_amount' });
-  const rawSettlementRate = useWatch({ control, name: 'transactionDetails.company_settlement_rate' });
-  const rawAddMargin = useWatch({ control, name: 'transactionDetails.add_margin' });
-  const rawCustomerRate = useWatch({ control, name: 'transactionDetails.customer_rate' });
-  const rawPanNumber = useWatch({ control, name: 'transactionDetails.applicant_pan_number' });
-  const rawSourceOfFunds = useWatch({ control, name: 'transactionDetails.source_of_funds' });
-  const rawPurpose = useWatch({ control, name: 'transactionDetails.purpose' });
-  const rawNostroCharges = useWatch({ control, name: 'transactionDetails.nostro_charges' });
+  // 1. Watch all fields for Redux Sync in one go
+  const allValues = useWatch({
+    control,
+    name: [
+      'transactionDetails.fx_currency',
+      'transactionDetails.fx_amount',
+      'transactionDetails.company_settlement_rate',
+      'transactionDetails.add_margin',
+      'transactionDetails.customer_rate',
+      'transactionDetails.applicant_pan_number',
+      'transactionDetails.source_of_funds',
+      'transactionDetails.purpose',
+      'transactionDetails.nostro_charges'
+    ]
+  });
 
-  // Low-priority / Debounced Watches
-  const debouncedFxCurrency = useDebounce(rawFxCurrency, 300);
-  const debouncedFxAmount = useDebounce(rawFxAmount, 300);
-  const debouncedSettlementRate = useDebounce(rawSettlementRate, 300);
-  const debouncedAddMargin = useDebounce(rawAddMargin, 300);
-  const debouncedCustomerRate = useDebounce(rawCustomerRate, 300);
-  const debouncedPanNumber = useDebounce(rawPanNumber, 300);
-  const debouncedSourceOfFunds = useDebounce(rawSourceOfFunds, 300);
-  const debouncedPurpose = useDebounce(rawPurpose, 300);
-  const debouncedNostroCharges = useDebounce(rawNostroCharges, 300);
+  const [
+    rawFxCurrency,
+    rawFxAmount,
+    rawSettlementRate,
+    rawAddMargin,
+    rawCustomerRate,
+    rawPanNumber,
+    rawSourceOfFunds,
+    rawPurpose,
+    rawNostroCharges
+  ] = allValues;
 
+  // Single debounce for all values to prevent timer thrashing
+  const debouncedValues = useDebounce(allValues, 300);
+  
+  const [
+    debouncedFxCurrency,
+    debouncedFxAmount,
+    debouncedSettlementRate,
+    debouncedAddMargin,
+    debouncedCustomerRate,
+    debouncedPanNumber,
+    debouncedSourceOfFunds,
+    debouncedPurpose,
+    debouncedNostroCharges
+  ] = debouncedValues;
 
-  // Side Effect: Fetch Specific Currency Rate
+  // Side Effect: Fetch Specific Currency Rate (Use Debounced Value to save requests)
   const { data: specificCurrencyRate } = useGetSpecificCurrencyRates(
-    rawFxCurrency && typeof rawFxCurrency === 'string' && rawFxCurrency.trim() ? rawFxCurrency.trim() : ''
+    debouncedFxCurrency && typeof debouncedFxCurrency === 'string' && debouncedFxCurrency.trim() ? debouncedFxCurrency.trim() : ''
   );
 
   // Side Effect: Update Company Settlement Rate when Currency Changes
   const prevSettlementRateRef = useRef<number | null>(null);
   useEffect(() => {
-    if (rawFxCurrency && specificCurrencyRate && typeof rawFxCurrency === 'string') {
+    // Only update if currency matches and valid
+    if (debouncedFxCurrency && specificCurrencyRate && typeof debouncedFxCurrency === 'string') {
       const rate = specificCurrencyRate;
       const buyRate = Number(rate.card_buy_rate);
       if (
-        rate.currency_code === rawFxCurrency.trim() &&
+        rate.currency_code === debouncedFxCurrency.trim() &&
         !isNaN(buyRate) &&
         buyRate > 0 &&
         prevSettlementRateRef.current !== buyRate
@@ -62,10 +83,10 @@ const TransactionFormSync = memo(() => {
         setValue('transactionDetails.company_settlement_rate', buyRate, { shouldValidate: false, shouldDirty: false });
       }
     }
-  }, [rawFxCurrency, specificCurrencyRate, setValue]);
+  }, [debouncedFxCurrency, specificCurrencyRate, setValue]);
 
   // Side Effect: Clear Payee Fields when Source of Funds is not 'others'
-  const { clearErrors } = useFormContext(); // Need clearErrors
+  const { clearErrors } = useFormContext(); 
   useEffect(() => {
     if (debouncedSourceOfFunds !== 'others') {
       const options = { shouldValidate: false, shouldDirty: false };
@@ -90,12 +111,11 @@ const TransactionFormSync = memo(() => {
         const margin = Number(debouncedAddMargin || 0);
         const calculatedCustomerRate = rate + margin;
         
-        // Only update if different to avoid loops (though debounce helps)
         setValue('transactionDetails.customer_rate', calculatedCustomerRate, { shouldValidate: false, shouldDirty: false });
     }
   }, [debouncedSettlementRate, debouncedAddMargin, setValue]);
 
-  // Sync Transaction Details TO Redux whenever they change
+  // Sync Transaction Details TO Redux - Single Effect
   useEffect(() => {
     dispatch(
       updateTransactionField({
@@ -110,7 +130,8 @@ const TransactionFormSync = memo(() => {
         nostro_charges: debouncedNostroCharges || '',
       })
     );
-  }, [debouncedFxCurrency, debouncedFxAmount, debouncedSettlementRate, debouncedAddMargin, debouncedCustomerRate, debouncedPanNumber, debouncedSourceOfFunds, debouncedPurpose, debouncedNostroCharges, dispatch]);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [debouncedValues, dispatch]); // Depend on the array itself
 
   // 2. Sync Redux State BACK TO Currency Details (Panel 3)
   // This ensures that when Panel 3 mounts, it immediately has the latest values from Redux

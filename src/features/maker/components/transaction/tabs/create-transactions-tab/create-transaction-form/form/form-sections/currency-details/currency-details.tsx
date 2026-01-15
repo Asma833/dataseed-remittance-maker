@@ -439,13 +439,13 @@ const CurrencyDetails = memo(({ setAccordionState, viewMode, paymentData, dealBo
 
           <div className="mt-16 flex flex-col items-center gap-10">
             <div className="flex justify-center gap-1 flex-wrap">
-              {viewMode && (
+              {!viewMode && (
                 <>
                   <ConfirmationAlert title="Cancel Transaction" description="Are you sure?" onConfirm={handleCancelConfirm}>
                     <Button type="button" variant="light" className="mx-2">Cancel</Button>
                   </ConfirmationAlert>
                   <ConfirmationAlert title="Save Transaction" description="Are you sure?" onConfirm={handleSave}>
-                    <Button variant="secondary" disabled={isSaving} className="mx-2 w-24">{isSaving ? 'Saving...' : 'Save'}</Button>
+                    <Button type="button" variant="secondary" disabled={isSaving} className="mx-2 w-24">{isSaving ? 'Saving...' : 'Save'}</Button>
                   </ConfirmationAlert>
                 </>
               )}

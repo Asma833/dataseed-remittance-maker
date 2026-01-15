@@ -41,7 +41,6 @@ export default function CreateTransactionsAccordion({
             '&:before': { display: 'none !important', opacity: '0 !important', height: '0 !important' },
             '&.MuiAccordion-root': { border: 'none !important', boxShadow: 'none !important' },
           }}
-          TransitionProps={{ unmountOnExit: true }}
         >
           <AccordionSummary
             expandIcon={<ChevronDown />}
