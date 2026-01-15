@@ -21,6 +21,7 @@ interface FileUploadProps {
   documentUrl?: string;
   onView?: () => void;
   required?: boolean;
+  control?: any;
 }
 
 const FileUploadWithView = ({
@@ -35,6 +36,7 @@ const FileUploadWithView = ({
   documentUrl,
   onView,
   required,
+  control,
 }: FileUploadProps) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
@@ -104,6 +106,7 @@ const FileUploadWithView = ({
             className="p-0 flex-1 min-w-0"
             styleType="fileUploadWithView"
             disabled={disabled ?? false}
+            control={control}
           />
           {viewFile && (
             <button

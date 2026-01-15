@@ -1,12 +1,10 @@
-import { Controller, useFormContext } from 'react-hook-form';
+import { useFormContext } from 'react-hook-form';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { FormItem, FormLabel, FormControl, FormMessage } from '@/components/ui/form';
+import { FormItem, FormLabel, FormControl, FormMessage, FormField } from '@/components/ui/form';
 import { cn } from '@/utils/cn';
-import { toTitleCase } from '@/utils/textFormater';
 import { useMemo, useState, useRef, useEffect } from 'react';
-import MultipleSelector, { Option } from '@/components/ui/multiselect';
-import { CheckIcon, XIcon, ChevronDownIcon, CircleXIcon } from 'lucide-react';
-import { Button } from '@/components/ui/button';
+import { Option } from '@/components/ui/multiselect';
+import { CheckIcon, ChevronDownIcon, CircleXIcon } from 'lucide-react';
 
 interface ShadCnSelectProps {
   name: string;
@@ -21,7 +19,118 @@ interface ShadCnSelectProps {
   forcedValue?: string;
   errors?: any;
   isMulti?: boolean;
+  control?: any;
 }
+
+const MultiSelectInner = ({ 
+    value, 
+    onChange, 
+    error, 
+    options, 
+    disabled, 
+    placeholder 
+}: { 
+    value: string[]; 
+    onChange: (val: string[]) => void; 
+    error?: any; 
+    options: Option[];
+    disabled?: boolean;
+    placeholder?: string;
+}) => {
+    const [isOpen, setIsOpen] = useState(false);
+    const dropdownRef = useRef<HTMLDivElement>(null);
+    const selectedValues: string[] = value || [];
+    const selectedOptions = selectedValues.map((v: string) => {
+        const option = options.find((opt) => opt.value === v);
+        return option ? option : { value: v, label: v };
+    });
+
+    const handleSelect = (optionValue: string) => {
+        const newValues = selectedValues.includes(optionValue)
+            ? selectedValues.filter((v: string) => v !== optionValue)
+            : [...selectedValues, optionValue];
+        onChange(newValues);
+    };
+
+    const handleRemoveChip = (optionValue: string) => {
+        const newValues = selectedValues.filter((v: string) => v !== optionValue);
+        onChange(newValues);
+    };
+
+    useEffect(() => {
+        const handleClickOutside = (event: MouseEvent) => {
+            if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
+                setIsOpen(false);
+            }
+        };
+        if (isOpen) document.addEventListener('mousedown', handleClickOutside);
+        return () => document.removeEventListener('mousedown', handleClickOutside);
+    }, [isOpen]);
+
+    return (
+        <div className="space-y-2">
+            <div
+                className={cn(
+                    'flex h-10 w-full items-center justify-between rounded-lg border border-input bg-background px-3 py-2 text-sm ring-offset-background placeholder:text-[#a3a3a3] focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 hover:border-primary/50 transition-colors disabled:cursor-not-allowed disabled:opacity-50 form-input truncate',
+                    disabled && 'cursor-not-allowed opacity-50',
+                    error && 'border-destructive'
+                )}
+                onClick={() => !disabled && setIsOpen(!isOpen)}
+            >
+                <span className="text-[#a3a3a3]">
+                    {selectedValues.length > 0
+                        ? `${selectedValues.length} item${selectedValues.length > 1 ? 's' : ''} selected`
+                        : placeholder || 'Select options'}
+                </span>
+                <ChevronDownIcon size={16} className="ml-2 text-muted-foreground" />
+            </div>
+
+            {isOpen && (
+                <div ref={dropdownRef} className="relative">
+                    <div className="absolute z-50 w-full mt-1 bg-popover border border-border rounded-lg shadow-lg">
+                        <div className="max-h-60 overflow-y-auto">
+                            {options.map((option) => {
+                                const isSelected = selectedValues.includes(option.value);
+                                return (
+                                    <div
+                                        key={option.value}
+                                        className="flex items-center p-2 cursor-pointer hover:bg-primary/10 transition-colors"
+                                        onClick={() => handleSelect(option.value)}
+                                    >
+                                        <div className="flex items-center justify-center w-5 h-5 mr-3">
+                                            {isSelected && <CheckIcon size={18} className="text-primary" />}
+                                        </div>
+                                        <span>{option.label}</span>
+                                    </div>
+                                );
+                            })}
+                        </div>
+                    </div>
+                </div>
+            )}
+
+            {selectedOptions.length > 0 && (
+                <div className="flex flex-wrap gap-2">
+                    {selectedOptions.map((option: Option) => (
+                        <div
+                            key={option.value}
+                            className="inline-flex items-center gap-1 px-3 py-1 bg-[#eeeeee] text-sm rounded-full hover:bg-[#888]/20 transition-colors"
+                        >
+                            <span className="font-medium">{option.label}</span>
+                            <button
+                                type="button"
+                                onClick={() => handleRemoveChip(option.value)}
+                                className="hover:[var(--color-title)]/20 rounded-full  transition-colors"
+                            >
+                                <CircleXIcon size={14} className="text-[--color-title] cursor-pointer" />
+                            </button>
+                        </div>
+                    ))}
+                </div>
+            )}
+        </div>
+    );
+};
 
 export const ShadCnSelect = ({
   name,
@@ -34,11 +143,12 @@ export const ShadCnSelect = ({
   forcedValue,
   errors,
   isMulti = false,
+  control: propControl,
 }: ShadCnSelectProps) => {
-  const { control } = useFormContext();
+  const { control: contextControl } = useFormContext();
+  const control = propControl || contextControl;
   const isArrayOptions = Array.isArray(options);
 
-  // Convert options to MultipleSelector format when isMulti is true
   const multiSelectOptions: Option[] = useMemo(() => {
     if (!isMulti) return [];
     if (isArrayOptions) {
@@ -54,8 +164,6 @@ export const ShadCnSelect = ({
     }
   }, [options, isArrayOptions, isMulti]);
 
-  // Generate stable, unique keys for array options to avoid duplicate key warnings.
-  // Strategy: use provided id or value as base. If duplicates occur, append an incrementing suffix.
   const processedArrayOptions = useMemo(() => {
     if (!isArrayOptions || !options) return [];
     const counts: Record<string, number> = {};
@@ -69,10 +177,8 @@ export const ShadCnSelect = ({
     );
   }, [options, isArrayOptions]);
 
-  // Get default value from options based on 'selected' property
   const getDefaultValue = () => {
     if (!options) return '';
-
     if (isArrayOptions) {
       const selectedOption = (options as Array<{ value: string; label: string; selected?: boolean }>).find(
         (option) => option.selected
@@ -87,152 +193,28 @@ export const ShadCnSelect = ({
 
   const defaultValue = getDefaultValue();
 
-  // Get display value for the selected option
-  const getDisplayValue = (selected: string) => {
-    if (!selected || selected === '') {
-      return undefined; // Let SelectValue handle the placeholder
-    }
-
-    if (!options) {
-      return selected;
-    }
-
-    if (isArrayOptions) {
-      const selectedOption = processedArrayOptions.find((option) => option.value === selected);
-      return selectedOption ? selectedOption.label : selected;
-    } else {
-      const selectedEntry = Object.entries(options).find(([value]) => value === selected);
-      return selectedEntry ? selectedEntry[1].label : selected;
-    }
-  };
-
   return (
-    <FormItem className={className}>
-      <FormLabel className="text-[var(--color-form-label)]">
-        {label}
-        {required && <span className="text-destructive ml-1">*</span>}
-      </FormLabel>
-      <FormControl>
-        {isMulti ? (
-          <Controller
-            name={name}
-            control={control}
-            defaultValue={[]}
-            render={({ field: { value, onChange }, fieldState: { error } }) => {
-              const [isOpen, setIsOpen] = useState(false);
-              const dropdownRef = useRef<HTMLDivElement>(null);
-              const selectedValues: string[] = value || [];
-              const selectedOptions = selectedValues.map((v: string) => {
-                const option = multiSelectOptions.find((opt) => opt.value === v);
-                return option ? option : { value: v, label: v };
-              });
-
-              const handleSelect = (optionValue: string) => {
-                const newValues = selectedValues.includes(optionValue)
-                  ? selectedValues.filter((v: string) => v !== optionValue)
-                  : [...selectedValues, optionValue];
-                onChange(newValues);
-              };
-
-              const handleRemoveChip = (optionValue: string) => {
-                const newValues = selectedValues.filter((v: string) => v !== optionValue);
-                onChange(newValues);
-              };
-
-              // Close dropdown when clicking outside
-              useEffect(() => {
-                const handleClickOutside = (event: MouseEvent) => {
-                  if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
-                    setIsOpen(false);
-                  }
-                };
-
-                if (isOpen) {
-                  document.addEventListener('mousedown', handleClickOutside);
-                }
-
-                return () => {
-                  document.removeEventListener('mousedown', handleClickOutside);
-                };
-              }, [isOpen]);
-
-              return (
-                <div className="space-y-2">
-                  {/* Select Trigger */}
-                  <div
-                    className={cn(
-                      'flex h-10 w-full items-center justify-between rounded-lg border border-input bg-background px-3 py-2 text-sm ring-offset-background placeholder:text-[#a3a3a3] focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 hover:border-primary/50 transition-colors disabled:cursor-not-allowed disabled:opacity-50 form-input truncate',
-                      disabled && 'cursor-not-allowed opacity-50',
-                      error && 'border-destructive'
-                    )}
-                    onClick={() => !disabled && setIsOpen(!isOpen)}
-                  >
-                    <span className="text-[#a3a3a3]">
-                      {selectedValues.length > 0
-                        ? `${selectedValues.length} item${selectedValues.length > 1 ? 's' : ''} selected`
-                        : placeholder || 'Select options'}
-                    </span>
-                    <ChevronDownIcon size={16} className="ml-2 text-muted-foreground" />
-                  </div>
-
-                  {/* Dropdown */}
-                  {isOpen && (
-                    <div ref={dropdownRef} className="relative">
-                      <div className="absolute z-50 w-full mt-1 bg-popover border border-border rounded-lg shadow-lg">
-                        <div className="max-h-60 overflow-y-auto">
-                          {multiSelectOptions.map((option) => {
-                            const isSelected = selectedValues.includes(option.value);
-                            return (
-                              <div
-                                key={option.value}
-                                className="flex items-center p-2 cursor-pointer hover:bg-primary/10 transition-colors"
-                                onClick={() => handleSelect(option.value)}
-                              >
-                                <div className="flex items-center justify-center w-5 h-5 mr-3">
-                                  {isSelected && <CheckIcon size={18} className="text-primary" />}
-                                </div>
-                                <span>{option.label}</span>
-                              </div>
-                            );
-                          })}
-                        </div>
-                      </div>
-                    </div>
-                  )}
-
-                  {/* Selected Chips */}
-                  {selectedOptions.length > 0 && (
-                    <div className="flex flex-wrap gap-2">
-                      {selectedOptions.map((option: Option) => (
-                        <div
-                          key={option.value}
-                          className="inline-flex items-center gap-1 px-3 py-1 bg-[#eeeeee] text-sm rounded-full hover:bg-[#888]/20 transition-colors"
-                        >
-                          <span className="font-medium">{option.label}</span>
-                          <button
-                            type="button"
-                            onClick={() => handleRemoveChip(option.value)}
-                            className="hover:[var(--color-title)]/20 rounded-full  transition-colors"
-                          >
-                            <CircleXIcon size={14} className="text-[--color-title] cursor-pointer" />
-                          </button>
-                        </div>
-                      ))}
-                    </div>
-                  )}
-
-                  {error && <p className="text-sm text-destructive mt-1">{error.message}</p>}
-                </div>
-              );
-            }}
-          />
-        ) : (
-          <Controller
-            name={name}
-            control={control}
-            defaultValue={defaultValue}
-            render={({ field: { value, onChange }, fieldState: { error } }) => (
-              <div className="w-full min-w-0">
+    <FormField
+      control={control}
+      name={name}
+      render={({ field: { value, onChange }, fieldState: { error } }) => (
+        <FormItem className={className}>
+          <FormLabel className="text-[var(--color-form-label)]">
+            {label}
+            {required && <span className="text-destructive ml-1">*</span>}
+          </FormLabel>
+          <FormControl>
+            <div className="w-full min-w-0">
+               {isMulti ? (
+                    <MultiSelectInner 
+                        value={value} 
+                        onChange={onChange} 
+                        error={error} 
+                        options={multiSelectOptions}
+                        disabled={disabled}
+                        placeholder={placeholder}
+                    />
+               ) : (
                 <Select value={(forcedValue ? forcedValue : value) || ''} onValueChange={onChange} disabled={disabled}>
                   <SelectTrigger
                     className={cn(
@@ -258,12 +240,12 @@ export const ShadCnSelect = ({
                         : null}
                   </SelectContent>
                 </Select>
-                {error && <p className="text-sm text-destructive mt-1">{error.message}</p>}
-              </div>
-            )}
-          />
-        )}
-      </FormControl>
-    </FormItem>
+               )}
+            </div>
+          </FormControl>
+          <FormMessage />
+        </FormItem>
+      )}
+    />
   );
 };

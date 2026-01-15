@@ -27,7 +27,7 @@ export const getController = (field: any) => {
     className: field.className,
     required: field.required,
     placeholder: field.placeholder,
-    errors: field.errors,
+    control: field.control, // Ensure control is passed
   };
 
   switch (field.type) {

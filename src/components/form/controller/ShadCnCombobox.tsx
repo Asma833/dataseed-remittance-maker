@@ -1,5 +1,5 @@
-import { Controller, useFormContext } from 'react-hook-form';
-import { FormItem, FormLabel, FormControl, FormMessage } from '@/components/ui/form';
+import { useFormContext } from 'react-hook-form';
+import { FormItem, FormLabel, FormControl, FormMessage, FormField } from '@/components/ui/form';
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
 import { Command, CommandEmpty, CommandGroup, CommandItem, CommandList } from '@/components/ui/command';
 import { Input } from '@/components/ui/input';
@@ -17,6 +17,8 @@ interface ShadCnComboboxProps {
   placeholder?: string;
   disabled?: boolean;
   required?: boolean;
+  forcedValue?: string;
+  control?: any;
 }
 
 export const ShadCnCombobox = ({
@@ -27,8 +29,11 @@ export const ShadCnCombobox = ({
   placeholder = 'Select an option',
   disabled = false,
   required = false,
+  forcedValue,
+  control: propControl,
 }: ShadCnComboboxProps) => {
-  const { control, setValue } = useFormContext();
+  const { control: contextControl } = useFormContext();
+  const control = propControl || contextControl;
   const [open, setOpen] = React.useState(false);
   const [inputValue, setInputValue] = React.useState('');
 
@@ -50,29 +55,29 @@ export const ShadCnCombobox = ({
   }, [formattedOptions, inputValue]);
 
   return (
-    <FormItem className={cn('flex flex-col', className)}>
-      <FormLabel className="text-[var(--color-form-label)]">
-        {label}
-        {required && <span className="text-destructive ml-1">*</span>}
-      </FormLabel>
-      <FormControl>
-        <Controller
-          name={name}
-          control={control}
-          render={({ field }) => {
-            // Sync internal input value with external field value on load or external change
-            React.useEffect(() => {
-              if (field.value) {
-                const selectedOption = formattedOptions.find(opt => opt.value === field.value);
-                if (selectedOption) {
-                  setInputValue(selectedOption.label);
-                }
-              } else {
-                setInputValue('');
-              }
-            }, [field.value, formattedOptions]);
+    <FormField
+      control={control}
+      name={name}
+      render={({ field, fieldState: { error } }) => {
+        // Sync internal input value with external field value on load or external change
+        React.useEffect(() => {
+          if (field.value) {
+            const selectedOption = formattedOptions.find((opt) => opt.value === field.value);
+            if (selectedOption) {
+              setInputValue(selectedOption.label);
+            }
+          } else {
+            setInputValue('');
+          }
+        }, [field.value, formattedOptions]);
 
-            return (
+        return (
+          <FormItem className={cn('flex flex-col', className)}>
+            <FormLabel className="text-[var(--color-form-label)]">
+              {label}
+              {required && <span className="text-destructive ml-1">*</span>}
+            </FormLabel>
+            <FormControl>
               <div className="relative w-full">
                 <Popover open={open} onOpenChange={setOpen}>
                   <PopoverTrigger asChild>
@@ -95,21 +100,21 @@ export const ShadCnCombobox = ({
                           if (!open && val) setOpen(true);
                         }}
                         onFocus={() => {
-                           if (!disabled) setOpen(true);
+                          if (!disabled) setOpen(true);
                         }}
                       />
                       <ChevronDown className="absolute right-2 h-4 w-4 shrink-0 opacity-50 pointer-events-none" />
                     </div>
                   </PopoverTrigger>
-                  <PopoverContent 
-                    className="w-fit p-0 border border-[#e5e7eb] shadow-lg" 
-                    align="start" 
+                  <PopoverContent
+                    className="w-fit p-0 border border-[#e5e7eb] shadow-lg"
+                    align="start"
                     onOpenAutoFocus={(e) => e.preventDefault()} // Don't steal focus from input
                   >
                     <Command className="w-full" shouldFilter={false}>
                       <CommandList className="max-h-60">
                         {filteredOptions.length === 0 ? (
-                           <CommandEmpty className="px-4 py-6">No results found.</CommandEmpty>
+                          <CommandEmpty className="px-4 py-6">No results found.</CommandEmpty>
                         ) : (
                           <CommandGroup>
                             {filteredOptions.map((option) => (
@@ -138,11 +143,11 @@ export const ShadCnCombobox = ({
                   </PopoverContent>
                 </Popover>
               </div>
-            );
-          }}
-        />
-      </FormControl>
-      <FormMessage />
-    </FormItem>
+            </FormControl>
+            <FormMessage />
+          </FormItem>
+        );
+      }}
+    />
   );
 };

@@ -1,9 +1,9 @@
 import { cn } from '@/utils/cn';
 import { ChangeEvent } from 'react';
-import { Controller, useFormContext } from 'react-hook-form';
+import { useFormContext } from 'react-hook-form';
 import { Button } from '@/components/ui/button';
 import { Upload } from 'lucide-react';
-import { FormItem, FormLabel, FormControl, FormMessage } from '@/components/ui/form';
+import { FormItem, FormLabel, FormControl, FormMessage, FormField } from '@/components/ui/form';
 
 interface ShadCnFileUploadProps {
   id?: string;
@@ -20,6 +20,7 @@ interface ShadCnFileUploadProps {
   defaultValue?: File | null;
   disabled?: boolean;
   required?: boolean;
+  control?: any;
 }
 
 export const ShadCnFileUpload = ({
@@ -33,8 +34,10 @@ export const ShadCnFileUpload = ({
   disabled = false,
   required = false,
   accept,
+  control: propControl,
 }: ShadCnFileUploadProps) => {
-  const { control } = useFormContext();
+  const { control: contextControl } = useFormContext();
+  const control = propControl || contextControl;
 
   const handleChange = (e: ChangeEvent<HTMLInputElement> | null) => {
     if (!handleFileChange) return;
@@ -42,17 +45,16 @@ export const ShadCnFileUpload = ({
   };
 
   return (
-    <FormItem className={className}>
-      <FormLabel className="text-(--color-form-label)">
-        {label}
-        {required && <span className="text-destructive ml-1">*</span>}
-      </FormLabel>
-      <FormControl>
-        <Controller
-          name={name}
-          control={control}
-          defaultValue={[]}
-          render={({ field: { value, onChange }, fieldState: { error } }) => (
+    <FormField
+      control={control}
+      name={name}
+      render={({ field: { value, onChange }, fieldState: { error } }) => (
+        <FormItem className={className}>
+          <FormLabel className="text-(--color-form-label)">
+            {label}
+            {required && <span className="text-destructive ml-1">*</span>}
+          </FormLabel>
+          <FormControl>
             <div className={cn('w-full flex flex-col gap-2', className)}>
               <label htmlFor={id}>
                 <div className="relative">
@@ -97,12 +99,11 @@ export const ShadCnFileUpload = ({
                   </Button>
                 </div>
               </label>
-              {error && <p className="text-sm text-destructive mt-1">{error.message}</p>}
             </div>
-          )}
-        />
-      </FormControl>
-      <FormMessage />
-    </FormItem>
+          </FormControl>
+          <FormMessage />
+        </FormItem>
+      )}
+    />
   );
 };

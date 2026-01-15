@@ -1,6 +1,6 @@
-import { Controller, useFormContext } from 'react-hook-form';
+import { useFormContext } from 'react-hook-form';
 import { ShadCnFormInput } from './ShadCnFormInput';
-import { FormItem, FormLabel, FormControl, FormMessage } from '@/components/ui/form';
+import { FormItem, FormLabel, FormControl, FormMessage, FormField } from '@/components/ui/form';
 import { cn } from '@/utils/cn';
 import { NumericFormat } from 'react-number-format';
 
@@ -16,6 +16,7 @@ interface ShadCnNumberProps {
   min?: number;
   step?: number | string;
   placeholder?: string;
+  control?: any;
 }
 
 const currencyFields = [
@@ -43,27 +44,27 @@ export const ShadCnNumber = ({
   min = 0,
   step = 'any',
   placeholder,
+  control: propControl,
 }: ShadCnNumberProps) => {
-  const { control } = useFormContext();
+  const { control: contextControl } = useFormContext();
+  const control = propControl || contextControl;
 
   const isCurrencyField = currencyFields.some((field) => name === field || name.endsWith(`.${field}`));
 
   return (
-    <FormItem className={className}>
-      <FormLabel className="text-[var(--color-form-label)]">
-        {label}
-        {required && <span className="text-destructive ml-1">*</span>}
-      </FormLabel>
-      <FormControl>
-        <Controller
-          name={name}
-          control={control}
-          defaultValue=""
-          render={({ field: { value, onChange, ...field }, fieldState: { error } }) => {
-            const currentValue = forcedValue !== undefined ? forcedValue : value;
-            const isValueEmpty = currentValue === '' || currentValue === null || currentValue === undefined;
+    <FormField
+      control={control}
+      name={name}
+      render={({ field: { value, onChange, ...field }, fieldState: { error } }) => {
+        const currentValue = forcedValue !== undefined ? forcedValue : value;
 
-            return (
+        return (
+          <FormItem className={className}>
+            <FormLabel className="text-[var(--color-form-label)]">
+              {label}
+              {required && <span className="text-destructive ml-1">*</span>}
+            </FormLabel>
+            <FormControl>
               <div>
                 {isCurrencyField ? (
                   <NumericFormat
@@ -109,13 +110,12 @@ export const ShadCnNumber = ({
                     disabled={disabled}
                   />
                 )}
-                {error && <p className="text-sm text-destructive mt-1">{error.message}</p>}
               </div>
-            );
-          }}
-        />
-      </FormControl>
-      <FormMessage />
-    </FormItem>
+            </FormControl>
+            <FormMessage />
+          </FormItem>
+        );
+      }}
+    />
   );
 };

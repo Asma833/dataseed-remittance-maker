@@ -1,10 +1,10 @@
 import * as React from 'react';
 import { useCallback, useMemo } from 'react';
-import { Controller, useFormContext } from 'react-hook-form';
+import { useFormContext } from 'react-hook-form';
 import { Calendar } from '@/components/ui/calendar';
 import { Button } from '@/components/ui/button';
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
-import { FormItem, FormLabel, FormControl, FormMessage } from '@/components/ui/form';
+import { FormItem, FormLabel, FormControl, FormMessage, FormField } from '@/components/ui/form';
 import { cn } from '@/utils/cn';
 import { CalendarIcon } from 'lucide-react';
 import { format } from 'date-fns';
@@ -18,6 +18,7 @@ interface ShadCnDatePickerProps {
   disabled?: boolean;
   required?: boolean;
   placeholder?: string;
+  control?: any;
 }
 
 export const ShadCnDatePicker = ({
@@ -27,8 +28,10 @@ export const ShadCnDatePicker = ({
   disabled = false,
   required = false,
   placeholder = 'Pick a date',
+  control: propControl,
 }: ShadCnDatePickerProps) => {
-  const { control, clearErrors } = useFormContext();
+  const { control: contextControl, clearErrors } = useFormContext();
+  const control = propControl || contextControl;
 
   const handleCalendarChange = useCallback(
     (_value: string | number, _e: React.ChangeEventHandler<HTMLSelectElement>) => {
@@ -77,50 +80,50 @@ export const ShadCnDatePicker = ({
     [handleCalendarChange]
   );
   return (
-    <FormItem className={cn('min-w-0', className)}>
-      <FormLabel className="text-[var(--color-form-label)]">
-        {label}
-        {required && <span className="text-destructive ml-1">*</span>}
-      </FormLabel>
-      <FormControl>
-        <Controller
-          name={name}
-          control={control}
-          render={({ field, fieldState }) => {
-            const selected = useMemo(() => {
-              if (field.value) {
-                try {
-                  return new Date(field.value);
-                } catch (error) {
-                  return undefined;
-                }
-              }
+    <FormField
+      control={control}
+      name={name}
+      render={({ field, fieldState }) => {
+        const selected = useMemo(() => {
+          if (field.value) {
+            try {
+              return new Date(field.value);
+            } catch (error) {
               return undefined;
-            }, [field.value]);
+            }
+          }
+          return undefined;
+        }, [field.value]);
 
-            const defaultMonth = useMemo(() => {
-              if (field.value) {
-                try {
-                  return new Date(field.value);
-                } catch (error) {
-                  return new Date();
-                }
-              }
+        const defaultMonth = useMemo(() => {
+          if (field.value) {
+            try {
+              return new Date(field.value);
+            } catch (error) {
               return new Date();
-            }, [field.value]);
+            }
+          }
+          return new Date();
+        }, [field.value]);
 
-            const displayValue = useMemo(() => {
-              if (field.value) {
-                try {
-                  return format(new Date(field.value), 'PPP');
-                } catch (error) {
-                  return placeholder;
-                }
-              }
+        const displayValue = useMemo(() => {
+          if (field.value) {
+            try {
+              return format(new Date(field.value), 'PPP');
+            } catch (error) {
               return placeholder;
-            }, [field.value, placeholder]);
+            }
+          }
+          return placeholder;
+        }, [field.value, placeholder]);
 
-            return (
+        return (
+          <FormItem className={cn('min-w-0', className)}>
+            <FormLabel className="text-[var(--color-form-label)]">
+              {label}
+              {required && <span className="text-destructive ml-1">*</span>}
+            </FormLabel>
+            <FormControl>
               <div className="min-w-0">
                 <Popover>
                   <PopoverTrigger asChild>
@@ -157,13 +160,12 @@ export const ShadCnDatePicker = ({
                     />
                   </PopoverContent>
                 </Popover>
-                {fieldState.error && <p className="text-sm text-destructive mt-1">{fieldState.error.message}</p>}
               </div>
-            );
-          }}
-        />
-      </FormControl>
-      <FormMessage />
-    </FormItem>
+            </FormControl>
+            <FormMessage />
+          </FormItem>
+        );
+      }}
+    />
   );
 };

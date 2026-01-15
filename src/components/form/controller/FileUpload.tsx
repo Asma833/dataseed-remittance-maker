@@ -17,6 +17,7 @@ interface FileUpload {
   styleType?: 'default' | 'fileUploadWithView';
   defaultValue?: File | null;
   disabled?: boolean;
+  control?: any;
 }
 
 export const FileUpload = ({
@@ -29,8 +30,10 @@ export const FileUpload = ({
   styleType = 'default',
   defaultValue,
   disabled,
+  control: propControl,
 }: FileUpload) => {
-  const { control } = useFormContext();
+  const { control: contextControl } = useFormContext();
+  const control = propControl || contextControl;
 
   const handleChange = (e: ChangeEvent<HTMLInputElement> | null) => {
     if (!handleFileChange) return;
@@ -40,7 +43,6 @@ export const FileUpload = ({
     <Controller
       name={name}
       control={control}
-      defaultValue={[]}
       render={({ field: { value, onChange }, fieldState: { error } }) => (
         <div className={cn('w-full p-3 flex flex-col gap-2', className)}>
           {styleType == 'default' && <span className="text-sm"> {label}</span>}

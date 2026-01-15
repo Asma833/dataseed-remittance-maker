@@ -15,9 +15,10 @@ interface FileUploadProps {
   accept?: string;
   multiple?: boolean;
   viewFile?: boolean;
+  control?: any;
 }
 
-const FileUploadWithOutView = ({ id, name, label, className, accept }: FileUploadProps) => {
+const FileUploadWithOutView = ({ id, name, label, className, accept, control }: FileUploadProps) => {
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const {
     watch,
@@ -56,6 +57,7 @@ const FileUploadWithOutView = ({ id, name, label, className, accept }: FileUploa
             className="p-0 flex-1"
             styleType="fileUploadWithView"
             {...(accept ? { accept } : {})}
+            control={control}
           />
         </div>
         {errors && errors[name] && (

@@ -10,8 +10,8 @@ interface ShadCnFileUploadWithButtonProps {
   className?: string;
   disabled?: boolean;
   required?: boolean;
+  control?: any;
 }
-
 export const ShadCnFileUploadWithButton = ({
   name,
   label,
@@ -19,8 +19,10 @@ export const ShadCnFileUploadWithButton = ({
   className,
   disabled = false,
   required = false,
+  control: propControl,
 }: ShadCnFileUploadWithButtonProps) => {
-  const { control } = useFormContext();
+  const { control: contextControl } = useFormContext();
+  const control = propControl || contextControl;
 
   return (
     <FormItem className={className}>
@@ -32,7 +34,6 @@ export const ShadCnFileUploadWithButton = ({
         <Controller
           name={name}
           control={control}
-          defaultValue={null}
           render={({ field: { value, onChange }, fieldState: { error } }) => (
             <div>
               <label>

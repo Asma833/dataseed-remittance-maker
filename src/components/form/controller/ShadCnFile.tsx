@@ -1,7 +1,7 @@
-import { Controller, useFormContext } from 'react-hook-form';
+import { useFormContext } from 'react-hook-form';
 import { Button } from '@/components/ui/button';
 import { Upload } from 'lucide-react';
-import { FormItem, FormLabel, FormControl, FormMessage } from '@/components/ui/form';
+import { FormItem, FormLabel, FormControl, FormMessage, FormField } from '@/components/ui/form';
 import { cn } from '@/utils/cn';
 
 interface ShadCnFileProps {
@@ -10,23 +10,24 @@ interface ShadCnFileProps {
   className?: string;
   disabled?: boolean;
   required?: boolean;
+  control?: any;
 }
 
-export const ShadCnFile = ({ name, label, className, disabled = false, required = false }: ShadCnFileProps) => {
-  const { control } = useFormContext();
+export const ShadCnFile = ({ name, label, className, disabled = false, required = false, control: propControl }: ShadCnFileProps) => {
+  const { control: contextControl } = useFormContext();
+  const control = propControl || contextControl;
 
   return (
-    <FormItem className={className}>
-      <FormLabel className="text-[var(--color-form-label)]">
-        {label}
-        {required && <span className="text-destructive ml-1">*</span>}
-      </FormLabel>
-      <FormControl>
-        <Controller
-          name={name}
-          control={control}
-          defaultValue={null}
-          render={({ field: { value, onChange }, fieldState: { error } }) => (
+    <FormField
+      control={control}
+      name={name}
+      render={({ field: { value, onChange }, fieldState: { error } }) => (
+        <FormItem className={className}>
+          <FormLabel className="text-[var(--color-form-label)]">
+            {label}
+            {required && <span className="text-destructive ml-1">*</span>}
+          </FormLabel>
+          <FormControl>
             <div>
               <label>
                 <Button
@@ -50,10 +51,10 @@ export const ShadCnFile = ({ name, label, className, disabled = false, required 
                 />
               </label>
             </div>
-          )}
-        />
-      </FormControl>
-      <FormMessage />
-    </FormItem>
+          </FormControl>
+          <FormMessage />
+        </FormItem>
+      )}
+    />
   );
 };

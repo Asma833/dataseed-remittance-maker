@@ -1,6 +1,6 @@
-import { Controller, FieldValues, Path, FieldPathValue, useFormContext } from 'react-hook-form';
+import { FieldValues, Path, FieldPathValue, useFormContext } from 'react-hook-form';
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
-import { FormItem, FormLabel, FormControl, FormMessage } from '@/components/ui/form';
+import { FormItem, FormLabel, FormControl, FormMessage, FormField } from '@/components/ui/form';
 import { cn } from '@/utils/cn';
 
 interface ShadCnRadioGroupProps<T extends FieldValues> {
@@ -37,24 +37,23 @@ export const ShadCnRadioGroup = <T extends FieldValues>({
   const isBooleanGroup = optionKeys.every((k) => k === 'true' || k === 'false');
 
   return (
-    <FormItem className={className}>
-      <FormLabel className={cn('text-[var(--color-form-label)]', disabled && 'text-gray-400')}>
-        {label}
-        {required && <span className="text-destructive ml-1">*</span>}
-      </FormLabel>
+    <FormField
+      control={control}
+      name={name}
+      {...(defaultValue !== undefined ? { defaultValue } : {})}
+      render={({ field }) => {
+        // Keep the value as string unless this group is truly boolean
+        const currentValue = forcedValue ?? (isBooleanGroup ? String(field.value) : String(field.value ?? ''));
+        const horizontal = (orientation ?? (optionKeys.length <= 10 ? 'horizontal' : 'vertical')) === 'horizontal';
 
-      <FormControl>
-        <Controller<T>
-          name={name}
-          control={control}
-          {...(defaultValue !== undefined ? { defaultValue } : {})}
-          render={({ field }) => {
-            // Keep the value as string unless this group is truly boolean
-            const currentValue = forcedValue ?? (isBooleanGroup ? String(field.value) : String(field.value ?? ''));
+        return (
+          <FormItem className={className}>
+            <FormLabel className={cn('text-[var(--color-form-label)]', disabled && 'text-gray-400')}>
+              {label}
+              {required && <span className="text-destructive ml-1">*</span>}
+            </FormLabel>
 
-            const horizontal = (orientation ?? (optionKeys.length <= 10 ? 'horizontal' : 'vertical')) === 'horizontal';
-
-            return (
+            <FormControl>
               <RadioGroup
                 value={currentValue}
                 onValueChange={(v) => {
@@ -106,12 +105,12 @@ export const ShadCnRadioGroup = <T extends FieldValues>({
                   </div>
                 ))}
               </RadioGroup>
-            );
-          }}
-        />
-      </FormControl>
+            </FormControl>
 
-      <FormMessage />
-    </FormItem>
+            <FormMessage />
+          </FormItem>
+        );
+      }}
+    />
   );
 };

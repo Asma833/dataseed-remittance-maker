@@ -1,6 +1,6 @@
-import { Controller, useFormContext } from 'react-hook-form';
+import { useFormContext } from 'react-hook-form';
 import { ShadCnFormInput } from './ShadCnFormInput';
-import { FormItem, FormLabel, FormControl, FormMessage } from '@/components/ui/form';
+import { FormItem, FormLabel, FormControl, FormMessage, FormField } from '@/components/ui/form';
 import { cn } from '@/utils/cn';
 
 interface ShadCnEmailProps {
@@ -10,6 +10,7 @@ interface ShadCnEmailProps {
   disabled?: boolean;
   required?: boolean;
   forcedValue?: string;
+  control?: any;
 }
 
 export const ShadCnEmail = ({
@@ -19,21 +20,22 @@ export const ShadCnEmail = ({
   disabled = false,
   required = false,
   forcedValue,
+  control: propControl,
 }: ShadCnEmailProps) => {
-  const { control } = useFormContext();
+  const { control: contextControl } = useFormContext();
+  const control = propControl || contextControl;
 
   return (
-    <FormItem className={className}>
-      <FormLabel className="text-[var(--color-form-label)]">
-        {label}
-        {required && <span className="text-destructive ml-1">*</span>}
-      </FormLabel>
-      <FormControl>
-        <Controller
-          name={name}
-          control={control}
-          defaultValue=""
-          render={({ field, fieldState: { error } }) => (
+    <FormField
+      control={control}
+      name={name}
+      render={({ field, fieldState: { error } }) => (
+        <FormItem className={className}>
+          <FormLabel className="text-[var(--color-form-label)]">
+            {label}
+            {required && <span className="text-destructive ml-1">*</span>}
+          </FormLabel>
+          <FormControl>
             <div>
               <ShadCnFormInput
                 {...field}
@@ -46,12 +48,11 @@ export const ShadCnEmail = ({
                 forcedValue={forcedValue}
                 placeholder="Enter Email Address"
               />
-              {error && <p className="text-sm text-destructive mt-1">{error.message}</p>}
             </div>
-          )}
-        />
-      </FormControl>
-      <FormMessage />
-    </FormItem>
+          </FormControl>
+          <FormMessage />
+        </FormItem>
+      )}
+    />
   );
 };
