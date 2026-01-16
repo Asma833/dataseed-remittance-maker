@@ -1,4 +1,4 @@
-import { formatDateWithFallback } from '@/utils/formatDateWithFallback';
+import { formatDateWithFallback, formatDateForCsv } from '@/utils/formatDateWithFallback';
 import { SignLinkButton } from '@/components/cell/table/SignLinkButton';
 import { StatusBadge } from '@/components/common/status-badge';
 import { AmountCell } from '@/components/common/amount-cell';
@@ -35,6 +35,7 @@ export const GetViewAllTransactionTableColumns = ({
       accessorKey: 'order_date',
       meta: { className: 'min-w-0 p-2' },
       cell: ({ row }: { row: any }) => <span>{formatDateWithFallback(row.order_date)}</span>,
+      exportFormatter: formatDateForCsv,
     },
     {
       id: 'expiry_date',
@@ -42,6 +43,7 @@ export const GetViewAllTransactionTableColumns = ({
       accessorKey: 'expiry_date',
       meta: { className: 'min-w-0 p-2' },
       cell: ({ row }: { row: any }) => <span>{formatDateWithFallback(row.expiry_date)}</span>,
+      exportFormatter: formatDateForCsv,
     },
 
     {
@@ -142,7 +144,7 @@ export const GetViewAllTransactionTableColumns = ({
           tooltipText="View"
           buttonType="view"
           buttonIconType="view"
-          className="text-primary hover:text-primary/80 hover:bg-gray-100"
+          className="text-gray-600 hover:text-gray-800 hover:bg-gray-100"
         />
       ),
     }
@@ -187,7 +189,7 @@ const SwiftCopyDownloadCell = ({ row }: { row: PaymentData }) => {
             size="icon"
             onClick={handleDownload}
             disabled={isLoading || !swiftCopy}
-            className={cn('text-primary hover:text-primary/80', !swiftCopy && 'text-gray-400 opacity-50')}
+            className={cn('text-gray-600 hover:text-gray-800', !swiftCopy && 'text-gray-400 opacity-50')}
             title={swiftCopy ? 'Download Swift Copy' : 'Swift Copy Not Available'}
           >
             {isLoading ? <Loader2 className="h-4 w-4 animate-spin" /> : <Download className="h-4 w-4" />}

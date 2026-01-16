@@ -35,6 +35,10 @@ export const exportTableToCSV = <T>(
           const rowData = row.original as any;
           const value = rowData[col.accessorKey as string];
 
+          if (col.exportFormatter) {
+            return formatCellValue(col.exportFormatter(value));
+          }
+
           return formatCellValue(value);
         })
         .join(',');

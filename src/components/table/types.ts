@@ -5,6 +5,7 @@ export interface TableColumn<T = any> {
   header: string;
   accessorKey?: keyof T | string;
   cell?: (props: { row: T; value: any; tableRow?: Row<T> }) => React.ReactNode;
+  exportFormatter?: (value: any) => string;
   sortable?: boolean;
   filterable?: boolean;
   width?: number | string;

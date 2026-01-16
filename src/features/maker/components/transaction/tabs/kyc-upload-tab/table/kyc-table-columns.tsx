@@ -1,4 +1,4 @@
-import { formatDateWithFallback } from '@/utils/formatDateWithFallback';
+import { formatDateWithFallback, formatDateForCsv } from '@/utils/formatDateWithFallback';
 import { KYCStatusEnum } from '@/types/enums';
 import { StatusBadge } from '@/components/common/status-badge';
 import TooltipImageButton from '@/components/common/tooltip-image-button';
@@ -37,6 +37,7 @@ export const KycTableColumnsConfig = ({
       header: 'Order Date',
       meta: { className: 'min-w-0 p-2' },
       cell: (props: { row: PaymentData }) => <span>{formatDateWithFallback(props.row.order_date)}</span>,
+      exportFormatter: formatDateForCsv,
     },
     {
       accessorKey: 'expiry_date',
@@ -44,6 +45,7 @@ export const KycTableColumnsConfig = ({
       header: 'Expiry Date',
       meta: { className: 'min-w-0 p-2' },
       cell: (props: { row: PaymentData }) => <span>{formatDateWithFallback(props.row.expiry_date)}</span>,
+      exportFormatter: formatDateForCsv,
     },
     {
       accessorKey: 'applicant_name',
@@ -128,7 +130,7 @@ export const KycTableColumnsConfig = ({
           tooltipText="View"
           buttonType="view"
           buttonIconType="view"
-          className="text-primary hover:text-primary/80 hover:bg-gray-100"
+          className="text-gray-600 hover:text-gray-800 hover:bg-gray-100"
         />
       ),
     },

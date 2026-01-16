@@ -55,6 +55,7 @@ export function DataTable<T>({
 }: DataTableProps<T>) {
   // State for minimum loader display time
   const [showLoader, setShowLoader] = useState(true);
+  const [isExporting, setIsExporting] = useState(false);
 
   useEffect(() => {
     const timer = setTimeout(() => {
@@ -62,6 +63,8 @@ export function DataTable<T>({
     }, 1500);
     return () => clearTimeout(timer);
   }, []);
+
+
 
   // Early error handling for invalid data
   if (!data) {
@@ -260,13 +263,23 @@ export function DataTable<T>({
 
   // Helper function to export data to CSV
   const exportToCSV = () => {
-    // Get the currently visible/filtered rows from the table
-    const rows = table.getFilteredRowModel().rows as Row<T>[];
+    setIsExporting(true);
+    // Use setTimeout to allow UI to update with loading state before heavy calculation/download
+    setTimeout(() => {
+      try {
+        // Get the currently visible/filtered rows from the table
+        const rows = table.getFilteredRowModel().rows as Row<T>[];
 
-    exportTableToCSV(rows, columns, {
-      fileName: config.export?.fileName || 'export.csv',
-      includeHeaders: config.export?.includeHeaders ?? true,
-    });
+        exportTableToCSV(rows, columns, {
+          fileName: config.export?.fileName || 'export.csv',
+          includeHeaders: config.export?.includeHeaders ?? true,
+        });
+      } catch (error) {
+        console.error('Export failed:', error);
+      } finally {
+        setIsExporting(false);
+      }
+    }, 500);
   };
 
   // Helper function to clear all filters
@@ -589,10 +602,16 @@ export function DataTable<T>({
                   variant="outline"
                   size="sm"
                   onClick={exportToCSV}
-                  className="h-9 w-9 sm:w-10 p-0 text-white bg-(--color-title) hover:bg-(--color-title) hover:opacity-90 hover:text-white transition-opacity shrink-0"
-                  tooltip="Download CSV"
+                  disabled={isExporting}
+                  className="group h-9 w-9 sm:w-10 p-0 text-white bg-(--color-title) hover:bg-(--color-title) hover:opacity-90 hover:text-white transition-opacity shrink-0"
+                  tooltip={isExporting ? 'Downloading...' : 'Download CSV'}
                 >
-                  <DownloadIcon className="h-4 w-4 text-white" />
+                  <DownloadIcon
+                    className={cn(
+                      'h-4 w-4 text-white',
+                      isExporting && 'animate-bounce'
+                    )}
+                  />
                 </TooltipButton>
               )}
             </div>

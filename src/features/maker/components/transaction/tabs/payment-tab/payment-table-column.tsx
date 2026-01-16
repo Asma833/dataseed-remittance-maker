@@ -2,7 +2,7 @@ import { SignLinkButton } from '@/components/cell/table/SignLinkButton';
 import KycStatusCell from '@/components/cell/table/KycStatusCell';
 import { StatusBadge } from '@/components/common/status-badge';
 import { AmountCell } from '@/components/common/amount-cell';
-import { formatDateWithFallback } from '@/utils/formatDateWithFallback';
+import { formatDateWithFallback, formatDateForCsv } from '@/utils/formatDateWithFallback';
 import { PaymentData } from '../../types/payment.types';
 
 export const GetPaymentTableColumn = ({
@@ -21,6 +21,7 @@ export const GetPaymentTableColumn = ({
       accessorKey: 'order_date',
       meta: { className: 'min-w-0 p-2' },
       cell: ({ row }: { row: PaymentData }) => <span>{formatDateWithFallback(row.order_date)}</span>,
+      exportFormatter: formatDateForCsv,
     },
     {
       id: 'expiry_date',
@@ -28,6 +29,7 @@ export const GetPaymentTableColumn = ({
       accessorKey: 'expiry_date',
       meta: { className: 'min-w-0 p-2' },
       cell: ({ row }: { row: PaymentData }) => <span>{formatDateWithFallback(row.expiry_date)}</span>,
+      exportFormatter: formatDateForCsv,
     },
     {
       id: 'applicant_name',
@@ -161,8 +163,8 @@ export const GetPaymentTableColumn = ({
             tooltipText={tooltipText}
             buttonIconType={hasChallan ? 'file_text' : 'upload'}
             buttonType={hasChallan ? 'file_text' : 'upload'}
-            className="text-primary hover:text-primary/80 hover:bg-gray-100"
-            iconClassName="text-primary hover:text-white group-disabled:text-gray-400"
+            className="text-gray-600 hover:text-gray-800 hover:bg-gray-100"
+            iconClassName="text-gray-600 hover:text-gray-800 group-disabled:text-gray-400"
           />
         );
       },
@@ -180,7 +182,7 @@ export const GetPaymentTableColumn = ({
           tooltipText="View"
           buttonType="view"
           buttonIconType="view"
-          className="text-primary hover:text-primary/80 hover:bg-gray-100"
+          className="text-gray-600 hover:text-gray-800 hover:bg-gray-100"
         />
       ),
     },
