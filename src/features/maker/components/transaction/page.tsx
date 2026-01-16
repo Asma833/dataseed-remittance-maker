@@ -44,7 +44,8 @@ const TransactionPage = () => {
             style={({ isActive }) => {
               const isNestedActive =
                 (tab.path === 'payment' && location.pathname.includes('/payment/view-transactions')) ||
-                (tab.path === 'kyc' && location.pathname.includes('/kyc/view-transactions'));
+                (tab.path === 'kyc' && location.pathname.includes('/kyc/view-transactions'))||
+                (tab.path === 'view-all-transactions' && location.pathname.includes('/view-all-transactions/view-transactions'));
               const isTabActive = isActive || isNestedActive;
 
               return {

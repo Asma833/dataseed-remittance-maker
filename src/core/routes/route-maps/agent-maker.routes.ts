@@ -42,9 +42,14 @@ export const agentMakerRoutes: RouteConfig[] = [
         permission: '',
       },
       {
-        path: 'approved-deals',
+        path: 'view-all-transactions',
         label: 'View All Transactions',
         element: makerComponents.ViewAllTransactions,
+        permission: '',
+      },
+      {
+        path: 'view-all-transactions/view-transactions',
+        element: makerComponents.CreateTransactions,
         permission: '',
       },
       {

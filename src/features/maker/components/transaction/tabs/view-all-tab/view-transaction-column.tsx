@@ -11,7 +11,11 @@ import { Loader2, Download } from 'lucide-react';
 import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip';
 import { cn } from '@/utils/cn';
 
-export const GetViewAllTransactionTableColumns = () => {
+export const GetViewAllTransactionTableColumns = ({
+  handleViewTransaction,
+}: {
+  handleViewTransaction: (rowData: PaymentData) => void;
+}) => {
   return [
     {
       id: 'ref_no',
@@ -125,6 +129,21 @@ export const GetViewAllTransactionTableColumns = () => {
       accessorKey: 'swift_copy',
       meta: { className: 'min-w-0 p-2' },
       cell: ({ row }: { row: any }) => <SwiftCopyDownloadCell row={row} />, // Render custom cell
+    },
+    {
+      id: 'view_action',
+      header: 'View',
+      accessorKey: 'view_action',
+      meta: { className: 'min-w-0 p-2' },
+      cell: ({ row }: { row: PaymentData }) => (
+        <SignLinkButton
+          id={row.ref_no}
+          onClick={() => handleViewTransaction(row)}
+          tooltipText="View"
+          buttonType="view"
+          buttonIconType="view"
+        />
+      ),
     }
   ];
 };
