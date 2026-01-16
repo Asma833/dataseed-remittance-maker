@@ -14,12 +14,6 @@ const OPTIONAL_DATE_SCHEMA = z.preprocess((arg) => {
 
 export const transactionBasicDetailsSchema = z
   .object({
-    company_reference_number: z
-      .string()
-      .regex(NO_LEADING_HYPHEN_OR_SPACE, 'Company reference number cannot start with hyphen or space')
-      .max(50, 'Company Reference number too long')
-      .optional()
-      .or(z.literal('')),
     agent_reference_number: z
       .string()
       .regex(NO_LEADING_HYPHEN_OR_SPACE, 'Agent reference number cannot start with hyphen or space')

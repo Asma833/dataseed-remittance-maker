@@ -24,6 +24,7 @@ export type TransactionCreatedDialogProps = {
 export type CommonCreateTransactionProps = {
   setAccordionState: (state: Partial<AccordionState>) => void;
   viewMode?: boolean;
+  isViewOnly?: boolean;
   paymentData?: PaymentData;
   dealBookingId?: string;
 };

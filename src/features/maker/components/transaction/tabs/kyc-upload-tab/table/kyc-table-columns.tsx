@@ -98,7 +98,7 @@ export const KycTableColumnsConfig = ({
             alt={tooltipText}
             tooltipText={tooltipText}
             disabled={disabled}
-            imgClassName={isCompleted ? 'w-[22px] h-[22px]' : 'w-[16px] h-[16px]'}
+            imgClassName={isCompleted ? 'w-[22px] h-[22px]' : 'w-[14px] h-[14px]'}
           />
         );
       },

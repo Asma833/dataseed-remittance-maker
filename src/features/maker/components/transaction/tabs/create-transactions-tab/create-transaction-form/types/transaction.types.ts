@@ -63,7 +63,7 @@ export interface BeneficiaryDetails {
 }
 
 export interface TransactionDetails {
-  company_reference_number: string;
+  company_reference_number?: string;
   agent_reference_number: string;
   order_date: string;
   order_expiry: string;

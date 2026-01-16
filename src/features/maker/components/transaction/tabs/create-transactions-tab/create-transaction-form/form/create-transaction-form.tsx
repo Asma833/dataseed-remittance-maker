@@ -154,7 +154,6 @@ const CreateTransactionForm = ({ onCancel, onSubmit, initialData, viewMode }: Pr
           intermediary_bank_address: normalizeString(data.beneficiaryDetails.intermediary_bank_address),
         },
         transactionDetails: {
-          company_reference_number: normalizeString(data.transactionDetails.company_reference_number),
           agent_reference_number: normalizeString(data.transactionDetails.agent_reference_number),
           order_date: new Date().toISOString(),
           order_expiry: new Date().toISOString(),
@@ -168,9 +167,9 @@ const CreateTransactionForm = ({ onCancel, onSubmit, initialData, viewMode }: Pr
           customer_rate: safeNumber(data.transactionDetails.customer_rate),
           nostro_charges: safeNumber(data.currencyDetails.invoiceRateTable.nostro_charges.rate),
           applicant_name: normalizeString(data.transactionDetails.applicant_name),
-          // applicant_dob: data.transactionDetails.applicant_dob
-          //   ? new Date(data.transactionDetails.applicant_dob).toISOString()
-          //   : '',
+          applicant_dob: data.transactionDetails.applicant_dob
+            ? new Date(data.transactionDetails.applicant_dob).toISOString()
+            : '',
           applicant_pan_number: normalizeString(data.transactionDetails.applicant_pan_number),
           applicant_email: normalizeString(data.transactionDetails.applicant_email),
           applicant_mobile_number: normalizeString(data.transactionDetails.applicant_mobile_number),
@@ -297,6 +296,7 @@ const CreateTransactionForm = ({ onCancel, onSubmit, initialData, viewMode }: Pr
           <CreateTransactionsAccordion
             accordionItems={accordionItems}
             viewMode={viewMode || isCreated}
+            isViewOnly={!!viewMode}
             {...(latestPaymentData ? { paymentData: latestPaymentData } : {})}
             dealBookingId={latestDealBookingId}
           />

@@ -30,7 +30,7 @@ import { useDebounce } from '@/hooks/useDebounce';
 import { useGetDealDetails } from '@/features/maker/components/transaction/hooks/useGetPaymentDetails';
 import { KycSelectionDialog } from './kyc-selection-dialog';
 
-const CurrencyDetails = ({ setAccordionState, viewMode, paymentData, dealBookingId }: CommonCreateTransactionProps) => {
+const CurrencyDetails = ({ setAccordionState, viewMode, isViewOnly, paymentData, dealBookingId }: CommonCreateTransactionProps) => {
   const { accordionState } = useAccordionStateProvider();
   const [isSaving, setIsSaving] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -497,7 +497,7 @@ const CurrencyDetails = ({ setAccordionState, viewMode, paymentData, dealBooking
                     }
                     return (
                       <FieldWrapper key={name}>
-                        {getController({ ...fieldWithOptions, name: `currencyDetails.${name}`, control, errors })}
+                        {getController({ ...fieldWithOptions, name: `currencyDetails.${name}`, control, errors, disabled: viewMode })}
                       </FieldWrapper>
                     );
                   })}
@@ -507,7 +507,7 @@ const CurrencyDetails = ({ setAccordionState, viewMode, paymentData, dealBooking
                     const field = currencyDetailsConfig.find((f) => f.name === name) as FieldConfig;
                     return (
                       <FieldWrapper key={name}>
-                        {getController({ ...field, name: `currencyDetails.${name}`, control, errors })}
+                        {getController({ ...field, name: `currencyDetails.${name}`, control, errors, disabled: viewMode })}
                       </FieldWrapper>
                     );
                   })}
@@ -529,6 +529,7 @@ const CurrencyDetails = ({ setAccordionState, viewMode, paymentData, dealBooking
                           name: `currencyDetails.${name}`,
                           control,
                           errors,
+                          disabled: viewMode,
                         })}
                       </FieldWrapper>
                     );
@@ -551,6 +552,7 @@ const CurrencyDetails = ({ setAccordionState, viewMode, paymentData, dealBooking
                           name: `currencyDetails.${name}`,
                           control,
                           errors,
+                          disabled: viewMode,
                         })}
                       </FieldWrapper>
                     );
@@ -561,7 +563,7 @@ const CurrencyDetails = ({ setAccordionState, viewMode, paymentData, dealBooking
                     const field = currencyDetailsConfig.find((f) => f.name === name) as FieldConfig;
                     return (
                       <FieldWrapper key={name}>
-                        {getController({ ...field, name: `currencyDetails.${name}`, control, errors })}
+                        {getController({ ...field, name: `currencyDetails.${name}`, control, errors, disabled: viewMode })}
                       </FieldWrapper>
                     );
                   })}
@@ -570,7 +572,7 @@ const CurrencyDetails = ({ setAccordionState, viewMode, paymentData, dealBooking
               <div className="flex flex-wrap md:!w-full lg:w-1/2">
                 <RateTable
                   id={'currencyDetails.invoiceRateTable'}
-                  mode={'edit'}
+                  mode={viewMode ? 'view' : 'edit'}
                   totalAmount={transactionAmount}
                   beneficiaryAmount={beneficiaryAmount}
                   editableFields={[
@@ -617,11 +619,11 @@ const CurrencyDetails = ({ setAccordionState, viewMode, paymentData, dealBooking
                       onClick={handlePayment} 
                       variant="secondary" 
                       className="mr-2"
-                      disabled={!!(selectedPayment?.payment_challan_url || paymentData?.payment_challan_url)}
+                      disabled={isViewOnly || !!(selectedPayment?.payment_challan_url || paymentData?.payment_challan_url)}
                     >
                       Offline Bank Transfer
                     </Button>
-                     <Button type="button" onClick={() => setIsKycDialogOpen(true)} variant="secondary" className="mr-2">
+                     <Button type="button" onClick={() => setIsKycDialogOpen(true)} variant="secondary" className="mr-2" disabled={isViewOnly}>
                       KYC Upload
                     </Button>
                   </>

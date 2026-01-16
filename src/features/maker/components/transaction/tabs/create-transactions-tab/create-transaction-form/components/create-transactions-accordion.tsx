@@ -10,11 +10,13 @@ import { useAccordionStateProvider } from '../context/accordion-control-context'
 export default function CreateTransactionsAccordion({
   accordionItems,
   viewMode,
+  isViewOnly,
   paymentData,
   dealBookingId,
 }: {
   accordionItems: AccordionItem[];
   viewMode?: boolean;
+  isViewOnly?: boolean;
   paymentData?: any;
   dealBookingId?: string | undefined;
 }) {
@@ -59,7 +61,7 @@ export default function CreateTransactionsAccordion({
           </AccordionSummary>
           <AccordionDetails className="mt-4 bg-transparent text-foreground">
             {typeof item.content === 'function' ? (
-              item.content({ setAccordionState, viewMode, paymentData, dealBookingId })
+              item.content({ setAccordionState, viewMode: viewMode, isViewOnly, paymentData, dealBookingId })
             ) : (
               <Typography>{item.content}</Typography>
             )}

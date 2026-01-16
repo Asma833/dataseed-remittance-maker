@@ -10,7 +10,7 @@ import { getController } from '@/components/form/utils/get-controller';
 import { Button } from '@/components/ui/button';
 import { toast } from 'sonner';
 
-const BeneficiaryDetails = ({ setAccordionState }: CommonCreateTransactionProps) => {
+const BeneficiaryDetails = ({ setAccordionState, viewMode }: CommonCreateTransactionProps) => {
   const [isSaving, setIsSaving] = useState(false);
   const [isEditing, setIsEditing] = useState(false);
   const { control, trigger } = useFormContext();
@@ -59,7 +59,7 @@ const BeneficiaryDetails = ({ setAccordionState }: CommonCreateTransactionProps)
             if (!field) return null;
             return (
               <FieldWrapper key={name}>
-                {getController({ ...field, name: `beneficiaryDetails.${name}`, control, errors })}
+                {getController({ ...field, name: `beneficiaryDetails.${name}`, control, errors, disabled: viewMode })}
               </FieldWrapper>
             );
           }
@@ -78,7 +78,7 @@ const BeneficiaryDetails = ({ setAccordionState }: CommonCreateTransactionProps)
           if (!field) return null;
           return (
             <FieldWrapper key={name}>
-              {getController({ ...field, name: `beneficiaryDetails.${name}`, control, errors })}
+              {getController({ ...field, name: `beneficiaryDetails.${name}`, control, errors, disabled: viewMode })}
             </FieldWrapper>
           );
         })}
@@ -94,7 +94,7 @@ const BeneficiaryDetails = ({ setAccordionState }: CommonCreateTransactionProps)
               key={name}
               className={name === 'message_to_beneficiary_additional_information' ? 'col-span-2' : ''}
             >
-              {getController({ ...field, name: `beneficiaryDetails.${name}`, control, errors })}
+              {getController({ ...field, name: `beneficiaryDetails.${name}`, control, errors, disabled: viewMode })}
             </FieldWrapper>
           );
         })}
@@ -106,7 +106,7 @@ const BeneficiaryDetails = ({ setAccordionState }: CommonCreateTransactionProps)
             if (!field) return null;
             return (
               <FieldWrapper key={name}>
-                {getController({ ...field, name: `beneficiaryDetails.${name}`, control, errors })}
+                {getController({ ...field, name: `beneficiaryDetails.${name}`, control, errors, disabled: viewMode })}
               </FieldWrapper>
             );
           }
@@ -122,6 +122,7 @@ const BeneficiaryDetails = ({ setAccordionState }: CommonCreateTransactionProps)
               no: { label: 'No' },
             }}
             className="justify-start"
+            disabled={!!viewMode}
           />
         </FieldWrapper>
         {intermediaryBankDetails === 'yes' && (
@@ -138,6 +139,7 @@ const BeneficiaryDetails = ({ setAccordionState }: CommonCreateTransactionProps)
                       required: item.required,
                       control,
                       errors,
+                      disabled: !!viewMode,
                     })}
                   </FieldWrapper>
                 );

@@ -18,7 +18,7 @@ import { TransactionPurposeMap } from '@/types/common/transaction-form.types';
 import { useDispatch } from 'react-redux';
 import { updateTransactionField } from '@/features/maker/store/transaction-form-slice';
 
-const TransactionBasicDetails = ({ setAccordionState }: CommonCreateTransactionProps) => {
+const TransactionBasicDetails = ({ setAccordionState, viewMode }: CommonCreateTransactionProps) => {
   const dispatch = useDispatch();
   const {
     control,
@@ -218,7 +218,7 @@ const TransactionBasicDetails = ({ setAccordionState }: CommonCreateTransactionP
               }
               return (
                 <FieldWrapper key={name}>
-                  {getController({ ...fieldWithOptions, name: `transactionDetails.${name}`, control, errors })}
+                  {getController({ ...fieldWithOptions, name: `transactionDetails.${name}`, control, errors, disabled: viewMode })}
                 </FieldWrapper>
               );
             })}
@@ -232,7 +232,7 @@ const TransactionBasicDetails = ({ setAccordionState }: CommonCreateTransactionP
               }
               return (
                 <FieldWrapper key={name}>
-                  {getController({ ...fieldWithOptions, name: `transactionDetails.${name}`, control, errors })}
+                  {getController({ ...fieldWithOptions, name: `transactionDetails.${name}`, control, errors, disabled: viewMode })}
                 </FieldWrapper>
               );
             })}
@@ -245,7 +245,7 @@ const TransactionBasicDetails = ({ setAccordionState }: CommonCreateTransactionP
                   const field = transactionBasicDetailsConfig.find((f) => f.name === name) as FieldConfig;
                   return (
                     <FieldWrapper key={name}>
-                      {getController({ ...field, name: `transactionDetails.${name}`, control, errors })}
+                      {getController({ ...field, name: `transactionDetails.${name}`, control, errors, disabled: viewMode })}
                     </FieldWrapper>
                   );
                 }
@@ -257,7 +257,7 @@ const TransactionBasicDetails = ({ setAccordionState }: CommonCreateTransactionP
                   const field = transactionBasicDetailsConfig.find((f) => f.name === name) as FieldConfig;
                   return (
                     <FieldWrapper key={name}>
-                      {getController({ ...field, name: `transactionDetails.${name}`, control, errors })}
+                      {getController({ ...field, name: `transactionDetails.${name}`, control, errors, disabled: viewMode })}
                     </FieldWrapper>
                   );
                 }
@@ -277,7 +277,7 @@ const TransactionBasicDetails = ({ setAccordionState }: CommonCreateTransactionP
                 const field = transactionBasicDetailsConfig.find((f) => f.name === name) as FieldConfig;
                 return (
                   <FieldWrapper key={name}>
-                    {getController({ ...field, name: `transactionDetails.${name}`, control, errors })}
+                    {getController({ ...field, name: `transactionDetails.${name}`, control, errors, disabled: viewMode })}
                   </FieldWrapper>
                 );
               })}
@@ -288,7 +288,7 @@ const TransactionBasicDetails = ({ setAccordionState }: CommonCreateTransactionP
                   const field = transactionBasicDetailsConfig.find((f) => f.name === name) as FieldConfig;
                   return (
                     <FieldWrapper key={name}>
-                      {getController({ ...field, name: `transactionDetails.${name}`, control, errors })}
+                      {getController({ ...field, name: `transactionDetails.${name}`, control, errors, disabled: viewMode })}
                     </FieldWrapper>
                   );
                 }
@@ -300,7 +300,7 @@ const TransactionBasicDetails = ({ setAccordionState }: CommonCreateTransactionP
                   const field = transactionBasicDetailsConfig.find((f) => f.name === name) as FieldConfig;
                   return (
                     <FieldWrapper key={name}>
-                      {getController({ ...field, name: `transactionDetails.${name}`, control, errors })}
+                      {getController({ ...field, name: `transactionDetails.${name}`, control, errors, disabled: viewMode })}
                     </FieldWrapper>
                   );
                 }
@@ -311,7 +311,7 @@ const TransactionBasicDetails = ({ setAccordionState }: CommonCreateTransactionP
                 const field = transactionBasicDetailsConfig.find((f) => f.name === name) as FieldConfig;
                 return (
                   <FieldWrapper key={name}>
-                    {getController({ ...field, name: `transactionDetails.${name}`, control, errors })}
+                    {getController({ ...field, name: `transactionDetails.${name}`, control, errors, disabled: viewMode })}
                   </FieldWrapper>
                 );
               })}

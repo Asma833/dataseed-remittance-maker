@@ -2,13 +2,6 @@ import { FieldType } from '@/types/enums';
 
 const transactionBasicDetailsConfig = [
   {
-    name: 'company_reference_number',
-    label: 'Company Reference Number',
-    type: FieldType.Text,
-    placeholder: 'Enter Company Reference Number',
-    required: false,
-  },
-  {
     name: 'agent_reference_number',
     label: 'Agent Reference Number',
     type: FieldType.Text,
