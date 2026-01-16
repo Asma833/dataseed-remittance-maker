@@ -50,6 +50,50 @@ const KYCForm = ({
 
   const [localPreviews, setLocalPreviews] = useState<Record<string, { url: string; isPdf: boolean }>>({});
   const queryClient = useQueryClient();
+  // Prepare default values for document fields with existing URLs
+  const documentDefaultValues = useMemo(() => {
+    const values: Record<string, any> = {};
+    if (documentTypes) {
+      documentTypes.forEach((doc: MappedDocument) => {
+        if (doc.document_url) {
+          const documentId = doc.document_id || doc.id;
+          if (doc.is_back_required) {
+            values[`document_${documentId}_front`] = [{ document_url: doc.document_url, name: doc.document_url }];
+            values[`document_${documentId}_back`] = [{ document_url: doc.document_url, name: doc.document_url }];
+          } else {
+            values[`document_${documentId}`] = [{ document_url: doc.document_url, name: doc.document_url }];
+          }
+        }
+      });
+    }
+    return values;
+  }, [documentTypes]);
+
+  const formSchema = useMemo(() => createKycFormSchema(documentTypes), [documentTypes]);
+  const formSchemaRef = useRef(formSchema);
+
+  useEffect(() => {
+    formSchemaRef.current = formSchema;
+  }, [formSchema]);
+
+  const methods = useForm({
+    resolver: (values, context, options) => zodResolver(formSchemaRef.current)(values, context, options),
+    defaultValues: {
+      company_reference_number: transaction?.company_ref_number || '',
+      agent_reference_number: transaction?.agent_ref_number || '',
+      applicant_name: transaction?.kyc_details?.applicant_name || '',
+      ...documentDefaultValues,
+    } as any, // Casting to any to avoid index signature operator incompatibility with strict types due to catchall
+  });
+
+  const {
+    handleSubmit,
+    control,
+    reset,
+    getValues,
+    setValue,
+    formState: { errors },
+  } = methods;
 
   const handleUploadOnFileChange = useCallback(
     async ({ file, documentId, fieldKey }: { file: File; documentId: string; fieldKey?: string }) => {
@@ -67,14 +111,23 @@ const KYCForm = ({
           remarks: '',
         });
         
-        // Update local preview
+        // Update local preview and form state to satisfy validation
         if (fieldKey) {
             const url = URL.createObjectURL(file);
             const isPdf = file.type === 'application/pdf';
             setLocalPreviews(prev => ({ ...prev, [fieldKey]: { url, isPdf } }));
+            
+            // Critical: Update form value so react-hook-form validation passes
+            // Schema expects an array of objects
+            setValue(fieldKey, [{
+                file: file,
+                name: file.name,
+                size: file.size,
+                type: file.type,
+                lastModified: file.lastModified,
+                document_url: url
+            }], { shouldValidate: true, shouldDirty: true });
         }
-
-       // toast.success('Document uploaded successfully');
 
       } catch (error: any) {
         console.error('KYC document upload failed:', error);
@@ -84,9 +137,9 @@ const KYCForm = ({
         );
       }
     },
-    [transaction?.id, transaction?.transaction_id, transaction?.transaction_purpose_map_id, queryClient]
+    [transaction?.id, transaction?.transaction_id, transaction?.transaction_purpose_map_id, queryClient, setValue]
   );
-
+  
   const handleViewDocument = async (s3Key: string, documentName: string) => {
     try {
       const response = await getPresignedUrlsAsync([s3Key]);
@@ -178,55 +231,11 @@ const KYCForm = ({
                    }
                 }
                 : undefined,
-          onFileSelected: (file: File) => handleUploadOnFileChange({ file, documentId, fieldKey: fieldName }),
+            onFileSelected: (file: File) => handleUploadOnFileChange({ file, documentId, fieldKey: fieldName }),
         },
       ];
     });
   }, [documentTypes, handleUploadOnFileChange, handleViewDocument, localPreviews]);
-
-  // Prepare default values for document fields with existing URLs
-  const documentDefaultValues = useMemo(() => {
-    const values: Record<string, any> = {};
-    if (documentTypes) {
-      documentTypes.forEach((doc: MappedDocument) => {
-        if (doc.document_url) {
-          const documentId = doc.document_id || doc.id;
-          if (doc.is_back_required) {
-            values[`document_${documentId}_front`] = [{ document_url: doc.document_url, name: doc.document_url }];
-            values[`document_${documentId}_back`] = [{ document_url: doc.document_url, name: doc.document_url }];
-          } else {
-            values[`document_${documentId}`] = [{ document_url: doc.document_url, name: doc.document_url }];
-          }
-        }
-      });
-    }
-    return values;
-  }, [documentTypes]);
-
-  const formSchema = useMemo(() => createKycFormSchema(documentTypes), [documentTypes]);
-  const formSchemaRef = useRef(formSchema);
-
-  useEffect(() => {
-    formSchemaRef.current = formSchema;
-  }, [formSchema]);
-
-  const methods = useForm({
-    resolver: (values, context, options) => zodResolver(formSchemaRef.current)(values, context, options),
-    defaultValues: {
-      company_reference_number: transaction?.company_ref_number || '',
-      agent_reference_number: transaction?.agent_ref_number || '',
-      applicant_name: transaction?.kyc_details?.applicant_name || '',
-      ...documentDefaultValues,
-    } as any, // Casting to any to avoid index signature operator incompatibility with strict types due to catchall
-  });
-
-  const {
-    handleSubmit,
-    control,
-    reset,
-    getValues,
-    formState: { errors },
-  } = methods;
 
   // Extract stable values for dependencies
   const transactionId = transaction?.id || transaction?.transaction_id;
@@ -245,24 +254,17 @@ const KYCForm = ({
 
       const currentValues = getValues();
       
-      // Perform a check to avoid unnecessary resets (which cause infinite loops)
-      // We check specific fields because getValues() might return more data or structure diffs
       const isDifferent = 
           currentValues.company_reference_number !== newValues.company_reference_number ||
           currentValues.agent_reference_number !== newValues.agent_reference_number ||
           currentValues.applicant_name !== newValues.applicant_name ||
           JSON.stringify(documentDefaultValues) !== JSON.stringify(Object.fromEntries(Object.entries(currentValues).filter(([k]) => k.startsWith('document_'))));
 
-      // Fallback: simplified deep compare if the above specific check is too complex to maintain
-      // const deepDifferent = JSON.stringify(currentValues) !== JSON.stringify({ ...currentValues, ...newValues });
-      
       if (isDifferent) {
          reset(newValues as any);
       }
     }
   }, [transactionId, companyRef, agentRef, applicantName, documentDefaultValues, reset, getValues]);
-
-
 
   const handleKycSubmit = handleSubmit(
     async (formdata: FieldValues) => {
@@ -275,13 +277,33 @@ const KYCForm = ({
       }
     },
     (errors) => {
-      toast.error('Please complete all required fields');
+      console.error('Form validation errors:', errors);
+      const errorDetails = Object.entries(errors)
+        .map(([key, error]: [string, any]) => `${key}: ${error?.message || 'Unknown error'}`)
+        .join('\n');
+      toast.error(`Validation failed:\n${errorDetails}`);
     }
   );
 
   const handleCancel = () => {
     onCancel();
   };
+
+  /* 
+   * Calculate which fields correspond to rejected documents.
+   * We need to ensure that for every rejected document field, a new file has been locally uploaded (proven by localPreviews).
+   */
+  const rejectedFieldNames = useMemo(() => {
+     if (!rejectedDocuments?.length) return [];
+     return dynamicDocumentFields
+        .filter((field: any) => rejectedDocuments.some(d => d.document_id === field.documentId))
+        .map((field: any) => field.name);
+  }, [dynamicDocumentFields, rejectedDocuments]);
+
+  const allRejectedUploaded = useMemo(() => {
+    if (rejectedFieldNames.length === 0) return true;
+    return rejectedFieldNames.every(name => !!localPreviews[name]);
+  }, [rejectedFieldNames, localPreviews]);
 
   return (
     <>
@@ -349,7 +371,13 @@ const KYCForm = ({
             <Button type="button" onClick={handleCancel} variant="light" className="w-full sm:w-auto px-10">
               Cancel
             </Button>
-            <Button type="button" onClick={handleKycSubmit} variant="secondary" className="w-full sm:w-auto px-10">
+            <Button 
+                type="button" 
+                onClick={handleKycSubmit} 
+                variant="secondary" 
+                className="w-full sm:w-auto px-10"
+                disabled={isRejected && !allRejectedUploaded}
+            >
               Submit
             </Button>
           </div>
