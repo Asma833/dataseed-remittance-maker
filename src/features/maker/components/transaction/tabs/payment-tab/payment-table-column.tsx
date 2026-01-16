@@ -126,7 +126,12 @@ export const GetPaymentTableColumn = ({
     //     );
     //   },
     // },
-
+    { 
+      id: 'rejection_reason', 
+      header: 'Comments', 
+      accessorKey: 'rejection_reason', 
+      meta: { className: 'min-w-0 p-2' } 
+    },
     {
       id: 'payment_screenshot',
       header: 'Payment Screenshot',
@@ -156,13 +161,13 @@ export const GetPaymentTableColumn = ({
             tooltipText={tooltipText}
             buttonIconType={hasChallan ? 'file_text' : 'upload'}
             buttonType={hasChallan ? 'file_text' : 'upload'}
-            className="group"
-            iconClassName="text-primary group-hover:text-white group-disabled:text-gray-400"
+            className="text-primary hover:text-primary/80 hover:bg-gray-100"
+            iconClassName="text-primary hover:text-white group-disabled:text-gray-400"
           />
         );
       },
     },
-    { id: 'rejection_reason', header: 'Comments', accessorKey: 'rejection_reason', meta: { className: 'min-w-0 p-2' } },
+    
     {
       id: 'view_action',
       header: 'View',
@@ -175,6 +180,7 @@ export const GetPaymentTableColumn = ({
           tooltipText="View"
           buttonType="view"
           buttonIconType="view"
+          className="text-primary hover:text-primary/80 hover:bg-gray-100"
         />
       ),
     },

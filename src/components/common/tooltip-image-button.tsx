@@ -23,7 +23,8 @@ const TooltipImageButton = ({
   size = 'sm',
   className,
   imgClassName,
-}: TooltipImageButtonProps) => {
+  invertOnHover = true,
+}: TooltipImageButtonProps & { invertOnHover?: boolean }) => {
   const [isHovered, setIsHovered] = useState(false);
 
   return (
@@ -50,9 +51,10 @@ const TooltipImageButton = ({
             alt={alt}
             className={cn('w-3 h-3 transition-all duration-200', imgClassName)}
             style={{
-              filter: isHovered
-                ? 'brightness(0) saturate(100%) invert(1) contrast(1.2) drop-shadow(0 0 0.5px white)'
-                : 'brightness(0) saturate(100%) contrast(2) drop-shadow(0 0 0.3px black)',
+              filter:
+                isHovered && invertOnHover
+                  ? 'brightness(0) saturate(100%) invert(1) contrast(1.2) drop-shadow(0 0 0.5px white)'
+                  : 'brightness(0) saturate(100%) contrast(2) drop-shadow(0 0 0.3px black)',
             }}
           />
         </Button>

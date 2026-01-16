@@ -142,6 +142,7 @@ export const GetViewAllTransactionTableColumns = ({
           tooltipText="View"
           buttonType="view"
           buttonIconType="view"
+          className="text-primary hover:text-primary/80 hover:bg-gray-100"
         />
       ),
     }

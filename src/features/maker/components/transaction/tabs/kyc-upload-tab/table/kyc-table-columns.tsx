@@ -7,6 +7,7 @@ import TickIcon from '@/assets/icons/transaction-approved.svg';
 import upload from '@/assets/icons/upload.svg';
 import { SignLinkButton } from '@/components/cell/table/SignLinkButton';
 import { PaymentData } from '../../../types/payment.types';
+import { cn } from '@/utils/cn';
 
 export const KycTableColumnsConfig = ({
   navigate,
@@ -68,7 +69,17 @@ export const KycTableColumnsConfig = ({
       header: 'Purpose',
       meta: { className: 'min-w-0 p-2' },
     },
+   
     {
+      accessorKey: 'kyc_status',
+      id: 'kyc_status',
+      header: 'KYC Status',
+      meta: { className: 'min-w-0 p-2' },
+      cell: (props: { row: PaymentData; value: any }) => {
+        return <StatusBadge status={props.row.kyc_status} />;
+      },
+    },
+ {
       accessorKey: 'kyc_doc',
       id: 'kyc_doc',
       header: 'KYC Doc',
@@ -98,21 +109,13 @@ export const KycTableColumnsConfig = ({
             alt={tooltipText}
             tooltipText={tooltipText}
             disabled={disabled}
-            imgClassName={isCompleted ? 'w-[22px] h-[22px]' : 'w-[14px] h-[14px]'}
+            className="hover:bg-gray-100"
+            invertOnHover={false}
+            imgClassName={cn(isCompleted ? 'w-[22px] h-[22px]' : 'w-[14px] h-[14px]')}
           />
         );
       },
     },
-    {
-      accessorKey: 'kyc_status',
-      id: 'kyc_status',
-      header: 'KYC Status',
-      meta: { className: 'min-w-0 p-2' },
-      cell: (props: { row: PaymentData; value: any }) => {
-        return <StatusBadge status={props.row.kyc_status} />;
-      },
-    },
-
     {
       accessorKey: 'view_action',
       id: 'view_action',
@@ -125,6 +128,7 @@ export const KycTableColumnsConfig = ({
           tooltipText="View"
           buttonType="view"
           buttonIconType="view"
+          className="text-primary hover:text-primary/80 hover:bg-gray-100"
         />
       ),
     },
