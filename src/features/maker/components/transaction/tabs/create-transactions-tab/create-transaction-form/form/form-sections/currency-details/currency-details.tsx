@@ -497,7 +497,7 @@ const CurrencyDetails = ({ setAccordionState, viewMode, isViewOnly, paymentData,
                     }
                     return (
                       <FieldWrapper key={name}>
-                        {getController({ ...fieldWithOptions, name: `currencyDetails.${name}`, control, errors, disabled: viewMode })}
+                        {getController({ ...fieldWithOptions, name: `currencyDetails.${name}`, control, errors, disabled: viewMode || field?.disabled })}
                       </FieldWrapper>
                     );
                   })}
@@ -507,7 +507,7 @@ const CurrencyDetails = ({ setAccordionState, viewMode, isViewOnly, paymentData,
                     const field = currencyDetailsConfig.find((f) => f.name === name) as FieldConfig;
                     return (
                       <FieldWrapper key={name}>
-                        {getController({ ...field, name: `currencyDetails.${name}`, control, errors, disabled: viewMode })}
+                        {getController({ ...field, name: `currencyDetails.${name}`, control, errors, disabled: viewMode || field?.disabled })}
                       </FieldWrapper>
                     );
                   })}
@@ -529,7 +529,7 @@ const CurrencyDetails = ({ setAccordionState, viewMode, isViewOnly, paymentData,
                           name: `currencyDetails.${name}`,
                           control,
                           errors,
-                          disabled: viewMode,
+                          disabled: viewMode || field?.disabled,
                         })}
                       </FieldWrapper>
                     );
@@ -552,7 +552,7 @@ const CurrencyDetails = ({ setAccordionState, viewMode, isViewOnly, paymentData,
                           name: `currencyDetails.${name}`,
                           control,
                           errors,
-                          disabled: viewMode,
+                          disabled: viewMode || field?.disabled,
                         })}
                       </FieldWrapper>
                     );
@@ -563,7 +563,7 @@ const CurrencyDetails = ({ setAccordionState, viewMode, isViewOnly, paymentData,
                     const field = currencyDetailsConfig.find((f) => f.name === name) as FieldConfig;
                     return (
                       <FieldWrapper key={name}>
-                        {getController({ ...field, name: `currencyDetails.${name}`, control, errors, disabled: viewMode })}
+                        {getController({ ...field, name: `currencyDetails.${name}`, control, errors, disabled: viewMode || field?.disabled })}
                       </FieldWrapper>
                     );
                   })}

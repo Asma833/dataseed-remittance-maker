@@ -218,7 +218,7 @@ const TransactionBasicDetails = ({ setAccordionState, viewMode }: CommonCreateTr
               }
               return (
                 <FieldWrapper key={name}>
-                  {getController({ ...fieldWithOptions, name: `transactionDetails.${name}`, control, errors, disabled: viewMode })}
+                  {getController({ ...fieldWithOptions, name: `transactionDetails.${name}`, control, errors, disabled: viewMode || field?.disabled })}
                 </FieldWrapper>
               );
             })}
@@ -232,7 +232,7 @@ const TransactionBasicDetails = ({ setAccordionState, viewMode }: CommonCreateTr
               }
               return (
                 <FieldWrapper key={name}>
-                  {getController({ ...fieldWithOptions, name: `transactionDetails.${name}`, control, errors, disabled: viewMode })}
+                  {getController({ ...fieldWithOptions, name: `transactionDetails.${name}`, control, errors, disabled: viewMode || field?.disabled })}
                 </FieldWrapper>
               );
             })}
@@ -245,7 +245,7 @@ const TransactionBasicDetails = ({ setAccordionState, viewMode }: CommonCreateTr
                   const field = transactionBasicDetailsConfig.find((f) => f.name === name) as FieldConfig;
                   return (
                     <FieldWrapper key={name}>
-                      {getController({ ...field, name: `transactionDetails.${name}`, control, errors, disabled: viewMode })}
+                      {getController({ ...field, name: `transactionDetails.${name}`, control, errors, disabled: viewMode || field?.disabled })}
                     </FieldWrapper>
                   );
                 }
@@ -257,7 +257,7 @@ const TransactionBasicDetails = ({ setAccordionState, viewMode }: CommonCreateTr
                   const field = transactionBasicDetailsConfig.find((f) => f.name === name) as FieldConfig;
                   return (
                     <FieldWrapper key={name}>
-                      {getController({ ...field, name: `transactionDetails.${name}`, control, errors, disabled: viewMode })}
+                      {getController({ ...field, name: `transactionDetails.${name}`, control, errors, disabled: viewMode || field?.disabled })}
                     </FieldWrapper>
                   );
                 }
@@ -277,7 +277,7 @@ const TransactionBasicDetails = ({ setAccordionState, viewMode }: CommonCreateTr
                 const field = transactionBasicDetailsConfig.find((f) => f.name === name) as FieldConfig;
                 return (
                   <FieldWrapper key={name}>
-                    {getController({ ...field, name: `transactionDetails.${name}`, control, errors, disabled: viewMode })}
+                    {getController({ ...field, name: `transactionDetails.${name}`, control, errors, disabled: viewMode || field?.disabled })}
                   </FieldWrapper>
                 );
               })}
@@ -288,7 +288,7 @@ const TransactionBasicDetails = ({ setAccordionState, viewMode }: CommonCreateTr
                   const field = transactionBasicDetailsConfig.find((f) => f.name === name) as FieldConfig;
                   return (
                     <FieldWrapper key={name}>
-                      {getController({ ...field, name: `transactionDetails.${name}`, control, errors, disabled: viewMode })}
+                      {getController({ ...field, name: `transactionDetails.${name}`, control, errors, disabled: viewMode || field?.disabled })}
                     </FieldWrapper>
                   );
                 }
@@ -300,7 +300,7 @@ const TransactionBasicDetails = ({ setAccordionState, viewMode }: CommonCreateTr
                   const field = transactionBasicDetailsConfig.find((f) => f.name === name) as FieldConfig;
                   return (
                     <FieldWrapper key={name}>
-                      {getController({ ...field, name: `transactionDetails.${name}`, control, errors, disabled: viewMode })}
+                      {getController({ ...field, name: `transactionDetails.${name}`, control, errors, disabled: viewMode || field?.disabled })}
                     </FieldWrapper>
                   );
                 }
@@ -311,7 +311,7 @@ const TransactionBasicDetails = ({ setAccordionState, viewMode }: CommonCreateTr
                 const field = transactionBasicDetailsConfig.find((f) => f.name === name) as FieldConfig;
                 return (
                   <FieldWrapper key={name}>
-                    {getController({ ...field, name: `transactionDetails.${name}`, control, errors, disabled: viewMode })}
+                    {getController({ ...field, name: `transactionDetails.${name}`, control, errors, disabled: viewMode || field?.disabled })}
                   </FieldWrapper>
                 );
               })}
