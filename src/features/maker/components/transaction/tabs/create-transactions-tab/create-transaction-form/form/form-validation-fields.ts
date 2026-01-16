@@ -18,6 +18,7 @@ export const transactionDetailsFields = [
   'transactionDetails.applicant_state',
   'transactionDetails.applicant_country',
   'transactionDetails.postal_code',
+  'transactionDetails.agent_reference_number',
 ] as const;
 
 export const beneficiaryDetailsFields = [
@@ -32,6 +33,14 @@ export const beneficiaryDetailsFields = [
   'beneficiaryDetails.sort_bsb_aba_transit_code',
   'beneficiaryDetails.message_to_beneficiary_additional_information',
   'beneficiaryDetails.intermediaryBankDetails',
+  'beneficiaryDetails.intermediary_bank_account_number',
+  'beneficiaryDetails.intermediary_bank_swift_code',
+  'beneficiaryDetails.intermediary_bank_name',
+  'beneficiaryDetails.intermediary_bank_address',
+  'beneficiaryDetails.student_name',
+  'beneficiaryDetails.student_passport_number',
+  'beneficiaryDetails.payment_instruction_number',
+  'beneficiaryDetails.university_name',
 ] as const;
 
 export const currencyDetailsFields = [

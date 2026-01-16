@@ -68,13 +68,13 @@ export function Pagination({
       <div className="flex flex-1 items-center justify-end gap-5">
         {/* Rows per page pill */}
         {showPageSizeSelector && (
-          <div className="flex items-center gap-2 rounded-md bg-[var(--color-table-header-bg)] pl-3 pr-2 py-1 font-semibold">
+          <div className="flex items-center gap-2 rounded-md bg-[var(--color-table-header-bg)] text-[var(--color-table-header-text)] pl-3 pr-2 py-1 font-semibold">
             <p className="text-sm">{rowsLabel}</p>
             <Select
               value={String(table.getState().pagination.pageSize)}
               onValueChange={(v) => table.setPageSize(Number(v))}
             >
-              <SelectTrigger className="h-8 w-16 border-0 bg-transparent shadow-none focus:ring-0">
+              <SelectTrigger className="h-8 w-20 border-0 bg-transparent shadow-none focus:ring-0">
                 <SelectValue placeholder={table.getState().pagination.pageSize} />
               </SelectTrigger>
               <SelectContent side="top">

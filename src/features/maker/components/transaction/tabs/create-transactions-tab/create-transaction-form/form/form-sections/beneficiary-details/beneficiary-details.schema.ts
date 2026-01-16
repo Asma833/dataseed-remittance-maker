@@ -2,6 +2,7 @@ import { z } from 'zod';
 
 const nameRegex = /^[a-zA-Z][a-zA-Z\s-]*$/;
 const alphanumericRegex = /^[A-Z0-9]+$/;
+const alphanumericCaseInsensitiveRegex = /^[a-zA-Z0-9]+$/;
 const addressRegex = /^[a-zA-Z0-9][a-zA-Z0-9\s,-]*$/;
 const lettersOnlyRegex = /^[A-Za-z][A-Za-z\s]*$/;
 
@@ -44,7 +45,7 @@ export const beneficiaryDetailsSchema = z
     beneficiary_swift_code: z
       .string()
       .min(1, 'Beneficiary swift code is required')
-      .regex(alphanumericRegex, 'Only alphanumeric characters allowed, no spaces or hyphens'),
+      .regex(alphanumericCaseInsensitiveRegex, 'Only alphanumeric characters allowed, no spaces or hyphens'),
     beneficiary_bank_name: z
       .string()
       .min(1, 'Beneficiary bank name is required')
@@ -56,7 +57,7 @@ export const beneficiaryDetailsSchema = z
     sort_bsb_aba_transit_code: z
       .string()
       .min(1, 'SORT/BSB/ABA/TRANSIT Code is required')
-      .regex(alphanumericRegex, 'Only alphanumeric characters allowed, no spaces or hyphens'),
+      .regex(alphanumericCaseInsensitiveRegex, 'Only alphanumeric characters allowed, no spaces or hyphens'),
     message_to_beneficiary_additional_information: z
       .string()
       .min(1, 'Message to beneficiary / additional information is required')
@@ -86,6 +87,7 @@ export const beneficiaryDetailsSchema = z
     intermediaryBankDetails: z.enum(['yes', 'no']),
     intermediary_bank_account_number: z
       .string()
+      .max(18, 'Max 18 characters allowed')
       .optional()
       .refine(
         (val) => !val || val.match(alphanumericRegex),
@@ -110,23 +112,10 @@ export const beneficiaryDetailsSchema = z
         'Intermediary bank address can only contain letters, numbers, spaces, commas, and hyphens'
       ),
   })
-  .refine(
-    (data) => {
-      if (data.intermediaryBankDetails === 'yes') {
-        return (
-          !!data.intermediary_bank_account_number &&
-          !!data.intermediary_bank_swift_code &&
-          !!data.intermediary_bank_name &&
-          !!data.intermediary_bank_address
-        );
-      }
-      return true;
-    },
-    {
-      message: 'All Intermediary Bank Details are required when Yes is selected',
-      path: ['intermediary_bank_account_number'],
-    }
-  )
+  .refine((data) => data.intermediaryBankDetails !== 'yes' || !!data.intermediary_bank_account_number, {
+    message: 'Intermediary Bank Account Number is required',
+    path: ['intermediary_bank_account_number'],
+  })
   .refine((data) => data.intermediaryBankDetails !== 'yes' || !!data.intermediary_bank_swift_code, {
     message: 'Intermediary Bank Swift Code is required',
     path: ['intermediary_bank_swift_code'],
