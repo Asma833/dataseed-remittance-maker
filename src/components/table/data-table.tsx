@@ -265,22 +265,19 @@ export function DataTable<T>({
   // Helper function to export data to CSV
   const exportToCSV = () => {
     setIsExporting(true);
-    // Use setTimeout to allow UI to update with loading state before heavy calculation/download
-    setTimeout(() => {
-      try {
-        // Get the currently visible/filtered rows from the table
-        const rows = table.getFilteredRowModel().rows as Row<T>[];
+    try {
+      // Get the currently visible/filtered rows from the table
+      const rows = table.getFilteredRowModel().rows as Row<T>[];
 
-        exportTableToCSV(rows, columns, {
-          fileName: config.export?.fileName || 'export.csv',
-          includeHeaders: config.export?.includeHeaders ?? true,
-        });
-      } catch (error) {
-        console.error('Export failed:', error);
-      } finally {
-        setIsExporting(false);
-      }
-    }, 3000);
+      exportTableToCSV(rows, columns, {
+        fileName: config.export?.fileName || 'export.csv',
+        includeHeaders: config.export?.includeHeaders ?? true,
+      });
+    } catch (error) {
+      console.error('Export failed:', error);
+    } finally {
+      setIsExporting(false);
+    }
   };
 
   // Helper function to clear all filters
@@ -609,12 +606,9 @@ export function DataTable<T>({
                   className="group h-9 w-9 sm:w-10 p-0 text-white bg-(--color-title) hover:bg-(--color-title) hover:opacity-90 hover:text-white transition-opacity shrink-0"
                   tooltip={isExporting ? 'Downloading...' : 'Download CSV'}
                 >
-                  <DownloadIcon
-                    className={cn(
-                      'h-4 w-4 text-white',
-                      isExporting && 'animate-bounce'
-                    )}
-                  />
+                    <DownloadIcon
+                      className="h-4 w-4 text-white"
+                    />
                 </TooltipButton>
               )}
             </div>
