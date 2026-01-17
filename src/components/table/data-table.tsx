@@ -56,6 +56,7 @@ export function DataTable<T>({
   // State for minimum loader display time
   const [showLoader, setShowLoader] = useState(true);
   const [isExporting, setIsExporting] = useState(false);
+  const [isResetting, setIsResetting] = useState(false);
 
   useEffect(() => {
     const timer = setTimeout(() => {
@@ -279,11 +280,13 @@ export function DataTable<T>({
       } finally {
         setIsExporting(false);
       }
-    }, 500);
+    }, 3000);
   };
 
   // Helper function to clear all filters
   const clearAllFilters = () => {
+    setIsResetting(true);
+    setTimeout(() => setIsResetting(false), 1000);
     setGlobalFilter('');
     setColumnFilters([]);
     setSelectedStatusFilter('all');
@@ -565,7 +568,7 @@ export function DataTable<T>({
                       className="h-9 w-10 p-0 bg-(--color-background-icon) hover:bg-(--color-background-icon)/80"
                       tooltip="Clear All Filters"
                     >
-                      <RefreshCwIcon className="h-4 w-4 text-(--color-title)" />
+                      <RefreshCwIcon className={cn('h-4 w-4 text-(--color-title)', isResetting && 'animate-spin')} />
                     </TooltipButton>
                   </div>
               )}
