@@ -363,10 +363,6 @@ const CurrencyDetails = ({ setAccordionState, viewMode, isViewOnly, paymentData,
 
   const handleSave = async () => {
     const isValid = await trigger();
-    console.log("Form trigger Result:", isValid);
-    console.log("Current Form Errors:", errors);
-    console.log("Current Form Values:", getValues());
-
     if (!isValid) {
       const missingFields = flattenErrors(errors);
       
@@ -386,7 +382,6 @@ const CurrencyDetails = ({ setAccordionState, viewMode, isViewOnly, paymentData,
                 const fieldPath = firstIssue.path.join('.');
                 const label = getFieldLabel(fieldPath);
                 toast.error(`${label}: ${firstIssue.message}`);
-                console.log("Manual Validation Issues:", issues);
                 return;
              }
           }

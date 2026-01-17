@@ -126,7 +126,6 @@ export const mapDealDetailsApiToFormInput = (
       intermediary_bank_address: apiResponse.beneficiaryDetails.intermediary_bank_address || '',
     },
     transactionDetails: {
-      company_reference_number: apiResponse.transactionDetails.company_reference_number || '',
       agent_reference_number: apiResponse.transactionDetails.agent_reference_number || '',
       purpose: apiResponse.transactionDetails.purpose || '',
       transaction_purpose_map_id: apiResponse.transactionDetails.transaction_purpose_map_id || '',

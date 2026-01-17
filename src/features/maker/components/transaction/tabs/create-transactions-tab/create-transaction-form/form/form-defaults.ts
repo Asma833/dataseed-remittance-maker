@@ -156,7 +156,6 @@ export const getFormDefaultValues = (
       intermediary_bank_address: '',
     },
     transactionDetails: sourceData?.transactionDetails || {
-      company_reference_number: '',
       agent_reference_number: '',
       transaction_type: '',
       purpose: '',
@@ -169,6 +168,7 @@ export const getFormDefaultValues = (
       nostro_charges: (sourceData?.currencyDetails?.invoiceRateTable?.nostro_charges as { type?: string })?.type || '',
       applicant_name: '',
       applicant_pan_number: '',
+      applicant_dob: undefined,
       passport_issue_date: '',
       passport_expiry_date: '',
       applicant_email: '',
@@ -177,6 +177,7 @@ export const getFormDefaultValues = (
       paid_by: '',
       payee_name: '',
       payee_pan_number: '',
+      payee_dob: undefined,
       applicant_id_document: '',
       passport_number: '',
       place_of_issue: '',

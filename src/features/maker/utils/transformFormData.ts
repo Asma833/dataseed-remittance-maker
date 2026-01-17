@@ -19,7 +19,7 @@ export const transformFormDataToApiRequest = (
   const selectedPurposeType = purposeTypes.find((type) => type.text === formData.transactionDetails.purpose);
 
   return {
-    partner_order_id: formData.transactionDetails.company_reference_number || '',
+    partner_order_id: formData.transactionDetails.agent_reference_number || '',
     transaction_type_id: selectedTransactionType?.id || '',
     is_e_sign_required: true, // Always true as per requirement
     is_v_kyc_required: false, // TODO: Add to schema when implemented
