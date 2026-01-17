@@ -69,15 +69,23 @@ const KYCForm = ({
     return values;
   }, [documentTypes]);
 
+  // Extract stable values for dependencies
+  const transactionId = transaction?.id || transaction?.transaction_id;
+  const companyRef = transaction?.company_ref_number;
+  const agentRef = transaction?.agent_ref_number;
+  const applicantName = transaction?.kyc_details?.applicant_name;
+
   const formSchema = useMemo(() => createKycFormSchema(documentTypes), [documentTypes]);
   const formSchemaRef = useRef(formSchema);
-
+  const prevTransactionIdRef = useRef(transactionId);
+  
   useEffect(() => {
     formSchemaRef.current = formSchema;
   }, [formSchema]);
 
   const methods = useForm({
     resolver: (values, context, options) => zodResolver(formSchemaRef.current)(values, context, options),
+    mode: 'onChange',
     defaultValues: {
       company_reference_number: transaction?.company_ref_number || '',
       agent_reference_number: transaction?.agent_ref_number || '',
@@ -92,7 +100,8 @@ const KYCForm = ({
     reset,
     getValues,
     setValue,
-    formState: { errors },
+    trigger,
+    formState: { errors, isSubmitSuccessful, isValid, touchedFields },
   } = methods;
 
   const handleUploadOnFileChange = useCallback(
@@ -126,7 +135,7 @@ const KYCForm = ({
                 type: file.type,
                 lastModified: file.lastModified,
                 document_url: url
-            }], { shouldValidate: true, shouldDirty: true });
+            }], { shouldValidate: true, shouldDirty: true, shouldTouch: true });
         }
 
       } catch (error: any) {
@@ -237,11 +246,7 @@ const KYCForm = ({
     });
   }, [documentTypes, handleUploadOnFileChange, handleViewDocument, localPreviews]);
 
-  // Extract stable values for dependencies
-  const transactionId = transaction?.id || transaction?.transaction_id;
-  const companyRef = transaction?.company_ref_number;
-  const agentRef = transaction?.agent_ref_number;
-  const applicantName = transaction?.kyc_details?.applicant_name;
+
 
   useEffect(() => {
     if (transactionId) {
@@ -261,10 +266,19 @@ const KYCForm = ({
           JSON.stringify(documentDefaultValues) !== JSON.stringify(Object.fromEntries(Object.entries(currentValues).filter(([k]) => k.startsWith('document_'))));
 
       if (isDifferent) {
-         reset(newValues as any);
+         const isSameTransaction = prevTransactionIdRef.current === transactionId;
+         reset(newValues as any, { keepIsSubmitSuccessful: isSameTransaction });
+         prevTransactionIdRef.current = transactionId;
       }
     }
+
   }, [transactionId, companyRef, agentRef, applicantName, documentDefaultValues, reset, getValues]);
+
+  useEffect(() => {
+    if (documentTypes.length > 0) {
+      trigger();
+    }
+  }, [documentTypes, trigger]);
 
   const handleKycSubmit = handleSubmit(
     async (formdata: FieldValues) => {
@@ -278,8 +292,8 @@ const KYCForm = ({
     },
     (errors) => {
       console.error('Form validation errors:', errors);
-      const errorDetails = Object.entries(errors)
-        .map(([key, error]: [string, any]) => `${key}: ${error?.message || 'Unknown error'}`)
+      const errorDetails = Object.values(errors)
+        .map((error: any) => error?.message || 'Invalid field')
         .join('\n');
       toast.error(`Validation failed:\n${errorDetails}`);
     }
@@ -335,10 +349,17 @@ const KYCForm = ({
                   // If NOT rejected but transaction is rejected, disable the field
                   // If not rejected transaction (normal flow), everything is enabled
 
-                  const isDisabled = (isRejected && transaction?.kyc_status !== KYCStatusEnum.UPLOADED) && !hasDocumentId && !!field.documentUrl;
+                  const isDisabled = 
+                      isSubmitSuccessful || 
+                      ((isRejected && transaction?.kyc_status !== KYCStatusEnum.UPLOADED) && !hasDocumentId && !!field.documentUrl);
+                  const isReUpload = !!localPreviews[field.name];
                   const shouldShowRemarks = transaction?.kyc_status === KYCStatusEnum.UPLOADING || transaction?.kyc_status === KYCStatusEnum.REJECTED;
-                  const errorMessage = (shouldShowRemarks && hasDocumentId ?
-                    (hasDocumentId.remarks || hasDocumentId.rejection_reason || 'Document Rejected') : '') || (errors[field.name] as any)?.message;
+                  const rejectionError = (shouldShowRemarks && hasDocumentId && !isReUpload) ? 
+                      (hasDocumentId.remarks || hasDocumentId.rejection_reason || 'Document Rejected') : '';
+                  const fieldError = (errors[field.name] as any)?.message;
+                  const isTouched = touchedFields[field.name];
+                  // Show error if it is a rejection error OR if the field is touched and has a validation error
+                  const errorMessage = rejectionError || (isTouched && fieldError);
 
                   return (
                     <div key={field.name}>
@@ -376,7 +397,7 @@ const KYCForm = ({
                 onClick={handleKycSubmit} 
                 variant="secondary" 
                 className="w-full sm:w-auto px-10"
-                disabled={isRejected && !allRejectedUploaded}
+                disabled={loading || !isValid || isSubmitSuccessful || (isRejected && !allRejectedUploaded)}
             >
               Submit
             </Button>
