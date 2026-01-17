@@ -86,7 +86,8 @@ export const API = {
     GET_AGENT_BY_ID: (id: string) => `/agents/${id}`,
     DOCUMENTS_REJECTION: (id: string) => `/remittance/transactions/documents/${id}/rejection`,
     DOCUMENTS_UPLOAD: `/remittance/transactions/documents/upload`,
-    GET_MAPPED_DOCUMENTS: (purposeId: string,transactionId: string) => `/trans-purpose-document/${purposeId}/rem-documents?transaction_id=${transactionId}`
+    GET_MAPPED_DOCUMENTS: (purposeId: string, transactionId: string) =>
+      `/trans-purpose-document/${purposeId}/rem-documents?transaction_id=${transactionId}`,
   },
 } as const;
 

@@ -2,7 +2,10 @@ import { useQuery, UseQueryResult } from '@tanstack/react-query';
 import { mappedDocumentsApi } from '../api/mapped-documents.api';
 import { MappedDocument } from '../types/mapped-documents.types';
 
-export const useGetMappedDocuments = (purposeId?: string, transactionId?: string): UseQueryResult<MappedDocument[], Error> => {
+export const useGetMappedDocuments = (
+  purposeId?: string,
+  transactionId?: string
+): UseQueryResult<MappedDocument[], Error> => {
   return useQuery({
     queryKey: ['mapped-documents', purposeId, transactionId],
     queryFn: async (): Promise<MappedDocument[]> => {

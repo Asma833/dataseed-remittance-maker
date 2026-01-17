@@ -41,7 +41,7 @@ export const fieldLabelMap: Record<string, string> = {
 
 export const getFieldLabel = (key: string): string => {
   if (!key) return '';
-  
+
   // Check if key exists in the map
   if (fieldLabelMap[key]) {
     return fieldLabelMap[key];

@@ -37,7 +37,6 @@ import DynamicTabs from '@/components/tabs/dynamic-tabs';
 import { TableLoader } from './table-loader';
 import { TableDateRangePicker } from './table-date-range-picker';
 
-
 interface DataTableProps<T> {
   columns: TableColumn<T>[];
   data: TableData<T> | T[]; // Support both TableData object and direct array
@@ -64,8 +63,6 @@ export function DataTable<T>({
     }, 1500);
     return () => clearTimeout(timer);
   }, []);
-
-
 
   // Early error handling for invalid data
   if (!data) {
@@ -363,8 +360,7 @@ export function DataTable<T>({
         }
 
         if (col.cell) {
-          optionalDef.cell = ({ row, getValue }) =>
-            col.cell!({ row: row.original, value: getValue(), tableRow: row });
+          optionalDef.cell = ({ row, getValue }) => col.cell!({ row: row.original, value: getValue(), tableRow: row });
         }
 
         return { ...baseDef, ...optionalDef };
@@ -447,11 +443,7 @@ export function DataTable<T>({
         <div className="space-y-2">
           <div className="flex flex-col lg:flex-row lg:items-end lg:justify-between gap-2 mt-2">
             {/* Left side - Tab Filters and Filters */}
-            <div
-              className={cn(
-                'flex flex-wrap gap-2 lg:gap-3 items-end'
-              )}
-            >
+            <div className={cn('flex flex-wrap gap-2 lg:gap-3 items-end')}>
               {/* Custom Left Element */}
               {config.filters.customLeftElement && config.filters.customLeftElement}
 
@@ -524,7 +516,9 @@ export function DataTable<T>({
                       <p className="text-xs text-gray-600 px-1 h-5 flex items-center">{filter.columnName}</p>
                       <Select
                         value={selectedCustomFilters[filter.columnId] || 'all'}
-                        onValueChange={(value) => setSelectedCustomFilters((prev) => ({ ...prev, [filter.columnId]: value }))}
+                        onValueChange={(value) =>
+                          setSelectedCustomFilters((prev) => ({ ...prev, [filter.columnId]: value }))
+                        }
                       >
                         <SelectTrigger className="w-full sm:w-40 bg-(--color-table-header-bg)">
                           <SelectValue placeholder={filter.columnName} />
@@ -548,26 +542,26 @@ export function DataTable<T>({
                 dateRangeFilterConfig?.enabled ||
                 (config.filters.customFilters && config.filters.customFilters.some((f) => f.enabled))) && (
                 <div className="flex gap-2">
-                    <TooltipButton
-                      variant="outline"
-                      size="sm"
-                      onClick={applyFilters}
-                      className="h-9 w-10 p-0 bg-(--color-background-icon) hover:bg-(--color-background-icon)/80"
-                      tooltip="Apply Filters"
-                    >
-                      <ArrowRightIcon className="h-4 w-4 text-(--color-title)" />
-                    </TooltipButton>
+                  <TooltipButton
+                    variant="outline"
+                    size="sm"
+                    onClick={applyFilters}
+                    className="h-9 w-10 p-0 bg-(--color-background-icon) hover:bg-(--color-background-icon)/80"
+                    tooltip="Apply Filters"
+                  >
+                    <ArrowRightIcon className="h-4 w-4 text-(--color-title)" />
+                  </TooltipButton>
 
-                    <TooltipButton
-                      variant="outline"
-                      size="sm"
-                      onClick={clearAllFilters}
-                      className="h-9 w-10 p-0 bg-(--color-background-icon) hover:bg-(--color-background-icon)/80"
-                      tooltip="Clear All Filters"
-                    >
-                      <RefreshCwIcon className={cn('h-4 w-4 text-(--color-title)', isResetting && 'animate-spin')} />
-                    </TooltipButton>
-                  </div>
+                  <TooltipButton
+                    variant="outline"
+                    size="sm"
+                    onClick={clearAllFilters}
+                    className="h-9 w-10 p-0 bg-(--color-background-icon) hover:bg-(--color-background-icon)/80"
+                    tooltip="Clear All Filters"
+                  >
+                    <RefreshCwIcon className={cn('h-4 w-4 text-(--color-title)', isResetting && 'animate-spin')} />
+                  </TooltipButton>
+                </div>
               )}
             </div>
 
@@ -606,9 +600,7 @@ export function DataTable<T>({
                   className="group h-9 w-9 sm:w-10 p-0 text-white bg-(--color-title) hover:bg-(--color-title) hover:opacity-90 hover:text-white transition-opacity shrink-0"
                   tooltip={isExporting ? 'Downloading...' : 'Download CSV'}
                 >
-                    <DownloadIcon
-                      className="h-4 w-4 text-white"
-                    />
+                  <DownloadIcon className="h-4 w-4 text-white" />
                 </TooltipButton>
               )}
             </div>
@@ -636,9 +628,7 @@ export function DataTable<T>({
                     }}
                   >
                     <div className="flex items-center justify-center gap-2">
-                      {header.isPlaceholder
-                        ? null
-                        : flexRender(header.column.columnDef.header, header.getContext())}
+                      {header.isPlaceholder ? null : flexRender(header.column.columnDef.header, header.getContext())}
                     </div>
                   </TableHead>
                 ))}
@@ -722,7 +712,7 @@ export function DataTable<T>({
                   {safeData.data.length === 0 ? 'No data available.' : 'No results found.'}
                 </TableCell>
               </TableRow>
-            ) }
+            )}
           </TableBody>
         </Table>
       </div>
@@ -738,4 +728,3 @@ export function DataTable<T>({
     </div>
   );
 }
-

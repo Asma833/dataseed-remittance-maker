@@ -43,7 +43,6 @@ const KYCUpload = () => {
     });
   }, [rejectionSumData]);
 
-
   const location = useLocation();
 
   const handleUploadClick = (reupload: boolean, transaction: DealsResponseTransaction) => {
@@ -58,10 +57,10 @@ const KYCUpload = () => {
       // Handle legacy deep nesting if present, otherwise assume it's the transaction object directly
       let transaction = stateTransaction;
       if (stateTransaction?.deal?.payment_records?.[0]?.raw_data?.transaction) {
-         transaction = stateTransaction.deal.payment_records[0].raw_data.transaction;
+        transaction = stateTransaction.deal.payment_records[0].raw_data.transaction;
       } else if (stateTransaction?.transaction) {
-          // If transaction is nested directly (e.g. wrapper object)
-          transaction = stateTransaction.transaction;
+        // If transaction is nested directly (e.g. wrapper object)
+        transaction = stateTransaction.transaction;
       }
       setTransaction(transaction);
       setShowForm(true);
@@ -69,7 +68,6 @@ const KYCUpload = () => {
       window.history.replaceState({}, document.title);
     }
   }, [location.state]);
-
 
   return (
     <>

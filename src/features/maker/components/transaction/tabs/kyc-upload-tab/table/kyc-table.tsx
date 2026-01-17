@@ -16,12 +16,12 @@ const KYCTable = ({ onUploadClick }: { onUploadClick: (isReupload: boolean, tran
 
   const handleViewTransaction = (rowData: PaymentData) => {
     if (rowData.deal_booking_id) {
-       navigate('/branch_agent_maker/transaction/kyc/view-transactions', { 
-           state: { 
-               dealId: rowData.deal_booking_id,
-               paymentData: rowData
-           } 
-       });
+      navigate('/branch_agent_maker/transaction/kyc/view-transactions', {
+        state: {
+          dealId: rowData.deal_booking_id,
+          paymentData: rowData,
+        },
+      });
     }
   };
 

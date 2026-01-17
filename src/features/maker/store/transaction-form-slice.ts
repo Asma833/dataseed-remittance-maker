@@ -28,10 +28,7 @@ const transactionFormSlice = createSlice({
   name: 'transactionForm',
   initialState,
   reducers: {
-    updateTransactionField: (
-      state,
-      action: PayloadAction<Partial<TransactionFormState>>
-    ) => {
+    updateTransactionField: (state, action: PayloadAction<Partial<TransactionFormState>>) => {
       return { ...state, ...action.payload };
     },
     resetTransactionForm: () => initialState,

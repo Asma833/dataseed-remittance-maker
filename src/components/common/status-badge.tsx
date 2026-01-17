@@ -9,22 +9,12 @@ interface StatusBadgeProps {
 
 export const StatusBadge = ({ status, className }: StatusBadgeProps) => {
   if (!status || status === '-') return <span>-</span>;
-  
-  const isSuccess = StatusKeywords[StatusCategory.SUCCESS].some((s) =>
-    status.toLowerCase().includes(s)
-  );
-  const isError = StatusKeywords[StatusCategory.ERROR].some((s) =>
-    status.toLowerCase().includes(s)
-  );
-  const isPending = StatusKeywords[StatusCategory.PENDING].some((s) =>
-    status.toLowerCase().includes(s)
-  );
-  const isUploaded = StatusKeywords[StatusCategory.UPLOADED].some((s) =>
-    status.toLowerCase().includes(s)
-  );
-  const isUploading = StatusKeywords[StatusCategory.UPLOADING].some((s) =>
-    status.toLowerCase().includes(s)
-  );
+
+  const isSuccess = StatusKeywords[StatusCategory.SUCCESS].some((s) => status.toLowerCase().includes(s));
+  const isError = StatusKeywords[StatusCategory.ERROR].some((s) => status.toLowerCase().includes(s));
+  const isPending = StatusKeywords[StatusCategory.PENDING].some((s) => status.toLowerCase().includes(s));
+  const isUploaded = StatusKeywords[StatusCategory.UPLOADED].some((s) => status.toLowerCase().includes(s));
+  const isUploading = StatusKeywords[StatusCategory.UPLOADING].some((s) => status.toLowerCase().includes(s));
 
   return (
     <Badge

@@ -78,7 +78,7 @@ const KYCForm = ({
   const formSchema = useMemo(() => createKycFormSchema(documentTypes), [documentTypes]);
   const formSchemaRef = useRef(formSchema);
   const prevTransactionIdRef = useRef(transactionId);
-  
+
   useEffect(() => {
     formSchemaRef.current = formSchema;
   }, [formSchema]);
@@ -119,25 +119,30 @@ const KYCForm = ({
           document_id: documentId,
           remarks: '',
         });
-        
+
         // Update local preview and form state to satisfy validation
         if (fieldKey) {
-            const url = URL.createObjectURL(file);
-            const isPdf = file.type === 'application/pdf';
-            setLocalPreviews(prev => ({ ...prev, [fieldKey]: { url, isPdf } }));
-            
-            // Critical: Update form value so react-hook-form validation passes
-            // Schema expects an array of objects
-            setValue(fieldKey, [{
+          const url = URL.createObjectURL(file);
+          const isPdf = file.type === 'application/pdf';
+          setLocalPreviews((prev) => ({ ...prev, [fieldKey]: { url, isPdf } }));
+
+          // Critical: Update form value so react-hook-form validation passes
+          // Schema expects an array of objects
+          setValue(
+            fieldKey,
+            [
+              {
                 file: file,
                 name: file.name,
                 size: file.size,
                 type: file.type,
                 lastModified: file.lastModified,
-                document_url: url
-            }], { shouldValidate: true, shouldDirty: true, shouldTouch: true });
+                document_url: url,
+              },
+            ],
+            { shouldValidate: true, shouldDirty: true, shouldTouch: true }
+          );
         }
-
       } catch (error: any) {
         console.error('KYC document upload failed:', error);
         toast.error(
@@ -148,7 +153,7 @@ const KYCForm = ({
     },
     [transaction?.id, transaction?.transaction_id, transaction?.transaction_purpose_map_id, queryClient, setValue]
   );
-  
+
   const handleViewDocument = async (s3Key: string, documentName: string) => {
     try {
       const response = await getPresignedUrlsAsync([s3Key]);
@@ -187,17 +192,18 @@ const KYCForm = ({
             name: frontFieldName,
             label: `${label} (Front)`,
             ...base,
-            onView: (doc.document_url || localPreviews[frontFieldName]) 
+            onView:
+              doc.document_url || localPreviews[frontFieldName]
                 ? () => {
-                   if (localPreviews[frontFieldName]) {
+                    if (localPreviews[frontFieldName]) {
                       setModalImageSrc(localPreviews[frontFieldName].url);
                       setIsPdf(localPreviews[frontFieldName].isPdf);
                       setModalTitle(`${label} (Front)`);
                       setIsImageModalOpen(true);
-                   } else if (doc.document_url) {
-                       handleViewDocument(doc.document_url, `${label} (Front)`);
-                   }
-                }
+                    } else if (doc.document_url) {
+                      handleViewDocument(doc.document_url, `${label} (Front)`);
+                    }
+                  }
                 : undefined,
             onFileSelected: (file: File) => handleUploadOnFileChange({ file, documentId, fieldKey: frontFieldName }),
           },
@@ -205,17 +211,18 @@ const KYCForm = ({
             name: backFieldName,
             label: `${label} (Back)`,
             ...base,
-            onView: (doc.document_url || localPreviews[backFieldName]) 
+            onView:
+              doc.document_url || localPreviews[backFieldName]
                 ? () => {
-                   if (localPreviews[backFieldName]) {
+                    if (localPreviews[backFieldName]) {
                       setModalImageSrc(localPreviews[backFieldName].url);
                       setIsPdf(localPreviews[backFieldName].isPdf);
                       setModalTitle(`${label} (Back)`);
                       setIsImageModalOpen(true);
-                   } else if (doc.document_url) {
-                       handleViewDocument(doc.document_url, `${label} (Back)`);
-                   }
-                }
+                    } else if (doc.document_url) {
+                      handleViewDocument(doc.document_url, `${label} (Back)`);
+                    }
+                  }
                 : undefined,
             onFileSelected: (file: File) => handleUploadOnFileChange({ file, documentId, fieldKey: backFieldName }),
           },
@@ -228,25 +235,24 @@ const KYCForm = ({
           name: fieldName,
           label,
           ...base,
-          onView: (doc.document_url || localPreviews[fieldName]) 
-                ? () => {
-                   if (localPreviews[fieldName]) {
-                      setModalImageSrc(localPreviews[fieldName].url);
-                      setIsPdf(localPreviews[fieldName].isPdf);
-                      setModalTitle(label);
-                      setIsImageModalOpen(true);
-                   } else if (doc.document_url) {
-                       handleViewDocument(doc.document_url, label);
-                   }
+          onView:
+            doc.document_url || localPreviews[fieldName]
+              ? () => {
+                  if (localPreviews[fieldName]) {
+                    setModalImageSrc(localPreviews[fieldName].url);
+                    setIsPdf(localPreviews[fieldName].isPdf);
+                    setModalTitle(label);
+                    setIsImageModalOpen(true);
+                  } else if (doc.document_url) {
+                    handleViewDocument(doc.document_url, label);
+                  }
                 }
-                : undefined,
-            onFileSelected: (file: File) => handleUploadOnFileChange({ file, documentId, fieldKey: fieldName }),
+              : undefined,
+          onFileSelected: (file: File) => handleUploadOnFileChange({ file, documentId, fieldKey: fieldName }),
         },
       ];
     });
   }, [documentTypes, handleUploadOnFileChange, handleViewDocument, localPreviews]);
-
-
 
   useEffect(() => {
     if (transactionId) {
@@ -258,20 +264,20 @@ const KYCForm = ({
       };
 
       const currentValues = getValues();
-      
-      const isDifferent = 
-          currentValues.company_reference_number !== newValues.company_reference_number ||
-          currentValues.agent_reference_number !== newValues.agent_reference_number ||
-          currentValues.applicant_name !== newValues.applicant_name ||
-          JSON.stringify(documentDefaultValues) !== JSON.stringify(Object.fromEntries(Object.entries(currentValues).filter(([k]) => k.startsWith('document_'))));
+
+      const isDifferent =
+        currentValues.company_reference_number !== newValues.company_reference_number ||
+        currentValues.agent_reference_number !== newValues.agent_reference_number ||
+        currentValues.applicant_name !== newValues.applicant_name ||
+        JSON.stringify(documentDefaultValues) !==
+          JSON.stringify(Object.fromEntries(Object.entries(currentValues).filter(([k]) => k.startsWith('document_'))));
 
       if (isDifferent) {
-         const isSameTransaction = prevTransactionIdRef.current === transactionId;
-         reset(newValues as any, { keepIsSubmitSuccessful: isSameTransaction });
-         prevTransactionIdRef.current = transactionId;
+        const isSameTransaction = prevTransactionIdRef.current === transactionId;
+        reset(newValues as any, { keepIsSubmitSuccessful: isSameTransaction });
+        prevTransactionIdRef.current = transactionId;
       }
     }
-
   }, [transactionId, companyRef, agentRef, applicantName, documentDefaultValues, reset, getValues]);
 
   useEffect(() => {
@@ -284,7 +290,11 @@ const KYCForm = ({
     async (formdata: FieldValues) => {
       toast.success('KYC documents submitted successfully');
       await queryClient.invalidateQueries({
-        queryKey: ['mapped-documents', transaction?.transaction_purpose_map_id, transaction?.id || transaction?.transaction_id],
+        queryKey: [
+          'mapped-documents',
+          transaction?.transaction_purpose_map_id,
+          transaction?.id || transaction?.transaction_id,
+        ],
       });
       if (onSuccess) {
         onSuccess();
@@ -303,20 +313,20 @@ const KYCForm = ({
     onCancel();
   };
 
-  /* 
+  /*
    * Calculate which fields correspond to rejected documents.
    * We need to ensure that for every rejected document field, a new file has been locally uploaded (proven by localPreviews).
    */
   const rejectedFieldNames = useMemo(() => {
-     if (!rejectedDocuments?.length) return [];
-     return dynamicDocumentFields
-        .filter((field: any) => rejectedDocuments.some(d => d.document_id === field.documentId))
-        .map((field: any) => field.name);
+    if (!rejectedDocuments?.length) return [];
+    return dynamicDocumentFields
+      .filter((field: any) => rejectedDocuments.some((d) => d.document_id === field.documentId))
+      .map((field: any) => field.name);
   }, [dynamicDocumentFields, rejectedDocuments]);
 
   const allRejectedUploaded = useMemo(() => {
     if (rejectedFieldNames.length === 0) return true;
-    return rejectedFieldNames.every(name => !!localPreviews[name]);
+    return rejectedFieldNames.every((name) => !!localPreviews[name]);
   }, [rejectedFieldNames, localPreviews]);
 
   return (
@@ -349,13 +359,20 @@ const KYCForm = ({
                   // If NOT rejected but transaction is rejected, disable the field
                   // If not rejected transaction (normal flow), everything is enabled
 
-                  const isDisabled = 
-                      isSubmitSuccessful || 
-                      ((isRejected && transaction?.kyc_status !== KYCStatusEnum.UPLOADED) && !hasDocumentId && !!field.documentUrl);
+                  const isDisabled =
+                    isSubmitSuccessful ||
+                    (isRejected &&
+                      transaction?.kyc_status !== KYCStatusEnum.UPLOADED &&
+                      !hasDocumentId &&
+                      !!field.documentUrl);
                   const isReUpload = !!localPreviews[field.name];
-                  const shouldShowRemarks = transaction?.kyc_status === KYCStatusEnum.UPLOADING || transaction?.kyc_status === KYCStatusEnum.REJECTED;
-                  const rejectionError = (shouldShowRemarks && hasDocumentId && !isReUpload) ? 
-                      (hasDocumentId.remarks || hasDocumentId.rejection_reason || 'Document Rejected') : '';
+                  const shouldShowRemarks =
+                    transaction?.kyc_status === KYCStatusEnum.UPLOADING ||
+                    transaction?.kyc_status === KYCStatusEnum.REJECTED;
+                  const rejectionError =
+                    shouldShowRemarks && hasDocumentId && !isReUpload
+                      ? hasDocumentId.remarks || hasDocumentId.rejection_reason || 'Document Rejected'
+                      : '';
                   const fieldError = (errors[field.name] as any)?.message;
                   const isTouched = touchedFields[field.name];
                   // Show error if it is a rejection error OR if the field is touched and has a validation error
@@ -363,14 +380,12 @@ const KYCForm = ({
 
                   return (
                     <div key={field.name}>
-                      <FieldWrapper
-                        error={errorMessage}
-                      >
-                        {getController({ 
-                          ...field, 
-                          control, 
+                      <FieldWrapper error={errorMessage}>
+                        {getController({
+                          ...field,
+                          control,
                           errors,
-                          disabled: isDisabled 
+                          disabled: isDisabled,
                         })}
                       </FieldWrapper>
                     </div>
@@ -392,12 +407,12 @@ const KYCForm = ({
             <Button type="button" onClick={handleCancel} variant="light" className="w-full sm:w-auto px-10">
               Cancel
             </Button>
-            <Button 
-                type="button" 
-                onClick={handleKycSubmit} 
-                variant="secondary" 
-                className="w-full sm:w-auto px-10"
-                disabled={loading || !isValid || isSubmitSuccessful || (isRejected && !allRejectedUploaded)}
+            <Button
+              type="button"
+              onClick={handleKycSubmit}
+              variant="secondary"
+              className="w-full sm:w-auto px-10"
+              disabled={loading || !isValid || isSubmitSuccessful || (isRejected && !allRejectedUploaded)}
             >
               Submit
             </Button>

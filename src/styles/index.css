@@ -574,17 +574,19 @@ body {
 }
 
 .bg-gradient {
-  background: linear-gradient(50.74deg,
-      #6e3494 0%,
-      #b11f82 10.44%,
-      #db1a57 20.4%,
-      #f26922 29.48%,
-      #f3ec26 38.31%,
-      #fcb921 45.75%,
-      #e775ae 53.26%,
-      #ee478e 61.47%,
-      #427bbf 66.35%,
-      #5ac5c4 71.69%);
+  background: linear-gradient(
+    50.74deg,
+    #6e3494 0%,
+    #b11f82 10.44%,
+    #db1a57 20.4%,
+    #f26922 29.48%,
+    #f3ec26 38.31%,
+    #fcb921 45.75%,
+    #e775ae 53.26%,
+    #ee478e 61.47%,
+    #427bbf 66.35%,
+    #5ac5c4 71.69%
+  );
 }
 
 .login-form {

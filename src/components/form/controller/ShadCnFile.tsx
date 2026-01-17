@@ -13,7 +13,14 @@ interface ShadCnFileProps {
   control?: any;
 }
 
-export const ShadCnFile = ({ name, label, className, disabled = false, required = false, control: propControl }: ShadCnFileProps) => {
+export const ShadCnFile = ({
+  name,
+  label,
+  className,
+  disabled = false,
+  required = false,
+  control: propControl,
+}: ShadCnFileProps) => {
   const { control: contextControl } = useFormContext();
   const control = propControl || contextControl;
 

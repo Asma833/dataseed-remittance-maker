@@ -31,29 +31,30 @@ const CreateTransactionForm = ({ onCancel, onSubmit, initialData, viewMode }: Pr
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [latestPaymentData, setLatestPaymentData] = useState<any>(() => {
     if (!initialData?.paymentDetails) return undefined;
-    
+
     // Normalize initial payment data for view mode
     const paymentRec = initialData.paymentDetails;
 
     // If raw_data already exists (e.g. passed from table view), preserve it
     if ((paymentRec as any).raw_data) {
-        return paymentRec;
+      return paymentRec;
     }
 
-    const transactionId = (initialData as any).transaction?.transaction_id || 
-                          (initialData as any).transactionDetails?.transaction_id || 
-                          (initialData as any).deal_booking_id; // Fallback
+    const transactionId =
+      (initialData as any).transaction?.transaction_id ||
+      (initialData as any).transactionDetails?.transaction_id ||
+      (initialData as any).deal_booking_id; // Fallback
 
     return {
-       ...paymentRec,
-       ...(paymentRec|| {}),
-       transaction_id: transactionId,
-       raw_data: {
-           transaction: (initialData as any).transaction || (initialData as any).transactionDetails,
-           deal: {
-               payment_records: [paymentRec]
-           }
-       }
+      ...paymentRec,
+      ...(paymentRec || {}),
+      transaction_id: transactionId,
+      raw_data: {
+        transaction: (initialData as any).transaction || (initialData as any).transactionDetails,
+        deal: {
+          payment_records: [paymentRec],
+        },
+      },
     };
   });
   const [latestDealBookingId, setLatestDealBookingId] = useState<string | undefined>(initialData?.deal_booking_id);
@@ -214,50 +215,50 @@ const CreateTransactionForm = ({ onCancel, onSubmit, initialData, viewMode }: Pr
           ...(rawPaymentRecord || {}), // Flatten dataValues if present
           transaction_id: (response as any).transaction?.transaction_id,
           raw_data: {
-             transaction: (response as any).transaction,
-              deal: {
-                payment_records: [rawPaymentRecord]
-             }
-          }
+            transaction: (response as any).transaction,
+            deal: {
+              payment_records: [rawPaymentRecord],
+            },
+          },
         };
         setLatestPaymentData(updatedPaymentData);
         setLatestDealBookingId((response as any).transaction.deal_booking_id);
-        
+
         // Invalidate the query to fetch the latest data
         await queryClient.invalidateQueries({ queryKey: ['deal-details', transactionId] });
-        
+
         form.reset(data);
       } else {
         // Create mode
         const response = await createTransaction(payload);
-        
+
         const rawPaymentRecord = (response as any).payment_record;
         // Construct initialData for view mode from response and current form data
         const newInitialData = {
           ...data,
           deal_booking_id: (response as any).transaction.deal_booking_id,
           paymentDetails: {
-             ...rawPaymentRecord,
-             ...(rawPaymentRecord || {}), // Flatten dataValues if present
-             transaction_id: (response as any).transaction?.transaction_id,
-             // Add raw_data structure to mimic DealDetailsApiResponse/PaymentData structure expected by CurrencyDetails
-             raw_data: {
-                 transaction: (response as any).transaction,
-                 deal: {
-                    payment_records: [rawPaymentRecord]
-                 }
-             }
-          }
+            ...rawPaymentRecord,
+            ...(rawPaymentRecord || {}), // Flatten dataValues if present
+            transaction_id: (response as any).transaction?.transaction_id,
+            // Add raw_data structure to mimic DealDetailsApiResponse/PaymentData structure expected by CurrencyDetails
+            raw_data: {
+              transaction: (response as any).transaction,
+              deal: {
+                payment_records: [rawPaymentRecord],
+              },
+            },
+          },
         };
         form.reset(newInitialData);
         setLatestPaymentData(newInitialData.paymentDetails);
-        
+
         const dealBookingId = (response as any).transaction.deal_booking_id;
         setLatestDealBookingId(dealBookingId);
 
-         // Invalidate the query to fetch the latest data
+        // Invalidate the query to fetch the latest data
         if (dealBookingId) {
-             await queryClient.invalidateQueries({ queryKey: ['deal-details', dealBookingId] });
+          await queryClient.invalidateQueries({ queryKey: ['deal-details', dealBookingId] });
         }
         setIsCreated(true);
       }

@@ -64,9 +64,10 @@ const Payments = ({
   };
   return (
     <div className="space-y-0 overflow-hidden pt-3">
-
       <div className="text-md font-semibold truncate">Offline bank transfer</div>
-      <p className="text-sm my-0 text-gray-400 border-b border-gray-200 pb-2">Please upload screen shot for offline bank transfer</p>
+      <p className="text-sm my-0 text-gray-400 border-b border-gray-200 pb-2">
+        Please upload screen shot for offline bank transfer
+      </p>
 
       <FormProvider {...methods}>
         <FormContentWrapper className="rounded-lg w-full mr-auto bg-transparent">
@@ -118,7 +119,13 @@ const Payments = ({
               <Button type="button" onClick={() => setIsOpen(false)} variant="light" className="px-5">
                 Cancel
               </Button>
-              <Button type="button" onClick={handleSubmit(submit)} variant="secondary" className="px-5" disabled={!!data?.payment_challan_url && !fileUpload?.[0]?.file}>
+              <Button
+                type="button"
+                onClick={handleSubmit(submit)}
+                variant="secondary"
+                className="px-5"
+                disabled={!!data?.payment_challan_url && !fileUpload?.[0]?.file}
+              >
                 Submit
               </Button>
             </div>

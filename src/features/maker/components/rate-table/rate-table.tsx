@@ -31,11 +31,7 @@ export default function RateTable({
   invoiceData?: any;
   nostroType?: string | undefined;
 }) {
-
-
-
   // Update rate calculation when companySettlementRate or addMargin changes
-
 
   const invoices = GetRateTableColumns({ id, mode, editableFields, invoiceData, nostroType });
 

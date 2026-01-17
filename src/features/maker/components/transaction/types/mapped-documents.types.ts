@@ -8,7 +8,7 @@ export interface MappedDocument {
   is_mandatory: boolean;
   is_uploaded: boolean;
   document_url: string;
-  trans_doc_id:string;
+  trans_doc_id: string;
 }
 
 export interface GetMappedDocumentsResponse {

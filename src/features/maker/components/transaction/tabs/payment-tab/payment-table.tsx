@@ -19,7 +19,7 @@ const PaymentStatus = () => {
   const { data, isLoading, error } = useGetPaymentDetails();
   const { mutateAsync: uploadChallan } = useUploadPaymentChallan();
   const { mutateAsync: getPresignedUrlsAsync } = useGetPresignedUrls();
-  
+
   const [isImageModalOpen, setIsImageModalOpen] = useState(false);
   const [modalImageSrc, setModalImageSrc] = useState('');
   const [modalTitle, setModalTitle] = useState('');
@@ -30,41 +30,41 @@ const PaymentStatus = () => {
     return mapAllTransactionsToTableRows(data as AllTransaction[]);
   }, [data]);
 
-   const handleViewScreenshot = async (s3Key: string, refNo: string) => {
-      try {
-        const response = await getPresignedUrlsAsync([s3Key]);
-        if (response?.urls?.[0]?.presigned_url) {
-          setModalImageSrc(response.urls[0].presigned_url);
-          setModalTitle(`Payment Screenshot`);
-          setIsPdf(false);
-          setIsImageModalOpen(true);
-        }
-      } catch (error) {
-        console.error('Failed to get presigned URL:', error);
+  const handleViewScreenshot = async (s3Key: string, refNo: string) => {
+    try {
+      const response = await getPresignedUrlsAsync([s3Key]);
+      if (response?.urls?.[0]?.presigned_url) {
+        setModalImageSrc(response.urls[0].presigned_url);
+        setModalTitle(`Payment Screenshot`);
+        setIsPdf(false);
+        setIsImageModalOpen(true);
       }
-    };
+    } catch (error) {
+      console.error('Failed to get presigned URL:', error);
+    }
+  };
 
-   const handleViewLocalFile = (file: File) => {
-     setLocalFile(file);
-     setModalImageSrc(URL.createObjectURL(file));
-     setModalTitle(`Payment Screenshot`);
-     setIsPdf(file.type === 'application/pdf');
-     setIsImageModalOpen(true);
-   };
+  const handleViewLocalFile = (file: File) => {
+    setLocalFile(file);
+    setModalImageSrc(URL.createObjectURL(file));
+    setModalTitle(`Payment Screenshot`);
+    setIsPdf(file.type === 'application/pdf');
+    setIsImageModalOpen(true);
+  };
 
-   const handlePayment = (rowData: PaymentData) => {
+  const handlePayment = (rowData: PaymentData) => {
     setSelectedPayment(rowData);
     setIsModalOpen(true);
   };
 
   const handleViewTransaction = (rowData: PaymentData) => {
     if (rowData.deal_booking_id) {
-       navigate('/branch_agent_maker/transaction/payment/view-transactions', { 
-           state: { 
-               dealId: rowData.deal_booking_id,
-               paymentData: rowData
-           } 
-       });
+      navigate('/branch_agent_maker/transaction/payment/view-transactions', {
+        state: {
+          dealId: rowData.deal_booking_id,
+          paymentData: rowData,
+        },
+      });
     }
   };
 
@@ -120,19 +120,19 @@ const PaymentStatus = () => {
           className="md:max-w-[40%] gap-0 [&_[data-slot=alert-dialog-header]]:text-left"
         />
       )}
-       <ImageViewModal
-         isOpen={isImageModalOpen}
-         onClose={() => {
-           setIsImageModalOpen(false);
-           if (localFile) {
-             URL.revokeObjectURL(modalImageSrc);
-             setLocalFile(null);
-           }
-         }}
-         imageSrc={modalImageSrc}
-         title={modalTitle}
-         isPdf={isPdf}
-       />
+      <ImageViewModal
+        isOpen={isImageModalOpen}
+        onClose={() => {
+          setIsImageModalOpen(false);
+          if (localFile) {
+            URL.revokeObjectURL(modalImageSrc);
+            setLocalFile(null);
+          }
+        }}
+        imageSrc={modalImageSrc}
+        title={modalTitle}
+        isPdf={isPdf}
+      />
     </div>
   );
 };

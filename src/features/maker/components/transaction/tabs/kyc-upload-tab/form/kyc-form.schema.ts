@@ -55,11 +55,11 @@ export const createKycFormSchema = (documentTypes: MappedDocument[]) => {
       // Treat all documents as mandatory for UX validation per user request
       if (true) {
         const docId = doc.document_id || doc.id;
-        
+
         if (doc.is_back_required) {
           const frontKey = `document_${docId}_front`;
           const backKey = `document_${docId}_back`;
-          
+
           if (!data[frontKey] || (Array.isArray(data[frontKey]) && data[frontKey].length === 0)) {
             ctx.addIssue({
               code: z.ZodIssueCode.custom,
@@ -68,7 +68,7 @@ export const createKycFormSchema = (documentTypes: MappedDocument[]) => {
             });
           }
           if (!data[backKey] || (Array.isArray(data[backKey]) && data[backKey].length === 0)) {
-             ctx.addIssue({
+            ctx.addIssue({
               code: z.ZodIssueCode.custom,
               message: `${doc.display_name || doc.name} (Back) is required`,
               path: [backKey],

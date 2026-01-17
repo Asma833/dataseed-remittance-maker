@@ -9,7 +9,7 @@ import { uploadPaymentChallanApi } from '../api/upload-payment-challan.api';
  */
 export const useUploadPaymentChallan = () => {
   const queryClient = useQueryClient();
-  
+
   return useMutation<UploadPaymentChallanResponse, Error, UploadPaymentChallanRequest>({
     mutationFn: uploadPaymentChallanApi.uploadPaymentChallan,
     onSuccess: (data) => {

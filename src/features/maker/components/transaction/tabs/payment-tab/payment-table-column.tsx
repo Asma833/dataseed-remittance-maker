@@ -128,11 +128,11 @@ export const GetPaymentTableColumn = ({
     //     );
     //   },
     // },
-    { 
-      id: 'rejection_reason', 
-      header: 'Comments', 
-      accessorKey: 'rejection_reason', 
-      meta: { className: 'min-w-0 p-2' } 
+    {
+      id: 'rejection_reason',
+      header: 'Comments',
+      accessorKey: 'rejection_reason',
+      meta: { className: 'min-w-0 p-2' },
     },
     {
       id: 'payment_screenshot',
@@ -145,8 +145,7 @@ export const GetPaymentTableColumn = ({
 
         // Enable upload if it's FAILED, or if it's INITIATED but has no challan yet.
         // Disable if challan is available and NOT failed.
-        const canUpload =
-          paymentStatus === 'FAILED' || (paymentStatus === 'INITIATED' && !hasChallan);
+        const canUpload = paymentStatus === 'FAILED' || (paymentStatus === 'INITIATED' && !hasChallan);
 
         let tooltipText = 'Upload';
         if (hasChallan) {
@@ -169,7 +168,7 @@ export const GetPaymentTableColumn = ({
         );
       },
     },
-    
+
     {
       id: 'view_action',
       header: 'View',

@@ -147,7 +147,7 @@ export const GetViewAllTransactionTableColumns = ({
           className="text-gray-600 hover:text-gray-800 hover:bg-gray-100"
         />
       ),
-    }
+    },
   ];
 };
 const SwiftCopyDownloadCell = ({ row }: { row: PaymentData }) => {
@@ -202,6 +202,3 @@ const SwiftCopyDownloadCell = ({ row }: { row: PaymentData }) => {
     </Tooltip>
   );
 };
-
-
-

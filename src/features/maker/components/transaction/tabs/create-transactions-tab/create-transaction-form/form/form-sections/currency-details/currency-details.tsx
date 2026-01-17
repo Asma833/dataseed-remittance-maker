@@ -30,7 +30,13 @@ import { useDebounce } from '@/hooks/useDebounce';
 import { useGetDealDetails } from '@/features/maker/components/transaction/hooks/useGetPaymentDetails';
 import { KycSelectionDialog } from './kyc-selection-dialog';
 
-const CurrencyDetails = ({ setAccordionState, viewMode, isViewOnly, paymentData, dealBookingId }: CommonCreateTransactionProps) => {
+const CurrencyDetails = ({
+  setAccordionState,
+  viewMode,
+  isViewOnly,
+  paymentData,
+  dealBookingId,
+}: CommonCreateTransactionProps) => {
   const { accordionState } = useAccordionStateProvider();
   const [isSaving, setIsSaving] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -48,35 +54,33 @@ const CurrencyDetails = ({ setAccordionState, viewMode, isViewOnly, paymentData,
   const { data: currencyRates, isLoading: currencyLoading } = useGetCurrencyRates();
 
   const { data: dealDetails, refetch: refetchDealDetails } = useGetDealDetails(dealBookingId || '');
-  
+
   useEffect(() => {
     if (dealDetails && dealDetails.paymentDetails) {
-        // Find payment record if structure matches or if dealDetails is directly useful
-         const paymentRecord = (dealDetails as any).payment_record || dealDetails.paymentDetails;
-         if(paymentRecord) {
-            setSelectedPayment(paymentRecord);
-         }
+      // Find payment record if structure matches or if dealDetails is directly useful
+      const paymentRecord = (dealDetails as any).payment_record || dealDetails.paymentDetails;
+      if (paymentRecord) {
+        setSelectedPayment(paymentRecord);
+      }
     }
   }, [dealDetails]);
 
   const reduxState = useSelector((state: RootState) => state.transactionForm);
-  const { 
+  const {
     fx_currency: fxCurrency,
-    fx_amount: fxAmount, 
-    customer_rate: customerRate, 
+    fx_amount: fxAmount,
+    customer_rate: customerRate,
     add_margin: addMargin,
     company_settlement_rate: companySettlementRate,
     applicant_pan_number: panNumber,
     source_of_funds: sourceofFund,
     purpose,
-    nostro_charges: reduxNostroType 
+    nostro_charges: reduxNostroType,
   } = reduxState;
 
   const transactionAmount = useWatch({ control, name: 'currencyDetails.invoiceRateTable.transaction_amount.rate' });
   const totalTcsAmt = useWatch({ control, name: 'currencyDetails.total_transaction_amount_tcs' });
   const declarationAmt = useWatch({ control, name: 'currencyDetails.declared_previous_amount' });
-
-
 
   // Get the form data only once during component initialization for view mode
   // This prevents infinite re-renders by not calling getValues() on every render
@@ -107,7 +111,6 @@ const CurrencyDetails = ({ setAccordionState, viewMode, isViewOnly, paymentData,
 
   const previousTransactionAmt = useWatch({ control, name: 'currencyDetails.previous_transaction_amount' });
 
-
   // Watch the entire invoiceRateTable to pass to RateTable
   const invoiceRateTable = useWatch({ control, name: 'currencyDetails.invoiceRateTable' });
 
@@ -135,12 +138,7 @@ const CurrencyDetails = ({ setAccordionState, viewMode, isViewOnly, paymentData,
 
   // Calculate Transaction Amount locally for API trigger to ensure stability
   const calculatedTransactionAmount = useMemo(() => {
-    if (
-      transactionValueRate != null &&
-      remittanceRate != null &&
-      nostroRate != null &&
-      otherRate != null
-    ) {
+    if (transactionValueRate != null && remittanceRate != null && nostroRate != null && otherRate != null) {
       // BEN mode: Foreign charges (nostro) are not paid by the sender
       const nostroPayable = selectedNostroType === 'BEN' ? 0 : Number(nostroRate);
       return Number(transactionValueRate) + Number(remittanceRate) + nostroPayable + Number(otherRate);
@@ -152,30 +150,24 @@ const CurrencyDetails = ({ setAccordionState, viewMode, isViewOnly, paymentData,
   const debouncedTransactionAmount = useDebounce(calculatedTransactionAmount.toString(), 1000);
 
   const tcsPayload = useMemo(() => {
-     const isEducation = (purpose || '').toLowerCase() === 'education';
-     const calculatedTotalTcsAmt =
-        Number(transactionValueRate || 0) + Number(previousTransactionAmt || 0) + Number(declarationAmt || 0);
+    const isEducation = (purpose || '').toLowerCase() === 'education';
+    const calculatedTotalTcsAmt =
+      Number(transactionValueRate || 0) + Number(previousTransactionAmt || 0) + Number(declarationAmt || 0);
 
-     return {
-        purpose: 'Personal Visit / Leisure Travel',
-        panNumber,
-        sourceofFund,
-        declarationAmt: isEducation ? String(declarationAmt) : '0',
-        txnAmount: calculatedTotalTcsAmt.toString(),
-     };
+    return {
+      purpose: 'Personal Visit / Leisure Travel',
+      panNumber,
+      sourceofFund,
+      declarationAmt: isEducation ? String(declarationAmt) : '0',
+      txnAmount: calculatedTotalTcsAmt.toString(),
+    };
   }, [purpose, panNumber, sourceofFund, declarationAmt, transactionValueRate, previousTransactionAmt]);
 
   const debouncedTcsPayload = useDebounce(tcsPayload, 1000);
 
-  const { data: gstData } = useGstCalculation(
-    debouncedTransactionAmount,
-    accordionState.currentActiveTab === 'panel3'
-  );
+  const { data: gstData } = useGstCalculation(debouncedTransactionAmount, accordionState.currentActiveTab === 'panel3');
 
-  const { data: tcsData } = useTcsCalculation(
-    debouncedTcsPayload,
-    accordionState.currentActiveTab === 'panel3'
-  );
+  const { data: tcsData } = useTcsCalculation(debouncedTcsPayload, accordionState.currentActiveTab === 'panel3');
 
   // Calculate beneficiary amount synchronous with latest rates to avoid render cycle lag
   const beneficiaryAmount = useMemo(() => {
@@ -192,7 +184,7 @@ const CurrencyDetails = ({ setAccordionState, viewMode, isViewOnly, paymentData,
   }, [customerRate, fxAmount, nostroCompanyRate, nostroAgentMarkUp, selectedNostroType]);
 
   // Syncing is now handled by CalculationsSync sub-component to reduce re-renders
-  
+
   // Explicitly sync fx_currency from form context (panel 1) to panel 3 on mount/change
   // This helps when Redux sync might have slight lag or type mismatch
   const watchedFxCurrency = useWatch({ control, name: 'transactionDetails.fx_currency' });
@@ -257,7 +249,7 @@ const CurrencyDetails = ({ setAccordionState, viewMode, isViewOnly, paymentData,
       // In both BEN and OUR, we show the charge amount in the table for information
       // But we control whether it's added to the total in the sum effects
       const rate = Number(nostroCompanyRate) + Number(nostroAgentMarkUp);
-      
+
       setValue('currencyDetails.invoiceRateTable.nostro_charges.rate', rate, {
         shouldValidate: false,
         shouldDirty: false,
@@ -276,17 +268,11 @@ const CurrencyDetails = ({ setAccordionState, viewMode, isViewOnly, paymentData,
   }, [otherCompanyRate, otherAgentMarkUp, setValue]);
 
   useEffect(() => {
-    if (
-      transactionValueRate != null &&
-      remittanceRate != null &&
-      nostroRate != null &&
-      otherRate != null
-    ) {
+    if (transactionValueRate != null && remittanceRate != null && nostroRate != null && otherRate != null) {
       // BEN mode: Foreign charges (nostro) are not paid by the sender
       const nostroPayable = selectedNostroType === 'BEN' ? 0 : Number(nostroRate);
-      const transactionAmt =
-        Number(transactionValueRate) + Number(remittanceRate) + nostroPayable + Number(otherRate);
-        
+      const transactionAmt = Number(transactionValueRate) + Number(remittanceRate) + nostroPayable + Number(otherRate);
+
       setValue('currencyDetails.invoiceRateTable.transaction_amount.rate', transactionAmt, {
         shouldValidate: false,
         shouldDirty: false,
@@ -340,11 +326,11 @@ const CurrencyDetails = ({ setAccordionState, viewMode, isViewOnly, paymentData,
           shouldDirty: false,
         });
       } else {
-         console.error('TCS calculation failed:', tcsData.responsemessage);
-         setValue('currencyDetails.invoiceRateTable.tcs.rate', 0, {
-            shouldValidate: false,
-            shouldDirty: false,
-          });
+        console.error('TCS calculation failed:', tcsData.responsemessage);
+        setValue('currencyDetails.invoiceRateTable.tcs.rate', 0, {
+          shouldValidate: false,
+          shouldDirty: false,
+        });
       }
     }
   }, [tcsData, setValue]);
@@ -365,7 +351,7 @@ const CurrencyDetails = ({ setAccordionState, viewMode, isViewOnly, paymentData,
     const isValid = await trigger();
     if (!isValid) {
       const missingFields = flattenErrors(errors);
-      
+
       if (missingFields.length > 0) {
         toast.error(`Missing required field: ${getFieldLabel(missingFields[0])}`);
       } else {
@@ -374,19 +360,19 @@ const CurrencyDetails = ({ setAccordionState, viewMode, isViewOnly, paymentData,
           const { createTransactionSchema } = await import('../../common-schema');
           const values = getValues();
           const result = createTransactionSchema.safeParse(values);
-          
+
           if (!result.success) {
-             const issues = (result.error as any).issues;
-             if (issues.length > 0) {
-                const firstIssue = issues[0];
-                const fieldPath = firstIssue.path.join('.');
-                const label = getFieldLabel(fieldPath);
-                toast.error(`${label}: ${firstIssue.message}`);
-                return;
-             }
+            const issues = (result.error as any).issues;
+            if (issues.length > 0) {
+              const firstIssue = issues[0];
+              const fieldPath = firstIssue.path.join('.');
+              const label = getFieldLabel(fieldPath);
+              toast.error(`${label}: ${firstIssue.message}`);
+              return;
+            }
           }
         } catch (e) {
-          console.error("Manual validation error:", e);
+          console.error('Manual validation error:', e);
         }
         toast.error('Please fill all required fields in all sections');
       }
@@ -432,15 +418,17 @@ const CurrencyDetails = ({ setAccordionState, viewMode, isViewOnly, paymentData,
         const updatedPayment = {
           ...selectedPayment,
           payment_challan_url: response.url,
-          raw_data: selectedPayment.raw_data ? {
-            ...selectedPayment.raw_data,
-            deal: {
-              ...selectedPayment.raw_data.deal,
-              payment_records: selectedPayment.raw_data.deal.payment_records.map((rec: any, idx: number) => 
-                idx === 0 ? { ...rec, payment_challan_url: response.url } : rec
-              )
-            }
-          } : selectedPayment.raw_data
+          raw_data: selectedPayment.raw_data
+            ? {
+                ...selectedPayment.raw_data,
+                deal: {
+                  ...selectedPayment.raw_data.deal,
+                  payment_records: selectedPayment.raw_data.deal.payment_records.map((rec: any, idx: number) =>
+                    idx === 0 ? { ...rec, payment_challan_url: response.url } : rec
+                  ),
+                },
+              }
+            : selectedPayment.raw_data,
         };
         setSelectedPayment(updatedPayment);
       }
@@ -479,7 +467,7 @@ const CurrencyDetails = ({ setAccordionState, viewMode, isViewOnly, paymentData,
     <>
       <CalculationsSync />
       <Spacer>
-        {(accordionState.currentActiveTab === 'panel3' || viewMode) ? (
+        {accordionState.currentActiveTab === 'panel3' || viewMode ? (
           <>
             <FormFieldRow rowCols={2} wrapperClassName="flex-row lg:!flex-nowrap items-start">
               <div className="flex flex-wrap md:!w-full lg:w-1/2 gap-4">
@@ -492,7 +480,13 @@ const CurrencyDetails = ({ setAccordionState, viewMode, isViewOnly, paymentData,
                     }
                     return (
                       <FieldWrapper key={name}>
-                        {getController({ ...fieldWithOptions, name: `currencyDetails.${name}`, control, errors, disabled: viewMode || field?.disabled })}
+                        {getController({
+                          ...fieldWithOptions,
+                          name: `currencyDetails.${name}`,
+                          control,
+                          errors,
+                          disabled: viewMode || field?.disabled,
+                        })}
                       </FieldWrapper>
                     );
                   })}
@@ -502,7 +496,13 @@ const CurrencyDetails = ({ setAccordionState, viewMode, isViewOnly, paymentData,
                     const field = currencyDetailsConfig.find((f) => f.name === name) as FieldConfig;
                     return (
                       <FieldWrapper key={name}>
-                        {getController({ ...field, name: `currencyDetails.${name}`, control, errors, disabled: viewMode || field?.disabled })}
+                        {getController({
+                          ...field,
+                          name: `currencyDetails.${name}`,
+                          control,
+                          errors,
+                          disabled: viewMode || field?.disabled,
+                        })}
                       </FieldWrapper>
                     );
                   })}
@@ -558,7 +558,13 @@ const CurrencyDetails = ({ setAccordionState, viewMode, isViewOnly, paymentData,
                     const field = currencyDetailsConfig.find((f) => f.name === name) as FieldConfig;
                     return (
                       <FieldWrapper key={name}>
-                        {getController({ ...field, name: `currencyDetails.${name}`, control, errors, disabled: viewMode || field?.disabled })}
+                        {getController({
+                          ...field,
+                          name: `currencyDetails.${name}`,
+                          control,
+                          errors,
+                          disabled: viewMode || field?.disabled,
+                        })}
                       </FieldWrapper>
                     );
                   })}
@@ -583,9 +589,8 @@ const CurrencyDetails = ({ setAccordionState, viewMode, isViewOnly, paymentData,
 
             <div className="mt-16 flex flex-col items-center gap-10">
               <div className="flex justify-center gap-1 flex-wrap">
-              
-                  {!viewMode && (
-                    <>
+                {!viewMode && (
+                  <>
                     <ConfirmationAlert
                       title="Cancel Transaction"
                       description="Are you sure you want to cancel? All unsaved changes will be lost."
@@ -595,7 +600,7 @@ const CurrencyDetails = ({ setAccordionState, viewMode, isViewOnly, paymentData,
                         Cancel
                       </Button>
                     </ConfirmationAlert>
-                     <ConfirmationAlert
+                    <ConfirmationAlert
                       title="Save Transaction"
                       description="Are you sure you want to save this transaction?"
                       onConfirm={handleSave}
@@ -604,21 +609,29 @@ const CurrencyDetails = ({ setAccordionState, viewMode, isViewOnly, paymentData,
                         {isSaving ? 'Saving...' : 'Save'}
                       </Button>
                     </ConfirmationAlert>
-                    </>
-                  )}
-                 
+                  </>
+                )}
+
                 {viewMode && (
                   <>
-                    <Button 
-                      type="button" 
-                      onClick={handlePayment} 
-                      variant="secondary" 
+                    <Button
+                      type="button"
+                      onClick={handlePayment}
+                      variant="secondary"
                       className="mr-2"
-                      disabled={isViewOnly || !!(selectedPayment?.payment_challan_url || paymentData?.payment_challan_url)}
+                      disabled={
+                        isViewOnly || !!(selectedPayment?.payment_challan_url || paymentData?.payment_challan_url)
+                      }
                     >
                       Offline Bank Transfer
                     </Button>
-                     <Button type="button" onClick={() => setIsKycDialogOpen(true)} variant="secondary" className="mr-2" disabled={isViewOnly}>
+                    <Button
+                      type="button"
+                      onClick={() => setIsKycDialogOpen(true)}
+                      variant="secondary"
+                      className="mr-2"
+                      disabled={isViewOnly}
+                    >
                       KYC Upload
                     </Button>
                   </>
@@ -632,10 +645,10 @@ const CurrencyDetails = ({ setAccordionState, viewMode, isViewOnly, paymentData,
           </div>
         )}
       </Spacer>
-      <GenericDialog 
-        open={isModalOpen} 
-        onOpenChange={setIsModalOpen} 
-        title="Order is generated" 
+      <GenericDialog
+        open={isModalOpen}
+        onOpenChange={setIsModalOpen}
+        title="Order is generated"
         description={`Tnx Reference No - ${dealDetails?.transaction?.transaction_id || (dealDetails?.transactionDetails as any)?.transaction_id || ''}`}
         contentClassName="md:w-[40vw] gap-0 [&>div:first-child]:!text-left"
       >
@@ -665,34 +678,31 @@ const CurrencyDetails = ({ setAccordionState, viewMode, isViewOnly, paymentData,
         open={isKycDialogOpen}
         onOpenChange={setIsKycDialogOpen}
         transactionRefNo={
-          dealDetails?.transaction?.transaction_id ||
-          (dealDetails?.transactionDetails as any)?.transaction_id ||
-          ''
+          dealDetails?.transaction?.transaction_id || (dealDetails?.transactionDetails as any)?.transaction_id || ''
         }
         onShareLink={(url) => {
-            toast.success('Link shared successfully');
-            setIsKycDialogOpen(false);
+          toast.success('Link shared successfully');
+          setIsKycDialogOpen(false);
         }}
-
         onUploadNow={() => {
-            let transactionToPass: any = paymentData?.raw_data;
+          let transactionToPass: any = paymentData?.raw_data;
 
-            if (!transactionToPass) {
-                 if (dealDetails?.transaction) {
-                    transactionToPass = dealDetails.transaction;
-                 } else if ((dealDetails as any)?.transactionDetails) {
-                    transactionToPass = (dealDetails as any).transactionDetails;
-                 } else {
-                    transactionToPass = paymentData;
-                 }
-            }
-            
-            if (transactionToPass) {
-                navigate('/branch_agent_maker/transaction/kyc', { state: { transaction: transactionToPass } });
+          if (!transactionToPass) {
+            if (dealDetails?.transaction) {
+              transactionToPass = dealDetails.transaction;
+            } else if ((dealDetails as any)?.transactionDetails) {
+              transactionToPass = (dealDetails as any).transactionDetails;
             } else {
-                 navigate('/branch_agent_maker/transaction/kyc');
+              transactionToPass = paymentData;
             }
-             setIsKycDialogOpen(false);
+          }
+
+          if (transactionToPass) {
+            navigate('/branch_agent_maker/transaction/kyc', { state: { transaction: transactionToPass } });
+          } else {
+            navigate('/branch_agent_maker/transaction/kyc');
+          }
+          setIsKycDialogOpen(false);
         }}
       />
     </>
@@ -721,30 +731,40 @@ const CalculationsSync = memo(() => {
   } = reduxState;
 
   useEffect(() => {
-      if (fxCurrency && typeof fxCurrency === 'string') {
-        setValue('currencyDetails.fx_currency', fxCurrency.trim(), { shouldValidate: false, shouldDirty: false });
-      }
-      if (fxAmount != null) setValue('currencyDetails.fx_amount', fxAmount, { shouldValidate: false, shouldDirty: false });
-      if (settlementRate != null) {
-          setValue('currencyDetails.settlement_rate', settlementRate, { shouldValidate: false, shouldDirty: false });
-          // In the table, company_rate for transaction value should be the settlement rate
-          setValue('currencyDetails.invoiceRateTable.transaction_value.company_rate', settlementRate, { shouldValidate: false, shouldDirty: false });
-      }
-      
-      if (customerRate != null) {
-          setValue('currencyDetails.customer_rate', customerRate, { shouldValidate: false, shouldDirty: false });
-      }
-      
-      if (addMargin != null) {
-          setValue('currencyDetails.add_margin', addMargin, { shouldValidate: false, shouldDirty: false });
-          setValue('currencyDetails.invoiceRateTable.transaction_value.agent_mark_up', addMargin, { shouldValidate: false, shouldDirty: false });
-      }
-      
-      if (fxAmount && customerRate) {
-          const rate = Number(customerRate) * Number(fxAmount);
-          // Correct path: transaction_value.rate (individual row) not transaction_amount.rate (total)
-          setValue('currencyDetails.invoiceRateTable.transaction_value.rate', rate, { shouldValidate: false, shouldDirty: false });
-      }
+    if (fxCurrency && typeof fxCurrency === 'string') {
+      setValue('currencyDetails.fx_currency', fxCurrency.trim(), { shouldValidate: false, shouldDirty: false });
+    }
+    if (fxAmount != null)
+      setValue('currencyDetails.fx_amount', fxAmount, { shouldValidate: false, shouldDirty: false });
+    if (settlementRate != null) {
+      setValue('currencyDetails.settlement_rate', settlementRate, { shouldValidate: false, shouldDirty: false });
+      // In the table, company_rate for transaction value should be the settlement rate
+      setValue('currencyDetails.invoiceRateTable.transaction_value.company_rate', settlementRate, {
+        shouldValidate: false,
+        shouldDirty: false,
+      });
+    }
+
+    if (customerRate != null) {
+      setValue('currencyDetails.customer_rate', customerRate, { shouldValidate: false, shouldDirty: false });
+    }
+
+    if (addMargin != null) {
+      setValue('currencyDetails.add_margin', addMargin, { shouldValidate: false, shouldDirty: false });
+      setValue('currencyDetails.invoiceRateTable.transaction_value.agent_mark_up', addMargin, {
+        shouldValidate: false,
+        shouldDirty: false,
+      });
+    }
+
+    if (fxAmount && customerRate) {
+      const rate = Number(customerRate) * Number(fxAmount);
+      // Correct path: transaction_value.rate (individual row) not transaction_amount.rate (total)
+      setValue('currencyDetails.invoiceRateTable.transaction_value.rate', rate, {
+        shouldValidate: false,
+        shouldDirty: false,
+      });
+    }
   }, [fxCurrency, fxAmount, settlementRate, customerRate, addMargin, selectedNostroType, setValue]);
 
   return null;

@@ -49,9 +49,7 @@ export const ShadCnCombobox = ({
 
   const filteredOptions = React.useMemo(() => {
     if (!inputValue) return formattedOptions;
-    return formattedOptions.filter((option) =>
-      option.label.toLowerCase().includes(inputValue.toLowerCase())
-    );
+    return formattedOptions.filter((option) => option.label.toLowerCase().includes(inputValue.toLowerCase()));
   }, [formattedOptions, inputValue]);
 
   return (

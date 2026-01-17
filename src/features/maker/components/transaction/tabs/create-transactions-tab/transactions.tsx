@@ -11,25 +11,23 @@ const Transactions = () => {
   const dealId = location.state?.dealId;
   const paymentData = location.state?.paymentData;
 
-  const { data: dealDetails, isLoading } = useGetDealDetails(
-    !stateInitialData && dealId ? dealId : undefined
-  );
+  const { data: dealDetails, isLoading } = useGetDealDetails(!stateInitialData && dealId ? dealId : undefined);
 
   const resolvedInitialData = useMemo(() => {
-     if (stateInitialData) return stateInitialData;
-     
-     if (dealDetails && dealId) {
-         const mapped = mapDealDetailsApiToFormInput(dealDetails, dealId);
-         if (paymentData) {
-             mapped.paymentDetails = paymentData;
-         }
-         return mapped;
-     }
-     return undefined;
+    if (stateInitialData) return stateInitialData;
+
+    if (dealDetails && dealId) {
+      const mapped = mapDealDetailsApiToFormInput(dealDetails, dealId);
+      if (paymentData) {
+        mapped.paymentDetails = paymentData;
+      }
+      return mapped;
+    }
+    return undefined;
   }, [stateInitialData, dealDetails, dealId, paymentData]);
 
   if (isLoading) {
-      return <div className="p-8 text-center">Loading transaction details...</div>;
+    return <div className="p-8 text-center">Loading transaction details...</div>;
   }
 
   return (

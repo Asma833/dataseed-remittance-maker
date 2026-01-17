@@ -71,7 +71,7 @@ export const KycTableColumnsConfig = ({
       header: 'Purpose',
       meta: { className: 'min-w-0 p-2' },
     },
-   
+
     {
       accessorKey: 'kyc_status',
       id: 'kyc_status',
@@ -81,7 +81,7 @@ export const KycTableColumnsConfig = ({
         return <StatusBadge status={props.row.kyc_status} />;
       },
     },
- {
+    {
       accessorKey: 'kyc_doc',
       id: 'kyc_doc',
       header: 'KYC Doc',

@@ -26,7 +26,7 @@ const TransactionBasicDetails = ({ setAccordionState, viewMode }: CommonCreateTr
     clearErrors,
     formState: { errors },
   } = useFormContext();
-  
+
   // Watch fields and sync to Redux for calculations in other tabs
   const fxCurrency = useWatch({ control, name: 'transactionDetails.fx_currency' });
   const fxAmount = useWatch({ control, name: 'transactionDetails.fx_amount' });
@@ -58,18 +58,31 @@ const TransactionBasicDetails = ({ setAccordionState, viewMode }: CommonCreateTr
   });
 
   useEffect(() => {
-    dispatch(updateTransactionField({
-      fx_currency: typeof fxCurrency === 'string' ? fxCurrency.trim() : fxCurrency,
-      fx_amount: Number(fxAmount || 0),
-      company_settlement_rate: Number(companySettlementRate || 0),
-      add_margin: Number(addMargin || 0),
-      customer_rate: Number(customerRate || 0),
-      applicant_pan_number: panNumber,
-      source_of_funds: sourceOfFunds,
-      purpose: purpose,
-      nostro_charges: nostroChargesType || '',
-    }));
-  }, [fxCurrency, fxAmount, companySettlementRate, addMargin, customerRate, panNumber, sourceOfFunds, purpose, nostroChargesType, dispatch]);
+    dispatch(
+      updateTransactionField({
+        fx_currency: typeof fxCurrency === 'string' ? fxCurrency.trim() : fxCurrency,
+        fx_amount: Number(fxAmount || 0),
+        company_settlement_rate: Number(companySettlementRate || 0),
+        add_margin: Number(addMargin || 0),
+        customer_rate: Number(customerRate || 0),
+        applicant_pan_number: panNumber,
+        source_of_funds: sourceOfFunds,
+        purpose: purpose,
+        nostro_charges: nostroChargesType || '',
+      })
+    );
+  }, [
+    fxCurrency,
+    fxAmount,
+    companySettlementRate,
+    addMargin,
+    customerRate,
+    panNumber,
+    sourceOfFunds,
+    purpose,
+    nostroChargesType,
+    dispatch,
+  ]);
 
   const selectedTransactionTypeId = '3f9fbf53-057f-4cf7-90f5-5035edd2e158';
   // Filter purpose types based on selected transaction type
@@ -190,12 +203,12 @@ const TransactionBasicDetails = ({ setAccordionState, viewMode }: CommonCreateTr
       setValue('transactionDetails.payee_name', '', options);
       setValue('transactionDetails.payee_pan_number', '', options);
       setValue('transactionDetails.payee_dob', '', options);
-      
+
       clearErrors([
-        'transactionDetails.paid_by', 
-        'transactionDetails.payee_name', 
-        'transactionDetails.payee_pan_number', 
-        'transactionDetails.payee_dob'
+        'transactionDetails.paid_by',
+        'transactionDetails.payee_name',
+        'transactionDetails.payee_pan_number',
+        'transactionDetails.payee_dob',
       ]);
     }
   }, [sourceOfFunds, setValue, clearErrors]);
@@ -210,21 +223,29 @@ const TransactionBasicDetails = ({ setAccordionState, viewMode }: CommonCreateTr
       <FormContentWrapper className="rounded-lg w-full mr-auto bg-transparent">
         <Spacer>
           <FormFieldRow wrapperClassName="xl:row-cols-4">
-            {(['agent_reference_number', 'fx_currency','fx_amount','company_settlement_rate' ] as const).map((name) => {
-              const field = transactionBasicDetailsConfig.find((f) => f.name === name) as FieldConfig;
-              let fieldWithOptions = field;
-              if (name === 'fx_currency') {
-                fieldWithOptions = { ...field, options: currencyCodeType };
+            {(['agent_reference_number', 'fx_currency', 'fx_amount', 'company_settlement_rate'] as const).map(
+              (name) => {
+                const field = transactionBasicDetailsConfig.find((f) => f.name === name) as FieldConfig;
+                let fieldWithOptions = field;
+                if (name === 'fx_currency') {
+                  fieldWithOptions = { ...field, options: currencyCodeType };
+                }
+                return (
+                  <FieldWrapper key={name}>
+                    {getController({
+                      ...fieldWithOptions,
+                      name: `transactionDetails.${name}`,
+                      control,
+                      errors,
+                      disabled: viewMode || field?.disabled,
+                    })}
+                  </FieldWrapper>
+                );
               }
-              return (
-                <FieldWrapper key={name}>
-                  {getController({ ...fieldWithOptions, name: `transactionDetails.${name}`, control, errors, disabled: viewMode || field?.disabled })}
-                </FieldWrapper>
-              );
-            })}
+            )}
           </FormFieldRow>
           <FormFieldRow wrapperClassName="xl:row-cols-4">
-            {(['add_margin', 'customer_rate','nostro_charges', 'purpose'] as const).map((name) => {
+            {(['add_margin', 'customer_rate', 'nostro_charges', 'purpose'] as const).map((name) => {
               const field = transactionBasicDetailsConfig.find((f) => f.name === name) as FieldConfig;
               let fieldWithOptions = field;
               if (name === 'purpose') {
@@ -232,7 +253,13 @@ const TransactionBasicDetails = ({ setAccordionState, viewMode }: CommonCreateTr
               }
               return (
                 <FieldWrapper key={name}>
-                  {getController({ ...fieldWithOptions, name: `transactionDetails.${name}`, control, errors, disabled: viewMode || field?.disabled })}
+                  {getController({
+                    ...fieldWithOptions,
+                    name: `transactionDetails.${name}`,
+                    control,
+                    errors,
+                    disabled: viewMode || field?.disabled,
+                  })}
                 </FieldWrapper>
               );
             })}
@@ -240,28 +267,38 @@ const TransactionBasicDetails = ({ setAccordionState, viewMode }: CommonCreateTr
           <p className="font-semibold text-gray-600">KYC Details</p>
           <>
             <FormFieldRow wrapperClassName="xl:row-cols-4">
-              {(['applicant_name','applicant_dob', 'applicant_email', 'applicant_mobile_number'] as const).map(
+              {(['applicant_name', 'applicant_dob', 'applicant_email', 'applicant_mobile_number'] as const).map(
                 (name) => {
                   const field = transactionBasicDetailsConfig.find((f) => f.name === name) as FieldConfig;
                   return (
                     <FieldWrapper key={name}>
-                      {getController({ ...field, name: `transactionDetails.${name}`, control, errors, disabled: viewMode || field?.disabled })}
+                      {getController({
+                        ...field,
+                        name: `transactionDetails.${name}`,
+                        control,
+                        errors,
+                        disabled: viewMode || field?.disabled,
+                      })}
                     </FieldWrapper>
                   );
                 }
               )}
             </FormFieldRow>
             <FormFieldRow wrapperClassName="xl:row-cols-4">
-              {(['applicant_pan_number', 'source_of_funds'] as const).map(
-                (name) => {
-                  const field = transactionBasicDetailsConfig.find((f) => f.name === name) as FieldConfig;
-                  return (
-                    <FieldWrapper key={name}>
-                      {getController({ ...field, name: `transactionDetails.${name}`, control, errors, disabled: viewMode || field?.disabled })}
-                    </FieldWrapper>
-                  );
-                }
-              )}
+              {(['applicant_pan_number', 'source_of_funds'] as const).map((name) => {
+                const field = transactionBasicDetailsConfig.find((f) => f.name === name) as FieldConfig;
+                return (
+                  <FieldWrapper key={name}>
+                    {getController({
+                      ...field,
+                      name: `transactionDetails.${name}`,
+                      control,
+                      errors,
+                      disabled: viewMode || field?.disabled,
+                    })}
+                  </FieldWrapper>
+                );
+              })}
             </FormFieldRow>
             <FormFieldRow wrapperClassName="xl:row-cols-4">
               {(['paid_by', 'payee_name', 'payee_pan_number', 'payee_dob'] as const).map((name) => {
@@ -277,7 +314,13 @@ const TransactionBasicDetails = ({ setAccordionState, viewMode }: CommonCreateTr
                 const field = transactionBasicDetailsConfig.find((f) => f.name === name) as FieldConfig;
                 return (
                   <FieldWrapper key={name}>
-                    {getController({ ...field, name: `transactionDetails.${name}`, control, errors, disabled: viewMode || field?.disabled })}
+                    {getController({
+                      ...field,
+                      name: `transactionDetails.${name}`,
+                      control,
+                      errors,
+                      disabled: viewMode || field?.disabled,
+                    })}
                   </FieldWrapper>
                 );
               })}
@@ -288,7 +331,13 @@ const TransactionBasicDetails = ({ setAccordionState, viewMode }: CommonCreateTr
                   const field = transactionBasicDetailsConfig.find((f) => f.name === name) as FieldConfig;
                   return (
                     <FieldWrapper key={name}>
-                      {getController({ ...field, name: `transactionDetails.${name}`, control, errors, disabled: viewMode || field?.disabled })}
+                      {getController({
+                        ...field,
+                        name: `transactionDetails.${name}`,
+                        control,
+                        errors,
+                        disabled: viewMode || field?.disabled,
+                      })}
                     </FieldWrapper>
                   );
                 }
@@ -300,7 +349,13 @@ const TransactionBasicDetails = ({ setAccordionState, viewMode }: CommonCreateTr
                   const field = transactionBasicDetailsConfig.find((f) => f.name === name) as FieldConfig;
                   return (
                     <FieldWrapper key={name}>
-                      {getController({ ...field, name: `transactionDetails.${name}`, control, errors, disabled: viewMode || field?.disabled })}
+                      {getController({
+                        ...field,
+                        name: `transactionDetails.${name}`,
+                        control,
+                        errors,
+                        disabled: viewMode || field?.disabled,
+                      })}
                     </FieldWrapper>
                   );
                 }
@@ -311,7 +366,13 @@ const TransactionBasicDetails = ({ setAccordionState, viewMode }: CommonCreateTr
                 const field = transactionBasicDetailsConfig.find((f) => f.name === name) as FieldConfig;
                 return (
                   <FieldWrapper key={name}>
-                    {getController({ ...field, name: `transactionDetails.${name}`, control, errors, disabled: viewMode || field?.disabled })}
+                    {getController({
+                      ...field,
+                      name: `transactionDetails.${name}`,
+                      control,
+                      errors,
+                      disabled: viewMode || field?.disabled,
+                    })}
                   </FieldWrapper>
                 );
               })}

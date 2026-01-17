@@ -85,9 +85,7 @@ const ShadCnFormInput = forwardRef<HTMLInputElement, ShadCnFormInputProps>(
       return <PasswordInput {...(inputProps as any)} />;
     }
 
-    return (
-      <Input {...(inputProps as any)} />
-    );
+    return <Input {...(inputProps as any)} />;
   }
 );
 

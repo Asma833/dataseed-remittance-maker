@@ -18,12 +18,12 @@ const ViewAllTransactions = () => {
 
   const handleViewTransaction = (rowData: PaymentData) => {
     if (rowData.deal_booking_id) {
-       navigate('/branch_agent_maker/transaction/view-all-transactions/view-transactions', { 
-           state: { 
-               dealId: rowData.deal_booking_id,
-               paymentData: rowData
-           } 
-       });
+      navigate('/branch_agent_maker/transaction/view-all-transactions/view-transactions', {
+        state: {
+          dealId: rowData.deal_booking_id,
+          paymentData: rowData,
+        },
+      });
     }
   };
 
