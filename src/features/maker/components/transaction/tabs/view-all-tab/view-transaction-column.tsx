@@ -125,13 +125,13 @@ export const GetViewAllTransactionTableColumns = ({
       meta: { className: 'min-w-0 p-2' },
       cell: ({ row }: { row: PaymentData }) => <StatusBadge status={row.transaction_status} />,
     },
-    {
-      id: 'swift_copy',
-      header: 'Swift Copy',
-      accessorKey: 'swift_copy',
-      meta: { className: 'min-w-0 p-2' },
-      cell: ({ row }: { row: any }) => <SwiftCopyDownloadCell row={row} />, // Render custom cell
-    },
+    // {
+    //   id: 'swift_copy',
+    //   header: 'Swift Copy',
+    //   accessorKey: 'swift_copy',
+    //   meta: { className: 'min-w-0 p-2' },
+    //   cell: ({ row }: { row: any }) => <SwiftCopyDownloadCell row={row} />, // Render custom cell
+    // },
     {
       id: 'view_action',
       header: 'View',
