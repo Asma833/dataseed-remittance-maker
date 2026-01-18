@@ -267,7 +267,7 @@ const TransactionBasicDetails = ({ setAccordionState, viewMode }: CommonCreateTr
           <p className="font-semibold text-gray-600">KYC Details</p>
           <>
             <FormFieldRow wrapperClassName="xl:row-cols-4">
-              {(['applicant_name', 'applicant_dob', 'applicant_email', 'applicant_mobile_number'] as const).map(
+              {(['applicant_name', 'applicant_email', 'applicant_mobile_number'] as const).map(
                 (name) => {
                   const field = transactionBasicDetailsConfig.find((f) => f.name === name) as FieldConfig;
                   return (
